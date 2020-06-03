@@ -1,10 +1,10 @@
 # draft
 
 ## ユースケース図（U-Messe フェーズ0.5）
-(u-messe version alpha.png)
+![alpha](https://github.com/openusen/umesse/blob/master/documents/u-messe%20version%20alpha.png)
 
 ## ユースケース図（U-Messe フェーズ1.0）
-(u-messe version beta.png)
+![beta](https://github.com/openusen/umesse/blob/master/documents/u-messe%20version%20beta.png)
 
 ## 構成図
-(all-map.png)
+![all-map](https://github.com/openusen/umesse/blob/master/documents/all-map.png)
