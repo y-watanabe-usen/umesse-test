@@ -1,0 +1,43 @@
+@startuml u-messe version beta
+
+left to right direction
+file cm
+rectangle "CM作成アプリ" {
+  usecase "音源作成(音声録音・TTS)" as u1
+  usecase "音源組立" as u2
+  usecase "音源出力" as u3
+  usecase "収録音源" as u4
+}
+rectangle "外部デバイス" {
+  usecase "再生" as d1
+}
+rectangle "センター" {
+  usecase "CM編成" as c1
+}
+rectangle "ES" {
+  usecase "音圧調整" as e1
+}
+rectangle "STB" {
+  usecase "CM同期" as s1
+  usecase "CM再生" as s2
+}
+rectangle "U-Musicアプリ" {
+  usecase "CM選択" as a1
+}
+
+title ** センター同期 **
+user ---> u1
+user ---> u2
+user ---> u3
+u1 .> u2
+u4 .> u2
+u3 --> cm
+u3 --> d1
+u3 ---> c1
+c1 -> e1
+e1 -> c1
+c1 -> s1
+user ---> a1
+a1 ---> s2
+
+@enduml
