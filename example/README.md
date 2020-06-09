@@ -1,16 +1,15 @@
-# demo
+# example
 
-A new Flutter project.
+お試しデモ
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+サウンド再生
+- [assets_audio_player](https://pub.dev/packages/assets_audio_player)
+- [soundpool](https://pub.dev/packages/soundpool)
 
-A few resources to get you started if this is your first Flutter project:
+音声録音
+- [flutter_sound](https://pub.dev/packages/flutter_sound)
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+TTS
+- [flutter_tts](https://pub.dev/packages/flutter_tts)
