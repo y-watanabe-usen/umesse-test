@@ -2,8 +2,6 @@
 
 お試しデモ
 
-## Getting Started
-
 サウンド再生
 - [assets_audio_player](https://pub.dev/packages/assets_audio_player)
 - [soundpool](https://pub.dev/packages/soundpool)
