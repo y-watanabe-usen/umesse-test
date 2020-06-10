@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sound/flutter_sound.dart';
@@ -17,10 +16,11 @@ class RecordWidget extends StatefulWidget {
 }
 
 class _RecordWidgetState extends State<RecordWidget> {
+  FlutterSoundPlayer player;
   FlutterSoundRecorder recorder;
   StreamSubscription recorderSubscription;
-  AssetsAudioPlayer assetsAudioPlayer;
 
+  bool _isPlaying;
   bool _isRecording;
   String _recorderTxt;
   double _dbLevel;
@@ -30,6 +30,14 @@ class _RecordWidgetState extends State<RecordWidget> {
   @override
   void initState() {
     super.initState();
+    player = FlutterSoundPlayer()
+      ..openAudioSession(
+        focus: AudioFocus.requestFocusTransient,
+        category: SessionCategory.playAndRecord,
+        mode: SessionMode.modeDefault,
+        audioFlags: outputToSpeaker,
+      );
+
     recorder = FlutterSoundRecorder()
       ..openAudioSession(
         focus: AudioFocus.requestFocusTransient,
@@ -37,8 +45,8 @@ class _RecordWidgetState extends State<RecordWidget> {
         mode: SessionMode.modeDefault,
         audioFlags: outputToSpeaker,
       );
-    assetsAudioPlayer = AssetsAudioPlayer();
 
+    _isPlaying = false;
     _isRecording = false;
     _recorderTxt = '00:00:00';
   }
@@ -68,10 +76,8 @@ class _RecordWidgetState extends State<RecordWidget> {
           child: _isRecording ? Icon(Icons.mic_off) : Icon(Icons.mic),
         ),
         FlatButton(
-          onPressed: () => assetsAudioPlayer
-              .open(Audio.file(_path))
-              .then((_) => assetsAudioPlayer.play()),
-          child: Icon(Icons.play_circle_filled),
+          onPressed: () => _isPlaying ? stopPlayer() : startPlayer(),
+          child: _isPlaying ? Icon(Icons.stop) : Icon(Icons.play_arrow),
         ),
       ],
     );
@@ -80,9 +86,28 @@ class _RecordWidgetState extends State<RecordWidget> {
   @override
   void dispose() {
     super.dispose();
+    player.stopPlayer();
+    player.closeSession();
+    recorder.stopRecorder();
     recorder.closeSession();
-    assetsAudioPlayer.dispose();
-    cancelRecorderSubscriptions();
+  }
+
+  void startPlayer() async {
+    try {
+      print('startPlayer');
+      await player.startPlayer(
+        fromURI: _path,
+        codec: _codec,
+        whenFinished: () {
+          print('startPlayerFinish');
+          setState(() => _isPlaying = false);
+        },
+      );
+      setState(() => _isPlaying = true);
+    } catch (err) {
+      print('startPlayer error: $err');
+      stopPlayer();
+    }
   }
 
   void startRecoder() async {
@@ -122,14 +147,24 @@ class _RecordWidgetState extends State<RecordWidget> {
     } catch (err) {
       print('startRecorder error: $err');
       stopRecorder();
-      cancelRecorderSubscriptions();
     }
+  }
+
+  void stopPlayer() async {
+    try {
+      print('stopPlayer');
+      await player.stopPlayer();
+    } catch (err) {
+      print('stopPlayer error: $err');
+    }
+    setState(() => _isPlaying = false);
   }
 
   void stopRecorder() async {
     try {
       print('stopRecorder');
       await recorder.stopRecorder();
+      cancelRecorderSubscriptions();
     } catch (err) {
       print('stopRecorder error: $err');
     }
