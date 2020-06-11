@@ -49,14 +49,23 @@ class _RecordWidgetState extends State<RecordWidget> {
     _isPlaying = false;
     _isRecording = false;
     _recorderTxt = '00:00:00';
+
+    updateList();
   }
 
-  @override
-  Widget build(BuildContext context) {
+  updateList() {
+    getTemporaryDirectory().then((dir) {
+      setState(() {
+        listItems = dir.listSync();
+      });
+    });
+  }
+
+  List<FileSystemEntity> listItems = [];
+
+  Widget _buildRecordController() {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
+      children: [
         _isRecording
             ? LinearProgressIndicator(
                 value: 100.0 / 160.0 * (this._dbLevel ?? 1) / 100,
@@ -71,32 +80,66 @@ class _RecordWidgetState extends State<RecordWidget> {
             color: Colors.black,
           ),
         ),
-        FlatButton(
-          onPressed: () => _isRecording ? stopRecorder() : startRecoder(),
-          child: _isRecording ? Icon(Icons.mic_off) : Icon(Icons.mic),
+        RawMaterialButton(
+          onPressed: () {
+            if (_isRecording) {
+              stopRecorder();
+              updateList();
+            } else
+              startRecoder();
+          },
+          elevation: 2.0,
+          fillColor: Colors.white,
+          child: _isRecording
+              ? Icon(Icons.stop, size: 35.0)
+              : Icon(Icons.mic, size: 35.0),
+          padding: EdgeInsets.all(15.0),
+          shape: CircleBorder(),
         ),
-        FlatButton(
-          onPressed: () => _isPlaying ? stopPlayer() : startPlayer(),
-          child: _isPlaying ? Icon(Icons.stop) : Icon(Icons.play_arrow),
-        ),
+      ],
+    );
+  }
+
+  Widget _buildRecordedList() {
+    if (listItems.length == 0) return Container();
+    return ListView.builder(
+        itemCount: listItems.length,
+        itemBuilder: (context, index) {
+          return ListTile(
+              onTap: () {
+                _isPlaying
+                    ? stopPlayer()
+                    : startPlayer(listItems.elementAt(index).path.toString());
+              },
+              title: Text(listItems.elementAt(index).path.toString()),
+              trailing: Icon(Icons.play_arrow));
+        });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        _buildRecordController(),
+        Expanded(child: _buildRecordedList()),
       ],
     );
   }
 
   @override
   void dispose() {
-    super.dispose();
     player.stopPlayer();
     player.closeSession();
-    recorder.stopRecorder();
+    if (recorder.isRecording) recorder.stopRecorder();
     recorder.closeSession();
+    super.dispose();
   }
 
-  void startPlayer() async {
+  void startPlayer(String path) async {
     try {
       print('startPlayer');
       await player.startPlayer(
-        fromURI: _path,
+        fromURI: path,
         codec: _codec,
         whenFinished: () {
           print('startPlayerFinish');
@@ -118,7 +161,11 @@ class _RecordWidgetState extends State<RecordWidget> {
       }
 
       Directory tempDir = await getTemporaryDirectory();
-      _path = '${tempDir.path}/${recorder.slotNo}-${ext[_codec.index]}';
+      final datetime = DateTime.now();
+      var formatter = new DateFormat('yyyy-MM-dd-HH-mm-ss', "ja_JP");
+      var formatted = formatter.format(datetime);
+      // _path = '${tempDir.path}/${recorder.slotNo}${ext[_codec.index]}';
+      _path = '${tempDir.path}/$formatted${ext[_codec.index]}';
       print(_path);
       await recorder.startRecorder(
         toFile: _path,

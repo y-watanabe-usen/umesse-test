@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:umesse/ui/transitions/page_transitions.dart';
-import 'package:umesse/ui/widget/bottom_navigation_bar_widget.dart';
 import 'package:umesse/ui/widget/mix_widget.dart';
-import 'package:umesse/ui/widget/navigator_manager.dart';
 import 'package:umesse/ui/widget/record_widget.dart';
 import 'package:umesse/ui/widget/tts_widget.dart';
+
+import 'audio_analyzer.widget.dart';
+import 'audio_concat_widget.dart';
+import 'preset_widget.dart';
 
 class HomeWidget extends StatefulWidget {
   static String routeName = '/';
@@ -14,28 +15,24 @@ class HomeWidget extends StatefulWidget {
   _HomeWidgetState createState() => _HomeWidgetState();
 }
 
-class _HomeWidgetState extends State<HomeWidget> {
-  final _navigatorKey = NavigatorManager.instance.homeNavigatorKey;
+class _HomeWidgetState extends State<HomeWidget>
+    with SingleTickerProviderStateMixin {
   int selectedIndex = 0;
 
-  void onBottomItemTapped(int index) {
-    if (selectedIndex == index) return;
-    setState(() {
-      selectedIndex = index;
-    });
-    switch (index) {
-      case 0:
-        _navigatorKey.currentState.pushReplacementNamed(HomeWidget.routeName);
-        break;
-      case 1:
-        _navigatorKey.currentState.pushReplacementNamed(RecordWidget.routeName);
-        break;
-      case 2:
-        _navigatorKey.currentState.pushReplacementNamed(TtsWidget.routeName);
-        break;
-      default:
-        throw Exception('system error');
-    }
+  final tabs = [
+    Tab(text: 'Home'),
+    Tab(text: 'Preset'),
+    Tab(text: 'Record'),
+    Tab(text: '結合'),
+    Tab(text: '音圧'),
+    Tab(text: 'TTS')
+  ];
+
+  TabController _tabController;
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: tabs.length, vsync: this);
   }
 
   @override
@@ -44,41 +41,22 @@ class _HomeWidgetState extends State<HomeWidget> {
       appBar: AppBar(
         title: Text('home'),
       ),
-      body: _buildRouter(),
-      bottomNavigationBar: BottomNavigationBarWidget(
-        selectedIndex: selectedIndex,
-        onTap: onBottomItemTapped,
+      bottomNavigationBar: BottomAppBar(
+        child: TabBar(
+          tabs: tabs,
+          controller: _tabController,
+          unselectedLabelColor: Colors.grey,
+          labelColor: Colors.black,
+        ),
       ),
-    );
-  }
-
-  Widget _buildRouter() {
-    return Navigator(
-      key: _navigatorKey,
-      observers: [
-        HeroController(),
-      ],
-      onGenerateRoute: (settings) {
-        Widget child;
-        switch (settings.name) {
-          case '/':
-            child = MixWidget();
-            break;
-          case '/record':
-            child = RecordWidget();
-            break;
-          case '/tts':
-            child = TtsWidget();
-            break;
-          default:
-            throw Exception('Invalid route: ${settings.name}');
-        }
-        return PageTransition<dynamic>(
-          child: child,
-          type: PageTransitionType.fade,
-          settings: settings,
-        );
-      },
+      body: TabBarView(controller: _tabController, children: [
+        MixWidget(),
+        PresetWidget(),
+        RecordWidget(),
+        AudioConcatWidget(),
+        AudioAnalyzerWidget(),
+        TtsWidget()
+      ]),
     );
   }
 }
