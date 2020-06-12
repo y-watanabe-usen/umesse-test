@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_sound/flutter_sound.dart';
 import 'package:umesse/models/voices.dart';
+import 'package:umesse/ui/audio_player/audio_player_flutter_sound.dart';
 
 class PresetWidget extends StatefulWidget {
   @override
@@ -9,7 +9,7 @@ class PresetWidget extends StatefulWidget {
 }
 
 class _PresetWidgetState extends State<PresetWidget> {
-  FlutterSoundPlayer player;
+  AudioPlayerFlutterSound audioPlayer;
   Future<Voices> getPresetVoices() async {
     String data = await rootBundle.loadString('assets/json/presetvoices.json');
     return voicesFromJson(data);
@@ -18,32 +18,23 @@ class _PresetWidgetState extends State<PresetWidget> {
   @override
   void initState() {
     super.initState();
-    player = FlutterSoundPlayer()
-      ..openAudioSession(
-        focus: AudioFocus.requestFocusTransient,
-        category: SessionCategory.playAndRecord,
-        mode: SessionMode.modeDefault,
-        audioFlags: outputToSpeaker,
-      );
+    audioPlayer = AudioPlayerFlutterSound()
+      ..setCodec(AudioCodec.mp3)
+      ..setStateListener((AudioPlayerState state) {
+        //setState(() => _isPlaying = (AudioPlayerState.isPlaying == state));
+      });
   }
 
   @override
   void dispose() {
-    player.stopPlayer();
-    player.closeSession();
+    audioPlayer.dispose();
     super.dispose();
   }
 
   void startPlayer(String path) async {
     try {
       print('startPlayer');
-      await player.startPlayer(
-        fromURI: path,
-        codec: Codec.mp3,
-        whenFinished: () {
-          print('startPlayerFinish');
-        },
-      );
+      audioPlayer.play(path);
     } catch (err) {
       print('startPlayer error: $err');
       stopPlayer();
@@ -53,7 +44,7 @@ class _PresetWidgetState extends State<PresetWidget> {
   void stopPlayer() async {
     try {
       print('stopPlayer');
-      await player.stopPlayer();
+      audioPlayer.stop();
     } catch (err) {
       print('stopPlayer error: $err');
     }

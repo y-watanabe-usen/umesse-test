@@ -7,6 +7,7 @@ import 'package:flutter_sound/flutter_sound.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:umesse/ui/audio_player/audio_player_flutter_sound.dart';
 
 class RecordWidget extends StatefulWidget {
   static String routeName = '/record';
@@ -16,7 +17,7 @@ class RecordWidget extends StatefulWidget {
 }
 
 class _RecordWidgetState extends State<RecordWidget> {
-  FlutterSoundPlayer player;
+  AudioPlayerFlutterSound audioPlayer;
   FlutterSoundRecorder recorder;
   StreamSubscription recorderSubscription;
 
@@ -30,13 +31,11 @@ class _RecordWidgetState extends State<RecordWidget> {
   @override
   void initState() {
     super.initState();
-    player = FlutterSoundPlayer()
-      ..openAudioSession(
-        focus: AudioFocus.requestFocusTransient,
-        category: SessionCategory.playAndRecord,
-        mode: SessionMode.modeDefault,
-        audioFlags: outputToSpeaker,
-      );
+    audioPlayer = AudioPlayerFlutterSound()
+      ..setCodec(AudioCodec.aac)
+      ..setStateListener((AudioPlayerState state) {
+        setState(() => _isPlaying = (AudioPlayerState.isPlaying == state));
+      });
 
     recorder = FlutterSoundRecorder()
       ..openAudioSession(
@@ -108,8 +107,9 @@ class _RecordWidgetState extends State<RecordWidget> {
           return ListTile(
               onTap: () {
                 _isPlaying
-                    ? stopPlayer()
-                    : startPlayer(listItems.elementAt(index).path.toString());
+                    ? audioPlayer.stop()
+                    : audioPlayer
+                        .play(listItems.elementAt(index).path.toString());
               },
               title: Text(listItems.elementAt(index).path.toString()),
               trailing: Icon(Icons.play_arrow));
@@ -128,29 +128,10 @@ class _RecordWidgetState extends State<RecordWidget> {
 
   @override
   void dispose() {
-    player.stopPlayer();
-    player.closeSession();
+    audioPlayer.dispose();
     if (recorder.isRecording) recorder.stopRecorder();
     recorder.closeSession();
     super.dispose();
-  }
-
-  void startPlayer(String path) async {
-    try {
-      print('startPlayer');
-      await player.startPlayer(
-        fromURI: path,
-        codec: _codec,
-        whenFinished: () {
-          print('startPlayerFinish');
-          setState(() => _isPlaying = false);
-        },
-      );
-      setState(() => _isPlaying = true);
-    } catch (err) {
-      print('startPlayer error: $err');
-      stopPlayer();
-    }
   }
 
   void startRecoder() async {
@@ -195,16 +176,6 @@ class _RecordWidgetState extends State<RecordWidget> {
       print('startRecorder error: $err');
       stopRecorder();
     }
-  }
-
-  void stopPlayer() async {
-    try {
-      print('stopPlayer');
-      await player.stopPlayer();
-    } catch (err) {
-      print('stopPlayer error: $err');
-    }
-    setState(() => _isPlaying = false);
   }
 
   void stopRecorder() async {
