@@ -89,6 +89,7 @@ class TextToSpeechAPI {
     try {
       httpRequest.headers.add('X-Goog-Api-Key', _apiKey);
       httpRequest.headers.add(HttpHeaders.contentTypeHeader, 'application/json');
+      httpRequest.headers.add(HttpHeaders.refererHeader, 'http://usen.com/'); // リファラーがこのURLのときしかAPIが動かないように制限してる
       if (data != null) {
         httpRequest.add(data);
       }
