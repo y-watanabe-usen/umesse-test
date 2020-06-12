@@ -43,6 +43,7 @@ class _HomeWidgetState extends State<HomeWidget>
       ),
       bottomNavigationBar: BottomAppBar(
         child: TabBar(
+          isScrollable: true,
           tabs: tabs,
           controller: _tabController,
           unselectedLabelColor: Colors.grey,
