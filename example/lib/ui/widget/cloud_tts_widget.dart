@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
-import 'package:audioplayer/audioplayer.dart';
 import 'dart:convert';
 import 'package:path_provider/path_provider.dart';
 import 'package:umesse/repository/test_to_speach_api.dart';
 import 'package:umesse/models/cloud_tts_voice.dart';
+import 'package:umesse/utils/audio_player/audio_player_flutter_sound.dart';
 
 class CloudTtsWidget extends StatefulWidget {
   @override
@@ -14,19 +14,22 @@ class CloudTtsWidget extends StatefulWidget {
 class _CloudTtsWidgetState extends State<CloudTtsWidget> {
   List<CloudTtsVoice> _voices = [];
   CloudTtsVoice _selectedVoice;
-  AudioPlayer audioPlugin = AudioPlayer();
+  // AudioPlayer audioPlugin = AudioPlayer();
+  AudioPlayer audioPlayer;
   final TextEditingController _searchQuery =
       TextEditingController(text: "いらっしゃいませ");
 
   initState() {
     super.initState();
     getVoices();
+   audioPlayer = AudioPlayerFlutterSound()
+      ..setCodec(AudioCodec.mp3)
+      ..setStateListener((AudioPlayerState state) {
+        //setState(() => _isPlaying = (AudioPlayerState.isPlaying == state));
+      });
   }
 
   void synthesizeText(String text) async {
-    if (audioPlugin.state == AudioPlayerState.PLAYING) {
-      await audioPlugin.stop();
-    }
     final String audioContent = await TextToSpeechAPI().synthesizeText(
         text, _selectedVoice.name, _selectedVoice.languageCodes.first);
     if (audioContent == null) return;
@@ -34,7 +37,7 @@ class _CloudTtsWidgetState extends State<CloudTtsWidget> {
     final dir = await getTemporaryDirectory();
     final file = File('${dir.path}/wavenet.mp3');
     await file.writeAsBytes(bytes);
-    await audioPlugin.play(file.path, isLocal: true);
+    audioPlayer.play(file.path);
   }
 
   void getVoices() async {
