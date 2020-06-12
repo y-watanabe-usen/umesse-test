@@ -7,6 +7,10 @@ import 'package:flutter_sound/flutter_sound.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:umesse/utils/audio_player/audio_player.dart';
+import 'package:umesse/utils/audio_player/audio_player_flutter_sound.dart';
+import 'package:umesse/utils/audio_recorder/audio_recorder.dart';
+import 'package:umesse/utils/audio_recorder/audio_recorder_flutter_sound.dart';
 
 class RecordWidget extends StatefulWidget {
   static String routeName = '/record';
@@ -16,8 +20,8 @@ class RecordWidget extends StatefulWidget {
 }
 
 class _RecordWidgetState extends State<RecordWidget> {
-  FlutterSoundPlayer player;
-  FlutterSoundRecorder recorder;
+  AudioPlayer audioPlayer;
+  AudioRecorder audioRecorder;
   StreamSubscription recorderSubscription;
 
   bool _isPlaying;
@@ -30,21 +34,12 @@ class _RecordWidgetState extends State<RecordWidget> {
   @override
   void initState() {
     super.initState();
-    player = FlutterSoundPlayer()
-      ..openAudioSession(
-        focus: AudioFocus.requestFocusTransient,
-        category: SessionCategory.playAndRecord,
-        mode: SessionMode.modeDefault,
-        audioFlags: outputToSpeaker,
-      );
-
-    recorder = FlutterSoundRecorder()
-      ..openAudioSession(
-        focus: AudioFocus.requestFocusTransient,
-        category: SessionCategory.playAndRecord,
-        mode: SessionMode.modeDefault,
-        audioFlags: outputToSpeaker,
-      );
+    audioPlayer = AudioPlayerFlutterSound()
+      ..setCodec(AudioCodec.aac)
+      ..setStateListener((AudioPlayerState state) {
+        setState(() => _isPlaying = (AudioPlayerState.isPlaying == state));
+      });
+    audioRecorder = AudioRecorderFlutterSound();
 
     _isPlaying = false;
     _isRecording = false;
@@ -108,8 +103,9 @@ class _RecordWidgetState extends State<RecordWidget> {
           return ListTile(
               onTap: () {
                 _isPlaying
-                    ? stopPlayer()
-                    : startPlayer(listItems.elementAt(index).path.toString());
+                    ? audioPlayer.stop()
+                    : audioPlayer
+                        .play(listItems.elementAt(index).path.toString());
               },
               title: Text(listItems.elementAt(index).path.toString()),
               trailing: Icon(Icons.play_arrow));
@@ -128,29 +124,11 @@ class _RecordWidgetState extends State<RecordWidget> {
 
   @override
   void dispose() {
-    player.stopPlayer();
-    player.closeSession();
-    if (recorder.isRecording) recorder.stopRecorder();
-    recorder.closeSession();
+    audioPlayer.dispose();
+    audioRecorder.dispose();
+//    if (recorder.isRecording) recorder.stopRecorder();
+//    recorder.closeSession();
     super.dispose();
-  }
-
-  void startPlayer(String path) async {
-    try {
-      print('startPlayer');
-      await player.startPlayer(
-        fromURI: path,
-        codec: _codec,
-        whenFinished: () {
-          print('startPlayerFinish');
-          setState(() => _isPlaying = false);
-        },
-      );
-      setState(() => _isPlaying = true);
-    } catch (err) {
-      print('startPlayer error: $err');
-      stopPlayer();
-    }
   }
 
   void startRecoder() async {
@@ -167,15 +145,10 @@ class _RecordWidgetState extends State<RecordWidget> {
       // _path = '${tempDir.path}/${recorder.slotNo}${ext[_codec.index]}';
       _path = '${tempDir.path}/$formatted${ext[_codec.index]}';
       print(_path);
-      await recorder.startRecorder(
-        toFile: _path,
-        codec: _codec,
-        bitRate: 8000,
-        sampleRate: 8000,
-      );
+      audioRecorder.startRecorder(_path);
       print('startRecorder');
 
-      recorderSubscription = recorder.onProgress.listen((e) {
+      recorderSubscription = audioRecorder.onProgress.listen((e) {
         if (e != null && e.duration != null) {
           DateTime date = DateTime.fromMillisecondsSinceEpoch(
             e.duration.inMilliseconds,
@@ -197,20 +170,10 @@ class _RecordWidgetState extends State<RecordWidget> {
     }
   }
 
-  void stopPlayer() async {
-    try {
-      print('stopPlayer');
-      await player.stopPlayer();
-    } catch (err) {
-      print('stopPlayer error: $err');
-    }
-    setState(() => _isPlaying = false);
-  }
-
   void stopRecorder() async {
     try {
       print('stopRecorder');
-      await recorder.stopRecorder();
+      audioRecorder.stopRecorder();
       cancelRecorderSubscriptions();
     } catch (err) {
       print('stopRecorder error: $err');
