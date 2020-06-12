@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:umesse/ui/widget/mix_widget.dart';
 import 'package:umesse/ui/widget/record_widget.dart';
 import 'package:umesse/ui/widget/tts_widget.dart';
+import 'package:umesse/ui/widget/cloud_tts_widget.dart';
 
 import 'audio_analyzer.widget.dart';
 import 'audio_concat_widget.dart';
@@ -25,7 +26,8 @@ class _HomeWidgetState extends State<HomeWidget>
     Tab(text: 'Record'),
     Tab(text: '結合'),
     Tab(text: '音圧'),
-    Tab(text: 'TTS')
+    Tab(text: 'TTS'),
+    Tab(text: 'CloudTTS'),
   ];
 
   TabController _tabController;
@@ -56,7 +58,8 @@ class _HomeWidgetState extends State<HomeWidget>
         RecordWidget(),
         AudioConcatWidget(),
         AudioAnalyzerWidget(),
-        TtsWidget()
+        TtsWidget(),
+        CloudTtsWidget(),
       ]),
     );
   }
