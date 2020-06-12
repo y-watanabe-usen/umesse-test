@@ -6,7 +6,7 @@ import 'package:umesse/models/cloud_tts_voice.dart';
 class TextToSpeechAPI {
   static final TextToSpeechAPI _singleton = TextToSpeechAPI._internal();
   final _httpClient = HttpClient();
-  static const _apiKey = "AIzaSyACc2LrBusx_UTfHvzEf5ApizQzqQ9X8GM";
+  static const _apiKey = "AIzaSyACc2LrBusx_UTfHvzEf5ApizQzqQ9X8GM"; // 個人で取得したAPIキー
   static const _apiURL = "texttospeech.googleapis.com";
 //  static const _apiURL = "speech.googleapis.com";
 
