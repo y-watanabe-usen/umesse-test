@@ -9,6 +9,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:umesse/utils/audio_player/audio_player.dart';
 import 'package:umesse/utils/audio_player/audio_player_flutter_sound.dart';
+import 'package:umesse/utils/audio_recorder/audio_recorder.dart';
+import 'package:umesse/utils/audio_recorder/audio_recorder_flutter_sound.dart';
 
 class RecordWidget extends StatefulWidget {
   static String routeName = '/record';
@@ -19,7 +21,7 @@ class RecordWidget extends StatefulWidget {
 
 class _RecordWidgetState extends State<RecordWidget> {
   AudioPlayer audioPlayer;
-  FlutterSoundRecorder recorder;
+  AudioRecorder audioRecorder;
   StreamSubscription recorderSubscription;
 
   bool _isPlaying;
@@ -37,14 +39,7 @@ class _RecordWidgetState extends State<RecordWidget> {
       ..setStateListener((AudioPlayerState state) {
         setState(() => _isPlaying = (AudioPlayerState.isPlaying == state));
       });
-
-    recorder = FlutterSoundRecorder()
-      ..openAudioSession(
-        focus: AudioFocus.requestFocusTransient,
-        category: SessionCategory.playAndRecord,
-        mode: SessionMode.modeDefault,
-        audioFlags: outputToSpeaker,
-      );
+    audioRecorder = AudioRecorderFlutterSound();
 
     _isPlaying = false;
     _isRecording = false;
@@ -130,8 +125,9 @@ class _RecordWidgetState extends State<RecordWidget> {
   @override
   void dispose() {
     audioPlayer.dispose();
-    if (recorder.isRecording) recorder.stopRecorder();
-    recorder.closeSession();
+    audioRecorder.dispose();
+//    if (recorder.isRecording) recorder.stopRecorder();
+//    recorder.closeSession();
     super.dispose();
   }
 
@@ -149,15 +145,10 @@ class _RecordWidgetState extends State<RecordWidget> {
       // _path = '${tempDir.path}/${recorder.slotNo}${ext[_codec.index]}';
       _path = '${tempDir.path}/$formatted${ext[_codec.index]}';
       print(_path);
-      await recorder.startRecorder(
-        toFile: _path,
-        codec: _codec,
-        bitRate: 8000,
-        sampleRate: 8000,
-      );
+      audioRecorder.startRecorder(_path);
       print('startRecorder');
 
-      recorderSubscription = recorder.onProgress.listen((e) {
+      recorderSubscription = audioRecorder.onProgress.listen((e) {
         if (e != null && e.duration != null) {
           DateTime date = DateTime.fromMillisecondsSinceEpoch(
             e.duration.inMilliseconds,
@@ -182,7 +173,7 @@ class _RecordWidgetState extends State<RecordWidget> {
   void stopRecorder() async {
     try {
       print('stopRecorder');
-      await recorder.stopRecorder();
+      audioRecorder.stopRecorder();
       cancelRecorderSubscriptions();
     } catch (err) {
       print('stopRecorder error: $err');
