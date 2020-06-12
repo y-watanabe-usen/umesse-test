@@ -50,6 +50,7 @@ class AudioPlayerFlutterSound implements AudioPlayer {
     }
   }
 
+  @override
   void dispose() {
     if (player.isPlaying) player.stopPlayer();
     player.closeSession();

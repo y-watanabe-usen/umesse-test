@@ -14,4 +14,5 @@ abstract class AudioPlayer {
   void play(String path);
   void stop();
   void setStateListener(UpdateStateListener listener);
+  void dispose();
 }

@@ -7,7 +7,8 @@ import 'package:flutter_sound/flutter_sound.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:umesse/ui/audio_player/audio_player_flutter_sound.dart';
+import 'package:umesse/utils/audio_player/audio_player.dart';
+import 'package:umesse/utils/audio_player/audio_player_flutter_sound.dart';
 
 class RecordWidget extends StatefulWidget {
   static String routeName = '/record';
@@ -17,7 +18,7 @@ class RecordWidget extends StatefulWidget {
 }
 
 class _RecordWidgetState extends State<RecordWidget> {
-  AudioPlayerFlutterSound audioPlayer;
+  AudioPlayer audioPlayer;
   FlutterSoundRecorder recorder;
   StreamSubscription recorderSubscription;
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:umesse/models/voices.dart';
-import 'package:umesse/ui/audio_player/audio_player_flutter_sound.dart';
+import 'package:umesse/utils/audio_player/audio_player_flutter_sound.dart';
 
 class PresetWidget extends StatefulWidget {
   @override
@@ -9,7 +9,7 @@ class PresetWidget extends StatefulWidget {
 }
 
 class _PresetWidgetState extends State<PresetWidget> {
-  AudioPlayerFlutterSound audioPlayer;
+  AudioPlayer audioPlayer;
   Future<Voices> getPresetVoices() async {
     String data = await rootBundle.loadString('assets/json/presetvoices.json');
     return voicesFromJson(data);
