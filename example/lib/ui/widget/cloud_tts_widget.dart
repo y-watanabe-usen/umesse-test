@@ -22,7 +22,7 @@ class _CloudTtsWidgetState extends State<CloudTtsWidget> {
   initState() {
     super.initState();
     getVoices();
-   audioPlayer = AudioPlayerFlutterSound()
+    audioPlayer = AudioPlayerFlutterSound()
       ..setCodec(AudioCodec.mp3)
       ..setStateListener((AudioPlayerState state) {
         //setState(() => _isPlaying = (AudioPlayerState.isPlaying == state));
