@@ -43,6 +43,8 @@ class _AudioAnalyzerWidgetState extends State<AudioAnalyzerWidget> {
               setState(() {
                 loading = false;
                 inputFile = null;
+                Scaffold.of(context).showSnackBar(
+                    SnackBar(content: Text("generate $outputFile")));
               });
             },
           ),
@@ -55,6 +57,8 @@ class _AudioAnalyzerWidgetState extends State<AudioAnalyzerWidget> {
               setState(() {
                 loading = false;
                 inputFile = null;
+                Scaffold.of(context).showSnackBar(
+                    SnackBar(content: Text("generate $outputFile")));
               });
             },
           ),
