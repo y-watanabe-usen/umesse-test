@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:umesse/ui/dialogs/audio_file_selector_dialog.dart';
-import 'package:umesse/utils/audio_manager.dart';
+import 'package:umesse/utils/audio_converter.dart';
 
 class AudioConcatWidget extends StatefulWidget {
   @override
@@ -11,7 +11,7 @@ class AudioConcatWidget extends StatefulWidget {
 }
 
 class _AudioConcatWidgetState extends State<AudioConcatWidget> {
-  final AudioManager _audioManager = AudioManager();
+  final AudioConverter _audioConverter = AudioConverter();
   String first, seccond;
   bool _loading = false;
 
@@ -30,7 +30,7 @@ class _AudioConcatWidgetState extends State<AudioConcatWidget> {
   }
 
   void updateList() {
-    _audioManager.listAudioOutiutFiles().then((list) {
+    _audioConverter.listAudioOutiutFiles().then((list) {
       setState(() => listItems = list);
     });
   }
@@ -82,7 +82,7 @@ class _AudioConcatWidgetState extends State<AudioConcatWidget> {
                 var formatter = new DateFormat('yyyy-MM-dd-HH-mm-ss', "ja_JP");
                 var formatted = formatter.format(datetime);
                 final outputFile = "output_$formatted.aac";
-                _audioManager.concat(first, seccond, outputFile).then((result) {
+                _audioConverter.concat(first, seccond, outputFile).then((result) {
                   first = null;
                   seccond = null;
                   loading = false;

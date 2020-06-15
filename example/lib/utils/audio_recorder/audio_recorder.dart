@@ -1,7 +1,7 @@
 import 'package:flutter_sound/flutter_sound.dart';
 
 abstract class AudioRecorder {
-  void startRecorder(String toFile);
+  void startRecorder();
   void stopRecorder();
   void dispose();
 

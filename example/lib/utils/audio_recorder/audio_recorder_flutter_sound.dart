@@ -1,9 +1,12 @@
-import 'package:flutter_sound/flutter_sound.dart';
+import 'dart:io';
 
+import 'package:flutter_sound/flutter_sound.dart';
+import 'package:intl/intl.dart';
+
+import '../path_utils.dart';
 import 'audio_recorder.dart';
 
 class AudioRecorderFlutterSound implements AudioRecorder {
-
   @override
   Stream<RecordingDisposition> get onProgress => recorder.onProgress;
   final FlutterSoundRecorder recorder = FlutterSoundRecorder()
@@ -14,8 +17,12 @@ class AudioRecorderFlutterSound implements AudioRecorder {
       audioFlags: outputToSpeaker,
     );
   @override
-  void startRecorder(String toFile) async{
-    await recorder.startRecorder(
+  void startRecorder() async {
+    Directory tempDir = await PathUtils.getAudioDir();
+    var formatted =
+        DateFormat('yyyy-MM-dd-HH-mm-ss', "ja_JP").format(DateTime.now());
+    final toFile = '${tempDir.path}/$formatted${ext[Codec.aacADTS.index]}';
+    recorder.startRecorder(
       toFile: toFile,
       codec: Codec.aacADTS,
       bitRate: 8000,
