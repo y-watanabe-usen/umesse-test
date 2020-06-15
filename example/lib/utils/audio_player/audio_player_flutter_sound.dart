@@ -14,6 +14,8 @@ class AudioPlayerFlutterSound implements AudioPlayer {
     );
 
   @override
+  bool get isPlaying => player.playerState == PlayerState.isPlaying;
+  @override
   void play(String path) async {
     await player.startPlayer(
       fromURI: path,

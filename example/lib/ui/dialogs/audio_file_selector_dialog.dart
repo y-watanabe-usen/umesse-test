@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:umesse/utils/audio_manager.dart';
+import 'package:umesse/utils/audio_converter.dart';
 
 Future<String> showAudioFileSelectorDialog(BuildContext context) {
   return showDialog(
@@ -18,7 +18,7 @@ class AudioFileSelectorDialog extends StatefulWidget {
 class _AudioFileSelectorDialogState extends State<AudioFileSelectorDialog> {
   List<FileSystemEntity> listItems = [];
 
-  final AudioManager _audioManager = AudioManager();
+  final AudioConverter _audioManager = AudioConverter();
   @override
   void initState() {
     super.initState();

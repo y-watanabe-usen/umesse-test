@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'dart:convert';
-import 'package:path_provider/path_provider.dart';
 import 'package:umesse/repository/test_to_speach_api.dart';
 import 'package:umesse/models/cloud_tts_voice.dart';
 import 'package:umesse/utils/audio_player/audio_player_flutter_sound.dart';
+import 'package:umesse/utils/path_utils.dart';
 
 class CloudTtsWidget extends StatefulWidget {
   @override
@@ -34,7 +34,7 @@ class _CloudTtsWidgetState extends State<CloudTtsWidget> {
         text, _selectedVoice.name, _selectedVoice.languageCodes.first);
     if (audioContent == null) return;
     final bytes = Base64Decoder().convert(audioContent, 0, audioContent.length);
-    final dir = await getTemporaryDirectory();
+    final dir = await PathUtils.getAudioDir();
     final file = File('${dir.path}/wavenet.mp3');
     await file.writeAsBytes(bytes);
     audioPlayer.play(file.path);

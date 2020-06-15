@@ -10,6 +10,7 @@ enum AudioCodec {
 typedef void UpdateStateListener(AudioPlayerState state);
 
 abstract class AudioPlayer {
+  bool get isPlaying;
   void setCodec(AudioCodec codec);
   void play(String path);
   void stop();

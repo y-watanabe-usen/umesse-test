@@ -5,12 +5,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:intl/intl.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:umesse/utils/audio_player/audio_player.dart';
 import 'package:umesse/utils/audio_player/audio_player_flutter_sound.dart';
 import 'package:umesse/utils/audio_recorder/audio_recorder.dart';
 import 'package:umesse/utils/audio_recorder/audio_recorder_flutter_sound.dart';
+import 'package:umesse/utils/path_utils.dart';
 
 class RecordWidget extends StatefulWidget {
   static String routeName = '/record';
@@ -24,24 +24,18 @@ class _RecordWidgetState extends State<RecordWidget> {
   AudioRecorder audioRecorder;
   StreamSubscription recorderSubscription;
 
-  bool _isPlaying;
   bool _isRecording;
   String _recorderTxt;
   double _dbLevel;
-  Codec _codec = Codec.aacADTS;
-  String _path;
 
   @override
   void initState() {
     super.initState();
     audioPlayer = AudioPlayerFlutterSound()
       ..setCodec(AudioCodec.aac)
-      ..setStateListener((AudioPlayerState state) {
-        setState(() => _isPlaying = (AudioPlayerState.isPlaying == state));
-      });
+      ..setStateListener((AudioPlayerState state) => setState(() => {}));
     audioRecorder = AudioRecorderFlutterSound();
 
-    _isPlaying = false;
     _isRecording = false;
     _recorderTxt = '00:00:00';
 
@@ -49,7 +43,7 @@ class _RecordWidgetState extends State<RecordWidget> {
   }
 
   updateList() {
-    getTemporaryDirectory().then((dir) {
+    PathUtils.getAudioDir().then((dir) {
       setState(() {
         listItems = dir.listSync();
       });
@@ -102,7 +96,7 @@ class _RecordWidgetState extends State<RecordWidget> {
         itemBuilder: (context, index) {
           return ListTile(
               onTap: () {
-                _isPlaying
+                audioPlayer.isPlaying
                     ? audioPlayer.stop()
                     : audioPlayer
                         .play(listItems.elementAt(index).path.toString());
@@ -126,8 +120,6 @@ class _RecordWidgetState extends State<RecordWidget> {
   void dispose() {
     audioPlayer.dispose();
     audioRecorder.dispose();
-//    if (recorder.isRecording) recorder.stopRecorder();
-//    recorder.closeSession();
     super.dispose();
   }
 
@@ -137,15 +129,7 @@ class _RecordWidgetState extends State<RecordWidget> {
       if (status != PermissionStatus.granted) {
         throw RecordingPermissionException('Microphone permission not granted');
       }
-
-      Directory tempDir = await getTemporaryDirectory();
-      final datetime = DateTime.now();
-      var formatter = new DateFormat('yyyy-MM-dd-HH-mm-ss', "ja_JP");
-      var formatted = formatter.format(datetime);
-      // _path = '${tempDir.path}/${recorder.slotNo}${ext[_codec.index]}';
-      _path = '${tempDir.path}/$formatted${ext[_codec.index]}';
-      print(_path);
-      audioRecorder.startRecorder(_path);
+      audioRecorder.startRecorder();
       print('startRecorder');
 
       recorderSubscription = audioRecorder.onProgress.listen((e) {

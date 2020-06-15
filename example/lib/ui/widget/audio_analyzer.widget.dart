@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:umesse/ui/dialogs/audio_file_selector_dialog.dart';
-import 'package:umesse/utils/audio_manager.dart';
+import 'package:umesse/utils/audio_converter.dart';
 
 class AudioAnalyzerWidget extends StatefulWidget {
   @override
@@ -8,7 +8,7 @@ class AudioAnalyzerWidget extends StatefulWidget {
 }
 
 class _AudioAnalyzerWidgetState extends State<AudioAnalyzerWidget> {
-  AudioManager _audioManager = AudioManager();
+  AudioConverter _audioManager = AudioConverter();
   String inputFile;
 
   bool _loading = false;
