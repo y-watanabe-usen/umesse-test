@@ -1,24 +1,22 @@
 const aws = require('aws-sdk');
-
-const s3 = new aws.S3({ endpoint: 'http://localstack:4572' });
+const s3 = new aws.S3({
+  endpoint: 'http://localstack:4572',
+  s3ForcePathStyle: 'true',
+});
 
 exports.handler = async (event, context, callback) => {
   try {
     const params = {
       Bucket: 'mybucket',
-      Key: event.Key
+      Key: event.Key,
     };
     console.log(params);
     const ret = await s3.getObject(params).promise();
-    context.succeed({
-      statusCode: 200,
-      body: ret.body,
-    });
+    context.statusCode = 200;
+    return ret.Body.toString();
   } catch (error) {
     console.log(error);
-    context.succeed({
-      statusCode: 500,
-      body: JSON.stringify(error),
-    });
+    context.statusCode = 500;
+    return JSON.stringify(error);
   }
 };
