@@ -1,40 +1,22 @@
-const aws = require('aws-sdk');
-const s3 = new aws.S3({
-  endpoint: 'http://docker-s3:9000',
-  s3ForcePathStyle: 'true', // docker-lambda only
-});
+'use strict';
+
+const handler = require('./handler');
 
 exports.handler = async (event, context, callback) => {
   console.log(JSON.stringify(event));
 
   try {
-    if (!event.Bucket) throw 'Parameter is not a Bucket'
-    if (!event.Key) throw 'Parameter is not a Key'
-
-    const params = {
-      Bucket: event.Bucket,
-      Key: event.Key,
-    };
-    const ret = await s3.getObject(params).promise();
-
-    return {
-      statusCode: 200,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        'url': 'http://localhost:9000/' + event.Bucket + '/' + event.Key,
-        'length': ret.Body.length
-      }),
-    };
-  } catch (error) {
-    console.log(error);
+    if (!event.Handler || typeof handler[event.Handler] !== 'function')
+      throw 'Parameter is not a Handler'
+    return handler[event.Handler](event);
+  } catch (e) {
+    console.log(e);
     return {
       statusCode: 500,
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(error)
+      body: JSON.stringify(e)
     };
   }
 };
