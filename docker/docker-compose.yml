@@ -16,10 +16,6 @@ services:
       DOCKER_LAMBDA_WATCH: 1
       DOCKER_LAMBDA_STAY_OPEN: 1
     command: index.handler
-    links:
-      - docker-s3
-    depends_on:
-      - docker-s3
     networks:
       - default
 

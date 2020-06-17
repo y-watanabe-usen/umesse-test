@@ -1,6 +1,9 @@
+'use strict';
+
 const aws = require('aws-sdk');
 const s3 = new aws.S3({
-  endpoint: 'http://docker-s3:9000',
+  region: 'ap-northeast-1',
+  endpoint: 'http://localhost:9000',
   s3ForcePathStyle: 'true', // docker-lambda only
 });
 
@@ -14,8 +17,10 @@ exports.handler = async (event, context, callback) => {
     const params = {
       Bucket: event.Bucket,
       Key: event.Key,
+      Expires: 600, // 10min
     };
-    const ret = await s3.getObject(params).promise();
+
+    const url = await s3.getSignedUrl('getObject', params);
 
     return {
       statusCode: 200,
@@ -23,8 +28,7 @@ exports.handler = async (event, context, callback) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        'url': 'http://localhost:9000/' + event.Bucket + '/' + event.Key,
-        'length': ret.Body.length
+        'url': url,
       }),
     };
   } catch (error) {
