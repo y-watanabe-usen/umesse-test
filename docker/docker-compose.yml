@@ -16,6 +16,10 @@ services:
       AWS_LAMBDA_FUNCTION_HANDLER: index.handler
       DOCKER_LAMBDA_WATCH: 1
       DOCKER_LAMBDA_STAY_OPEN: 1
+    links:
+      - docker-s3
+    depends_on:
+      - docker-s3
     networks:
       - default
 

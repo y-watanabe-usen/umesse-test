@@ -1,11 +1,6 @@
 'use strict';
 
 const aws = require('aws-sdk');
-const s3 = new aws.S3({
-  region: 'ap-northeast-1',
-  endpoint: 'http://localhost:9000',
-  s3ForcePathStyle: 'true', // docker-lambda only
-});
 const execSync = require('child_process').execSync;
 const fs = require('fs');
 
@@ -20,7 +15,14 @@ exports.get = async (event) => {
       Expires: 600, // 10min
     };
 
+    // FIXME: do not here, but for verification.
+    const s3 = new aws.S3({
+      region: 'ap-northeast-1',
+      endpoint: 'http://localhost:9000',
+      s3ForcePathStyle: 'true', // docker-lambda only
+    });
     let url = await s3.getSignedUrl('getObject', params);
+    if (!url) throw 'getSignedUrl faild'
 
     return {
       statusCode: 200,
@@ -57,12 +59,17 @@ exports.convert = async (event) => {
       Key: event.Key,
     };
 
-    let ret = await s3.getObject(params).promise;
-    fs.writeFileSync(srcPath, ret.Body);
-    console.log('file write complete');
+    // FIXME: do not here, but for verification.
+    const s3 = new aws.S3({
+      region: 'ap-northeast-1',
+      endpoint: 'http://docker-s3:9000',
+      s3ForcePathStyle: 'true', // docker-lambda only
+    });
+    let ret = await s3.getObject(params).promise();
+    if (!ret.Body) throw 'getObject faild'
 
+    fs.writeFileSync(srcPath, ret.Body);
     execSync(`/var/task/bin/ffmpeg -i ${srcPath} -af volume=3.0 ${destPath}`);
-    console.log('ffmpeg complete');
 
     let fileStream = fs.createReadStream(destPath);
     fileStream.on('error', (error) => { throw error });
@@ -72,7 +79,7 @@ exports.convert = async (event) => {
       Bucket: event.Bucket,
       Key: 'output.mp3',
     };
-    await s3.putObject(params).promise;
+    await s3.putObject(params).promise();
     console.log('put complete');
 
     return {
