@@ -20,16 +20,19 @@ exports.handler = async (event, context, callback) => {
     return {
       statusCode: 200,
       headers: {
-        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
       },
-      body: ret.Body.toString(),
+      body: JSON.stringify({
+        'url': 'http://localhost:9000/' + event.Bucket + '/' + event.Key,
+        'length': ret.Body.length
+      }),
     };
   } catch (error) {
     console.log(error);
     return {
       statusCode: 500,
       headers: {
-        'Access-Control-Allow-Origin': '*',
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(error)
     };
