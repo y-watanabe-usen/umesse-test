@@ -28,6 +28,7 @@ exports.get = async (event) => {
       statusCode: 200,
       headers: {
         'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
       },
       body: JSON.stringify({
         'url': url,
@@ -39,6 +40,7 @@ exports.get = async (event) => {
       statusCode: 500,
       headers: {
         'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
       },
       body: JSON.stringify(e)
     };
@@ -86,6 +88,7 @@ exports.convert = async (event) => {
       statusCode: 200,
       headers: {
         'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
       },
       body: JSON.stringify({
         'message': 'convert complete',
@@ -97,6 +100,7 @@ exports.convert = async (event) => {
       statusCode: 500,
       headers: {
         'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
       },
       body: JSON.stringify(e)
     };

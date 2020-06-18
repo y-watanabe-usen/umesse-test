@@ -1,0 +1,41 @@
+swagger: '2.0'
+info:
+  version: 0.0.1
+  title: U-Messe API
+  description: サンプル
+host: localhost:9001
+basePath: /
+schemes:
+  - http
+paths:
+  /2015-03-31/functions/index/invocations:
+    post:
+      tags:
+        - demo
+      summary: サンプル
+      description: サンプル
+      consumes:
+        - application/json
+      parameters:
+        - name: data
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              Handler:
+                type: string
+                example: get
+              Bucket:
+                type: string
+                example: demo
+              Key:
+                type: string
+                example: demo.mp3
+      responses:
+        200:
+          description: OK
+        400:
+          description: Bad request
+        500:
+          description: Internal server error
