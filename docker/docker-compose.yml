@@ -37,3 +37,14 @@ services:
     command: server /storage
     networks:
       - default
+
+  swagger:
+    container_name: swagger
+    hostname: swagger
+    image: swaggerapi/swagger-ui
+    ports:
+      - 9002:8080
+    volumes:
+      - ./swagger.yaml:/usr/share/nginx/html/swagger.yaml
+    environment:
+      API_URL: swagger.yaml
