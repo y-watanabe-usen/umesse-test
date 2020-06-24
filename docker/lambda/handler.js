@@ -6,8 +6,14 @@ const fs = require('fs');
 
 exports.get = async (event) => {
   try {
-    if (!event.Bucket) throw 'Parameter is not a Bucket'
-    if (!event.Key) throw 'Parameter is not a Key'
+    if (!event.Bucket) throw {
+      'status': 400,
+      'message': 'Parameter is not a Bucket'
+    };
+    if (!event.Key) throw {
+      'status': 400,
+      'message': 'Parameter is not a Key'
+    };
 
     let params = {
       Bucket: event.Bucket,
@@ -24,37 +30,26 @@ exports.get = async (event) => {
     let url = await s3.getSignedUrl('getObject', params);
     if (!url) throw 'getSignedUrl faild'
 
-    return {
-      statusCode: 200,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-      },
-      body: JSON.stringify({
-        'url': url,
-      }),
-    };
+    return { 'url': url };
   } catch (e) {
     console.log(e);
-    return {
-      statusCode: 500,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-      },
-      body: JSON.stringify(e)
-    };
+    return e;
   }
 };
 
 exports.convert = async (event) => {
   try {
-    if (!event.Bucket) throw 'Parameter is not a Bucket'
-    if (!event.Key) throw 'Parameter is not a Key'
+    if (!event.Bucket) throw {
+      'status': 400,
+      'message': 'Parameter is not a Bucket'
+    };
+    if (!event.Key) throw {
+      'status': 400,
+      'message': 'Parameter is not a Key'
+    };
 
     const srcPath = '/tmp/src.mp3';
     const destPath = '/tmp/dest.mp3';
-    execSync(`rm -rf ${srcPath} ${destPath}`);
 
     let params = {
       Bucket: event.Bucket,
@@ -84,25 +79,10 @@ exports.convert = async (event) => {
     await s3.putObject(params).promise();
     console.log('put complete');
 
-    return {
-      statusCode: 200,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-      },
-      body: JSON.stringify({
-        'message': 'convert complete',
-      }),
-    };
+    execSync(`rm -rf ${srcPath} ${destPath}`);
+    return { 'message': 'convert complete' };
   } catch (e) {
     console.log(e);
-    return {
-      statusCode: 500,
-      headers: {
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*',
-      },
-      body: JSON.stringify(e)
-    };
+    return e;
   }
 };

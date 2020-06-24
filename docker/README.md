@@ -17,4 +17,6 @@ http://localhost:9000
 ## swagger
 ```
 http://localhost:9002
+TODO: CORS
+https://github.com/lambci/docker-lambda/issues/256
 ```
