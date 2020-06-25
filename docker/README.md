@@ -5,7 +5,7 @@ docker-compose up
 
 ## lambda
 ```
-endpoint: http://localhost:9000
+endpoint: http://localhost:9001
 curl -d '{"bucket":"[bucket name]", "key":"[file name]", "handler":"[get|convert]"}' http://localhost:9001/2015-03-31/functions/index/invocations
 ```
 
