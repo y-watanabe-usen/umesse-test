@@ -18,8 +18,10 @@ services:
       DOCKER_LAMBDA_STAY_OPEN: 1
     links:
       - docker-s3
+      - docker-dynamodb
     depends_on:
       - docker-s3
+      - docker-dynamodb
     networks:
       - default
 
@@ -38,15 +40,31 @@ services:
     networks:
       - default
 
-  swagger:
-    container_name: swagger
-    hostname: swagger
+  docker-dynamodb:
+    container_name: docker-dynamodb
+    hostname: docker-dynamodb
+    image: amazon/dynamodb-local
+    volumes:
+      - ./dynamodb:/home/dynamodblocal
+    ports:
+      - 9002:8000
+    command: -jar DynamoDBLocal.jar -sharedDb -dbPath . -optimizeDbBeforeStartup
+    environment:
+      AWS_DEFAULT_REGION: ap-northeast-1
+      AWS_ACCESS_KEY_ID: 1234567890
+      AWS_SECRET_ACCESS_KEY: 1234567890
+    networks:
+      - default
+
+  docker-swagger:
+    container_name: docker-swagger
+    hostname: docker-swagger
     image: swaggerapi/swagger-ui
     ports:
-      - 9002:8080
+      - 9003:8080
     volumes:
-      - ./swagger.yaml:/usr/share/nginx/html/swagger.yaml
+      - ./umesseapi.yaml:/usr/share/nginx/html/umesseapi.yaml
     environment:
-      API_URL: swagger.yaml
+      API_URL: umesseapi.yaml
     networks:
       - default

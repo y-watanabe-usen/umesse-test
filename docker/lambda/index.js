@@ -6,12 +6,12 @@ exports.handler = async (event, context, callback) => {
   console.log(JSON.stringify(event));
 
   try {
-    if (!event.Handler || typeof handler[event.Handler] !== 'function')
+    if (!event.handler || typeof handler[event.handler] !== 'function')
       throw {
         'status': 400,
-        'message': 'Parameter is not a Handler'
+        'message': 'Parameter is not a handler'
       };
-    let body = await handler[event.Handler](event);
+    let body = await handler[event.handler](event);
     return {
       statusCode: 200,
       headers: {
