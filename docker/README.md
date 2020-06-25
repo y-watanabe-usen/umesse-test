@@ -14,9 +14,14 @@ curl -d '{"bucket":"[bucket name]", "key":"[file name]", "handler":"[get|convert
 http://localhost:9000
 ```
 
+## dynamodb
+```
+http://localhost:8000/shell/
+```
+
 ## swagger
 ```
-http://localhost:9002
+http://localhost:8080
 TODO: CORS
 https://github.com/lambci/docker-lambda/issues/256
 ```
