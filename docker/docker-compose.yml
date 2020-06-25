@@ -47,7 +47,7 @@ services:
     volumes:
       - ./dynamodb:/home/dynamodblocal
     ports:
-      - 9002:8000
+      - 8000:8000
     command: -jar DynamoDBLocal.jar -sharedDb -dbPath . -optimizeDbBeforeStartup
     environment:
       AWS_DEFAULT_REGION: ap-northeast-1
@@ -61,7 +61,7 @@ services:
     hostname: docker-swagger
     image: swaggerapi/swagger-ui
     ports:
-      - 9003:8080
+      - 8080:8080
     volumes:
       - ./umesseapi.yaml:/usr/share/nginx/html/umesseapi.yaml
     environment:
