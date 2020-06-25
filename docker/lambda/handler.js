@@ -1,33 +1,22 @@
 'use strict';
 
-const aws = require('aws-sdk');
 const execSync = require('child_process').execSync;
 const fs = require('fs');
+const s3 = require('./s3Controller').controller;
+const dynamodb = require('./dynamodbController').controller;
 
 exports.get = async (event) => {
   try {
-    if (!event.Bucket) throw {
+    if (!event.bucket) throw {
       'status': 400,
-      'message': 'Parameter is not a Bucket'
+      'message': 'Parameter is not a bucket'
     };
-    if (!event.Key) throw {
+    if (!event.key) throw {
       'status': 400,
-      'message': 'Parameter is not a Key'
+      'message': 'Parameter is not a key'
     };
 
-    let params = {
-      Bucket: event.Bucket,
-      Key: event.Key,
-      Expires: 600, // 10min
-    };
-
-    // FIXME: do not here, but for verification.
-    const s3 = new aws.S3({
-      region: 'ap-northeast-1',
-      endpoint: 'http://localhost:9000',
-      s3ForcePathStyle: 'true', // docker-lambda only
-    });
-    let url = await s3.getSignedUrl('getObject', params);
+    let url = await s3.getSignedUrl(event.bucket, event.key);
     if (!url) throw 'getSignedUrl faild'
 
     return { 'url': url };
@@ -39,30 +28,20 @@ exports.get = async (event) => {
 
 exports.convert = async (event) => {
   try {
-    if (!event.Bucket) throw {
+    if (!event.bucket) throw {
       'status': 400,
-      'message': 'Parameter is not a Bucket'
+      'message': 'Parameter is not a bucket'
     };
-    if (!event.Key) throw {
+    if (!event.key) throw {
       'status': 400,
-      'message': 'Parameter is not a Key'
+      'message': 'Parameter is not a key'
     };
 
     const srcPath = '/tmp/src.mp3';
     const destPath = '/tmp/dest.mp3';
 
-    let params = {
-      Bucket: event.Bucket,
-      Key: event.Key,
-    };
-
-    // FIXME: do not here, but for verification.
-    const s3 = new aws.S3({
-      region: 'ap-northeast-1',
-      endpoint: 'http://docker-s3:9000',
-      s3ForcePathStyle: 'true', // docker-lambda only
-    });
-    let ret = await s3.getObject(params).promise();
+    execSync(`rm -rf ${srcPath} ${destPath}`);
+    let ret = await s3.get(event.bucket, event.key);
     if (!ret.Body) throw 'getObject faild'
 
     fs.writeFileSync(srcPath, ret.Body);
@@ -70,17 +49,41 @@ exports.convert = async (event) => {
 
     let fileStream = fs.createReadStream(destPath);
     fileStream.on('error', (error) => { throw error });
-
-    params = {
-      Body: fileStream,
-      Bucket: event.Bucket,
-      Key: 'output.mp3',
-    };
-    await s3.putObject(params).promise();
+    await s3.put(event.bucket, 'output.mp3', fileStream);
     console.log('put complete');
 
-    execSync(`rm -rf ${srcPath} ${destPath}`);
     return { 'message': 'convert complete' };
+  } catch (e) {
+    console.log(e);
+    return e;
+  }
+};
+
+exports.create = async (event) => {
+  try {
+    if (!event.table) throw {
+      'status': 400,
+      'message': 'Parameter is not a table'
+    };
+
+    let ret = await dynamodb.createTable({
+      TableName: event.table,
+      AttributeDefinitions: [
+        { AttributeName: 'id', AttributeType: 'S' },
+        { AttributeName: 'numbers', AttributeType: 'N' }
+      ],
+      KeySchema: [
+        { AttributeName: 'id', KeyType: 'HASH' },
+        { AttributeName: 'numbers', KeyType: 'RANGE' }
+      ],
+      ProvisionedThroughput: {
+        ReadCapacityUnits: 1,
+        WriteCapacityUnits: 1
+      },
+    });
+    if (!ret) throw 'create faild'
+
+    return { 'message': 'create complete' };
   } catch (e) {
     console.log(e);
     return e;

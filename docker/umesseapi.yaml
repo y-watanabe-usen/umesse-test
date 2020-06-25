@@ -23,13 +23,13 @@ paths:
           schema:
             type: object
             properties:
-              Handler:
+              handler:
                 type: string
                 example: get
-              Bucket:
+              bucket:
                 type: string
                 example: demo
-              Key:
+              key:
                 type: string
                 example: demo.mp3
       responses:
