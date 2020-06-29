@@ -11,11 +11,9 @@ CM = コメント (comment) + ジングル (jingle) + BGM (music)
 
 ### lambda
 - token発行
-- TTS (max length?, thrid party?)
 - コンテンツ管理 (contents)
 - プロジェクト管理 (projects)
 - 音源一覧 (comment/jingle/music/user contents)
-- Center連携 (cmアップロード or s3 get?)
 - アカウント連携 (stbaccount or umembers key?)
 
 ### s3
@@ -23,7 +21,7 @@ CM = コメント (comment) + ジングル (jingle) + BGM (music)
 ```
 users/(user_id)/contents/(id).aac // 録音音源、TTS音源 
                /projects/(id).aac // CM音源
-share/ // TODO
+share/(group_id)/ // TODO
 ```
 - bucket: umesse-contents (private) : 収録音源
 ```
@@ -54,7 +52,8 @@ user_id:
     timestamp:
   ]
 ```
-
+## 構成図
+![all-map](https://github.com/openusen/umesse/blob/master/documents/all-map.png)
 
 ## ユースケース図（U-Messe フェーズ0.5）
 ![alpha](https://github.com/openusen/umesse/blob/master/documents/u-messe%20version%20alpha.png)
@@ -62,5 +61,3 @@ user_id:
 ## ユースケース図（U-Messe フェーズ1.0）
 ![beta](https://github.com/openusen/umesse/blob/master/documents/u-messe%20version%20beta.png)
 
-## 構成図
-![all-map](https://github.com/openusen/umesse/blob/master/documents/all-map.png)
