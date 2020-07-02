@@ -4,12 +4,8 @@ variable "aws_region" {
 }
 
 variable "aws_access_key" {
-  type    = string
-default = "local"
 }
 variable "aws_secret_key" {
-  type    = string
-default = "local"
 }
 variable "aws_endpoint_url" {
   type    = string

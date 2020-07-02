@@ -10,6 +10,8 @@ provider "aws" {
   skip_metadata_api_check     = true
   s3_force_path_style         = true
 
+	### localの場合 remove comment
+/*
   endpoints {
     apigateway = var.aws_endpoint_url
     lambda     = var.aws_endpoint_url 
@@ -17,6 +19,7 @@ provider "aws" {
     dynamodb   = var.aws_endpoint_url 
     s3         = var.aws_endpoint_url 
   }
+*/
 }
 
 
