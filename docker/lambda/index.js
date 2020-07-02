@@ -9,7 +9,7 @@ exports.handler = async (event, context, callback) => {
     if (!event.handler || typeof handler[event.handler] !== 'function')
       throw {
         'status': 400,
-        'message': 'Parameter is not a handler'
+        'message': 'Parameter is not a handler',
       };
     let body = await handler[event.handler](event);
     return {
@@ -30,7 +30,7 @@ exports.handler = async (event, context, callback) => {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
       },
-      body: JSON.stringify(e.message)
+      body: JSON.stringify(e.message),
     };
   }
 };

@@ -24,11 +24,18 @@ exports.controller = {
     }).promise();
   },
 
+  list: (bucket, key) => {
+    return s3.listObjectsV2({
+      Bucket: bucket,
+      Prefix: key,
+    }).promise();
+  },
+
   getSignedUrl: (bucket, key) => {
     return s3.getSignedUrl('getObject', {
       Bucket: bucket,
       Key: key,
-      Expires: 600 // 10 minutes
+      Expires: 600, // 10 minutes
     });
   },
 };
