@@ -1,0 +1,76 @@
+@startuml mix
+
+participant App order 1
+participant Lambda order 2
+participant DynamoDB order 3
+participant S3 order 4
+skinparam ParticipantPadding 50
+autonumber
+
+title ** MIX **
+
+== プロジェクト作成・編集 ==
+App --> Lambda: プロジェクト作成・編集
+Lambda --> DynamoDB: プロジェクトデータ取得
+Lambda <-- DynamoDB: レスポンス
+App <-- Lambda: レスポンス
+
+== リスト取得 ==
+App --> Lambda: リスト取得（ナレーション・チャイム・BGM）
+Lambda --> S3: リスト取得
+Lambda <-- S3: レスポンス
+App <-- Lambda: レスポンス
+
+== 編集（リアルタイム？） ==
+App --> Lambda: 編集
+note right
+// draft
+{
+  "project_id": "xxxxxxxxxxxxxxxxx",
+  "project_title": "xxxxxxxxxxxxxxxxx",
+  "statuss": "status"
+  "start_chime": {
+    "id": "(chime_id or file_name)",
+    "volume": "1.0",
+  },
+  "end_chime": {
+    "id": "(chime_id or file_name)",
+    "volume": "1.0",
+  },
+  "bgm": {
+    "id": "(bgm_id or file_name)",
+    "volume": "1.0",
+  },
+  "narrations": [
+    {
+      "id": "(narration_id or file_name)",
+      "volume": "1.0",
+    },
+    {
+      "id": "(narration_id or file_name)",
+      "volume": "1.0",
+    },
+  ],
+  "timestamp": "timestamp",
+}
+end note
+Lambda --> DynamoDB: 編集データ更新
+Lambda <-- DynamoDB: レスポンス
+App <-- Lambda: レスポンス
+
+== 確定・視聴・ダウンロード ==
+App --> Lambda: 確定
+Lambda --> DynamoDB: プロジェクトデータ取得
+Lambda <-- DynamoDB: レスポンス
+Lambda --> S3: 該当ファイル取得
+Lambda <-- S3: ファイル取得
+Lambda --> Lambda: ffmpeg 結合
+Lambda --> S3: ファイルPUT
+Lambda <-- S3: レスポンス
+Lambda --> S3: signed url 取得
+Lambda <-- S3: signed url
+App <-- Lambda: signed url
+App --> S3: Access
+App <-- S3: Streaming or Download
+
+@enduml
