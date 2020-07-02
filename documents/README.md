@@ -5,7 +5,7 @@
 
 ## 機能一覧 (draft)
 CM作成 = ナレーション（コメント） + チャイム（ジングル） + BGM (無料の曲)を組み合わせる  
-構成は、開始チャイム（任意）＋ナレーション（必須・複数可能：多言語を想定）＋終了チャイム（任意）となり、コメントの裏にBGM（任意）が設定させる  
+構成は、開始チャイム（任意）＋ナレーション（必須・複数可能：多言語を想定）＋終了チャイム（任意）となり、ナレーションの裏にBGM（任意）を設定させる  
 各素材は任意にボリューム調整可能
 
 ### アプリ
@@ -23,8 +23,10 @@ CM作成 = ナレーション（コメント） + チャイム（ジングル）
 | TOKEN発行 | 有効期限トークンを発行する |
 | 素材管理 | ユーザーからの録音、TTS音源、USENが用意する収録音源を格納、管理する |
 | プロジェクト管理 | CM編集のプロジェクトを管理する |
+| CM作成 | ffmpegを利用してファイルを結合する |
 
 ### s3
+※１つのバケットでもいいかも
 - bucket: umesse-users (private) : ユーザーデータ
 ```
 users/(user_id)/contents/(id).aac // 録音音源、TTS音源 
@@ -33,9 +35,10 @@ share/(group_id)/ // TODO
 ```
 - bucket: umesse-contents (private) : 収録音源
 ```
-narration/*.aac // コナレーション音源
-chime/*.aac  // チャイム音源
-bgm/*.aac   // BGM音源
+narration/(カテゴリ)/*.aac // コナレーション音源
+chime/(カテゴリ)/*.aac  // チャイム音源
+bgm/(カテゴリ)/*.aac   // BGM音源
+.aacなのかは要確認
 ```
 
 ### dynamodb
@@ -47,20 +50,41 @@ bgm/*.aac   // BGM音源
     status: {N: 停止/無料/有料},
     timestamp: {N: timestamp},
     auth: {
-        token_id: {S: tokenid},
-        expiration: {N: timestamp},
+      token_id: {S: tokenid},
+      expiration: {N: timestamp},
     },
     projects: [ // max 10?
+      {
         project_id: {N: id},
-        narration_id: {N: id},
-        chime_id: {N: id},
-        bgm_id: {N: id},
-        mix_id: {N: id},
+        project_title: {S: title},
+        status: {N: status}
+        start_chime: {
+          id: {S: (chime_id or file_name)},
+          volume: {N: int},
+        },
+        end_chime: {
+          id: {S: (chime_id or file_name)},
+          volume: {N: int},
+        },
+        bgm: {
+          id: {S: (bgm_id or file_name)},
+          volume: {N: int},
+        },
+        narrations: [
+          {
+            id: {S: (narration_id or file_name)},
+            volume: {N: int},
+          },
+        ],
+        mix: {S: (mix_id or file_name)},
         timestamp: {N: timestamp},
+      },
     ],
-    contents:[ // max 10?
-        content_id: {N: id},
+    originals:[ // max 10?
+      {
+        id: {S: (orijinal_id or file_name)},
         timestamp: {N: timestamp},
+      },
     ],
   },
 }
