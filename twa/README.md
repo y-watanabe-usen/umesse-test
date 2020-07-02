@@ -10,3 +10,8 @@ https://codelabs.developers.google.com/codelabs/getting-started-with-twas/index.
 adb shell "echo '_ --disable-digital-asset-link-verification-for-url=\"https://[target url]\"' > /data/local/tmp/chrome-command-line"
 ```
 
+
+
+### 
+app/build.gradleの[hostName]を変更する事
+
