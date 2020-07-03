@@ -10,14 +10,14 @@ terraform apply
 
 
 ### local deploy
-variables.tfにendpoint設定
 ```
+### variables.tfにendpoint設定
 variable "aws_endpoint_url" {
   type    = string
   default = "http://localhost:4566"
 }
-main.tfにendpoint設定
-```
+
+## main.tfにendpoint設定
   endpoints {
     apigateway = var.aws_endpoint_url
     lambda     = var.aws_endpoint_url
