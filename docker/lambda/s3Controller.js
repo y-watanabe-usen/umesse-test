@@ -19,7 +19,7 @@ exports.controller = {
     return s3.putObject({
       Bucket: bucket,
       Key: key,
-      Body: body.toString(),
+      Body: body,
       ACL: 'private'
     }).promise();
   },

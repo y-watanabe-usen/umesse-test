@@ -121,33 +121,47 @@ exports.mix = async (event) => {
       'status': 400,
       'message': 'Parameter is not a bucket',
     };
-    if (!event.comment) throw {
-      'status': 400,
-      'message': 'Parameter is not a comment',
-    };
-    if (!event.bgm) throw {
-      'status': 400,
-      'message': 'Parameter is not a bgm',
-    };
 
-    const commentPath = '/tmp/comment.mp3';
-    const bgmPath = '/tmp/bgm.mp3';
-    const destPath = '/tmp/dest.mp3';
+    const list = [
+      'chime/se_maoudamashii_chime01.mp3',
+      'chime/se_maoudamashii_chime02.mp3',
+      'bgm/11_NSF227-011.mp3',
+      'narration/NA_001.mp3',
+      'narration/NA_002.mp3',
+      'narration/NA_003.mp3',
+    ];
 
-    execSync(`rm -rf ${commentPath} ${bgmPath} ${destPath}`);
+    execSync(`rm -rf /tmp/chime /tmp/bgm /tmp/narration /tmp/output.mp3`);
+    execSync(`mkdir -p /tmp/{chime,bgm,narration}`);
 
-    let ret = await s3.get(event.bucket, event.comment);
-    if (!ret.Body) throw 'getObject faild';
-    fs.writeFileSync(commentPath, ret.Body);
+    for (let key of list) {
+      console.log(key);
+      let res = await s3.get(event.bucket, key);
+      if (!res.Body) throw 'getObject faild';
+      fs.writeFileSync('/tmp/' + key, res.Body);
+    }
 
-    ret = await s3.get(event.bucket, event.bgm);
-    if (!ret.Body) throw 'getObject faild';
-    fs.writeFileSync(bgmPath, ret.Body);
+    let paths = '';
+    for (let key of list) {
+      paths += ' -i /tmp/' + key;
+    }
 
-    execSync(`/var/task/bin/ffmpeg -i ${commentPath} -i ${bgmPath} -filter_complex amix=inputs=2:duration=longest ${destPath}`);
-    // execSync(`/var/task/bin/ffmpeg -i ${commentPath} -i ${bgmPath} -af "afade=t=out:start_time=00:01:00:d=3" -c:v copy ${destPath}`);
+    let command = `/var/task/bin/ffmpeg -y ${paths} \
+      -filter_complex " \
+        [0:a]volume=0.8[startchime]; \
+        [1:a]volume=0.8[endchime]; \
+        [2:a]volume=0.6,aloop=2:2.14748e+009[bgm]; \
+        [3:a]volume=2.0,adelay=3s|3s[narration1]; \
+        [4:a]volume=2.0,adelay=3s|3s[narration2]; \
+        [5:a]volume=2.0,adelay=3s|3s[narration3]; \
+        [narration1][narration2][narration3]concat=n=3:v=0:a=1[join]; \
+        [join][bgm]amix=inputs=2:duration=shortest:dropout_transition=3[mix]; \
+        [startchime][mix][endchime]concat=n=3:v=0:a=1 \
+      " /tmp/output.mp3`;
+    console.log(command);
+    execSync(command);
 
-    let fileStream = fs.createReadStream(destPath);
+    let fileStream = fs.createReadStream('/tmp/output.mp3');
     fileStream.on('error', (error) => { throw error });
     await s3.put(event.bucket, 'output.mp3', fileStream);
     console.log('put complete');
