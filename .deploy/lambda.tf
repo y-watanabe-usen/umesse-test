@@ -2,17 +2,28 @@
 ##### Lambda #####
 
 data "archive_file" "lambda_zip" {
-  type        = "zip"
-  source_dir  = "${path.module}/../docker/lambda"
+  type       = "zip"
+  source_dir = "${path.module}/../docker/lambda"
+  //  source_file = "${path.module}/src/index.js"
   output_path = "umesse.zip"
+  //  source {
+  //    filename = "${path.module}/src/index.js"
+  //    content  = "index.js"
+  //  }
+  //  source {
+  //    filename = "${path.module}/src/handler.js"
+  //    content  = "handler.js"
+  //  }
 }
 resource "aws_lambda_function" "umesse" {
   function_name    = "umesse"
   filename         = "umesse.zip"
   role             = aws_iam_role.umesse.arn
-  handler          = "index.handler"
+  handler          = "lambda.handler"
   source_code_hash = data.archive_file.lambda_zip.output_base64sha256
   runtime          = "nodejs12.x"
+  //  memory_size      = 128
+  //  timeout          = 1
 }
 resource "aws_iam_role" "umesse" {
   name               = "umesse"

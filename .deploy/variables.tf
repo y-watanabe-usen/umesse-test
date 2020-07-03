@@ -7,8 +7,8 @@ variable "aws_access_key" {
 }
 variable "aws_secret_key" {
 }
-variable "aws_endpoint_url" {
-  type    = string
-  default = "http://localhost:4566"
-}
+//variable "aws_endpoint_url" {
+//  type    = string
+//  default = "http://localhost:4566"
+//}
 
