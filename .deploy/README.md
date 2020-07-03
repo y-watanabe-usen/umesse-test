@@ -1,7 +1,7 @@
 ##
 
 
-#### aws deploy
+### aws deploy
 ```
 terraform init
 terraform plan
@@ -27,7 +27,7 @@ variable "aws_endpoint_url" {
   }
 ```
 
-deploy 
+deploy to localenv 
 ```
 terraform init
 terraform plan
