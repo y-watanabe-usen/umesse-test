@@ -3,6 +3,8 @@ const express = require('express')
 const router = express.Router()
 
 const AudioManager = require('../../utils/audioManager')
+const handler = require('../../handler');
+
 const audioManager = new AudioManager()
 
 router.get('/', (req, res) => {
@@ -12,7 +14,7 @@ router.get('/', (req, res) => {
 
 const fetchChime = async (req, res) => {
     const id = req.params.id;
-    res.json(await audioManager.fetchChime(id))
+    res.json(await handler.list({bucket:'umesse-contents',key:'bgm'}))
 }
 const fetchChimes = async (req, res) => {
     res.json(await audioManager.fetchChimes())
