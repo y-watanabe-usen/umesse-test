@@ -14,10 +14,10 @@ router.get('/', (req, res) => {
 
 const fetchChime = async (req, res) => {
     const id = req.params.id;
-    res.json(await handler.list({bucket:'umesse-contents',key:'bgm'}))
+    res.json(await handler.get({bucket:'umesse-contents',key:'bgm/14_NSC726-014.mp3'}))
 }
 const fetchChimes = async (req, res) => {
-    res.json(await audioManager.fetchChimes())
+    res.json(await handler.list({bucket:'umesse-contents',key:'chime'}))
 }
 
 const putChime = (req, res) => {
