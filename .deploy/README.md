@@ -1,5 +1,12 @@
-##
+## dev 
 
+```
+cd docker/lambda
+npm install
+
+AWS_DYNAMO_ENDPOINT='http://localhost:4566' AWS_S3_ENDPOINT='http://localhost:4566' node app.local.js
+curl localhost:3000/api/material/chime/1
+```
 
 ### aws deploy
 ```

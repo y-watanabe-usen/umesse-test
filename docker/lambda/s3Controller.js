@@ -3,7 +3,7 @@
 const aws = require('aws-sdk');
 const s3 = new aws.S3({
   region: 'ap-northeast-1',
-  endpoint: 'http://docker-s3:9000',
+  endpoint: process.env.AWS_S3_ENDPOINT || 'http://docker-s3:9000',
   s3ForcePathStyle: 'true', // docker-lambda only
 });
 
