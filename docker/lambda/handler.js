@@ -148,15 +148,16 @@ exports.mix = async (event) => {
 
     let command = `/var/task/bin/ffmpeg -y ${paths} \
       -filter_complex " \
-        [0:a]volume=0.8[startchime]; \
-        [1:a]volume=0.8[endchime]; \
-        [2:a]volume=0.6,aloop=2:2.14748e+009[bgm]; \
-        [3:a]volume=2.0,adelay=3s|3s[narration1]; \
-        [4:a]volume=2.0,adelay=3s|3s[narration2]; \
-        [5:a]volume=2.0,adelay=3s|3s[narration3]; \
+        [0:a]volume=0.5[start_chime]; \
+        [1:a]volume=0.5,adelay=3s|3s[end_chime]; \
+        [2:a]volume=0.5,aloop=2:2.14748e+009[bgm]; \
+        [3:a]volume=3.0,adelay=3s|3s[narration1]; \
+        [4:a]volume=3.0,adelay=3s|3s[narration2]; \
+        [5:a]volume=3.0,adelay=3s|3s,apad=pad_dur=5[narration3]; \
         [narration1][narration2][narration3]concat=n=3:v=0:a=1[join]; \
-        [join][bgm]amix=inputs=2:duration=shortest:dropout_transition=3[mix]; \
-        [startchime][mix][endchime]concat=n=3:v=0:a=1 \
+        [join][bgm]amix=duration=shortest[mix]; \
+        [mix][end_chime]acrossfade=d=3[last]; \
+        [start_chime][last]concat=n=2:v=0:a=1 \
       " /tmp/output.mp3`;
     console.log(command);
     execSync(command);
