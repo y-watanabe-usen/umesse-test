@@ -31,7 +31,6 @@ CM作成 = ナレーション（コメント） + チャイム（ジングル）
 | CM管理 | CM作成した音源、センターアップロードしたCMを管理する |
 
 ### s3
-※１つのバケットでもいいかも
 - bucket: umesse-users (private) : ユーザーデータ
 ```
 users/(user_id)/contents/(id).aac // 録音音源、TTS音源 
