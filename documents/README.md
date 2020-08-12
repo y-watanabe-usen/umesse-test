@@ -1,14 +1,29 @@
-# draft
-
-## 構成図
+# 構成図
 ![all-map](https://github.com/openusen/umesse/blob/master/documents/all-map.png)
 
-## 機能一覧 (draft)
-CM作成 = ナレーション（コメント） + チャイム（ジングル） + BGM (無料の曲)を組み合わせる  
-構成は、開始チャイム（任意）＋ナレーション（必須・複数可能：多言語を想定）＋終了チャイム（任意）となり、ナレーションの裏にBGM（任意）を設定させる  
-各素材は任意にボリューム調整可能
+# 概要
+AWS上にブラウザによる機能を搭載し、アプリ側はTWAで表示する  
+機能は大きく分けて、CM作成、CM管理、CM発注機能がある  
 
-### アプリ
+## CM作成
+- ナレーション（コメント） + チャイム（ジングル） + BGM (無料の曲)を選択しMIXさせる
+- 構成は、開始チャイム（任意）＋ナレーション（必須・複数可能：多言語を想定）＋終了チャイム（任意）となり、ナレーションの裏にBGM（任意）  
+- 各素材は任意にボリューム調整可能
+- USENが提供するナレーションだけでなく、自身で録音したデータ、TTSを利用したデータも作成、設定することができる
+- MIX時に音圧調整を実施する
+
+## CM管理
+- 作成したCMをタブレット上で再生、U-Musicで再生するためセンターアップロード、外部デバイス（フェーズ2.0予定）へ転送管理する
+- タブレットへはダウンロードして再生できるようにする
+- センターアップロードの形式は要検討
+
+## CM発注
+- 企業CMなどUSENへ依頼するCM発注を行う
+- 依頼方法は要検討（フェーズ1.5ではメール送信？）
+
+# 機能一覧
+
+## Webアプリ
 | 機能 | 説明 |
 | ---- | ---- |
 | 認証 | TODO |
@@ -19,7 +34,7 @@ CM作成 = ナレーション（コメント） + チャイム（ジングル）
 | CM出力 | 完成したCMをダウンロードして再生、もしくはセンターアップロードし、U-Music上で利用する　センターから削除も可能（プロジェクトと紐づける？） |
 | CM再生 | ダウンロードしたCMを直再生か、外部デバイスで再生する |
 
-### lambda
+## lambda
 | 機能 | 説明 |
 | ---- | ---- |
 | 認証 | TODO |
@@ -30,7 +45,7 @@ CM作成 = ナレーション（コメント） + チャイム（ジングル）
 | CM作成 | ffmpegを利用して音源ファイルを結合する |
 | CM管理 | CM作成した音源、センターアップロードしたCMを管理する |
 
-### s3
+## s3
 - bucket: umesse-users (private) : ユーザーデータ
 ```
 users/(user_id)/contents/(id).aac // 録音音源、TTS音源 
@@ -42,17 +57,18 @@ share/(group_id)/ // TODO
 narration/(カテゴリ)/*.aac // コナレーション音源
 chime/(カテゴリ)/*.aac  // チャイム音源
 bgm/(カテゴリ)/*.aac   // BGM音源
-.aacなのかは要確認
 ```
+- bucket: umesse-webapp (private) : 静的コンテンツ
 
-### dynamodb
+## dynamodb
 - table: umesse-users : ユーザー管理テーブル
 ```
 {
   user_id: {S: xxxxx},
   items: {
-    status: {N: 停止/無料/有料},
+    status: {N: 有効/無効},
     timestamp: {N: timestamp},
+    group_id: {S: xxxxx},
     auth: {
       token_id: {S: tokenid},
       expiration: {N: timestamp},
@@ -61,7 +77,7 @@ bgm/(カテゴリ)/*.aac   // BGM音源
       {
         project_id: {N: id},
         project_title: {S: title},
-        status: {N: status}
+        status: {N: 有効/無効}
         start_chime: {
           id: {S: (chime_id or file_name)},
           volume: {N: int},
@@ -86,7 +102,7 @@ bgm/(カテゴリ)/*.aac   // BGM音源
     ],
     originals:[ // max 10?
       {
-        id: {S: (orijinal_id or file_name)},
+        id: {S: (original_id or file_name)},
         timestamp: {N: timestamp},
       },
     ],
