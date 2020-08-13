@@ -5,7 +5,7 @@ AWS上にブラウザによる機能を搭載し、アプリ側はTWAで表示�
 
 ## 構成図
 
-![all-map](all-map.png)
+![all-map](https://github.com/openusen/umesse/blob/master/documents/uml/all-map.png)
 
 ## 機能概要
 
