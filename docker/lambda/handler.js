@@ -17,7 +17,7 @@ exports.get = async (event) => {
     };
 
     let url = await s3.getSignedUrl(event.bucket, event.key);
-    if (!url) throw 'getSignedUrl faild';
+    if (!url) throw 'getSignedUrl failed';
 
     return { 'url': url };
   } catch (e) {
@@ -35,7 +35,7 @@ exports.list = async (event) => {
     if (!event.key) event.key = '';
 
     let res = await s3.list(event.bucket, event.key);
-    if (!res) throw 'list faild';
+    if (!res) throw 'list failed';
 
     let list = [];
     res.Contents.map(v => v.Key).forEach(v => {
@@ -65,7 +65,7 @@ exports.convert = async (event) => {
 
     execSync(`rm -rf ${srcPath} ${destPath}`);
     let ret = await s3.get(event.bucket, event.key);
-    if (!ret.Body) throw 'getObject faild';
+    if (!ret.Body) throw 'getObject failed';
 
     fs.writeFileSync(srcPath, ret.Body);
     execSync(`/var/task/bin/ffmpeg -i ${srcPath} -af volume=3.0 ${destPath}`);
@@ -98,7 +98,7 @@ exports.convert = async (event) => {
 
     execSync(`rm -rf ${srcPath} ${destPath}`);
     let ret = await s3.get(event.bucket, event.key);
-    if (!ret.Body) throw 'getObject faild';
+    if (!ret.Body) throw 'getObject failed';
 
     fs.writeFileSync(srcPath, ret.Body);
     execSync(`/var/task/bin/ffmpeg -i ${srcPath} -af volume=3.0 ${destPath}`);
@@ -137,7 +137,7 @@ exports.mix = async (event) => {
     for (let key of list) {
       console.log(key);
       let res = await s3.get(event.bucket, key);
-      if (!res.Body) throw 'getObject faild';
+      if (!res.Body) throw 'getObject failed';
       fs.writeFileSync('/tmp/' + key, res.Body);
     }
 
@@ -196,7 +196,7 @@ exports.create = async (event) => {
         WriteCapacityUnits: 1
       },
     });
-    if (!ret) throw 'create faild';
+    if (!ret) throw 'create failed';
 
     return { 'message': 'create complete' };
   } catch (e) {

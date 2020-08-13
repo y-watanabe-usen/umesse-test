@@ -4,7 +4,8 @@ left to right direction
 rectangle "U-Messe" {
   usecase "音声録音" as u1
   usecase "TTS録音" as u2
-  usecase "ストレージ" as u3
+  usecase "音圧調整" as u3
+  usecase "ストレージ" as u4
 }
 rectangle "外部デバイス" {
   usecase "マイク" as d1
@@ -18,9 +19,10 @@ user --> u1
 user --> u2
 user .> d1
 d1 -- u1
-u1 ..> u3: 音源格納
+u1 ..> u3
+u2 ..> u3
+u3 .> u4: 音源格納
 u2 <-> t1
-u2 <.. u3: テキストテンプレート取得
-u2 ..> u3: 音源格納
+u2 <.. u4: テキストテンプレート取得
 
 @enduml

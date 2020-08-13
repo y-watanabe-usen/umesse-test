@@ -6,8 +6,9 @@ actor usen
 rectangle "U-Messe" {
   usecase "音源作成(音声録音・TTS)" as u1
   usecase "CM作成" as u2
-  usecase "CM出力" as u3
-  usecase "収録音源" as u4
+  usecase "CM管理" as u3
+  usecase "CM発注" as u4
+  usecase "収録音源" as u5
 }
 rectangle "外部デバイス" {
   usecase "再生" as d1
@@ -27,14 +28,15 @@ title ** 全体概要 **
 user ---> u1
 user ---> u2
 user ---> u3
-u4 <-- usen: contents upload
+user ---> u4
+u5 <-- usen: contents upload
 u1 .> u2
 u4 .> u2
 u3 ---> c1: CMアップロード
-u3 <--- c1: 音圧調整後CMダウンロード
 u3 --> d1: フェーズ2.0
 c1 -> s1
 user ---> a1
 a1 ---> s2
+u4 --> usen: CM作成依頼
 
 @enduml
