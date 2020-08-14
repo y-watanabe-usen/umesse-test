@@ -5,7 +5,7 @@ AWS上にブラウザによる機能を搭載し、アプリ側はTWAで表示�
 
 ## 構成図
 
-![all-map](uml/architecture.png)
+![architecture](uml/architecture.png)
 
 ## 機能概要
 
@@ -29,6 +29,6 @@ AWS上にブラウザによる機能を搭載し、アプリ側はTWAで表示�
 
 ## 詳細
 
-[機能一覧](FEATURE_LIST.md)
-[画面一覧](SCREEN_LIST.md)
-[シーケンス一覧](SEQUENCE_LIST.md)
+- [機能一覧](FEATURE_LIST.md)
+- [画面一覧](SCREEN_LIST.md)
+- [シーケンス一覧](SEQUENCE_LIST.md)
