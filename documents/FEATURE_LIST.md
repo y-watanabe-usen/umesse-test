@@ -28,15 +28,17 @@
 
 ### s3
 
-- bucket: umesse-users (private) : ユーザーデータ
+- bucket: umesse-users (private) : ユーザーデータ管理（本番）
+- bucket: stg-umesse-users (private) : ユーザーデータ管理（ステージング）
 
 ```
-users/(user_id)/contents/(id).aac // 録音音源、TTS音源 
-               /projects/(id).aac // CM音源
+users/(user_id)/original/(id).aac // オリジナル音源（音声録音、TTS録音）
+               /cm/(id).aac // CM音源
 share/(group_id)/ // TODO
 ```
 
-- bucket: umesse-contents (private) : 収録音源
+- bucket: umesse-contents (private) : USEN収録音源管理（本番）
+- bucket: stg-umesse-contents (private) : USEN収録音源管理（ステージング）
 
 ```
 narration/(カテゴリ)/*.aac // コナレーション音源
@@ -44,55 +46,69 @@ chime/(カテゴリ)/*.aac  // チャイム音源
 bgm/(カテゴリ)/*.aac   // BGM音源
 ```
 
-- bucket: umesse-webapp (private) : 静的コンテンツ
+- bucket: umesse-webapp (private) : 静的コンテンツ管理（本番）
+- bucket: stg-umesse-webapp (private) : 静的コンテンツ管理（ステージング）
+
+```
+webapp/
+```
 
 ### dynamodb
 
-- table: umesse-users : ユーザー管理テーブル
+- table: umesse-users : ユーザー管理テーブル（本番）
+- table: stg-umesse-users : ユーザー管理テーブル（ステージング）
 
 ```
 {
   user_id: {S: xxxxx},
   items: {
-    status: {N: 有効/無効},
-    timestamp: {N: timestamp},
-    group_id: {S: xxxxx},
-    auth: {
-      token_id: {S: tokenid},
-      expiration: {N: timestamp},
+    info: {
+      name: {S: 店舗名},
+      open_time: {S: Date},
+      close_time: {S: Date},
+      group_id: {S: xxxxx},
+      status: {B: bool},
+      date: {S: Date},
     },
-    projects: [ // max 10?
+    auth: {
+      token: {S: トークンID},
+      expiration: {S: Date},
+    },
+    contents: [ // max 30
       {
-        project_id: {N: id},
-        project_title: {S: title},
-        status: {N: 有効/無効}
+        cm_id: {S: ファイル名},
+        cm_tags: [
+          {S: タグ名},
+        ],
         start_chime: {
-          id: {S: (chime_id or file_name)},
-          volume: {N: int},
+          id: {S: ファイル名},
+          volume: {N: double},
         },
         end_chime: {
-          id: {S: (chime_id or file_name)},
-          volume: {N: int},
+          id: {S: ファイル名},
+          volume: {N: double},
         },
         bgm: {
-          id: {S: (bgm_id or file_name)},
-          volume: {N: int},
+          id: {S: ファイル名},
+          volume: {N: double},
         },
         narrations: [
           {
-            id: {S: (narration_id or file_name)},
-            volume: {N: int},
+            id: {S: ファイル名},
+            volume: {N: double},
           },
         ],
-        mix: {S: (mix_id or file_name)},
-        timestamp: {N: timestamp},
+        date: {S: Date},
       },
     ],
-    originals:[ // max 10?
+    originals: [ // max 30
       {
-        id: {S: (original_id or file_name)},
-        timestamp: {N: timestamp},
+        id: {S: ファイル名},
+        date: {S: Date},
       },
+    ],
+    tags: [ // max 30
+      {S: タグ名},
     ],
   },
 }
