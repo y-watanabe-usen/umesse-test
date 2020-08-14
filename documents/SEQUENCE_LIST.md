@@ -12,7 +12,7 @@
 
 ## CM作成
 
-- 3-1 CM作成MIX
+- 3-1 CM作成MIX ![3-1 CM作成MIX](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/openusen/umesse/master/documents/uml/s3-1.wsd?token=AHW2PB2P4MNI3UA6RP2BQ6S7GYL32)
 - 3-2 音声録音
 - 3-3 TTS録音
 
