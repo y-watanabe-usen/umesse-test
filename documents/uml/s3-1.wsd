@@ -1,4 +1,4 @@
-@startuml mix
+@startuml s3-1
 
 participant WebApp order 1
 participant Lambda order 2

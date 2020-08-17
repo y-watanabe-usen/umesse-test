@@ -32,18 +32,18 @@
 - bucket: stg-umesse-users (private) : ユーザーデータ管理（ステージング）
 
 ```
-users/(user_id)/original/(id).aac // オリジナル音源（音声録音、TTS録音）
-               /cm/(id).aac // CM音源
-share/(group_id)/ // TODO
+users/(ユーザーID)/オリジナル/(タイトル).aac // オリジナル音源（音声録音、TTS録音）
+                 /CM/(タイトル).aac // CM音源
+share/(グループID)/CM/(タイトル).aac // TODO
 ```
 
 - bucket: umesse-contents (private) : USEN収録音源管理（本番）
 - bucket: stg-umesse-contents (private) : USEN収録音源管理（ステージング）
 
 ```
-narration/(カテゴリ)/*.aac // コナレーション音源
-chime/(カテゴリ)/*.aac  // チャイム音源
-bgm/(カテゴリ)/*.aac   // BGM音源
+ナレーション/(カテゴリ名)/(タイトル).aac // コナレーション音源
+チャイム/(カテゴリ名)/(タイトル).aac  // チャイム音源
+BGM/(カテゴリ名)/(タイトル).aac   // BGM音源
 ```
 
 - bucket: umesse-webapp (private) : 静的コンテンツ管理（本番）
