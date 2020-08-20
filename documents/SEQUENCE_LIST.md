@@ -8,11 +8,11 @@
 
 ### 2-1 CM一覧取得
 
-![2-1 CM一覧取得](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/openusen/umesse/master/documents/uml/s2-1.wsd?token=AHW2PBZCJUCYM54IKPS5E2S7HYGQY)
+![2-1 CM一覧取得](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/openusen/umesse/master/documents/uml/s2-1.wsd?token=AHW2PB2FEUUG3UEE23J3OEK7HYGYK)
 
 ### 2-2 CM再生・削除
 
-![2-2 CM再生・削除](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/openusen/umesse/master/documents/uml/s2-2.wsd?token=AHW2PBZCJUCYM54IKPS5E2S7HYGQY)
+![2-2 CM再生・削除](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/openusen/umesse/master/documents/uml/s2-2.wsd?token=AHW2PB3YR3OCOL26M4SDQT27HYG2M)
 
 ### 2-3 CMセンターアップロード (TODO)
 
@@ -20,7 +20,7 @@
 
 ### 3-1 CM作成MIX
 
-![3-1 CM作成MIX](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/openusen/umesse/master/documents/uml/s3-1.wsd?token=AHW2PB6LZGNVTXJMA6HAL3S7HYGNM)
+![3-1 CM作成MIX](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/openusen/umesse/master/documents/uml/s3-1.wsd?token=AHW2PBZUCXXJ2K7TD2P6YO27HYG4M)
 
 ### 3-2 音声録音
 
