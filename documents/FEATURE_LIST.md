@@ -99,9 +99,6 @@ webapp/
     contents: [ // max 30
       {
         cm_id: {S: ファイル名},
-        cm_tags: [
-          {S: タグ名},
-        ],
         start_chime: {
           id: {S: ファイル名},
           volume: {N: double},
@@ -122,15 +119,6 @@ webapp/
         ],
         date: {S: Date},
       },
-    ],
-    originals: [ // max 30
-      {
-        id: {S: ファイル名},
-        date: {S: Date},
-      },
-    ],
-    tags: [ // max 30
-      {S: タグ名},
     ],
   },
 }

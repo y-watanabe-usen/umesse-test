@@ -1,0 +1,20 @@
+@startuml s2-1
+
+participant WebApp order 1
+participant Lambda order 2
+participant DynamoDB order 3
+participant S3 order 4
+skinparam ParticipantPadding 50
+autonumber
+
+title ** 2-1 CM一覧取得 **
+
+== CM一覧取得 ==
+WebApp --> Lambda: リスト取得
+Lambda --> S3: リスト取得
+Lambda <-- S3: レスポンス
+WebApp <-- Lambda: レスポンス
+WebApp --> WebApp: ソート（更新日・名称）
+WebApp --> WebApp: 絞り込み（タグ）
+
+@enduml

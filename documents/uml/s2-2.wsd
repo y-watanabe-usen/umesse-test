@@ -1,0 +1,34 @@
+@startuml s2-2
+
+participant WebApp order 1
+participant Lambda order 2
+participant DynamoDB order 3
+participant S3 order 4
+skinparam ParticipantPadding 50
+autonumber
+
+title ** 2-2 CM再生・削除 **
+
+== CM一覧取得 ==
+WebApp --> Lambda: リスト取得
+Lambda --> S3: リスト取得
+Lambda <-- S3: レスポンス
+WebApp <-- Lambda: レスポンス
+
+== CM再生 ==
+WebApp --> Lambda: CM再生
+Lambda --> S3: signed url 取得
+Lambda <-- S3: signed url
+WebApp <-- Lambda: signed url
+WebApp --> S3: Access
+WebApp <-- S3: Streaming
+
+== CM削除 ==
+WebApp --> Lambda: CM削除
+Lambda --> S3: オブジェクト削除
+Lambda <-- S3: レスポンス
+Lambda --> DynamoDB: データ削除
+Lambda <-- DynamoDB: レスポンス
+WebApp <-- Lambda: レスポンス
+
+@enduml

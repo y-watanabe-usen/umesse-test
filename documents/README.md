@@ -58,7 +58,7 @@ https://developers.google.com/web/android/trusted-web-activity
 ### TTS
 
 - TODO:
-- Hoya社のReadSpeakerを利用（想定）
+- Hoya社のReadSpeakerを利用
 - [webapi](https://cloud.voicetext.jp/webapi)
 
 ### U-DS
