@@ -26,8 +26,9 @@ https://developers.google.com/web/android/trusted-web-activity
 
 ### CM管理
 
-- 作成したCMを編集、再生、削除、センターアップロード、拡張デバイス割り当て（フェーズ2.0予定）を行う
+- 作成したCMを編集、再生、削除、共有、センターアップロード、拡張デバイス割り当て（フェーズ2.0予定）を行う
 - センターアップロードの形式は要検討
+- 共有はU-DSからのグループ内でCMを利用できるようにする
 
 ### オリジナル管理
 
@@ -36,45 +37,74 @@ https://developers.google.com/web/android/trusted-web-activity
 - 音声録音はユーザー側のマイクを利用して録音する
 - TTS録音はあらかじめコメントが記載されているテンプレートから選択し、一部入力（店名、開店時間など）をユーザーが行い、外部APIを利用する
 
-### CM発注(※要検討)
+### CM発注（TODO）
 
 - 企業CMなどUSENへ依頼するCM発注を行う
-- 依頼方法は要検討（フェーズ1.5ではメール送信？）MITYに依頼するフォーマット形式に合わせる(CSVファイル出力→USEN制作部→手動→MITYへ登録)
+- リンクで依頼フォームへ飛ばす方針で検討中
 
 ## 詳細
 
 - [画面一覧](SCREEN_LIST.md)
 - [機能一覧](FEATURE_LIST.md)
 - [シーケンス一覧](SEQUENCE_LIST.md)
-- APIはswaggerで管理
+- APIはswaggerで管理予定
 
 ## 外部連携
 
 ### MDM
 
-- TODO:
+- TODO: 仕様待ち
 - intentによりユーザーIDを取得する
 
 ### TTS
 
-- TODO:
+- TODO: 先方調整中
 - Hoya社のReadSpeakerを利用
 - [webapi](https://cloud.voicetext.jp/webapi)
+- サンプル
+```
+#!/bin/bash
+
+url=https://api.voicetext.jp/v1/tts
+key=esukobytdjetv1en
+
+speakers="
+hikari
+takeru
+"
+
+text="
+本日も、ご来店いただき、誠にありがとうございます。
+お客様にお知らせいたします。
+当店では、新型コロナウイルスの感染予防対策を推進しております。
+ご来店の際は、出来る限りマスク着用の上、入店前には店頭備え付けのアルコール消毒液のご使用をお願いいたします。
+ご不明な点がございましたら、お近くのスタッフまでお申し付けください。
+"
+
+for speaker in $speakers; do
+  echo $speaker
+  curl "$url" -o "$speaker.mp3" -u "$key:" -d "text=$text" -d "speaker=$speaker" -d "emotion=happiness" -d "emotion_level=1" -d "pitch=90" -d "speed=100"
+  echo
+  sleep 1
+done
+
+exit
+```
 
 ### U-DS
 
-- TODO:
+- TODO: 仕様待ち
 - U-DSからユーザー情報を取得する or ユーザーIDをキーにAPIへアクセスする
 
 ### センター・ES
 
-- TODO:
+- TODO: 仕様待ち
 - 作成したCMをアップロードする
 - U-MusicのCMカテゴリに合わせてメタ情報を設定する必要がある
 
 ### 拡張デバイス（フェーズ2.0）
 
-- TODO:
+- TODO: 仕様待ち
 - フェーズ2.0対応予定
 
 ## アプリの配布
@@ -84,13 +114,12 @@ https://developers.google.com/web/android/trusted-web-activity
 
 ## AWSのエラー検知
 
-- TODO:
+- TODO: U-Musicでどのようなエスかフローを構築するか確認中
 - LambdaのログをCloudWatchへ飛ばし、CloudWatchからアラートログをSlackへ飛ばす方式を検討中(もしくはIM課へエスカレーション)
-- U-MusicのAWS系のエスカレーションがどのようにしているか確認中
 
 ## 聴取ログ・利用動向レポート
 
-- TODO:
+- TODO: CP確認中
 - オリジナルCMをローカル再生する場合などに聴取ログが必要か
 - USEN提供の音源をどれくらい利用されているかレポートも必要か
 - U-Musicの聴取ログ・レポートと合わせて確認中
