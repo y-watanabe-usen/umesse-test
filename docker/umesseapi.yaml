@@ -3,35 +3,32 @@ info:
   version: 0.0.1
   title: U-Messe API
   description: サンプル
-host: localhost:9001
+host: localhost:3000
 basePath: /
 schemes:
   - http
 paths:
-  /2015-03-31/functions/index/invocations:
+  /list:
     post:
       tags:
-        - demo
-      summary: サンプル
-      description: サンプル
+        - list
+      summary: ファイルリスト取得
+      description: S3からファイルリストを取得する
       consumes:
         - application/json
       parameters:
-        - name: data
+        - name: body
           in: body
-          required: true
+          required: bucket
           schema:
             type: object
             properties:
-              handler:
-                type: string
-                example: get
               bucket:
                 type: string
-                example: demo
+                example: umesse-contents
               key:
                 type: string
-                example: demo.mp3
+                example: BGM
       responses:
         200:
           description: OK

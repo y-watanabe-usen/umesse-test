@@ -5,24 +5,16 @@ const handler = require('./handler');
 exports.handler = async (event, context) => {
   console.log(JSON.stringify(event));
 
-  return {
-    statusCode: 200,
-    headers: {
-      'Content-Type': 'application/json',
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-    },
-    body: JSON.stringify(event),
-  };
-
-
   try {
-    if (!event.handler || typeof handler[event.handler] !== 'function')
+    if (
+      !event.pathParameters.handler ||
+      typeof handler[event.pathParameters.handler] !== 'function'
+    )
       throw {
-        'status': 400,
-        'message': 'Parameter is not a handler',
+        status: 400,
+        message: 'Parameter is not a handler',
       };
-    let body = await handler[event.handler](event);
+    let body = await handler[event.pathParameters.handler](event.body);
     return {
       statusCode: 200,
       headers: {

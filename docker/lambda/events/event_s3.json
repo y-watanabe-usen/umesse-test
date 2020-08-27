@@ -1,0 +1,8 @@
+{
+  "pathParameters": {
+    "handler": "list"
+  },
+  "body": {
+    "bucket": "umesse-contents"
+  }
+}

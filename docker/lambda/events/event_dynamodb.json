@@ -1,0 +1,8 @@
+{
+  "pathParameters": {
+    "handler": "create"
+  },
+  "body": {
+    "table": "umesse-users"
+  }
+}
