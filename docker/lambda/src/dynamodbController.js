@@ -3,7 +3,7 @@
 const aws = require('aws-sdk');
 const dynamo = new aws.DynamoDB({
   region: 'ap-northeast-1',
-  endpoint: 'http://docker-dynamodb:8000',
+  endpoint: 'http://localhost:8000',
 });
 
 exports.controller = {

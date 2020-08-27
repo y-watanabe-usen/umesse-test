@@ -2,8 +2,19 @@
 
 const handler = require('./handler');
 
-exports.handler = async (event, context, callback) => {
+exports.handler = async (event, context) => {
   console.log(JSON.stringify(event));
+
+  return {
+    statusCode: 200,
+    headers: {
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+    },
+    body: JSON.stringify(event),
+  };
+
 
   try {
     if (!event.handler || typeof handler[event.handler] !== 'function')

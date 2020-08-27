@@ -1,30 +1,5 @@
 version: '3'
 services:
-
-  docker-lambda:
-    container_name: docker-lambda
-    hostname: docker-lambda
-    image: lambci/lambda:nodejs12.x
-    volumes:
-      - ./lambda:/var/task:ro,delegated
-    ports:
-      - 9001:9001
-    environment:
-      AWS_DEFAULT_REGION: ap-northeast-1
-      AWS_ACCESS_KEY_ID: 1234567890
-      AWS_SECRET_ACCESS_KEY: 1234567890
-      AWS_LAMBDA_FUNCTION_HANDLER: index.handler
-      DOCKER_LAMBDA_WATCH: 1
-      DOCKER_LAMBDA_STAY_OPEN: 1
-    links:
-      - docker-s3
-      - docker-dynamodb
-    depends_on:
-      - docker-s3
-      - docker-dynamodb
-    networks:
-      - default
-
   docker-s3:
     container_name: docker-s3
     hostname: docker-s3
