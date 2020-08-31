@@ -2,7 +2,5 @@
   "pathParameters": {
     "handler": "list"
   },
-  "body": {
-    "bucket": "umesse-contents"
-  }
+  "body": "{\"bucket\": \"umesse-contents\"}"
 }

@@ -38,8 +38,8 @@ services:
     ports:
       - 8080:8080
     volumes:
-      - ./umesseapi.yaml:/usr/share/nginx/html/umesseapi.yaml
+      - ./lambda/swagger.yaml:/usr/share/nginx/html/swagger.yaml
     environment:
-      API_URL: umesseapi.yaml
+      API_URL: swagger.yaml
     networks:
       - default

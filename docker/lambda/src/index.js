@@ -14,7 +14,7 @@ exports.handler = async (event, context) => {
         status: 400,
         message: 'Parameter is not a handler',
       };
-    let body = await handler[event.pathParameters.handler](event.body);
+    let body = await handler[event.pathParameters.handler](JSON.parse(event.body));
     return {
       statusCode: 200,
       headers: {

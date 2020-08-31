@@ -15,7 +15,12 @@ Transform:
 # More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
 Globals:
   Function:
+    Runtime: nodejs12.x
+    MemorySize: 128
     Timeout: 30
+    Environment:
+      Variables:
+        TZ: Asia/Tokyo
   Api:
     Cors:
       AllowMethods: "'GET, POST, PUT, DELETE, OPTIONS'"
@@ -25,46 +30,86 @@ Globals:
 # Resources declares the AWS resources that you want to include in the stack
 # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/resources-section-structure.html
 Resources:
-  # Each Lambda function is defined by properties:
-  # https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+
+  LambdaRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: UMesseLambdaRole
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+              - lambda.amazonaws.com
+          Action:
+            - sts:AssumeRole
+      Path: "/"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+        - arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
+
+  LambdaRoleProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: "/"
+      Roles:
+        - !Ref LambdaRole
+
+  # UMesseApi:
+  #   Type: AWS::Serverless::Api
+  #   Properties:
+  #     Name: UMesseApi
+  #     StageName: dev
+  #     DefinitionUri: swagger.yaml
+  #     Variables:
+  #       AWSRegion: !Ref AWS::Region
 
   UMesseFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: src/index.handler
-      Runtime: nodejs12.x
-      MemorySize: 128
-      Timeout: 30
+      FunctionName: UMesseFunction
       Description: U-Messe function.
-      Policies:
-        - DynamoDBCrudPolicy:
-            TableName: !Ref AppTable
-      Environment:
-        Variables:
-          APP_TABLE: !Ref AppTable
+      Handler: src/index.handler
+      Role: !GetAtt LambdaRole.Arn
+      # Policies:
+      #   - DynamoDBCrudPolicy:
+      #       TableName: !Ref AppTable
+      # Environment:
+      #   Variables:
+      #     APP_TABLE: !Ref AppTable
       Events:
         Api:
           Type: Api
           Properties:
+            # RestApiId: !Ref UMesseApi
             Path: /{handler}
-            Method: POST
+            Method: post
 
-  # S3 bucket
-  AppBucket:
-    Type: AWS::S3::Bucket
+  UMesseFunctionPermission:
+    Type: AWS::Lambda::Permission
     Properties:
-      BucketName: !Ref AppBucketName
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref UMesseFunction
+      Principal: apigateway.amazonaws.com
 
-  # DynamoDB table
-  AppTable:
-    Type: AWS::Serverless::SimpleTable
-    Properties:
-      PrimaryKey:
-        Name: id
-        Type: String
-      ProvisionedThroughput:
-        ReadCapacityUnits: 2
-        WriteCapacityUnits: 2
+  # # S3 bucket
+  # UMesseBucket:
+  #   Type: AWS::S3::Bucket
+  #   Properties:
+  #     BucketName: umesse-contents
+
+  # # DynamoDB table
+  # UMesseTable:
+  #   Type: AWS::Serverless::SimpleTable
+  #   Properties:
+  #     PrimaryKey:
+  #       Name: id
+  #       Type: String
+  #     ProvisionedThroughput:
+  #       ReadCapacityUnits: 2
+  #       WriteCapacityUnits: 2
 
 Outputs:
   WebEndpoint:
