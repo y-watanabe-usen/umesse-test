@@ -3,22 +3,26 @@
 const aws = require('aws-sdk');
 const dynamo = new aws.DynamoDB({
   region: 'ap-northeast-1',
-  endpoint: 'http://docker-dynamodb:8000',
+  endpoint: 'http://host.docker.internal:8000',
 });
 
 exports.controller = {
   get: (table, key) => {
-    return dynamo.getItem({
-      TableName: table,
-      Key: key,
-    }).promise();
+    return dynamo
+      .getItem({
+        TableName: table,
+        Key: key,
+      })
+      .promise();
   },
 
   put: (table, item) => {
-    return dynamo.putItem({
-      TableName: table,
-      Item: item,
-    }).promise();
+    return dynamo
+      .putItem({
+        TableName: table,
+        Item: item,
+      })
+      .promise();
   },
 
   listTables: () => {
@@ -26,9 +30,11 @@ exports.controller = {
   },
 
   describeTable: (table) => {
-    return dynamo.describeTable({
-      TableName: table,
-    }).promise();
+    return dynamo
+      .describeTable({
+        TableName: table,
+      })
+      .promise();
   },
 
   createTable: (params) => {

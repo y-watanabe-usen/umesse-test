@@ -1,0 +1,54 @@
+swagger: '2.0'
+info:
+  version: 0.0.1
+  title: U-Messe API
+  description: サンプル
+host: localhost:3000
+basePath: /
+schemes:
+  - http
+consumes:
+  - application/json
+produces:
+  - application/json
+paths:
+  /list:
+    post:
+      tags:
+        - list
+      summary: ファイルリスト取得
+      description: S3からファイルリストを取得する
+      parameters:
+        - name: params
+          in: body
+          schema:
+            type: object
+            required:
+              - bucket
+            properties:
+              bucket:
+                type: string
+                example: umesse-contents
+              key:
+                type: string
+                example: BGM
+      responses:
+        200:
+          description: OK
+        400:
+          description: Bad request
+        500:
+          description: Internal server error
+      x-amazon-apigateway-integration:
+        type: aws_proxy
+        httpMethod: post
+        passthroughBehavior: when_no_match
+        uri:
+          Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${UMesseFunction.Arn}/invocations
+        responses:
+          default:
+            statusCode: 200
+            responseParameters:
+              method.response.header.Access-Control-Allow-Methods: "'GET, POST, PUT, DELETE, OPTIONS'"
+              method.response.header.Access-Control-Allow-Headers: "'Content-Type'"
+              method.response.header.Access-Control-Allow-Origin: "'*'"

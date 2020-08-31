@@ -2,16 +2,19 @@
 
 const handler = require('./handler');
 
-exports.handler = async (event, context, callback) => {
+exports.handler = async (event, context) => {
   console.log(JSON.stringify(event));
 
   try {
-    if (!event.handler || typeof handler[event.handler] !== 'function')
+    if (
+      !event.pathParameters.handler ||
+      typeof handler[event.pathParameters.handler] !== 'function'
+    )
       throw {
-        'status': 400,
-        'message': 'Parameter is not a handler',
+        status: 400,
+        message: 'Parameter is not a handler',
       };
-    let body = await handler[event.handler](event);
+    let body = await handler[event.pathParameters.handler](JSON.parse(event.body));
     return {
       statusCode: 200,
       headers: {
