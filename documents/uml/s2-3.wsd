@@ -1,0 +1,40 @@
+@startuml s2-3
+
+participant WebApp order 1
+participant Lambda order 2
+participant DynamoDB order 3
+participant S3 order 4
+skinparam ParticipantPadding 50
+autonumber
+
+title ** 2-3 CM共有・解除 **
+
+== CM一覧取得 ==
+WebApp --> Lambda: リスト取得
+Lambda --> S3: リスト取得
+Lambda <-- S3: レスポンス
+WebApp <-- Lambda: レスポンス
+
+== CM共有 ==
+WebApp --> Lambda: CM共有
+Lambda --> DynamoDB: ユーザー情報取得（グループID）
+Lambda <-- DynamoDB: レスポンス
+Lambda --> S3: CMコピー
+S3 --> S3: CMコピー
+Lambda <-- S3: レスポンス
+Lambda --> DynamoDB: CMデータ更新
+Lambda <-- DynamoDB: レスポンス
+WebApp <-- Lambda: レスポンス
+
+== CM解除 ==
+WebApp --> Lambda: CM共有解除
+Lambda --> DynamoDB: ユーザー情報取得（グループID）
+Lambda <-- DynamoDB: レスポンス
+Lambda --> S3: CM削除
+S3 --> S3: CM削除
+Lambda <-- S3: レスポンス
+Lambda --> DynamoDB: CMデータ更新
+Lambda <-- DynamoDB: レスポンス
+WebApp <-- Lambda: レスポンス
+
+@enduml

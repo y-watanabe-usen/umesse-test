@@ -2,7 +2,7 @@
 
 ## 認証
 
-### 1-1 キー認証
+### 1-1 認証（TODO）
 
 ## CM管理
 
@@ -14,9 +14,13 @@
 
 ![2-2 CM再生・削除](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/openusen/umesse/master/documents/uml/s2-2.wsd?token=AHW2PB3YR3OCOL26M4SDQT27HYG2M)
 
-### 2-3 CMセンターアップロード (TODO)
+### 2-3 CM共有・解除
 
-## CM作成
+![2-3 CM共有・解除]()
+
+### 2-4 CMセンターアップロード (TODO)
+
+## 作成
 
 ### 3-1 CM作成MIX
 

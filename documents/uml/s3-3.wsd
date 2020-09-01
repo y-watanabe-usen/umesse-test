@@ -24,13 +24,15 @@ WebApp <-- Lambda: レスポンス
 WebApp --> WebApp: 店名、開店時間入力
 
 == TTS録音作成 ==
-WebApp --> Lambda: TTS録音作成
-Lambda --> TTS: TTS API
-Lambda <-- TTS: wav レスポンス
-Lambda --> Lambda: ffmpeg 処理
-Lambda --> S3: ファイルPUT
-Lambda <-- S3: レスポンス
-Lambda --> DynamoDB: TTS録音データ登録
+WebApp --> TTS: TTS API
+WebApp <-- TTS: wav/ogg/mp3 レスポンス
+WebApp --> Lambda: 音声録音アップロードURL取得
+Lambda --> S3: signed url 取得
+Lambda <-- S3: signed url
+WebApp <-- Lambda: signed url
+WebApp --> S3: 音声録音データPUT
+WebApp <-- S3: レスポンス
+WebApp --> Lambda: 音声録音データ登録
 note right
 // draft
 {
@@ -42,6 +44,7 @@ note right
   ],
 }
 end note
+Lambda --> DynamoDB: 音声録音データ登録
 Lambda <-- DynamoDB: レスポンス
 WebApp <-- Lambda: レスポンス
 

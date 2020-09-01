@@ -7,7 +7,7 @@ participant S3 order 4
 skinparam ParticipantPadding 50
 autonumber
 
-title ** 3-1 CM作成MIX **
+title ** 3-1 CM作成 **
 
 == CM新規作成・編集 ==
 WebApp --> Lambda: CM新規作成・編集
@@ -60,7 +60,7 @@ Lambda --> DynamoDB: CMデータ更新
 Lambda <-- DynamoDB: レスポンス
 WebApp <-- Lambda: レスポンス
 
-== 確定・視聴・ダウンロード ==
+== 結合 ==
 WebApp --> Lambda: 確定
 Lambda --> DynamoDB: CMデータ取得
 Lambda <-- DynamoDB: レスポンス
@@ -69,10 +69,6 @@ Lambda <-- S3: ファイル取得
 Lambda --> Lambda: ffmpeg 結合
 Lambda --> S3: ファイルPUT
 Lambda <-- S3: レスポンス
-Lambda --> S3: signed url 取得
-Lambda <-- S3: signed url
-WebApp <-- Lambda: signed url
-WebApp --> S3: Access
-WebApp <-- S3: Streaming or Download
+WebApp <-- Lambda: レスポンス
 
 @enduml

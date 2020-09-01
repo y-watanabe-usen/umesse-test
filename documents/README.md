@@ -107,6 +107,14 @@ exit
 - TODO: 仕様待ち
 - フェーズ2.0対応予定
 
+## 開発環境
+
+![development](uml/development.png)
+
+- 開発完了はローカルのDockerを利用する
+- githubのmasterマージでAWS上にデプロイする
+- lambdaはエイリアス・タグによるエンドポイントでステージング・本番環境へ振り分ける
+
 ## アプリの配布
 
 - U-Musicと同様にU-IDMから配布する
