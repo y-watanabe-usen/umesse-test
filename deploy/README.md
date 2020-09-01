@@ -11,6 +11,9 @@ dokcer-compose up -d
 
 ## LocalStackへのdeploy
 ```
+$ cd docker/lambda
+$ npm install
+$ cd ../..
 $ cd deploy
 $ terraform init
 $ terraform plan
