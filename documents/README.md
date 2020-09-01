@@ -111,7 +111,7 @@ exit
 
 ![development](uml/development.png)
 
-- 開発完了はローカルのDockerを利用する
+- 開発はローカルでAWS Sam、Dockerを利用する
 - githubのmasterマージでAWS上にデプロイする
 - lambdaはエイリアス・タグによるエンドポイントでステージング・本番環境へ振り分ける
 
