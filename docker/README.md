@@ -1,11 +1,12 @@
 # start command
 
 ```bash
-docker-compose up -d
+docker-compose up -d --build
 cd lambda
 sam build
 sam local start-api --docker-network docker_default
-http://localhost:3000/
+# TODO
+# https://github.com/aws/aws-sam-cli/issues/1921
 ```
 
 ## lambda
@@ -57,7 +58,7 @@ sam validate
 sam deploy -g
 ```
 
-## s3
+## storage
 
 - endpoint: `http://localhost:9000`
 - url: `http://localhost:9080`
@@ -67,6 +68,124 @@ sam deploy -g
 - endpoint: `http://localhost:8000`
 - url: `http://localhost:8000/shell`
 
+### create table
+
+```bash
+// This CreateTable request will create the UMesseUsers table.
+var params = {
+    TableName: 'UMesseUsers',
+    KeySchema: [
+        {
+            AttributeName: 'Id',
+            KeyType: 'HASH'
+        }
+    ],
+    AttributeDefinitions: [
+        {
+            AttributeName: 'Id',
+            AttributeType: 'S'
+        }
+    ],
+    ProvisionedThroughput:  {
+        ReadCapacityUnits: 1,
+        WriteCapacityUnits: 1
+    }
+};
+console.log("Creating the UMesseUsers table");
+dynamodb.createTable(params, function(err, data) {
+        if (err) ppJson(err); // an error occurred
+        else ppJson(data); // successful response
+    });
+```
+
+### put item
+
+```bash
+// The PutItem API inserts a new item into DynamoDB.
+// If an item already exists with the same primary key value,
+// the item is replaced with the new item.
+// The API has several other useful parameters not shown here, including:
+//  * Expected: DynamoDB will perform the write only if certain attributes
+//    match the values you expect them to have
+//  * ReturnValues: DynamoDB can return the value you are replacing
+var params = {
+    TableName: 'UMesseUsers',
+    Item: {
+        Id: 'USER000001',
+        Info: {
+            Name: 'テスト店舗000001',
+            OpenTime: '1000',
+            CloseTime: '2200',
+            GroupId: 'GROUP000001',
+            Status: true,
+            Date: new Date().toISOString(),
+        },
+        Auth: {
+            Token: 'TOKEN0000001',
+            Expiration: '2020-10-01T00:00:00+09:00',
+        },
+        Contents: [
+            {
+                CmId: 'CM000001.aac',
+                StartChime: {
+                    Id: 'チャイム/se_maoudamashii_chime01.mp3',
+                    Volume: 0.5,
+                },
+                EndChime: {
+                    Id: 'チャイム/se_maoudamashii_chime02.mp3',
+                    Volume: 0.5,
+                },
+                Bgm: {
+                    Id: 'BGM/11_NSF227-011.mp3',
+                    Volume: 0.5,
+                },
+                Narrations: [
+                    {
+                        Id: 'ナレーション/NA_001.mp3',
+                        Volume: 3.0,
+                    },
+                    {
+                        Id: 'ナレーション/NA_002.mp3',
+                        Volume: 3.0,
+                    },
+                    {
+                        Id: 'ナレーション/NA_003.mp3',
+                        Volume: 3.0,
+                    },
+                ],
+                Share: false,
+                Center: false,
+                Date: new Date().toISOString(),
+            },
+            {
+                CmId: 'CM000002.aac',
+                Narrations: [
+                    {
+                        Id: 'ナレーション/NA_001.mp3',
+                        Volume: 3.0,
+                    },
+                ],
+                Share: false,
+                Center: false,
+                Date: new Date().toISOString(),
+            },
+        ],
+    }
+};
+console.log("Calling PutItem");
+ppJson(params);
+docClient.put(params, function(err, data) {
+    if (err) ppJson(err); // an error occurred
+    else console.log("PutItem returned successfully");
+});
+```
+
 ## swagger
 
 - url: `http://localhost:8080`
+
+## webapp
+
+[Nust.js](https://ja.nuxtjs.org/)
+
+- url: `http://localhost:3001/`

@@ -1,0 +1,18 @@
+{
+  "name": "webapp",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt --port 3001",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate"
+  },
+  "dependencies": {
+    "axios": "^0.20.0",
+    "nuxt": "^2.14.0",
+    "vue-closable": "^0.0.3",
+    "vue-js-modal": "^2.0.0-rc.6"
+  },
+  "devDependencies": {}
+}

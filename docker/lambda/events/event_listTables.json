@@ -1,0 +1,6 @@
+{
+  "pathParameters": {
+    "handler": "listTables"
+  },
+  "body": "{\"table\": \"UMesseUsers\"}"
+}

@@ -1,0 +1,6 @@
+{
+  "pathParameters": {
+    "handler": "getSignedUrl"
+  },
+  "body": "{\"bucket\": \"UMesseContents\", \"key\": \"ナレーション/NA_001.mp3\"}"
+}

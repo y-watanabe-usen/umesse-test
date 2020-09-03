@@ -1,12 +1,20 @@
-'use strict';
+"use strict";
 
-const aws = require('aws-sdk');
+const aws = require("aws-sdk");
 const dynamo = new aws.DynamoDB({
-  region: 'ap-northeast-1',
-  endpoint: 'http://host.docker.internal:8000',
+  region: "ap-northeast-1",
+  endpoint: "http://host.docker.internal:8000",
 });
 
 exports.controller = {
+  scan: (table) => {
+    return dynamo
+      .scan({
+        TableName: table,
+      })
+      .promise();
+  },
+
   get: (table, key) => {
     return dynamo
       .getItem({

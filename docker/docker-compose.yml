@@ -1,8 +1,8 @@
 version: '3'
 services:
-  docker-s3:
-    container_name: docker-s3
-    hostname: docker-s3
+  local-storage:
+    container_name: local-storage
+    hostname: local-storage
     image: minio/minio
     volumes:
       - ./storage:/storage
@@ -15,9 +15,9 @@ services:
     networks:
       - default
 
-  docker-dynamodb:
-    container_name: docker-dynamodb
-    hostname: docker-dynamodb
+  local-dynamodb:
+    container_name: local-dynamodb
+    hostname: local-dynamodb
     image: amazon/dynamodb-local
     volumes:
       - ./dynamodb:/home/dynamodblocal
@@ -31,15 +31,27 @@ services:
     networks:
       - default
 
-  docker-swagger:
-    container_name: docker-swagger
-    hostname: docker-swagger
-    image: swaggerapi/swagger-ui
+  # local-swagger:
+  #   container_name: local-swagger
+  #   hostname: local-swagger
+  #   image: swaggerapi/swagger-ui
+  #   ports:
+  #     - 8080:8080
+  #   volumes:
+  #     - ./lambda/swagger.yaml:/usr/share/nginx/html/swagger.yaml
+  #   environment:
+  #     API_URL: swagger.yaml
+  #   networks:
+  #     - default
+
+  local-webapp:
+    container_name: local-webapp
+    hostname: local-webapp
+    build: ./
+    tty: true
     ports:
-      - 8080:8080
+      - 3001:3001
     volumes:
-      - ./lambda/swagger.yaml:/usr/share/nginx/html/swagger.yaml
-    environment:
-      API_URL: swagger.yaml
+      - ./webapp:/webapp
     networks:
       - default

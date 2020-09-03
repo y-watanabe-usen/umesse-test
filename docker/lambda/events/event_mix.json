@@ -1,0 +1,6 @@
+{
+  "pathParameters": {
+    "handler": "mix"
+  },
+  "body": "{\"bucket\": \"UMesseContents\"}"
+}

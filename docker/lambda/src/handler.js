@@ -1,24 +1,24 @@
-'use strict';
+"use strict";
 
-const execSync = require('child_process').execSync;
-const fs = require('fs');
-const s3 = require('./s3Controller').controller;
-const dynamodb = require('./dynamodbController').controller;
+const execSync = require("child_process").execSync;
+const fs = require("fs");
+const s3 = require("./s3Controller").controller;
+const dynamodb = require("./dynamodbController").controller;
 
-exports.get = async (params) => {
+exports.getSignedUrl = async (params) => {
   if (!params.bucket)
     throw {
       status: 400,
-      message: 'Parameter is not a bucket',
+      message: "Parameter is not a bucket",
     };
   if (!params.key)
     throw {
       status: 400,
-      message: 'Parameter is not a key',
+      message: "Parameter is not a key",
     };
 
   let url = await s3.getSignedUrl(params.bucket, params.key);
-  if (!url) throw 'getSignedUrl failed';
+  if (!url) throw "getSignedUrl failed";
 
   return { url: url };
 };
@@ -27,12 +27,12 @@ exports.list = async (params) => {
   if (!params.bucket)
     throw {
       status: 400,
-      message: 'Parameter is not a bucket',
+      message: "Parameter is not a bucket",
     };
-  if (!params.key) params.key = '';
+  if (!params.key) params.key = "";
 
   let res = await s3.list(params.bucket, params.key);
-  if (!res) throw 'list failed';
+  if (!res) throw "list failed";
 
   let list = [];
   res.Contents.map((v) => v.Key).forEach((v) => {
@@ -42,70 +42,38 @@ exports.list = async (params) => {
   return { list: list };
 };
 
-exports.convert = async (params) => {
-  if (!params.bucket)
-    throw {
-      status: 400,
-      message: 'Parameter is not a bucket',
-    };
-  if (!params.key)
-    throw {
-      status: 400,
-      message: 'Parameter is not a key',
-    };
-
-  const srcPath = '/tmp/src.mp3';
-  const destPath = '/tmp/dest.mp3';
-
-  execSync(`rm -rf ${srcPath} ${destPath}`);
-  let ret = await s3.get(params.bucket, params.key);
-  if (!ret.Body) throw 'getObject failed';
-
-  fs.writeFileSync(srcPath, ret.Body);
-  execSync(`/var/task/bin/ffmpeg -i ${srcPath} -af volume=3.0 ${destPath}`);
-
-  let fileStream = fs.createReadStream(destPath);
-  fileStream.on('error', (error) => {
-    throw error;
-  });
-  await s3.put(params.bucket, 'output.mp3', fileStream);
-  console.log('put complete');
-
-  return { message: 'convert complete' };
-};
-
 exports.mix = async (params) => {
   if (!params.bucket)
     throw {
       status: 400,
-      message: 'Parameter is not a bucket',
+      message: "Parameter is not a bucket",
     };
 
   const list = [
-    'チャイム/se_maoudamashii_chime01.mp3',
-    'チャイム/se_maoudamashii_chime02.mp3',
-    'BGM/11_NSF227-011.mp3',
-    'ナレーション/NA_001.mp3',
-    'ナレーション/NA_002.mp3',
-    'ナレーション/NA_003.mp3',
+    "チャイム/se_maoudamashii_chime01.mp3",
+    "チャイム/se_maoudamashii_chime02.mp3",
+    "BGM/11_NSF227-011.mp3",
+    "ナレーション/NA_001.mp3",
+    "ナレーション/NA_002.mp3",
+    "ナレーション/NA_003.mp3",
   ];
 
-  execSync(`rm -rf /tmp/chime /tmp/bgm /tmp/narration /tmp/output.mp3`);
-  execSync(`mkdir -p /tmp/{chime,bgm,narration}`);
+  execSync(`rm -rf /tmp/チャイム /tmp/BGM /tmp/ナレーション /tmp/output.mp3`);
+  execSync(`mkdir -p /tmp/{チャイム,BGM,ナレーション}`);
 
   for (let key of list) {
     console.log(key);
     let res = await s3.get(params.bucket, key);
-    if (!res.Body) throw 'getObject failed';
-    fs.writeFileSync('/tmp/' + key, res.Body);
+    if (!res.Body) throw "getObject failed";
+    fs.writeFileSync("/tmp/" + key, res.Body);
   }
 
-  let paths = '';
+  let paths = "";
   for (let key of list) {
-    paths += ' -i /tmp/' + key;
+    paths += " -i /tmp/" + key;
   }
 
-  let command = `/var/task/bin/ffmpeg -y ${paths} \
+  let command = `/var/task/src/bin/ffmpeg -y ${paths} \
     -filter_complex ' \
       [0:a]volume=0.5[start_chime]; \
       [1:a]volume=0.5,adelay=3s|3s[end_chime]; \
@@ -121,39 +89,38 @@ exports.mix = async (params) => {
   console.log(command);
   execSync(command);
 
-  let fileStream = fs.createReadStream('/tmp/output.mp3');
-  fileStream.on('error', (error) => {
+  let fileStream = fs.createReadStream("/tmp/output.mp3");
+  fileStream.on("error", (error) => {
     throw error;
   });
-  await s3.put(params.bucket, 'output.mp3', fileStream);
-  console.log('put complete');
+  await s3.put(params.bucket, "output.mp3", fileStream);
+  console.log("put complete");
 
-  return { message: 'mix complete' };
+  return { message: "mix complete" };
 };
 
-exports.create = async (params) => {
+exports.listTables = async (params) => {
+  let res = await dynamodb.listTables({});
+  if (!res) throw "listTables failed";
+
+  return { res: res };
+};
+
+exports.getItem = async (params) => {
   if (!params.table)
     throw {
       status: 400,
-      message: 'Parameter is not a table',
+      message: "Parameter is not a table",
     };
+  if (!params.key) params.key = "";
 
-  let ret = await dynamodb.createTable({
+  let res = await dynamodb.get({
     TableName: params.table,
-    AttributeDefinitions: [
-      { AttributeName: 'id', AttributeType: 'S' },
-      { AttributeName: 'numbers', AttributeType: 'N' },
-    ],
-    KeySchema: [
-      { AttributeName: 'id', KeyType: 'HASH' },
-      { AttributeName: 'numbers', KeyType: 'RANGE' },
-    ],
-    ProvisionedThroughput: {
-      ReadCapacityUnits: 1,
-      WriteCapacityUnits: 1,
+    Key: {
+      Id: params.key,
     },
   });
-  if (!ret) throw 'create failed';
+  if (!res) throw "scan failed";
 
-  return { message: 'create complete' };
+  return { res: res };
 };

@@ -1,12 +1,12 @@
-'use strict';
+"use strict";
 
-const aws = require('aws-sdk');
+const aws = require("aws-sdk");
 const s3 = new aws.S3({
-  region: 'ap-northeast-1',
-  endpoint: 'http://host.docker.internal:9000',
-  accessKeyId: '1234567890',
-  secretAccessKey: '1234567890',
-  s3ForcePathStyle: 'true', // local only
+  region: "ap-northeast-1",
+  endpoint: "http://host.docker.internal:9000",
+  accessKeyId: "1234567890",
+  secretAccessKey: "1234567890",
+  s3ForcePathStyle: "true", // local only
 });
 
 exports.controller = {
@@ -25,7 +25,7 @@ exports.controller = {
         Bucket: bucket,
         Key: key,
         Body: body,
-        ACL: 'private',
+        ACL: "private",
       })
       .promise();
   },
@@ -40,7 +40,7 @@ exports.controller = {
   },
 
   getSignedUrl: (bucket, key) => {
-    return s3.getSignedUrl('getObject', {
+    return s3.getSignedUrl("getObject", {
       Bucket: bucket,
       Key: key,
       Expires: 600, // 10 minutes
