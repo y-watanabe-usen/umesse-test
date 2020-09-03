@@ -50,8 +50,8 @@
 ### s3
 
 - ユーザー作成音源、CMを管理
-- bucket: umesse-users (private) : ユーザーデータ管理（本番）
-- bucket: stg-umesse-users (private) : ユーザーデータ管理（ステージング）
+- bucket: UMesseUsers (private) : ユーザーデータ管理（本番）
+- bucket: StgUMesseUsers (private) : ユーザーデータ管理（ステージング）
 
 ```none
 users/(ユーザーID)/オリジナル/(タイトル).aac // オリジナル音源（音声録音、TTS録音）
@@ -60,8 +60,8 @@ share/(グループID)/CM/(タイトル).aac // TODO
 ```
 
 - USEN収録音源、TTSテンプレートを管理
-- bucket: umesse-contents (private) : USEN収録音源管理（本番）
-- bucket: stg-umesse-contents (private) : USEN収録音源管理（ステージング）
+- bucket: UMesseContents (private) : USEN収録音源管理（本番）
+- bucket: StgUMesseContents (private) : USEN収録音源管理（ステージング）
 
 ```none
 ナレーション/(カテゴリ名)/(タイトル).aac // コナレーション音源
@@ -71,8 +71,8 @@ TTS/(カテゴリ名)/(タイトル).txt // TTSテンプレート
 ```
 
 - Webアプリを管理
-- bucket: umesse-webapp (private) : 静的コンテンツ管理（本番）
-- bucket: stg-umesse-webapp (private) : 静的コンテンツ管理（ステージング）
+- bucket: UMesseWebapp (private) : 静的コンテンツ管理（本番）
+- bucket: StgUMesseWebapp (private) : 静的コンテンツ管理（ステージング）
 
 ```none
 webapp/
@@ -81,51 +81,49 @@ webapp/
 ### dynamodb
 
 - ユーザーの情報を管理
-- table: umesse-users : ユーザー管理テーブル（本番）
-- table: stg-umesse-users : ユーザー管理テーブル（ステージング）
+- table: UMesseUsers : ユーザー管理テーブル（本番）
+- table: StgUMesseUsers : ユーザー管理テーブル（ステージング）
 
 ```none
 {
-  user_id: {S: xxxxx},
-  items: {
-    info: {
-      name: {S: 店舗名},
-      open_time: {S: Date},
-      close_time: {S: Date},
-      group_id: {S: xxxxx},
-      status: {BOOL: boolean},
-      date: {S: Date},
-    },
-    auth: {
-      token: {S: トークンID},
-      expiration: {S: Date},
-    },
-    contents: [ // max 30
-      {
-        cm_id: {S: ファイル名},
-        start_chime: {
-          id: {S: ファイル名},
-          volume: {N: double},
-        },
-        end_chime: {
-          id: {S: ファイル名},
-          volume: {N: double},
-        },
-        bgm: {
-          id: {S: ファイル名},
-          volume: {N: double},
-        },
-        narrations: [
-          {
-            id: {S: ファイル名},
-            volume: {N: double},
-          },
-        ],
-        share: {BOOL: boolean},
-        center: {BOOL: boolean},
-        date: {S: Date},
-      },
-    ],
+  Id: {S: xxxxx},
+  Info: {
+    Name: {S: 店舗名},
+    OpenTime: {S: Date},
+    CloseTime: {S: Date},
+    GroupId: {S: xxxxx},
+    Status: {BOOL: boolean},
+    Date: {S: Date},
   },
+  Auth: {
+    Token: {S: トークンID},
+    Expiration: {S: Date},
+  },
+  Contents: [ // max 30
+    {
+      CmId: {S: ファイル名},
+      StartChime: {
+        Id: {S: ファイル名},
+        Volume: {N: double},
+      },
+      EndChime: {
+        Id: {S: ファイル名},
+        Volume: {N: double},
+      },
+      Bgm: {
+        Id: {S: ファイル名},
+        Volume: {N: double},
+      },
+      Narrations: [
+        {
+          Id: {S: ファイル名},
+          Volume: {N: double},
+        },
+      ],
+      Share: {BOOL: boolean},
+      Center: {BOOL: boolean},
+      Date: {S: Date},
+    },
+  ],
 }
 ```
