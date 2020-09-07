@@ -1,6 +1,6 @@
 # 概要
 
-AWS上にブラウザによる機能を搭載し、アプリ側はTWAで表示する  
+AWS上にブラウザによるフロントエンド機能、APIによるバックエンド機能を構築し、アプリ側はTWAでブラウザを表示する  
 https://developers.google.com/web/android/trusted-web-activity  
 機能は大きく分けて、CM作成、CM管理、オリジナル管理、CM発注機能がある  
 
@@ -18,7 +18,7 @@ https://developers.google.com/web/android/trusted-web-activity
 
 ### CM作成
 
-- ナレーション（コメント） + チャイム（ジングル） + BGM (ロイヤリティフリー)を選択しMIXさせる
+- ナレーション（コメント） + チャイム（ジングル） + BGM (USENスタジオ音源)を選択しMIXさせる
 - 構成は、開始チャイム（任意）＋ナレーション（必須・複数可能(MIN:1 MAX:4)・多言語を想定）＋終了チャイム（任意）となり、ナレーションにBGM（任意）をつける  
 - 各素材は任意にボリューム調整可能
 - USENが提供するナレーションだけでなく、自身で録音したデータ(MAX:120秒)、TTSを利用したデータ(MAX:120秒)も作成、選択することができる
@@ -34,7 +34,7 @@ https://developers.google.com/web/android/trusted-web-activity
 
 - オリジナルはユーザー自身で音声録音とTTS録音を行い、ナレーションとして利用する
 - 新規作成、作成したオリジナルを再生、削除を行う
-- 音声録音はユーザー側のマイクを利用して録音する
+- 音声録音はタブレットのマイク（および外部マイク接続）を利用して録音する
 - TTS録音はあらかじめコメントが記載されているテンプレートから選択し、一部入力（店名、開店時間など）をユーザーが行い、外部APIを利用する
 
 ### CM発注（TODO）
@@ -111,14 +111,14 @@ exit
 
 ![development](uml/development.png)
 
-- 開発はローカルでAWS Sam、Dockerを利用する
-- githubのmasterマージでAWS上にデプロイする
+- 開発はローカルでフロントエンドにvue（バージョン3.0以降、Typescript）、バックエンドにlocalstackを利用して行う
+- githubのmasterマージでterraformを利用しAWS上にデプロイする（ステージング環境）
 - lambdaはエイリアス・タグによるエンドポイントでステージング・本番環境へ振り分ける
 
 ## アプリの配布
 
 - U-Musicと同様にU-IDMから配布する
-- 今後ユーザーのスマホからの利用も可能性としてあり（Google Play、Apple Storeへの公開）
+- ~~今後ユーザーのスマホからの利用も可能性としてあり（Google Play、Apple Storeへの公開）~~
 
 ## AWSのエラー検知
 
