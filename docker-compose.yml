@@ -17,7 +17,7 @@ services:
       - START_WEB=1
       - LOCALSTACK_HOSTNAME=localstack
     volumes:
-      - ./localstack:/tmp/localstack
+      # - ./localstack:/tmp/localstack
       - /var/run/docker.sock:/var/run/docker.sock
 
   # swagger:

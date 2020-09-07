@@ -1,4 +1,3 @@
-# Local Values
 locals {
   name                   = "UMesseFunction"
   tag                    = "UMesse"

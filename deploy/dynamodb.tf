@@ -1,3 +1,4 @@
+# Dynamodb Table
 resource "aws_dynamodb_table" "users" {
   name           = "umesse-users"
   billing_mode   = "PROVISIONED"
@@ -11,6 +12,7 @@ resource "aws_dynamodb_table" "users" {
   }
 }
 
+# Dynamodb Item
 resource "aws_dynamodb_table_item" "users" {
   table_name = aws_dynamodb_table.users.name
   hash_key   = aws_dynamodb_table.users.hash_key
