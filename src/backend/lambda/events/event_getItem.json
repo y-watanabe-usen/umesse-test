@@ -1,0 +1,6 @@
+{
+  "pathParameters": {
+    "handler": "getItem"
+  },
+  "body": "{\"table\": \"UMesseUsers\", \"key\": \"USER000001\"}"
+}

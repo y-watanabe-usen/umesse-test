@@ -1,0 +1,6 @@
+{
+  "pathParameters": {
+    "handler": "list"
+  },
+  "body": "{\"bucket\": \"UMesseContents\"}"
+}
