@@ -1,9 +1,7 @@
-variable "access_key" {}
-variable "secret_key" {}
 
 provider "aws" {
   version                     = "~> 2.70"
-  region                      = "ap-northeast-1"
+  region                      = var.aws_region
   access_key                  = var.access_key
   secret_key                  = var.secret_key
   skip_credentials_validation = true
@@ -11,18 +9,18 @@ provider "aws" {
   skip_metadata_api_check     = true
   s3_force_path_style         = true
   endpoints {
-    apigateway     = "http://localhost:4567"
+    apigateway = var.aws_endpoint_url
     # cloudformation = "http://localhost:4581"
     # cloudwatch     = "http://localhost:4582"
-    dynamodb       = "http://localhost:4569"
+    dynamodb =var.aws_endpoint_url 
     # es             = "http://localhost:4578"
     # firehose       = "http://localhost:4573"
     # iam            = "http://localhost:4593"
     # kinesis        = "http://localhost:4568"
-    lambda         = "http://localhost:4574"
+    lambda     = var.aws_endpoint_url
     # route53        = "http://localhost:4580"
     # redshift       = "http://localhost:4577"
-    s3             = "http://localhost:4572"
+    s3       =var.aws_endpoint_url 
     # secretsmanager = "http://localhost:4584"
     # ses            = "http://localhost:4579"
     # sns            = "http://localhost:4575"
