@@ -21,6 +21,7 @@ var.secret_key
   Enter a value: local
 
 $ terraform apply
+$ init.sh  // s3のデータ転送
 ```
 
 

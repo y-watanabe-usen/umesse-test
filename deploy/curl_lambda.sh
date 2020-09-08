@@ -19,8 +19,8 @@ if [ -z $API_ID ]
 		curl  ${ENDPOINT}/auth $@
 		curl  ${ENDPOINT}/token $@
 		curl  ${ENDPOINT}/material $@
-		curl  ${ENDPOINT}/material/chime $@
-		curl  ${ENDPOINT}/material/chime/1 $@
-		curl  ${ENDPOINT}/project $@
-		curl  ${ENDPOINT}/cm $@
+		#curl  ${ENDPOINT}/material/chime $@
+		#curl  ${ENDPOINT}/material/chime/1 $@
+		#curl  ${ENDPOINT}/project $@
+		#curl  ${ENDPOINT}/cm $@
 fi

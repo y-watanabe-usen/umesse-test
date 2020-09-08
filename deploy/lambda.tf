@@ -13,7 +13,7 @@ data "archive_file" "lambda_file" {
 # Lambda Function
 resource "aws_lambda_function" "lambda" {
   function_name    = local.name
-  handler          = "src/index.handler"
+  handler          = "src/lambda.handler"
   role             = "watever"
   runtime          = "nodejs12.x"
   filename         = data.archive_file.lambda_file.output_path
