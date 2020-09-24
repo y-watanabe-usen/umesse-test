@@ -6,7 +6,7 @@ locals {
 # Lambda File Zip
 data "archive_file" "lambda_file" {
   type        = "zip"
-  source_dir  = "${path.module}/../docker/lambda"
+  source_dir  = "${path.module}/../develop/lambda"
   output_path = "lambda_src.zip"
 }
 

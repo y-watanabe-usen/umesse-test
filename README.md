@@ -6,11 +6,17 @@ U-Messe 簡易CM作成アプリ
 
 https://docs.google.com/presentation/d/1plloUJstdpIdemTB1MyP4VQUClir-DfiCY6seTF-Xgs/edit#slide=id.p
 
-## start command
+## develop
 
-```bash
-docker-compose up -d
-docker run -it --rm -v $PWD/deploy:/deploy -w /deploy hashicorp/terraform:light init
-docker run -it --rm -v $PWD/deploy:/deploy -v $PWD/src/lambda:/lambda -w /deploy hashicorp/terraform:light plan -var 'access_key=dummy' -var 'secret_key=dummy'
-docker run -it --rm -v $PWD/deploy:/deploy -v $PWD/src/lambda:/lambda -w /deploy hashicorp/terraform:light apply -var 'access_key=dummy' -var 'secret_key=dummy'
-```
+### aws cli
+
+https://docs.aws.amazon.com/ja_jp/cli/latest/userguide/install-cliv2.html
+
+### npm or yarn
+
+https://classic.yarnpkg.com/ja/docs/install/#debian-stable
+
+### terraform
+
+https://www.terraform.io/downloads.html
+https://hub.docker.com/r/hashicorp/terraform/
