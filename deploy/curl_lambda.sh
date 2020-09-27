@@ -13,7 +13,7 @@ if [ -z $API_ID ]
 	then
 		echo "Not Found $API_NAME"
 	else
-		ENDPOINT=http://localhost:4567/restapis/${API_ID}/${STAGE}/_user_request_/api
+		ENDPOINT=http://localhost:4566/restapis/${API_ID}/${STAGE}/_user_request_/api
 		echo "${ENDPOINT}"
 		curl  ${ENDPOINT} $@
 		curl  ${ENDPOINT}/auth $@
