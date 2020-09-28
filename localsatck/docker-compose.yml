@@ -18,5 +18,5 @@ services:
       - HOST_TMP_FOLDER=${TMPDIR}
       - DEFAULT_REGION=${DEFAULT_REGION- }
     volumes:
-      - "${TMPDIR:-/tmp/localstack}:/tmp/localstack"
+      # - "${TMPDIR:-/tmp/localstack}:/tmp/localstack"
       - "/var/run/docker.sock:/var/run/docker.sock"
