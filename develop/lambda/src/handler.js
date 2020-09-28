@@ -42,6 +42,20 @@ exports.list = async (params) => {
   return { list: list };
 };
 
+exports.getTag = async (params) => {
+  if (!params.bucket)
+    throw {
+      status: 400,
+      message: "Parameter is not a bucket",
+    };
+  if (!params.key) params.key = "";
+
+  let res = await s3.getTag(params.bucket, params.key);
+  if (!res) throw "getTag failed";
+
+  return { res: res };
+};
+
 exports.mix = async (params) => {
   if (!params.bucket)
     throw {

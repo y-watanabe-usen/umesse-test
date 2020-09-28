@@ -28,7 +28,7 @@
 ### 準備
 下記をインストールする
 - [aws cli](https://docs.aws.amazon.com/ja_jp/cli/latest/userguide/install-cliv2.html)
-- [npm or yarn](https://classic.yarnpkg.com/ja/docs/install/#debian-stable)
+- [npm](https://nodejs.org/ja/download/)
 - [terraform](https://www.terraform.io/downloads.html)
 ### ローカル環境
 
