@@ -14,19 +14,28 @@ router.get('/', (req, res) => {
 
 const fetchChime = async (req, res) => {
     const id = req.params.id;
-    res.json(await handler.get({bucket:'umesse-contents',key:'bgm/14_NSC726-014.mp3'}))
+    res.json(await handler.get({bucket:'umesse-contents',key:'BGM/サンプル01.mp3'}))
 }
 const fetchChimes = async (req, res) => {
-    res.json(await handler.list({bucket:'umesse-contents',key:'chime'}))
+    res.json(await handler.list({bucket:'umesse-contents',key:'チャイム'}))
 }
 
 const putChime = (req, res) => {
     res.json({ ok: 'ok' })
 }
 
+const fetchTag = async (req, res) => {
+    // aws --endpoint-url http://localhost:4566 s3api put-object-tagging \
+    //     --bucket umesse-contents \
+    //     --key チャイム/サンプル01.mp3 \
+    //     --tagging '{"TagSet":[{"Key":"div", "Value":"demo"}]}'
+    res.json(await handler.getTag({bucket:'umesse-contents',key:'チャイム/サンプル01.mp3'}))
+}
+
 router.get('/chime', fetchChimes)
 router.route('/chime/:id')
     .get(fetchChime)
     .post(putChime)
+router.get('/tag', fetchTag)
 
 module.exports = router

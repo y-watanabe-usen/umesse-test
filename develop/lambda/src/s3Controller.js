@@ -4,8 +4,6 @@ const aws = require("aws-sdk");
 const s3 = new aws.S3({
   region: "ap-northeast-1",
   endpoint: "localhost:4566",
-  accessKeyId: "local",
-  secretAccessKey: "local",
   s3ForcePathStyle: "true", // local only
 });
 
@@ -45,5 +43,26 @@ exports.controller = {
       Key: key,
       Expires: 600, // 10 minutes
     });
+  },
+
+  getTag: (bucket, key, tag) => {
+    return s3
+      .getObjectTagging({
+        Bucket: bucket,
+        Key: key,
+      })
+      .promise();
+  },
+
+  putTag: (bucket, key, tags) => {
+    return s3
+      .getObjectTagging({
+        Bucket: bucket,
+        Key: key,
+        Tagging: {
+          TagSet: tags,
+        },
+      })
+      .promise();
   },
 };
