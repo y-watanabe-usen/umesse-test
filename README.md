@@ -67,7 +67,7 @@ cd develop/lambda
 node ./src/app.local.js
 
 cd develop/webapp
-yarn dev
+yarn serve
 ```
 
 ## Swagger
