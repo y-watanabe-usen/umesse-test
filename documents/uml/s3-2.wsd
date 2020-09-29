@@ -9,34 +9,20 @@ autonumber
 
 title ** 3-2 音声録音 **
 
-== オリジナル新規作成・編集 ==
-WebApp --> Lambda: オリジナル新規作成・編集
-Lambda --> DynamoDB: オリジナルデータ取得
-Lambda <-- DynamoDB: レスポンス
+== オリジナル一覧取得 ==
+WebApp --> Lambda: リスト取得
+Lambda --> S3: リスト取得(listObjectsV2)
+Lambda <-- S3: レスポンス
 WebApp <-- Lambda: レスポンス
+WebApp --> WebApp: ソート（更新日・名称）
 
 == 音声録音作成 ==
 WebApp --> WebApp: 音声録音
 WebApp --> Lambda: 音声録音アップロードURL取得
-Lambda --> S3: signed url 取得
+Lambda --> S3: signed url 取得(getSignedUrl)
 Lambda <-- S3: signed url
 WebApp <-- Lambda: signed url
 WebApp --> S3: 音声録音データPUT
 WebApp <-- S3: レスポンス
-WebApp --> Lambda: 音声録音データ登録
-note right
-// draft
-{
-  "originals": [ // max 30
-    {
-      id: {S: ファイル名},
-      date: {S: Date},
-    },
-  ],
-}
-end note
-Lambda --> DynamoDB: 音声録音データ登録
-Lambda <-- DynamoDB: レスポンス
-WebApp <-- Lambda: レスポンス
 
 @enduml

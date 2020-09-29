@@ -10,64 +10,53 @@ autonumber
 title ** 3-1 CM作成 **
 
 == CM新規作成・編集 ==
-WebApp --> Lambda: CM新規作成・編集
-Lambda --> DynamoDB: CMデータ取得
-Lambda <-- DynamoDB: レスポンス
+WebApp --> Lambda: CM編集
+Lambda --> S3: リスト取得(listObjectsV2)
+note right
+// CMのMetadata
+{
+  "Metadata": {
+    "start-chime": "ファイル名",
+    "start-chime-volume": "1.0",
+    "end-chime": "ファイル名",
+    "end-chime-volume": "1.0",
+    "bgm": "ファイル名",
+    "bgm-volume": "1.0",
+    "narration-1": "ファイル名",
+    "narration-1-volume": "1.0",
+  }
+}
+end note
+Lambda <-- S3: レスポンス
 WebApp <-- Lambda: レスポンス
 
 == 音源一覧取得 ==
 WebApp --> Lambda: リスト取得（ナレーション・チャイム・BGM・オリジナル）
-Lambda --> S3: リスト取得
+Lambda --> S3: リスト取得(listObjectsV2)
 Lambda <-- S3: レスポンス
-WebApp <-- Lambda: レスポンス
-
-== 編集（リアルタイム更新） ==
-WebApp --> Lambda: 編集
-note right
-// draft
-{
-  "cm_id": "CMファイル名(タイトル.aac 重複不可)",
-  "cm_tag": [
-    "ランチ",
-    "セール",
-  ],
-  "start_chime": {
-    "id": "(chime_id or file_name)",
-    "volume": "1.0",
-  },
-  "end_chime": {
-    "id": "(chime_id or file_name)",
-    "volume": "1.0",
-  },
-  "bgm": {
-    "id": "(bgm_id or file_name)",
-    "volume": "1.0",
-  },
-  "narrations": [
-    {
-      "id": "(narration_id or file_name)",
-      "volume": "1.0",
-    },
-    {
-      "id": "(narration_id or file_name)",
-      "volume": "1.0",
-    },
-  ],
-  "timestamp": "timestamp",
-}
-end note
-Lambda --> DynamoDB: CMデータ更新
-Lambda <-- DynamoDB: レスポンス
 WebApp <-- Lambda: レスポンス
 
 == 結合 ==
 WebApp --> Lambda: 確定
-Lambda --> DynamoDB: CMデータ取得
-Lambda <-- DynamoDB: レスポンス
-Lambda --> S3: 該当ファイル取得
+Lambda --> S3: 該当ファイル取得(getObject)
 Lambda <-- S3: ファイル取得
 Lambda --> Lambda: ffmpeg 結合
-Lambda --> S3: ファイルPUT
+Lambda --> S3: ファイルPUT(putObject)
+note right
+// CMのMetadata
+{
+  "Metadata": {
+    "start-chime": "ファイル名",
+    "start-chime-volume": "1.0",
+    "end-chime": "ファイル名",
+    "end-chime-volume": "1.0",
+    "bgm": "ファイル名",
+    "bgm-volume": "1.0",
+    "narration-1": "ファイル名",
+    "narration-1-volume": "1.0",
+  }
+}
+end note
 Lambda <-- S3: レスポンス
 WebApp <-- Lambda: レスポンス
 

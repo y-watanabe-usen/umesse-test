@@ -32,10 +32,21 @@ const fetchTag = async (req, res) => {
     res.json(await handler.getTag({bucket:'umesse-contents',key:'チャイム/サンプル01.mp3'}))
 }
 
+const fetchMeta = async (req, res) => {
+    // aws --endpoint-url http://localhost:4566 s3api copy-object \
+    //     --bucket umesse-contents \
+    //     --key チャイム/サンプル01.mp3 \
+    //     --copy-source umesse-contents/チャイム/サンプル01.mp3 \
+    //     --metadata-directive REPLACE \
+    //     --metadata '{"test":"aaa", "demo":"bbb"}'
+    res.json(await handler.getMeta({bucket:'umesse-contents',key:'チャイム/サンプル01.mp3'}))
+}
+
 router.get('/chime', fetchChimes)
 router.route('/chime/:id')
     .get(fetchChime)
     .post(putChime)
 router.get('/tag', fetchTag)
+router.get('/meta', fetchMeta)
 
 module.exports = router
