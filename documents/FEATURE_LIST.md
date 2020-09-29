@@ -1,4 +1,4 @@
-# draft
+# 機能
 
 ## 機能一覧
 
@@ -6,7 +6,8 @@
 
 | 機能 | 説明 |  備考 |
 | ---- | ---- | ---- |
-| ユーザーID取得 | MDMからintentでユーザーIDを取得する | TODO: MDMのIntentの仕様 |
+| UNIS顧客CD取得 | MDMからintentでUNIS顧客CDを取得する | |
+| Javascript I/F | Vuejsとの繋ぎこみ | |
 
 ### Webアプリ
 
@@ -14,7 +15,7 @@
 | ---- | ---- | ---- |
 | キー認証 | キーを利用して認証を行い、トークンを取得する | |
 | トークン認証 | 発行されたトークンを利用して各APIにて認証を行う | |
-| CM一覧 |  | |
+| CM一覧 | ユーザーが作成したCMを一覧で表示する<br>ソート（タイトル、更新日時）を行えるようにする | |
 | CM作成・編集 | ナレーション、チャイム（開始/終了）、BGMを一覧から選択する　各素材の音量調整や視聴も可能 | |
 | CM MIX | ffmpegを利用して音源ファイルを結合する | |
 | CM再生 | 作成したCMをストリーム再生する | |
@@ -31,7 +32,6 @@
 
 | 機能 | 説明 | 備考 |
 | ---- | ---- | ---- |
-| ユーザー情報取得 | U-DSからユーザー情報を取得する | TODO: U-DSの仕様確認 |
 | キー認証 | キーを利用して認証を行い、有効期限トークンを発行する | |
 | 一覧取得 | 作成したCM、オリジナル音源を一覧で取得する<br>オブジェクトのタグ（CMのみ）も取得する | |
 | 詳細取得・更新 | 作成したCM、オリジナル音源の詳細を取得、削除を行う | | |
@@ -50,18 +50,18 @@
 ### s3
 
 - ユーザー作成音源、CMを管理
-- bucket: UMesseUsers (private) : ユーザーデータ管理（本番）
-- bucket: StgUMesseUsers (private) : ユーザーデータ管理（ステージング）
+- bucket: umesse-users (private) : ユーザーデータ管理（本番）
+- bucket: umesse-users-stg (private) : ユーザーデータ管理（ステージング）
 
 ```none
-users/(ユーザーID)/オリジナル/(タイトル).aac // オリジナル音源（音声録音、TTS録音）
-                 /CM/(タイトル).aac // CM音源
+users/(ユーザーID)/オリジナル/(カテゴリ)/(タイトル).aac // オリジナル音源（音声録音、TTS録音）
+                 /CM/(カテゴリ)/(タイトル).aac // CM音源
 share/(グループID)/CM/(タイトル).aac // TODO
 ```
 
 - USEN収録音源、TTSテンプレートを管理
-- bucket: UMesseContents (private) : USEN収録音源管理（本番）
-- bucket: StgUMesseContents (private) : USEN収録音源管理（ステージング）
+- bucket: umesse-contents (private) : USEN収録音源管理（本番）
+- bucket: umesse-contents-stg (private) : USEN収録音源管理（ステージング）
 
 ```none
 ナレーション/(カテゴリ名)/(タイトル).aac // コナレーション音源
@@ -71,8 +71,8 @@ TTS/(カテゴリ名)/(タイトル).txt // TTSテンプレート
 ```
 
 - Webアプリを管理
-- bucket: UMesseWebapp (private) : 静的コンテンツ管理（本番）
-- bucket: StgUMesseWebapp (private) : 静的コンテンツ管理（ステージング）
+- bucket: umesse-webapp (private) : 静的コンテンツ管理（本番）
+- bucket: umesse-webapp-stg (private) : 静的コンテンツ管理（ステージング）
 
 ```none
 webapp/
@@ -80,50 +80,16 @@ webapp/
 
 ### dynamodb
 
-- ユーザーの情報を管理
-- table: UMesseUsers : ユーザー管理テーブル（本番）
-- table: StgUMesseUsers : ユーザー管理テーブル（ステージング）
+- ユーザーの認証情報、CM情報を管理
+- table: umesse-users : ユーザー管理テーブル（本番）
+- table: umesse-users-stg : ユーザー管理テーブル（ステージング）
 
 ```none
 {
   Id: {S: xxxxx},
-  Info: {
-    Name: {S: 店舗名},
-    OpenTime: {S: Date},
-    CloseTime: {S: Date},
-    GroupId: {S: xxxxx},
-    Status: {BOOL: boolean},
-    Date: {S: Date},
-  },
   Auth: {
     Token: {S: トークンID},
     Expiration: {S: Date},
   },
-  Contents: [ // max 30
-    {
-      CmId: {S: ファイル名},
-      StartChime: {
-        Id: {S: ファイル名},
-        Volume: {N: double},
-      },
-      EndChime: {
-        Id: {S: ファイル名},
-        Volume: {N: double},
-      },
-      Bgm: {
-        Id: {S: ファイル名},
-        Volume: {N: double},
-      },
-      Narrations: [
-        {
-          Id: {S: ファイル名},
-          Volume: {N: double},
-        },
-      ],
-      Share: {BOOL: boolean},
-      Center: {BOOL: boolean},
-      Date: {S: Date},
-    },
-  ],
 }
 ```

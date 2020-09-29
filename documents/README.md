@@ -1,7 +1,6 @@
 # 概要
 
-AWS上にブラウザによるフロントエンド機能、APIによるバックエンド機能を構築し、アプリ側はTWAでブラウザを表示する  
-https://developers.google.com/web/android/trusted-web-activity  
+AWS上にブラウザによるフロントエンド機能、APIによるバックエンド機能を構築し、アプリ側は[TWA](https://developers.google.com/web/android/trusted-web-activity)でブラウザを表示する  
 機能は大きく分けて、CM作成、CM管理、オリジナル管理、CM発注機能がある  
 
 ## 構成図
@@ -14,7 +13,7 @@ https://developers.google.com/web/android/trusted-web-activity
 
 - タブレットに搭載されているMDMからintentにてユーザーIDを取得する
 - AWSキーを用いてキー認証を行い、有効期限トークンを取得する
-- 各APIへのアクセスはトークン＋ユーザーIDにてアクセスする
+- 各APIへのアクセスはヘッダーにトークン＋ユーザーIDにてアクセスする
 
 ### CM作成
 
@@ -28,7 +27,7 @@ https://developers.google.com/web/android/trusted-web-activity
 
 - 作成したCMを編集、再生、削除、共有、センターアップロード、拡張デバイス割り当て（フェーズ2.0予定）を行う
 - センターアップロードの形式は要検討
-- 共有はU-DSからのグループ内でCMを利用できるようにする
+- 共有はグループIDによりグループ間でCMを利用できるようにする
 
 ### オリジナル管理
 
@@ -53,16 +52,40 @@ https://developers.google.com/web/android/trusted-web-activity
 
 ### MDM
 
-- TODO: 仕様待ち
-- intentによりユーザーIDを取得する
+- intentによりUNIS顧客CD（unis_customer_cd）を取得する
+- MDMで取得できるパラメータ
+
+|Name|Type|
+|----|----|
+|contract_cd|String|
+|**unis_customer_cd**|String|
+|customer_name|String|
+|customer_zip_cd|String|
+|customer_state_name|String|
+|customer_address1|String|
+|customer_address2|String|
+|customer_address3|String|
+|umembers_key|String|
+|uphon_contract_cd|String|
+|uphone_number|String|
+|uphone_number_key|String|
+|ufax_number|String|
+|ufax_number_key|String|
+|com_ssid2_name|String|
+|com_ssid2_pass|String|
+|sereal_cd|String|
+|create_date|String|
+|renewal_date|String|
 
 ### TTS
 
 - TODO: 先方調整中
 - Hoya社のReadSpeakerを利用
+- 無料版と有料版では品質、仕様が異なる模様
 - [webapi](https://cloud.voicetext.jp/webapi)
-- サンプル
-```
+- サンプル（無料版）
+
+```bash
 #!/bin/bash
 
 url=https://api.voicetext.jp/v1/tts
@@ -91,20 +114,20 @@ done
 exit
 ```
 
-### U-DS
+### ユーザー情報
 
-- TODO: 仕様待ち
-- U-DSからユーザー情報を取得する or ユーザーIDをキーにAPIへアクセスする
+- TODO: 確認中
+- U MEMBERSで利用しているユーザー情報を利用する
 
 ### センター・ES
 
 - TODO: 仕様待ち
 - 作成したCMをアップロードする
 - U-MusicのCMカテゴリに合わせてメタ情報を設定する必要がある
+- クラウドからオンプレへのアクセスはインフラポリシーNGらしいので、センターからAPIを叩きデータをダウンロードしてもらう
 
 ### 拡張デバイス（フェーズ2.0）
 
-- TODO: 仕様待ち
 - フェーズ2.0対応予定
 
 ## 開発環境

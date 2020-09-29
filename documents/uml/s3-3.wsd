@@ -10,11 +10,12 @@ autonumber
 
 title ** 3-3 TTS録音 **
 
-== オリジナル新規作成・編集 ==
-WebApp --> Lambda: オリジナル新規作成・編集
-Lambda --> DynamoDB: オリジナルデータ取得
-Lambda <-- DynamoDB: レスポンス
+== オリジナル一覧取得 ==
+WebApp --> Lambda: リスト取得
+Lambda --> S3: リスト取得(listObjectsV2)
+Lambda <-- S3: レスポンス
 WebApp <-- Lambda: レスポンス
+WebApp --> WebApp: ソート（更新日・名称）
 
 == TTSテンプレート選択 ==
 WebApp --> Lambda: リスト取得（TTSテンプレート）
@@ -24,28 +25,11 @@ WebApp <-- Lambda: レスポンス
 WebApp --> WebApp: 店名、開店時間入力
 
 == TTS録音作成 ==
-WebApp --> TTS: TTS API
-WebApp <-- TTS: wav/ogg/mp3 レスポンス
-WebApp --> Lambda: 音声録音アップロードURL取得
-Lambda --> S3: signed url 取得
-Lambda <-- S3: signed url
-WebApp <-- Lambda: signed url
-WebApp --> S3: 音声録音データPUT
-WebApp <-- S3: レスポンス
-WebApp --> Lambda: 音声録音データ登録
-note right
-// draft
-{
-  "originals": [ // max 30
-    {
-      id: {S: ファイル名},
-      date: {S: Date},
-    },
-  ],
-}
-end note
-Lambda --> DynamoDB: 音声録音データ登録
-Lambda <-- DynamoDB: レスポンス
+WebApp --> Lambda: TTS作成
+Lambda --> TTS: TTS
+Lambda <-- TTS: wav/ogg/mp3 レスポンス
+Lambda --> S3: 音声録音データPUT
+Lambda <-- S3: レスポンス
 WebApp <-- Lambda: レスポンス
 
 @enduml
