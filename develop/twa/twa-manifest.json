@@ -1,0 +1,25 @@
+{
+  "packageId": "com.usen.umesse",
+  "host": "10.0.2.2",
+  "name": "U MESSE",
+  "launcherName": "U MESSE",
+  "display": "standalone",
+  "themeColor": "#39A0D2",
+  "navigationColor": "#000000",
+  "backgroundColor": "#FFFFFF",
+  "enableNotifications": false,
+  "startUrl": "/",
+  "iconUrl": "http://localhost/512x512.png",
+  "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "./android.keystore",
+    "alias": "android"
+  },
+  "appVersionName": "1",
+  "appVersionCode": 1,
+  "shortcuts": [],
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "http://localhost/manifest.json",
+  "fallbackType": "customtabs",
+  "appVersion": "1"
+}
