@@ -1,28 +1,16 @@
 <template>
   <div id="app">
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+.bg-umesse {
+  background: -moz-linear-gradient(top, #525e72, #7c8389);
+  background: -webkit-linear-gradient(top, #525e72, #7c8389);
+  background: linear-gradient(to bottom, #525e72, #7c8389);
 }
-
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+.nav-bg-umesse {
+  background: #525e72;
 }
 </style>
