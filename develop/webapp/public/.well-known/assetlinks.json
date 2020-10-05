@@ -1,0 +1,5 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target" : { "namespace": "android_app", "package_name": "com.usen.umesse",
+               "sha256_cert_fingerprints": ["8B:83:B8:C4:3E:B2:55:0E:0C:0C:24:AC:78:FD:D7:C9:14:FA:F5:63:E4:99:62:AB:F0:AB:23:24:B6:E7:F4:2F"] }
+}]

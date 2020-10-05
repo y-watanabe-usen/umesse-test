@@ -14,12 +14,13 @@ class MainActivity : LauncherActivity() {
         super.onDestroy()
     }
 
+    private fun getDynamicParameterValue(): String {
+        return (Math.random() * 1000).toInt().toString()
+    }
+
     override fun getLaunchingUrl(): Uri {
-        val url = intent.getStringExtra("url")
-        if (url != null) {
-            Log.d("getLaunchingUrl", url)
-            return Uri.parse(url)
-        }
-        return super.getLaunchingUrl()
+        val uri = super.getLaunchingUrl()
+        Log.e("MainActivity", uri.toString())
+        return uri.buildUpon().appendQueryParameter("token", getDynamicParameterValue()).build()
     }
 }
