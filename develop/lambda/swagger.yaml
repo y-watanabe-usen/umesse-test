@@ -1,17 +1,29 @@
-swagger: '2.0'
+openapi: 3.0.0
+servers:
+  - url: /api
 info:
+  description: U-Messe API
   version: 0.0.1
   title: U-Messe API
-  description: サンプル
-host: localhost:3000
-basePath: /
-schemes:
-  - http
-consumes:
-  - application/json
-produces:
-  - application/json
 paths:
+  /health:
+    get:
+      tags:
+        - health
+      summary: health check
+      description: health check
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              examples:
+                ok:
+                  value: '{"message":"ok"}'
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
   /getSignedUrl:
     post:
       tags:
@@ -20,7 +32,7 @@ paths:
       description: S3から署名付きURLを取得する
       parameters:
         - name: params
-          in: body
+          in: query
           schema:
             type: object
             required:
@@ -33,26 +45,12 @@ paths:
                 type: string
                 example: ナレーション/NA_001.mp3
       responses:
-        200:
+        '200':
           description: OK
-        400:
+        '400':
           description: Bad request
-        500:
+        '500':
           description: Internal server error
-      # x-amazon-apigateway-integration:
-      #   type: aws_proxy
-      #   httpMethod: post
-      #   passthroughBehavior: when_no_match
-      #   uri:
-      #     Fn::Sub: arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${UMesseFunction.Arn}/invocations
-      #   responses:
-      #     default:
-      #       statusCode: 200
-      #       responseParameters:
-      #         method.response.header.Access-Control-Allow-Methods: "'GET, POST, PUT, DELETE, OPTIONS'"
-      #         method.response.header.Access-Control-Allow-Headers: "'Content-Type'"
-      #         method.response.header.Access-Control-Allow-Origin: "'*'"
-
   /list:
     post:
       tags:
@@ -61,7 +59,7 @@ paths:
       description: S3からファイルリストを取得する
       parameters:
         - name: params
-          in: body
+          in: query
           schema:
             type: object
             required:
@@ -74,13 +72,12 @@ paths:
                 type: string
                 example: BGM
       responses:
-        200:
+        '200':
           description: OK
-        400:
+        '400':
           description: Bad request
-        500:
+        '500':
           description: Internal server error
-
   /mix:
     post:
       tags:
@@ -89,7 +86,7 @@ paths:
       description: 音源結合
       parameters:
         - name: params
-          in: body
+          in: query
           schema:
             type: object
             required:
@@ -99,13 +96,12 @@ paths:
                 type: string
                 example: UMesseContents
       responses:
-        200:
+        '200':
           description: OK
-        400:
+        '400':
           description: Bad request
-        500:
+        '500':
           description: Internal server error
-
   /listTables:
     post:
       tags:
@@ -114,7 +110,7 @@ paths:
       description: DynamoDbからテーブルを取得する
       parameters:
         - name: params
-          in: body
+          in: query
           schema:
             type: object
             required:
@@ -124,13 +120,12 @@ paths:
                 type: string
                 example: UMesseUsers
       responses:
-        200:
+        '200':
           description: OK
-        400:
+        '400':
           description: Bad request
-        500:
+        '500':
           description: Internal server error
-
   /getItem:
     post:
       tags:
@@ -139,7 +134,7 @@ paths:
       description: DynamoDbからデータを取得する
       parameters:
         - name: params
-          in: body
+          in: query
           schema:
             type: object
             required:
@@ -150,11 +145,11 @@ paths:
                 example: UMesseUsers
               key:
                 type: string
-                example: USER000001 
-        responses:
-        200:
+                example: USER000001
+      responses:
+        '200':
           description: OK
-        400:
+        '400':
           description: Bad request
-        500:
+        '500':
           description: Internal server error
