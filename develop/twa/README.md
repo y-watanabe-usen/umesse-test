@@ -10,7 +10,7 @@
 docker run -d --rm -p 80:80 -v $(pwd)/webmanifest:/usr/share/nginx/html nginx:alpine
 bubblewrap init --manifest http://localhost/manifest.json
 
-? Domain: 10.0.2.2 ## Added port 8081 later
+? Domain: localhost ## Update later
 ? URL path: /
 ? Application name: U MESSE
 ? Short name: U MESSE
