@@ -10,7 +10,4 @@
   background: -webkit-linear-gradient(top, #525e72, #7c8389);
   background: linear-gradient(to bottom, #525e72, #7c8389);
 }
-.nav-bg-umesse {
-  background: #525e72;
-}
 </style>
