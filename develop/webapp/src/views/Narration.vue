@@ -17,13 +17,13 @@
             type="button"
             class="btn btn-menu text-left text-white"
             :class="[
-              menu.id == activeMenuNumber ? 'btn-light' : 'btn-link',
-              menu.id == activeMenuNumber ? 'text-dark' : 'text-white',
+              menu.id == activeMenuId ? 'btn-light' : 'btn-link',
+              menu.id == activeMenuId ? 'text-dark' : 'text-white',
               menu.id == 1 ? 'mt-2' : '',
             ]"
             v-for="menu in menus"
             :key="menu.id"
-            @click="activeMenuNumber = menu.id"
+            @click="activeMenuId = menu.id"
           >
             {{ menu.title }}
           </button>
@@ -135,7 +135,7 @@ export default {
           title: "スーパー/ドラッグ",
         },
       ],
-      activeMenuNumber: 1,
+      activeMenuId: 1,
       sorts: ["名前順", "作成日順", "更新日順"],
       narrationDatas: [
         {
@@ -178,6 +178,7 @@ export default {
   width: 100%;
   height: 80px;
   margin-bottom: 10px;
+  text-decoration: none;
 }
 .btn-try,
 .btn-edit {
