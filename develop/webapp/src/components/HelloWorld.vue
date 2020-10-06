@@ -30,11 +30,6 @@
       <li><a href="https://vue-loader.vuejs.org" target="_blank" rel="noopener">vue-loader</a></li>
       <li><a href="https://github.com/vuejs/awesome-vue" target="_blank" rel="noopener">awesome-vue</a></li>
     </ul>
-    <h3>Test</h3>
-    <ul>
-      <li><button v-on:click="demo()">Show Demo</button></li>
-      <li><a href="android-app://com.usen.umesse" target="_blank" rel="noopener">Android</a></li>
-    </ul>
   </div>
 </template>
 
@@ -48,10 +43,6 @@ import { Options, Vue } from 'vue-class-component';
 })
 export default class HelloWorld extends Vue {
   msg!: string
-
-  demo(): void {
-    window.alert("demo")
-  }
 }
 </script>
 

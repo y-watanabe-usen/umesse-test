@@ -335,8 +335,20 @@
         </div>
       </div>
     </div>
+    <button v-on:click="get()">Show Params</button>
   </div>
 </template>
+
+<script lang="ts">
+import { Vue } from 'vue-class-component';
+
+
+export default class Params extends Vue {
+  get(): void {
+    window.alert("token:" + this.$route.query.token + " cd:" + this.$route.query.cd)
+  }
+}
+</script>
 
 <style scoped>
 .custom-card {
