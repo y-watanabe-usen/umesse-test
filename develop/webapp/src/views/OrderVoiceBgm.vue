@@ -74,11 +74,41 @@
                       試聴
                     </button>
                     <button type="button" class="btn btn-edit">
-											<svg id="グループ_42" data-name="グループ 42" xmlns="http://www.w3.org/2000/svg" width="30" height="6" viewBox="0 0 30 6">
-												<circle id="楕円形_2" data-name="楕円形 2" cx="3" cy="3" r="3" fill="#555"/>
-												<circle id="楕円形_3" data-name="楕円形 3" cx="3" cy="3" r="3" transform="translate(12)" fill="#555"/>
-												<circle id="楕円形_4" data-name="楕円形 4" cx="3" cy="3" r="3" transform="translate(24)" fill="#555"/>
-											</svg>
+                      <svg
+                        id="グループ_42"
+                        data-name="グループ 42"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="30"
+                        height="6"
+                        viewBox="0 0 30 6"
+                      >
+                        <circle
+                          id="楕円形_2"
+                          data-name="楕円形 2"
+                          cx="3"
+                          cy="3"
+                          r="3"
+                          fill="#555"
+                        />
+                        <circle
+                          id="楕円形_3"
+                          data-name="楕円形 3"
+                          cx="3"
+                          cy="3"
+                          r="3"
+                          transform="translate(12)"
+                          fill="#555"
+                        />
+                        <circle
+                          id="楕円形_4"
+                          data-name="楕円形 4"
+                          cx="3"
+                          cy="3"
+                          r="3"
+                          transform="translate(24)"
+                          fill="#555"
+                        />
+                      </svg>
                     </button>
                   </div>
                 </div>
@@ -108,7 +138,7 @@ export default {
         {
           id: 2,
           title: "BGM",
-        }
+        },
       ],
       activeMenuId: 1,
       sorts: ["名前順", "作成日順", "更新日順"],
