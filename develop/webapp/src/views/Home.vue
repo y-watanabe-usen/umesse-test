@@ -294,7 +294,7 @@
                     </p>
                   </router-link>
                   <router-link
-                    to="#"
+                    :to="{ path: 'ordervoicebgm' }"
                     class="list-group-item list-group-item-action flex-column align-items-start"
                   >
                     <div class="d-flex w-100 justify-content-between">
