@@ -18,6 +18,9 @@
 ```bash
 ├── [deploy] (*デプロイ)
 ├── [develop] (*開発)
+    ├── [lambda](https://github.com/openusen/umesse/blob/master/develop/lambda/README.md)
+    ├── [twa]
+    └── [webapp](https://github.com/openusen/umesse/blob/master/develop/webapp/README.md)
 ├── [localstack] (*ローカルAWS)
 ├── [sample_data] (*サンプル音源素材)
 └── [documents](https://github.com/openusen/umesse/documents)
