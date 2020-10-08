@@ -11,11 +11,11 @@ provider "aws" {
   endpoints {
     apigateway = var.aws_endpoint_url
     # cloudformation = "http://localhost:4581"
-    # cloudwatch     = "http://localhost:4582"
+    cloudwatch     = var.aws_endpoint_url
     dynamodb =var.aws_endpoint_url 
     # es             = "http://localhost:4578"
     # firehose       = "http://localhost:4573"
-    # iam            = "http://localhost:4593"
+    iam            = var.aws_endpoint_url
     # kinesis        = "http://localhost:4568"
     lambda     = var.aws_endpoint_url
     # route53        = "http://localhost:4580"

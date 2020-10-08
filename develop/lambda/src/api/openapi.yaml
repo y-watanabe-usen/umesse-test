@@ -1,0 +1,493 @@
+openapi: 3.0.0
+info:
+  title: U-Messe API
+  description: U-Messe API
+  version: 0.0.1
+servers:
+- url: /api
+paths:
+  /ping:
+    get:
+      tags:
+      - ping
+      summary: ping
+      operationId: pingGET
+      responses:
+        default:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_default'
+      x-swagger-router-controller: Ping
+  /auth:
+    post:
+      tags:
+      - auth
+      summary: 端末認証
+      operationId: authPOST
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body'
+      responses:
+        "200":
+          description: 端末認証
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Auth'
+      x-swagger-router-controller: Auth
+  /user:
+    get:
+      tags:
+      - user
+      summary: User情報取得
+      operationId: userGET
+      responses:
+        "200":
+          description: User情報
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+      x-swagger-router-controller: User
+    post:
+      tags:
+      - user
+      summary: User情報更新
+      operationId: userPOST
+      responses:
+        "200":
+          description: ok
+      x-swagger-router-controller: User
+  /user/cm:
+    get:
+      tags:
+      - user
+      summary: UserのCM
+      operationId: userCmGET
+      responses:
+        "200":
+          description: UserのCM
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CMItem'
+      x-swagger-router-controller: User
+  /cm:
+    get:
+      tags:
+      - cm
+      summary: CMリスト取得
+      operationId: cmGET
+      responses:
+        "200":
+          description: The response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CMItem'
+                x-content-type: application/json
+        "400":
+          description: Response invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-swagger-router-controller: Cm
+    post:
+      tags:
+      - cm
+      summary: CM新規追加
+      operationId: cmPOST
+      responses:
+        "200":
+          description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CMItem'
+        default:
+          description: Default error sample response
+      x-swagger-router-controller: Cm
+  /cm/{cmId}:
+    post:
+      tags:
+      - cm
+      summary: CM情報更新
+      operationId: cmCmIdPOST
+      parameters:
+      - name: cmId
+        in: path
+        description: ID of cm to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        default:
+          description: Default response
+      x-swagger-router-controller: Cm
+    delete:
+      tags:
+      - cm
+      summary: cm 削除
+      operationId: cmCmIdDELETE
+      parameters:
+      - name: cmId
+        in: path
+        description: ID of cm to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        default:
+          description: Default error sample response
+      x-swagger-router-controller: Cm
+  /recording:
+    get:
+      tags:
+      - recording
+      summary: 録音データリスト取得
+      operationId: recordingGET
+      responses:
+        "200":
+          description: The response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+      x-swagger-router-controller: Recording
+    post:
+      tags:
+      - recording
+      summary: 新規録音データ
+      operationId: recordingPOST
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/body_1'
+      responses:
+        "200":
+          description: successful
+      x-swagger-router-controller: Recording
+  /recording/{recordingId}:
+    get:
+      tags:
+      - recording
+      summary: 録音データ取得
+      operationId: recordingRecordingIdGET
+      parameters:
+      - name: recordingId
+        in: path
+        description: ID of cm to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        default:
+          description: Default response
+      x-swagger-router-controller: Recording
+    delete:
+      tags:
+      - recording
+      summary: 録音データ削除
+      operationId: recordingRecordingIdDELETE
+      parameters:
+      - name: recordingId
+        in: path
+        description: ID of cm to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        default:
+          description: Default response
+      x-swagger-router-controller: Recording
+  /bgm:
+    get:
+      tags:
+      - resources
+      summary: BGM
+      operationId: bgmGET
+      responses:
+        "200":
+          description: The response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+        "400":
+          description: Response invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-swagger-router-controller: Resources
+  /narration:
+    get:
+      tags:
+      - resources
+      summary: ナレーション
+      operationId: narrationGET
+      responses:
+        "200":
+          description: The response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_2'
+        "400":
+          description: Response invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-swagger-router-controller: Resources
+  /chime:
+    get:
+      tags:
+      - resources
+      summary: Open/Endチャイム
+      operationId: chimeGET
+      responses:
+        "200":
+          description: The response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_3'
+        "400":
+          description: Response invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-swagger-router-controller: Resources
+  /mix:
+    post:
+      tags:
+      - mix
+      summary: 音源結合
+      description: 音源結合
+      operationId: mixPOST
+      parameters:
+      - name: params
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          $ref: '#/components/schemas/params'
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad request
+        "500":
+          description: Internal server error
+      x-swagger-router-controller: Mix
+components:
+  schemas:
+    Auth:
+      properties:
+        token:
+          type: string
+          example: "1234567890"
+      example:
+        token: "1234567890"
+    User:
+      properties:
+        id:
+          type: integer
+          example: 1234
+        name:
+          type: string
+          example: Meguro Cafe
+      example:
+        name: Meguro Cafe
+        id: 1234
+    CMItem:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        detail:
+          type: string
+      example:
+        name: name
+        id: 0
+        detail: detail
+    BGMItem:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        detail:
+          type: string
+      example:
+        name: name
+        id: 0
+        detail: detail
+    NarrationItem:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        detail:
+          type: string
+      example:
+        name: name
+        id: 0
+        detail: detail
+    ChimeItem:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        detail:
+          type: string
+      example:
+        name: name
+        id: 0
+        detail: detail
+    RecordingItem:
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        detail:
+          type: string
+      example:
+        id: 0
+        detail: detail
+        title: title
+    Error:
+      type: object
+      properties:
+        status:
+          type: string
+        code:
+          type: string
+        title:
+          type: string
+        detail:
+          type: string
+      description: Error
+    inline_response_default:
+      properties:
+        message:
+          type: string
+          example: ok
+      example:
+        message: ok
+    body:
+      type: object
+      properties:
+        unis_customer_cd:
+          type: string
+    inline_response_200:
+      properties:
+        value:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecordingItem'
+      example:
+        data:
+        - id: 0
+          detail: detail
+          title: title
+        - id: 0
+          detail: detail
+          title: title
+        value: value
+    body_1:
+      type: object
+      properties:
+        filename:
+          type: string
+        recordedFile:
+          type: string
+          format: binary
+    inline_response_200_1:
+      properties:
+        value:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/BGMItem'
+      example:
+        data:
+        - name: name
+          id: 0
+          detail: detail
+        - name: name
+          id: 0
+          detail: detail
+        value: value
+    inline_response_200_2:
+      properties:
+        value:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/NarrationItem'
+      example:
+        data:
+        - name: name
+          id: 0
+          detail: detail
+        - name: name
+          id: 0
+          detail: detail
+        value: value
+    inline_response_200_3:
+      properties:
+        value:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ChimeItem'
+      example:
+        data:
+        - name: name
+          id: 0
+          detail: detail
+        - name: name
+          id: 0
+          detail: detail
+        value: value
+    params:
+      required:
+      - bucket
+      type: object
+      properties:
+        bucket:
+          type: string
+          example: UMesseContents

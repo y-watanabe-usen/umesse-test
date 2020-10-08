@@ -1,41 +1,23 @@
-"use strict";
+'use strict';
 
-const handler = require("./handler");
+var path = require('path');
+var http = require('http');
 
-exports.handler = async (event, context) => {
-  console.log(JSON.stringify(event));
+var oas3Tools = require('oas3-tools');
+var serverPort = 8080;
 
-  try {
-    if (
-      !event.pathParameters.handler ||
-      typeof handler[event.pathParameters.handler] !== "function"
-    )
-      throw {
-        status: 400,
-        message: "Parameter is not a handler",
-      };
-    let body = await handler[event.pathParameters.handler](
-      JSON.parse(event.body)
-    );
-    return {
-      statusCode: 200,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-      },
-      body: JSON.stringify(body),
-    };
-  } catch (e) {
-    console.log(e);
-    return {
-      statusCode: e.status ? e.status : 500,
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
-      },
-      body: JSON.stringify(e.message),
-    };
-  }
+// swaggerRouter configuration
+var options = {
+    controllers: path.join(__dirname, './controllers')
 };
+
+var expressAppConfig = oas3Tools.expressAppConfig(path.join(__dirname, 'api/openapi.yaml'), options);
+expressAppConfig.addValidator();
+var app = expressAppConfig.getApp();
+
+// Initialize the Swagger middleware
+http.createServer(app).listen(serverPort, function () {
+    console.log('Your server is listening on port %d (http://localhost:%d)', serverPort, serverPort);
+    console.log('Swagger-ui is available on http://localhost:%d/docs', serverPort);
+});
+
