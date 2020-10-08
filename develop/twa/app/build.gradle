@@ -23,9 +23,8 @@ def twaManifest = [
     applicationId: 'com.usen.umesse',
     //  App running at:
     //  - Local:   http://localhost:8080/
-    //  - Network: http://172.18.24.212:8080/
-//    hostName: '10.0.2.2:8080', // The domain being opened in the TWA.
-    hostName: '172.18.30.211:8080', // The domain being opened in the TWA.
+    //  - Network: http://172.18.24.xxx:8080/
+    hostName: '10.0.2.2:8080', // The domain being opened in the TWA.
     launchUrl: '/', // The start path for the TWA. Must be relative to the domain.
     name: 'U MESSE', // The application name.
     launcherName: 'U MESSE', // The name shown on the Android Launcher.

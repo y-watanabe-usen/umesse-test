@@ -8,7 +8,7 @@ class MainActivity : LauncherActivity() {
     override fun getLaunchingUrl(): Uri {
         val uri = super.getLaunchingUrl()
         Log.e("MainActivity", uri.toString())
-        return uri.buildUpon().appendQueryParameter("token", getDynamicParameterValue()).appendQueryParameter("cd", getDynamicParameterValue()).build()
+        return uri.buildUpon().appendQueryParameter("custCd", "Dummy").build()
     }
 
     private fun getDynamicParameterValue(): String {

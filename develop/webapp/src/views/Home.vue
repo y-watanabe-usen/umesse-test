@@ -3,7 +3,7 @@
     <div class="bg-umesse">
       <div class="container">
         <nav class="navbar navbar-expand-lg navbar-light">
-          <span class="navbar-brand mb-0 h1 text-white">U Messe</span>
+          <span class="navbar-brand mb-0 h1 text-white">U Messe {{ custCd }}</span>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto">
               <li class="nav-item">
@@ -335,19 +335,21 @@
         </div>
       </div>
     </div>
-    <button v-on:click="get()">Show Params</button>
   </div>
 </template>
 
-<script lang="ts">
-import { Vue } from 'vue-class-component';
-
-
-export default class Params extends Vue {
-  get(): void {
-    window.alert("token:" + this.$route.query.token + " cd:" + this.$route.query.cd)
+<script>
+import store from '../store';
+export default {
+  created () {
+    store.commit('setCustCd', this.$route.query.custCd || '')
+  },
+  computed: {
+    custCd() {
+      return this.$store.state.custCd
+    }
   }
-}
+};
 </script>
 
 <style scoped>
