@@ -1,0 +1,393 @@
+openapi: 3.0.0
+servers:
+  - url: /api
+info:
+  description: U-Messe API
+  version: 0.0.1
+  title: U-Messe API
+paths:
+  /ping:
+    get:
+      tags:
+        - ping
+      summary: ping
+      responses:
+        default:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "ok"
+  /auth:
+    post:
+      tags:
+        - auth
+      summary: 端末認証
+      requestBody:
+        content: 
+          application/json:
+            schema: 
+              type: object
+              properties:
+                unis_customer_cd:
+                  type: string
+      responses:
+        '200':
+          description: 端末認証
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Auth'
+  /user:
+    get:
+      tags:
+        - user
+      summary: User情報取得
+      responses:
+        '200':
+          description: User情報
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    post:
+      tags:
+        - user
+      summary: User情報更新
+      responses:
+        '200':
+          description: ok
+  /user/cm:
+    get:
+      tags:
+        - user
+      summary: UserのCM
+      responses:
+        '200':
+          description: UserのCM
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CMItem'
+  /cm:
+    get:
+      tags:
+        - cm
+      summary: CMリスト取得
+      description: ''
+      operationId: ''
+      responses:
+        '200':
+          description: The response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CMItem'
+        '400':
+          description: Response invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      tags:
+        - cm
+      summary: CM新規追加
+      description: ''
+      operationId: ''
+      responses:
+        '200':
+          description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CMItem'
+        default:
+          description: Default error sample response
+  '/cm/{cmId}':
+    post:
+      tags:
+        - cm
+      summary: CM情報更新
+      description: ''
+      operationId: ''
+      parameters:
+        - name: cmId
+          in: path
+          description: ID of cm to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        default:
+          description: Default response
+    delete:
+      tags:
+        - cm
+      summary: cm 削除
+      description: ''
+      operationId: ''
+      parameters:
+        - name: cmId
+          in: path
+          description: ID of cm to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        default:
+          description: Default error sample response
+  /recording:
+    get:
+      tags:
+        - recording
+      summary: 録音データリスト取得
+      description: ''
+      operationId: ''
+      responses:
+        '200':
+          description: The response
+          content:
+            application/json:
+              schema:
+                properties:
+                  value:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/RecordingItem'
+    post:
+      tags:
+        - recording
+      summary: 新規録音データ
+      description: ''
+      operationId: ''
+      responses:
+        '200':
+          description: successful
+      requestBody:
+        content: 
+          multipart/form-data:
+            schema: 
+              type: object
+              properties:
+                filename:
+                  type: string
+                recordedFile:
+                  type: string
+                  format: binary
+
+  '/recording/{recordingId}':
+    get:
+      tags:
+        - recording
+      summary: 録音データ取得
+      description: ''
+      operationId: ''
+      parameters:
+        - name: recordingId
+          in: path
+          description: ID of cm to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        default:
+          description: Default response
+    delete:
+      tags:
+        - recording
+      summary: 録音データ削除
+      description: ''
+      operationId: ''
+      parameters:
+        - name: recordingId
+          in: path
+          description: ID of cm to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        default:
+          description: Default response
+  /bgm:
+    get:
+      tags:
+        - resources
+      summary: BGM
+      description: ''
+      operationId: ''
+      responses:
+        '200':
+          description: The response
+          content:
+            application/json:
+              schema:
+                properties:
+                  value:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/BGMItem'
+        '400':
+          description: Response invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /narration:
+    get:
+      tags:
+        - resources
+      summary: ナレーション
+      description: ''
+      operationId: ''
+      responses:
+        '200':
+          description: The response
+          content:
+            application/json:
+              schema:
+                properties:
+                  value:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/NarrationItem'
+        '400':
+          description: Response invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /chime:
+    get:
+      tags:
+        - resources
+      summary: Open/Endチャイム
+      description: ''
+      operationId: ''
+      responses:
+        '200':
+          description: The response
+          content:
+            application/json:
+              schema:
+                properties:
+                  value:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ChimeItem'
+        '400':
+          description: Response invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /mix:
+    post:
+      tags:
+        - mix
+      summary: 音源結合
+      description: 音源結合
+      parameters:
+        - name: params
+          in: query
+          schema:
+            type: object
+            required:
+              - bucket
+            properties:
+              bucket:
+                type: string
+                example: UMesseContents
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Bad request
+        '500':
+          description: Internal server error
+
+components:
+  schemas:
+    Auth:
+      properties:
+        token:
+          type: string
+          example: '1234567890'
+    User:
+      properties:
+        id:
+          type: integer
+          example: 1234
+        name:
+          type: string
+          example: "Meguro Cafe"
+    CMItem:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        detail:
+          type: string
+    BGMItem:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        detail:
+          type: string
+    NarrationItem:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        detail:
+          type: string
+    ChimeItem:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        detail:
+          type: string
+    RecordingItem:
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        detail:
+          type: string
+        
+    Error:
+      description: Error
+      type: object
+      properties:
+        status:
+          type: string
+        code:
+          type: string
+        title:
+          type: string
+        detail:
+          type: string
