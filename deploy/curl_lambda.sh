@@ -15,12 +15,7 @@ if [ -z $API_ID ]
 	else
 		ENDPOINT=http://localhost:4566/restapis/${API_ID}/${STAGE}/_user_request_/api
 		echo "${ENDPOINT}"
-		curl  ${ENDPOINT} $@
-		curl  ${ENDPOINT}/auth $@
-		curl  ${ENDPOINT}/token $@
-		curl  ${ENDPOINT}/material $@
-		#curl  ${ENDPOINT}/material/chime $@
-		#curl  ${ENDPOINT}/material/chime/1 $@
-		#curl  ${ENDPOINT}/project $@
+		curl  ${ENDPOINT}/ping $@
+		curl  ${ENDPOINT}/user $@
 		#curl  ${ENDPOINT}/cm $@
 fi

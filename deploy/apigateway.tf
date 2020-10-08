@@ -39,3 +39,11 @@ resource "aws_api_gateway_deployment" "umesse_v1" {
   rest_api_id = aws_api_gateway_rest_api.umesse.id
   stage_name  = "v1"
 }
+
+## permission:   API Gateway ----> Lambda
+#resource "aws_lambda_permission" "xxxxx" {
+#  statement_id  = "AllowAPIGatewayInvoke"
+#  action        = "lambda:InvokeFunction"
+#  function_name = aws_lambda_function.lambda.arn
+#  principal     = "apigateway.amazonaws.com"
+#}
