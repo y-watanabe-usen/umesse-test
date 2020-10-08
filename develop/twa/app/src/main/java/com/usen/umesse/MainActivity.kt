@@ -10,8 +10,4 @@ class MainActivity : LauncherActivity() {
         Log.e("MainActivity", uri.toString())
         return uri.buildUpon().appendQueryParameter("custCd", "Dummy").build()
     }
-
-    private fun getDynamicParameterValue(): String {
-        return (Math.random() * 1000).toInt().toString()
-    }
 }
