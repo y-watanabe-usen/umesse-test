@@ -53,7 +53,7 @@
               <div class="card-body">
                 <div class="list-group">
                   <router-link
-                    :to="{ path: 'narration' }"
+                    :to="{ path: 'RecordingStart' }"
                     class="list-group-item list-group-item-action flex-column align-items-start"
                   >
                     <div class="d-flex w-100 justify-content-between">
@@ -221,7 +221,7 @@
                     </p>
                   </router-link>
                   <router-link
-                    to="#"
+                    :to="{ path: 'narration' }"
                     class="list-group-item list-group-item-action flex-column align-items-start"
                   >
                     <div class="d-flex w-100 justify-content-between">
