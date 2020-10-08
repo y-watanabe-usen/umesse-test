@@ -57,16 +57,16 @@ terraform apply
 
 ```bash
 cd develop/lambda
+npm install
 node ./src/app.local.js
 ```
 
 #### VueJs
 
 ```bash
-cd develop/lambda
-node ./src/app.local.js
-
 cd develop/webapp
+yarn install
+
 # develop
 yarn serve
 
