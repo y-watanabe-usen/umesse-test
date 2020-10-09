@@ -6,6 +6,7 @@ import RecordedMaterial from '../views/RecordedMaterial.vue'
 import CreatedCm from '../views/CreatedCm.vue'
 import OrderVoiceBgm from '../views/OrderVoiceBgm.vue'
 import NewOrder from '../views/NewOrder.vue'
+import ApiConnectTest from '../views/ApiConnectTest.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -42,6 +43,12 @@ const routes: Array<RouteRecordRaw> = [
     path: '/new-order',
     name: 'NewOrder',
     component: NewOrder
+  },
+  // TODO: 実際には使わないので後で消す
+  {
+    path: '/apiconnecttest',
+    name: 'ApiConnectTest',
+    component: ApiConnectTest
   },
   {
     path: '/about',
