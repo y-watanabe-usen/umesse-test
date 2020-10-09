@@ -3,6 +3,7 @@ import Home from '../views/Home.vue'
 import Narration from '../views/Narration.vue'
 import RecordingStart from '../views/RecordingStart.vue'
 import RecordedMaterial from '../views/RecordedMaterial.vue'
+import CreatedCm from '../views/CreatedCm.vue'
 import OrderVoiceBgm from '../views/OrderVoiceBgm.vue'
 import NewOrder from '../views/NewOrder.vue'
 
@@ -26,6 +27,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/recordedmaterial',
     name: 'RecordedMaterial',
     component: RecordedMaterial
+  },
+  {
+    path: '/createdcm',
+    name: 'CreatedCm',
+    component: CreatedCm
   },
   {
     path: '/ordervoicebgm',
