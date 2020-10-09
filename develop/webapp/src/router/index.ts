@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Home from '../views/Home.vue'
 import Narration from '../views/Narration.vue'
 import OrderVoiceBgm from '../views/OrderVoiceBgm.vue'
+import NewOrder from '../views/NewOrder.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -18,6 +19,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/ordervoicebgm',
     name: 'OrderVoiceBgm',
     component: OrderVoiceBgm
+  },
+  {
+    path: '/new-order',
+    name: 'NewOrder',
+    component: NewOrder
   },
   {
     path: '/about',
