@@ -41,9 +41,9 @@ const routes: Array<RouteRecordRaw> = [
     component: OrderVoiceBgm
   },
   {
-    path: '/ordervoicebgm',
-    name: 'OrderVoiceBgm',
-    component: OrderVoiceBgm
+    path: '/createcommercial',
+    name: 'CreateCommercial',
+    component: CreateCommercial
   },
   {
     path: '/new-order',
