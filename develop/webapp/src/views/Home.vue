@@ -158,7 +158,7 @@
               <div class="card-body">
                 <div class="list-group">
                   <router-link
-                    to="#"
+                    :to="{ path: 'CreateCommercial' }"
                     class="list-group-item list-group-item-action flex-column align-items-start"
                   >
                     <div class="d-flex w-100 justify-content-between">
