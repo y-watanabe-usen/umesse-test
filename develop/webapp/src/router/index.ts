@@ -2,8 +2,12 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Home from '../views/Home.vue'
 import Narration from '../views/Narration.vue'
 import RecordingStart from '../views/RecordingStart.vue'
+import RecordedMaterial from '../views/RecordedMaterial.vue'
+import CreatedCm from '../views/CreatedCm.vue'
 import OrderVoiceBgm from '../views/OrderVoiceBgm.vue'
 import CreateCommercial from '../views/CreateCommercial.vue'
+import NewOrder from '../views/NewOrder.vue'
+import ApiConnectTest from '../views/ApiConnectTest.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -22,14 +26,35 @@ const routes: Array<RouteRecordRaw> = [
     component: RecordingStart
   },
   {
+    path: '/recordedmaterial',
+    name: 'RecordedMaterial',
+    component: RecordedMaterial
+  },
+  {
+    path: '/createdcm',
+    name: 'CreatedCm',
+    component: CreatedCm
+  },
+  {
     path: '/ordervoicebgm',
     name: 'OrderVoiceBgm',
     component: OrderVoiceBgm
   },
   {
-    path: '/createcommercial',
-    name: 'CreateCommercial',
-    component: CreateCommercial
+    path: '/ordervoicebgm',
+    name: 'OrderVoiceBgm',
+    component: OrderVoiceBgm
+  },
+  {
+    path: '/new-order',
+    name: 'NewOrder',
+    component: NewOrder
+  },
+  // TODO: 実際には使わないので後で消す
+  {
+    path: '/apiconnecttest',
+    name: 'ApiConnectTest',
+    component: ApiConnectTest
   },
   {
     path: '/about',
