@@ -1,4 +1,4 @@
-# ffmpeg build libfdk-aac
+# ffmpeg compile libfdk-aac
 
 [Compile FFmpeg for Ubuntu, Debian, or Mint](https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu)
 
@@ -9,7 +9,7 @@ docker build -t compile-ffmpeg .
 docker run --name compile-ffmpeg compile-ffmpeg && docker cp compile-ffmpeg:/root/bin/ffmpeg ./ && docker rm compile-ffmpeg
 ```
 
-## try
+## test
 
 ```bash
 ./ffmpeg -y \
