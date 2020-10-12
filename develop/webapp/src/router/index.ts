@@ -5,6 +5,7 @@ import RecordingStart from '../views/RecordingStart.vue'
 import RecordedMaterial from '../views/RecordedMaterial.vue'
 import CreatedCm from '../views/CreatedCm.vue'
 import OrderVoiceBgm from '../views/OrderVoiceBgm.vue'
+import CreateCommercial from '../views/CreateCommercial.vue'
 import NewOrder from '../views/NewOrder.vue'
 import ApiConnectTest from '../views/ApiConnectTest.vue'
 
@@ -38,6 +39,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/ordervoicebgm',
     name: 'OrderVoiceBgm',
     component: OrderVoiceBgm
+  },
+  {
+    path: '/createcommercial',
+    name: 'CreateCommercial',
+    component: CreateCommercial
   },
   {
     path: '/new-order',
