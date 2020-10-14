@@ -20,7 +20,7 @@
           type="text"
           class="form-control"
           id="loginId"
-          v-model="loginId"
+          v-model="state.loginId"
         />
       </div>
       <div class="mb-3">
@@ -29,7 +29,7 @@
           type="password"
           class="form-control"
           id="password"
-          v-model="password"
+          v-model="state.password"
         />
       </div>
       <div class="mb-3">
@@ -40,12 +40,12 @@
           type="text"
           class="form-control"
           id="identifier"
-          v-model="identifier"
+          v-model="state.identifier"
         />
       </div>
       <div class="mb-3">
         <label for="iv" class="text-white">IV</label>
-        <input type="text" class="form-control" id="iv" v-model="iv" />
+        <input type="text" class="form-control" id="iv" v-model="state.iv" />
       </div>
       <hr class="mb-4" />
       <div class="mb-3">
@@ -63,7 +63,7 @@
 
 <script>
 // TODO: 実際には使わないので後で消す
-import { computed, inject } from "vue";
+import { computed, inject, reactive } from "vue";
 import UserKey from "@/components/user-key";
 
 export default {
@@ -72,19 +72,18 @@ export default {
     if (!user) {
       throw new Error(`${user} is not provided`);
     }
-    const loginId = "xSgdZv";
-    const password = "KbvDW6K4";
-    const identifier = "OEKMQ6xhFRepyLjIzzLiNbCVtdI33rDXqLrWO1aY2J4=";
-    const iv = "fOLf8ZE4btauxiqE";
+    const state = reactive({
+      loginId: "xSgdZv",
+      password: "KbvDW6K4",
+      identifier: "EAbkM8KfG/jZ/gTGGFWoaqhbCpIHjG9T75Cyv2k+/Pk=",
+      iv: "fOLf8ZE4btauxiqE",
+    });
 
     const login = async () => {
-      user.login(loginId, password, identifier, iv);
+      user.login(state.loginId, state.password, state.identifier, state.iv);
     };
     return {
-      loginId,
-      password,
-      identifier,
-      iv,
+      state,
       login,
     };
   },
