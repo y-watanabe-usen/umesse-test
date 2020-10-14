@@ -20,7 +20,7 @@
           type="text"
           class="form-control"
           id="loginId"
-          v-model="loginId"
+          v-model="state.loginId"
         />
       </div>
       <div class="mb-3">
@@ -29,7 +29,7 @@
           type="password"
           class="form-control"
           id="password"
-          v-model="password"
+          v-model="state.password"
         />
       </div>
       <div class="mb-3">
@@ -40,26 +40,25 @@
           type="text"
           class="form-control"
           id="identifier"
-          v-model="identifier"
+          v-model="state.identifier"
         />
       </div>
       <div class="mb-3">
         <label for="iv" class="text-white">IV</label>
-        <input type="text" class="form-control" id="iv" v-model="iv" />
+        <input type="text" class="form-control" id="iv" v-model="state.iv" />
       </div>
       <hr class="mb-4" />
       <div class="mb-3">
         <button
           class="btn btn-primary btn-lg btn-block"
           type="submit"
-          :disabled="isLoading"
-          @click="loginAuth"
+          @click="login"
         >
           送信
         </button>
       </div>
       <div class="mb-3">
-        <p class="text-white">{{ token }}</p>
+        <p class="text-white">{{ user }}</p>
       </div>
     </div>
   </div>
@@ -67,43 +66,32 @@
 
 <script>
 // TODO: 実際には使わないので後で消す
-import store from "../store";
-import UsenMembersRepository from "@/repository/usenMembersRepository";
+import { computed, defineComponent, reactive } from "vue";
+import UserStore from "@/store/user";
 
 export default {
-  data() {
-    return {
+  setup() {
+    const state = reactive({
       loginId: "xSgdZv",
       password: "KbvDW6K4",
-      identifier: "Xa6pnHEfGt5a1zEfwBqO0XMpFfpdKBv4CbZB7lO5WYA=",
-      iv: "1234567890123456",
-      isLoading: false,
+      identifier: "OEKMQ6xhFRepyLjIzzLiNbCVtdI33rDXqLrWO1aY2J4=",
+      iv: "fOLf8ZE4btauxiqE",
+    });
+    const userStore = UserStore();
+    const user = computed(() => userStore.user);
+    const login = async () => {
+      userStore.login(
+        state.loginId,
+        state.password,
+        state.identifier,
+        state.iv
+      );
     };
-  },
-  computed: {
-    token() {
-      return store.getters.token;
-    },
-  },
-  methods: {
-    async loginAuth() {
-      this.isLoading = true;
-      UsenMembersRepository.loginAuth(
-        this.loginId,
-        this.password,
-        this.identifier,
-        this.iv
-      )
-        .then((response) => {
-          store.commit("setToken", response.token);
-        })
-        .catch((e) => {
-          console.log(e);
-        })
-        .finally(() => {
-          this.isLoading = false;
-        });
-    },
+    return {
+      state,
+      user,
+      login,
+    };
   },
 };
 </script>
