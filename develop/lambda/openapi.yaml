@@ -53,26 +53,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-    post:
-      tags:
-        - user
-      summary: User情報更新
-      responses:
-        '200':
-          description: ok
+    # post:
+    #   tags:
+    #     - user
+    #   summary: User情報更新
+    #   responses:
+    #     '200':
+    #       description: ok
+  # /user/cm:
+  #   get:
+  #     tags:
+  #       - user
+  #     summary: UserのCM
+  #     responses:
+  #       '200':
+  #         description: UserのCM
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/CMItem'
   /user/cm:
-    get:
-      tags:
-        - user
-      summary: UserのCM
-      responses:
-        '200':
-          description: UserのCM
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CMItem'
-  /cm:
     get:
       tags:
         - cm
@@ -144,7 +144,7 @@ paths:
       responses:
         default:
           description: Default error sample response
-  /recording:
+  /user/recording:
     get:
       tags:
         - recording
@@ -185,7 +185,7 @@ paths:
                   type: string
                   format: binary
 
-  '/recording/{recordingId}':
+  '/user/recording/{recordingId}':
     get:
       tags:
         - recording
@@ -211,6 +211,81 @@ paths:
       operationId: ''
       parameters:
         - name: recordingId
+          in: path
+          description: ID of cm to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        default:
+          description: Default response
+  /user/tts:
+    get:
+      tags:
+        - tts
+      summary: TTSデータリスト取得
+      description: ''
+      operationId: ''
+      responses:
+        '200':
+          description: The response
+          content:
+            application/json:
+              schema:
+                properties:
+                  value:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TtsItem'
+    post:
+      tags:
+        - tts
+      summary: 新規録音データ
+      description: ''
+      operationId: ''
+      responses:
+        '200':
+          description: successful
+      requestBody:
+        content: 
+          multipart/form-data:
+            schema: 
+              type: object
+              properties:
+                filename:
+                  type: string
+                recordedFile:
+                  type: string
+                  format: binary
+  '/user/tts/{ttsId}':
+    get:
+      tags:
+        - tts
+      summary: TTSデータ取得
+      description: ''
+      operationId: ''
+      parameters:
+        - name: ttsId
+          in: path
+          description: ID of cm to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        default:
+          description: Default response
+    delete:
+      tags:
+        - tts
+      summary: TTSデータ削除
+      description: ''
+      operationId: ''
+      parameters:
+        - name: ttsId
           in: path
           description: ID of cm to return
           required: true
@@ -298,30 +373,32 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /mix:
-    post:
+  /tts:
+    get:
       tags:
-        - mix
-      summary: 音源結合
-      description: 音源結合
-      parameters:
-        - name: params
-          in: query
-          schema:
-            type: object
-            required:
-              - bucket
-            properties:
-              bucket:
-                type: string
-                example: UMesseContents
+        - resources
+      summary: TTSテンプレート一覧
+      description: ''
+      operationId: ''
       responses:
         '200':
-          description: OK
+          description: The response
+          content:
+            application/json:
+              schema:
+                properties:
+                  value:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TtsItem'
         '400':
-          description: Bad request
-        '500':
-          description: Internal server error
+          description: Response invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
 components:
   schemas:

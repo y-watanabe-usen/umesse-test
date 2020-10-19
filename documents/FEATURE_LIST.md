@@ -31,18 +31,27 @@
 
 ### lambda
 
-| 機能 | 説明 | 備考 |
+| 機能 | protocol | path |
 | ---- | ---- | ---- |
-| キー認証 | キーを利用して認証を行い、有効期限トークンを発行する | |
-| 一覧取得 | 作成したCM、音源素材、オリジナル音声を一覧で取得する | |
-| 詳細取得・更新 | 作成したCM、オリジナル音源の詳細を取得、削除を行う | | |
-| 署名URL取得 | CM再生や録音音声アップロードで署名付きURLの発行を行う | |
-| データ削除 | バケットおよびテーブルから該当データを削除する | |
-| CMセンターアップロード | 作成したCMをセンターアップロードし、U-Music上で利用する　センターから削除も可能 | TODO: センターの仕様確認 |
-| CM共有・解除 | 作成したCMをグループ内に共有・解除する | |
-| 音源結合 | ffmpegを利用して音源ファイルを結合する | |
-| 音圧調整 | ffmpegを利用してラウドネス調整、音圧調整を行う | |
-| TTS作成 | 外部APIを利用してTTS音源を作成する | |
+| 認証 | get | /auth |
+
+| 機能 | protocol | path |
+| ---- | ---- | ---- |
+| ユーザー情報取得 | get | /user |
+| CM一覧取得（ユーザー作成） | get | /user/cm |
+| 録音音声一覧取得（ユーザー作成） | get | /user/recording |
+| TTS音声一覧取得（ユーザー作成） | get | /user/tts |
+| CM作成情報取得（ユーザー作成） | get/post | /user/cm/{cmid} |
+| 録音音声作成情報取得（ユーザー作成） | get/post | /user/recording/{recordingid} |
+| TTS音声作成情報取得（ユーザー作成） | get/post | /user/tts/{ttsid} |
+| チャイム一覧取得（USEN提供素材） | get | /chime |
+| BGM一覧取得（USEN提供素材） | get | /bgm |
+| ナレーション一覧取得（USEN提供素材） | get | /narration |
+| TTSテンプレート一覧取得（USEN提供素材） | get | /tts |
+
+| 機能 | protocol | path |
+| ---- | ---- | ---- |
+| 試聴 | get | /listen |
 
 ## データ定義
 
@@ -123,9 +132,51 @@ webapp/
 {
   Id: {S: xxxxx},
   Auth: {
-    Token: {S: トークンID},
+    Token: {S: トークンID}
     Expiration: {S: Date},
   },
+  Cm: [
+    {
+      id: {S, XXXX},
+      ファイル名
+      タイトル
+      説明文
+      素材
+      値
+    },
+    {
+      id: {S, XXXXX},
+      タイトル
+      説明文
+      素材
+      値
+    },
+  ],
+  recording: [
+    {
+      id: {S, XXXXX},
+      タイトル
+      説明文
+    },
+    {
+      id: {S, XXXXX},
+      タイトル
+      説明文
+    },
+  ],
+  tts: [
+    {
+      id: {S, XXXXX},
+      タイトル
+      説明文
+      TTSテンプレート
+    },
+    {
+      id: {S, XXXXX},
+      タイトル
+      説明文
+    },
+  ],
 }
 ```
 
