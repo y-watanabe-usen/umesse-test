@@ -143,6 +143,8 @@ webapp/
       説明文
       素材
       値
+      センター
+      共有
     },
     {
       id: {S, XXXXX},
@@ -150,6 +152,8 @@ webapp/
       説明文
       素材
       値
+      センター
+      共有
     },
   ],
   recording: [
@@ -175,6 +179,7 @@ webapp/
       id: {S, XXXXX},
       タイトル
       説明文
+      TTSテンプレート
     },
   ],
 }
@@ -189,7 +194,22 @@ webapp/
   Id: {S: xxxxx},
   Title: {S: タイトル名},
   Description: {S: 説明文},
-  Manuscript: {S: 説明文},
+  Manuscript: {S: 原稿},
+  Seconds: {I: 秒数},
+  Category1: {S: 業種名},
+  Category2: {S: シーン名},
+}
+```
+
+- センター連携管理
+- table: umesse-center : センター連携管理テーブル（本番）
+- table: stg-umesse-center : センター連携管理テーブル（ステージング）
+
+```none
+{
+  Id: {S: xxxxx},
+  Title: {S: タイトル名},
+  Description: {S: 説明文},
   Seconds: {I: 秒数},
   Category1: {S: 業種名},
   Category2: {S: シーン名},

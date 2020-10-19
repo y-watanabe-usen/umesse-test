@@ -4,6 +4,7 @@ participant WebApp order 1
 participant Lambda order 2
 participant DynamoDB order 3
 participant S3 order 4
+participant SQS order 5
 skinparam ParticipantPadding 50
 autonumber
 
@@ -36,8 +37,8 @@ Lambda --> S3: リスト取得(listObjectsV2)
 Lambda <-- S3: レスポンス
 WebApp <-- Lambda: レスポンス
 
-== 結合 ==
-WebApp --> Lambda: 確定
+== 結合（10秒） ==
+WebApp --> Lambda: 結合（試聴）
 Lambda --> S3: 該当ファイル取得(getObject)
 Lambda <-- S3: ファイル取得
 Lambda --> Lambda: ffmpeg 結合
@@ -59,5 +60,26 @@ note right
 end note
 Lambda <-- S3: レスポンス
 WebApp <-- Lambda: レスポンス
+
+== 確定 ==
+WebApp --> Lambda: 確定（完了）
+Lambda --> DynamoDB
+Lambda <-- DynamoDB
+Lambda --> SQS
+WebApp <-- Lambda: レスポンス
+
+== バックグラウンド（30秒→60秒） ==
+Lambda <-- SQS
+Lambda --> S3: 該当ファイル取得(getObject)
+Lambda <-- S3: ファイル取得
+Lambda --> Lambda: ffmpeg 音源加工
+Lambda --> S3: ファイルPUT(putObject)
+Lambda <-- S3: レスポンス
+Lambda --> DynamoDB: センター連携データ登録
+Lambda <-- DynamoDB: レスポンス
+
+== センター連携 ==
+
+
 
 @enduml
