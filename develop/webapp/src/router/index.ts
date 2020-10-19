@@ -8,6 +8,7 @@ import OrderVoiceBgm from '../views/OrderVoiceBgm.vue'
 import CreateCommercial from '../views/CreateCommercial.vue'
 import NewOrder from '../views/NewOrder.vue'
 import ApiConnectTest from '../views/ApiConnectTest.vue'
+import ApiConnectTest2 from '../views/ApiConnectTest2.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -55,6 +56,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/apiconnecttest',
     name: 'ApiConnectTest',
     component: ApiConnectTest
+  },
+  {
+    path: '/apiconnecttest2',
+    name: 'ApiConnectTest2',
+    component: ApiConnectTest2
   },
   {
     path: '/about',
