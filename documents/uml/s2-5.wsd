@@ -1,0 +1,64 @@
+@startuml s2-5
+
+participant Center order 1
+participant Lambda order 2
+participant DynamoDB order 3
+participant S3 order 4
+skinparam ParticipantPadding 50
+autonumber
+
+title ** 2-5 CMセンター連携 **
+
+== CMセンター連携 ==
+Center --> Lambda: CM連携リスト取得
+Lambda --> DynamoDB: データ取得（センター連携用）
+note right
+{
+  UnisCustomerCd: {S, '顧客CD'},
+  DataProcessType: {S, '01: 追加, 02: 変更, 03: 削除'}
+  Id: {S, 'ファイル名'},
+  Title: {S, 'タイトル名'},
+  Description: {S, '説明文'},
+  Seconds: {I, '秒数'},
+  StartDate: {S, '2014-10-10T13:50:40+09:00'},
+  EndDate: {S, '9999-12-31T23:59:59+09:00'},
+  ProductionType: {S, '01: 音楽系, 02: 素ナレ'},
+  Category1: {S: '業種名'},
+  Category2: {S: 'シーン名'},
+  Status: {I, '1: 連携可能'}
+  TimeStamp: {S, '2014-10-10T13:50:40+09:00'}
+}
+end note
+Lambda <-- DynamoDB: レスポンス
+Lambda --> S3: 追加の場合、signed url 取得(getSignedUrl)
+Lambda <-- S3: signed url
+Center <-- Lambda: レスポンス
+note right
+{
+  "unisCustomerCd" : "12345",
+  "cmMetas" : [
+    {
+      "dataProcessType" : "01",
+      "uMesseCmCd" : "ABCDE",
+      "url" : "https://xxxx",
+      "contentTime" : 30000,
+      "fileName" : "test.aac",
+      "fileSize" : 1234567,
+      "cmName" : "時報A",
+      "cmCommentManuscript" : "テストCMです",
+      "startDatetime" : "2020-01-01T12:34:56+09:00",
+      "endDatetime" : "9999-12-31T23:59:59+09:00",
+      "productionType" : "01",
+    }
+  ]
+}
+end note
+
+== CMセンター連携完了 ==
+Center --> Lambda: CM連携完了
+Lambda --> DynamoDB: データ削除（センター連携用）
+DynamoDB --> DynamoDB: 該当データ削除
+Lambda <-- DynamoDB: レスポンス
+Center <-- Lambda: レスポンス
+
+@enduml

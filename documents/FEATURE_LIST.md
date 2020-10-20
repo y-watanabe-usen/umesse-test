@@ -197,6 +197,7 @@ webapp/
   ProductionType: {S, '01: 音楽系, 02: 素ナレ'},
   Category1: {S: '業種名'},
   Category2: {S: 'シーン名'},
+  Status: {I, '0: 連携準備中, 1: 連携可能'}
   TimeStamp: {S, '2014-10-10T13:50:40+09:00'}
 }
 ```

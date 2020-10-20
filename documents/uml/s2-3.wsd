@@ -9,65 +9,40 @@ autonumber
 
 title ** 2-3 CM共有・解除 **
 
-== CM一覧取得 ==
-WebApp --> Lambda: リスト取得
-Lambda --> S3: リスト取得(listObjectsV2)
-Lambda <-- S3: レスポンス
-WebApp <-- Lambda: レスポンス
-
 == CM共有 ==
 WebApp --> Lambda: CM共有
-Lambda --> DynamoDB: ユーザー情報取得（グループID）U MEMBERS
+Lambda --> DynamoDB: ユーザー情報取得（グループID）
 Lambda <-- DynamoDB: レスポンス
 Lambda --> S3: CMコピー(copyObject)
-S3 --> S3: CMコピー(umesse-users/グループID/CM/ 配下へ)
+S3 --> S3: CMコピー(umesse-users/グループID/cm/ 配下へ)
 Lambda <-- S3: レスポンス
-Lambda --> S3: CMメタ更新(copyObject)
-S3 --> S3: CMメタ更新
+Lambda --> DynamoDB: CMメタデータ更新
 note right
-// CMのMetadata
 {
-  "Metadata": {
-    "start-chime": "ファイル名",
-    "start-chime-volume": "1.0",
-    "end-chime": "ファイル名",
-    "end-chime-volume": "1.0",
-    "bgm": "ファイル名",
-    "bgm-volume": "1.0",
-    "narration-1": "ファイル名",
-    "narration-1-volume": "1.0",
-    "shared-path": "シェアファイルパス",
-  }
+  Id: {S, 'ファイル名'},
+  GroupShear: ture,
+  TimeStamp: {S, '2014-10-10T13:50:40+09:00'}
 }
 end note
-Lambda <-- S3: レスポンス
+Lambda <-- DynamoDB: レスポンス
 WebApp <-- Lambda: レスポンス
 
 == CM共有解除 ==
 WebApp --> Lambda: CM共有解除
-Lambda --> DynamoDB: ユーザー情報取得（グループID）U MEMBERS
+Lambda --> DynamoDB: ユーザー情報取得（グループID）
 Lambda <-- DynamoDB: レスポンス
 Lambda --> S3: CM削除(deleteObject)
-S3 --> S3: CM削除(umesse-users/グループID/CM/ 配下削除)
+S3 --> S3: CM削除(umesse-users/グループID/cm/ 配下削除)
 Lambda <-- S3: レスポンス
-Lambda --> S3: CMメタ更新(copyObject)
-S3 --> S3: CMメタ更新
+Lambda --> DynamoDB: CMメタデータ更新
 note right
-// CMのMetadata
 {
-  "Metadata": {
-    "start-chime": "ファイル名",
-    "start-chime-volume": "1.0",
-    "end-chime": "ファイル名",
-    "end-chime-volume": "1.0",
-    "bgm": "ファイル名",
-    "bgm-volume": "1.0",
-    "narration-1": "ファイル名",
-    "narration-1-volume": "1.0",
-  }
+  Id: {S, 'ファイル名'},
+  GroupShear: false,
+  TimeStamp: {S, '2014-10-10T13:50:40+09:00'}
 }
 end note
-Lambda <-- S3: レスポンス
+Lambda <-- DynamoDB: レスポンス
 WebApp <-- Lambda: レスポンス
 
 @enduml

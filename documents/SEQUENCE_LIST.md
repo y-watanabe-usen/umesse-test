@@ -6,33 +6,45 @@
 
 ## CM管理
 
-### 2-1 CM一覧取得
+### 2-1 CMリスト取得
 
-![2-1 CM一覧取得](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/openusen/umesse/master/documents/uml/s2-1.wsd?token=AHW2PBYGWDOZRAD3ZBIWPUK7KEFZA)
+![2-1 CMリスト取得](uml/s2-1.png)
 
-### 2-2 CM再生・削除
+### 2-2 CM再生
 
-![2-2 CM再生・削除](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/openusen/umesse/master/documents/uml/s2-2.wsd?token=AHW2PB6WQUJHIWJAHBPWYVS7KEF2K)
+![2-2 CM再生](uml/s2-2.png)
 
 ### 2-3 CM共有・解除
 
-![2-3 CM共有・解除](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/openusen/umesse/master/documents/uml/s2-3.wsd?token=AHW2PB5ZKTQMPM7QTMFH67K7KEF3O)
+![2-3 CM共有・解除](uml/s2-3.png)
 
-### 2-4 CMセンターアップロード (TODO)
+### 2-4 CMセンター追加・変更・解除
 
-## 作成
+- 前提条件：追加の場合のみCMファイルを連携、変更はメタデータのみ、削除は終了日時連携
 
-### 3-1 CM作成MIX
+![2-4 CMセンター追加・変更・解除](uml/s2-4.png)
 
-![3-1 CM作成MIX](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/openusen/umesse/master/documents/uml/s3-1.wsd?token=AHW2PB4RTQCTU532AXEZDS27KEF44)
+### 2-5 CMセンター連携
 
-### 3-2 音声録音
+![2-5 CMセンター連携](uml/s2-5.png)
 
-![3-2 音声録音](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/openusen/umesse/master/documents/uml/s3-2.wsd?token=AHW2PB2QCVU63VBNSW4IX5K7KEF6Q)
+## 作成・更新・削除
 
-### 3-3 TTS録音
+### 3-1 CM作成
 
-![3-3 TTS録音](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/openusen/umesse/master/documents/uml/s3-3.wsd?token=AHW2PB34RVXSQFQOM3IQD627KEF74)
+![3-1 CM作成](uml/s3-1.png)
+
+### 3-2 CM変更・削除
+
+![3-2 CM変更・削除](uml/s3-2.png)
+
+### 3-3 録音作成・削除
+
+![3-3 録音作成・削除](uml/s3-3.png)
+
+### 3-4 TTS作成・削除
+
+![3-4 TTS作成・削除](uml/s3-4.png)
 
 ## CM発注
 

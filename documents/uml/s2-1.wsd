@@ -7,36 +7,49 @@ participant S3 order 4
 skinparam ParticipantPadding 50
 autonumber
 
-title ** 2-1 CM一覧取得 **
+title ** 2-1 CMリスト取得 **
 
-== CM一覧取得 ==
+== CMリスト取得 ==
 WebApp --> Lambda: リスト取得
-Lambda --> S3: リスト取得(listObjectsV2)
+Lambda --> DynamoDB: リスト取得
 note right
-// CMのMetadata
 {
-  "Metadata": {
-    "start-chime": "ファイル名",
-    "start-chime-volume": "1.0",
-    "end-chime": "ファイル名",
-    "end-chime-volume": "1.0",
-    "bgm": "ファイル名",
-    "bgm-volume": "1.0",
-    "narration-1": "ファイル名",
-    "narration-1-volume": "1.0",
-    "narration-2": "ファイル名",
-    "narration-2-volume": "1.0",
-    "narration-3": "ファイル名",
-    "narration-3-volume": "1.0",
-    "narration-4": "ファイル名",
-    "narration-4-volume": "1.0",
-    "shared-path": "シェアファイルパス",
-    "center-enabled": "true",
-  }
+  Id: {S, 'ファイル名'},
+  Title: {S, 'タイトル名'},
+  Description: {S, '説明文'},
+  Seconds: {I, '秒数'},
+  StartDate: {S, '2014-10-10T13:50:40+09:00'},
+  EndDate: {S, '9999-12-31T23:59:59+09:00'},
+  ProductionType: {S, '01: 音楽系, 02: 素ナレ'},
+  Category1: {S: '業種名'},
+  Category2: {S: 'シーン名'},
+  Materials: {
+    Narrations: [
+      {
+        Id: {S, 'ファイル名'},
+        Volume: {I, 'ボリューム値'},
+      }
+    ],
+    StartChime: {
+      Id: {S, 'ファイル名'},
+      Volume: {I, 'ボリューム値'},
+    },
+    EndChime: {
+      Id: {S, 'ファイル名'},
+      Volume: {I, 'ボリューム値'},
+    },
+    Bgm: {
+      Id: {S, 'ファイル名'},
+      Volume: {I, 'ボリューム値'},
+    },
+  },
+  CenterShear: {B, false},
+  GroupShear: {B, false},
+  TimeStamp: {S, '2014-10-10T13:50:40+09:00'}
 }
 end note
-Lambda <-- S3: レスポンス
+Lambda <-- DynamoDB: レスポンス
 WebApp <-- Lambda: レスポンス
-WebApp --> WebApp: ソート（更新日・名称）
+WebApp --> WebApp: ソート（作成日・名称）
 
 @enduml
