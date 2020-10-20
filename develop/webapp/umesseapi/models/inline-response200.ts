@@ -1,8 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * U-Messe API
- * U-Messe API
+ * U MESSE API
+ * U MESSE API
  *
  * OpenAPI spec version: 0.0.1
  * 
@@ -25,7 +25,7 @@ export interface InlineResponse200 {
     value?: any;
     /**
      * 
-     * @type {Array&lt;RecordingItem&gt;}
+     * @type {Array&lt;CenterItem&gt;}
      * @memberof InlineResponse200
      */
     data?: any;

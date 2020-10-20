@@ -14,13 +14,13 @@
 /**
  * 
  * @export
- * @interface InlineResponseDefault
+ * @interface InlineResponse2006
  */
-export interface InlineResponseDefault {
+export interface InlineResponse2006 {
     /**
      * 
      * @type {string}
-     * @memberof InlineResponseDefault
+     * @memberof InlineResponse2006
      */
-    message?: any;
+    url?: any;
 }

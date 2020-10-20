@@ -1,8 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * U-Messe API
- * U-Messe API
+ * U MESSE API
+ * U MESSE API
  *
  * OpenAPI spec version: 0.0.1
  * 
@@ -22,11 +22,41 @@ export interface Body2 {
      * @type {string}
      * @memberof Body2
      */
-    filename?: any;
+    title?: any;
     /**
      * 
      * @type {string}
      * @memberof Body2
      */
-    recordedFile?: any;
+    description?: any;
+    /**
+     * 
+     * @type {number}
+     * @memberof Body2
+     */
+    seconds?: any;
+    /**
+     * 
+     * @type {Date}
+     * @memberof Body2
+     */
+    startDate?: any;
+    /**
+     * 
+     * @type {Date}
+     * @memberof Body2
+     */
+    endDate?: any;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Body2
+     */
+    shear?: any;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Body2
+     */
+    center?: any;
 }

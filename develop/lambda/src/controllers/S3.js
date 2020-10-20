@@ -1,10 +1,10 @@
 'use strict';
 
 var utils = require('../utils/writer.js');
-var Mix = require('../service/MixService');
+var S3 = require('../service/S3Service');
 
-module.exports.mixPOST = function mixPOST (req, res, next, params) {
-  Mix.mixPOST(params)
+module.exports.signedUrlGET = function signedUrlGET (req, res, next) {
+  S3.signedUrlGET()
     .then(function (response) {
       utils.writeJson(res, response);
     })

@@ -1,7 +1,7 @@
 {
   "name": "u-messe-api",
   "version": "0.0.1",
-  "description": "U-Messe API",
+  "description": "U MESSE API",
   "main": "index.js",
   "scripts": {
 	"prestart": "npm install",

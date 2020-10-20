@@ -1,10 +1,10 @@
 'use strict';
 
 var utils = require('../utils/writer.js');
-var Resources = require('../service/ResourcesService');
+var Center = require('../service/CenterService');
 
-module.exports.bgmGET = function bgmGET (req, res, next) {
-  Resources.bgmGET()
+module.exports.centerCmIdDELETE = function centerCmIdDELETE (req, res, next, cmId) {
+  Center.centerCmIdDELETE(cmId)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -13,8 +13,8 @@ module.exports.bgmGET = function bgmGET (req, res, next) {
     });
 };
 
-module.exports.chimeGET = function chimeGET (req, res, next) {
-  Resources.chimeGET()
+module.exports.centerCmIdPOST = function centerCmIdPOST (req, res, next, body, cmId) {
+  Center.centerCmIdPOST(body, cmId)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -23,8 +23,8 @@ module.exports.chimeGET = function chimeGET (req, res, next) {
     });
 };
 
-module.exports.narrationGET = function narrationGET (req, res, next) {
-  Resources.narrationGET()
+module.exports.centerDownloadCmIdPOST = function centerDownloadCmIdPOST (req, res, next, cmId) {
+  Center.centerDownloadCmIdPOST(cmId)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -33,8 +33,8 @@ module.exports.narrationGET = function narrationGET (req, res, next) {
     });
 };
 
-module.exports.ttsGET = function ttsGET (req, res, next) {
-  Resources.ttsGET()
+module.exports.centerDownloadGET = function centerDownloadGET (req, res, next) {
+  Center.centerDownloadGET()
     .then(function (response) {
       utils.writeJson(res, response);
     })

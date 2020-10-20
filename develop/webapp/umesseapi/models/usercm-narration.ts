@@ -14,13 +14,19 @@
 /**
  * 
  * @export
- * @interface InlineResponseDefault
+ * @interface UsercmNarration
  */
-export interface InlineResponseDefault {
+export interface UsercmNarration {
     /**
      * 
      * @type {string}
-     * @memberof InlineResponseDefault
+     * @memberof UsercmNarration
      */
-    message?: any;
+    narrationId?: any;
+    /**
+     * 
+     * @type {number}
+     * @memberof UsercmNarration
+     */
+    volume?: any;
 }

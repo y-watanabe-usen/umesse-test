@@ -1,8 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * U-Messe API
- * U-Messe API
+ * U MESSE API
+ * U MESSE API
  *
  * OpenAPI spec version: 0.0.1
  * 
@@ -14,25 +14,19 @@
 /**
  * 
  * @export
- * @interface BGMItem
+ * @interface InlineResponse2005
  */
-export interface BGMItem {
-    /**
-     * 
-     * @type {number}
-     * @memberof BGMItem
-     */
-    id?: any;
+export interface InlineResponse2005 {
     /**
      * 
      * @type {string}
-     * @memberof BGMItem
+     * @memberof InlineResponse2005
      */
-    name?: any;
+    value?: any;
     /**
      * 
-     * @type {string}
-     * @memberof BGMItem
+     * @type {Array&lt;ChimeItem&gt;}
+     * @memberof InlineResponse2005
      */
-    detail?: any;
+    data?: any;
 }

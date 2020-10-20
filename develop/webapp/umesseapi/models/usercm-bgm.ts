@@ -1,8 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * U-Messe API
- * U-Messe API
+ * U MESSE API
+ * U MESSE API
  *
  * OpenAPI spec version: 0.0.1
  * 
@@ -14,25 +14,19 @@
 /**
  * 
  * @export
- * @interface CMItem
+ * @interface UsercmBgm
  */
-export interface CMItem {
+export interface UsercmBgm {
+    /**
+     * 
+     * @type {string}
+     * @memberof UsercmBgm
+     */
+    bgmId?: any;
     /**
      * 
      * @type {number}
-     * @memberof CMItem
+     * @memberof UsercmBgm
      */
-    id?: any;
-    /**
-     * 
-     * @type {string}
-     * @memberof CMItem
-     */
-    name?: any;
-    /**
-     * 
-     * @type {string}
-     * @memberof CMItem
-     */
-    detail?: any;
+    volume?: any;
 }
