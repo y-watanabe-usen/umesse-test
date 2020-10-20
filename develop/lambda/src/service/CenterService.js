@@ -39,15 +39,15 @@ exports.centerDownloadCmIdPOST = function(cmId) {
     var examples = {};
     examples['application/json'] = {
   "data" : [ {
-    "id" : 0,
-    "detail" : "detail",
-    "title" : "title"
+    "id" : 1234,
+    "detail" : "center detail",
+    "title" : "center title"
   }, {
-    "id" : 0,
-    "detail" : "detail",
-    "title" : "title"
+    "id" : 1234,
+    "detail" : "center detail",
+    "title" : "center title"
   } ],
-  "value" : "value"
+  "value" : "???"
 };
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
@@ -68,15 +68,15 @@ exports.centerDownloadGET = function() {
     var examples = {};
     examples['application/json'] = {
   "data" : [ {
-    "id" : 0,
-    "detail" : "detail",
-    "title" : "title"
+    "id" : 1234,
+    "detail" : "center detail",
+    "title" : "center title"
   }, {
-    "id" : 0,
-    "detail" : "detail",
-    "title" : "title"
+    "id" : 1234,
+    "detail" : "center detail",
+    "title" : "center title"
   } ],
-  "value" : "value"
+  "value" : "???"
 };
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);

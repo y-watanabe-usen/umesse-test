@@ -24,13 +24,13 @@ exports.userCmCmIdGET = function(cmId) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = [ {
-  "name" : "name",
-  "id" : 0,
-  "detail" : "detail"
+  "name" : "cm name",
+  "id" : 1234,
+  "detail" : "cm detail"
 }, {
-  "name" : "name",
-  "id" : 0,
-  "detail" : "detail"
+  "name" : "cm name",
+  "id" : 1234,
+  "detail" : "cm detail"
 } ];
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
@@ -64,13 +64,13 @@ exports.userCmGET = function() {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = [ {
-  "name" : "name",
-  "id" : 0,
-  "detail" : "detail"
+  "name" : "cm name",
+  "id" : 1234,
+  "detail" : "cm detail"
 }, {
-  "name" : "name",
-  "id" : 0,
-  "detail" : "detail"
+  "name" : "cm name",
+  "id" : 1234,
+  "detail" : "cm detail"
 } ];
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
@@ -91,9 +91,9 @@ exports.userCmPOST = function(body) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
-  "name" : "name",
-  "id" : 0,
-  "detail" : "detail"
+  "name" : "cm name",
+  "id" : 1234,
+  "detail" : "cm detail"
 };
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);

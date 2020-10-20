@@ -11,7 +11,7 @@ exports.signedUrlGET = function() {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
-  "url" : "url"
+  "url" : "https://filesamples.com/samples/audio/aac/sample1.aac"
 };
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);

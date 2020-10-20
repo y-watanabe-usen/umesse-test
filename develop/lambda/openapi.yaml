@@ -274,6 +274,7 @@ paths:
                 properties:
                   value:
                     type: string
+                    example: "???"
                   data:
                     type: array
                     items:
@@ -303,6 +304,7 @@ paths:
                 properties:
                   value:
                     type: string
+                    example: "???"
                   data:
                     type: array
                     items:
@@ -383,6 +385,7 @@ paths:
                 properties:
                   value:
                     type: string
+                    example: "???"
                   data:
                     type: array
                     items:
@@ -470,6 +473,7 @@ paths:
                 properties:
                   value:
                     type: string
+                    example: "???"
                   data:
                     type: array
                     items:
@@ -557,6 +561,7 @@ paths:
                 properties:
                   value:
                     type: string
+                    example: "???"
                   data:
                     type: array
                     items:
@@ -584,6 +589,7 @@ paths:
                 properties:
                   value:
                     type: string
+                    example: "???"
                   data:
                     type: array
                     items:
@@ -611,6 +617,7 @@ paths:
                 properties:
                   value:
                     type: string
+                    example: "???"
                   data:
                     type: array
                     items:
@@ -638,6 +645,7 @@ paths:
                 properties:
                   value:
                     type: string
+                    example: "???"
                   data:
                     type: array
                     items:
@@ -664,6 +672,7 @@ paths:
                 properties:
                   url:
                     type: string
+                    example: "https://filesamples.com/samples/audio/aac/sample1.aac"
         '400':
           description: Response invalid
           content:
@@ -721,67 +730,92 @@ components:
       properties:
         id:
           type: integer
+          example: 1234
         name:
           type: string
+          example: "cm name"
         detail:
           type: string
+          example: "cm detail"
     BgmItem:
       properties:
         id:
           type: integer
+          example: 1234
         name:
           type: string
+          example: "bgm name"
         detail:
           type: string
+          example: "bgm detail"
     NarrationItem:
       properties:
         id:
           type: integer
+          example: 1234
         name:
           type: string
+          example: "narration name"
         detail:
           type: string
+          example: "narration detail"
     ChimeItem:
       properties:
         id:
           type: integer
+          example: 1234
         name:
           type: string
+          example: "chime name"
         detail:
           type: string
+          example: "chime detail"
     RecordingItem:
       properties:
         id:
           type: integer
+          example: 1234
         title:
           type: string
+          example: "recording title"
         detail:
           type: string
+          example: "recording detail"
     TtsItem:
       properties:
         id:
           type: integer
+          example: 1234
         title:
           type: string
+          example: "tts title"
         detail:
           type: string
+          example: "tts detail"
     CenterItem:
       properties:
         id:
           type: integer
+          example: 1234
         title:
           type: string
+          example: "center title"
         detail:
           type: string
+          example: "center detail"
     Error:
       description: Error
       type: object
       properties:
         status:
           type: string
+          example: "status?"
         code:
           type: string
-        title:
+          example: "erorr code"
+        message:
           type: string
+          example: "error message"
         detail:
           type: string
+          example: "error detail"
