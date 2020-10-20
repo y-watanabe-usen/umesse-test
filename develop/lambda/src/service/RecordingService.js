@@ -11,15 +11,15 @@ exports.userRecordingGET = function() {
     var examples = {};
     examples['application/json'] = {
   "data" : [ {
-    "id" : 0,
-    "detail" : "detail",
-    "title" : "title"
+    "id" : 1234,
+    "detail" : "recording detail",
+    "title" : "recording title"
   }, {
-    "id" : 0,
-    "detail" : "detail",
-    "title" : "title"
+    "id" : 1234,
+    "detail" : "recording detail",
+    "title" : "recording title"
   } ],
-  "value" : "value"
+  "value" : "???"
 };
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);

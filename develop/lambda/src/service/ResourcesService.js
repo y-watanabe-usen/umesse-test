@@ -11,15 +11,15 @@ exports.bgmGET = function() {
     var examples = {};
     examples['application/json'] = {
   "data" : [ {
-    "name" : "name",
-    "id" : 0,
-    "detail" : "detail"
+    "name" : "bgm name",
+    "id" : 1234,
+    "detail" : "bgm detail"
   }, {
-    "name" : "name",
-    "id" : 0,
-    "detail" : "detail"
+    "name" : "bgm name",
+    "id" : 1234,
+    "detail" : "bgm detail"
   } ],
-  "value" : "value"
+  "value" : "???"
 };
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
@@ -40,15 +40,15 @@ exports.chimeGET = function() {
     var examples = {};
     examples['application/json'] = {
   "data" : [ {
-    "name" : "name",
-    "id" : 0,
-    "detail" : "detail"
+    "name" : "chime name",
+    "id" : 1234,
+    "detail" : "chime detail"
   }, {
-    "name" : "name",
-    "id" : 0,
-    "detail" : "detail"
+    "name" : "chime name",
+    "id" : 1234,
+    "detail" : "chime detail"
   } ],
-  "value" : "value"
+  "value" : "???"
 };
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
@@ -69,15 +69,15 @@ exports.narrationGET = function() {
     var examples = {};
     examples['application/json'] = {
   "data" : [ {
-    "name" : "name",
-    "id" : 0,
-    "detail" : "detail"
+    "name" : "narration name",
+    "id" : 1234,
+    "detail" : "narration detail"
   }, {
-    "name" : "name",
-    "id" : 0,
-    "detail" : "detail"
+    "name" : "narration name",
+    "id" : 1234,
+    "detail" : "narration detail"
   } ],
-  "value" : "value"
+  "value" : "???"
 };
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
@@ -98,15 +98,15 @@ exports.ttsGET = function() {
     var examples = {};
     examples['application/json'] = {
   "data" : [ {
-    "id" : 0,
-    "detail" : "detail",
-    "title" : "title"
+    "id" : 1234,
+    "detail" : "tts detail",
+    "title" : "tts title"
   }, {
-    "id" : 0,
-    "detail" : "detail",
-    "title" : "title"
+    "id" : 1234,
+    "detail" : "tts detail",
+    "title" : "tts title"
   } ],
-  "value" : "value"
+  "value" : "???"
 };
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);

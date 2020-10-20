@@ -643,97 +643,122 @@ components:
       properties:
         id:
           type: integer
+          example: 1234
         name:
           type: string
+          example: cm name
         detail:
           type: string
+          example: cm detail
       example:
-        name: name
-        id: 0
-        detail: detail
+        name: cm name
+        id: 1234
+        detail: cm detail
     BgmItem:
       properties:
         id:
           type: integer
+          example: 1234
         name:
           type: string
+          example: bgm name
         detail:
           type: string
+          example: bgm detail
       example:
-        name: name
-        id: 0
-        detail: detail
+        name: bgm name
+        id: 1234
+        detail: bgm detail
     NarrationItem:
       properties:
         id:
           type: integer
+          example: 1234
         name:
           type: string
+          example: narration name
         detail:
           type: string
+          example: narration detail
       example:
-        name: name
-        id: 0
-        detail: detail
+        name: narration name
+        id: 1234
+        detail: narration detail
     ChimeItem:
       properties:
         id:
           type: integer
+          example: 1234
         name:
           type: string
+          example: chime name
         detail:
           type: string
+          example: chime detail
       example:
-        name: name
-        id: 0
-        detail: detail
+        name: chime name
+        id: 1234
+        detail: chime detail
     RecordingItem:
       properties:
         id:
           type: integer
+          example: 1234
         title:
           type: string
+          example: recording title
         detail:
           type: string
+          example: recording detail
       example:
-        id: 0
-        detail: detail
-        title: title
+        id: 1234
+        detail: recording detail
+        title: recording title
     TtsItem:
       properties:
         id:
           type: integer
+          example: 1234
         title:
           type: string
+          example: tts title
         detail:
           type: string
+          example: tts detail
       example:
-        id: 0
-        detail: detail
-        title: title
+        id: 1234
+        detail: tts detail
+        title: tts title
     CenterItem:
       properties:
         id:
           type: integer
+          example: 1234
         title:
           type: string
+          example: center title
         detail:
           type: string
+          example: center detail
       example:
-        id: 0
-        detail: detail
-        title: title
+        id: 1234
+        detail: center detail
+        title: center title
     Error:
       type: object
       properties:
         status:
           type: string
+          example: status?
         code:
           type: string
-        title:
+          example: erorr code
+        message:
           type: string
+          example: error message
         detail:
           type: string
+          example: error detail
       description: Error
     inline_response_default:
       properties:
@@ -835,36 +860,38 @@ components:
       properties:
         value:
           type: string
+          example: ???
         data:
           type: array
           items:
             $ref: '#/components/schemas/CenterItem'
       example:
         data:
-        - id: 0
-          detail: detail
-          title: title
-        - id: 0
-          detail: detail
-          title: title
-        value: value
+        - id: 1234
+          detail: center detail
+          title: center title
+        - id: 1234
+          detail: center detail
+          title: center title
+        value: ???
     inline_response_200_1:
       properties:
         value:
           type: string
+          example: ???
         data:
           type: array
           items:
             $ref: '#/components/schemas/RecordingItem'
       example:
         data:
-        - id: 0
-          detail: detail
-          title: title
-        - id: 0
-          detail: detail
-          title: title
-        value: value
+        - id: 1234
+          detail: recording detail
+          title: recording title
+        - id: 1234
+          detail: recording detail
+          title: recording title
+        value: ???
     body_4:
       type: object
       properties:
@@ -885,19 +912,20 @@ components:
       properties:
         value:
           type: string
+          example: ???
         data:
           type: array
           items:
             $ref: '#/components/schemas/TtsItem'
       example:
         data:
-        - id: 0
-          detail: detail
-          title: title
-        - id: 0
-          detail: detail
-          title: title
-        value: value
+        - id: 1234
+          detail: tts detail
+          title: tts title
+        - id: 1234
+          detail: tts detail
+          title: tts title
+        value: ???
     body_6:
       type: object
       properties:
@@ -918,59 +946,63 @@ components:
       properties:
         value:
           type: string
+          example: ???
         data:
           type: array
           items:
             $ref: '#/components/schemas/BgmItem'
       example:
         data:
-        - name: name
-          id: 0
-          detail: detail
-        - name: name
-          id: 0
-          detail: detail
-        value: value
+        - name: bgm name
+          id: 1234
+          detail: bgm detail
+        - name: bgm name
+          id: 1234
+          detail: bgm detail
+        value: ???
     inline_response_200_4:
       properties:
         value:
           type: string
+          example: ???
         data:
           type: array
           items:
             $ref: '#/components/schemas/NarrationItem'
       example:
         data:
-        - name: name
-          id: 0
-          detail: detail
-        - name: name
-          id: 0
-          detail: detail
-        value: value
+        - name: narration name
+          id: 1234
+          detail: narration detail
+        - name: narration name
+          id: 1234
+          detail: narration detail
+        value: ???
     inline_response_200_5:
       properties:
         value:
           type: string
+          example: ???
         data:
           type: array
           items:
             $ref: '#/components/schemas/ChimeItem'
       example:
         data:
-        - name: name
-          id: 0
-          detail: detail
-        - name: name
-          id: 0
-          detail: detail
-        value: value
+        - name: chime name
+          id: 1234
+          detail: chime detail
+        - name: chime name
+          id: 1234
+          detail: chime detail
+        value: ???
     inline_response_200_6:
       properties:
         url:
           type: string
+          example: https://filesamples.com/samples/audio/aac/sample1.aac
       example:
-        url: url
+        url: https://filesamples.com/samples/audio/aac/sample1.aac
   parameters:
     CmId:
       name: cmId
