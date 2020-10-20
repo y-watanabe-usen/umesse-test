@@ -1,10 +1,10 @@
 'use strict';
 
 var utils = require('../utils/writer.js');
-var Shear = require('../service/ShearService');
+var Share = require('../service/ShareService');
 
-module.exports.shearCmIdDELETE = function shearCmIdDELETE (req, res, next, cmId) {
-  Shear.shearCmIdDELETE(cmId)
+module.exports.shareCmIdDELETE = function shareCmIdDELETE (req, res, next, cmId) {
+  Share.shareCmIdDELETE(cmId)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -13,8 +13,8 @@ module.exports.shearCmIdDELETE = function shearCmIdDELETE (req, res, next, cmId)
     });
 };
 
-module.exports.shearCmIdPOST = function shearCmIdPOST (req, res, next, cmId) {
-  Shear.shearCmIdPOST(cmId)
+module.exports.shareCmIdPOST = function shareCmIdPOST (req, res, next, cmId) {
+  Share.shareCmIdPOST(cmId)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -23,8 +23,8 @@ module.exports.shearCmIdPOST = function shearCmIdPOST (req, res, next, cmId) {
     });
 };
 
-module.exports.shearGET = function shearGET (req, res, next) {
-  Shear.shearGET()
+module.exports.shareGET = function shareGET (req, res, next) {
+  Share.shareGET()
     .then(function (response) {
       utils.writeJson(res, response);
     })

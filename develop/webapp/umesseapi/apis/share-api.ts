@@ -18,10 +18,10 @@ import { Configuration } from '../configuration';
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
 import { CmItem } from '../models';
 /**
- * ShearApi - axios parameter creator
+ * ShareApi - axios parameter creator
  * @export
  */
-export const ShearApiAxiosParamCreator = function (configuration?: Configuration) {
+export const ShareApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
          * 
@@ -30,12 +30,12 @@ export const ShearApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        shearCmIdDelete: async (cmId: number, options: any = {}): Promise<RequestArgs> => {
+        shareCmIdDelete: async (cmId: number, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'cmId' is not null or undefined
             if (cmId === null || cmId === undefined) {
-                throw new RequiredError('cmId','Required parameter cmId was null or undefined when calling shearCmIdDelete.');
+                throw new RequiredError('cmId','Required parameter cmId was null or undefined when calling shareCmIdDelete.');
             }
-            const localVarPath = `/shear/{cmId}`
+            const localVarPath = `/share/{cmId}`
                 .replace(`{${"cmId"}}`, encodeURIComponent(String(cmId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -70,12 +70,12 @@ export const ShearApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        shearCmIdPost: async (cmId: string, options: any = {}): Promise<RequestArgs> => {
+        shareCmIdPost: async (cmId: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'cmId' is not null or undefined
             if (cmId === null || cmId === undefined) {
-                throw new RequiredError('cmId','Required parameter cmId was null or undefined when calling shearCmIdPost.');
+                throw new RequiredError('cmId','Required parameter cmId was null or undefined when calling shareCmIdPost.');
             }
-            const localVarPath = `/shear/{cmId}`
+            const localVarPath = `/share/{cmId}`
                 .replace(`{${"cmId"}}`, encodeURIComponent(String(cmId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -109,8 +109,8 @@ export const ShearApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        shearGet: async (options: any = {}): Promise<RequestArgs> => {
-            const localVarPath = `/shear`;
+        shareGet: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/share`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
             let baseOptions;
@@ -141,10 +141,10 @@ export const ShearApiAxiosParamCreator = function (configuration?: Configuration
 };
 
 /**
- * ShearApi - functional programming interface
+ * ShareApi - functional programming interface
  * @export
  */
-export const ShearApiFp = function(configuration?: Configuration) {
+export const ShareApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
@@ -153,8 +153,8 @@ export const ShearApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async shearCmIdDelete(cmId: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await ShearApiAxiosParamCreator(configuration).shearCmIdDelete(cmId, options);
+        async shareCmIdDelete(cmId: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await ShareApiAxiosParamCreator(configuration).shareCmIdDelete(cmId, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -167,8 +167,8 @@ export const ShearApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async shearCmIdPost(cmId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await ShearApiAxiosParamCreator(configuration).shearCmIdPost(cmId, options);
+        async shareCmIdPost(cmId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await ShareApiAxiosParamCreator(configuration).shareCmIdPost(cmId, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -180,8 +180,8 @@ export const ShearApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async shearGet(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CmItem>>> {
-            const localVarAxiosArgs = await ShearApiAxiosParamCreator(configuration).shearGet(options);
+        async shareGet(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CmItem>>> {
+            const localVarAxiosArgs = await ShareApiAxiosParamCreator(configuration).shareGet(options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -191,10 +191,10 @@ export const ShearApiFp = function(configuration?: Configuration) {
 };
 
 /**
- * ShearApi - factory interface
+ * ShareApi - factory interface
  * @export
  */
-export const ShearApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+export const ShareApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     return {
         /**
          * 
@@ -203,8 +203,8 @@ export const ShearApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        shearCmIdDelete(cmId: number, options?: any): AxiosPromise<void> {
-            return ShearApiFp(configuration).shearCmIdDelete(cmId, options).then((request) => request(axios, basePath));
+        shareCmIdDelete(cmId: number, options?: any): AxiosPromise<void> {
+            return ShareApiFp(configuration).shareCmIdDelete(cmId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -213,8 +213,8 @@ export const ShearApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        shearCmIdPost(cmId: string, options?: any): AxiosPromise<void> {
-            return ShearApiFp(configuration).shearCmIdPost(cmId, options).then((request) => request(axios, basePath));
+        shareCmIdPost(cmId: string, options?: any): AxiosPromise<void> {
+            return ShareApiFp(configuration).shareCmIdPost(cmId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -222,29 +222,29 @@ export const ShearApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        shearGet(options?: any): AxiosPromise<Array<CmItem>> {
-            return ShearApiFp(configuration).shearGet(options).then((request) => request(axios, basePath));
+        shareGet(options?: any): AxiosPromise<Array<CmItem>> {
+            return ShareApiFp(configuration).shareGet(options).then((request) => request(axios, basePath));
         },
     };
 };
 
 /**
- * ShearApi - object-oriented interface
+ * ShareApi - object-oriented interface
  * @export
- * @class ShearApi
+ * @class ShareApi
  * @extends {BaseAPI}
  */
-export class ShearApi extends BaseAPI {
+export class ShareApi extends BaseAPI {
     /**
      * 
      * @summary CM共有削除
      * @param {number} cmId ID of cm to return
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ShearApi
+     * @memberof ShareApi
      */
-    public shearCmIdDelete(cmId: number, options?: any) {
-        return ShearApiFp(this.configuration).shearCmIdDelete(cmId, options).then((request) => request(this.axios, this.basePath));
+    public shareCmIdDelete(cmId: number, options?: any) {
+        return ShareApiFp(this.configuration).shareCmIdDelete(cmId, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * 
@@ -252,19 +252,19 @@ export class ShearApi extends BaseAPI {
      * @param {string} cmId ID of cm to return
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ShearApi
+     * @memberof ShareApi
      */
-    public shearCmIdPost(cmId: string, options?: any) {
-        return ShearApiFp(this.configuration).shearCmIdPost(cmId, options).then((request) => request(this.axios, this.basePath));
+    public shareCmIdPost(cmId: string, options?: any) {
+        return ShareApiFp(this.configuration).shareCmIdPost(cmId, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * 
      * @summary CM共有リスト取得
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ShearApi
+     * @memberof ShareApi
      */
-    public shearGet(options?: any) {
-        return ShearApiFp(this.configuration).shearGet(options).then((request) => request(this.axios, this.basePath));
+    public shareGet(options?: any) {
+        return ShareApiFp(this.configuration).shareGet(options).then((request) => request(this.axios, this.basePath));
     }
 }

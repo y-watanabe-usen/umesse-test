@@ -7,7 +7,7 @@
  * cmId Long ID of cm to return
  * no response value expected for this operation
  **/
-exports.shearCmIdDELETE = function(cmId) {
+exports.shareCmIdDELETE = function(cmId) {
   return new Promise(function(resolve, reject) {
     resolve();
   });
@@ -20,7 +20,7 @@ exports.shearCmIdDELETE = function(cmId) {
  * cmId String ID of cm to return
  * no response value expected for this operation
  **/
-exports.shearCmIdPOST = function(cmId) {
+exports.shareCmIdPOST = function(cmId) {
   return new Promise(function(resolve, reject) {
     resolve();
   });
@@ -32,7 +32,7 @@ exports.shearCmIdPOST = function(cmId) {
  *
  * returns List
  **/
-exports.shearGET = function() {
+exports.shareGET = function() {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = [ {

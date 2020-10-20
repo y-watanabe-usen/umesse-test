@@ -266,12 +266,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
       x-swagger-router-controller: Center
-  /shear:
+  /share:
     get:
       tags:
-      - shear
+      - share
       summary: CM共有リスト取得
-      operationId: shearGET
+      operationId: shareGET
       responses:
         "200":
           description: The response
@@ -288,13 +288,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-      x-swagger-router-controller: Shear
-  /shear/{cmId}:
+      x-swagger-router-controller: Share
+  /share/{cmId}:
     post:
       tags:
-      - shear
+      - share
       summary: CM共有追加
-      operationId: shearCmIdPOST
+      operationId: shareCmIdPOST
       parameters:
       - name: cmId
         in: path
@@ -308,12 +308,12 @@ paths:
       responses:
         default:
           description: Default response
-      x-swagger-router-controller: Shear
+      x-swagger-router-controller: Share
     delete:
       tags:
-      - shear
+      - share
       summary: CM共有削除
-      operationId: shearCmIdDELETE
+      operationId: shareCmIdDELETE
       parameters:
       - name: cmId
         in: path
@@ -327,7 +327,7 @@ paths:
       responses:
         default:
           description: Default error sample response
-      x-swagger-router-controller: Shear
+      x-swagger-router-controller: Share
   /user/recording:
     get:
       tags:
