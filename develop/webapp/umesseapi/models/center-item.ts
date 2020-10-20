@@ -14,31 +14,25 @@
 /**
  * 
  * @export
- * @interface Body1
+ * @interface CenterItem
  */
-export interface Body1 {
+export interface CenterItem {
     /**
      * 
-     * @type {Array&lt;UsercmNarration&gt;}
-     * @memberof Body1
+     * @type {number}
+     * @memberof CenterItem
      */
-    narration?: any;
+    id?: any;
     /**
      * 
-     * @type {UsercmStartChime}
-     * @memberof Body1
+     * @type {string}
+     * @memberof CenterItem
      */
-    startChime?: any;
+    title?: any;
     /**
      * 
-     * @type {UsercmEndChime}
-     * @memberof Body1
+     * @type {string}
+     * @memberof CenterItem
      */
-    endChime?: any;
-    /**
-     * 
-     * @type {UsercmBgm}
-     * @memberof Body1
-     */
-    bgm?: any;
+    detail?: any;
 }

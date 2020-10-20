@@ -1,8 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * U-Messe API
- * U-Messe API
+ * U MESSE API
+ * U MESSE API
  *
  * OpenAPI spec version: 0.0.1
  * 
@@ -25,7 +25,7 @@ export interface InlineResponse2003 {
     value?: any;
     /**
      * 
-     * @type {Array&lt;NarrationItem&gt;}
+     * @type {Array&lt;BgmItem&gt;}
      * @memberof InlineResponse2003
      */
     data?: any;

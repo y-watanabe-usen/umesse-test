@@ -16,31 +16,34 @@ import { Configuration } from '../configuration';
 // Some imports not used depending on template conditions
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
-import { InlineResponse2002 } from '../models';
-import { InlineResponse2003 } from '../models';
-import { InlineResponse2004 } from '../models';
-import { InlineResponse2005 } from '../models';
+import { CmItem } from '../models';
 /**
- * ResourcesApi - axios parameter creator
+ * ShareApi - axios parameter creator
  * @export
  */
-export const ResourcesApiAxiosParamCreator = function (configuration?: Configuration) {
+export const ShareApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
          * 
-         * @summary BGM
+         * @summary CM共有削除
+         * @param {number} cmId ID of cm to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        bgmGet: async (options: any = {}): Promise<RequestArgs> => {
-            const localVarPath = `/bgm`;
+        shareCmIdDelete: async (cmId: number, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'cmId' is not null or undefined
+            if (cmId === null || cmId === undefined) {
+                throw new RequiredError('cmId','Required parameter cmId was null or undefined when calling shareCmIdDelete.');
+            }
+            const localVarPath = `/share/{cmId}`
+                .replace(`{${"cmId"}}`, encodeURIComponent(String(cmId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
             }
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -62,19 +65,25 @@ export const ResourcesApiAxiosParamCreator = function (configuration?: Configura
         },
         /**
          * 
-         * @summary Open/Endチャイム
+         * @summary CM共有追加
+         * @param {string} cmId ID of cm to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        chimeGet: async (options: any = {}): Promise<RequestArgs> => {
-            const localVarPath = `/chime`;
+        shareCmIdPost: async (cmId: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'cmId' is not null or undefined
+            if (cmId === null || cmId === undefined) {
+                throw new RequiredError('cmId','Required parameter cmId was null or undefined when calling shareCmIdPost.');
+            }
+            const localVarPath = `/share/{cmId}`
+                .replace(`{${"cmId"}}`, encodeURIComponent(String(cmId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
             }
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
@@ -96,46 +105,12 @@ export const ResourcesApiAxiosParamCreator = function (configuration?: Configura
         },
         /**
          * 
-         * @summary ナレーション
+         * @summary CM共有リスト取得
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        narrationGet: async (options: any = {}): Promise<RequestArgs> => {
-            const localVarPath = `/narration`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            const query = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                query.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                query.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(query)).toString();
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @summary TTSテンプレート一覧
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        ttsGet: async (options: any = {}): Promise<RequestArgs> => {
-            const localVarPath = `/tts`;
+        shareGet: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/share`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
             let baseOptions;
@@ -166,19 +141,20 @@ export const ResourcesApiAxiosParamCreator = function (configuration?: Configura
 };
 
 /**
- * ResourcesApi - functional programming interface
+ * ShareApi - functional programming interface
  * @export
  */
-export const ResourcesApiFp = function(configuration?: Configuration) {
+export const ShareApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @summary BGM
+         * @summary CM共有削除
+         * @param {number} cmId ID of cm to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async bgmGet(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2003>> {
-            const localVarAxiosArgs = await ResourcesApiAxiosParamCreator(configuration).bgmGet(options);
+        async shareCmIdDelete(cmId: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await ShareApiAxiosParamCreator(configuration).shareCmIdDelete(cmId, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -186,12 +162,13 @@ export const ResourcesApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary Open/Endチャイム
+         * @summary CM共有追加
+         * @param {string} cmId ID of cm to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async chimeGet(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2005>> {
-            const localVarAxiosArgs = await ResourcesApiAxiosParamCreator(configuration).chimeGet(options);
+        async shareCmIdPost(cmId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await ShareApiAxiosParamCreator(configuration).shareCmIdPost(cmId, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -199,25 +176,12 @@ export const ResourcesApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary ナレーション
+         * @summary CM共有リスト取得
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async narrationGet(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2004>> {
-            const localVarAxiosArgs = await ResourcesApiAxiosParamCreator(configuration).narrationGet(options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
-        },
-        /**
-         * 
-         * @summary TTSテンプレート一覧
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async ttsGet(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2002>> {
-            const localVarAxiosArgs = await ResourcesApiAxiosParamCreator(configuration).ttsGet(options);
+        async shareGet(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CmItem>>> {
+            const localVarAxiosArgs = await ShareApiAxiosParamCreator(configuration).shareGet(options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -227,95 +191,80 @@ export const ResourcesApiFp = function(configuration?: Configuration) {
 };
 
 /**
- * ResourcesApi - factory interface
+ * ShareApi - factory interface
  * @export
  */
-export const ResourcesApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+export const ShareApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     return {
         /**
          * 
-         * @summary BGM
+         * @summary CM共有削除
+         * @param {number} cmId ID of cm to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        bgmGet(options?: any): AxiosPromise<InlineResponse2003> {
-            return ResourcesApiFp(configuration).bgmGet(options).then((request) => request(axios, basePath));
+        shareCmIdDelete(cmId: number, options?: any): AxiosPromise<void> {
+            return ShareApiFp(configuration).shareCmIdDelete(cmId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @summary Open/Endチャイム
+         * @summary CM共有追加
+         * @param {string} cmId ID of cm to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        chimeGet(options?: any): AxiosPromise<InlineResponse2005> {
-            return ResourcesApiFp(configuration).chimeGet(options).then((request) => request(axios, basePath));
+        shareCmIdPost(cmId: string, options?: any): AxiosPromise<void> {
+            return ShareApiFp(configuration).shareCmIdPost(cmId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @summary ナレーション
+         * @summary CM共有リスト取得
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        narrationGet(options?: any): AxiosPromise<InlineResponse2004> {
-            return ResourcesApiFp(configuration).narrationGet(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @summary TTSテンプレート一覧
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        ttsGet(options?: any): AxiosPromise<InlineResponse2002> {
-            return ResourcesApiFp(configuration).ttsGet(options).then((request) => request(axios, basePath));
+        shareGet(options?: any): AxiosPromise<Array<CmItem>> {
+            return ShareApiFp(configuration).shareGet(options).then((request) => request(axios, basePath));
         },
     };
 };
 
 /**
- * ResourcesApi - object-oriented interface
+ * ShareApi - object-oriented interface
  * @export
- * @class ResourcesApi
+ * @class ShareApi
  * @extends {BaseAPI}
  */
-export class ResourcesApi extends BaseAPI {
+export class ShareApi extends BaseAPI {
     /**
      * 
-     * @summary BGM
+     * @summary CM共有削除
+     * @param {number} cmId ID of cm to return
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ResourcesApi
+     * @memberof ShareApi
      */
-    public bgmGet(options?: any) {
-        return ResourcesApiFp(this.configuration).bgmGet(options).then((request) => request(this.axios, this.basePath));
+    public shareCmIdDelete(cmId: number, options?: any) {
+        return ShareApiFp(this.configuration).shareCmIdDelete(cmId, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * 
-     * @summary Open/Endチャイム
+     * @summary CM共有追加
+     * @param {string} cmId ID of cm to return
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ResourcesApi
+     * @memberof ShareApi
      */
-    public chimeGet(options?: any) {
-        return ResourcesApiFp(this.configuration).chimeGet(options).then((request) => request(this.axios, this.basePath));
+    public shareCmIdPost(cmId: string, options?: any) {
+        return ShareApiFp(this.configuration).shareCmIdPost(cmId, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * 
-     * @summary ナレーション
+     * @summary CM共有リスト取得
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof ResourcesApi
+     * @memberof ShareApi
      */
-    public narrationGet(options?: any) {
-        return ResourcesApiFp(this.configuration).narrationGet(options).then((request) => request(this.axios, this.basePath));
-    }
-    /**
-     * 
-     * @summary TTSテンプレート一覧
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ResourcesApi
-     */
-    public ttsGet(options?: any) {
-        return ResourcesApiFp(this.configuration).ttsGet(options).then((request) => request(this.axios, this.basePath));
+    public shareGet(options?: any) {
+        return ShareApiFp(this.configuration).shareGet(options).then((request) => request(this.axios, this.basePath));
     }
 }

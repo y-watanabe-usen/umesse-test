@@ -2,18 +2,16 @@
 
 
 /**
- * User情報取得
+ * S3オブジェクトの署名付きURLの取得
+ * 試聴再生、録音音声アップロード
  *
- * returns User
+ * returns inline_response_200_6
  **/
-exports.userGET = function() {
+exports.signedUrlGET = function() {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
-  "customerGroupName" : "USEN",
-  "unisCustomerCd" : "1234567890",
-  "customerName" : "Meguro Cafe",
-  "customerGroupCd" : "1234567890"
+  "url" : "url"
 };
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);

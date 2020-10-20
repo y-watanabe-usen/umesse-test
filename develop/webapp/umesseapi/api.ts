@@ -1,8 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * U-Messe API
- * U-Messe API
+ * U MESSE API
+ * U MESSE API
  *
  * OpenAPI spec version: 0.0.1
  * 
@@ -11,10 +11,13 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */export * from './apis/auth-api';
+export * from './apis/center-api';
 export * from './apis/cm-api';
 export * from './apis/ping-api';
 export * from './apis/recording-api';
 export * from './apis/resources-api';
+export * from './apis/s3-api';
+export * from './apis/share-api';
 export * from './apis/tts-api';
 export * from './apis/user-api';
 

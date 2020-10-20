@@ -2,11 +2,11 @@
 
 
 /**
- * 録音データリスト取得
+ * TTSデータリスト取得
  *
- * returns inline_response_200_1
+ * returns inline_response_200_2
  **/
-exports.userRecordingGET = function() {
+exports.userTtsGET = function() {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
@@ -35,7 +35,7 @@ exports.userRecordingGET = function() {
  *
  * no response value expected for this operation
  **/
-exports.userRecordingPOST = function() {
+exports.userTtsPOST = function() {
   return new Promise(function(resolve, reject) {
     resolve();
   });
@@ -43,12 +43,12 @@ exports.userRecordingPOST = function() {
 
 
 /**
- * 録音データ削除
+ * TTSデータ削除
  *
- * recordingId String ID of recording to return
+ * ttsId String ID of tts to return
  * no response value expected for this operation
  **/
-exports.userRecordingRecordingIdDELETE = function(recordingId) {
+exports.userTtsTtsIdDELETE = function(ttsId) {
   return new Promise(function(resolve, reject) {
     resolve();
   });
@@ -56,12 +56,12 @@ exports.userRecordingRecordingIdDELETE = function(recordingId) {
 
 
 /**
- * 録音データ取得
+ * TTSデータ取得
  *
- * recordingId String ID of recording to return
+ * ttsId String ID of tts to return
  * no response value expected for this operation
  **/
-exports.userRecordingRecordingIdGET = function(recordingId) {
+exports.userTtsTtsIdGET = function(ttsId) {
   return new Promise(function(resolve, reject) {
     resolve();
   });
@@ -69,12 +69,12 @@ exports.userRecordingRecordingIdGET = function(recordingId) {
 
 
 /**
- * 録音データ更新（メタデータのみ）
+ * TTSデータ更新（メタデータのみ）
  *
- * recordingId String ID of recording to return
+ * ttsId String ID of tts to return
  * no response value expected for this operation
  **/
-exports.userRecordingRecordingIdPOST = function(recordingId) {
+exports.userTtsTtsIdPOST = function(ttsId) {
   return new Promise(function(resolve, reject) {
     resolve();
   });

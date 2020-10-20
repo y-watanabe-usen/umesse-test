@@ -14,31 +14,31 @@
 /**
  * 
  * @export
- * @interface Body1
+ * @interface Body3
  */
-export interface Body1 {
+export interface Body3 {
     /**
      * 
-     * @type {Array&lt;UsercmNarration&gt;}
-     * @memberof Body1
+     * @type {string}
+     * @memberof Body3
      */
-    narration?: any;
+    title?: any;
     /**
      * 
-     * @type {UsercmStartChime}
-     * @memberof Body1
+     * @type {string}
+     * @memberof Body3
      */
-    startChime?: any;
+    description?: any;
     /**
      * 
-     * @type {UsercmEndChime}
-     * @memberof Body1
+     * @type {Date}
+     * @memberof Body3
      */
-    endChime?: any;
+    startDate?: any;
     /**
      * 
-     * @type {UsercmBgm}
-     * @memberof Body1
+     * @type {Date}
+     * @memberof Body3
      */
-    bgm?: any;
+    endDate?: any;
 }

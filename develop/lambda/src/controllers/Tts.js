@@ -1,10 +1,10 @@
 'use strict';
 
 var utils = require('../utils/writer.js');
-var Cm = require('../service/CmService');
+var Tts = require('../service/TtsService');
 
-module.exports.userCmCmIdDELETE = function userCmCmIdDELETE (req, res, next, cmId) {
-  Cm.userCmCmIdDELETE(cmId)
+module.exports.userTtsGET = function userTtsGET (req, res, next) {
+  Tts.userTtsGET()
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -13,8 +13,8 @@ module.exports.userCmCmIdDELETE = function userCmCmIdDELETE (req, res, next, cmI
     });
 };
 
-module.exports.userCmCmIdGET = function userCmCmIdGET (req, res, next, cmId) {
-  Cm.userCmCmIdGET(cmId)
+module.exports.userTtsPOST = function userTtsPOST (req, res, next) {
+  Tts.userTtsPOST()
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -23,8 +23,8 @@ module.exports.userCmCmIdGET = function userCmCmIdGET (req, res, next, cmId) {
     });
 };
 
-module.exports.userCmCmIdPOST = function userCmCmIdPOST (req, res, next, body, cmId) {
-  Cm.userCmCmIdPOST(body, cmId)
+module.exports.userTtsTtsIdDELETE = function userTtsTtsIdDELETE (req, res, next, ttsId) {
+  Tts.userTtsTtsIdDELETE(ttsId)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -33,8 +33,8 @@ module.exports.userCmCmIdPOST = function userCmCmIdPOST (req, res, next, body, c
     });
 };
 
-module.exports.userCmGET = function userCmGET (req, res, next) {
-  Cm.userCmGET()
+module.exports.userTtsTtsIdGET = function userTtsTtsIdGET (req, res, next, ttsId) {
+  Tts.userTtsTtsIdGET(ttsId)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -43,8 +43,8 @@ module.exports.userCmGET = function userCmGET (req, res, next) {
     });
 };
 
-module.exports.userCmPOST = function userCmPOST (req, res, next, body) {
-  Cm.userCmPOST(body)
+module.exports.userTtsTtsIdPOST = function userTtsTtsIdPOST (req, res, next, ttsId) {
+  Tts.userTtsTtsIdPOST(ttsId)
     .then(function (response) {
       utils.writeJson(res, response);
     })

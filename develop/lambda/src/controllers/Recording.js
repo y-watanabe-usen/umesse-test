@@ -3,8 +3,8 @@
 var utils = require('../utils/writer.js');
 var Recording = require('../service/RecordingService');
 
-module.exports.recordingGET = function recordingGET (req, res, next) {
-  Recording.recordingGET()
+module.exports.userRecordingGET = function userRecordingGET (req, res, next) {
+  Recording.userRecordingGET()
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -13,8 +13,8 @@ module.exports.recordingGET = function recordingGET (req, res, next) {
     });
 };
 
-module.exports.recordingPOST = function recordingPOST (req, res, next) {
-  Recording.recordingPOST()
+module.exports.userRecordingPOST = function userRecordingPOST (req, res, next) {
+  Recording.userRecordingPOST()
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -23,8 +23,8 @@ module.exports.recordingPOST = function recordingPOST (req, res, next) {
     });
 };
 
-module.exports.recordingRecordingIdDELETE = function recordingRecordingIdDELETE (req, res, next, recordingId) {
-  Recording.recordingRecordingIdDELETE(recordingId)
+module.exports.userRecordingRecordingIdDELETE = function userRecordingRecordingIdDELETE (req, res, next, recordingId) {
+  Recording.userRecordingRecordingIdDELETE(recordingId)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -33,8 +33,18 @@ module.exports.recordingRecordingIdDELETE = function recordingRecordingIdDELETE 
     });
 };
 
-module.exports.recordingRecordingIdGET = function recordingRecordingIdGET (req, res, next, recordingId) {
-  Recording.recordingRecordingIdGET(recordingId)
+module.exports.userRecordingRecordingIdGET = function userRecordingRecordingIdGET (req, res, next, recordingId) {
+  Recording.userRecordingRecordingIdGET(recordingId)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
+
+module.exports.userRecordingRecordingIdPOST = function userRecordingRecordingIdPOST (req, res, next, recordingId) {
+  Recording.userRecordingRecordingIdPOST(recordingId)
     .then(function (response) {
       utils.writeJson(res, response);
     })
