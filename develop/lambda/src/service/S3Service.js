@@ -5,7 +5,7 @@
  * S3オブジェクトの署名付きURLの取得
  * 試聴再生、録音音声アップロード
  *
- * returns inline_response_200_6
+ * returns inline_response_200_5
  **/
 exports.signedUrlGET = function() {
   return new Promise(function(resolve, reject) {

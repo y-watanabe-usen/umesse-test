@@ -14,13 +14,19 @@
 /**
  * 
  * @export
- * @interface InlineResponseDefault
+ * @interface UsercmBgm
  */
-export interface InlineResponseDefault {
+export interface UsercmBgm {
     /**
      * 
      * @type {string}
-     * @memberof InlineResponseDefault
+     * @memberof UsercmBgm
      */
-    message?: any;
+    bgmId?: any;
+    /**
+     * 
+     * @type {number}
+     * @memberof UsercmBgm
+     */
+    volume?: any;
 }

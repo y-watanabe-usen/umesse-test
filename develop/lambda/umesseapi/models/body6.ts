@@ -14,13 +14,19 @@
 /**
  * 
  * @export
- * @interface InlineResponseDefault
+ * @interface Body6
  */
-export interface InlineResponseDefault {
+export interface Body6 {
     /**
      * 
      * @type {string}
-     * @memberof InlineResponseDefault
+     * @memberof Body6
      */
-    message?: any;
+    filename?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof Body6
+     */
+    recordedFile?: any;
 }

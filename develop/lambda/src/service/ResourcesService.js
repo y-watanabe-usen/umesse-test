@@ -4,22 +4,22 @@
 /**
  * BGM
  *
- * returns inline_response_200_2
+ * returns inline_response_200_3
  **/
 exports.bgmGET = function() {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
   "data" : [ {
-    "name" : "name",
-    "id" : 0,
-    "detail" : "detail"
+    "name" : "bgm name",
+    "id" : 1234,
+    "detail" : "bgm detail"
   }, {
-    "name" : "name",
-    "id" : 0,
-    "detail" : "detail"
+    "name" : "bgm name",
+    "id" : 1234,
+    "detail" : "bgm detail"
   } ],
-  "value" : "value"
+  "value" : "???"
 };
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
@@ -33,22 +33,22 @@ exports.bgmGET = function() {
 /**
  * Open/Endチャイム
  *
- * returns inline_response_200_3
+ * returns inline_response_200_4
  **/
 exports.chimeGET = function() {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
   "data" : [ {
-    "name" : "name",
-    "id" : 0,
-    "detail" : "detail"
+    "name" : "chime name",
+    "id" : 1234,
+    "detail" : "chime detail"
   }, {
-    "name" : "name",
-    "id" : 0,
-    "detail" : "detail"
+    "name" : "chime name",
+    "id" : 1234,
+    "detail" : "chime detail"
   } ],
-  "value" : "value"
+  "value" : "???"
 };
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
@@ -166,14 +166,22 @@ exports.narrationSceneIdGET = function(sceneId) {
 /**
  * TTSテンプレート一覧
  *
- * returns inline_response_200_1
+ * returns inline_response_200_2
  **/
 exports.ttsGET = function() {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
-  "data" : [ "{}", "{}" ],
-  "value" : "value"
+  "data" : [ {
+    "id" : 1234,
+    "detail" : "tts detail",
+    "title" : "tts title"
+  }, {
+    "id" : 1234,
+    "detail" : "tts detail",
+    "title" : "tts title"
+  } ],
+  "value" : "???"
 };
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);

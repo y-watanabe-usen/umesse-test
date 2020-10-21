@@ -16,34 +16,30 @@ import { Configuration } from '../configuration';
 // Some imports not used depending on template conditions
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
-import { Auth } from '../models';
-import { Body } from '../models';
+import { InlineResponse2005 } from '../models';
 /**
- * AuthApi - axios parameter creator
+ * S3Api - axios parameter creator
  * @export
  */
-export const AuthApiAxiosParamCreator = function (configuration?: Configuration) {
+export const S3ApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * 
-         * @summary 端末認証
-         * @param {Body} [body] 
+         * 試聴再生、録音音声アップロード
+         * @summary S3オブジェクトの署名付きURLの取得
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        authPost: async (body?: Body, options: any = {}): Promise<RequestArgs> => {
-            const localVarPath = `/auth`;
+        signedUrlGet: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/signedUrl`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
             let baseOptions;
             if (configuration) {
                 baseOptions = configuration.baseOptions;
             }
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            localVarHeaderParameter['Content-Type'] = 'application/json';
 
             const query = new URLSearchParams(localVarUrlObj.search);
             for (const key in localVarQueryParameter) {
@@ -55,8 +51,6 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
             localVarUrlObj.search = (new URLSearchParams(query)).toString();
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            const needsSerialization = (typeof body !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
-            localVarRequestOptions.data =  needsSerialization ? JSON.stringify(body !== undefined ? body : {}) : (body || "");
 
             return {
                 url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
@@ -67,20 +61,19 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
 };
 
 /**
- * AuthApi - functional programming interface
+ * S3Api - functional programming interface
  * @export
  */
-export const AuthApiFp = function(configuration?: Configuration) {
+export const S3ApiFp = function(configuration?: Configuration) {
     return {
         /**
-         * 
-         * @summary 端末認証
-         * @param {Body} [body] 
+         * 試聴再生、録音音声アップロード
+         * @summary S3オブジェクトの署名付きURLの取得
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async authPost(body?: Body, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Auth>> {
-            const localVarAxiosArgs = await AuthApiAxiosParamCreator(configuration).authPost(body, options);
+        async signedUrlGet(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2005>> {
+            const localVarAxiosArgs = await S3ApiAxiosParamCreator(configuration).signedUrlGet(options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -90,40 +83,38 @@ export const AuthApiFp = function(configuration?: Configuration) {
 };
 
 /**
- * AuthApi - factory interface
+ * S3Api - factory interface
  * @export
  */
-export const AuthApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+export const S3ApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     return {
         /**
-         * 
-         * @summary 端末認証
-         * @param {Body} [body] 
+         * 試聴再生、録音音声アップロード
+         * @summary S3オブジェクトの署名付きURLの取得
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        authPost(body?: Body, options?: any): AxiosPromise<Auth> {
-            return AuthApiFp(configuration).authPost(body, options).then((request) => request(axios, basePath));
+        signedUrlGet(options?: any): AxiosPromise<InlineResponse2005> {
+            return S3ApiFp(configuration).signedUrlGet(options).then((request) => request(axios, basePath));
         },
     };
 };
 
 /**
- * AuthApi - object-oriented interface
+ * S3Api - object-oriented interface
  * @export
- * @class AuthApi
+ * @class S3Api
  * @extends {BaseAPI}
  */
-export class AuthApi extends BaseAPI {
+export class S3Api extends BaseAPI {
     /**
-     * 
-     * @summary 端末認証
-     * @param {Body} [body] 
+     * 試聴再生、録音音声アップロード
+     * @summary S3オブジェクトの署名付きURLの取得
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof AuthApi
+     * @memberof S3Api
      */
-    public authPost(body?: Body, options?: any) {
-        return AuthApiFp(this.configuration).authPost(body, options).then((request) => request(this.axios, this.basePath));
+    public signedUrlGet(options?: any) {
+        return S3ApiFp(this.configuration).signedUrlGet(options).then((request) => request(this.axios, this.basePath));
     }
 }

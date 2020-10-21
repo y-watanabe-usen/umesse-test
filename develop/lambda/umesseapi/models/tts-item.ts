@@ -14,31 +14,25 @@
 /**
  * 
  * @export
- * @interface Body1
+ * @interface TtsItem
  */
-export interface Body1 {
+export interface TtsItem {
     /**
      * 
-     * @type {Array&lt;UsercmNarration&gt;}
-     * @memberof Body1
+     * @type {number}
+     * @memberof TtsItem
      */
-    narration?: any;
+    id?: any;
     /**
      * 
-     * @type {UsercmStartChime}
-     * @memberof Body1
+     * @type {string}
+     * @memberof TtsItem
      */
-    startChime?: any;
+    title?: any;
     /**
      * 
-     * @type {UsercmEndChime}
-     * @memberof Body1
+     * @type {string}
+     * @memberof TtsItem
      */
-    endChime?: any;
-    /**
-     * 
-     * @type {UsercmBgm}
-     * @memberof Body1
-     */
-    bgm?: any;
+    detail?: any;
 }

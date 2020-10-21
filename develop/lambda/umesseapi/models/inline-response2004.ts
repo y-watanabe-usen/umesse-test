@@ -14,13 +14,19 @@
 /**
  * 
  * @export
- * @interface InlineResponseDefault
+ * @interface InlineResponse2004
  */
-export interface InlineResponseDefault {
+export interface InlineResponse2004 {
     /**
      * 
      * @type {string}
-     * @memberof InlineResponseDefault
+     * @memberof InlineResponse2004
      */
-    message?: any;
+    value?: any;
+    /**
+     * 
+     * @type {Array&lt;ChimeItem&gt;}
+     * @memberof InlineResponse2004
+     */
+    data?: any;
 }

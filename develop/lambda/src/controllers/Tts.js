@@ -42,3 +42,13 @@ module.exports.userTtsTtsIdGET = function userTtsTtsIdGET (req, res, next, ttsId
       utils.writeJson(res, response);
     });
 };
+
+module.exports.userTtsTtsIdPOST = function userTtsTtsIdPOST (req, res, next, ttsId) {
+  Tts.userTtsTtsIdPOST(ttsId)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
