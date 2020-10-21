@@ -1,7 +1,7 @@
 data "archive_file" "umesse_converter_lambda" {
   type        = "zip"
   source_file = "${path.module}/../develop/lambda/audio_converter_lambda.js"
-  output_path = "${path.module}/lambda.js.zip"
+  output_path = "${path.module}/convert_umesse_lambda.js.zip"
 }
 
 resource "aws_lambda_function" "umesse_converter_lambda" {
