@@ -28,7 +28,7 @@ export default function authStore() {
         }
         if (custCd == undefined) {
             if (state.authenticating) return
-            return state.error = 'custCdが設定されていない'
+            return state.error = ''
         }
 
         console.log(`requestAuthorization`)
