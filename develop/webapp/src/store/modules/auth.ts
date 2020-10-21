@@ -28,7 +28,7 @@ export default function authStore() {
         }
         if (custCd == undefined) {
             if (state.authenticating) return
-            return state.error = 'システムエラー'
+            return state.error = 'custCdが設定されていない'
         }
 
         console.log(`requestAuthorization`)
@@ -37,8 +37,8 @@ export default function authStore() {
             const api = new UMesseApi.AuthApi();
             const response = await api.authPost();
             state.token = response.data.token
-        } catch {
-            state.error = `認証エラー`
+        } catch (e) {
+            state.error = e.message
         } finally {
             state.authenticating = false
         }
