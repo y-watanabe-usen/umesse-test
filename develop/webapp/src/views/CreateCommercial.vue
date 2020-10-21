@@ -84,7 +84,6 @@
           <div v-if="currentView == 2">
             <AddCreateCommercial2 />
           </div>
-
           <div class="space"></div>
           <button class="box-bottom">
             <div class="btn-area">

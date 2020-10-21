@@ -1,7 +1,7 @@
 <template>
   <div
-    class="modal fade modal2"
-    id="modal2"
+    class="modal fade modal4"
+    id="modal4"
     tabindex="-1"
     role="dialog"
     aria-labelledby="label1"
@@ -11,7 +11,7 @@
       <div class="modal-content">
         <div class="modal-header" style="height: 70px">
           <div></div>
-          <div style="margin: auto">ナレーションを選択</div>
+          <div style="margin: auto">オーダーした音声を選択</div>
           <button data-dismiss="modal" class="bg-white mt-1">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -167,36 +167,36 @@ export default {
       menus: [
         {
           id: 1,
-          title: "録音音源",
+          title: "音声",
         },
         {
           id: 2,
-          title: "合成音声",
+          title: "BGM",
         },
       ],
       activeMenuId: 1,
       sorts: ["名前順", "作成日順", "更新日順"],
       narrationDatas: [
         {
-          title: "録音した音源1",
+          title: "オーダーした音声1",
           description1:
             "本日はご来店いただきまして、誠にありがとうございます。お客様に…",
           description2: "00:24 放送開始日2020年10月15日 有効期限2020年10月20日",
         },
         {
-          title: "録音した音源2",
+          title: "オーダーした音声2",
           description1:
             "お客様にご案内申し上げます。当店ではアルバイトを募集いたしており…",
           description2: "00:15 放送開始日2020年10月15日 有効期限2020年10月20日",
         },
         {
-          title: "録音した音源3",
+          title: "オーダーした音声3",
           description1:
             "本日はご来店いただきまして、誠にありがとうございます。お客様に…",
           description2: "00:24 放送開始日2020年10月15日 有効期限2020年10月20日",
         },
         {
-          title: "録音した音源4",
+          title: "オーダーした音声4",
           description1:
             "本日はご来店いただきまして、誠にありがとうございます。お客様に…",
           description2: "00:24 放送開始日2020年10月15日 有効期限2020年10月20日",

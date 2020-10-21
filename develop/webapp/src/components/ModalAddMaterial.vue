@@ -11,7 +11,6 @@
         <li>
           <button
             class="modal-btn select-top"
-            id="to-modal2"
             data-toggle="modal"
             data-target="#modal2"
             data-dismiss="modal"
@@ -20,10 +19,22 @@
           </button>
         </li>
         <li>
-          <button class="modal-btn">USENが提供する音声を追加</button>
+          <button
+            class="modal-btn select-top"
+            data-toggle="modal"
+            data-target="#modal3"
+            data-dismiss="modal"
+          >
+            USENが提供する音声を追加
+          </button>
         </li>
         <li>
-          <button class="modal-btn select-bottom">
+          <button
+            class="modal-btn select-bottom"
+            data-toggle="modal"
+            data-target="#modal4"
+            data-dismiss="modal"
+          >
             オーダーした音声を追加
           </button>
         </li>
@@ -37,7 +48,7 @@
 <style scoped>
 button {
   border: none;
-	background-color: #ffffff;
+  background-color: #ffffff;
 }
 button:focus {
   outline: 0;

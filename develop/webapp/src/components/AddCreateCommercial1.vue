@@ -41,15 +41,21 @@
   </button>
   <ModalAddMaterial />
   <ModalSelectNarrationRecordingData />
+  <ModalSelectVoiceProvidedByUsen />
+  <ModalSelectVoiceOrdered />
 </template>
 <script>
 import ModalAddMaterial from "@/components/ModalAddMaterial";
 import ModalSelectNarrationRecordingData from "@/components/ModalSelectNarrationRecordingData";
+import ModalSelectVoiceProvidedByUsen from "@/components/ModalSelectVoiceProvidedByUsen";
+import ModalSelectVoiceOrdered from "@/components/ModalSelectVoiceOrdered";
 
 export default {
     components: {
       ModalAddMaterial,
       ModalSelectNarrationRecordingData,
+      ModalSelectVoiceProvidedByUsen,
+      ModalSelectVoiceOrdered,
   },
 };
 </script>
