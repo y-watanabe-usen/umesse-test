@@ -1,7 +1,7 @@
-#output "sqs_url" {
-#  value = "${aws_sqs_queue.ffmpeg_queue.id}"
-#}
-#
+output "sqs_url" {
+  value = "${aws_sqs_queue.umesse_converter_queue.id}"
+}
+
 output "rest_api_id" {
   description = "REST API id"
   value       = aws_api_gateway_rest_api.umesse.id
