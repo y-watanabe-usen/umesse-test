@@ -39,8 +39,19 @@
       </g>
     </svg>
   </button>
+  <ModalAddMaterial />
+  <ModalSelectNarrationRecordingData />
 </template>
 <script>
+import ModalAddMaterial from "@/components/ModalAddMaterial";
+import ModalSelectNarrationRecordingData from "@/components/ModalSelectNarrationRecordingData";
+
+export default {
+    components: {
+      ModalAddMaterial,
+      ModalSelectNarrationRecordingData,
+  },
+};
 </script>
 
 <style scoped>

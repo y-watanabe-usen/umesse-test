@@ -206,7 +206,7 @@ export default {
   },
   methods: {
     changeView() {
-      this.$emit("my-click", 2);
+      this.$parent.$emit("my-click", 2);
       $('.modal-backdrop').remove();
     },
   },

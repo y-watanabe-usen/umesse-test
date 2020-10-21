@@ -84,8 +84,7 @@
           <div v-if="currentView == 2">
             <AddCreateCommercial2 />
           </div>
-          <ModalAddMaterial />
-          <ModalSelectNarrationRecordingData />
+
           <div class="space"></div>
           <button class="box-bottom">
             <div class="btn-area">
@@ -178,15 +177,11 @@
 // 表示するコンポーネントをインポート
 import AddCreateCommercial1 from "@/components/AddCreateCommercial1";
 import AddCreateCommercial2 from "@/components/AddCreateCommercial2";
-import ModalAddMaterial from "@/components/ModalAddMaterial";
-import ModalSelectNarrationRecordingData from "@/components/ModalSelectNarrationRecordingData";
 
 export default {
     components: {
     AddCreateCommercial1,
     AddCreateCommercial2,
-    ModalAddMaterial,
-    ModalSelectNarrationRecordingData,
   },
   data() {
     return {
