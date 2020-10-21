@@ -24,7 +24,7 @@ provider "aws" {
     # secretsmanager = "http://localhost:4584"
     # ses            = "http://localhost:4579"
     # sns            = "http://localhost:4575"
-    # sqs            = "http://localhost:4576"
+    sqs            = var.aws_endpoint_url
     # ssm            = "http://localhost:4583"
     # stepfunctions  = "http://localhost:4585"
     # sts            = "http://localhost:4592"

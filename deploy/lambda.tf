@@ -3,7 +3,6 @@ locals {
   tag                    = "UMesse"
 }
 
-
 # Lambda File Zip
 data "archive_file" "lambda_file" {
   type        = "zip"
@@ -11,6 +10,10 @@ data "archive_file" "lambda_file" {
   output_path = "lambda_src.zip"
 }
 
+resource "aws_iam_role" "iam_for_lambda" {
+  name = "iam_for_lambda"
+  assume_role_policy = file("iam_role_policy.json")
+}
 # Lambda Function
 resource "aws_lambda_function" "lambda" {
   function_name    = local.name
@@ -32,24 +35,6 @@ resource "aws_lambda_function" "lambda" {
   tags = {
     CreateOwner = local.tag
   }
-}
-resource "aws_iam_role" "iam_for_lambda" {
-  name = "iam_for_lambda"
-
-  assume_role_policy = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "lambda.amazonaws.com"
-      },
-      "Effect": "Allow"
-    }
-  ]
-}
-EOF
 }
 
 ## # CloudWatch Logs
