@@ -25,7 +25,7 @@ export interface InlineResponse2004 {
     value?: any;
     /**
      * 
-     * @type {Array&lt;NarrationItem&gt;}
+     * @type {Array&lt;ChimeItem&gt;}
      * @memberof InlineResponse2004
      */
     data?: any;

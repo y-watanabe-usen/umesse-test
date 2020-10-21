@@ -14,13 +14,25 @@
 /**
  * 
  * @export
- * @interface InlineResponse2005
+ * @interface IndustryItem
  */
-export interface InlineResponse2005 {
+export interface IndustryItem {
+    /**
+     * 
+     * @type {number}
+     * @memberof IndustryItem
+     */
+    id?: any;
     /**
      * 
      * @type {string}
-     * @memberof InlineResponse2005
+     * @memberof IndustryItem
      */
-    url?: any;
+    name?: any;
+    /**
+     * 
+     * @type {Array&lt;SceneItem&gt;}
+     * @memberof IndustryItem
+     */
+    scenes?: any;
 }

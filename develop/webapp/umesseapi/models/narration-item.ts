@@ -35,4 +35,22 @@ export interface NarrationItem {
      * @memberof NarrationItem
      */
     detail?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof NarrationItem
+     */
+    manuscript?: any;
+    /**
+     * 試聴URL
+     * @type {string}
+     * @memberof NarrationItem
+     */
+    url?: any;
+    /**
+     * 
+     * @type {number}
+     * @memberof NarrationItem
+     */
+    second?: any;
 }

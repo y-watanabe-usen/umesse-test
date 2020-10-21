@@ -14,13 +14,19 @@
 /**
  * 
  * @export
- * @interface InlineResponse2005
+ * @interface SceneItem
  */
-export interface InlineResponse2005 {
+export interface SceneItem {
+    /**
+     * 
+     * @type {number}
+     * @memberof SceneItem
+     */
+    id?: any;
     /**
      * 
      * @type {string}
-     * @memberof InlineResponse2005
+     * @memberof SceneItem
      */
-    url?: any;
+    name?: any;
 }

@@ -106,66 +106,84 @@
 </template>
 
 <script>
+import {
+  defineComponent,
+  computed,
+  ref,
+  onMounted,
+  reactive,
+  onCreated,, inject
+} from "vue";
+import narrationStore from '@/store/narration'
+
 export default {
-  data() {
-    return {
-      menus: [
-        {
-          id: 1,
-          title: "お気に入り",
-        },
-        {
-          id: 2,
-          title: "新着&おすすめ",
-        },
-        {
-          id: 3,
-          title: "飲食店向け",
-        },
-        {
-          id: 4,
-          title: "サービス業向け",
-        },
-        {
-          id: 5,
-          title: "小売向け",
-        },
-        {
-          id: 6,
-          title: "スーパー/ドラッグ",
-        },
-      ],
-      activeMenuId: 1,
-      sorts: ["名前順", "作成日順", "更新日順"],
-      narrationDatas: [
-        {
-          title: "18時30分閉店",
-          description1:
-            "本日はご来店いただきまして、誠にありがとうございます。お客様に…",
-          description2: "00:24 放送開始日2020年10月15日 有効期限2020年10月20日",
-        },
-        {
-          title: "アルバイト募集",
-          description1:
-            "お客様にご案内申し上げます。当店ではアルバイトを募集いたしており…",
-          description2: "00:15 放送開始日2020年10月15日 有効期限2020年10月20日",
-        },
-        {
-          title: "チャイルドチェア",
-          description1:
-            "本日はご来店いただきまして、誠にありがとうございます。お客様に…",
-          description2: "00:24 放送開始日2020年10月15日 有効期限2020年10月20日",
-        },
-        {
-          title: "デリバリー",
-          description1:
-            "本日はご来店いただきまして、誠にありがとうございます。お客様に…",
-          description2: "00:24 放送開始日2020年10月15日 有効期限2020年10月20日",
-        },
-      ],
-    };
+  setup() {
+    const a = inject(narrationStore)
+    onCreated(() => {
+      
+    });
   },
 };
+// export default {
+//   data() {
+//     return {
+//       menus: [
+//         {
+//           id: 1,
+//           title: "お気に入り",
+//         },
+//         {
+//           id: 2,
+//           title: "新着&おすすめ",
+//         },
+//         {
+//           id: 3,
+//           title: "飲食店向け",
+//         },
+//         {
+//           id: 4,
+//           title: "サービス業向け",
+//         },
+//         {
+//           id: 5,
+//           title: "小売向け",
+//         },
+//         {
+//           id: 6,
+//           title: "スーパー/ドラッグ",
+//         },
+//       ],
+//       activeMenuId: 1,
+//       sorts: ["名前順", "作成日順", "更新日順"],
+//       narrationDatas: [
+//         {
+//           title: "18時30分閉店",
+//           description1:
+//             "本日はご来店いただきまして、誠にありがとうございます。お客様に…",
+//           description2: "00:24 放送開始日2020年10月15日 有効期限2020年10月20日",
+//         },
+//         {
+//           title: "アルバイト募集",
+//           description1:
+//             "お客様にご案内申し上げます。当店ではアルバイトを募集いたしており…",
+//           description2: "00:15 放送開始日2020年10月15日 有効期限2020年10月20日",
+//         },
+//         {
+//           title: "チャイルドチェア",
+//           description1:
+//             "本日はご来店いただきまして、誠にありがとうございます。お客様に…",
+//           description2: "00:24 放送開始日2020年10月15日 有効期限2020年10月20日",
+//         },
+//         {
+//           title: "デリバリー",
+//           description1:
+//             "本日はご来店いただきまして、誠にありがとうございます。お客様に…",
+//           description2: "00:24 放送開始日2020年10月15日 有効期限2020年10月20日",
+//         },
+//       ],
+//     };
+//   },
+// };
 </script>
 
 <style scoped>

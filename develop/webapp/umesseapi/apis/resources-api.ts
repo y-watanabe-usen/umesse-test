@@ -19,7 +19,8 @@ import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } fr
 import { InlineResponse2002 } from '../models';
 import { InlineResponse2003 } from '../models';
 import { InlineResponse2004 } from '../models';
-import { InlineResponse2005 } from '../models';
+import { NarrationListItem } from '../models';
+import { NarrationSceneListItem } from '../models';
 /**
  * ResourcesApi - axios parameter creator
  * @export
@@ -96,12 +97,52 @@ export const ResourcesApiAxiosParamCreator = function (configuration?: Configura
         },
         /**
          * 
-         * @summary ナレーション
+         * @summary ナレーションリスト取得
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
         narrationGet: async (options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/narration`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            const query = new URLSearchParams(localVarUrlObj.search);
+            for (const key in localVarQueryParameter) {
+                query.set(key, localVarQueryParameter[key]);
+            }
+            for (const key in options.query) {
+                query.set(key, options.query[key]);
+            }
+            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary ナレーション取得
+         * @param {number} sceneId ID of narration to return
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        narrationSceneIdGet: async (sceneId: number, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'sceneId' is not null or undefined
+            if (sceneId === null || sceneId === undefined) {
+                throw new RequiredError('sceneId','Required parameter sceneId was null or undefined when calling narrationSceneIdGet.');
+            }
+            const localVarPath = `/narration/{sceneId}`
+                .replace(`{${"sceneId"}}`, encodeURIComponent(String(sceneId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
             let baseOptions;
@@ -190,7 +231,7 @@ export const ResourcesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async chimeGet(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2005>> {
+        async chimeGet(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2004>> {
             const localVarAxiosArgs = await ResourcesApiAxiosParamCreator(configuration).chimeGet(options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
@@ -199,12 +240,26 @@ export const ResourcesApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary ナレーション
+         * @summary ナレーションリスト取得
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async narrationGet(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2004>> {
+        async narrationGet(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<NarrationListItem>> {
             const localVarAxiosArgs = await ResourcesApiAxiosParamCreator(configuration).narrationGet(options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
+         * 
+         * @summary ナレーション取得
+         * @param {number} sceneId ID of narration to return
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async narrationSceneIdGet(sceneId: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<NarrationSceneListItem>> {
+            const localVarAxiosArgs = await ResourcesApiAxiosParamCreator(configuration).narrationSceneIdGet(sceneId, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -247,17 +302,27 @@ export const ResourcesApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        chimeGet(options?: any): AxiosPromise<InlineResponse2005> {
+        chimeGet(options?: any): AxiosPromise<InlineResponse2004> {
             return ResourcesApiFp(configuration).chimeGet(options).then((request) => request(axios, basePath));
         },
         /**
          * 
-         * @summary ナレーション
+         * @summary ナレーションリスト取得
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        narrationGet(options?: any): AxiosPromise<InlineResponse2004> {
+        narrationGet(options?: any): AxiosPromise<NarrationListItem> {
             return ResourcesApiFp(configuration).narrationGet(options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary ナレーション取得
+         * @param {number} sceneId ID of narration to return
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        narrationSceneIdGet(sceneId: number, options?: any): AxiosPromise<NarrationSceneListItem> {
+            return ResourcesApiFp(configuration).narrationSceneIdGet(sceneId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -300,13 +365,24 @@ export class ResourcesApi extends BaseAPI {
     }
     /**
      * 
-     * @summary ナレーション
+     * @summary ナレーションリスト取得
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ResourcesApi
      */
     public narrationGet(options?: any) {
         return ResourcesApiFp(this.configuration).narrationGet(options).then((request) => request(this.axios, this.basePath));
+    }
+    /**
+     * 
+     * @summary ナレーション取得
+     * @param {number} sceneId ID of narration to return
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ResourcesApi
+     */
+    public narrationSceneIdGet(sceneId: number, options?: any) {
+        return ResourcesApiFp(this.configuration).narrationSceneIdGet(sceneId, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * 

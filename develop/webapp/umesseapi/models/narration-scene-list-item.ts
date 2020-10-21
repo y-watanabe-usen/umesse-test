@@ -14,13 +14,7 @@
 /**
  * 
  * @export
- * @interface InlineResponse2005
+ * @interface NarrationSceneListItem
  */
-export interface InlineResponse2005 {
-    /**
-     * 
-     * @type {string}
-     * @memberof InlineResponse2005
-     */
-    url?: any;
+export interface NarrationSceneListItem extends Array<NarrationItem> {
 }
