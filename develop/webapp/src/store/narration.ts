@@ -31,7 +31,7 @@ export default function narrationStore() {
     async fetchNarrations(sceneId: number) {
       try {
         const response = await api.narrationSceneIdGet(sceneId)
-        state.narrationLists = response.data
+        state.narrations = response.data
       } catch (e) {
         console.log(e)
       }
