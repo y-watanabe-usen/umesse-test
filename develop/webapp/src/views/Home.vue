@@ -403,22 +403,22 @@
   </div>
 </template>
 
-<script>
-import { useGlobalStore } from "@/store";
-import { defineComponent, onMounted, reactive, toRefs } from "vue";
+<script lang="ts">
+import { useGlobalStore } from "@/store"
+import { defineComponent, onMounted, reactive, toRefs } from "vue"
 
 export default defineComponent({
   name: "Home",
   setup() {
-    const { auth } = useGlobalStore();
+    const { auth } = useGlobalStore()
     onMounted(() => {
-      auth.requestAuth();
-    });
+      auth.requestAuth()
+    })
     return {
       ...auth,
-    };
+    }
   },
-});
+})
 </script>
 
 <style scoped>
