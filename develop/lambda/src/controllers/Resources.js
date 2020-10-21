@@ -33,6 +33,16 @@ module.exports.narrationGET = function narrationGET (req, res, next) {
     });
 };
 
+module.exports.narrationSceneIdGET = function narrationSceneIdGET (req, res, next, sceneId) {
+  Resources.narrationSceneIdGET(sceneId)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
+
 module.exports.ttsGET = function ttsGET (req, res, next) {
   Resources.ttsGET()
     .then(function (response) {

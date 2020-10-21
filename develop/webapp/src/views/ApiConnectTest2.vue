@@ -16,10 +16,15 @@ export default {
     });
 
     const send = async () => {
-      const api = new UMesseApi.AuthApi();
-      const response = await api.authPost();
+      // const api = new UMesseApi.AuthApi();
+      // const response = await api.authPost();
+      // console.log(response);
+      // state.token = response.data.token;
+      const api = new UMesseApi.ResourcesApi();
+      const response = await api.narrationGet();
       console.log(response);
-      state.token = response.data.token;
+      state.token = response.data
+
     };
     return {
       state,

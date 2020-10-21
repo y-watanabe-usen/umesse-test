@@ -1,8 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * U MESSE API
- * U MESSE API
+ * U-Messe API
+ * U-Messe API
  *
  * OpenAPI spec version: 0.0.1
  * 
@@ -14,13 +14,25 @@
 /**
  * 
  * @export
- * @interface InlineResponse2005
+ * @interface CMItem
  */
-export interface InlineResponse2005 {
+export interface CMItem {
+    /**
+     * 
+     * @type {number}
+     * @memberof CMItem
+     */
+    id?: any;
     /**
      * 
      * @type {string}
-     * @memberof InlineResponse2005
+     * @memberof CMItem
      */
-    url?: any;
+    name?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof CMItem
+     */
+    detail?: any;
 }

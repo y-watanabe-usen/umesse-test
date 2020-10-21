@@ -14,13 +14,25 @@
 /**
  * 
  * @export
- * @interface InlineResponse2005
+ * @interface ChimeItem
  */
-export interface InlineResponse2005 {
+export interface ChimeItem {
+    /**
+     * 
+     * @type {number}
+     * @memberof ChimeItem
+     */
+    id?: any;
     /**
      * 
      * @type {string}
-     * @memberof InlineResponse2005
+     * @memberof ChimeItem
      */
-    url?: any;
+    name?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof ChimeItem
+     */
+    detail?: any;
 }

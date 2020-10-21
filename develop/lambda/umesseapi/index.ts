@@ -11,16 +11,6 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
-/**
- * 
- * @export
- * @interface InlineResponse2005
- */
-export interface InlineResponse2005 {
-    /**
-     * 
-     * @type {string}
-     * @memberof InlineResponse2005
-     */
-    url?: any;
-}
+export * from "./api";
+export * from "./configuration";
+

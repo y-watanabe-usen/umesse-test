@@ -14,13 +14,19 @@
 /**
  * 
  * @export
- * @interface InlineResponse2005
+ * @interface Body4
  */
-export interface InlineResponse2005 {
+export interface Body4 {
     /**
      * 
      * @type {string}
-     * @memberof InlineResponse2005
+     * @memberof Body4
      */
-    url?: any;
+    filename?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof Body4
+     */
+    recordedFile?: any;
 }

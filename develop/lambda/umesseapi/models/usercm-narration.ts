@@ -14,13 +14,19 @@
 /**
  * 
  * @export
- * @interface InlineResponse2005
+ * @interface UsercmNarration
  */
-export interface InlineResponse2005 {
+export interface UsercmNarration {
     /**
      * 
      * @type {string}
-     * @memberof InlineResponse2005
+     * @memberof UsercmNarration
      */
-    url?: any;
+    narrationId?: any;
+    /**
+     * 
+     * @type {number}
+     * @memberof UsercmNarration
+     */
+    volume?: any;
 }

@@ -12,21 +12,33 @@
  * Do not edit the class manually.
  */
 /**
- * 
+ * Error
  * @export
- * @interface InlineResponse2004
+ * @interface ModelError
  */
-export interface InlineResponse2004 {
+export interface ModelError {
     /**
      * 
      * @type {string}
-     * @memberof InlineResponse2004
+     * @memberof ModelError
      */
-    value?: any;
+    status?: any;
     /**
      * 
-     * @type {Array&lt;ChimeItem&gt;}
-     * @memberof InlineResponse2004
+     * @type {string}
+     * @memberof ModelError
      */
-    data?: any;
+    code?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof ModelError
+     */
+    message?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof ModelError
+     */
+    detail?: any;
 }

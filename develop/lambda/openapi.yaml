@@ -577,7 +577,7 @@ paths:
     get:
       tags:
         - resources
-      summary: ナレーション
+      summary: ナレーションリスト取得
       description: ''
       operationId: ''
       responses:
@@ -586,14 +586,36 @@ paths:
           content:
             application/json:
               schema:
-                properties:
-                  value:
-                    type: string
-                    example: "???"
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/NarrationItem'
+                $ref: '#/components/schemas/NarrationListItem'
+        '400':
+          description: Response invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  '/narration/{sceneId}':
+    get:
+      tags:
+        - resources
+      summary: ナレーション取得
+      description: ''
+      operationId: ''
+      parameters:
+        - name: sceneId
+          in: path
+          description: ID of narration to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: The response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NarrationSceneListItem'
         '400':
           description: Response invalid
           content:
@@ -748,17 +770,108 @@ components:
         detail:
           type: string
           example: "bgm detail"
+    NarrationListItem:
+      type: array
+      items:
+        $ref: '#/components/schemas/IndustryItem'
+      example: 
+        - id: 1
+          name: "業種名1"
+          scenes:
+            - id: 11
+              name: "シーン名11"
+            - id: 12
+              name: "シーン名12"
+            - id: 13
+              name: "シーン名13"
+        - id: 2
+          name: "業種名2"
+          scenes:
+            - id: 21
+              name: "シーン名21"
+            - id: 22
+              name: "シーン名22"
+            - id: 23
+              name: "シーン名23"
+        - id: 3
+          name: "業種名3"
+          scenes:
+            - id: 31
+              name: "シーン名31"
+            - id: 32
+              name: "シーン名32"
+            - id: 33
+              name: "シーン名33"
+    IndustryItem:
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: '業種名'
+        scenes:
+          type: array
+          items:
+            $ref: '#/components/schemas/SceneItem'
+    SceneItem:
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: 'シーン名'
+    NarrationSceneListItem:
+      type: array
+      items:
+        $ref: '#/components/schemas/NarrationItem'
+      example: 
+        - id: 1
+          name: '18時30分閉店'
+          detail: '放送開始日2020年10月15日 有効期限2020年10月20日'
+          manuscript: '本日はご来店いただきましてありがとうございます。当店は18時30分閉店です'
+          second: 10
+          url: 'https://example.com'
+        - id: 2
+          name: 'アルバイト募集'
+          detail: '放送開始日2020年10月15日 有効期限2020年10月20日'
+          manuscript: '当店ではアルバイトを募集しております。なんたらかんたら'
+          second: 20
+          url: 'https://example.com'
+        - id: 3
+          name: 'チャイルドチェア'
+          detail: '放送開始日2020年10月15日 有効期限2020年10月20日'
+          manuscript: '本日はご来店いただきましてありがとうございます。なんたらかんたら'
+          second: 30
+          url: 'https://example.com'
+        - id: 4
+          name: 'デリバリー'
+          detail: '放送開始日2020年10月15日 有効期限2020年10月20日'
+          manuscript: '本日はご来店いただきましてありがとうございます。なんたらかんたら'
+          second: 40
+          url: 'https://example.com'
     NarrationItem:
       properties:
         id:
           type: integer
-          example: 1234
+          example: 1
         name:
           type: string
-          example: "narration name"
+          example: '18時30分閉店'
         detail:
           type: string
-          example: "narration detail"
+          example: '放送開始日2020年10月15日 有効期限2020年10月20日'
+        manuscript:
+          type: string
+          example: '本日はご来店いただきましてありがとうございます。当店は18時30分閉店です'
+        url:
+          type: string
+          description: '試聴URL'
+          example: 'https://example.com'
+        second:
+          type: integer
+          example: 30
     ChimeItem:
       properties:
         id:

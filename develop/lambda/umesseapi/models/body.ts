@@ -14,13 +14,13 @@
 /**
  * 
  * @export
- * @interface InlineResponse2005
+ * @interface Body
  */
-export interface InlineResponse2005 {
+export interface Body {
     /**
      * 
      * @type {string}
-     * @memberof InlineResponse2005
+     * @memberof Body
      */
-    url?: any;
+    unisCustomerCd?: any;
 }

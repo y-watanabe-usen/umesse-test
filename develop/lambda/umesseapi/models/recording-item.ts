@@ -14,13 +14,25 @@
 /**
  * 
  * @export
- * @interface InlineResponse2005
+ * @interface RecordingItem
  */
-export interface InlineResponse2005 {
+export interface RecordingItem {
+    /**
+     * 
+     * @type {number}
+     * @memberof RecordingItem
+     */
+    id?: any;
     /**
      * 
      * @type {string}
-     * @memberof InlineResponse2005
+     * @memberof RecordingItem
      */
-    url?: any;
+    title?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof RecordingItem
+     */
+    detail?: any;
 }

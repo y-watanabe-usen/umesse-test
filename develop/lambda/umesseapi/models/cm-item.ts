@@ -14,13 +14,25 @@
 /**
  * 
  * @export
- * @interface InlineResponse2005
+ * @interface CmItem
  */
-export interface InlineResponse2005 {
+export interface CmItem {
+    /**
+     * 
+     * @type {number}
+     * @memberof CmItem
+     */
+    id?: any;
     /**
      * 
      * @type {string}
-     * @memberof InlineResponse2005
+     * @memberof CmItem
      */
-    url?: any;
+    name?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof CmItem
+     */
+    detail?: any;
 }

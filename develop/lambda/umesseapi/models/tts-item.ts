@@ -14,13 +14,25 @@
 /**
  * 
  * @export
- * @interface InlineResponse2005
+ * @interface TtsItem
  */
-export interface InlineResponse2005 {
+export interface TtsItem {
+    /**
+     * 
+     * @type {number}
+     * @memberof TtsItem
+     */
+    id?: any;
     /**
      * 
      * @type {string}
-     * @memberof InlineResponse2005
+     * @memberof TtsItem
      */
-    url?: any;
+    title?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof TtsItem
+     */
+    detail?: any;
 }

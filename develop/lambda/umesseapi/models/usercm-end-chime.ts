@@ -14,13 +14,19 @@
 /**
  * 
  * @export
- * @interface InlineResponse2005
+ * @interface UsercmEndChime
  */
-export interface InlineResponse2005 {
+export interface UsercmEndChime {
     /**
      * 
      * @type {string}
-     * @memberof InlineResponse2005
+     * @memberof UsercmEndChime
      */
-    url?: any;
+    endChimeId?: any;
+    /**
+     * 
+     * @type {number}
+     * @memberof UsercmEndChime
+     */
+    volume?: any;
 }

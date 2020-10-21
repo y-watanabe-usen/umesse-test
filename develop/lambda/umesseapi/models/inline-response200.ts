@@ -14,13 +14,19 @@
 /**
  * 
  * @export
- * @interface InlineResponse2005
+ * @interface InlineResponse200
  */
-export interface InlineResponse2005 {
+export interface InlineResponse200 {
     /**
      * 
      * @type {string}
-     * @memberof InlineResponse2005
+     * @memberof InlineResponse200
      */
-    url?: any;
+    value?: any;
+    /**
+     * 
+     * @type {Array&lt;CenterItem&gt;}
+     * @memberof InlineResponse200
+     */
+    data?: any;
 }

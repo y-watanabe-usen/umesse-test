@@ -14,13 +14,25 @@
 /**
  * 
  * @export
- * @interface InlineResponse2005
+ * @interface BgmItem
  */
-export interface InlineResponse2005 {
+export interface BgmItem {
+    /**
+     * 
+     * @type {number}
+     * @memberof BgmItem
+     */
+    id?: any;
     /**
      * 
      * @type {string}
-     * @memberof InlineResponse2005
+     * @memberof BgmItem
      */
-    url?: any;
+    name?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof BgmItem
+     */
+    detail?: any;
 }

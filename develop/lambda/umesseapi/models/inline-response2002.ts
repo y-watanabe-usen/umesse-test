@@ -14,13 +14,19 @@
 /**
  * 
  * @export
- * @interface InlineResponse2005
+ * @interface InlineResponse2002
  */
-export interface InlineResponse2005 {
+export interface InlineResponse2002 {
     /**
      * 
      * @type {string}
-     * @memberof InlineResponse2005
+     * @memberof InlineResponse2002
      */
-    url?: any;
+    value?: any;
+    /**
+     * 
+     * @type {Array&lt;TtsItem&gt;}
+     * @memberof InlineResponse2002
+     */
+    data?: any;
 }

@@ -14,13 +14,31 @@
 /**
  * 
  * @export
- * @interface InlineResponse2005
+ * @interface Body3
  */
-export interface InlineResponse2005 {
+export interface Body3 {
     /**
      * 
      * @type {string}
-     * @memberof InlineResponse2005
+     * @memberof Body3
      */
-    url?: any;
+    title?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof Body3
+     */
+    description?: any;
+    /**
+     * 
+     * @type {Date}
+     * @memberof Body3
+     */
+    startDate?: any;
+    /**
+     * 
+     * @type {Date}
+     * @memberof Body3
+     */
+    endDate?: any;
 }

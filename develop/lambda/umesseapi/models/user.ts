@@ -14,19 +14,31 @@
 /**
  * 
  * @export
- * @interface InlineResponse2004
+ * @interface User
  */
-export interface InlineResponse2004 {
+export interface User {
     /**
      * 
      * @type {string}
-     * @memberof InlineResponse2004
+     * @memberof User
      */
-    value?: any;
+    unisCustomerCd?: any;
     /**
      * 
-     * @type {Array&lt;ChimeItem&gt;}
-     * @memberof InlineResponse2004
+     * @type {string}
+     * @memberof User
      */
-    data?: any;
+    customerName?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    customerGroupCd?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    customerGroupName?: any;
 }

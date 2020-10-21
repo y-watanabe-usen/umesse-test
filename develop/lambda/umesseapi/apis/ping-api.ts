@@ -16,21 +16,21 @@ import { Configuration } from '../configuration';
 // Some imports not used depending on template conditions
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
-import { InlineResponse2005 } from '../models';
+import { InlineResponseDefault } from '../models';
 /**
- * S3Api - axios parameter creator
+ * PingApi - axios parameter creator
  * @export
  */
-export const S3ApiAxiosParamCreator = function (configuration?: Configuration) {
+export const PingApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * 試聴再生、録音音声アップロード
-         * @summary S3オブジェクトの署名付きURLの取得
+         * 
+         * @summary ping
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        signedUrlGet: async (options: any = {}): Promise<RequestArgs> => {
-            const localVarPath = `/signedUrl`;
+        pingGet: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/ping`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
             let baseOptions;
@@ -61,19 +61,19 @@ export const S3ApiAxiosParamCreator = function (configuration?: Configuration) {
 };
 
 /**
- * S3Api - functional programming interface
+ * PingApi - functional programming interface
  * @export
  */
-export const S3ApiFp = function(configuration?: Configuration) {
+export const PingApiFp = function(configuration?: Configuration) {
     return {
         /**
-         * 試聴再生、録音音声アップロード
-         * @summary S3オブジェクトの署名付きURLの取得
+         * 
+         * @summary ping
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async signedUrlGet(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2005>> {
-            const localVarAxiosArgs = await S3ApiAxiosParamCreator(configuration).signedUrlGet(options);
+        async pingGet(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponseDefault>> {
+            const localVarAxiosArgs = await PingApiAxiosParamCreator(configuration).pingGet(options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -83,38 +83,38 @@ export const S3ApiFp = function(configuration?: Configuration) {
 };
 
 /**
- * S3Api - factory interface
+ * PingApi - factory interface
  * @export
  */
-export const S3ApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+export const PingApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     return {
         /**
-         * 試聴再生、録音音声アップロード
-         * @summary S3オブジェクトの署名付きURLの取得
+         * 
+         * @summary ping
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        signedUrlGet(options?: any): AxiosPromise<InlineResponse2005> {
-            return S3ApiFp(configuration).signedUrlGet(options).then((request) => request(axios, basePath));
+        pingGet(options?: any): AxiosPromise<InlineResponseDefault> {
+            return PingApiFp(configuration).pingGet(options).then((request) => request(axios, basePath));
         },
     };
 };
 
 /**
- * S3Api - object-oriented interface
+ * PingApi - object-oriented interface
  * @export
- * @class S3Api
+ * @class PingApi
  * @extends {BaseAPI}
  */
-export class S3Api extends BaseAPI {
+export class PingApi extends BaseAPI {
     /**
-     * 試聴再生、録音音声アップロード
-     * @summary S3オブジェクトの署名付きURLの取得
+     * 
+     * @summary ping
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof S3Api
+     * @memberof PingApi
      */
-    public signedUrlGet(options?: any) {
-        return S3ApiFp(this.configuration).signedUrlGet(options).then((request) => request(this.axios, this.basePath));
+    public pingGet(options?: any) {
+        return PingApiFp(this.configuration).pingGet(options).then((request) => request(this.axios, this.basePath));
     }
 }

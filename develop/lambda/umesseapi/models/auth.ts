@@ -14,13 +14,13 @@
 /**
  * 
  * @export
- * @interface InlineResponse2005
+ * @interface Auth
  */
-export interface InlineResponse2005 {
+export interface Auth {
     /**
      * 
      * @type {string}
-     * @memberof InlineResponse2005
+     * @memberof Auth
      */
-    url?: any;
+    token?: any;
 }
