@@ -2,9 +2,9 @@ openapi: 3.0.0
 servers:
   - url: /api
 info:
-  description: U MESSE API
+  description: U-Messe API
   version: 0.0.1
-  title: U MESSE API
+  title: U-Messe API
 paths:
   /ping:
     get:
@@ -21,7 +21,6 @@ paths:
                   message:
                     type: string
                     example: "ok"
-
   /auth:
     post:
       tags:
@@ -42,7 +41,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Auth'
-
   /user:
     get:
       tags:
@@ -55,7 +53,25 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-
+    # post:
+    #   tags:
+    #     - user
+    #   summary: User情報更新
+    #   responses:
+    #     '200':
+    #       description: ok
+  # /user/cm:
+  #   get:
+  #     tags:
+  #       - user
+  #     summary: UserのCM
+  #     responses:
+  #       '200':
+  #         description: UserのCM
+  #         content:
+  #           application/json:
+  #             schema:
+  #               $ref: '#/components/schemas/CMItem'
   /user/cm:
     get:
       tags:
@@ -71,7 +87,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/CmItem'
+                  $ref: '#/components/schemas/CMItem'
         '400':
           description: Response invalid
           content:
@@ -81,83 +97,19 @@ paths:
     post:
       tags:
         - cm
-      summary: CM新規結合
+      summary: CM新規追加
       description: ''
       operationId: ''
-      requestBody:
-        content: 
-          application/json:
-            schema: 
-              type: object
-              properties:
-                narration:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      narrationId:
-                        type: string
-                      volume:
-                        type: integer
-                        format: int64
-                startChime:
-                  type: object
-                  properties:
-                    startChimeId:
-                      type: string
-                    volume:
-                      type: integer
-                      format: int64
-                endChime:
-                  type: object
-                  properties:
-                    endChimeId:
-                      type: string
-                    volume:
-                      type: integer
-                      format: int64
-                bgm:
-                  type: object
-                  properties:
-                    bgmId:
-                      type: string
-                    volume:
-                      type: integer
-                      format: int64
       responses:
         '200':
           description: successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CmItem'
+                $ref: '#/components/schemas/CMItem'
         default:
           description: Default error sample response
-
-  '/user/cm/{cmId}':
-    get:
-      tags:
-        - cm
-      summary: CM情報取得
-      description: ''
-      operationId: ''
-      parameters:
-        - $ref: '#/components/parameters/CmId'
-      responses:
-        '200':
-          description: The response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/CmItem'
-        '400':
-          description: Response invalid
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+  '/cm/{cmId}':
     post:
       tags:
         - cm
@@ -165,42 +117,20 @@ paths:
       description: ''
       operationId: ''
       parameters:
-        - $ref: '#/components/parameters/CmId'
-      requestBody:
-        content: 
-          application/json:
-            schema: 
-              type: object
-              properties:
-                title:
-                  type: string
-                  example: 'タイトル'
-                description:
-                  type: string
-                  example: '説明文'
-                seconds:
-                  type: integer
-                  format: int64
-                startDate:
-                  type: string
-                  format: date-time
-                endDate:
-                  type: string
-                  format: date-time
-                  example: '掲載終了日時（固定）'
-                shear:
-                  type: boolean
-                  example: false
-                center:
-                  type: boolean
-                  example: true
+        - name: cmId
+          in: path
+          description: ID of cm to return
+          required: true
+          schema:
+            type: integer
+            format: int64
       responses:
         default:
           description: Default response
     delete:
       tags:
         - cm
-      summary: CM情報削除
+      summary: cm 削除
       description: ''
       operationId: ''
       parameters:
@@ -214,161 +144,6 @@ paths:
       responses:
         default:
           description: Default error sample response
-
-  '/center/{cmId}':
-    post:
-      tags:
-        - center
-      summary: CMセンター連携追加
-      description: ''
-      operationId: ''
-      parameters:
-        - $ref: '#/components/parameters/CmId'
-      requestBody:
-        content: 
-          application/json:
-            schema: 
-              type: object
-              properties:
-                title:
-                  type: string
-                  example: 'タイトル'
-                description:
-                  type: string
-                  example: '説明文'
-                startDate:
-                  type: string
-                  format: date-time
-                endDate:
-                  type: string
-                  format: date-time
-                  example: '掲載終了日時（固定）'
-      responses:
-        default:
-          description: Default response
-    delete:
-      tags:
-        - center
-      summary: CMセンター連携削除
-      description: ''
-      operationId: ''
-      parameters:
-        - $ref: '#/components/parameters/CmId'
-      responses:
-        default:
-          description: Default error sample response
-
-  /center/download:
-    get:
-      tags:
-        - center
-      summary: センターCM連携（センター専用）
-      description: ''
-      operationId: ''
-      responses:
-        '200':
-          description: The response
-          content:
-            application/json:
-              schema:
-                properties:
-                  value:
-                    type: string
-                    example: "???"
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/CenterItem'
-        '400':
-          description: Response invalid
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-
-  '/center/download/{cmId}':
-    post:
-      tags:
-        - center
-      summary: センターCM連携完了（センター専用）
-      description: ''
-      operationId: ''
-      parameters:
-        - $ref: '#/components/parameters/CmId'
-      responses:
-        '200':
-          description: The response
-          content:
-            application/json:
-              schema:
-                properties:
-                  value:
-                    type: string
-                    example: "???"
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/CenterItem'
-        '400':
-          description: Response invalid
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-
-  /share:
-    get:
-      tags:
-        - share
-      summary: CM共有リスト取得
-      description: ''
-      operationId: ''
-      responses:
-        '200':
-          description: The response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/CmItem'
-        '400':
-          description: Response invalid
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-
-  '/share/{cmId}':
-    post:
-      tags:
-        - share
-      summary: CM共有追加
-      description: ''
-      operationId: ''
-      parameters:
-        - $ref: '#/components/parameters/CmId'
-      responses:
-        default:
-          description: Default response
-    delete:
-      tags:
-        - share
-      summary: CM共有削除
-      description: ''
-      operationId: ''
-      parameters:
-        - name: cmId
-          in: path
-          description: ID of cm to return
-          required: true
-          schema:
-            type: integer
-            format: int64
-      responses:
-        default:
-          description: Default error sample response
-
   /user/recording:
     get:
       tags:
@@ -385,7 +160,6 @@ paths:
                 properties:
                   value:
                     type: string
-                    example: "???"
                   data:
                     type: array
                     items:
@@ -419,32 +193,16 @@ paths:
       description: ''
       operationId: ''
       parameters:
-        - $ref: '#/components/parameters/RecordingId'
+        - name: recordingId
+          in: path
+          description: ID of cm to return
+          required: true
+          schema:
+            type: integer
+            format: int64
       responses:
         default:
           description: Default response
-    post:
-      tags:
-        - recording
-      summary: 録音データ更新（メタデータのみ）
-      description: ''
-      operationId: ''
-      parameters:
-        - $ref: '#/components/parameters/RecordingId'
-      responses:
-        '200':
-          description: successful
-      requestBody:
-        content: 
-          multipart/form-data:
-            schema: 
-              type: object
-              properties:
-                filename:
-                  type: string
-                recordedFile:
-                  type: string
-                  format: binary
     delete:
       tags:
         - recording
@@ -452,11 +210,16 @@ paths:
       description: ''
       operationId: ''
       parameters:
-        - $ref: '#/components/parameters/RecordingId'
+        - name: recordingId
+          in: path
+          description: ID of cm to return
+          required: true
+          schema:
+            type: integer
+            format: int64
       responses:
         default:
           description: Default response
-
   /user/tts:
     get:
       tags:
@@ -473,7 +236,6 @@ paths:
                 properties:
                   value:
                     type: string
-                    example: "???"
                   data:
                     type: array
                     items:
@@ -498,7 +260,6 @@ paths:
                 recordedFile:
                   type: string
                   format: binary
-
   '/user/tts/{ttsId}':
     get:
       tags:
@@ -507,32 +268,16 @@ paths:
       description: ''
       operationId: ''
       parameters:
-        - $ref: '#/components/parameters/TtsId'
+        - name: ttsId
+          in: path
+          description: ID of cm to return
+          required: true
+          schema:
+            type: integer
+            format: int64
       responses:
         default:
           description: Default response
-    post:
-      tags:
-        - tts
-      summary: TTSデータ更新（メタデータのみ）
-      description: ''
-      operationId: ''
-      parameters:
-        - $ref: '#/components/parameters/TtsId'
-      responses:
-        '200':
-          description: successful
-      requestBody:
-        content: 
-          multipart/form-data:
-            schema: 
-              type: object
-              properties:
-                filename:
-                  type: string
-                recordedFile:
-                  type: string
-                  format: binary
     delete:
       tags:
         - tts
@@ -540,11 +285,16 @@ paths:
       description: ''
       operationId: ''
       parameters:
-        - $ref: '#/components/parameters/TtsId'
+        - name: ttsId
+          in: path
+          description: ID of cm to return
+          required: true
+          schema:
+            type: integer
+            format: int64
       responses:
         default:
           description: Default response
-
   /bgm:
     get:
       tags:
@@ -561,23 +311,21 @@ paths:
                 properties:
                   value:
                     type: string
-                    example: "???"
                   data:
                     type: array
                     items:
-                      $ref: '#/components/schemas/BgmItem'
+                      $ref: '#/components/schemas/BGMItem'
         '400':
           description: Response invalid
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-
   /narration:
     get:
       tags:
         - resources
-      summary: ナレーション
+      summary: ナレーションリスト取得
       description: ''
       operationId: ''
       responses:
@@ -586,21 +334,41 @@ paths:
           content:
             application/json:
               schema:
-                properties:
-                  value:
-                    type: string
-                    example: "???"
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/NarrationItem'
+                $ref: '#/components/schemas/NarrationListItem'
         '400':
           description: Response invalid
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-
+  '/narration/{sceneId}':
+    get:
+      tags:
+        - resources
+      summary: ナレーション取得
+      description: ''
+      operationId: ''
+      parameters:
+        - name: sceneId
+          in: path
+          description: ID of narration to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: The response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NarrationSceneListItem'
+        '400':
+          description: Response invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /chime:
     get:
       tags:
@@ -617,7 +385,6 @@ paths:
                 properties:
                   value:
                     type: string
-                    example: "???"
                   data:
                     type: array
                     items:
@@ -628,7 +395,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-
   /tts:
     get:
       tags:
@@ -645,7 +411,6 @@ paths:
                 properties:
                   value:
                     type: string
-                    example: "???"
                   data:
                     type: array
                     items:
@@ -656,56 +421,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /signedUrl:
-    get:
-      tags:
-        - s3
-      summary: S3オブジェクトの署名付きURLの取得
-      description: '試聴再生、録音音声アップロード'
-      operationId: ''
-      responses:
-        '200':
-          description: The response
-          content:
-            application/json:
-              schema:
-                properties:
-                  url:
-                    type: string
-                    example: "https://filesamples.com/samples/audio/aac/sample1.aac"
-        '400':
-          description: Response invalid
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
 
 components:
-  parameters:
-    CmId:
-      name: cmId
-      in: path
-      description: ID of cm to return
-      required: true
-      schema:
-        type: string
-        format: string
-    RecordingId:
-      name: recordingId
-      in: path
-      description: ID of recording to return
-      required: true
-      schema:
-        type: string
-        format: string
-    TtsId:
-      name: ttsId
-      in: path
-      description: ID of tts to return
-      required: true
-      schema:
-        type: string
-        format: string
   schemas:
     Auth:
       properties:
@@ -714,108 +431,156 @@ components:
           example: '1234567890'
     User:
       properties:
-        unisCustomerCd:
-          type: string
-          example: 1234567890
-        customerName:
+        id:
+          type: integer
+          example: 1234
+        name:
           type: string
           example: "Meguro Cafe"
-        customerGroupCd:
-          type: string
-          example: 1234567890
-        customerGroupName:
-          type: string
-          example: "USEN"
-    CmItem:
+    CMItem:
       properties:
         id:
           type: integer
-          example: 1234
         name:
           type: string
-          example: "cm name"
         detail:
           type: string
-          example: "cm detail"
-    BgmItem:
+    BGMItem:
       properties:
         id:
           type: integer
-          example: 1234
         name:
           type: string
-          example: "bgm name"
         detail:
           type: string
-          example: "bgm detail"
+    NarrationListItem:
+      type: array
+      items:
+        $ref: '#/components/schemas/IndustryItem'
+      example: 
+        - id: 1
+          name: "業種名1"
+          scenes:
+            - id: 11
+              name: "シーン名11"
+            - id: 12
+              name: "シーン名12"
+            - id: 13
+              name: "シーン名13"
+        - id: 2
+          name: "業種名2"
+          scenes:
+            - id: 21
+              name: "シーン名21"
+            - id: 22
+              name: "シーン名22"
+            - id: 23
+              name: "シーン名23"
+        - id: 3
+          name: "業種名3"
+          scenes:
+            - id: 31
+              name: "シーン名31"
+            - id: 32
+              name: "シーン名32"
+            - id: 33
+              name: "シーン名33"
+    IndustryItem:
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: '業種名'
+        scenes:
+          type: array
+          items:
+            $ref: '#/components/schemas/SceneItem'
+    SceneItem:
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: 'シーン名'
+    NarrationSceneListItem:
+      type: array
+      items:
+        $ref: '#/components/schemas/NarrationItem'
+      example: 
+        - id: 1
+          name: '18時30分閉店'
+          detail: '放送開始日2020年10月15日 有効期限2020年10月20日'
+          manuscript: '本日はご来店いただきましてありがとうございます。当店は18時30分閉店です'
+          second: 10
+          url: 'https://example.com'
+        - id: 2
+          name: 'アルバイト募集'
+          detail: '放送開始日2020年10月15日 有効期限2020年10月20日'
+          manuscript: '当店ではアルバイトを募集しております。なんたらかんたら'
+          second: 20
+          url: 'https://example.com'
+        - id: 3
+          name: 'チャイルドチェア'
+          detail: '放送開始日2020年10月15日 有効期限2020年10月20日'
+          manuscript: '本日はご来店いただきましてありがとうございます。なんたらかんたら'
+          second: 30
+          url: 'https://example.com'
+        - id: 4
+          name: 'デリバリー'
+          detail: '放送開始日2020年10月15日 有効期限2020年10月20日'
+          manuscript: '本日はご来店いただきましてありがとうございます。なんたらかんたら'
+          second: 40
+          url: 'https://example.com'
     NarrationItem:
       properties:
         id:
           type: integer
-          example: 1234
+          example: 1
         name:
           type: string
-          example: "narration name"
+          example: '18時30分閉店'
         detail:
           type: string
-          example: "narration detail"
+          example: '放送開始日2020年10月15日 有効期限2020年10月20日'
+        manuscript:
+          type: string
+          example: '本日はご来店いただきましてありがとうございます。当店は18時30分閉店です'
+        url:
+          type: string
+          description: '試聴URL'
+          example: 'https://example.com'
+        second:
+          type: integer
+          example: 30
     ChimeItem:
       properties:
         id:
           type: integer
-          example: 1234
         name:
           type: string
-          example: "chime name"
         detail:
           type: string
-          example: "chime detail"
     RecordingItem:
       properties:
         id:
           type: integer
-          example: 1234
         title:
           type: string
-          example: "recording title"
         detail:
           type: string
-          example: "recording detail"
-    TtsItem:
-      properties:
-        id:
-          type: integer
-          example: 1234
-        title:
-          type: string
-          example: "tts title"
-        detail:
-          type: string
-          example: "tts detail"
-    CenterItem:
-      properties:
-        id:
-          type: integer
-          example: 1234
-        title:
-          type: string
-          example: "center title"
-        detail:
-          type: string
-          example: "center detail"
+        
     Error:
       description: Error
       type: object
       properties:
         status:
           type: string
-          example: "status?"
         code:
           type: string
-          example: "erorr code"
-        message:
+        title:
           type: string
-          example: "error message"
         detail:
           type: string
-          example: "error detail"

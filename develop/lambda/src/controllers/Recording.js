@@ -42,13 +42,3 @@ module.exports.userRecordingRecordingIdGET = function userRecordingRecordingIdGE
       utils.writeJson(res, response);
     });
 };
-
-module.exports.userRecordingRecordingIdPOST = function userRecordingRecordingIdPOST (req, res, next, recordingId) {
-  Recording.userRecordingRecordingIdPOST(recordingId)
-    .then(function (response) {
-      utils.writeJson(res, response);
-    })
-    .catch(function (response) {
-      utils.writeJson(res, response);
-    });
-};

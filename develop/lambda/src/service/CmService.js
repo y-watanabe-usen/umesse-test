@@ -2,12 +2,12 @@
 
 
 /**
- * CM情報削除
+ * cm 削除
  *
  * cmId Long ID of cm to return
  * no response value expected for this operation
  **/
-exports.userCmCmIdDELETE = function(cmId) {
+exports.cmCmIdDELETE = function(cmId) {
   return new Promise(function(resolve, reject) {
     resolve();
   });
@@ -15,40 +15,12 @@ exports.userCmCmIdDELETE = function(cmId) {
 
 
 /**
- * CM情報取得
- *
- * cmId String ID of cm to return
- * returns List
- **/
-exports.userCmCmIdGET = function(cmId) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = [ {
-  "name" : "cm name",
-  "id" : 1234,
-  "detail" : "cm detail"
-}, {
-  "name" : "cm name",
-  "id" : 1234,
-  "detail" : "cm detail"
-} ];
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
-  });
-}
-
-
-/**
  * CM情報更新
  *
- * body Body_2  (optional)
- * cmId String ID of cm to return
+ * cmId Long ID of cm to return
  * no response value expected for this operation
  **/
-exports.userCmCmIdPOST = function(body,cmId) {
+exports.cmCmIdPOST = function(cmId) {
   return new Promise(function(resolve, reject) {
     resolve();
   });
@@ -64,13 +36,13 @@ exports.userCmGET = function() {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = [ {
-  "name" : "cm name",
-  "id" : 1234,
-  "detail" : "cm detail"
+  "name" : "name",
+  "id" : 0,
+  "detail" : "detail"
 }, {
-  "name" : "cm name",
-  "id" : 1234,
-  "detail" : "cm detail"
+  "name" : "name",
+  "id" : 0,
+  "detail" : "detail"
 } ];
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
@@ -82,18 +54,17 @@ exports.userCmGET = function() {
 
 
 /**
- * CM新規結合
+ * CM新規追加
  *
- * body Body_1  (optional)
- * returns CmItem
+ * returns CMItem
  **/
-exports.userCmPOST = function(body) {
+exports.userCmPOST = function() {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
-  "name" : "cm name",
-  "id" : 1234,
-  "detail" : "cm detail"
+  "name" : "name",
+  "id" : 0,
+  "detail" : "detail"
 };
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
