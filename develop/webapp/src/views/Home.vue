@@ -358,8 +358,7 @@
                     </div>
                     <p class="mb-1 text-left">
                       <small class="text-muted">
-                        試しにUSEN MEMBERSのログインapiに繋いでみます(TODO:
-                        後で消す)
+                        試しにUSEN MEMBERSのログインapiに繋いでみます(TODO: 後で消す)
                       </small>
                     </p>
                   </router-link>

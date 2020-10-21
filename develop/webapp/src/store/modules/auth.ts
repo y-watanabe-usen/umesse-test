@@ -14,7 +14,7 @@ export default function authStore() {
         error: undefined,
         authenticating: false
     });
-    const getState = async() => {
+    const getState = async () => {
 
     }
 
@@ -22,7 +22,7 @@ export default function authStore() {
         if (state.authenticating == true) return
 
         const custCd = router.currentRoute.value.query.custCd as string
-        if( state.token ) {
+        if (state.token) {
             // 認証済み
             return;
         }
