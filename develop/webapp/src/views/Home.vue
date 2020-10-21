@@ -3,9 +3,10 @@
     <div class="bg-umesse">
       <div class="container">
         <nav class="navbar navbar-expand-lg navbar-light">
-          <span class="navbar-brand mb-0 h1 text-white"
-            >U Messe {{ custCd }}</span
-          >
+          <span class="navbar-brand mb-0 h1 text-white">U Messe
+          <span v-if=authenticating>Loading...</span>
+          <span v-else> {{ token }} {{ error }} </span>
+          </span>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto">
               <li class="nav-item">
@@ -357,7 +358,8 @@
                     </div>
                     <p class="mb-1 text-left">
                       <small class="text-muted">
-                        試しにUSEN MEMBERSのログインapiに繋いでみます(TODO: 後で消す)
+                        試しにUSEN MEMBERSのログインapiに繋いでみます(TODO:
+                        後で消す)
                       </small>
                     </p>
                   </router-link>
@@ -403,17 +405,21 @@
 </template>
 
 <script>
-import store from "../store";
-export default {
-  created() {
-    store.commit("setCustCd", this.$route.query.custCd || "");
+import { useGlobalStore } from "@/store";
+import { defineComponent, onMounted, reactive, toRefs } from "vue";
+
+export default defineComponent({
+  name: "Home",
+  setup() {
+    const { auth } = useGlobalStore();
+    onMounted(() => {
+      auth.requestAuth();
+    });
+    return {
+      ...auth,
+    };
   },
-  computed: {
-    custCd() {
-      return this.$store.state.custCd;
-    },
-  },
-};
+});
 </script>
 
 <style scoped>

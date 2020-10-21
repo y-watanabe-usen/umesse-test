@@ -1,24 +1,21 @@
-import { createStore } from 'vuex'
+import { InjectionKey, inject } from 'vue';                                                                                                               
+import authStore from '@/store/modules/auth';
 
-export default createStore({
-  state: {
-    custCd: '',
-    token: '',
-  },
-  getters: {
-    custCd: state => state.custCd,
-    token: state => state.token
-  },
-  mutations: {
-    setCustCd(state, value) {
-      state.custCd = value
-    },
-    setToken(state, token) {
-      state.token = token
-    }
-  },
-  actions: {
-  },
-  modules: {
-  }
-})
+
+// Provide.
+export default function globalStore() {
+  return {
+    auth: authStore(),
+  };
+ }
+ 
+ // Inject.
+ type GlobalStore = ReturnType<typeof globalStore>;
+ export const GlobalStoreKey: InjectionKey<GlobalStore> = Symbol('GlobalStore');
+ export function useGlobalStore() {
+   const store = inject(GlobalStoreKey);
+   if (!store) {
+     throw new Error(`${GlobalStoreKey} is not provided`);
+   }
+   return store;
+ }
