@@ -332,37 +332,6 @@
                     </button>
                   </router-link>
                   <router-link
-                    :to="{ path: 'apiconnecttest' }"
-                    class="list-group-item list-group-item-action flex-column align-items-start"
-                  >
-                    <div class="d-flex w-100 justify-content-between">
-                      <h5 class="mb-1">
-                        <svg
-                          width="1em"
-                          height="1em"
-                          viewBox="0 0 16 16"
-                          class="bi bi-play-fill"
-                          fill="currentColor"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            fill-rule="evenodd"
-                            d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"
-                          />
-                          <path
-                            d="M11.596 8.697l-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"
-                          />
-                        </svg>
-                        api接続テスト
-                      </h5>
-                    </div>
-                    <p class="mb-1 text-left">
-                      <small class="text-muted">
-                        試しにUSEN MEMBERSのログインapiに繋いでみます(TODO: 後で消す)
-                      </small>
-                    </p>
-                  </router-link>
-                  <router-link
                     :to="{ path: 'apiconnecttest2' }"
                     class="list-group-item list-group-item-action flex-column align-items-start"
                   >
