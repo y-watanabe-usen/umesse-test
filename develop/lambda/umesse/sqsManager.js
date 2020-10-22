@@ -2,7 +2,7 @@ const aws = require('aws-sdk');
 const SQS = new aws.SQS({
   region: "ap-northeast-1",
   endpoint:"localhost:4566"});
-const QUEUE_URL = 'http://localhost:4566/000000000000/SomeQueue';
+const QUEUE_URL = 'http://localhost:4566/000000000000/umesseConverterQueue';
 
 exports.sendSQS = (jsonData) => {
   var params = {
