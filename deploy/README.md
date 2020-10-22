@@ -33,3 +33,8 @@ $ init.sh  // s3のデータ転送
 ./curl_lambda.sh
 ```
 
+### send SQS
+```
+aws --endpoint-url http://localhost:4566 --region ap-northeast-1 sqs send-message --queue-url $(terraform output sqs_url) --message-body "hello"
+```
+
