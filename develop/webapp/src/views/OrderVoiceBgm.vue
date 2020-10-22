@@ -73,7 +73,12 @@
                       </svg>
                       試聴
                     </button>
-                    <button type="button" class="btn btn-edit">
+                    <button
+                      type="button"
+                      class="btn btn-edit"
+                      data-toggle="modal"
+                      data-target="#modal1"
+                    >
                       <svg
                         id="グループ_42"
                         data-name="グループ 42"
@@ -110,6 +115,7 @@
                         />
                       </svg>
                     </button>
+                    <ModalOrderedMaterialMenu />
                   </div>
                 </div>
                 <span class="d-block pb-2"
@@ -127,7 +133,12 @@
 </template>
 
 <script>
+import ModalOrderedMaterialMenu from "@/components/ModalOrderedMaterialMenu";
+
 export default {
+  components: {
+    ModalOrderedMaterialMenu,
+  },
   data() {
     return {
       menus: [
@@ -192,5 +203,8 @@ export default {
 }
 .btn-edit {
   margin-left: 20px;
+}
+.btn:focus {
+  box-shadow: none;
 }
 </style>
