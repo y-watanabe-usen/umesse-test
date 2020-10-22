@@ -7,7 +7,7 @@
 | 機能 | 説明 |  備考 |
 | ---- | ---- | ---- |
 | UNIS顧客CD取得 | MDMからintentでUNIS顧客CDを取得する | |
-| パラメータ | Vuejsとの繋ぎこみ<br>/?custCd=XXXX | |
+| パラメータ | Vuejsとの繋ぎこみ<br>/?unisCustomerCd=XXXX | |
 
 ### Webアプリ（Vue）
 
@@ -20,7 +20,7 @@
 | CM MIX | ffmpegを利用して音源ファイルを結合する | |
 | CM再生 | 作成したCMをストリーム再生する | |
 | CM削除 | 作成したCMを削除する | |
-| CMセンターアップロード | 作成したCMをセンターアップロードし、U-Music上で利用する　センターから削除も可能 | TODO: センターの仕様確認 |
+| CMセンターアップロード | 作成したCMをセンターアップロードし、U-Music上で利用する　センターから削除も可能 | |
 | CM共有 | 同一グループユーザーへ作成したCMを共有する<br>CM共有したユーザーのみがCM共有解除ができる | |
 | CM発注 | 企業CMの依頼を受け、データを送信する | TODO: 方針確認中（リンクで飛ばすだけ） |
 | オリジナル音声一覧 | ユーザーが作成した音声録音、TTS音源を一覧で表示する<br>ソート（タイトル、更新日時）を行えるようにする | |
@@ -31,43 +31,17 @@
 
 ### lambda
 
-| 機能 | protocol | path |
-| ---- | ---- | ---- |
-| 認証 | get | /auth |
-
-| 機能 | protocol | path |
-| ---- | ---- | ---- |
-| ユーザー情報取得 | get | /user |
-| CM一覧取得（ユーザー作成） | get | /user/cm |
-| 録音音声一覧取得（ユーザー作成） | get | /user/recording |
-| TTS音声一覧取得（ユーザー作成） | get | /user/tts |
-| CM作成情報取得（ユーザー作成） | get/post | /user/cm/{cmid} |
-| 録音音声作成情報取得（ユーザー作成） | get/post | /user/recording/{recordingid} |
-| TTS音声作成情報取得（ユーザー作成） | get/post | /user/tts/{ttsid} |
-| チャイム一覧取得（USEN提供素材） | get | /chime |
-| BGM一覧取得（USEN提供素材） | get | /bgm |
-| ナレーション一覧取得（USEN提供素材） | get | /narration |
-| TTSテンプレート一覧取得（USEN提供素材） | get | /tts |
-
-| 機能 | protocol | path |
-| ---- | ---- | ---- |
-| 試聴 | get | /listen |
+※swaggerに記載
 
 ## データ定義
 
-コンテンツは基本的にs3で管理する  
+コンテンツはs3で管理する  
 ユーザー認証、ユーザー情報、CM作成情報はdynamodbで管理する  
 
-### USEN提供素材
+### メタデータ
 
-USENが提供する音源素材は下記
+- USEN提供素材
 
-- ナレーション
-- チャイム
-- BGM
-- TTSテンプレート
-
-メタ情報は下記
 | 区分 | タイトル名 | 説明文 | 原稿 | 秒数 | カテゴリ第一階層（業種） | カテゴリ第二階層（シーン） |
 | --- | --- | --- | --- | --- | --- | --- |
 | ナレーション | 〇 | 〇 | 〇 | 〇 | 〇 | 〇 |
@@ -75,20 +49,13 @@ USENが提供する音源素材は下記
 | BGM | 〇 | 〇 | - | 〇 | 〇 | 〇 |
 | TTSテンプレート | 〇 | 〇 | 〇 | - | 〇 | 〇 |
 
-### オリジナル音源
+- ユーザー作成素材
 
-ユーザーが作成できる音源は下記
-
-- CM
-- 録音音声
-- 合成音声（TTS）
-
-メタ情報は下記
-| 区分 | タイトル名 | 説明文 | 秒数 | カテゴリ（シーン） | 作成日 | 更新日 |
+| 区分 | タイトル名 | 説明文 | 原稿 | 秒数 | カテゴリ第一階層（業種） | カテゴリ第二階層（シーン） |
 | --- | --- | --- | --- | --- | --- | --- |
-| CM | 〇 | 〇(任意) | 〇 | 〇 | 〇 | 〇 |
-| 録音音声 | 〇 | 〇(任意) | 〇 | - | 〇 | 〇 |
-| 合成音声 | 〇 | 〇(任意) | 〇 | - | 〇 | 〇 |
+| CM | 〇 | 〇（任意） | - | 〇 | 〇（固定） | 〇（固定） |
+| 録音音声 | 〇 | 〇（任意） | - | 〇 | 〇（固定） | 〇（固定） |
+| 合成音声 | 〇 | 〇（任意） | - | 〇 | 〇（固定） | 〇（固定） |
 
 ### s3
 
@@ -111,7 +78,6 @@ share/(group_cd)/cm/(cm_id).aac
 narration/(id).mp3 // ナレーション音源
 chime/(id).mp3  // チャイム音源
 bgm/(id).mp3   // BGM音源
-tts/(id).txt // TTSテンプレート
 ```
 
 - Webアプリを管理
@@ -130,57 +96,68 @@ webapp/
 
 ```none
 {
-  Id: {S: xxxxx},
+  UnisCustomerCd: {S: '顧客CD'},
   Auth: {
     Token: {S: トークンID}
     Expiration: {S: Date},
   },
   Cm: [
     {
-      id: {S, XXXX},
-      ファイル名
-      タイトル
-      説明文
-      素材
-      値
-      センター
-      共有
-    },
-    {
-      id: {S, XXXXX},
-      タイトル
-      説明文
-      素材
-      値
-      センター
-      共有
-    },
+      Id: {S, 'ファイル名'},
+      Title: {S, 'タイトル名'},
+      Description: {S, '説明文'},
+      Seconds: {I, '秒数'},
+      StartDate: {S, '2014-10-10T13:50:40+09:00'},
+      EndDate: {S, '9999-12-31T23:59:59+09:00'},
+      ProductionType: {S, '01: 音楽系, 02: 素ナレ'},
+      Category1: {S: '業種名'},
+      Category2: {S: 'シーン名'},
+      Materials: {
+        Narrations: [
+          {
+            Id: {S, 'ファイル名'},
+            Volume: {I, 'ボリューム値'},
+          }
+        ],
+        StartChime: {
+          Id: {S, 'ファイル名'},
+          Volume: {I, 'ボリューム値'},
+        },
+        EndChime: {
+          Id: {S, 'ファイル名'},
+          Volume: {I, 'ボリューム値'},
+        },
+        Bgm: {
+          Id: {S, 'ファイル名'},
+          Volume: {I, 'ボリューム値'},
+        },
+      },
+      CenterShear: {B, false},
+      GroupShear: {B, false},
+      TimeStamp: {S, '2014-10-10T13:50:40+09:00'}
+    }
   ],
-  recording: [
+  Recording: [
     {
-      id: {S, XXXXX},
-      タイトル
-      説明文
-    },
-    {
-      id: {S, XXXXX},
-      タイトル
-      説明文
-    },
+      Id: {S, 'ファイル名'},
+      Title: {S, 'タイトル名'},
+      Description: {S, '説明文'},
+      Category1: {S: '業種名'},
+      Category2: {S: 'シーン名'},
+      StartDate: {S, '2014-10-10T13:50:40+09:00'},
+      TimeStamp: {S, '2014-10-10T13:50:40+09:00'}
+    }
   ],
   tts: [
     {
-      id: {S, XXXXX},
-      タイトル
-      説明文
-      TTSテンプレート
-    },
-    {
-      id: {S, XXXXX},
-      タイトル
-      説明文
-      TTSテンプレート
-    },
+      Id: {S, 'ファイル名'},
+      Title: {S, 'タイトル名'},
+      Description: {S, '説明文'},
+      Category1: {S: '業種名'},
+      Category2: {S: 'シーン名'},
+      StartDate: {S, '2014-10-10T13:50:40+09:00'},
+      TimeStamp: {S, '2014-10-10T13:50:40+09:00'}
+    }
   ],
 }
 ```
@@ -191,13 +168,14 @@ webapp/
 
 ```none
 {
-  Id: {S: xxxxx},
-  Title: {S: タイトル名},
-  Description: {S: 説明文},
-  Manuscript: {S: 原稿},
-  Seconds: {I: 秒数},
-  Category1: {S: 業種名},
-  Category2: {S: シーン名},
+  Id: {S: 'ファイル名'},
+  Title: {S: 'タイトル名'},
+  Description: {S: '説明文'},
+  Manuscript: {S: '原稿'},
+  Seconds: {I: '秒数'},
+  Category1: {S: '業種名'},
+  Category2: {S: 'シーン名'},
+  TimeStamp: {S, '2014-10-10T13:50:40+09:00'}
 }
 ```
 
@@ -207,11 +185,18 @@ webapp/
 
 ```none
 {
-  Id: {S: xxxxx},
-  Title: {S: タイトル名},
-  Description: {S: 説明文},
-  Seconds: {I: 秒数},
-  Category1: {S: 業種名},
-  Category2: {S: シーン名},
+  UnisCustomerCd: {S, '顧客CD'},
+  DataProcessType: {S, '01: 追加, 02: 変更, 03: 削除'}
+  Id: {S, 'ファイル名'},
+  Title: {S, 'タイトル名'},
+  Description: {S, '説明文'},
+  Seconds: {I, '秒数'},
+  StartDate: {S, '2014-10-10T13:50:40+09:00'},
+  EndDate: {S, '9999-12-31T23:59:59+09:00'},
+  ProductionType: {S, '01: 音楽系, 02: 素ナレ'},
+  Category1: {S: '業種名'},
+  Category2: {S: 'シーン名'},
+  Status: {I, '0: 連携準備中, 1: 連携可能'}
+  TimeStamp: {S, '2014-10-10T13:50:40+09:00'}
 }
 ```

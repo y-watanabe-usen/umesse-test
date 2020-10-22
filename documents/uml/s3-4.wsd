@@ -1,15 +1,16 @@
-@startuml s3-3
+@startuml s3-4
 
 participant WebApp order 1
 participant Lambda order 2
 participant DynamoDB order 3
 participant S3 order 4
+participant TTS order 5
 skinparam ParticipantPadding 50
 autonumber
 
-title ** 3-3 録音作成・削除 **
+title ** TTS作成・削除 **
 
-== 録音リスト取得 ==
+== TTSリスト取得 ==
 WebApp --> Lambda: リスト取得
 Lambda --> DynamoDB: リスト取得
 note right
@@ -27,15 +28,19 @@ Lambda <-- DynamoDB: レスポンス
 WebApp <-- Lambda: レスポンス
 WebApp --> WebApp: ソート（作成日・名称）
 
-== 音声録音作成 ==
-WebApp --> WebApp: 音声録音
-WebApp --> Lambda: 音声録音アップロードURL取得
-Lambda --> S3: signed url 取得(getSignedUrl)
-Lambda <-- S3: signed url
-WebApp <-- Lambda: signed url
-WebApp --> S3: 音声録音データPUT
-WebApp <-- S3: レスポンス
-WebApp --> Lambda: データ更新
+== TTSテンプレート選択 ==
+WebApp --> Lambda: TTSテンプレートリスト取得
+Lambda --> DynamoDB: リスト取得
+Lambda <-- DynamoDB: レスポンス
+WebApp <-- Lambda: レスポンス
+WebApp --> WebApp: 店名、開店時間入力
+
+== TTS録音作成 ==
+WebApp --> Lambda: TTS作成
+Lambda --> TTS: TTS
+Lambda <-- TTS: wav/ogg/mp3 レスポンス
+Lambda --> S3: 音声録音データPUT
+Lambda <-- S3: レスポンス
 Lambda --> DynamoDB: データ更新
 note right
 {

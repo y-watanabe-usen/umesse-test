@@ -1,0 +1,123 @@
+@startuml s2-4
+
+participant WebApp order 1
+participant Lambda order 2
+participant DynamoDB order 3
+participant S3 order 4
+participant SQS order 5
+skinparam ParticipantPadding 50
+autonumber
+
+title ** 2-4 CMセンター追加・変更・解除 **
+
+== CMセンター追加 ==
+WebApp --> Lambda: CM作成完了（センター連携）
+Lambda --> DynamoDB: データ更新（CMメタデータ）
+note right
+{
+  Id: {S, 'ファイル名'},
+  Title: {S, 'タイトル名'},
+  Description: {S, '説明文'},
+  Seconds: {I, '秒数'},
+  StartDate: {S, '2014-10-10T13:50:40+09:00'},
+  EndDate: {S, '9999-12-31T23:59:59+09:00'},
+  ProductionType: {S, '01: 音楽系, 02: 素ナレ'},
+  Category1: {S: '業種名'},
+  Category2: {S: 'シーン名'},
+  CenterShear: {B, ture},
+  TimeStamp: {S, '2014-10-10T13:50:40+09:00'}
+}
+end note
+Lambda <-- DynamoDB: レスポンス
+Lambda --> DynamoDB: データ追加（センター連携用）
+note right
+{
+  UnisCustomerCd: {S, '顧客CD'},
+  DataProcessType: {S, '01: 追加'}
+  Id: {S, 'ファイル名'},
+  Title: {S, 'タイトル名'},
+  Description: {S, '説明文'},
+  Seconds: {I, '秒数'},
+  StartDate: {S, '2014-10-10T13:50:40+09:00'},
+  EndDate: {S, '9999-12-31T23:59:59+09:00'},
+  ProductionType: {S, '01: 音楽系, 02: 素ナレ'},
+  Category1: {S: '業種名'},
+  Category2: {S: 'シーン名'},
+  Status: {I, '0: 連携準備中'}
+  TimeStamp: {S, '2014-10-10T13:50:40+09:00'}
+}
+end note
+Lambda <-- DynamoDB: レスポンス
+Lambda --> SQS: キュー（センター連携）
+Lambda <-- SQS: レスポンス
+WebApp <-- Lambda: レスポンス
+== 音源加工 ==
+Lambda <-- SQS: キュー（センター連携）
+Lambda --> S3: 該当ファイル取得(getObject)
+Lambda <-- S3: ファイル取得
+Lambda --> Lambda: ffmpeg 音源加工
+Lambda --> S3: ファイルPUT(putObject)
+Lambda <-- S3: レスポンス
+Lambda --> DynamoDB: データ追加（センター連携用）
+note right
+{
+  UnisCustomerCd: {S, '顧客CD'},
+  Id: {S, 'ファイル名'},
+  Status: {I, '1: 連携可能'}
+  TimeStamp: {S, '2014-10-10T13:50:40+09:00'}
+}
+end note
+Lambda <-- DynamoDB: レスポンス
+
+== CMセンター変更 ==
+WebApp --> Lambda: CM変更完了（タイトル・説明文のみ）
+Lambda --> DynamoDB: データ更新（CMメタデータ）
+note right
+{
+  Id: {S, 'ファイル名'},
+  Title: {S, 'タイトル名'},
+  Description: {S, '説明文'},
+  CenterShear: {B, ture},
+  TimeStamp: {S, '2014-10-10T13:50:40+09:00'}
+}
+end note
+Lambda <-- DynamoDB: レスポンス
+Lambda --> DynamoDB: データ追加（センター連携用）
+note right
+{
+  UnisCustomerCd: {S, '顧客CD'},
+  DataProcessType: {S, '02: 変更'}
+  Id: {S, 'ファイル名'},
+  Title: {S, 'タイトル名'},
+  Description: {S, '説明文'},
+  Status: {I, '1: 連携可能'}
+  TimeStamp: {S, '2014-10-10T13:50:40+09:00'}
+}
+end note
+WebApp <-- Lambda: レスポンス
+
+== CMセンター解除 ==
+WebApp --> Lambda: CM解除完了
+Lambda --> DynamoDB: データ更新（CMメタデータ）
+note right
+{
+  Id: {S, 'ファイル名'},
+  EndDate: {S, '9999-12-31T23:59:59+09:00'},
+  CenterShear: {B, false},
+  TimeStamp: {S, '2014-10-10T13:50:40+09:00'}
+}
+end note
+Lambda <-- DynamoDB: レスポンス
+Lambda --> DynamoDB: データ追加（センター連携用）
+note right
+{
+  UnisCustomerCd: {S, '顧客CD'},
+  DataProcessType: {S, '03: 削除'}
+  Id: {S, 'ファイル名'},
+  Status: {I, '1: 連携可能'}
+  TimeStamp: {S, '2014-10-10T13:50:40+09:00'}
+}
+end note
+WebApp <-- Lambda: レスポンス
+
+@enduml
