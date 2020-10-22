@@ -1,0 +1,177 @@
+@startuml s3-2
+
+participant WebApp order 1
+participant Lambda order 2
+participant DynamoDB order 3
+participant S3 order 4
+participant SQS order 5
+skinparam ParticipantPadding 50
+autonumber
+
+title ** 3-2 CM変更・削除 **
+
+== CM編集 ==
+WebApp --> Lambda: CMデータ取得
+Lambda --> DynamoDB: データ取得
+note right
+{
+  Id: {S, 'ファイル名'},
+  Title: {S, 'タイトル名'},
+  Description: {S, '説明文'},
+  Seconds: {I, '秒数'},
+  StartDate: {S, '2014-10-10T13:50:40+09:00'},
+  EndDate: {S, '9999-12-31T23:59:59+09:00'},
+  ProductionType: {S, '01: 音楽系, 02: 素ナレ'},
+  Category1: {S: '業種名'},
+  Category2: {S: 'シーン名'},
+  Materials: {
+    Narrations: [
+      {
+        Id: {S, 'ファイル名'},
+        Volume: {I, 'ボリューム値'},
+      }
+    ],
+    StartChime: {
+      Id: {S, 'ファイル名'},
+      Volume: {I, 'ボリューム値'},
+    },
+    EndChime: {
+      Id: {S, 'ファイル名'},
+      Volume: {I, 'ボリューム値'},
+    },
+    Bgm: {
+      Id: {S, 'ファイル名'},
+      Volume: {I, 'ボリューム値'},
+    },
+  },
+  CenterShear: {B, false},
+  GroupShear: {B, false},
+  TimeStamp: {S, '2014-10-10T13:50:40+09:00'}
+}
+end note
+Lambda <-- DynamoDB: レスポンス
+WebApp <-- Lambda: レスポンス
+
+== 素材音源リスト取得 ==
+WebApp --> Lambda: 素材リスト取得
+Lambda --> DynamoDB: リスト取得
+Lambda <-- DynamoDB: レスポンス
+WebApp <-- Lambda: レスポンス
+
+== CM結合 ==
+WebApp --> Lambda: CM結合
+Lambda --> S3: 該当ファイル取得(getObject)
+Lambda <-- S3: ファイル取得
+Lambda --> Lambda: ffmpeg 結合
+Lambda --> S3: ファイルPUT(putObject)
+Lambda <-- S3: レスポンス
+Lambda --> DynamoDB: データ更新
+note right
+{
+  Id: {S, 'ファイル名'},
+  ProductionType: {S, '01: 音楽系, 02: 素ナレ'},
+  Materials: {
+    Narrations: [
+      {
+        Id: {S, 'ファイル名'},
+        Volume: {I, 'ボリューム値'},
+      }
+    ],
+    StartChime: {
+      Id: {S, 'ファイル名'},
+      Volume: {I, 'ボリューム値'},
+    },
+    EndChime: {
+      Id: {S, 'ファイル名'},
+      Volume: {I, 'ボリューム値'},
+    },
+    Bgm: {
+      Id: {S, 'ファイル名'},
+      Volume: {I, 'ボリューム値'},
+    },
+  },
+  TimeStamp: {S, '2014-10-10T13:50:40+09:00'}
+}
+end note
+Lambda <-- DynamoDB: レスポンス
+WebApp <-- Lambda: レスポンス
+
+== CM確定 ==
+WebApp --> Lambda: CM確定
+Lambda --> DynamoDB: データ更新
+note right
+{
+  Id: {S, 'ファイル名'},
+  Title: {S, 'タイトル名'},
+  Description: {S, '説明文'},
+  Seconds: {I, '秒数'},
+  StartDate: {S, '2014-10-10T13:50:40+09:00'},
+  EndDate: {S, '9999-12-31T23:59:59+09:00'},
+  Category1: {S: '業種名'},
+  Category2: {S: 'シーン名'},
+  CenterShear: {B, false},
+  GroupShear: {B, false},
+  TimeStamp: {S, '2014-10-10T13:50:40+09:00'}
+}
+end note
+Lambda <-- DynamoDB: レスポンス
+Lambda --> SQS: キューメッセージ送信
+WebApp <-- Lambda: レスポンス
+
+== CM音源加工（バックグラウンド） ==
+Lambda <-- SQS: キューメッセージ受信
+Lambda --> S3: 該当ファイル取得(getObject)
+Lambda <-- S3: ファイル取得
+Lambda --> Lambda: ffmpeg 音源加工
+Lambda --> S3: ファイルPUT(putObject)
+Lambda <-- S3: レスポンス
+
+== CM削除 ==
+WebApp --> Lambda: CMデータ取得
+Lambda --> DynamoDB: データ取得
+note right
+{
+  Id: {S, 'ファイル名'},
+  Title: {S, 'タイトル名'},
+  Description: {S, '説明文'},
+  Seconds: {I, '秒数'},
+  StartDate: {S, '2014-10-10T13:50:40+09:00'},
+  EndDate: {S, '9999-12-31T23:59:59+09:00'},
+  ProductionType: {S, '01: 音楽系, 02: 素ナレ'},
+  Category1: {S: '業種名'},
+  Category2: {S: 'シーン名'},
+  Materials: {
+    Narrations: [
+      {
+        Id: {S, 'ファイル名'},
+        Volume: {I, 'ボリューム値'},
+      }
+    ],
+    StartChime: {
+      Id: {S, 'ファイル名'},
+      Volume: {I, 'ボリューム値'},
+    },
+    EndChime: {
+      Id: {S, 'ファイル名'},
+      Volume: {I, 'ボリューム値'},
+    },
+    Bgm: {
+      Id: {S, 'ファイル名'},
+      Volume: {I, 'ボリューム値'},
+    },
+  },
+  CenterShear: {B, false},
+  GroupShear: {B, false},
+  TimeStamp: {S, '2014-10-10T13:50:40+09:00'}
+}
+end note
+Lambda <-- DynamoDB: レスポンス
+WebApp <-- Lambda: レスポンス
+WebApp --> Lambda: CM削除
+Lambda --> S3: CM削除
+Lambda <-- S3: レスポンス
+Lambda --> DynamoDB: データ削除
+Lambda <-- DynamoDB: レスポンス
+WebApp <-- Lambda: レスポンス
+
+@enduml

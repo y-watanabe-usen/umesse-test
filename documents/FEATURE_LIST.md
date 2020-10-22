@@ -78,7 +78,6 @@ share/(group_cd)/cm/(cm_id).aac
 narration/(id).mp3 // ナレーション音源
 chime/(id).mp3  // チャイム音源
 bgm/(id).mp3   // BGM音源
-tts/(id).txt // TTSテンプレート
 ```
 
 - Webアプリを管理
@@ -158,7 +157,7 @@ webapp/
       Category2: {S: 'シーン名'},
       StartDate: {S, '2014-10-10T13:50:40+09:00'},
       TimeStamp: {S, '2014-10-10T13:50:40+09:00'}
-    },
+    }
   ],
 }
 ```

@@ -10,76 +10,80 @@ autonumber
 
 title ** 3-1 CM作成 **
 
-== CM新規作成・編集 ==
-WebApp --> Lambda: CM編集
-Lambda --> S3: リスト取得(listObjectsV2)
-note right
-// CMのMetadata
-{
-  "Metadata": {
-    "start-chime": "ファイル名",
-    "start-chime-volume": "1.0",
-    "end-chime": "ファイル名",
-    "end-chime-volume": "1.0",
-    "bgm": "ファイル名",
-    "bgm-volume": "1.0",
-    "narration-1": "ファイル名",
-    "narration-1-volume": "1.0",
-  }
-}
-end note
-Lambda <-- S3: レスポンス
+== 録音 および TTS および 素材音源選択から遷移 ==
+
+== 素材音源リスト取得 ==
+WebApp --> Lambda: 素材リスト取得
+Lambda --> DynamoDB: リスト取得
+Lambda <-- DynamoDB: レスポンス
 WebApp <-- Lambda: レスポンス
 
-== 音源一覧取得 ==
-WebApp --> Lambda: リスト取得（ナレーション・チャイム・BGM・オリジナル）
-Lambda --> S3: リスト取得(listObjectsV2)
-Lambda <-- S3: レスポンス
-WebApp <-- Lambda: レスポンス
-
-== 結合（10秒） ==
-WebApp --> Lambda: 結合（試聴）
+== CM結合 ==
+WebApp --> Lambda: CM結合
 Lambda --> S3: 該当ファイル取得(getObject)
 Lambda <-- S3: ファイル取得
 Lambda --> Lambda: ffmpeg 結合
 Lambda --> S3: ファイルPUT(putObject)
+Lambda <-- S3: レスポンス
+Lambda --> DynamoDB: データ更新
 note right
-// CMのMetadata
 {
-  "Metadata": {
-    "start-chime": "ファイル名",
-    "start-chime-volume": "1.0",
-    "end-chime": "ファイル名",
-    "end-chime-volume": "1.0",
-    "bgm": "ファイル名",
-    "bgm-volume": "1.0",
-    "narration-1": "ファイル名",
-    "narration-1-volume": "1.0",
-  }
+  Id: {S, 'ファイル名'},
+  ProductionType: {S, '01: 音楽系, 02: 素ナレ'},
+  Materials: {
+    Narrations: [
+      {
+        Id: {S, 'ファイル名'},
+        Volume: {I, 'ボリューム値'},
+      }
+    ],
+    StartChime: {
+      Id: {S, 'ファイル名'},
+      Volume: {I, 'ボリューム値'},
+    },
+    EndChime: {
+      Id: {S, 'ファイル名'},
+      Volume: {I, 'ボリューム値'},
+    },
+    Bgm: {
+      Id: {S, 'ファイル名'},
+      Volume: {I, 'ボリューム値'},
+    },
+  },
+  TimeStamp: {S, '2014-10-10T13:50:40+09:00'}
 }
 end note
-Lambda <-- S3: レスポンス
+Lambda <-- DynamoDB: レスポンス
 WebApp <-- Lambda: レスポンス
 
-== 確定 ==
-WebApp --> Lambda: 確定（完了）
-Lambda --> DynamoDB
-Lambda <-- DynamoDB
-Lambda --> SQS
+== CM確定 ==
+WebApp --> Lambda: CM確定
+Lambda --> DynamoDB: データ更新
+note right
+{
+  Id: {S, 'ファイル名'},
+  Title: {S, 'タイトル名'},
+  Description: {S, '説明文'},
+  Seconds: {I, '秒数'},
+  StartDate: {S, '2014-10-10T13:50:40+09:00'},
+  EndDate: {S, '9999-12-31T23:59:59+09:00'},
+  Category1: {S: '業種名'},
+  Category2: {S: 'シーン名'},
+  CenterShear: {B, false},
+  GroupShear: {B, false},
+  TimeStamp: {S, '2014-10-10T13:50:40+09:00'}
+}
+end note
+Lambda <-- DynamoDB: レスポンス
+Lambda --> SQS: キューメッセージ送信
 WebApp <-- Lambda: レスポンス
 
-== バックグラウンド（30秒→60秒） ==
-Lambda <-- SQS
+== CM音源加工（バックグラウンド） ==
+Lambda <-- SQS: キューメッセージ受信
 Lambda --> S3: 該当ファイル取得(getObject)
 Lambda <-- S3: ファイル取得
 Lambda --> Lambda: ffmpeg 音源加工
 Lambda --> S3: ファイルPUT(putObject)
 Lambda <-- S3: レスポンス
-Lambda --> DynamoDB: センター連携データ登録
-Lambda <-- DynamoDB: レスポンス
-
-== センター連携 ==
-
-
 
 @enduml

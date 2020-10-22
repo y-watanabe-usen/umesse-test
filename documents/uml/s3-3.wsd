@@ -7,14 +7,25 @@ participant S3 order 4
 skinparam ParticipantPadding 50
 autonumber
 
-title ** 3-3 音声録音 **
+title ** 3-3 録音作成・削除 **
 
-== オリジナル一覧取得 ==
+== 録音リスト取得 ==
 WebApp --> Lambda: リスト取得
-Lambda --> S3: リスト取得(listObjectsV2)
-Lambda <-- S3: レスポンス
+Lambda --> DynamoDB: リスト取得
+note right
+{
+    Id: {S, 'ファイル名'},
+    Title: {S, 'タイトル名'},
+    Description: {S, '説明文'},
+    Category1: {S: '業種名'},
+    Category2: {S: 'シーン名'},
+    StartDate: {S, '2014-10-10T13:50:40+09:00'},
+    TimeStamp: {S, '2014-10-10T13:50:40+09:00'}
+}
+end note
+Lambda <-- DynamoDB: レスポンス
 WebApp <-- Lambda: レスポンス
-WebApp --> WebApp: ソート（更新日・名称）
+WebApp --> WebApp: ソート（作成日・名称）
 
 == 音声録音作成 ==
 WebApp --> WebApp: 音声録音
@@ -24,5 +35,22 @@ Lambda <-- S3: signed url
 WebApp <-- Lambda: signed url
 WebApp --> S3: 音声録音データPUT
 WebApp <-- S3: レスポンス
+WebApp --> Lambda: データ更新
+Lambda --> DynamoDB: データ更新
+note right
+{
+    Id: {S, 'ファイル名'},
+    Title: {S, 'タイトル名'},
+    Description: {S, '説明文'},
+    Category1: {S: '業種名'},
+    Category2: {S: 'シーン名'},
+    StartDate: {S, '2014-10-10T13:50:40+09:00'},
+    TimeStamp: {S, '2014-10-10T13:50:40+09:00'}
+}
+end note
+Lambda <-- DynamoDB: レスポンス
+WebApp <-- Lambda: レスポンス
+
+== CM作成へ遷移 ==
 
 @enduml
