@@ -29,9 +29,14 @@
             <div class="player-right">00:00:00:00.00</div>
           </div>
         </div>
-        <router-link class="navbar-brand text-white" to="#"
+        <router-link
+          class="navbar-brand text-white"
+          to=""
+          data-toggle="modal"
+          data-target="#modal-save"
           >別名で保存</router-link
         >
+        <ModalSaveCreatedCommercial />
       </nav>
       <div class="box1">
         <div class="box2">
@@ -176,11 +181,13 @@
 // 表示するコンポーネントをインポート
 import AddCreateCommercial1 from "@/components/AddCreateCommercial1";
 import AddCreateCommercial2 from "@/components/AddCreateCommercial2";
+import ModalSaveCreatedCommercial from "@/components/ModalSaveCreatedCommercial";
 
 export default {
-    components: {
+  components: {
     AddCreateCommercial1,
     AddCreateCommercial2,
+    ModalSaveCreatedCommercial,
   },
   data() {
     return {
