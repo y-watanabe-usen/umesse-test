@@ -1,11 +1,13 @@
 import { InjectionKey, inject } from 'vue'
 import authStore from '@/store/modules/auth'
+import baseStore from '@/store/base'
 
 
 // Provide: globalで使うものを定義.
 export default function globalStore() {
   return {
     auth: authStore(),
+    base: baseStore(),
   }
 }
 
