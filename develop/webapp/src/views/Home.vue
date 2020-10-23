@@ -3,14 +3,19 @@
     <div class="bg-umesse">
       <div class="container">
         <nav class="navbar navbar-expand-lg navbar-light">
-          <span class="navbar-brand mb-0 h1 text-white">U Messe
-          <span v-if=authenticating>Loading...</span>
-          <span v-else> {{ token }} {{ error }} </span>
+          <span class="navbar-brand mb-0 h1 text-white"
+            >U Messe
+            <span v-if="authenticating">Loading...</span>
+            <span v-else> {{ token }} {{ error }} </span>
           </span>
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ml-auto">
               <li class="nav-item">
-                <router-link class="nav-link text-white" to="#"
+                <router-link
+                  class="nav-link text-white"
+                  to="#"
+                  data-toggle="modal"
+                  data-target="#modalSetting"
                   ><svg
                     width="1em"
                     height="1em"
@@ -369,25 +374,65 @@
         </div>
       </div>
     </div>
+    <!-- modal -->
+    <div
+      class="modal fade"
+      id="modalSetting"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="modalSetting"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalCenterTitle">setting</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body text-center">
+            <div class="custom-control custom-switch">
+              <input
+                type="checkbox"
+                class="custom-control-input"
+                id="customSwitch1"
+                v-model="isDarkTheme"
+                @change="toggleDarkTheme()"
+              />
+              <label class="custom-control-label" for="customSwitch1"
+                >switch dark mode</label
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script lang="ts">
-import { useGlobalStore } from "@/store"
-import { defineComponent, onMounted, reactive, toRefs } from "vue"
+import { useGlobalStore } from "@/store";
+import { computed, defineComponent, onMounted, reactive, toRefs } from "vue";
 
 export default defineComponent({
   name: "Home",
   setup() {
-    const { auth } = useGlobalStore()
+    const { auth, base } = useGlobalStore();
     onMounted(() => {
-      auth.requestAuth()
-    })
+      auth.requestAuth();
+    });
     return {
       ...auth,
-    }
+      ...base,
+    };
   },
-})
+});
 </script>
 
 <style scoped>
@@ -414,5 +459,15 @@ export default defineComponent({
 .custom-card.card {
   border: none;
   background-color: transparent;
+}
+.dark .list-group-item {
+  background: #272727;
+  color: #fff;
+  border-color: #aaa;
+}
+.dark .modal-content {
+  background: #272727;
+  color: #fff;
+  border-color: #aaa;
 }
 </style>
