@@ -17,19 +17,17 @@
             type="button"
             class="btn btn-menu text-left text-white"
             :class="[
-              narrationList.id == state.activeIndustryId
-                ? 'btn-light'
-                : 'btn-link',
-              narrationList.id == state.activeIndustryId
+              industry.id == state.activeIndustryId ? 'btn-light' : 'btn-link',
+              industry.id == state.activeIndustryId
                 ? 'text-dark'
                 : 'text-white',
-              narrationList.id == 1 ? 'mt-2' : '',
+              industry.id == 1 ? 'mt-2' : '',
             ]"
-            v-for="narrationList in narrationLists"
-            :key="narrationList.id"
-            @click="changeActiveIndustryId(narrationList.id)"
+            v-for="industry in industries"
+            :key="industry.id"
+            @click="clickIndustry(industry.id)"
           >
-            {{ narrationList.name }}
+            {{ industry.name }}
           </button>
         </div>
         <div class="col-10 bg-white rounded-right">
@@ -41,10 +39,10 @@
                 </option>
               </select>
             </h6>
-            <template v-if="state.scenes">
+            <template v-if="state.displayMode == DisplayMode.Scene">
               <div
                 class="media text-muted pt-3"
-                v-for="scene in state.scenes"
+                v-for="scene in scenes"
                 :key="scene.id"
               >
                 <div
@@ -61,7 +59,7 @@
                 </div>
               </div>
             </template>
-            <template v-if="state.scenes.length == 0">
+            <template v-if="state.displayMode == DisplayMode.Narration">
               <div
                 class="media text-muted pt-3"
                 v-for="narration in narrations"
@@ -139,62 +137,58 @@
   </div>
 </template>
 
-<script>
-import {
-  defineComponent,
-  computed,
-  ref,
-  onMounted,
-  reactive,
-  onCreated,
-} from "vue";
+<script lang="ts">
+import { defineComponent, computed, ref, onMounted, reactive } from "vue";
 import narrationStore from "@/store/narration";
 
 export default {
   setup() {
-    // TODO: 大分強引&分かりにくいので後でリファクタリング
+    enum DisplayMode {
+      Scene,
+      Narration,
+    }
+
     const store = narrationStore();
 
     const state = reactive({
       sorts: ["名前順", "作成日順", "更新日順"],
-      activeIndustryId: 0,
-      scenes: [],
+      activeIndustryId: 1,
+      displayMode: DisplayMode.Scene,
     });
 
-    const narrationLists = computed(() => store.narrationLists);
+    // 表示する業種
+    const industries = computed(() => store.industries);
+    // 表示するシーン
+    const scenes = computed(() => store.scenes);
+    // 表示するナレーション
     const narrations = computed(() => store.narrations);
 
     // TODO: onCreatedがない？？
     onMounted(async () => {
       await store.fetchNarrationLists();
-      changeActiveIndustryId(store.narrationLists[0].id);
+      clickIndustry(state.activeIndustryId);
     });
 
-    const changeActiveIndustryId = (id) => {
-      state.activeIndustryId = id;
-      console.log(state.activeIndustryId);
-      const narrationLists = store.narrationLists;
-      if (!narrationLists) {
-        state.scenes = [];
-      }
-      narrationLists.forEach((value) => {
-        console.log(value.scenes);
-        if (value.id == state.activeIndustryId) {
-          state.scenes = value.scenes;
-        }
-      });
+    const changeDisplayMode = (mode: DisplayMode) => {
+      state.displayMode = mode;
     };
-
-    const clickScene = async (id) => {
-      await store.fetchNarrations(id);
-      state.scenes = [];
+    const clickIndustry = (id: number) => {
+      state.activeIndustryId = id;
+      store.findIndustry(id);
+      changeDisplayMode(DisplayMode.Scene);
+    };
+    const clickScene = (id: number) => {
+      store.fetchNarrationSceneLists(id);
+      changeDisplayMode(DisplayMode.Narration);
     };
 
     return {
+      DisplayMode,
       state,
-      narrationLists,
+      industries,
+      scenes,
       narrations,
-      changeActiveIndustryId,
+      clickIndustry,
       clickScene,
     };
   },
