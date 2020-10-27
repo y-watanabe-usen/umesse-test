@@ -40,7 +40,7 @@
       </nav>
       <div class="box1">
         <div class="box2">
-          <button class="open-chime">
+          <button class="open-chime" data-toggle="modal" data-target="#modal-chime">
             <div class="btn-area">
               <div class="btn-edit shadow">
                 <div class="narration-text">Openチャイム</div>
@@ -80,6 +80,7 @@
               </g>
             </svg>
           </button>
+          <ModalSelectChime />
         </div>
         <div class="box3">
         <!-- コンポーネントを表示 -->
@@ -90,7 +91,7 @@
             <AddCreateCommercial2 />
           </div>
           <div class="space"></div>
-          <button class="box-bottom">
+          <button class="box-bottom" data-toggle="modal" data-target="#modal-bgm">
             <div class="btn-area">
               <div class="btn-edit shadow">
                 <div class="narration-text">BGM</div>
@@ -130,9 +131,10 @@
               </g>
             </svg>
           </button>
+          <ModalSelectBgm />
         </div>
         <div class="box4">
-          <button class="end-chime">
+          <button class="end-chime" data-toggle="modal" data-target="#modal-chime">
             <div class="btn-area">
               <div class="btn-edit shadow">
                 <div class="narration-text">Endチャイム</div>
@@ -182,12 +184,16 @@
 import AddCreateCommercial1 from "@/components/AddCreateCommercial1";
 import AddCreateCommercial2 from "@/components/AddCreateCommercial2";
 import ModalSaveCreatedCommercial from "@/components/ModalSaveCreatedCommercial";
+import ModalSelectBgm from "@/components/ModalSelectBgm";
+import ModalSelectChime from "@/components/ModalSelectChime";
 
 export default {
   components: {
     AddCreateCommercial1,
     AddCreateCommercial2,
     ModalSaveCreatedCommercial,
+    ModalSelectBgm,
+    ModalSelectChime,
   },
   data() {
     return {
