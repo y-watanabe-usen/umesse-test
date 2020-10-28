@@ -44,6 +44,7 @@
   <ModalSelectVoiceProvidedByUsen />
   <ModalSelectVoiceOrdered />
 </template>
+
 <script>
 import ModalAddMaterial from "@/components/ModalAddMaterial";
 import ModalSelectNarrationRecordingData from "@/components/ModalSelectNarrationRecordingData";
@@ -71,32 +72,6 @@ button {
 button:focus {
   outline: 0;
 }
-.player {
-  display: flex;
-  width: 800px;
-  height: 35px;
-  background-color: #555859;
-  border-radius: 5px;
-  opacity: 0.5;
-}
-.player-left {
-  width: 100px;
-  height: 35px;
-  border-radius: 5px;
-  text-align: center;
-  background-color: #555859;
-}
-.player-center {
-  width: 480px;
-  height: 35px;
-  border-radius: 5px;
-}
-.player-right {
-  width: 215px;
-  height: 35px;
-  border-radius: 5px;
-  text-align: center;
-}
 .btn-area {
   display: flex;
   justify-content: center;
@@ -109,58 +84,13 @@ button:focus {
   border-radius: 2em;
   margin: 8px;
 }
-.box1 {
-  display: flex;
-  width: 1100px;
-  height: 550px;
-  margin: 20px auto;
-  border-radius: 10px;
-}
-.box2 {
-  width: 25%;
-  border-radius: 10px;
-}
-.box3 {
-  width: 60%;
-  border-radius: 10px;
-}
-.box4 {
-  width: 25%;
-  border-radius: 10px;
-}
-.open-chime {
-  width: 170px;
-  height: 260px;
-  border-radius: 10px;
-  margin-top: 150px;
-  margin-left: 60px;
-  opacity: 0.5;
-}
-.end-chime {
-  width: 170px;
-  height: 260px;
-  border-radius: 10px;
-  margin-top: 150px;
-  margin-left: 20px;
-  opacity: 0.5;
-}
 .narration-text {
   font-size: 13px;
   margin-top: 10px;
-}
-.space {
-  width: 100px;
-  height: 35px;
 }
 .box-top {
   width: 100%;
   height: 235px;
   border-radius: 10px;
-}
-.box-bottom {
-  width: 100%;
-  height: 235px;
-  border-radius: 10px;
-  opacity: 0.5;
 }
 </style>

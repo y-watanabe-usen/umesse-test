@@ -214,7 +214,7 @@ export default {
   },
   methods: {
     changeView() {
-    this.$parent.$emit("my-click", 2);
+    this.$parent.$emit("selectedNarration", 2);
       $('.modal-backdrop').remove();
     },
   },
