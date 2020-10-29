@@ -29,175 +29,79 @@
             <div class="player-right">00:00:00:00.00</div>
           </div>
         </div>
-        <router-link
-          class="navbar-brand text-white"
-          to=""
-          data-toggle="modal"
-          data-target="#modal-save"
+        <router-link class="navbar-brand text-white" to="#"
           >別名で保存</router-link
         >
-        <ModalSaveCreatedCommercial />
       </nav>
       <div class="box1">
         <div class="box2">
-          <button class="open-chime" data-toggle="modal" data-target="#modal-chime">
-            <div class="btn-area">
-              <div class="btn-edit shadow">
-                <div class="narration-text">Openチャイム</div>
-              </div>
-            </div>
-            <p>素材追加</p>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="70"
-              height="70"
-              viewBox="0 0 70 70"
-            >
-              <g transform="translate(-313 -249)">
-                <g
-                  transform="translate(313 249)"
-                  fill="#fff"
-                  stroke="#dbdbdb"
-                  stroke-width="1"
-                >
-                  <circle cx="35" cy="35" r="35" stroke="none" />
-                  <circle cx="35" cy="35" r="34.5" fill="none" />
-                </g>
-                <rect
-                  width="40"
-                  height="8"
-                  rx="1"
-                  transform="translate(328 280)"
-                  fill="#9d9d9d"
-                />
-                <rect
-                  width="40"
-                  height="8"
-                  rx="1"
-                  transform="translate(352 264) rotate(90)"
-                  fill="#9d9d9d"
-                />
-              </g>
-            </svg>
-          </button>
-          <ModalSelectChime />
+          <div v-if="selectedOprnChime == 0">
+            <AddOpenChime v-on:open-chime="selectedOprnChime = $event" />
+          </div>
+          <div v-if="selectedOprnChime == 1">
+            <SelectedOpenChime />
+          </div>
         </div>
         <div class="box3">
-        <!-- コンポーネントを表示 -->
-          <div v-if="currentView == 1">
-            <AddCreateCommercial1 :current-view="currentView" v-on:my-click="currentView = $event" />
+          <div v-if="selectedNarration == 1">
+            <AddCreateCommercial1 v-on:selectedNarration="selectedNarration = $event" />
           </div>
-          <div v-if="currentView == 2">
-            <AddCreateCommercial2 />
+          <div v-if="selectedNarration == 2">
+            <AddCreateCommercial2 v-on:selectedNarration="selectedNarration = $event" />
           </div>
-          <div class="space"></div>
-          <button class="box-bottom" data-toggle="modal" data-target="#modal-bgm">
-            <div class="btn-area">
-              <div class="btn-edit shadow">
-                <div class="narration-text">BGM</div>
-              </div>
-            </div>
-            <p>素材追加</p>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="70"
-              height="70"
-              viewBox="0 0 70 70"
-            >
-              <g transform="translate(-313 -249)">
-                <g
-                  transform="translate(313 249)"
-                  fill="#fff"
-                  stroke="#dbdbdb"
-                  stroke-width="1"
-                >
-                  <circle cx="35" cy="35" r="35" stroke="none" />
-                  <circle cx="35" cy="35" r="34.5" fill="none" />
-                </g>
-                <rect
-                  width="40"
-                  height="8"
-                  rx="1"
-                  transform="translate(328 280)"
-                  fill="#9d9d9d"
-                />
-                <rect
-                  width="40"
-                  height="8"
-                  rx="1"
-                  transform="translate(352 264) rotate(90)"
-                  fill="#9d9d9d"
-                />
-              </g>
-            </svg>
-          </button>
-          <ModalSelectBgm />
+          <div v-if="selectedNarration == 3">
+            <AddCreateCommercial3 />
+          </div>
+          <div v-if="selectedBackGroundMusic == 0">
+            <AddBackgroundMusic v-on:selected-back-ground-music="selectedBackGroundMusic = $event" />
+          </div>
+          <div v-if="selectedBackGroundMusic == 1">
+            <SelectedBackGroundMusic />
+          </div>
         </div>
         <div class="box4">
-          <button class="end-chime" data-toggle="modal" data-target="#modal-chime">
-            <div class="btn-area">
-              <div class="btn-edit shadow">
-                <div class="narration-text">Endチャイム</div>
-              </div>
-            </div>
-            <p>素材追加</p>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="70"
-              height="70"
-              viewBox="0 0 70 70"
-            >
-              <g transform="translate(-313 -249)">
-                <g
-                  transform="translate(313 249)"
-                  fill="#fff"
-                  stroke="#dbdbdb"
-                  stroke-width="1"
-                >
-                  <circle cx="35" cy="35" r="35" stroke="none" />
-                  <circle cx="35" cy="35" r="34.5" fill="none" />
-                </g>
-                <rect
-                  width="40"
-                  height="8"
-                  rx="1"
-                  transform="translate(328 280)"
-                  fill="#9d9d9d"
-                />
-                <rect
-                  width="40"
-                  height="8"
-                  rx="1"
-                  transform="translate(352 264) rotate(90)"
-                  fill="#9d9d9d"
-                />
-              </g>
-            </svg>
-          </button>
+          <div v-if="selectedEndChime == 0">
+            <AddEndChime v-on:end-chime="selectedEndChime = $event" />
+          </div>
+          <div v-if="selectedEndChime == 1">
+            <SelectedEndChime />
+          </div>
         </div>
       </div>
     </div>
   </div>
 </template>
+
 <script>
 // 表示するコンポーネントをインポート
 import AddCreateCommercial1 from "@/components/AddCreateCommercial1";
 import AddCreateCommercial2 from "@/components/AddCreateCommercial2";
-import ModalSaveCreatedCommercial from "@/components/ModalSaveCreatedCommercial";
-import ModalSelectBgm from "@/components/ModalSelectBgm";
-import ModalSelectChime from "@/components/ModalSelectChime";
+import AddCreateCommercial3 from "@/components/AddCreateCommercial3";
+import AddOpenChime from "@/components/AddOpenChime";
+import SelectedOpenChime from "@/components/SelectedOpenChime";
+import AddBackgroundMusic from "@/components/AddBackgroundMusic";
+import SelectedBackGroundMusic from "@/components/SelectedBackGroundMusic";
+import AddEndChime from "@/components/AddEndChime";
+import SelectedEndChime from "@/components/SelectedEndChime";
 
 export default {
-  components: {
+    components: {
     AddCreateCommercial1,
     AddCreateCommercial2,
-    ModalSaveCreatedCommercial,
-    ModalSelectBgm,
-    ModalSelectChime,
+    AddCreateCommercial3,
+    AddOpenChime,
+    SelectedOpenChime,
+    AddBackgroundMusic,
+    SelectedBackGroundMusic,
+    AddEndChime,
+    SelectedEndChime,
   },
   data() {
     return {
-      currentView: 1,
+      selectedNarration: 1,
+      selectedOprnChime: 0,
+      selectedBackGroundMusic: 0,
+      selectedEndChime: 0,
     };
   },
 };
@@ -268,39 +172,8 @@ button {
   width: 25%;
   border-radius: 10px;
 }
-.open-chime {
-  width: 170px;
-  height: 260px;
-  border-radius: 10px;
-  margin-top: 150px;
-  margin-left: 60px;
-  opacity: 0.5;
-}
-.end-chime {
-  width: 170px;
-  height: 260px;
-  border-radius: 10px;
-  margin-top: 150px;
-  margin-left: 20px;
-  opacity: 0.5;
-}
 .narration-text {
   font-size: 13px;
   margin-top: 10px;
-}
-.space {
-  width: 100px;
-  height: 35px;
-}
-.box-top {
-  width: 100%;
-  height: 235px;
-  border-radius: 10px;
-}
-.box-bottom {
-  width: 100%;
-  height: 235px;
-  border-radius: 10px;
-  opacity: 0.5;
 }
 </style>
