@@ -11,225 +11,125 @@
       <div class="modal-content">
         <div class="modal-header" style="height: 70px">
           <div class="modal-title text-center" style="margin: auto">
-            作成したCMを保存
+            保存しますか？
           </div>
+          <button data-dismiss="modal" class="bg-white mt-1">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="14.769"
+              height="15.366"
+              viewBox="0 0 14.769 15.366"
+            >
+              <g transform="translate(-1385.086 -129.086)">
+                <line
+                  x1="11.941"
+                  y2="12.539"
+                  transform="translate(1386.5 130.5)"
+                  fill="none"
+                  stroke="#707070"
+                  stroke-linecap="round"
+                  stroke-width="2"
+                />
+                <line
+                  x2="11.941"
+                  y2="12.539"
+                  transform="translate(1386.5 130.5)"
+                  fill="none"
+                  stroke="#707070"
+                  stroke-linecap="round"
+                  stroke-width="2"
+                />
+              </g>
+            </svg>
+          </button>
         </div>
-        <div class="modal-body col-10 m-auto pt-4">
-          <div class="d-flex justify-content-between mb-4">
-            <p>ファイル名</p>
+        <div class="modal-body col-11 m-auto pt-4">
+          <div class="d-flex justify-content-between mb-3">
+            <div>
+              <p class="mb-0">タイトル</p>
+              <p class="m-0 text-primary" style="font-size: 0.9em">※必須</p>
+            </div>
             <div class="col-10 pr-0">
               <input type="text" class="form-control" />
             </div>
           </div>
-          <div class="d-flex mb-3">
-            <div class="col-2"></div>
-            <div class="col-10 tags d-flex">
-              <div class="tag">
-                <div class="tag-box d-flex justify-content-between">
-                  <div class="custom-control custom-checkbox">
-                    <input
-                      type="checkbox"
-                      class="custom-control-input"
-                      id="custom-check-1"
-                    />
-                    <label
-                      class="custom-control-label mr-2"
-                      for="custom-check-1"
-                      >タグ1</label
-                    >
-                  </div>
-                  <button class="btn-tag">
-                    <svg
-                      id="グループ_42"
-                      data-name="グループ 42"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="30"
-                      height="6"
-                      viewBox="0 0 30 6"
-                    >
-                      <circle
-                        id="楕円形_2"
-                        data-name="楕円形 2"
-                        cx="3"
-                        cy="3"
-                        r="3"
-                        fill="#555"
-                      />
-                      <circle
-                        id="楕円形_3"
-                        data-name="楕円形 3"
-                        cx="3"
-                        cy="3"
-                        r="3"
-                        transform="translate(12)"
-                        fill="#555"
-                      />
-                      <circle
-                        id="楕円形_4"
-                        data-name="楕円形 4"
-                        cx="3"
-                        cy="3"
-                        r="3"
-                        transform="translate(24)"
-                        fill="#555"
-                      />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-              <div class="tag">
-                <div class="tag-box d-flex justify-content-between">
-                  <div class="custom-control custom-checkbox">
-                    <input
-                      type="checkbox"
-                      class="custom-control-input"
-                      id="custom-check-2"
-                    />
-                    <label
-                      class="custom-control-label mr-2"
-                      for="custom-check-2"
-                      >タグ2</label
-                    >
-                  </div>
-                  <button class="btn-tag">
-                    <svg
-                      id="グループ_42"
-                      data-name="グループ 42"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="30"
-                      height="6"
-                      viewBox="0 0 30 6"
-                    >
-                      <circle
-                        id="楕円形_2"
-                        data-name="楕円形 2"
-                        cx="3"
-                        cy="3"
-                        r="3"
-                        fill="#555"
-                      />
-                      <circle
-                        id="楕円形_3"
-                        data-name="楕円形 3"
-                        cx="3"
-                        cy="3"
-                        r="3"
-                        transform="translate(12)"
-                        fill="#555"
-                      />
-                      <circle
-                        id="楕円形_4"
-                        data-name="楕円形 4"
-                        cx="3"
-                        cy="3"
-                        r="3"
-                        transform="translate(24)"
-                        fill="#555"
-                      />
-                    </svg>
-                  </button>
-                </div>
-              </div>
-              <div class="tag">
-                <div class="tag-box d-flex justify-content-between">
-                  <div class="custom-control custom-checkbox">
-                    <input
-                      type="checkbox"
-                      class="custom-control-input"
-                      id="custom-check-3"
-                    />
-                    <label
-                      class="custom-control-label mr-2"
-                      for="custom-check-3"
-                      >タグ3</label
-                    >
-                  </div>
-                  <button class="btn-tag">
-                    <svg
-                      id="グループ_42"
-                      data-name="グループ 42"
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="30"
-                      height="6"
-                      viewBox="0 0 30 6"
-                    >
-                      <circle
-                        id="楕円形_2"
-                        data-name="楕円形 2"
-                        cx="3"
-                        cy="3"
-                        r="3"
-                        fill="#555"
-                      />
-                      <circle
-                        id="楕円形_3"
-                        data-name="楕円形 3"
-                        cx="3"
-                        cy="3"
-                        r="3"
-                        transform="translate(12)"
-                        fill="#555"
-                      />
-                      <circle
-                        id="楕円形_4"
-                        data-name="楕円形 4"
-                        cx="3"
-                        cy="3"
-                        r="3"
-                        transform="translate(24)"
-                        fill="#555"
-                      />
-                    </svg>
-                  </button>
-                </div>
-              </div>
+          <div class="d-flex justify-content-between mb-4">
+            <p class="mt-2">説明</p>
+            <div class="col-10 pr-0">
+              <textarea class="form-control" style="height: 120px"></textarea>
             </div>
           </div>
-          <div class="d-flex" style="margin-bottom: 70px">
-            <div class="col-2"></div>
-            <div class="col-10">
-              <button class="add-tag">
-                <svg
-                  class="mb-1 text-primary"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="1em"
-                  height="1em"
-                  viewBox="0 0 20 20"
-                >
-                  <g transform="translate(-866 -179)">
-                    <rect
-                      width="20"
-                      height="4"
-                      rx="1"
-                      transform="translate(866 187)"
-                      fill="#007bff"
-                    />
-                    <rect
-                      width="20"
-                      height="4"
-                      rx="1"
-                      transform="translate(878 179) rotate(90)"
-                      fill="#007bff"
-                    />
-                  </g>
-                </svg>
-
-                タグ追加
-              </button>
+          <div class="d-flex justify-content-between mb-3">
+            <p>開始/終了</p>
+            <div class="col-10 pr-0">
+              <form action="" class="form-control" style="padding: 14px">
+                <select name="year" class="select-time">
+                  <option v-for="year in 5" :key="year">
+                    {{ year + 2019 }}
+                  </option>
+                </select>
+                年
+                <select name="month" class="select-time">
+                  <option v-for="month in 12" :key="month">{{ month }}</option>
+                </select>
+                月
+                <select name="day" class="select-time">
+                  <option v-for="day in 31" :key="day">{{ day }}</option>
+                </select>
+                日
+                <select name="hour" class="select-time">
+                  <option v-for="number in numbers" :key="number">
+                    {{ number }}
+                  </option>
+                  <option v-for="hour in 14" :key="hour">{{ hour + 9 }}</option>
+                </select>
+                時
+                <select name="minute" class="select-time">
+                  <option v-for="number in numbers" :key="number">
+                    {{ number }}
+                  </option>
+                  <option v-for="minute in 50" :key="minute">
+                    {{ minute + 9 }}
+                  </option>
+                </select>
+                分 -
+                <select name="year" class="select-time">
+                  <option v-for="year in 5" :key="year">
+                    {{ year + 2019 }}
+                  </option>
+                </select>
+                年
+                <select name="month" class="select-time">
+                  <option v-for="month in 12" :key="month">{{ month }}</option>
+                </select>
+                月
+                <select name="day" class="select-time">
+                  <option v-for="day in 31" :key="day">{{ day }}</option>
+                </select>
+                日
+                <select name="hour" class="select-time">
+                  <option v-for="number in numbers" :key="number">
+                    {{ number }}
+                  </option>
+                  <option v-for="hour in 14" :key="hour">{{ hour + 9 }}</option>
+                </select>
+                時
+                <select name="minute" class="select-time">
+                  <option v-for="number in numbers" :key="number">
+                    {{ number }}
+                  </option>
+                  <option v-for="minute in 50" :key="minute">
+                    {{ minute + 9 }}
+                  </option>
+                </select>
+                分
+              </form>
             </div>
           </div>
           <div class="d-flex justify-content-between mb-4">
             <p>配信先</p>
             <div class="col-10 pr-0">
-              <select class="form-control">
-                <option>--------</option>
-              </select>
-            </div>
-          </div>
-          <div class="d-flex justify-content-between">
-            <p>保存先</p>
-            <div class="col-10 pr-0">
-              <input type="text" class="form-control" value="作成したCM2" />
+              <input type="text" class="form-control" value="U-MUSIC" />
             </div>
           </div>
         </div>
@@ -243,10 +143,19 @@
     </div>
   </div>
 </template>
+<script>
+export default {
+  data() {
+    return {
+      numbers: ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09"],
+    };
+  },
+};
+</script>
 <style scoped>
 p {
   vertical-align: middle;
-  margin: auto 20px auto auto;
+  margin-top: 15px;
 }
 button {
   border: none;
@@ -255,8 +164,15 @@ button {
 svg {
   margin: auto;
 }
+.select-time {
+  border: none;
+  -webkit-appearance: none;
+}
 button:focus {
   outline: 0;
+}
+option {
+  text-decoration: none;
 }
 .form-control {
   height: 55px;
@@ -265,7 +181,7 @@ button:focus {
   max-width: 800px;
 }
 .modal-content {
-  height: 630px;
+  height: 560px;
 }
 button.btn-tag {
   background-color: transparent;
@@ -280,28 +196,15 @@ button.add-tag {
 }
 .btn-edit {
   font-size: 13px;
-  width: 160px;
+  width: 210px;
   height: 40px;
-  border-radius: 2em;
   margin: 8px;
+  border-radius: 3px;
 }
 .btn-save {
   color: #ffffff;
-  background-color: #578ed9;
-}
-.tag {
-  width: 160px;
-  height: 45px;
-  margin-right: 12px;
-  background-color: #ebebeb;
-  border-radius: 3px;
-}
-.tag-box {
-  padding: 11px 15px 10px 15px;
-}
-p.tag-box {
-  color: #000000;
-  margin-right: 20px;
+  /* background-color: #578ed9; */
+  background-color: #adadad;
 }
 .col-10 {
   padding: 0;
