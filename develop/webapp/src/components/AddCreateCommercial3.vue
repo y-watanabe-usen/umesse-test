@@ -27,11 +27,48 @@
         </div>
         <div class="under-center"></div>
         <div class="under-right">
-          <div class="dot">
+          <button class="dot" data-toggle="modal" data-target="#modal-add-material1">
             <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-three-dots" fill="#555555" xmlns="http://www.w3.org/2000/svg">
               <path fill-rule="evenodd" d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
             </svg>
-          </div>
+            <!-- Modal -->
+            <div
+              class="modal fade modal-add-material1"
+              id="modal-add-material1"
+              tabindex="-1"
+              role="dialog"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <ul class="modal-content shadow ul-selected-add1">
+                  <li>
+                    <button
+                      class="modal-btn select-top"
+                      id="to-modal2"
+                      data-toggle="modal-add-material"
+                      data-target="#modal2"
+                      data-dismiss="modal"
+                    >
+                      録音して音声と入れ替える
+                    </button>
+                  </li>
+                  <li>
+                    <button class="modal-btn">他のナレーションと入れ替える</button>
+                  </li>
+                  <li>
+                    <button class="modal-btn select-bottom">
+                      合成音声と入れ替える
+                    </button>
+                  </li>
+                  <li>
+                    <button class="modal-btn select-bottom delete-recording">
+                      削除
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </button>
         </div>
       </div>
     </div>
@@ -62,11 +99,48 @@
         </div>
         <div class="under-center"></div>
         <div class="under-right">
-          <div class="dot">
+          <button class="dot" data-toggle="modal" data-target="#modal-add-material2">
             <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-three-dots" fill="#555555" xmlns="http://www.w3.org/2000/svg">
               <path fill-rule="evenodd" d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
             </svg>
-          </div>
+            <!-- Modal -->
+            <div
+              class="modal fade modal-add-material2"
+              id="modal-add-material2"
+              tabindex="-1"
+              role="dialog"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <ul class="modal-content shadow ul-selected-add2">
+                  <li>
+                    <button
+                      class="modal-btn select-top"
+                      id="to-modal2"
+                      data-toggle="modal-add-material2"
+                      data-target="#modal2"
+                      data-dismiss="modal"
+                    >
+                      録音して音声と入れ替える
+                    </button>
+                  </li>
+                  <li>
+                    <button class="modal-btn">他のナレーションと入れ替える</button>
+                  </li>
+                  <li>
+                    <button class="modal-btn select-bottom">
+                      合成音声と入れ替える
+                    </button>
+                  </li>
+                  <li>
+                    <button class="modal-btn select-bottom delete-recording">
+                      削除
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </button>
         </div>
       </div>
     </div>
@@ -97,15 +171,51 @@
           </div>
         <div class="under-center"></div>
         <div class="under-right">
-          <div class="dot">
+          <button class="dot" data-toggle="modal" data-target="#modal-add-material3">
             <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-three-dots" fill="#555555" xmlns="http://www.w3.org/2000/svg">
               <path fill-rule="evenodd" d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
             </svg>
-          </div>
+            <!-- Modal -->
+            <div
+              class="modal fade modal-add-material3"
+              id="modal-add-material3"
+              tabindex="-1"
+              role="dialog"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <ul class="modal-content shadow ul-selected-add3">
+                  <li>
+                    <button
+                      class="modal-btn select-top"
+                      id="to-modal2"
+                      data-toggle="modal-add-material3"
+                      data-target="#modal2"
+                      data-dismiss="modal"
+                    >
+                      録音して音声と入れ替える
+                    </button>
+                  </li>
+                  <li>
+                    <button class="modal-btn">他のナレーションと入れ替える</button>
+                  </li>
+                  <li>
+                    <button class="modal-btn select-bottom">
+                      合成音声と入れ替える
+                    </button>
+                  </li>
+                  <li>
+                    <button class="modal-btn select-bottom delete-recording">
+                      削除
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </button>
         </div>
       </div>
     </div>
-    
   </div>
 </template>
 
@@ -156,30 +266,117 @@ button {
   border-radius: 10px;
   text-align: center;
 }
-.top-under{
+.top-under {
   display: flex;
   width: 100%;
   height: 40px;
   background-color: #C0C0C0;
   border-radius: 0 0 10px 10px;
 }
-.under-left{
+.under-left {
   width: 25%;
   border-radius: 10px;
   text-align: center;
   margin-top: 3px;
 }
-.under-center{
+.under-center {
   width: 50%;
   border-radius: 10px;
   margin-top: 10px;
   text-align: center;
 }
-.under-right{
+.under-right {
   width: 25%;
   border-radius: 10px;
 }
-.dot{
-  margin: 5px 0px 0px 13px; 
+.dot {
+  margin: 5px 0px 0px 7px;
+  background-color: #C0C0C0;
+}
+.modal-btn {
+  background-color: #ffffff;
+}
+li {
+  line-height: 4em;
+  background-color: #ffffff;
+  border-bottom: 1px solid #cccccc;
+}
+li:first-child {
+  border-radius: 5px 5px 0 0;
+}
+li:last-child {
+  border-radius: 0 0 5px 5px;
+  border-bottom: none;
+}
+ul:after {
+  z-index: -1;
+  content: "";
+  position: absolute;
+  margin-left: 110px;
+  top: -18px;
+  border-style: solid;
+  border-color: transparent transparent transparent #ffffff;
+  border-width: 15px 0 15px 17.32px;
+  transform: rotate(-90deg);
+  filter: drop-shadow(1px 3px 5px rgba(0, 0, 0, 0.1));
+}
+.modal-content {
+  border: none;
+  box-shadow: none;
+}
+.modal-dialog {
+  max-width: 1140px;
+}
+.bg-menu {
+  background: -moz-linear-gradient(top, #89929e, #a4a8ad);
+  background: -webkit-linear-gradient(top, #89929e, #a4a8ad);
+  background: linear-gradient(to bottom, #89929e, #a4a8ad);
+}
+.btn-menu {
+  width: 100%;
+  height: 80px;
+  margin-bottom: 10px;
+  text-decoration: none;
+}
+.modal-btn-try,
+.modal-btn-edit {
+  width: 100px;
+  height: 40px;
+}
+.modal-btn-edit {
+  margin-left: 20px;
+}
+.ul-selected-add1 {
+  z-index: 1000;
+  position: absolute;
+  text-align: center;
+  width: 250px;
+  top: 290px;
+  margin-left: 335px;
+  list-style: none;
+  border-radius: 10px;
+  padding-left: 0;
+}
+.ul-selected-add2 {
+  z-index: 1000;
+  position: absolute;
+  text-align: center;
+  width: 250px;
+  top: 290px;
+  margin-left: 530px;
+  list-style: none;
+  border-radius: 10px;
+  padding-left: 0;
+}
+.ul-selected-add3 {
+  z-index: 1000;
+  position: absolute;
+  text-align: center;
+  width: 250px;
+  top: 290px;
+  margin-left: 727px;
+  list-style: none;
+  border-radius: 10px;
+  padding-left: 0;
 }
 </style>
