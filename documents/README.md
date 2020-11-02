@@ -3,7 +3,7 @@
 AWS上にブラウザによるフロントエンド機能、APIによるバックエンド機能を構築し、アプリ側は[TWA](https://developers.google.com/web/android/trusted-web-activity)でブラウザを表示する  
 機能は大きく分けて、CM作成、CM管理、オリジナル音声管理、CM発注機能がある  
 
-##　環境
+## 環境
 
 フロントエンド、バックエンドともにAWSサービスを利用する
 AWSはU MESSE用のAWSアカウントを新規作成し、構築する
@@ -85,20 +85,22 @@ AWSはU MESSE用のAWSアカウントを新規作成し、構築する
 
 ### TTS
 
-- TODO: 先方調整中
 - Hoya社のReadSpeakerを利用
 - 無料版と有料版では品質、仕様が異なる模様
-- [webapi](https://cloud.voicetext.jp/webapi)
-- サンプル（無料版）
+- [無料版ドキュメント](https://cloud.voicetext.jp/webapi)
+- [有料版ドキュメント](https://cloud.voicetext.jp/webapi/docs/paid_api)
+- サンプル
 
 ```bash
 #!/bin/bash
 
 url=https://api.voicetext.jp/v1/tts
-key=esukobytdjetv1en
+key=yck1tgf1x2jl3m51
 
 speakers="
-hikari
+sayaka
+risa
+akira
 takeru
 "
 
@@ -112,7 +114,7 @@ text="
 
 for speaker in $speakers; do
   echo $speaker
-  curl "$url" -o "$speaker.mp3" -u "$key:" -d "text=$text" -d "speaker=$speaker" -d "emotion=happiness" -d "emotion_level=1" -d "pitch=90" -d "speed=100"
+  curl "$url" -o "$speaker.mp3" -u "$key:" -d "text=$text" -d "speaker=$speaker" -d "pitch=90" -d "speed=100"
   echo
   sleep 1
 done
