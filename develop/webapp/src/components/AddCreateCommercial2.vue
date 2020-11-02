@@ -27,10 +27,47 @@
         </div>
         <div class="under-center"></div>
         <div class="under-right">
-          <div class="dot">
+          <button class="dot" data-toggle="modal" data-target="#modal-add-material">
             <svg width="1.5em" height="1.5em" viewBox="0 0 16 16" class="bi bi-three-dots" fill="#555555" xmlns="http://www.w3.org/2000/svg">
               <path fill-rule="evenodd" d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"/>
             </svg>
+          </button>
+          <!-- Modal -->
+          <div
+            class="modal fade modal-add-material"
+            id="modal-add-material"
+            tabindex="-1"
+            role="dialog"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <ul class="modal-content shadow ul-selected-add">
+                <li>
+                  <button
+                    class="modal-btn select-top"
+                    id="to-modal2"
+                    data-toggle="modal-add-material"
+                    data-target="#modal2"
+                    data-dismiss="modal"
+                  >
+                    録音して音声と入れ替える
+                  </button>
+                </li>
+                <li>
+                  <button class="modal-btn">他のナレーションと入れ替える</button>
+                </li>
+                <li>
+                  <button class="modal-btn select-bottom">
+                    合成音声と入れ替える
+                  </button>
+                </li>
+                <li>
+                  <button class="modal-btn select-bottom delete-recording">
+                    削除
+                  </button>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -84,7 +121,7 @@
       aria-hidden="true"
     >
       <div class="modal-dialog modal-dialog-centered" role="document">
-        <ul class="modal-content shadow">
+        <ul class="modal-content shadow ul-add-material">
           <li>
             <button
               class="modal-btn select-top"
@@ -398,12 +435,13 @@ button {
   border-radius: 10px;
 }
 .dot{
-  margin: 5px 0px 0px 65px; 
+  margin: 5px 0px 0px 58px;
+  background-color: #C0C0C0;
 }
 .modal-btn {
   background-color: #ffffff;
 }
-ul {
+.ul-add-material {
   z-index: 1000;
   position: absolute;
   text-align: center;
@@ -463,5 +501,19 @@ ul:after {
 }
 .modal-btn-edit {
   margin-left: 20px;
+}
+.ul-selected-add {
+  z-index: 1000;
+  position: absolute;
+  text-align: center;
+  width: 250px;
+  top: 290px;
+  margin-left: 540px;
+  list-style: none;
+  border-radius: 10px;
+  padding-left: 0;
+}
+.delete-recording {
+  color: #bdbdbd;
 }
 </style>
