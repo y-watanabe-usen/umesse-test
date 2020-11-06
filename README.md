@@ -70,6 +70,9 @@ node ./src/app.local.js
 cd develop/webapp
 yarn install
 
+# local
+yarn serve:local
+
 # develop
 yarn serve
 
