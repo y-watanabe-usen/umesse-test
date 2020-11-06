@@ -6,10 +6,19 @@ export default () => {
     playing: false,
     mediaRecorder: null,
     powerDecibels: -100,
+    startedTime: 0,
+    playbackTime: 0,
+    duration: 0,
   })
 
   const getPowerDecibels = () => {
     return state.powerDecibels;
+  }
+  const getPlaybackTime = () => {
+    return state.playbackTime;
+  }
+  const getDuration = () => {
+    return state.duration;
   }
   const isPlaying = () => {
     return state.playing
@@ -23,9 +32,10 @@ export default () => {
     const source = context.createBufferSource();
 
     source.buffer = audioBuffer;
-
     analyser.connect(context.destination);
     source.connect(analyser)
+    state.duration = audioBuffer.duration;
+    state.startedTime = context.currentTime;
 
     source.onended = () => {
       source.stop()
@@ -35,7 +45,11 @@ export default () => {
       state.powerDecibels = -100;
     }
     source.start();
-    timer = setInterval(function () { updateAnalyser(); }, 100);
+    state.playbackTime = 0;
+    timer = setInterval(function () {
+      updateAnalyser();
+      updatePlaybackTime();
+    }, 100);
   }
   const stop = () => {
   }
@@ -49,7 +63,10 @@ export default () => {
     state.powerDecibels = Math.round(10 * Math.log10(sumOfSquares / sampleBuffer.length));
   }
 
+  const updatePlaybackTime = () => {
+    state.playbackTime = context.currentTime - state.startedTime;
+  }
   return {
-    start, stop, getPowerDecibels,
+    start, stop, getPowerDecibels, getPlaybackTime, getDuration,
   };
 }

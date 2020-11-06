@@ -12,6 +12,7 @@ export default () => {
     return state.recording
   }
   const start = async () => {
+    reset();
     const stream: MediaStream = await navigator.mediaDevices.getUserMedia({ audio: true })
     const mediaRecorder = new MediaRecorder(stream);
     mediaRecorder.onstop = () => stream.getTracks().forEach(track => track.stop());
