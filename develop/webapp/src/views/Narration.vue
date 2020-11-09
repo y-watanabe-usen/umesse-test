@@ -220,6 +220,7 @@
                       />
                     </svg>
                   </div>
+                  <div class="col text-center">volume 32</div>
                   <div class="col text-right">
                     <svg
                       width="1em"
