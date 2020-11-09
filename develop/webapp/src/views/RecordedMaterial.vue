@@ -115,7 +115,7 @@
                         />
                       </svg>
                     </button>
-                    <ModalMaterialMenu />
+                    <!-- <ModalMaterialMenu /> -->
                   </div>
                 </div>
                 <span class="d-block pb-2"
@@ -133,12 +133,12 @@
 </template>
 
 <script>
-import ModalMaterialMenu from "@/components/ModalMaterialMenu";
+//import ModalMaterialMenu from "@/components/ModalMaterialMenu";
 
 export default {
-  components: {
-    ModalMaterialMenu,
-  },
+  // components: {
+  //   ModalMaterialMenu,
+  // },
   data() {
     return {
       menus: [
