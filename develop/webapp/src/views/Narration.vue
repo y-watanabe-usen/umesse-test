@@ -77,26 +77,37 @@
                     <div>
                       <button
                         type="button"
+                        class="btn btn-light shadow btn-manuscript"
+                      >
+                        <svg
+                          width="1em"
+                          height="1em"
+                          viewBox="0 0 16 16"
+                          class="bi bi-file-earmark-text-fill"
+                          fill="currentColor"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M2 2a2 2 0 0 1 2-2h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm7.5 1.5v-2l3 3h-2a1 1 0 0 1-1-1zM4.5 8a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7zM4 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5z"
+                          />
+                        </svg>
+                        原稿
+                      </button>
+                      <button
+                        type="button"
                         class="btn btn-light shadow btn-try"
                       >
                         <svg
                           width="1em"
                           height="1em"
                           viewBox="0 0 16 16"
-                          class="bi bi-music-note-list"
+                          class="bi bi-play-fill"
                           fill="currentColor"
                           xmlns="http://www.w3.org/2000/svg"
                         >
                           <path
-                            d="M12 13c0 1.105-1.12 2-2.5 2S7 14.105 7 13s1.12-2 2.5-2 2.5.895 2.5 2z"
-                          />
-                          <path fill-rule="evenodd" d="M12 3v10h-1V3h1z" />
-                          <path
-                            d="M11 2.82a1 1 0 0 1 .804-.98l3-.6A1 1 0 0 1 16 2.22V4l-5 1V2.82z"
-                          />
-                          <path
-                            fill-rule="evenodd"
-                            d="M0 11.5a.5.5 0 0 1 .5-.5H4a.5.5 0 0 1 0 1H.5a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 .5 7H8a.5.5 0 0 1 0 1H.5a.5.5 0 0 1-.5-.5zm0-4A.5.5 0 0 1 .5 3H8a.5.5 0 0 1 0 1H.5a.5.5 0 0 1-.5-.5z"
+                            d="M11.596 8.697l-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"
                           />
                         </svg>
                         試聴
@@ -118,7 +129,7 @@
                             d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5L13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175l-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"
                           />
                         </svg>
-                        編集
+                        選択
                       </button>
                     </div>
                   </div>
@@ -207,11 +218,13 @@ export default {
   margin-bottom: 10px;
   text-decoration: none;
 }
+.btn-manuscript,
 .btn-try,
 .btn-edit {
   width: 100px;
   height: 40px;
 }
+.btn-try,
 .btn-edit {
   margin-left: 20px;
 }
