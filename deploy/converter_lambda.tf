@@ -6,7 +6,7 @@ data "archive_file" "umesse_converter_lambda" {
 
 resource "aws_lambda_function" "umesse_converter_lambda" {
   function_name = "lambda"
-  handler = "lambda.handler"
+  handler = "audio_converter_lambda.handler"
   role = aws_iam_role.umesse_converter_lambda.arn
   runtime = "nodejs12.x"
 
