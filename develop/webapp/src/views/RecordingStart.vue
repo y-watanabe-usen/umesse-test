@@ -31,34 +31,42 @@
           </p>
         </div>
         <div class="d-flex align-items-center">
-          <div class="border-top border-bottom lead" style="padding: 20px">
-            Recording Timestamp：00:00:00:00.00
+          <div class="lead" style="padding: 20px; width: 600px;">
             <div v-if="hasRecordedData">
-              <div>
-                <button class="btn btn-light mr-2 w-25" @click="play">
-                  再生
-                </button>
-                <button class="btn btn-light w-25" @click="deleteRecordedData">
-                  削除
-                </button>
+              <h5 class="m-0 text-right">db</h5>
+              <div class="d-flex">
+                <h5>-60</h5><h5>-50</h5><h5>-40</h5><h5>-30</h5><h5>-25</h5><h5>-20</h5><h5 class="ml-4">-15</h5><h5 class="ml-4">-10</h5><h5 class="ml-4">-5</h5><h5 class="ml-4">0</h5>
+              </div>
+              <div class="d-flex" style="width: 800px">
+                <div class="scale"></div><div class="scale"></div><div class="scale"></div><div class="scale"></div><div class="scale"></div><div class="scale"></div><div class="scale"></div><div class="scale"></div><div class="scale"></div><div class="scale"></div>
               </div>
               <meter
                 min="-100"
                 max="10"
                 class="w-100"
-                :value="decibel"
+                :value="decibel" style="height: 40px;"
               ></meter>
-              <span id="avg-level-text"> {{ decibel }} </span> dB
-              <div class="row">
-                <div class="col text-left">{{ playbackTimeHms }}</div>
-                <div class="col text-right">{{ durationHms }}</div>
-              </div>
-              <meter
-                min="0"
-                :max="duration"
-                class="w-100"
-                :value="playbackTime"
-              ></meter>
+              <!-- <span id="avg-level-text"> {{ decibel }} </span> dB -->
+                <h5 class="text-white mt-4">録音したデータ１</h5>
+                <div class="row">
+                  <div class="col text-left text-white" style="font-size: 17px;">{{ playbackTimeHms }}</div>
+                  <div class="col text-right text-white" style="font-size: 17px;">{{ durationHms }}</div>
+                </div>
+                <meter
+                  min="0"
+                  :max="duration"
+                  class="w-100"
+                  :value="playbackTime"
+                ></meter>
+                <div class="d-flex justify-content-center mt-4 mb-4">
+                  <button class="btn btn-light mr-3 btn-play" @click="play">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="30" height="23" viewBox="0 0 30 23"><path d="M10.1,3.654a1.5,1.5,0,0,1,2.8,0l9.319,24.309A1.5,1.5,0,0,1,20.819,30H2.181a1.5,1.5,0,0,1-1.4-2.037Z" transform="translate(30) rotate(90)" fill="#578ed9"/></svg>再生
+                  </button>
+                  <button class="btn btn-light btn-delete" @click="deleteRecordedData">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22"><g transform="translate(-860 -178)"><circle cx="11" cy="11" r="11" transform="translate(860 178)" fill="#982e2e"/><path d="M1,0H11a1,1,0,0,1,0,2H1C.448,2,0,1,0,1S.448,0,1,0Z" transform="translate(865 188)" fill="#fff"/></g></svg>削除
+                  </button>
+                </div>
+                <p style="font-size: 14px; font-weight: bold; color: #ffffff; text-align: center;">録音し直したい場合は、録音開始ボタンを押して再収録してください。</p>
             </div>
           </div>
         </div>
@@ -226,8 +234,52 @@ export default defineComponent({
 <style scoped>
 .recording {
   cursor: pointer;
-  margin-left: 95px;
-  width: 429px;
+  width: 350px;
   height: 429px;
+}
+img.card-img-top {
+  margin-top: 30px;
+}
+svg {
+  vertical-align: text-top;
+  margin-right: 10px;
+}
+.btn-play, .btn-delete{
+  width: 170px;
+  height: 50px;
+}
+.btn-play {
+  border: solid 4px #578ED9;
+}
+.btn-delete {
+  border: solid 4px #982E2E;
+}
+h5 {
+  margin-bottom: 0;
+  margin-right: 26px;
+  color: #ffffff;
+  font-weight: 400;
+  font-size: 17px;
+}
+.scale {
+  width: 2px;
+  height: 8px;
+  background-color: #ffffff;
+  margin-right: 49px;
+}
+.scale:first-child {
+  margin-right: 65px;
+}
+.scale:nth-child(n+6) {
+  margin-right: 73px;
+}
+.scale:nth-child(8) {
+  margin-right: 68px;
+}
+.scale:nth-child(9) {
+  margin-right: 64px;
+}
+.scale:last-child {
+  margin-right: 0;
 }
 </style>
