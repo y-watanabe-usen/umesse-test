@@ -17,13 +17,13 @@
             type="button"
             class="btn btn-menu text-left text-white"
             :class="[
-              menu.id == activeMenuId ? 'btn-light' : 'btn-link',
-              menu.id == activeMenuId ? 'text-dark' : 'text-white',
+              menu.id == state.activeMenuId ? 'btn-light' : 'btn-link',
+              menu.id == state.activeMenuId ? 'text-dark' : 'text-white',
               menu.id == 1 ? 'mt-2' : '',
             ]"
-            v-for="menu in menus"
+            v-for="menu in state.menus"
             :key="menu.id"
-            @click="activeMenuId = menu.id"
+            @click="state.activeMenuId = menu.id"
           >
             {{ menu.title }}
           </button>
@@ -32,12 +32,12 @@
           <div class="my-3">
             <h6 class="border-bottom border-gray pb-2 mb-0">
               <select class="form-control w-25">
-                <option v-for="sort in sorts" :key="sort">{{ sort }}</option>
+                <option v-for="sort in state.sorts" :key="sort">{{ sort }}</option>
               </select>
             </h6>
             <div
               class="media text-muted pt-3"
-              v-for="narrationData in narrationDatas"
+              v-for="narrationData in state.narrationDatas"
               :key="narrationData.title"
             >
               <div
@@ -331,9 +331,10 @@
 </template>
 
 <script lang="ts">
+import { reactive } from "vue";
 export default {
-  data() {
-    return {
+    setup() {
+    const state = reactive({
       menus: [
         {
           id: 1,
@@ -371,9 +372,12 @@ export default {
             "本日はご来店いただきまして、誠にありがとうございます。お客様に…",
           description2: "00:24 放送開始日2020年10月15日 有効期限2020年10月20日",
         },
-      ],
-    };
-  },
+      ]
+    })
+    return {
+      state
+    }
+  }
 };
 </script>
 
