@@ -7,7 +7,7 @@ AWS上にブラウザによるフロントエンド機能、APIによるバッ�
 
 フロントエンド、バックエンドともにAWSサービスを利用する
 AWSはU MESSE用のAWSアカウントを新規作成し、構築する
-ユーザー情報はVPC経由でU MEMBERSのDynamoDBかU DS APIから取得する
+ユーザー情報はVPC経由でUMEMBERSのDynamoDBかUDS APIから取得する
 
 ## 構成図
 
@@ -27,11 +27,11 @@ AWSはU MESSE用のAWSアカウントを新規作成し、構築する
 - 構成は、開始チャイム（任意）＋ナレーション（必須・複数可能(MIN:1 MAX:4)・多言語を想定）＋終了チャイム（任意）となり、ナレーションにBGM（任意）をつける  
 - 各素材は任意にボリューム調整可能
 - USENが提供するナレーションだけでなく、自身で録音した音声(MAX:120秒)、TTSを利用した合成音声(MAX:120秒)も作成、選択することができる
-- MIXにはffmpegを使用し、音圧・ラウンドネス調整・エンコードを実施する（簡易音源加工=OTORAKUと同等）
+- MIXにはffmpegを使用し、音圧・ラウンドネス調整・エンコードを実施する（簡易音源加工=OTORAKUと同等、若干のパラメータ変更）
 
 ### CM管理
 
-- 作成したCMを編集、再生、削除、共有、センターアップロード、拡張デバイス割り当て（フェーズ2.0予定）を行う
+- 作成したCMを編集、再生、削除、センターアップロード、拡張デバイス割り当て（フェーズ2.0予定）を行う
 - センターアップロードはクラウド側からオンプレ側へのアクセスはインフラポリシーでNGのため、センター側からクラウドにアクセスし、作成したCMをダウンロードする
 - 共有はグループIDによりグループ間でCMを利用できるようにする
 
@@ -40,7 +40,7 @@ AWSはU MESSE用のAWSアカウントを新規作成し、構築する
 - オリジナルはユーザー自身で音声録音とTTS録音を行い、ナレーションとして利用する
 - 新規作成、作成したオリジナル音声を再生、削除を行う
 - 音声録音はタブレットのマイク（および外部マイク接続）を利用して録音する
-- TTS録音はあらかじめコメントが記載されているテンプレートから選択し、一部入力（店名、開店時間など）をユーザーが行い、外部APIを利用する
+- TTS録音はフリー入力の他に、あらかじめコメントが記載されている原文をコピーし、外部APIを利用する
 
 ### CM発注（TODO）
 
@@ -59,7 +59,7 @@ AWSはU MESSE用のAWSアカウントを新規作成し、構築する
 ### MDM
 
 - intentによりUNIS顧客CD（unis_customer_cd）を取得する
-- MDMで取得できるパラメータ
+- MDMで取得できるパラメータ（※一部抜粋）
 
 |Name|Type|
 |----|----|
@@ -72,13 +72,6 @@ AWSはU MESSE用のAWSアカウントを新規作成し、構築する
 |customer_address2|String|
 |customer_address3|String|
 |umembers_key|String|
-|uphon_contract_cd|String|
-|uphone_number|String|
-|uphone_number_key|String|
-|ufax_number|String|
-|ufax_number_key|String|
-|com_ssid2_name|String|
-|com_ssid2_pass|String|
 |sereal_cd|String|
 |create_date|String|
 |renewal_date|String|
@@ -114,7 +107,7 @@ text="
 
 for speaker in $speakers; do
   echo $speaker
-  curl "$url" -o "$speaker.mp3" -u "$key:" -d "text=$text" -d "speaker=$speaker" -d "pitch=90" -d "speed=100"
+  curl "$url" -o "$speaker.mp3" -u "$key:" -d "text=$text" -d "speaker=$speaker" -d "pitch=100" -d "speed=95"
   echo
   sleep 1
 done
@@ -152,7 +145,6 @@ exit
 
 ## AWSのエラー検知
 
-- TODO: U-Musicでどのようなエスかフローを構築するか確認中
 - LambdaのログをCloudWatchへ飛ばし、CloudWatchからアラートログをSlackへ飛ばす方式を検討中(もしくはIM課へエスカレーション)
 
 ## 聴取ログ・利用動向レポート
@@ -160,4 +152,3 @@ exit
 - TODO: CP確認中
 - オリジナルCMをローカル再生する場合などに聴取ログが必要か
 - USEN提供の音源をどれくらい利用されているかレポートも必要か
-- U-Musicの聴取ログ・レポートと合わせて確認中
