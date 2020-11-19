@@ -1,13 +1,26 @@
 package com.usen.umesse
 
-import android.net.Uri
+import android.os.Bundle
 import android.util.Log
-import com.google.androidbrowserhelper.trusted.LauncherActivity
+import androidx.appcompat.app.AppCompatActivity
+import com.usen.umesse.mdm.MdmClient
 
-class MainActivity : LauncherActivity() {
-    override fun getLaunchingUrl(): Uri {
-        val uri = super.getLaunchingUrl()
-        Log.e("MainActivity", uri.toString())
-        return uri.buildUpon().appendQueryParameter("custCd", "Dummy").build()
+class MainActivity : AppCompatActivity() {
+    private lateinit var mdmClient: MdmClient
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Log.d("MainActivity", "onCreate.")
+        mdmClient= MdmClient(applicationContext).apply {
+            registerMdmReceiver()
+            requestCustomerInfo()
+        }
+
+        // TODO: スプラッシュ画面 MdmIntentReceiver来ない場合のエラー
+    }
+
+    override fun onDestroy() {
+        mdmClient.unregisterMdmReceiver()
+        super.onDestroy()
     }
 }
