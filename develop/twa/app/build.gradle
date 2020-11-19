@@ -18,6 +18,8 @@ import groovy.xml.MarkupBuilder
 
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 def twaManifest = [
     applicationId: 'com.usen.umesse',

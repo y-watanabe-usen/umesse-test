@@ -23,6 +23,17 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/launcherName">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".CustomLauncherActivity"
+            android:label="@string/launcherName">
             <meta-data
                 android:name="android.support.customtabs.trusted.DEFAULT_URL"
                 android:value="@string/launchUrl" />
@@ -51,11 +62,6 @@
                 android:name="android.support.customtabs.trusted.FALLBACK_STRATEGY"
                 android:value="@string/fallbackType" />
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
 
@@ -95,6 +101,12 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
+
+        <receiver android:name=".MdmIntentReceiver">
+            <intent-filter>
+                <action android:name="com.usen.custom_action_usen_cd" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
