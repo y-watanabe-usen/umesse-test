@@ -68,8 +68,8 @@ echo
 echo "========================================"
 echo "5. ラウドネス調整 + HE-AACv2化"
 echo "========================================"
-if [ `echo "$input_i > -12" | bc` -eq 1 ]; then
-  $ffmpeg -hide_banner -y -i tmp_2.wav -af volume=-`echo "$input_i + 12" | bc`dB -acodec libfdk_aac -profile:a aac_he_v2 -ab 48k -ar 48000 -ac 2 output.aac
+if [ `echo "$input_i > -17.5" | bc` -eq 1 ]; then
+  $ffmpeg -hide_banner -y -i tmp_2.wav -af volume=-`echo "$input_i + 17.5" | bc`dB -acodec libfdk_aac -profile:a aac_he_v2 -ab 48k -ar 48000 -ac 2 output.aac
 else
   $ffmpeg -hide_banner -y -i tmp_2.wav -af volume=0dB -acodec libfdk_aac -profile:a aac_he_v2 -ab 48k -ar 48000 -ac 2 output.aac
 fi
