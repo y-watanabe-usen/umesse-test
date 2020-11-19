@@ -164,7 +164,7 @@
             <form>
               <div class="form-group">
                 <label for="title" class="col-form-label">タイトル(必須)</label>
-                <input type="text" class="form-control" id="title" />
+                <input type="text" class="form-control" id="title" v-model="file.title" />
               </div>
               <div class="form-group">
                 <label for="description" class="col-form-label">説明</label>
@@ -186,6 +186,7 @@
               data-dismiss="modal"
               data-toggle="modal"
               data-target="#savedModal"
+	      @click="postData"
             >
               保存する
             </button>
@@ -231,12 +232,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, computed, toRefs } from "vue";
+import { defineComponent, reactive, computed, toRefs, ref, PropType  } from "vue";
 import AudioRecorder from "@/mixin/AudioRecorder";
 import AudioPlayer from "@/mixin/AudioPlayer";
 
 export default defineComponent({
-  setup() {
+  setup(props) {
+    const file = reactive({
+      title: ''
+    })
     const audioRecorder = AudioRecorder();
     const audioPlayer = AudioPlayer();
     const state = reactive({
@@ -286,14 +290,27 @@ export default defineComponent({
     const play = async () => {
       const audioBuffer = await audioRecorder.getAudioBuffer();
       audioPlayer.start(audioBuffer!!);
-    };
+    }
     const deleteRecordedData = () => audioRecorder.reset();
+
+    const postData = async () => {
+      const audioBuffer = await audioRecorder.getAudioBuffer();
+      
+      if (typeof audioBuffer !== 'undefined') {
+        const new_file = audioRecorder.getAudioFile(audioBuffer).then((value) => {
+          console.log(value);
+          audioRecorder.postData(file.title, value);
+        });
+      }
+    }
 
     return {
       ...toRefs(state),
+      file,
       toggleVoiceRecorder,
       play,
       deleteRecordedData,
+      postData,
     };
   },
 });
