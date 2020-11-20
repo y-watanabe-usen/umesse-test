@@ -38,6 +38,7 @@ export default () => {
     state.startedTime = context.currentTime;
 
     source.onended = () => {
+      state.playbackTime = state.duration
       source.stop()
       source.disconnect(analyser);
       analyser.disconnect(context.destination);
