@@ -25,3 +25,30 @@ bubblewrap init --manifest http://localhost/manifest.json
 ? Key name: android
 ? Do you want to create one now? No
 ```
+
+
+### ローカル環境でのTWA
+vuejsのIPが192.168.10.6の場合
+
+1. webapp(vuejs)の自分のPCのIPを許可設定する
+```
+adb shell "echo '_ --disable-digital-asset-link-verification-for-url=\"http://192.168.10.6:8080\"' > /data/local/tmp/chrome-command-line"
+```
+2. 端末のchormeを立ち上げ下記URLにアクセスしEnabledに変更する
+chrome://flags/#enable-command-line-on-non-rooted-devices
+
+3.下記にvuejsのアドレスを許可するように追加
+chrome://flags/#unsafely-treat-insecure-origin-as-secure
+http://192.168.10.6:8080を追加
+
+4. Chromeの下の方にrelaunchが出てるので押下
+5. Chromeを強制停止する
+
+6. twa/app/build.gradeのhostnameを編集する
+```
+hostName: '192.168.10.6:8080'
+```
+
+7. run vuejs server
+8. run twa android app.
+
