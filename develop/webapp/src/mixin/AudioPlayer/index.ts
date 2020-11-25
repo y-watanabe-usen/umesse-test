@@ -44,15 +44,18 @@ export default () => {
       analyser.disconnect(context.destination);
       clearInterval(timer);
       state.powerDecibels = -100;
+      state.playing = false
     }
     source.start();
     state.playbackTime = 0;
+    state.playing = true
     timer = setInterval(function () {
       updateAnalyser();
       updatePlaybackTime();
     }, 100);
   }
   const stop = () => {
+    state.playing = false
   }
 
   const updateAnalyser = () => {
@@ -68,6 +71,6 @@ export default () => {
     state.playbackTime = context.currentTime - state.startedTime;
   }
   return {
-    start, stop, getPowerDecibels, getPlaybackTime, getDuration,
+    start, stop, getPowerDecibels, getPlaybackTime, getDuration, isPlaying
   };
 }
