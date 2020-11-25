@@ -28,8 +28,9 @@ export default () => {
   analyser.fftSize = 2048;
   const sampleBuffer = new Float32Array(analyser.fftSize);
   var timer: number | undefined;
+  var source: AudioBufferSourceNode
   const start = async (audioBuffer: AudioBuffer) => {
-    const source = context.createBufferSource();
+    source = context.createBufferSource();
 
     source.buffer = audioBuffer;
     analyser.connect(context.destination);
@@ -55,6 +56,7 @@ export default () => {
     }, 100);
   }
   const stop = () => {
+    source.stop()
     state.playing = false
   }
 

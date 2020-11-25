@@ -193,10 +193,19 @@
               </div>
               <div class="col-8">
                 <div class="row">
-                  <div class="col text-left">00:00:01</div>
-                  <div class="col text-right">00:00:15</div>
+                  <div class="col text-left" style="font-size: 17px">
+                    {{ state.playbackTimeHms }}
+                  </div>
+                  <div class="col text-right" style="font-size: 17px">
+                    {{ state.durationHms }}
+                  </div>
                 </div>
-                <meter min="0" max="15" class="w-100" value="1"></meter>
+                <meter
+                  min="0"
+                  :max="state.duration"
+                  class="w-100"
+                  :value="state.playbackTime"
+                ></meter>
               </div>
             </div>
             <div class="row pt-5">
@@ -259,6 +268,7 @@
               type="button"
               class="btn btn-light btn-close"
               data-dismiss="modal"
+              @click="stop"
             >
               終了
             </button>
@@ -363,10 +373,12 @@
 import { computed, reactive } from "vue";
 import AudioPlayer from "@/mixin/AudioPlayer";
 import axios from "axios";
+import AudioStore from "@/store/audio";
 
 export default {
   setup() {
     const audioPlayer = AudioPlayer();
+    const audioStore = AudioStore();
     const state = reactive({
       menus: [
         {
@@ -428,19 +440,17 @@ export default {
       const s = "" + (((second % 60) / 10) | 0) + ((second % 60) % 10);
       return h + ":" + m + ":" + s;
     };
-    const play = () => {
-      axios
-        .get("/asahi/music/myuu/wave/hana.mp3", {
-          responseType: "arraybuffer",
-        })
-        .then((response) => {
-          audioPlayer.start(response.data);
-        })
-        .catch((error) => {});
+    const play = async () => {
+      if (state.isPlaying) return;
+      // TODO: umesse apiから取得
+      const signedUrl = "/audio/asahi/music/myuu/wave/hana.mp3";
+
+      await audioStore.download(signedUrl);
+      audioPlayer.start(<AudioBuffer>audioStore.audioBuffer);
     };
 
     const stop = () => {
-      audioPlayer.stop();
+      if (state.isPlaying) audioPlayer.stop();
     };
 
     return {
