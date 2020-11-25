@@ -6,7 +6,8 @@ export default () => {
   const state = reactive<AudioRecorderState>({
     recording: false,
     chunks: new Array<Blob>(),
-    mediaRecorder: null
+    mediaRecorder: null,
+    buffer: null
   })
 
   const isRecording = () => {
@@ -19,13 +20,14 @@ export default () => {
     mediaRecorder.onstop = () => stream.getTracks().forEach(track => track.stop());
     mediaRecorder.ondataavailable = (e: BlobEvent) => {
       state.chunks.push(e.data);
+      getAudioBuffer();
     };
     mediaRecorder.start();
 
     state.recording = true;
     state.mediaRecorder = mediaRecorder;
   }
-  const stop = () => {
+  const stop = async () => {
     state.mediaRecorder?.stop();
     state.recording = false;
   }
@@ -52,6 +54,7 @@ export default () => {
       reader.onload = (event: Event) => {
         context.decodeAudioData(reader.result as ArrayBuffer, (buffer) => {
           resolve(buffer);
+	  state.buffer = buffer;
         });
       };
       reader.onerror = (event: Event) => {
@@ -61,23 +64,17 @@ export default () => {
     });
   };
 
-  const postData = (filename: string, fileData: string) => {
-    var api = new UMesseApi.RecordingApi();
-    api.userRecordingPost(filename, fileData);
+  const getAudioFile = () => {
+    if (state.buffer != null) {
+      return URL.createObjectURL(bufferToWave());
+    }
+    return null;
   }
 
-  const getAudioFile = async (audioBuffer: AudioBuffer) => {
-    var duration = audioBuffer.duration,
-            rate = audioBuffer.sampleRate,
-          offset = 0;
-
-    return URL.createObjectURL(bufferToWave(audioBuffer, audioBuffer.length));
-
-  }
-
-  const bufferToWave = (abuffer: AudioBuffer, len: number) => {
-    var numOfChan = abuffer.numberOfChannels,
-        length = len * numOfChan * 2 + 44,
+  const bufferToWave = () => {
+    const abuffer = state.buffer!!;
+    var numOfChan = abuffer!!.numberOfChannels,
+        length = abuffer!!.length * numOfChan * 2 + 44,
         buffer = new ArrayBuffer(length),
         view = new DataView(buffer),
         channels = [], i, sample,
@@ -132,6 +129,6 @@ export default () => {
   return {
     ...toRefs(state),
     getBlob, getAudioBuffer,
-    start, stop, reset, isRecording, postData, getAudioFile, bufferToWave
+    start, stop, reset, isRecording, getAudioFile, bufferToWave
   };
 }

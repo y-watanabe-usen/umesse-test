@@ -232,12 +232,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, computed, toRefs, ref, PropType  } from "vue";
+import { defineComponent, reactive, computed, toRefs } from "vue";
 import AudioRecorder from "@/mixin/AudioRecorder";
 import AudioPlayer from "@/mixin/AudioPlayer";
+import * as UMesseApi from "umesseapi"
 
 export default defineComponent({
-  setup(props) {
+  setup() {
     const file = reactive({
       title: ''
     })
@@ -294,14 +295,13 @@ export default defineComponent({
     const deleteRecordedData = () => audioRecorder.reset();
 
     const postData = async () => {
-      const audioBuffer = await audioRecorder.getAudioBuffer();
+      var api = new UMesseApi.RecordingApi();
       
-      if (typeof audioBuffer !== 'undefined') {
-        const new_file = audioRecorder.getAudioFile(audioBuffer).then((value) => {
-          console.log(value);
-          audioRecorder.postData(file.title, value);
-        });
+      const audioFile = await audioRecorder.getAudioFile();
+      if (audioFile != null) {
+        api.userRecordingPost(file.title, audioFile);
       }
+
     }
 
     return {
