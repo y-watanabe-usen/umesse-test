@@ -15,38 +15,37 @@ WebApp --> Lambda: CMデータ取得
 Lambda --> DynamoDB: データ取得
 note right
 {
-  Id: {S, 'ファイル名'},
-  Title: {S, 'タイトル名'},
-  Description: {S, '説明文'},
-  Seconds: {I, '秒数'},
-  StartDate: {S, '2014-10-10T13:50:40+09:00'},
-  EndDate: {S, '9999-12-31T23:59:59+09:00'},
-  ProductionType: {S, '01: 音楽系, 02: 素ナレ'},
-  Category1: {S: '業種名'},
-  Category2: {S: 'シーン名'},
-  Materials: {
-    Narrations: [
+  id: {S, 'ファイル名'},
+  title: {S, 'タイトル名'},
+  description: {S, '説明文'},
+  seconds: {I, '秒数'},
+  start_date: {S, '2014-10-10T13:50:40+09:00'},
+  end_date: {S, '9999-12-31T23:59:59+09:00'},
+  production_type: {S, '01: 音楽系, 02: 素ナレ'},
+  industry: {S: '業種名'},
+  scene: {S: 'シーン名'},
+  materials: {
+    narrations: [
       {
-        Id: {S, 'ファイル名'},
-        Volume: {I, 'ボリューム値'},
+        id: {S, 'ファイル名'},
+        volume: {I, 'ボリューム値'},
       }
     ],
-    StartChime: {
-      Id: {S, 'ファイル名'},
-      Volume: {I, 'ボリューム値'},
+    start_chime: {
+      id: {S, 'ファイル名'},
+      volume: {I, 'ボリューム値'},
     },
-    EndChime: {
-      Id: {S, 'ファイル名'},
-      Volume: {I, 'ボリューム値'},
+    end_chime: {
+      id: {S, 'ファイル名'},
+      volume: {I, 'ボリューム値'},
     },
-    Bgm: {
-      Id: {S, 'ファイル名'},
-      Volume: {I, 'ボリューム値'},
+    bgm: {
+      id: {S, 'ファイル名'},
+      volume: {I, 'ボリューム値'},
     },
   },
-  CenterShear: {B, false},
-  GroupShear: {B, false},
-  TimeStamp: {S, '2014-10-10T13:50:40+09:00'}
+  status: {S: '02: CM作成完了'}
+  timestamp: {S, '2014-10-10T13:50:40+09:00'}
 }
 end note
 Lambda <-- DynamoDB: レスポンス
@@ -68,29 +67,30 @@ Lambda <-- S3: レスポンス
 Lambda --> DynamoDB: データ更新
 note right
 {
-  Id: {S, 'ファイル名'},
-  ProductionType: {S, '01: 音楽系, 02: 素ナレ'},
-  Materials: {
-    Narrations: [
+  id: {S, 'ファイル名'},
+  production_type: {S, '01: 音楽系, 02: 素ナレ'},
+  materials: {
+    narrations: [
       {
-        Id: {S, 'ファイル名'},
-        Volume: {I, 'ボリューム値'},
+        id: {S, 'ファイル名'},
+        volume: {I, 'ボリューム値'},
       }
     ],
-    StartChime: {
-      Id: {S, 'ファイル名'},
-      Volume: {I, 'ボリューム値'},
+    start_chime: {
+      id: {S, 'ファイル名'},
+      volume: {I, 'ボリューム値'},
     },
-    EndChime: {
-      Id: {S, 'ファイル名'},
-      Volume: {I, 'ボリューム値'},
+    end_chime: {
+      id: {S, 'ファイル名'},
+      volume: {I, 'ボリューム値'},
     },
-    Bgm: {
-      Id: {S, 'ファイル名'},
-      Volume: {I, 'ボリューム値'},
+    bgm: {
+      id: {S, 'ファイル名'},
+      volume: {I, 'ボリューム値'},
     },
   },
-  TimeStamp: {S, '2014-10-10T13:50:40+09:00'}
+  status: {S: '01: CM作成中'}
+  timestamp: {S, '2014-10-10T13:50:40+09:00'}
 }
 end note
 Lambda <-- DynamoDB: レスポンス
@@ -101,17 +101,16 @@ WebApp --> Lambda: CM確定
 Lambda --> DynamoDB: データ更新
 note right
 {
-  Id: {S, 'ファイル名'},
-  Title: {S, 'タイトル名'},
-  Description: {S, '説明文'},
-  Seconds: {I, '秒数'},
-  StartDate: {S, '2014-10-10T13:50:40+09:00'},
-  EndDate: {S, '9999-12-31T23:59:59+09:00'},
-  Category1: {S: '業種名'},
-  Category2: {S: 'シーン名'},
-  CenterShear: {B, false},
-  GroupShear: {B, false},
-  TimeStamp: {S, '2014-10-10T13:50:40+09:00'}
+  id: {S, 'ファイル名'},
+  title: {S, 'タイトル名'},
+  description: {S, '説明文'},
+  seconds: {I, '秒数'},
+  start_date: {S, '2014-10-10T13:50:40+09:00'},
+  end_date: {S, '9999-12-31T23:59:59+09:00'},
+  industry: {S: '業種名'},
+  scene: {S: 'シーン名'},
+  status: {S: '01: CM作成中'}
+  timestamp: {S, '2014-10-10T13:50:40+09:00'}
 }
 end note
 Lambda <-- DynamoDB: レスポンス
@@ -125,44 +124,53 @@ Lambda <-- S3: ファイル取得
 Lambda --> Lambda: ffmpeg 音源加工
 Lambda --> S3: ファイルPUT(putObject)
 Lambda <-- S3: レスポンス
+Lambda --> DynamoDB: データ更新
+note right
+{
+  id: {S, 'ファイル名'},
+  seconds: {I, '秒数'},
+  status: {S: '02: CM作成完了'}
+  timestamp: {S, '2014-10-10T13:50:40+09:00'}
+}
+end note
+Lambda <-- DynamoDB: レスポンス
 
-== CM削除 ==
+== CM削除 （※センターアップロード済みの場合は、センター削除も実施）==
 WebApp --> Lambda: CMデータ取得
 Lambda --> DynamoDB: データ取得
 note right
 {
-  Id: {S, 'ファイル名'},
-  Title: {S, 'タイトル名'},
-  Description: {S, '説明文'},
-  Seconds: {I, '秒数'},
-  StartDate: {S, '2014-10-10T13:50:40+09:00'},
-  EndDate: {S, '9999-12-31T23:59:59+09:00'},
-  ProductionType: {S, '01: 音楽系, 02: 素ナレ'},
-  Category1: {S: '業種名'},
-  Category2: {S: 'シーン名'},
-  Materials: {
-    Narrations: [
+  id: {S, 'ファイル名'},
+  title: {S, 'タイトル名'},
+  description: {S, '説明文'},
+  seconds: {I, '秒数'},
+  start_date: {S, '2014-10-10T13:50:40+09:00'},
+  end_date: {S, '9999-12-31T23:59:59+09:00'},
+  production_type: {S, '01: 音楽系, 02: 素ナレ'},
+  industry: {S: '業種名'},
+  scene: {S: 'シーン名'},
+  materials: {
+    narrations: [
       {
-        Id: {S, 'ファイル名'},
-        Volume: {I, 'ボリューム値'},
+        id: {S, 'ファイル名'},
+        volume: {I, 'ボリューム値'},
       }
     ],
-    StartChime: {
-      Id: {S, 'ファイル名'},
-      Volume: {I, 'ボリューム値'},
+    start_chime: {
+      id: {S, 'ファイル名'},
+      volume: {I, 'ボリューム値'},
     },
-    EndChime: {
-      Id: {S, 'ファイル名'},
-      Volume: {I, 'ボリューム値'},
+    end_chime: {
+      id: {S, 'ファイル名'},
+      volume: {I, 'ボリューム値'},
     },
-    Bgm: {
-      Id: {S, 'ファイル名'},
-      Volume: {I, 'ボリューム値'},
+    bgm: {
+      id: {S, 'ファイル名'},
+      volume: {I, 'ボリューム値'},
     },
   },
-  CenterShear: {B, false},
-  GroupShear: {B, false},
-  TimeStamp: {S, '2014-10-10T13:50:40+09:00'}
+  status: {S: '02: CM作成完了'}
+  timestamp: {S, '2014-10-10T13:50:40+09:00'}
 }
 end note
 Lambda <-- DynamoDB: レスポンス
@@ -170,7 +178,17 @@ WebApp <-- Lambda: レスポンス
 WebApp --> Lambda: CM削除
 Lambda --> S3: CM削除
 Lambda <-- S3: レスポンス
-Lambda --> DynamoDB: データ削除
+Lambda --> DynamoDB: データ更新
+Lambda --> DynamoDB: データ更新
+note right
+{
+  id: {S, 'ファイル名'},
+  end_date: {S, '9999-12-31T23:59:59+09:00'},
+  status: {S: '00: CM削除'},
+  timestamp: {S, '2014-10-10T13:50:40+09:00'}
+}
+end note
+Lambda <-- DynamoDB: レスポンス
 Lambda <-- DynamoDB: レスポンス
 WebApp <-- Lambda: レスポンス
 

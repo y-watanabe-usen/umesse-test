@@ -14,13 +14,11 @@ WebApp --> Lambda: リスト取得
 Lambda --> DynamoDB: リスト取得
 note right
 {
-    Id: {S, 'ファイル名'},
-    Title: {S, 'タイトル名'},
-    Description: {S, '説明文'},
-    Category1: {S: '業種名'},
-    Category2: {S: 'シーン名'},
-    StartDate: {S, '2014-10-10T13:50:40+09:00'},
-    TimeStamp: {S, '2014-10-10T13:50:40+09:00'}
+  id: {S, 'ファイル名'},
+  title: {S, 'タイトル名'},
+  description: {S, '説明文'},
+  start_date: {S, '2014-10-10T13:50:40+09:00'},
+  timestamp: {S, '2014-10-10T13:50:40+09:00'}
 }
 end note
 Lambda <-- DynamoDB: レスポンス
@@ -39,13 +37,11 @@ WebApp --> Lambda: データ更新
 Lambda --> DynamoDB: データ更新
 note right
 {
-    Id: {S, 'ファイル名'},
-    Title: {S, 'タイトル名'},
-    Description: {S, '説明文'},
-    Category1: {S: '業種名'},
-    Category2: {S: 'シーン名'},
-    StartDate: {S, '2014-10-10T13:50:40+09:00'},
-    TimeStamp: {S, '2014-10-10T13:50:40+09:00'}
+  id: {S, 'ファイル名'},
+  title: {S, 'タイトル名'},
+  description: {S, '説明文'},
+  start_date: {S, '2014-10-10T13:50:40+09:00'},
+  timestamp: {S, '2014-10-10T13:50:40+09:00'}
 }
 end note
 Lambda <-- DynamoDB: レスポンス

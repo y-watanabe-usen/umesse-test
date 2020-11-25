@@ -14,19 +14,19 @@ Center --> Lambda: CM連携リスト取得
 Lambda --> DynamoDB: データ取得（センター連携用）
 note right
 {
-  UnisCustomerCd: {S, '顧客CD'},
-  DataProcessType: {S, '01: 追加, 02: 変更, 03: 削除'}
-  Id: {S, 'ファイル名'},
-  Title: {S, 'タイトル名'},
-  Description: {S, '説明文'},
-  Seconds: {I, '秒数'},
-  StartDate: {S, '2014-10-10T13:50:40+09:00'},
-  EndDate: {S, '9999-12-31T23:59:59+09:00'},
-  ProductionType: {S, '01: 音楽系, 02: 素ナレ'},
-  Category1: {S: '業種名'},
-  Category2: {S: 'シーン名'},
-  Status: {I, '1: 連携可能'}
-  TimeStamp: {S, '2014-10-10T13:50:40+09:00'}
+  unis_customer_cd: {S, '顧客CD'},
+  data_process_type: {S, '01: 追加, 02: 変更, 03: 削除'}
+  id: {S, 'ファイル名'},
+  title: {S, 'タイトル名'},
+  description: {S, '説明文'},
+  seconds: {I, '秒数'},
+  start_date: {S, '2014-10-10T13:50:40+09:00'},
+  end_date: {S, '9999-12-31T23:59:59+09:00'},
+  production_type: {S, '01: 音楽系, 02: 素ナレ'},
+  industry: {S: '業種名'},
+  scene: {S: 'シーン名'},
+  status: {I, '1: 連携可能}
+  timestamp: {S, '2014-10-10T13:50:40+09:00'}
 }
 end note
 Lambda <-- DynamoDB: レスポンス
@@ -39,16 +39,17 @@ note right
   "cmMetas" : [
     {
       "dataProcessType" : "01",
-      "uMesseCmCd" : "ABCDE",
-      "url" : "https://xxxx",
-      "contentTime" : 30000,
-      "fileName" : "test.aac",
-      "fileSize" : 1234567,
+      "uMesseCmCd" : "0999999900-c-sfja8eo1",
+      "url" : "https://xxxxx/0999999900-c-sfja8eo1.aac?AWSAccessKeyId=xxxxxxxx",
       "cmName" : "時報A",
       "cmCommentManuscript" : "テストCMです",
       "startDatetime" : "2020-01-01T12:34:56+09:00",
       "endDatetime" : "9999-12-31T23:59:59+09:00",
       "productionType" : "01",
+      "fileName" : "0999999900-c-sfja8eo1.aac",
+      "contentTime" : 30000,
+      "fileSize" : 1234567,
+      "sceneCd" : "001",
     }
   ]
 }
@@ -59,6 +60,41 @@ Center --> Lambda: CM連携完了
 Lambda --> DynamoDB: データ削除（センター連携用）
 DynamoDB --> DynamoDB: 該当データ削除
 Lambda <-- DynamoDB: レスポンス
+Lambda --> DynamoDB: データ更新（CMメタデータ）
+note right
+{
+  id: {S, 'ファイル名'},
+  status: {S: '12: センターアップロード完了'}
+  timestamp: {S, '2014-10-10T13:50:40+09:00'}
+}
+end note
+Lambda <-- DynamoDB: レスポンス
 Center <-- Lambda: レスポンス
+
+== CMセンター連携エラー ==
+Center --> Lambda: CM連携エラー
+Lambda --> DynamoDB: データ更新（センター連携用）
+note right
+{
+  unis_customer_cd: {S, '顧客CD'},
+  id: {S, 'ファイル名'},
+  status: {I, '9: 連携失敗},
+  error_code: {S, 'エラーコード'},
+  error_message: {S, 'エラーメッセージ'},
+  timestamp: {S, '2014-10-10T13:50:40+09:00'}
+}
+end note
+Lambda <-- DynamoDB: レスポンス
+Lambda --> DynamoDB: データ更新（CMメタデータ）
+note right
+{
+  id: {S, 'ファイル名'},
+  status: {S: '19: センターアップロード失敗'}
+  timestamp: {S, '2014-10-10T13:50:40+09:00'}
+}
+end note
+Lambda <-- DynamoDB: レスポンス
+Center <-- Lambda: レスポンス
+
 
 @enduml

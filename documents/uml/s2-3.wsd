@@ -19,9 +19,9 @@ Lambda <-- S3: レスポンス
 Lambda --> DynamoDB: CMメタデータ更新
 note right
 {
-  Id: {S, 'ファイル名'},
-  GroupShear: ture,
-  TimeStamp: {S, '2014-10-10T13:50:40+09:00'}
+  id: {S, 'ファイル名'},
+  status: TODO,
+  timestamp: {S, '2014-10-10T13:50:40+09:00'}
 }
 end note
 Lambda <-- DynamoDB: レスポンス
@@ -37,9 +37,9 @@ Lambda <-- S3: レスポンス
 Lambda --> DynamoDB: CMメタデータ更新
 note right
 {
-  Id: {S, 'ファイル名'},
-  GroupShear: false,
-  TimeStamp: {S, '2014-10-10T13:50:40+09:00'}
+  id: {S, 'ファイル名'},
+  status: TODO,
+  timestamp: {S, '2014-10-10T13:50:40+09:00'}
 }
 end note
 Lambda <-- DynamoDB: レスポンス
