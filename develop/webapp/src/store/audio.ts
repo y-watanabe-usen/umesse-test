@@ -1,11 +1,16 @@
 import { reactive } from 'vue';
 import axios from "axios"
 
+export interface audioState {
+  isDownloading: boolean,
+  audioBuffer: AudioBuffer | undefined,
+}
+
 export default function audioStore() {
 
-  const state = reactive({
+  const state = reactive<audioState>({
     isDownloading: false,
-    audioBuffer: undefined as AudioBuffer | undefined,
+    audioBuffer: undefined,
   });
 
   const ctx = new AudioContext();
