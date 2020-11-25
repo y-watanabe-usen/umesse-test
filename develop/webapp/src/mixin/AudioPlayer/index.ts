@@ -28,8 +28,9 @@ export default () => {
   analyser.fftSize = 2048;
   const sampleBuffer = new Float32Array(analyser.fftSize);
   var timer: number | undefined;
+  var source: AudioBufferSourceNode
   const start = async (audioBuffer: AudioBuffer) => {
-    const source = context.createBufferSource();
+    source = context.createBufferSource();
 
     source.buffer = audioBuffer;
     analyser.connect(context.destination);
@@ -44,15 +45,19 @@ export default () => {
       analyser.disconnect(context.destination);
       clearInterval(timer);
       state.powerDecibels = -100;
+      state.playing = false
     }
     source.start();
     state.playbackTime = 0;
+    state.playing = true
     timer = setInterval(function () {
       updateAnalyser();
       updatePlaybackTime();
     }, 100);
   }
   const stop = () => {
+    source.stop()
+    state.playing = false
   }
 
   const updateAnalyser = () => {
@@ -68,6 +73,6 @@ export default () => {
     state.playbackTime = context.currentTime - state.startedTime;
   }
   return {
-    start, stop, getPowerDecibels, getPlaybackTime, getDuration,
+    start, stop, getPowerDecibels, getPlaybackTime, getDuration, isPlaying
   };
 }
