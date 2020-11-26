@@ -14,7 +14,10 @@ $AWSCLI s3 sync ../sample_data/s3/contents s3://umesse-contents/
 
 # dynamodb sample data
 $AWSCLI dynamodb batch-write-item --request-items file://../sample_data/dynamodb/users.json
-$AWSCLI dynamodb batch-write-item --request-items file://../sample_data/dynamodb/contents.json
+$AWSCLI dynamodb batch-write-item --request-items file://../sample_data/dynamodb/contents_bgm.json
+$AWSCLI dynamodb batch-write-item --request-items file://../sample_data/dynamodb/contents_chime.json
+$AWSCLI dynamodb batch-write-item --request-items file://../sample_data/dynamodb/contents_nattation.json
+$AWSCLI dynamodb batch-write-item --request-items file://../sample_data/dynamodb/contents_tts.json
 
 # sample scan
 # $AWSCLI dynamodb scan --table-name umesse-contents --filter-expression 'contains(id, :id)' --expression-attribute-values '{":id": {"S":"bgm"}}'
