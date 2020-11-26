@@ -11,6 +11,7 @@ paths:
       tags:
         - ping
       summary: ping
+      operationId: ping
       responses:
         default:
           description: successful response
@@ -27,6 +28,7 @@ paths:
       tags:
         - auth
       summary: 端末認証
+      operationId: auth
       requestBody:
         content: 
           application/json:
@@ -48,6 +50,7 @@ paths:
       tags:
         - user
       summary: User情報取得
+      operationId: getUser
       responses:
         '200':
           description: User情報
@@ -62,7 +65,7 @@ paths:
         - cm
       summary: CMリスト取得
       description: ''
-      operationId: ''
+      operationId: listUserCm
       responses:
         '200':
           description: The response
@@ -83,7 +86,7 @@ paths:
         - cm
       summary: CM新規結合
       description: ''
-      operationId: ''
+      operationId: createUserCm
       requestBody:
         content: 
           application/json:
@@ -108,7 +111,7 @@ paths:
         - cm
       summary: CM情報取得
       description: ''
-      operationId: ''
+      operationId: getUserCm
       parameters:
         - $ref: '#/components/parameters/CmId'
       responses:
@@ -129,7 +132,7 @@ paths:
         - cm
       summary: CM情報更新
       description: ''
-      operationId: ''
+      operationId: updateUserCm
       parameters:
         - $ref: '#/components/parameters/CmId'
       requestBody:
@@ -176,7 +179,7 @@ paths:
         - cm
       summary: CM情報削除
       description: ''
-      operationId: ''
+      operationId: deleteUserCm
       parameters:
         - name: cmId
           in: path
@@ -201,7 +204,7 @@ paths:
         - center
       summary: CMセンター連携追加
       description: ''
-      operationId: ''
+      operationId: createCenterCm
       parameters:
         - $ref: '#/components/parameters/CmId'
       requestBody:
@@ -231,7 +234,7 @@ paths:
         - center
       summary: CMセンター連携削除
       description: ''
-      operationId: ''
+      operationId: deleteCenterCm
       parameters:
         - $ref: '#/components/parameters/CmId'
       responses:
@@ -244,7 +247,7 @@ paths:
         - center
       summary: センターCM連携（センター専用）
       description: ''
-      operationId: ''
+      operationId: getCenterUpload
       responses:
         '200':
           description: The response
@@ -273,7 +276,7 @@ paths:
         - center
       summary: センターCM連携完了（センター専用）
       description: ''
-      operationId: ''
+      operationId: updateCenterUpload
       parameters:
         - $ref: '#/components/parameters/UnisCustomerCd'
       requestBody:
@@ -326,7 +329,7 @@ paths:
         - share
       summary: CM共有リスト取得
       description: ''
-      operationId: ''
+      operationId: listShare
       responses:
         '200':
           description: The response
@@ -349,7 +352,7 @@ paths:
         - share
       summary: CM共有追加
       description: ''
-      operationId: ''
+      operationId: createShare
       parameters:
         - $ref: '#/components/parameters/CmId'
       responses:
@@ -360,7 +363,7 @@ paths:
         - share
       summary: CM共有削除
       description: ''
-      operationId: ''
+      operationId: deleteShare
       parameters:
         - name: cmId
           in: path
@@ -379,7 +382,7 @@ paths:
         - recording
       summary: 録音データリスト取得
       description: ''
-      operationId: ''
+      operationId: listUserRecording
       responses:
         '200':
           description: The response
@@ -393,7 +396,7 @@ paths:
         - recording
       summary: 新規録音データ
       description: ''
-      operationId: ''
+      operationId: createUserRecording
       responses:
         '200':
           description: successful
@@ -415,7 +418,7 @@ paths:
         - recording
       summary: 録音データ取得
       description: ''
-      operationId: ''
+      operationId: getUserRecording
       parameters:
         - $ref: '#/components/parameters/RecordingId'
       responses:
@@ -432,7 +435,7 @@ paths:
         - recording
       summary: 録音データ更新（メタデータのみ）
       description: ''
-      operationId: ''
+      operationId: updateUserRecording
       parameters:
         - $ref: '#/components/parameters/RecordingId'
       requestBody:
@@ -459,7 +462,7 @@ paths:
         - recording
       summary: 録音データ削除
       description: ''
-      operationId: ''
+      operationId: deleteUserRecording
       parameters:
         - $ref: '#/components/parameters/RecordingId'
       responses:
@@ -472,7 +475,7 @@ paths:
         - tts
       summary: TTSデータリスト取得
       description: ''
-      operationId: ''
+      operationId: listUserTts
       responses:
         '200':
           description: The response
@@ -486,7 +489,7 @@ paths:
         - tts
       summary: 新規録音データ
       description: ''
-      operationId: ''
+      operationId: createUserTts
       responses:
         '200':
           description: successful
@@ -508,7 +511,7 @@ paths:
         - tts
       summary: TTSデータ取得
       description: ''
-      operationId: ''
+      operationId: getUserTts
       parameters:
         - $ref: '#/components/parameters/TtsId'
       responses:
@@ -525,7 +528,7 @@ paths:
         - tts
       summary: TTSデータ更新（メタデータのみ）
       description: ''
-      operationId: ''
+      operationId: updateUserTts
       parameters:
         - $ref: '#/components/parameters/TtsId'
       requestBody:
@@ -552,7 +555,7 @@ paths:
         - tts
       summary: TTSデータ削除
       description: ''
-      operationId: ''
+      operationId: deleteUserTts
       parameters:
         - $ref: '#/components/parameters/TtsId'
       responses:
@@ -565,7 +568,7 @@ paths:
         - resources
       summary: BGM
       description: ''
-      operationId: ''
+      operationId: listBgm
       responses:
         '200':
           description: The response
@@ -588,7 +591,7 @@ paths:
         - resources
       summary: BGM
       description: ''
-      operationId: ''
+      operationId: listBgm
       parameters:
         - name: industryId
           in: path
@@ -618,7 +621,7 @@ paths:
         - resources
       summary: BGM
       description: ''
-      operationId: ''
+      operationId: listBgm
       parameters:
         - name: industryId
           in: path
@@ -654,7 +657,7 @@ paths:
         - resources
       summary: ナレーション
       description: ''
-      operationId: ''
+      operationId: listNarration
       responses:
         '200':
           description: The response
@@ -677,7 +680,7 @@ paths:
         - resources
       summary: ナレーション
       description: ''
-      operationId: ''
+      operationId: listNarration
       parameters:
         - name: industryId
           in: path
@@ -707,7 +710,7 @@ paths:
         - resources
       summary: ナレーション
       description: ''
-      operationId: ''
+      operationId: listNarration
       parameters:
         - name: industryId
           in: path
@@ -743,7 +746,7 @@ paths:
         - resources
       summary: Open/Endチャイム
       description: ''
-      operationId: ''
+      operationId: listChime
       responses:
         '200':
           description: The response
@@ -766,7 +769,7 @@ paths:
         - resources
       summary: TTSテンプレート一覧
       description: ''
-      operationId: ''
+      operationId: listTts
       responses:
         '200':
           description: The response
@@ -788,7 +791,7 @@ paths:
         - s3
       summary: S3オブジェクトの署名付きURLの取得
       description: '試聴再生、録音音声アップロード'
-      operationId: ''
+      operationId: getSignedUrl
       responses:
         '200':
           description: The response
