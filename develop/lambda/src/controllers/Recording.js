@@ -14,7 +14,7 @@ module.exports.userRecordingGET = function userRecordingGET (req, res, next) {
 };
 
 module.exports.userRecordingPOST = function userRecordingPOST (req, res, next) {
-  Recording.userRecordingPOST()
+  Recording.userRecordingPOST(req.body['filename'], req.body['recordedFile'])
     .then(function (response) {
       utils.writeJson(res, response);
     })

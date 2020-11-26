@@ -1,5 +1,7 @@
 'use strict';
 
+const { resources } = require("../../umesse/resources");
+
 
 /**
  * 録音データリスト取得
@@ -35,8 +37,14 @@ exports.userRecordingGET = function() {
  *
  * no response value expected for this operation
  **/
-exports.userRecordingPOST = function() {
+exports.userRecordingPOST = function(filename, recordedFile) {
   return new Promise(function(resolve, reject) {
+    var data = {
+      'filename': filename,
+      'resouces': recordedFile
+    };
+    console.log(data);
+    resources.userRecording.put(data);
     resolve();
   });
 }

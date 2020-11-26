@@ -16,5 +16,15 @@ exports.narration = {
 	getAll: () => {
 		return controller.list("umesse-contents","ナレーション");
 	},
-	get : (id) => {}
+	get : (id) => {},
+}
+
+exports.userRecording = {
+	getAll: () => {
+		return controller.list("umesse-contents","ユーザー録音データ");
+	},
+	get : (id) => {},
+	put: (paramas) => {
+		return controller.put("umesse-contents", "ユーザー録音データ/" + params['filename'], params['resources']);
+	}
 }
