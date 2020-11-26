@@ -1,0 +1,85 @@
+{
+  "umesse-users": [
+    {
+      "PutRequest": {
+        "Item": {
+          "unis_customer_cd": {"S": "123456789"},
+          "contract_cd": {"S": "N01234567890123456789"},
+          "service_cd": {"S": "U01"},
+          "service_name": {"S": "U∞MUSNC"},
+          "customer_name": {"S": "カフェUSEN"},
+          "customer_name_kana": {"S": "カフェユーセン"},
+          "customer_group_cd": {"S": "1234567"},
+          "customer_group_name": {"S": "CAFÉ USENグループ"},
+          "contract_status_cd": {"S": "2"},
+          "contract_status_name": {"S": "確定"},
+          "create_date": {"S": "2019-09-01T09:00:00+9:00"},
+          "renewal_date": {"S": "2019-09-01T09:00:00+9:00"},
+          "cm": {
+            "L": [
+              {
+                "M": {
+                  "id": {"S": "123456789-c-12345678.aac"},
+                  "title": {"S": "サンプル"},
+                  "description": {"S": "サンプル"},
+                  "seconds": {"N": "540"},
+                  "start_date": {"S": "2019-09-01T09:00:00+9:00"},
+                  "end_date": {"S": "9999-12-31T23:59:59+09:00"},
+                  "production_type": {"S": "01"},
+                  "industry": {"S": ""},
+                  "scene": {"S": ""},
+                  "materials": {
+                    "M": {
+                      "narrations": {
+                        "L": [
+                          {
+                            "M": {
+                              "id": {"S": "サンプル01.mp3"},
+                              "volume": {"N": "1.0"}
+                            }
+                          },
+                          {
+                            "M": {
+                              "id": {"S": "サンプル02.mp3"},
+                              "volume": {"N": "1.0"}
+                            }
+                          },
+                          {
+                            "M": {
+                              "id": {"S": "サンプル03.mp3"},
+                              "volume": {"N": "1.0"}
+                            }
+                          }
+                        ]
+                      },
+                      "start_chime": {
+                        "M": {
+                          "id": {"S": "サンプル01.mp3"},
+                          "volume": {"N": "0.5"}
+                        }
+                      },
+                      "end_chime": {
+                        "M": {
+                          "id": {"S": "サンプル02.mp3"},
+                          "volume": {"N": "0.5"}
+                        }
+                      },
+                      "bgm": {
+                        "M": {
+                          "id": {"S": "サンプル01.mp3"},
+                          "volume": {"N": "0.5"}
+                        }
+                      }
+                    }
+                  },
+                  "status": {"S": "02"},
+                  "timestamp": {"S": "2019-09-01T09:00:00+9:00"}
+                }
+              }
+            ]  
+          }
+        }
+      }
+    }
+  ]
+}
