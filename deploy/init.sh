@@ -16,7 +16,7 @@ $AWSCLI s3 sync ../sample_data/s3/contents s3://umesse-contents/
 $AWSCLI dynamodb batch-write-item --request-items file://../sample_data/dynamodb/users.json
 $AWSCLI dynamodb batch-write-item --request-items file://../sample_data/dynamodb/contents_bgm.json
 $AWSCLI dynamodb batch-write-item --request-items file://../sample_data/dynamodb/contents_chime.json
-$AWSCLI dynamodb batch-write-item --request-items file://../sample_data/dynamodb/contents_nattation.json
+$AWSCLI dynamodb batch-write-item --request-items file://../sample_data/dynamodb/contents_narration.json
 $AWSCLI dynamodb batch-write-item --request-items file://../sample_data/dynamodb/contents_tts.json
 
 # sample scan
