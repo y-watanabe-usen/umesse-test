@@ -90,40 +90,8 @@ paths:
             schema: 
               type: object
               properties:
-                narration:
-                  type: array
-                  items:
-                    type: object
-                    properties:
-                      narrationId:
-                        type: string
-                      volume:
-                        type: integer
-                        format: int64
-                startChime:
-                  type: object
-                  properties:
-                    startChimeId:
-                      type: string
-                    volume:
-                      type: integer
-                      format: int64
-                endChime:
-                  type: object
-                  properties:
-                    endChimeId:
-                      type: string
-                    volume:
-                      type: integer
-                      format: int64
-                bgm:
-                  type: object
-                  properties:
-                    bgmId:
-                      type: string
-                    volume:
-                      type: integer
-                      format: int64
+                materials:
+                  $ref: '#/components/schemas/CmMaterialListItem'
       responses:
         '200':
           description: successful response
@@ -149,9 +117,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/CmItem'
+                $ref: '#/components/schemas/CmItem'
         '400':
           description: Response invalid
           content:
@@ -174,27 +140,35 @@ paths:
               properties:
                 title:
                   type: string
-                  example: 'タイトル'
+                  example: "サンプル"
                 description:
                   type: string
-                  example: '説明文'
+                  example: "サンプル"
                 seconds:
                   type: integer
                   format: int64
+                  example: 540
                 startDate:
                   type: string
                   format: date-time
+                  example: "2019-09-01T09:00:00+9:00"
                 endDate:
                   type: string
                   format: date-time
-                  example: '掲載終了日時（固定）'
-                shear:
-                  type: boolean
-                  example: false
-                center:
-                  type: boolean
-                  example: true
+                  example: "9999-12-31T23:59:59+09:00"
+                industry:
+                  type: string
+                  example: ""
+                scene:
+                  type: string
+                  example: ""
       responses:
+        '200':
+          description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CmItem'
         default:
           description: Default response
     delete:
@@ -212,8 +186,14 @@ paths:
             type: integer
             format: int64
       responses:
+        '200':
+          description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CmItem'
         default:
-          description: Default error sample response
+          description: Default response
 
   '/center/{cmId}':
     post:
@@ -258,7 +238,7 @@ paths:
         default:
           description: Default error sample response
 
-  /center/download:
+  /center/upload:
     get:
       tags:
         - center
@@ -271,14 +251,15 @@ paths:
           content:
             application/json:
               schema:
-                properties:
-                  value:
-                    type: string
-                    example: "???"
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/CenterItem'
+                items:
+                  properties:
+                    unisCustomerCd:
+                      type: string
+                      example: "123456789"
+                    cmMetas:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/CenterItem'
         '400':
           description: Response invalid
           content:
@@ -286,7 +267,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  '/center/download/{cmId}':
+  '/center/upload/{unisCustomerCd}':
     post:
       tags:
         - center
@@ -294,7 +275,25 @@ paths:
       description: ''
       operationId: ''
       parameters:
-        - $ref: '#/components/parameters/CmId'
+        - $ref: '#/components/parameters/UnisCustomerCd'
+      requestBody:
+        content: 
+          application/json:
+            schema: 
+              type: object
+              properties:
+                dataProcessType:
+                  type: string
+                  example: "01：正常完了、09：取込失敗"
+                uMesseCmCd:
+                  type: string
+                  example: "0999999900-c-sfja8eo1"
+                errorCode:
+                  type: string
+                  example: "E0001"
+                errorMessege:
+                  type: string
+                  example: "CM名に規定外の文字が使用されています"
       responses:
         '200':
           description: The response
@@ -302,13 +301,18 @@ paths:
             application/json:
               schema:
                 properties:
-                  value:
+                  dataProcessType:
                     type: string
-                    example: "???"
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/CenterItem'
+                    example: "01：正常完了、09：取込失敗"
+                  uMesseCmCd:
+                    type: string
+                    example: "0999999900-c-sfja8eo1"
+                  errorCode:
+                    type: string
+                    example: "E0001"
+                  errorMessege:
+                    type: string
+                    example: "CM名に規定外の文字が使用されています"
         '400':
           description: Response invalid
           content:
@@ -382,14 +386,8 @@ paths:
           content:
             application/json:
               schema:
-                properties:
-                  value:
-                    type: string
-                    example: "???"
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/RecordingItem'
+                items:
+                  $ref: '#/components/schemas/RecordingItem'
     post:
       tags:
         - recording
@@ -421,6 +419,12 @@ paths:
       parameters:
         - $ref: '#/components/parameters/RecordingId'
       responses:
+        '200':
+          description: The response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordingItem'
         default:
           description: Default response
     post:
@@ -431,20 +435,25 @@ paths:
       operationId: ''
       parameters:
         - $ref: '#/components/parameters/RecordingId'
-      responses:
-        '200':
-          description: successful
       requestBody:
         content: 
           multipart/form-data:
             schema: 
               type: object
               properties:
-                filename:
+                title:
                   type: string
-                recordedFile:
+                  example: "サンプル"
+                description:
                   type: string
-                  format: binary
+                  example: "サンプル"
+      responses:
+        '200':
+          description: The response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordingItem'
     delete:
       tags:
         - recording
@@ -470,14 +479,8 @@ paths:
           content:
             application/json:
               schema:
-                properties:
-                  value:
-                    type: string
-                    example: "???"
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/TtsItem'
+                items:
+                  $ref: '#/components/schemas/TtsItem'
     post:
       tags:
         - tts
@@ -509,6 +512,12 @@ paths:
       parameters:
         - $ref: '#/components/parameters/TtsId'
       responses:
+        '200':
+          description: The response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TtsItem'
         default:
           description: Default response
     post:
@@ -519,20 +528,25 @@ paths:
       operationId: ''
       parameters:
         - $ref: '#/components/parameters/TtsId'
-      responses:
-        '200':
-          description: successful
       requestBody:
         content: 
           multipart/form-data:
             schema: 
               type: object
               properties:
-                filename:
+                title:
                   type: string
-                recordedFile:
+                  example: "サンプル"
+                description:
                   type: string
-                  format: binary
+                  example: "サンプル"
+      responses:
+        '200':
+          description: The response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TtsItem'
     delete:
       tags:
         - tts
@@ -558,14 +572,75 @@ paths:
           content:
             application/json:
               schema:
-                properties:
-                  value:
-                    type: string
-                    example: "???"
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/BgmItem'
+                type: array
+                items:
+                  $ref: '#/components/schemas/BgmItem'
+        '400':
+          description: Response invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  '/bgm/{industryId}':
+    get:
+      tags:
+        - resources
+      summary: BGM
+      description: ''
+      operationId: ''
+      parameters:
+        - name: industryId
+          in: path
+          description: ID of bgm to return
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BgmItem'
+        '400':
+          description: Response invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  '/bgm/{industryId}/{sceneId}':
+    get:
+      tags:
+        - resources
+      summary: BGM
+      description: ''
+      operationId: ''
+      parameters:
+        - name: industryId
+          in: path
+          description: ID of bgm to return
+          required: true
+          schema:
+            type: string
+        - name: sceneId
+          in: path
+          description: ID of bgm to return
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BgmItem'
         '400':
           description: Response invalid
           content:
@@ -577,7 +652,7 @@ paths:
     get:
       tags:
         - resources
-      summary: ナレーションリスト取得
+      summary: ナレーション
       description: ''
       operationId: ''
       responses:
@@ -586,7 +661,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/NarrationListItem'
+                type: array
+                items:
+                  $ref: '#/components/schemas/NarrationItem'
         '400':
           description: Response invalid
           content:
@@ -594,28 +671,65 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  '/narration/{sceneId}':
+  '/narration/{industryId}':
     get:
       tags:
         - resources
-      summary: ナレーション取得
+      summary: ナレーション
       description: ''
       operationId: ''
       parameters:
-        - name: sceneId
+        - name: industryId
           in: path
           description: ID of narration to return
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
       responses:
         '200':
           description: The response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/NarrationSceneListItem'
+                type: array
+                items:
+                  $ref: '#/components/schemas/NarrationItem'
+        '400':
+          description: Response invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  '/narration/{industryId}/{sceneId}':
+    get:
+      tags:
+        - resources
+      summary: ナレーション
+      description: ''
+      operationId: ''
+      parameters:
+        - name: industryId
+          in: path
+          description: ID of narration to return
+          required: true
+          schema:
+            type: string
+        - name: sceneId
+          in: path
+          description: ID of narration to return
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NarrationItem'
         '400':
           description: Response invalid
           content:
@@ -636,14 +750,9 @@ paths:
           content:
             application/json:
               schema:
-                properties:
-                  value:
-                    type: string
-                    example: "???"
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/ChimeItem'
+                type: array
+                items:
+                  $ref: '#/components/schemas/ChimeItem'
         '400':
           description: Response invalid
           content:
@@ -664,14 +773,9 @@ paths:
           content:
             application/json:
               schema:
-                properties:
-                  value:
-                    type: string
-                    example: "???"
-                  data:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/TtsItem'
+                type: array
+                items:
+                  $ref: '#/components/schemas/TtsItem'
         '400':
           description: Response invalid
           content:
@@ -728,6 +832,14 @@ components:
       schema:
         type: string
         format: string
+    UnisCustomerCd:
+      name: unisCustomerCd
+      in: path
+      description: ID of unis customer cd to return
+      required: true
+      schema:
+        type: string
+        format: string
   schemas:
     Auth:
       properties:
@@ -738,128 +850,152 @@ components:
       properties:
         unisCustomerCd:
           type: string
-          example: 1234567890
+          example: "123456789"
+        contractCd:
+          type: string
+          example: "N01234567890123456789"
+        serviceCd:
+          type: string
+          example: "U01"
+        serviceName:
+          type: string
+          example: "U∞MUSIC"
         customerName:
           type: string
-          example: "Meguro Cafe"
+          example: "カフェUSEN"
+        customerNameKana:
+          type: string
+          example: "カフェユーセン"
         customerGroupCd:
           type: string
-          example: 1234567890
+          example: "1234567"
         customerGroupName:
           type: string
-          example: "USEN"
+          example: "CAFÉ USENグループ"
+        contractStatusCd:
+          type: string
+          example: "2"
+        contractStatusName:
+          type: string
+          example: "確定"
+        createDate:
+          type: string
+          example: "2019-09-01T09:00:00+9:00"
+        renewalDate:
+          type: string
+          example: "2019-09-01T09:00:00+9:00"
     CmItem:
       properties:
         id:
+          type: string
+          example: "123456789-c-12345678"
+        title:
+          type: string
+          example: "サンプル"
+        description:
+          type: string
+          example: "サンプル"
+        seconds:
           type: integer
-          example: 1234
-        name:
+          example: 540
+        startDate:
           type: string
-          example: "cm name"
-        detail:
+          example: "2019-09-01T09:00:00+9:00"
+        endDate:
           type: string
-          example: "cm detail"
+          example: "9999-12-31T23:59:59+09:00"
+        productionType:
+          type: string
+          example: "01: 音楽系, 02: 素ナレ"
+        industry:
+          type: string
+          example: ""
+        scene:
+          type: string
+          example: ""
+        materials:
+          $ref: '#/components/schemas/CmMaterialListItem'
+        status:
+          type: string
+          example: "00:CM削除, 01: CM作成中, 02: CM作成完了, 09: CM作成エラー, 11: センターアップロード中, 12: センターアップロード完了, 19: センターアップロードエラー"
+        timestamp:
+          type: string
+          example: "2019-09-01T09:00:00+9:00"
+    CmMaterialListItem:
+      properties:
+        narrations:
+          type: array
+          items:
+            properties:
+              id:
+                type: string
+                example: "narration/サンプル01"
+              volume:
+                type: integer
+                example: 1.5
+        startChime:
+          type: object
+          properties:
+            id:
+              type: string
+              example: "chime/サンプル01"
+            volume:
+              type: integer
+              example: 0.5
+        endChime:
+          type: object
+          properties:
+            id:
+              type: string
+              example: "chime/サンプル02"
+            volume:
+              type: integer
+              example: 0.5
+        bgm:
+          type: object
+          properties:
+            id:
+              type: string
+              example: "bgm/サンプル01"
+            volume:
+              type: integer
+              example: 0.5
     BgmItem:
       properties:
         id:
+          type: string
+          example: "bgm/サンプル01.mp3"
+        title:
+          type: string
+          example: "タイトル"
+        description:
+          type: string
+          example: "説明文"
+        seconds:
           type: integer
-          example: 1234
-        name:
+          example: 300
+        url:
           type: string
-          example: "bgm name"
-        detail:
-          type: string
-          example: "bgm detail"
-    NarrationListItem:
-      type: array
-      items:
-        $ref: '#/components/schemas/IndustryItem'
-      example: 
-        - id: 1
-          name: "業種名1"
-          scenes:
-            - id: 11
-              name: "シーン名11"
-            - id: 12
-              name: "シーン名12"
-            - id: 13
-              name: "シーン名13"
-        - id: 2
-          name: "業種名2"
-          scenes:
-            - id: 21
-              name: "シーン名21"
-            - id: 22
-              name: "シーン名22"
-            - id: 23
-              name: "シーン名23"
-        - id: 3
-          name: "業種名3"
-          scenes:
-            - id: 31
-              name: "シーン名31"
-            - id: 32
-              name: "シーン名32"
-            - id: 33
-              name: "シーン名33"
-    IndustryItem:
-      properties:
-        id:
-          type: integer
-          example: 1
-        name:
-          type: string
-          example: '業種名'
-        scenes:
-          type: array
+          description: '試聴URL'
+          example: 'https://example.com'
+        industry:
           items:
-            $ref: '#/components/schemas/SceneItem'
-    SceneItem:
-      properties:
-        id:
-          type: integer
-          example: 1
-        name:
+            $ref: '#/components/schemas/IndustryItem' 
+        scenes:
+          items:
+            $ref: '#/components/schemas/SceneItem' 
+        timestamp:
           type: string
-          example: 'シーン名'
-    NarrationSceneListItem:
-      type: array
-      items:
-        $ref: '#/components/schemas/NarrationItem'
-      example: 
-        - id: 1
-          name: '18時30分閉店'
-          detail: '放送開始日2020年10月15日 有効期限2020年10月20日'
-          manuscript: '本日はご来店いただきましてありがとうございます。当店は18時30分閉店です'
-          second: 10
-          url: 'https://example.com'
-        - id: 2
-          name: 'アルバイト募集'
-          detail: '放送開始日2020年10月15日 有効期限2020年10月20日'
-          manuscript: '当店ではアルバイトを募集しております。なんたらかんたら'
-          second: 20
-          url: 'https://example.com'
-        - id: 3
-          name: 'チャイルドチェア'
-          detail: '放送開始日2020年10月15日 有効期限2020年10月20日'
-          manuscript: '本日はご来店いただきましてありがとうございます。なんたらかんたら'
-          second: 30
-          url: 'https://example.com'
-        - id: 4
-          name: 'デリバリー'
-          detail: '放送開始日2020年10月15日 有効期限2020年10月20日'
-          manuscript: '本日はご来店いただきましてありがとうございます。なんたらかんたら'
-          second: 40
-          url: 'https://example.com'
+          example: "2019-09-01T09:00:00+9:00"
     NarrationItem:
       properties:
         id:
-          type: integer
-          example: 1
-        name:
+          type: string
+          example: "narration/サンプル01.mp3"
+        title:
           type: string
           example: '18時30分閉店'
-        detail:
+        description:
           type: string
           example: '放送開始日2020年10月15日 有効期限2020年10月20日'
         manuscript:
@@ -869,53 +1005,131 @@ components:
           type: string
           description: '試聴URL'
           example: 'https://example.com'
-        second:
+        seconds:
           type: integer
           example: 30
+        industry:
+          items:
+            $ref: '#/components/schemas/IndustryItem' 
+        scene:
+          items:
+            $ref: '#/components/schemas/SceneItem' 
+        timestamp:
+          type: string
+          example: "2019-09-01T09:00:00+9:00"
     ChimeItem:
       properties:
         id:
+          type: string
+          example: "chime/サンプル01.mp3"
+        title:
+          type: string
+          example: '開始チャイム'
+        description:
+          type: string
+          example: '開始チャイム'
+        url:
+          type: string
+          description: '試聴URL'
+          example: 'https://example.com'
+        seconds:
           type: integer
-          example: 1234
+          example: 30
+        timestamp:
+          type: string
+          example: "2019-09-01T09:00:00+9:00"
+    IndustryItem:
+      properties:
+        id:
+          type: string
+          example: "01"
         name:
           type: string
-          example: "chime name"
-        detail:
+          example: '業種名'
+    SceneItem:
+      properties:
+        id:
           type: string
-          example: "chime detail"
+          example: "01"
+        name:
+          type: string
+          example: 'シーン名'
     RecordingItem:
       properties:
         id:
-          type: integer
-          example: 1234
+          type: string
+          example: "123456789-r-12345678"
         title:
           type: string
-          example: "recording title"
-        detail:
+          example: "サンプル"
+        description:
           type: string
-          example: "recording detail"
+          example: "サンプル"
+        startDate:
+          type: string
+          example: "2019-09-01T09:00:00+9:00"
+        timestamp:
+          type: string
+          example: "2019-09-01T09:00:00+9:00"
     TtsItem:
       properties:
         id:
-          type: integer
-          example: 1234
+          type: string
+          example: "123456789-t-12345678"
         title:
           type: string
-          example: "tts title"
-        detail:
+          example: "サンプル"
+        description:
           type: string
-          example: "tts detail"
+          example: "サンプル"
+        startDate:
+          type: string
+          example: "2019-09-01T09:00:00+9:00"
+        timestamp:
+          type: string
+          example: "2019-09-01T09:00:00+9:00"
     CenterItem:
       properties:
-        id:
+        dataProcessType:
+          type: string
+          example: "01：追加、02：変更、03：削除"
+        uMesseCmCd:
+          type: string
+          example: "0999999900-c-sfja8eo1"
+        url:
+          type: string
+          example: "https://xxxxx/0999999900-c-sfja8eo1.aac?AWSAccessKeyId=xxxxxxxx"
+        cmName:
+          type: string
+          example: "時報A"
+        cmCommentManuscript:
+          type: string
+          example: "テストCMです"
+        startDatetime:
+          type: string
+          format: date-time
+          example: "2020-01-01T12:34:56+09:00"
+        endDatetime:
+          type: string
+          format: date-time
+          example: "9999-12-31T23:59:59+09:00"
+        productionType:
+          type: string
+          example: "01：音楽系、02：素ナレ"
+        fileName:
+          type: string
+          example: "0999999900-c-sfja8eo1.aac"
+        contentTime:
           type: integer
-          example: 1234
-        title:
+          format: int64
+          example: 30000
+        fileSize:
+          type: integer
+          format: int64
+          example: 1234567
+        sceneCd:
           type: string
-          example: "center title"
-        detail:
-          type: string
-          example: "center detail"
+          example: "001"
     Error:
       description: Error
       type: object
