@@ -2,8 +2,8 @@
 
 const execSync = require("child_process").execSync;
 const fs = require("fs");
-const s3 = require("./s3Controller").controller;
-const dynamodb = require("./dynamodbController").controller;
+const s3 = require("../utils/s3Controller").controller;
+const dynamodb = require("../utils/dynamodbController").controller;
 
 exports.getSignedUrl = async (params) => {
   if (!params.bucket)

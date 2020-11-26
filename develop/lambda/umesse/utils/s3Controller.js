@@ -4,6 +4,7 @@ const aws = require("aws-sdk");
 const s3 = new aws.S3({
   region: "ap-northeast-1",
   endpoint: "localhost:4566",
+  signatureVersion: "v4",
   s3ForcePathStyle: "true", // local only
 });
 
