@@ -164,7 +164,7 @@
             <form>
               <div class="form-group">
                 <label for="title" class="col-form-label">タイトル(必須)</label>
-                <input type="text" class="form-control" id="title" />
+                <input type="text" class="form-control" id="title" v-model="file.title" />
               </div>
               <div class="form-group">
                 <label for="description" class="col-form-label">説明</label>
@@ -186,6 +186,7 @@
               data-dismiss="modal"
               data-toggle="modal"
               data-target="#savedModal"
+	      @click="postData"
             >
               保存する
             </button>
@@ -234,12 +235,19 @@
 import { defineComponent, reactive, computed, toRefs } from "vue";
 import AudioRecorder from "@/mixin/AudioRecorder";
 import AudioPlayer from "@/mixin/AudioPlayer";
+import * as UMesseApi from "umesseapi"
 
+//FIXME: types等に移動.
+interface RecordingFile {
+  title: string | undefined,
+  description: string | undefined
+}
 export default defineComponent({
   setup() {
     const audioRecorder = AudioRecorder();
     const audioPlayer = AudioPlayer();
     const state = reactive({
+      file: <RecordingFile>{},
       isRecording: computed(() => (audioRecorder.isRecording() ? true : false)),
       hasRecordedData: computed(() => {
         if (audioRecorder.getBlob() !== undefined) return true;
@@ -286,14 +294,25 @@ export default defineComponent({
     const play = async () => {
       const audioBuffer = await audioRecorder.getAudioBuffer();
       audioPlayer.start(audioBuffer!!);
-    };
+    }
     const deleteRecordedData = () => audioRecorder.reset();
+
+    const postData = async () => {
+      var api = new UMesseApi.RecordingApi();
+      
+      const audioFile = await audioRecorder.getAudioFile();
+      if (audioFile != null) {
+        api.userRecordingPost(state.file.title, audioFile);
+      }
+
+    }
 
     return {
       ...toRefs(state),
       toggleVoiceRecorder,
       play,
       deleteRecordedData,
+      postData,
     };
   },
 });
