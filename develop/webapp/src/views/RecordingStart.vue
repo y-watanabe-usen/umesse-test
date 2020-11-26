@@ -237,14 +237,17 @@ import AudioRecorder from "@/mixin/AudioRecorder";
 import AudioPlayer from "@/mixin/AudioPlayer";
 import * as UMesseApi from "umesseapi"
 
+//FIXME: types等に移動.
+interface RecordingFile {
+  title: string | undefined,
+  description: string | undefined
+}
 export default defineComponent({
   setup() {
-    const file = reactive({
-      title: ''
-    })
     const audioRecorder = AudioRecorder();
     const audioPlayer = AudioPlayer();
     const state = reactive({
+      file: <RecordingFile>{},
       isRecording: computed(() => (audioRecorder.isRecording() ? true : false)),
       hasRecordedData: computed(() => {
         if (audioRecorder.getBlob() !== undefined) return true;
@@ -299,14 +302,13 @@ export default defineComponent({
       
       const audioFile = await audioRecorder.getAudioFile();
       if (audioFile != null) {
-        api.userRecordingPost(file.title, audioFile);
+        api.userRecordingPost(state.file.title, audioFile);
       }
 
     }
 
     return {
       ...toRefs(state),
-      file,
       toggleVoiceRecorder,
       play,
       deleteRecordedData,
