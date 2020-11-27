@@ -569,70 +569,10 @@ paths:
       summary: BGM
       description: ''
       operationId: listBgm
-      responses:
-        '200':
-          description: The response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/BgmItem'
-        '400':
-          description: Response invalid
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-
-  '/bgm/{industryId}':
-    get:
-      tags:
-        - resources
-      summary: BGM
-      description: ''
-      operationId: listBgm
       parameters:
         - name: industryId
-          in: path
+          in: query
           description: ID of bgm to return
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/BgmItem'
-        '400':
-          description: Response invalid
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-
-  '/bgm/{industryId}/{sceneId}':
-    get:
-      tags:
-        - resources
-      summary: BGM
-      description: ''
-      operationId: listBgm
-      parameters:
-        - name: industryId
-          in: path
-          description: ID of bgm to return
-          required: true
-          schema:
-            type: string
-        - name: sceneId
-          in: path
-          description: ID of bgm to return
-          required: true
           schema:
             type: string
       responses:
@@ -658,70 +598,15 @@ paths:
       summary: ナレーション
       description: ''
       operationId: listNarration
-      responses:
-        '200':
-          description: The response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/NarrationItem'
-        '400':
-          description: Response invalid
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-
-  '/narration/{industryId}':
-    get:
-      tags:
-        - resources
-      summary: ナレーション
-      description: ''
-      operationId: listNarration
       parameters:
         - name: industryId
-          in: path
-          description: ID of narration to return
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The response
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/NarrationItem'
-        '400':
-          description: Response invalid
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-
-  '/narration/{industryId}/{sceneId}':
-    get:
-      tags:
-        - resources
-      summary: ナレーション
-      description: ''
-      operationId: listNarration
-      parameters:
-        - name: industryId
-          in: path
-          description: ID of narration to return
-          required: true
+          in: query
+          description: ID of bgm to return
           schema:
             type: string
         - name: sceneId
-          in: path
-          description: ID of narration to return
-          required: true
+          in: query
+          description: ID of bgm to return
           schema:
             type: string
       responses:
@@ -770,6 +655,17 @@ paths:
       summary: TTSテンプレート一覧
       description: ''
       operationId: listTts
+      parameters:
+        - name: industryId
+          in: query
+          description: ID of bgm to return
+          schema:
+            type: string
+        - name: sceneId
+          in: query
+          description: ID of bgm to return
+          schema:
+            type: string
       responses:
         '200':
           description: The response
@@ -785,6 +681,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+
   /signedUrl:
     get:
       tags:
