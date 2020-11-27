@@ -32,7 +32,6 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
          * @throws {RequiredError}
          */
         authPost: async (body?: Body, options: any = {}): Promise<RequestArgs> => {
-	    console.log("kokokokok");
             const localVarPath = `/auth`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
