@@ -3,8 +3,8 @@
 var utils = require('../utils/writer.js');
 var Cm = require('../service/CmService');
 
-module.exports.userCmCmIdDELETE = function userCmCmIdDELETE (req, res, next, cmId) {
-  Cm.userCmCmIdDELETE(cmId)
+module.exports.createUserCm = function createUserCm (req, res, next, body) {
+  Cm.createUserCm(body)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -13,8 +13,8 @@ module.exports.userCmCmIdDELETE = function userCmCmIdDELETE (req, res, next, cmI
     });
 };
 
-module.exports.userCmCmIdGET = function userCmCmIdGET (req, res, next, cmId) {
-  Cm.userCmCmIdGET(cmId)
+module.exports.deleteUserCm = function deleteUserCm (req, res, next, cmId) {
+  Cm.deleteUserCm(cmId)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -23,8 +23,8 @@ module.exports.userCmCmIdGET = function userCmCmIdGET (req, res, next, cmId) {
     });
 };
 
-module.exports.userCmCmIdPOST = function userCmCmIdPOST (req, res, next, body, cmId) {
-  Cm.userCmCmIdPOST(body, cmId)
+module.exports.getUserCm = function getUserCm (req, res, next, cmId) {
+  Cm.getUserCm(cmId)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -33,8 +33,8 @@ module.exports.userCmCmIdPOST = function userCmCmIdPOST (req, res, next, body, c
     });
 };
 
-module.exports.userCmGET = function userCmGET (req, res, next) {
-  Cm.userCmGET()
+module.exports.listUserCm = function listUserCm (req, res, next) {
+  Cm.listUserCm()
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -43,8 +43,8 @@ module.exports.userCmGET = function userCmGET (req, res, next) {
     });
 };
 
-module.exports.userCmPOST = function userCmPOST (req, res, next, body) {
-  Cm.userCmPOST(body)
+module.exports.updateUserCm = function updateUserCm (req, res, next, body, cmId) {
+  Cm.updateUserCm(body, cmId)
     .then(function (response) {
       utils.writeJson(res, response);
     })

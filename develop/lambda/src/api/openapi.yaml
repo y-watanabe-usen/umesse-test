@@ -11,7 +11,7 @@ paths:
       tags:
       - ping
       summary: ping
-      operationId: pingGET
+      operationId: ping
       responses:
         default:
           description: successful response
@@ -25,7 +25,7 @@ paths:
       tags:
       - auth
       summary: 端末認証
-      operationId: authPOST
+      operationId: auth
       requestBody:
         content:
           application/json:
@@ -44,7 +44,7 @@ paths:
       tags:
       - user
       summary: User情報取得
-      operationId: userGET
+      operationId: getUser
       responses:
         "200":
           description: User情報
@@ -58,7 +58,7 @@ paths:
       tags:
       - cm
       summary: CMリスト取得
-      operationId: userCmGET
+      operationId: listUserCm
       responses:
         "200":
           description: The response
@@ -80,7 +80,7 @@ paths:
       tags:
       - cm
       summary: CM新規結合
-      operationId: userCmPOST
+      operationId: createUserCm
       requestBody:
         content:
           application/json:
@@ -101,7 +101,7 @@ paths:
       tags:
       - cm
       summary: CM情報取得
-      operationId: userCmCmIdGET
+      operationId: getUserCm
       parameters:
       - name: cmId
         in: path
@@ -118,10 +118,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/CmItem'
-                x-content-type: application/json
+                $ref: '#/components/schemas/CmItem'
         "400":
           description: Response invalid
           content:
@@ -133,7 +130,7 @@ paths:
       tags:
       - cm
       summary: CM情報更新
-      operationId: userCmCmIdPOST
+      operationId: updateUserCm
       parameters:
       - name: cmId
         in: path
@@ -150,6 +147,12 @@ paths:
             schema:
               $ref: '#/components/schemas/body_2'
       responses:
+        "200":
+          description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CmItem'
         default:
           description: Default response
       x-swagger-router-controller: Cm
@@ -157,7 +160,7 @@ paths:
       tags:
       - cm
       summary: CM情報削除
-      operationId: userCmCmIdDELETE
+      operationId: deleteUserCm
       parameters:
       - name: cmId
         in: path
@@ -169,15 +172,21 @@ paths:
           type: integer
           format: int64
       responses:
+        "200":
+          description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CmItem'
         default:
-          description: Default error sample response
+          description: Default response
       x-swagger-router-controller: Cm
   /center/{cmId}:
     post:
       tags:
       - center
       summary: CMセンター連携追加
-      operationId: centerCmIdPOST
+      operationId: createCenterCm
       parameters:
       - name: cmId
         in: path
@@ -201,7 +210,7 @@ paths:
       tags:
       - center
       summary: CMセンター連携削除
-      operationId: centerCmIdDELETE
+      operationId: deleteCenterCm
       parameters:
       - name: cmId
         in: path
@@ -216,19 +225,22 @@ paths:
         default:
           description: Default error sample response
       x-swagger-router-controller: Center
-  /center/download:
+  /center/upload:
     get:
       tags:
       - center
       summary: センターCM連携（センター専用）
-      operationId: centerDownloadGET
+      operationId: getCenterUpload
       responses:
         "200":
           description: The response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200'
+                type: array
+                items:
+                  $ref: '#/components/schemas/inline_response_200'
+                x-content-type: application/json
         "400":
           description: Response invalid
           content:
@@ -236,29 +248,34 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
       x-swagger-router-controller: Center
-  /center/download/{cmId}:
+  /center/upload/{unisCustomerCd}:
     post:
       tags:
       - center
       summary: センターCM連携完了（センター専用）
-      operationId: centerDownloadCmIdPOST
+      operationId: updateCenterUpload
       parameters:
-      - name: cmId
+      - name: unisCustomerCd
         in: path
-        description: ID of cm to return
+        description: ID of unis customer cd to return
         required: true
         style: simple
         explode: false
         schema:
           type: string
           format: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body_4'
       responses:
         "200":
           description: The response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200'
+                $ref: '#/components/schemas/inline_response_200_1'
         "400":
           description: Response invalid
           content:
@@ -271,7 +288,7 @@ paths:
       tags:
       - share
       summary: CM共有リスト取得
-      operationId: shareGET
+      operationId: listShare
       responses:
         "200":
           description: The response
@@ -294,7 +311,7 @@ paths:
       tags:
       - share
       summary: CM共有追加
-      operationId: shareCmIdPOST
+      operationId: createShare
       parameters:
       - name: cmId
         in: path
@@ -313,7 +330,7 @@ paths:
       tags:
       - share
       summary: CM共有削除
-      operationId: shareCmIdDELETE
+      operationId: deleteShare
       parameters:
       - name: cmId
         in: path
@@ -333,64 +350,23 @@ paths:
       tags:
       - recording
       summary: 録音データリスト取得
-      operationId: userRecordingGET
+      operationId: listUserRecording
       responses:
         "200":
           description: The response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_1'
+                type: array
+                items:
+                  $ref: '#/components/schemas/RecordingItem'
+                x-content-type: application/json
       x-swagger-router-controller: Recording
     post:
       tags:
       - recording
       summary: 新規録音データ
-      operationId: userRecordingPOST
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/body_4'
-      responses:
-        "200":
-          description: successful
-      x-swagger-router-controller: Recording
-  /user/recording/{recordingId}:
-    get:
-      tags:
-      - recording
-      summary: 録音データ取得
-      operationId: userRecordingRecordingIdGET
-      parameters:
-      - name: recordingId
-        in: path
-        description: ID of recording to return
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          format: string
-      responses:
-        default:
-          description: Default response
-      x-swagger-router-controller: Recording
-    post:
-      tags:
-      - recording
-      summary: 録音データ更新（メタデータのみ）
-      operationId: userRecordingRecordingIdPOST
-      parameters:
-      - name: recordingId
-        in: path
-        description: ID of recording to return
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          format: string
+      operationId: createUserRecording
       requestBody:
         content:
           multipart/form-data:
@@ -400,11 +376,65 @@ paths:
         "200":
           description: successful
       x-swagger-router-controller: Recording
+  /user/recording/{recordingId}:
+    get:
+      tags:
+      - recording
+      summary: 録音データ取得
+      operationId: getUserRecording
+      parameters:
+      - name: recordingId
+        in: path
+        description: ID of recording to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: string
+      responses:
+        "200":
+          description: The response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordingItem'
+        default:
+          description: Default response
+      x-swagger-router-controller: Recording
+    post:
+      tags:
+      - recording
+      summary: 録音データ更新（メタデータのみ）
+      operationId: updateUserRecording
+      parameters:
+      - name: recordingId
+        in: path
+        description: ID of recording to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/body_6'
+      responses:
+        "200":
+          description: The response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordingItem'
+      x-swagger-router-controller: Recording
     delete:
       tags:
       - recording
       summary: 録音データ削除
-      operationId: userRecordingRecordingIdDELETE
+      operationId: deleteUserRecording
       parameters:
       - name: recordingId
         in: path
@@ -424,64 +454,23 @@ paths:
       tags:
       - tts
       summary: TTSデータリスト取得
-      operationId: userTtsGET
+      operationId: listUserTts
       responses:
         "200":
           description: The response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_2'
+                type: array
+                items:
+                  $ref: '#/components/schemas/TtsItem'
+                x-content-type: application/json
       x-swagger-router-controller: Tts
     post:
       tags:
       - tts
       summary: 新規録音データ
-      operationId: userTtsPOST
-      requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/body_6'
-      responses:
-        "200":
-          description: successful
-      x-swagger-router-controller: Tts
-  /user/tts/{ttsId}:
-    get:
-      tags:
-      - tts
-      summary: TTSデータ取得
-      operationId: userTtsTtsIdGET
-      parameters:
-      - name: ttsId
-        in: path
-        description: ID of tts to return
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          format: string
-      responses:
-        default:
-          description: Default response
-      x-swagger-router-controller: Tts
-    post:
-      tags:
-      - tts
-      summary: TTSデータ更新（メタデータのみ）
-      operationId: userTtsTtsIdPOST
-      parameters:
-      - name: ttsId
-        in: path
-        description: ID of tts to return
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          format: string
+      operationId: createUserTts
       requestBody:
         content:
           multipart/form-data:
@@ -491,11 +480,65 @@ paths:
         "200":
           description: successful
       x-swagger-router-controller: Tts
+  /user/tts/{ttsId}:
+    get:
+      tags:
+      - tts
+      summary: TTSデータ取得
+      operationId: getUserTts
+      parameters:
+      - name: ttsId
+        in: path
+        description: ID of tts to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: string
+      responses:
+        "200":
+          description: The response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TtsItem'
+        default:
+          description: Default response
+      x-swagger-router-controller: Tts
+    post:
+      tags:
+      - tts
+      summary: TTSデータ更新（メタデータのみ）
+      operationId: updateUserTts
+      parameters:
+      - name: ttsId
+        in: path
+        description: ID of tts to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/body_8'
+      responses:
+        "200":
+          description: The response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TtsItem'
+      x-swagger-router-controller: Tts
     delete:
       tags:
       - tts
       summary: TTSデータ削除
-      operationId: userTtsTtsIdDELETE
+      operationId: deleteUserTts
       parameters:
       - name: ttsId
         in: path
@@ -515,14 +558,26 @@ paths:
       tags:
       - resources
       summary: BGM
-      operationId: bgmGET
+      operationId: listBgm
+      parameters:
+      - name: industryId
+        in: query
+        description: ID of bgm to return
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
       responses:
         "200":
           description: The response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_3'
+                type: array
+                items:
+                  $ref: '#/components/schemas/BgmItem'
+                x-content-type: application/json
         "400":
           description: Response invalid
           content:
@@ -534,45 +589,35 @@ paths:
     get:
       tags:
       - resources
-      summary: ナレーションリスト取得
-      operationId: narrationGET
-      responses:
-        "200":
-          description: The response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/NarrationListItem'
-        "400":
-          description: Response invalid
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-      x-swagger-router-controller: Resources
-  /narration/{sceneId}:
-    get:
-      tags:
-      - resources
-      summary: ナレーション取得
-      operationId: narrationSceneIdGET
+      summary: ナレーション
+      operationId: listNarration
       parameters:
-      - name: sceneId
-        in: path
-        description: ID of narration to return
-        required: true
-        style: simple
-        explode: false
+      - name: industryId
+        in: query
+        description: ID of bgm to return
+        required: false
+        style: form
+        explode: true
         schema:
-          type: integer
-          format: int64
+          type: string
+      - name: sceneId
+        in: query
+        description: ID of bgm to return
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
       responses:
         "200":
           description: The response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/NarrationSceneListItem'
+                type: array
+                items:
+                  $ref: '#/components/schemas/NarrationItem'
+                x-content-type: application/json
         "400":
           description: Response invalid
           content:
@@ -585,14 +630,17 @@ paths:
       tags:
       - resources
       summary: Open/Endチャイム
-      operationId: chimeGET
+      operationId: listChime
       responses:
         "200":
           description: The response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_4'
+                type: array
+                items:
+                  $ref: '#/components/schemas/ChimeItem'
+                x-content-type: application/json
         "400":
           description: Response invalid
           content:
@@ -605,14 +653,34 @@ paths:
       tags:
       - resources
       summary: TTSテンプレート一覧
-      operationId: ttsGET
+      operationId: listTts
+      parameters:
+      - name: industryId
+        in: query
+        description: ID of bgm to return
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+      - name: sceneId
+        in: query
+        description: ID of bgm to return
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
       responses:
         "200":
           description: The response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_2'
+                type: array
+                items:
+                  $ref: '#/components/schemas/WordItem'
+                x-content-type: application/json
         "400":
           description: Response invalid
           content:
@@ -626,14 +694,14 @@ paths:
       - s3
       summary: S3オブジェクトの署名付きURLの取得
       description: 試聴再生、録音音声アップロード
-      operationId: signedUrlGET
+      operationId: getSignedUrl
       responses:
         "200":
           description: The response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_5'
+                $ref: '#/components/schemas/inline_response_200_2'
         "400":
           description: Response invalid
           content:
@@ -654,141 +722,201 @@ components:
       properties:
         unisCustomerCd:
           type: string
-          example: "1234567890"
+          example: "123456789"
+        contractCd:
+          type: string
+          example: N01234567890123456789
+        serviceCd:
+          type: string
+          example: U01
+        serviceName:
+          type: string
+          example: U∞MUSIC
         customerName:
           type: string
-          example: Meguro Cafe
+          example: カフェUSEN
+        customerNameKana:
+          type: string
+          example: カフェユーセン
         customerGroupCd:
           type: string
-          example: "1234567890"
+          example: "1234567"
         customerGroupName:
           type: string
-          example: USEN
+          example: CAFÉ USENグループ
+        contractStatusCd:
+          type: string
+          example: "2"
+        contractStatusName:
+          type: string
+          example: 確定
+        createDate:
+          type: string
+          example: 2019-09-01T09:00:00+9:00
+        renewalDate:
+          type: string
+          example: 2019-09-01T09:00:00+9:00
       example:
-        customerGroupName: USEN
-        unisCustomerCd: "1234567890"
-        customerName: Meguro Cafe
-        customerGroupCd: "1234567890"
+        contractStatusName: 確定
+        contractStatusCd: "2"
+        customerGroupName: CAFÉ USENグループ
+        contractCd: N01234567890123456789
+        unisCustomerCd: "123456789"
+        customerNameKana: カフェユーセン
+        serviceCd: U01
+        renewalDate: 2019-09-01T09:00:00+9:00
+        serviceName: U∞MUSIC
+        customerName: カフェUSEN
+        customerGroupCd: "1234567"
+        createDate: 2019-09-01T09:00:00+9:00
     CmItem:
       properties:
         id:
+          type: string
+          example: 123456789-c-12345678
+        title:
+          type: string
+          example: サンプル
+        description:
+          type: string
+          example: サンプル
+        seconds:
           type: integer
-          example: 1234
-        name:
+          example: 540
+        startDate:
           type: string
-          example: cm name
-        detail:
+          example: 2019-09-01T09:00:00+9:00
+        endDate:
           type: string
-          example: cm detail
+          example: 9999-12-31T23:59:59+09:00
+        productionType:
+          type: string
+          example: '01: 音楽系, 02: 素ナレ'
+        industry:
+          type: string
+          example: ""
+        scene:
+          type: string
+          example: ""
+        materials:
+          $ref: '#/components/schemas/CmMaterialListItem'
+        status:
+          type: string
+          example: '00:CM削除, 01: CM作成中, 02: CM作成完了, 09: CM作成エラー, 11: センターアップロード中,
+            12: センターアップロード完了, 19: センターアップロードエラー'
+        timestamp:
+          type: string
+          example: 2019-09-01T09:00:00+9:00
       example:
-        name: cm name
-        id: 1234
-        detail: cm detail
+        seconds: 540
+        endDate: 9999-12-31T23:59:59+09:00
+        materials:
+          startChime:
+            volume: 6
+            id: chime/サンプル01
+          narrations:
+          - volume: 0
+            id: narration/サンプル01
+          - volume: 0
+            id: narration/サンプル01
+          endChime:
+            volume: 1
+            id: chime/サンプル02
+          bgm:
+            volume: 5
+            id: bgm/サンプル01
+        productionType: '01: 音楽系, 02: 素ナレ'
+        description: サンプル
+        industry: ""
+        id: 123456789-c-12345678
+        title: サンプル
+        startDate: 2019-09-01T09:00:00+9:00
+        scene: ""
+        status: '00:CM削除, 01: CM作成中, 02: CM作成完了, 09: CM作成エラー, 11: センターアップロード中, 12:
+          センターアップロード完了, 19: センターアップロードエラー'
+        timestamp: 2019-09-01T09:00:00+9:00
+    CmMaterialListItem:
+      properties:
+        narrations:
+          type: array
+          items:
+            $ref: '#/components/schemas/CmMaterialListItem_narrations'
+        startChime:
+          $ref: '#/components/schemas/CmMaterialListItem_startChime'
+        endChime:
+          $ref: '#/components/schemas/CmMaterialListItem_endChime'
+        bgm:
+          $ref: '#/components/schemas/CmMaterialListItem_bgm'
+      example:
+        startChime:
+          volume: 6
+          id: chime/サンプル01
+        narrations:
+        - volume: 0
+          id: narration/サンプル01
+        - volume: 0
+          id: narration/サンプル01
+        endChime:
+          volume: 1
+          id: chime/サンプル02
+        bgm:
+          volume: 5
+          id: bgm/サンプル01
     BgmItem:
       properties:
         id:
+          type: string
+          example: bgm/サンプル01
+        title:
+          type: string
+          example: タイトル
+        description:
+          type: string
+          example: 説明文
+        seconds:
           type: integer
-          example: 1234
-        name:
+          example: 300
+        url:
           type: string
-          example: bgm name
-        detail:
-          type: string
-          example: bgm detail
-      example:
-        name: bgm name
-        id: 1234
-        detail: bgm detail
-    NarrationListItem:
-      type: array
-      example:
-      - id: 1
-        name: 業種名1
-        scenes:
-        - id: 11
-          name: シーン名11
-        - id: 12
-          name: シーン名12
-        - id: 13
-          name: シーン名13
-      - id: 2
-        name: 業種名2
-        scenes:
-        - id: 21
-          name: シーン名21
-        - id: 22
-          name: シーン名22
-        - id: 23
-          name: シーン名23
-      - id: 3
-        name: 業種名3
-        scenes:
-        - id: 31
-          name: シーン名31
-        - id: 32
-          name: シーン名32
-        - id: 33
-          name: シーン名33
-      items:
-        $ref: '#/components/schemas/IndustryItem'
-    IndustryItem:
-      properties:
-        id:
-          type: integer
-          example: 1
-        name:
-          type: string
-          example: 業種名
+          description: 試聴URL
+          example: https://example.com
+        industry:
+          type: array
+          items:
+            $ref: '#/components/schemas/IndustryItem'
         scenes:
           type: array
           items:
             $ref: '#/components/schemas/SceneItem'
-    SceneItem:
-      properties:
-        id:
-          type: integer
-          example: 1
-        name:
+        timestamp:
           type: string
-          example: シーン名
-    NarrationSceneListItem:
-      type: array
+          example: 2019-09-01T09:00:00+9:00
       example:
-      - id: 1
-        name: 18時30分閉店
-        detail: 放送開始日2020年10月15日 有効期限2020年10月20日
-        manuscript: 本日はご来店いただきましてありがとうございます。当店は18時30分閉店です
-        second: 10
+        seconds: 300
+        scenes:
+        - name: シーン名
+          id: "01"
+        - name: シーン名
+          id: "01"
+        description: 説明文
+        industry:
+        - name: 業種名
+          id: "01"
+        - name: 業種名
+          id: "01"
+        id: bgm/サンプル01
+        title: タイトル
         url: https://example.com
-      - id: 2
-        name: アルバイト募集
-        detail: 放送開始日2020年10月15日 有効期限2020年10月20日
-        manuscript: 当店ではアルバイトを募集しております。なんたらかんたら
-        second: 20
-        url: https://example.com
-      - id: 3
-        name: チャイルドチェア
-        detail: 放送開始日2020年10月15日 有効期限2020年10月20日
-        manuscript: 本日はご来店いただきましてありがとうございます。なんたらかんたら
-        second: 30
-        url: https://example.com
-      - id: 4
-        name: デリバリー
-        detail: 放送開始日2020年10月15日 有効期限2020年10月20日
-        manuscript: 本日はご来店いただきましてありがとうございます。なんたらかんたら
-        second: 40
-        url: https://example.com
-      items:
-        $ref: '#/components/schemas/NarrationItem'
+        timestamp: 2019-09-01T09:00:00+9:00
     NarrationItem:
       properties:
         id:
-          type: integer
-          example: 1
-        name:
+          type: string
+          example: narration/サンプル01
+        title:
           type: string
           example: 18時30分閉店
-        detail:
+        description:
           type: string
           example: 放送開始日2020年10月15日 有効期限2020年10月20日
         manuscript:
@@ -798,69 +926,230 @@ components:
           type: string
           description: 試聴URL
           example: https://example.com
-        second:
+        seconds:
           type: integer
           example: 30
+        industry:
+          type: array
+          items:
+            $ref: '#/components/schemas/IndustryItem'
+        scene:
+          type: array
+          items:
+            $ref: '#/components/schemas/SceneItem'
+        timestamp:
+          type: string
+          example: 2019-09-01T09:00:00+9:00
+      example:
+        seconds: 30
+        manuscript: 本日はご来店いただきましてありがとうございます。当店は18時30分閉店です
+        description: 放送開始日2020年10月15日 有効期限2020年10月20日
+        industry:
+        - name: 業種名
+          id: "01"
+        - name: 業種名
+          id: "01"
+        id: narration/サンプル01
+        title: 18時30分閉店
+        url: https://example.com
+        scene:
+        - name: シーン名
+          id: "01"
+        - name: シーン名
+          id: "01"
+        timestamp: 2019-09-01T09:00:00+9:00
     ChimeItem:
       properties:
         id:
+          type: string
+          example: chime/サンプル01
+        title:
+          type: string
+          example: 開始チャイム
+        description:
+          type: string
+          example: 開始チャイム
+        url:
+          type: string
+          description: 試聴URL
+          example: https://example.com
+        seconds:
           type: integer
-          example: 1234
+          example: 30
+        timestamp:
+          type: string
+          example: 2019-09-01T09:00:00+9:00
+      example:
+        seconds: 30
+        description: 開始チャイム
+        id: chime/サンプル01
+        title: 開始チャイム
+        url: https://example.com
+        timestamp: 2019-09-01T09:00:00+9:00
+    WordItem:
+      properties:
+        id:
+          type: string
+          example: "123456789"
+        title:
+          type: string
+          example: 18時30分閉店
+        description:
+          type: string
+          example: 放送開始日2020年10月15日 有効期限2020年10月20日
+        manuscript:
+          type: string
+          example: 本日はご来店いただきましてありがとうございます。当店は18時30分閉店です
+        industry:
+          type: array
+          items:
+            $ref: '#/components/schemas/IndustryItem'
+        scene:
+          type: array
+          items:
+            $ref: '#/components/schemas/SceneItem'
+        timestamp:
+          type: string
+          example: 2019-09-01T09:00:00+9:00
+      example:
+        manuscript: 本日はご来店いただきましてありがとうございます。当店は18時30分閉店です
+        description: 放送開始日2020年10月15日 有効期限2020年10月20日
+        industry:
+        - name: 業種名
+          id: "01"
+        - name: 業種名
+          id: "01"
+        id: "123456789"
+        title: 18時30分閉店
+        scene:
+        - name: シーン名
+          id: "01"
+        - name: シーン名
+          id: "01"
+        timestamp: 2019-09-01T09:00:00+9:00
+    IndustryItem:
+      properties:
+        id:
+          type: string
+          example: "01"
         name:
           type: string
-          example: chime name
-        detail:
-          type: string
-          example: chime detail
+          example: 業種名
       example:
-        name: chime name
-        id: 1234
-        detail: chime detail
+        name: 業種名
+        id: "01"
+    SceneItem:
+      properties:
+        id:
+          type: string
+          example: "01"
+        name:
+          type: string
+          example: シーン名
+      example:
+        name: シーン名
+        id: "01"
     RecordingItem:
       properties:
         id:
-          type: integer
-          example: 1234
+          type: string
+          example: 123456789-r-12345678
         title:
           type: string
-          example: recording title
-        detail:
+          example: サンプル
+        description:
           type: string
-          example: recording detail
+          example: サンプル
+        startDate:
+          type: string
+          example: 2019-09-01T09:00:00+9:00
+        timestamp:
+          type: string
+          example: 2019-09-01T09:00:00+9:00
       example:
-        id: 1234
-        detail: recording detail
-        title: recording title
+        description: サンプル
+        id: 123456789-r-12345678
+        title: サンプル
+        startDate: 2019-09-01T09:00:00+9:00
+        timestamp: 2019-09-01T09:00:00+9:00
     TtsItem:
       properties:
         id:
-          type: integer
-          example: 1234
+          type: string
+          example: 123456789-t-12345678
         title:
           type: string
-          example: tts title
-        detail:
+          example: サンプル
+        description:
           type: string
-          example: tts detail
+          example: サンプル
+        startDate:
+          type: string
+          example: 2019-09-01T09:00:00+9:00
+        timestamp:
+          type: string
+          example: 2019-09-01T09:00:00+9:00
       example:
-        id: 1234
-        detail: tts detail
-        title: tts title
+        description: サンプル
+        id: 123456789-t-12345678
+        title: サンプル
+        startDate: 2019-09-01T09:00:00+9:00
+        timestamp: 2019-09-01T09:00:00+9:00
     CenterItem:
       properties:
-        id:
+        dataProcessType:
+          type: string
+          example: 01：追加、02：変更、03：削除
+        uMesseCmCd:
+          type: string
+          example: 0999999900-c-sfja8eo1
+        url:
+          type: string
+          example: https://xxxxx/0999999900-c-sfja8eo1.aac?AWSAccessKeyId=xxxxxxxx
+        cmName:
+          type: string
+          example: 時報A
+        cmCommentManuscript:
+          type: string
+          example: テストCMです
+        startDatetime:
+          type: string
+          format: date-time
+          example: 2020-01-01T12:34:56+09:00
+        endDatetime:
+          type: string
+          format: date-time
+          example: 9999-12-31T23:59:59+09:00
+        productionType:
+          type: string
+          example: 01：音楽系、02：素ナレ
+        fileName:
+          type: string
+          example: 0999999900-c-sfja8eo1.aac
+        contentTime:
           type: integer
-          example: 1234
-        title:
+          format: int64
+          example: 30000
+        fileSize:
+          type: integer
+          format: int64
+          example: 1234567
+        sceneCd:
           type: string
-          example: center title
-        detail:
-          type: string
-          example: center detail
+          example: "001"
       example:
-        id: 1234
-        detail: center detail
-        title: center title
+        startDatetime: 2020-01-01T12:34:56+09:00
+        cmName: 時報A
+        fileName: 0999999900-c-sfja8eo1.aac
+        sceneCd: "001"
+        uMesseCmCd: 0999999900-c-sfja8eo1
+        fileSize: 1234567
+        dataProcessType: 01：追加、02：変更、03：削除
+        cmCommentManuscript: テストCMです
+        productionType: 01：音楽系、02：素ナレ
+        contentTime: 30000
+        url: https://xxxxx/0999999900-c-sfja8eo1.aac?AWSAccessKeyId=xxxxxxxx
+        endDatetime: 9999-12-31T23:59:59+09:00
     Error:
       type: object
       properties:
@@ -887,77 +1176,39 @@ components:
     body:
       type: object
       properties:
-        unis_customer_cd:
+        unisCustomerCd:
           type: string
-    usercm_narration:
-      type: object
-      properties:
-        narrationId:
-          type: string
-        volume:
-          type: integer
-          format: int64
-    usercm_startChime:
-      type: object
-      properties:
-        startChimeId:
-          type: string
-        volume:
-          type: integer
-          format: int64
-    usercm_endChime:
-      type: object
-      properties:
-        endChimeId:
-          type: string
-        volume:
-          type: integer
-          format: int64
-    usercm_bgm:
-      type: object
-      properties:
-        bgmId:
-          type: string
-        volume:
-          type: integer
-          format: int64
     body_1:
       type: object
       properties:
-        narration:
-          type: array
-          items:
-            $ref: '#/components/schemas/usercm_narration'
-        startChime:
-          $ref: '#/components/schemas/usercm_startChime'
-        endChime:
-          $ref: '#/components/schemas/usercm_endChime'
-        bgm:
-          $ref: '#/components/schemas/usercm_bgm'
+        materials:
+          $ref: '#/components/schemas/CmMaterialListItem'
     body_2:
       type: object
       properties:
         title:
           type: string
-          example: タイトル
+          example: サンプル
         description:
           type: string
-          example: 説明文
+          example: サンプル
         seconds:
           type: integer
           format: int64
+          example: 540
         startDate:
           type: string
           format: date-time
         endDate:
           type: string
           format: date-time
-        shear:
-          type: boolean
-          example: false
-        center:
-          type: boolean
-          example: true
+          example: 9999-12-31T23:59:59+09:00
+        industry:
+          type: string
+          example: ""
+        scene:
+          type: string
+          example: ""
     body_3:
       type: object
       properties:
@@ -975,48 +1226,74 @@ components:
           format: date-time
     inline_response_200:
       properties:
-        value:
+        unisCustomerCd:
           type: string
-          example: ???
-        data:
+          example: "123456789"
+        cmMetas:
           type: array
           items:
             $ref: '#/components/schemas/CenterItem'
       example:
-        data:
-        - id: 1234
-          detail: center detail
-          title: center title
-        - id: 1234
-          detail: center detail
-          title: center title
-        value: ???
-    inline_response_200_1:
-      properties:
-        value:
-          type: string
-          example: ???
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/RecordingItem'
-      example:
-        data:
-        - id: 1234
-          detail: recording detail
-          title: recording title
-        - id: 1234
-          detail: recording detail
-          title: recording title
-        value: ???
+        cmMetas:
+        - startDatetime: 2020-01-01T12:34:56+09:00
+          cmName: 時報A
+          fileName: 0999999900-c-sfja8eo1.aac
+          sceneCd: "001"
+          uMesseCmCd: 0999999900-c-sfja8eo1
+          fileSize: 1234567
+          dataProcessType: 01：追加、02：変更、03：削除
+          cmCommentManuscript: テストCMです
+          productionType: 01：音楽系、02：素ナレ
+          contentTime: 30000
+          url: https://xxxxx/0999999900-c-sfja8eo1.aac?AWSAccessKeyId=xxxxxxxx
+          endDatetime: 9999-12-31T23:59:59+09:00
+        - startDatetime: 2020-01-01T12:34:56+09:00
+          cmName: 時報A
+          fileName: 0999999900-c-sfja8eo1.aac
+          sceneCd: "001"
+          uMesseCmCd: 0999999900-c-sfja8eo1
+          fileSize: 1234567
+          dataProcessType: 01：追加、02：変更、03：削除
+          cmCommentManuscript: テストCMです
+          productionType: 01：音楽系、02：素ナレ
+          contentTime: 30000
+          url: https://xxxxx/0999999900-c-sfja8eo1.aac?AWSAccessKeyId=xxxxxxxx
+          endDatetime: 9999-12-31T23:59:59+09:00
+        unisCustomerCd: "123456789"
     body_4:
       type: object
       properties:
-        filename:
+        dataProcessType:
           type: string
-        recordedFile:
+          example: 01：正常完了、09：取込失敗
+        uMesseCmCd:
           type: string
-          format: binary
+          example: 0999999900-c-sfja8eo1
+        errorCode:
+          type: string
+          example: E0001
+        errorMessege:
+          type: string
+          example: CM名に規定外の文字が使用されています
+    inline_response_200_1:
+      properties:
+        dataProcessType:
+          type: string
+          example: 01：正常完了、09：取込失敗
+        uMesseCmCd:
+          type: string
+          example: 0999999900-c-sfja8eo1
+        errorCode:
+          type: string
+          example: E0001
+        errorMessege:
+          type: string
+          example: CM名に規定外の文字が使用されています
+      example:
+        errorMessege: CM名に規定外の文字が使用されています
+        uMesseCmCd: 0999999900-c-sfja8eo1
+        dataProcessType: 01：正常完了、09：取込失敗
+        errorCode: E0001
     body_5:
       type: object
       properties:
@@ -1025,32 +1302,15 @@ components:
         recordedFile:
           type: string
           format: binary
-    inline_response_200_2:
-      properties:
-        value:
-          type: string
-          example: ???
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/TtsItem'
-      example:
-        data:
-        - id: 1234
-          detail: tts detail
-          title: tts title
-        - id: 1234
-          detail: tts detail
-          title: tts title
-        value: ???
     body_6:
       type: object
       properties:
-        filename:
+        title:
           type: string
-        recordedFile:
+          example: サンプル
+        description:
           type: string
-          format: binary
+          example: サンプル
     body_7:
       type: object
       properties:
@@ -1059,49 +1319,65 @@ components:
         recordedFile:
           type: string
           format: binary
-    inline_response_200_3:
+    body_8:
+      type: object
       properties:
-        value:
+        title:
           type: string
-          example: ???
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/BgmItem'
-      example:
-        data:
-        - name: bgm name
-          id: 1234
-          detail: bgm detail
-        - name: bgm name
-          id: 1234
-          detail: bgm detail
-        value: ???
-    inline_response_200_4:
-      properties:
-        value:
+          example: サンプル
+        description:
           type: string
-          example: ???
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/ChimeItem'
-      example:
-        data:
-        - name: chime name
-          id: 1234
-          detail: chime detail
-        - name: chime name
-          id: 1234
-          detail: chime detail
-        value: ???
-    inline_response_200_5:
+          example: サンプル
+    inline_response_200_2:
       properties:
         url:
           type: string
           example: https://filesamples.com/samples/audio/aac/sample1.aac
       example:
         url: https://filesamples.com/samples/audio/aac/sample1.aac
+    CmMaterialListItem_narrations:
+      properties:
+        id:
+          type: string
+          example: narration/サンプル01
+        volume:
+          type: integer
+      example:
+        volume: 0
+        id: narration/サンプル01
+    CmMaterialListItem_startChime:
+      type: object
+      properties:
+        id:
+          type: string
+          example: chime/サンプル01
+        volume:
+          type: integer
+      example:
+        volume: 6
+        id: chime/サンプル01
+    CmMaterialListItem_endChime:
+      type: object
+      properties:
+        id:
+          type: string
+          example: chime/サンプル02
+        volume:
+          type: integer
+      example:
+        volume: 1
+        id: chime/サンプル02
+    CmMaterialListItem_bgm:
+      type: object
+      properties:
+        id:
+          type: string
+          example: bgm/サンプル01
+        volume:
+          type: integer
+      example:
+        volume: 5
+        id: bgm/サンプル01
   parameters:
     CmId:
       name: cmId
@@ -1127,6 +1403,16 @@ components:
       name: ttsId
       in: path
       description: ID of tts to return
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+        format: string
+    UnisCustomerCd:
+      name: unisCustomerCd
+      in: path
+      description: ID of unis customer cd to return
       required: true
       style: simple
       explode: false

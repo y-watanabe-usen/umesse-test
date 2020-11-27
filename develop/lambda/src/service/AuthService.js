@@ -7,7 +7,7 @@
  * body Body  (optional)
  * returns Auth
  **/
-exports.authPOST = function(body) {
+exports.auth = function(body) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {

@@ -4,23 +4,55 @@
 /**
  * BGM
  *
- * returns inline_response_200_3
+ * industryId String ID of bgm to return (optional)
+ * returns List
  **/
-exports.bgmGET = function() {
+exports.listBgm = function(industryId) {
   return new Promise(function(resolve, reject) {
     var examples = {};
-    examples['application/json'] = {
-  "data" : [ {
-    "name" : "bgm name",
-    "id" : 1234,
-    "detail" : "bgm detail"
+    examples['application/json'] = [ {
+  "seconds" : 300,
+  "scenes" : [ {
+    "name" : "シーン名",
+    "id" : "01"
   }, {
-    "name" : "bgm name",
-    "id" : 1234,
-    "detail" : "bgm detail"
+    "name" : "シーン名",
+    "id" : "01"
   } ],
-  "value" : "???"
-};
+  "description" : "説明文",
+  "industry" : [ {
+    "name" : "業種名",
+    "id" : "01"
+  }, {
+    "name" : "業種名",
+    "id" : "01"
+  } ],
+  "id" : "bgm/サンプル01",
+  "title" : "タイトル",
+  "url" : "https://example.com",
+  "timestamp" : "2019-09-01T09:00:00+9:00"
+}, {
+  "seconds" : 300,
+  "scenes" : [ {
+    "name" : "シーン名",
+    "id" : "01"
+  }, {
+    "name" : "シーン名",
+    "id" : "01"
+  } ],
+  "description" : "説明文",
+  "industry" : [ {
+    "name" : "業種名",
+    "id" : "01"
+  }, {
+    "name" : "業種名",
+    "id" : "01"
+  } ],
+  "id" : "bgm/サンプル01",
+  "title" : "タイトル",
+  "url" : "https://example.com",
+  "timestamp" : "2019-09-01T09:00:00+9:00"
+} ];
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {
@@ -33,79 +65,25 @@ exports.bgmGET = function() {
 /**
  * Open/Endチャイム
  *
- * returns inline_response_200_4
+ * returns List
  **/
-exports.chimeGET = function() {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "data" : [ {
-    "name" : "chime name",
-    "id" : 1234,
-    "detail" : "chime detail"
-  }, {
-    "name" : "chime name",
-    "id" : 1234,
-    "detail" : "chime detail"
-  } ],
-  "value" : "???"
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
-  });
-}
-
-
-/**
- * ナレーションリスト取得
- *
- * returns NarrationListItem
- **/
-exports.narrationGET = function() {
+exports.listChime = function() {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = [ {
-  "id" : 1,
-  "name" : "業種名1",
-  "scenes" : [ {
-    "id" : 11,
-    "name" : "シーン名11"
-  }, {
-    "id" : 12,
-    "name" : "シーン名12"
-  }, {
-    "id" : 13,
-    "name" : "シーン名13"
-  } ]
+  "seconds" : 30,
+  "description" : "開始チャイム",
+  "id" : "chime/サンプル01",
+  "title" : "開始チャイム",
+  "url" : "https://example.com",
+  "timestamp" : "2019-09-01T09:00:00+9:00"
 }, {
-  "id" : 2,
-  "name" : "業種名2",
-  "scenes" : [ {
-    "id" : 21,
-    "name" : "シーン名21"
-  }, {
-    "id" : 22,
-    "name" : "シーン名22"
-  }, {
-    "id" : 23,
-    "name" : "シーン名23"
-  } ]
-}, {
-  "id" : 3,
-  "name" : "業種名3",
-  "scenes" : [ {
-    "id" : 31,
-    "name" : "シーン名31"
-  }, {
-    "id" : 32,
-    "name" : "シーン名32"
-  }, {
-    "id" : 33,
-    "name" : "シーン名33"
-  } ]
+  "seconds" : 30,
+  "description" : "開始チャイム",
+  "id" : "chime/サンプル01",
+  "title" : "開始チャイム",
+  "url" : "https://example.com",
+  "timestamp" : "2019-09-01T09:00:00+9:00"
 } ];
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
@@ -117,42 +95,59 @@ exports.narrationGET = function() {
 
 
 /**
- * ナレーション取得
+ * ナレーション
  *
- * sceneId Long ID of narration to return
- * returns NarrationSceneListItem
+ * industryId String ID of bgm to return (optional)
+ * sceneId String ID of bgm to return (optional)
+ * returns List
  **/
-exports.narrationSceneIdGET = function(sceneId) {
+exports.listNarration = function(industryId,sceneId) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = [ {
-  "id" : 1,
-  "name" : "18時30分閉店",
-  "detail" : "放送開始日2020年10月15日 有効期限2020年10月20日",
+  "seconds" : 30,
   "manuscript" : "本日はご来店いただきましてありがとうございます。当店は18時30分閉店です",
-  "second" : 10,
-  "url" : "https://example.com"
+  "description" : "放送開始日2020年10月15日 有効期限2020年10月20日",
+  "industry" : [ {
+    "name" : "業種名",
+    "id" : "01"
+  }, {
+    "name" : "業種名",
+    "id" : "01"
+  } ],
+  "id" : "narration/サンプル01",
+  "title" : "18時30分閉店",
+  "url" : "https://example.com",
+  "scene" : [ {
+    "name" : "シーン名",
+    "id" : "01"
+  }, {
+    "name" : "シーン名",
+    "id" : "01"
+  } ],
+  "timestamp" : "2019-09-01T09:00:00+9:00"
 }, {
-  "id" : 2,
-  "name" : "アルバイト募集",
-  "detail" : "放送開始日2020年10月15日 有効期限2020年10月20日",
-  "manuscript" : "当店ではアルバイトを募集しております。なんたらかんたら",
-  "second" : 20,
-  "url" : "https://example.com"
-}, {
-  "id" : 3,
-  "name" : "チャイルドチェア",
-  "detail" : "放送開始日2020年10月15日 有効期限2020年10月20日",
-  "manuscript" : "本日はご来店いただきましてありがとうございます。なんたらかんたら",
-  "second" : 30,
-  "url" : "https://example.com"
-}, {
-  "id" : 4,
-  "name" : "デリバリー",
-  "detail" : "放送開始日2020年10月15日 有効期限2020年10月20日",
-  "manuscript" : "本日はご来店いただきましてありがとうございます。なんたらかんたら",
-  "second" : 40,
-  "url" : "https://example.com"
+  "seconds" : 30,
+  "manuscript" : "本日はご来店いただきましてありがとうございます。当店は18時30分閉店です",
+  "description" : "放送開始日2020年10月15日 有効期限2020年10月20日",
+  "industry" : [ {
+    "name" : "業種名",
+    "id" : "01"
+  }, {
+    "name" : "業種名",
+    "id" : "01"
+  } ],
+  "id" : "narration/サンプル01",
+  "title" : "18時30分閉店",
+  "url" : "https://example.com",
+  "scene" : [ {
+    "name" : "シーン名",
+    "id" : "01"
+  }, {
+    "name" : "シーン名",
+    "id" : "01"
+  } ],
+  "timestamp" : "2019-09-01T09:00:00+9:00"
 } ];
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
@@ -166,23 +161,54 @@ exports.narrationSceneIdGET = function(sceneId) {
 /**
  * TTSテンプレート一覧
  *
- * returns inline_response_200_2
+ * industryId String ID of bgm to return (optional)
+ * sceneId String ID of bgm to return (optional)
+ * returns List
  **/
-exports.ttsGET = function() {
+exports.listTts = function(industryId,sceneId) {
   return new Promise(function(resolve, reject) {
     var examples = {};
-    examples['application/json'] = {
-  "data" : [ {
-    "id" : 1234,
-    "detail" : "tts detail",
-    "title" : "tts title"
+    examples['application/json'] = [ {
+  "manuscript" : "本日はご来店いただきましてありがとうございます。当店は18時30分閉店です",
+  "description" : "放送開始日2020年10月15日 有効期限2020年10月20日",
+  "industry" : [ {
+    "name" : "業種名",
+    "id" : "01"
   }, {
-    "id" : 1234,
-    "detail" : "tts detail",
-    "title" : "tts title"
+    "name" : "業種名",
+    "id" : "01"
   } ],
-  "value" : "???"
-};
+  "id" : "123456789",
+  "title" : "18時30分閉店",
+  "scene" : [ {
+    "name" : "シーン名",
+    "id" : "01"
+  }, {
+    "name" : "シーン名",
+    "id" : "01"
+  } ],
+  "timestamp" : "2019-09-01T09:00:00+9:00"
+}, {
+  "manuscript" : "本日はご来店いただきましてありがとうございます。当店は18時30分閉店です",
+  "description" : "放送開始日2020年10月15日 有効期限2020年10月20日",
+  "industry" : [ {
+    "name" : "業種名",
+    "id" : "01"
+  }, {
+    "name" : "業種名",
+    "id" : "01"
+  } ],
+  "id" : "123456789",
+  "title" : "18時30分閉店",
+  "scene" : [ {
+    "name" : "シーン名",
+    "id" : "01"
+  }, {
+    "name" : "シーン名",
+    "id" : "01"
+  } ],
+  "timestamp" : "2019-09-01T09:00:00+9:00"
+} ];
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {

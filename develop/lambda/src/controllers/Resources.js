@@ -3,8 +3,8 @@
 var utils = require('../utils/writer.js');
 var Resources = require('../service/ResourcesService');
 
-module.exports.bgmGET = function bgmGET (req, res, next) {
-  Resources.bgmGET()
+module.exports.listBgm = function listBgm (req, res, next, industryId) {
+  Resources.listBgm(industryId)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -13,8 +13,8 @@ module.exports.bgmGET = function bgmGET (req, res, next) {
     });
 };
 
-module.exports.chimeGET = function chimeGET (req, res, next) {
-  Resources.chimeGET()
+module.exports.listChime = function listChime (req, res, next) {
+  Resources.listChime()
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -23,8 +23,8 @@ module.exports.chimeGET = function chimeGET (req, res, next) {
     });
 };
 
-module.exports.narrationGET = function narrationGET (req, res, next) {
-  Resources.narrationGET()
+module.exports.listNarration = function listNarration (req, res, next, industryId, sceneId) {
+  Resources.listNarration(industryId, sceneId)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -33,18 +33,8 @@ module.exports.narrationGET = function narrationGET (req, res, next) {
     });
 };
 
-module.exports.narrationSceneIdGET = function narrationSceneIdGET (req, res, next, sceneId) {
-  Resources.narrationSceneIdGET(sceneId)
-    .then(function (response) {
-      utils.writeJson(res, response);
-    })
-    .catch(function (response) {
-      utils.writeJson(res, response);
-    });
-};
-
-module.exports.ttsGET = function ttsGET (req, res, next) {
-  Resources.ttsGET()
+module.exports.listTts = function listTts (req, res, next, industryId, sceneId) {
+  Resources.listTts(industryId, sceneId)
     .then(function (response) {
       utils.writeJson(res, response);
     })

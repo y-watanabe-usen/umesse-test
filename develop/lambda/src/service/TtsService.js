@@ -2,40 +2,11 @@
 
 
 /**
- * TTSデータリスト取得
- *
- * returns inline_response_200_2
- **/
-exports.userTtsGET = function() {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "data" : [ {
-    "id" : 1234,
-    "detail" : "tts detail",
-    "title" : "tts title"
-  }, {
-    "id" : 1234,
-    "detail" : "tts detail",
-    "title" : "tts title"
-  } ],
-  "value" : "???"
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
-    }
-  });
-}
-
-
-/**
  * 新規録音データ
  *
  * no response value expected for this operation
  **/
-exports.userTtsPOST = function() {
+exports.createUserTts = function() {
   return new Promise(function(resolve, reject) {
     resolve();
   });
@@ -48,7 +19,7 @@ exports.userTtsPOST = function() {
  * ttsId String ID of tts to return
  * no response value expected for this operation
  **/
-exports.userTtsTtsIdDELETE = function(ttsId) {
+exports.deleteUserTts = function(ttsId) {
   return new Promise(function(resolve, reject) {
     resolve();
   });
@@ -59,11 +30,53 @@ exports.userTtsTtsIdDELETE = function(ttsId) {
  * TTSデータ取得
  *
  * ttsId String ID of tts to return
- * no response value expected for this operation
+ * returns TtsItem
  **/
-exports.userTtsTtsIdGET = function(ttsId) {
+exports.getUserTts = function(ttsId) {
   return new Promise(function(resolve, reject) {
-    resolve();
+    var examples = {};
+    examples['application/json'] = {
+  "description" : "サンプル",
+  "id" : "123456789-t-12345678",
+  "title" : "サンプル",
+  "startDate" : "2019-09-01T09:00:00+9:00",
+  "timestamp" : "2019-09-01T09:00:00+9:00"
+};
+    if (Object.keys(examples).length > 0) {
+      resolve(examples[Object.keys(examples)[0]]);
+    } else {
+      resolve();
+    }
+  });
+}
+
+
+/**
+ * TTSデータリスト取得
+ *
+ * returns List
+ **/
+exports.listUserTts = function() {
+  return new Promise(function(resolve, reject) {
+    var examples = {};
+    examples['application/json'] = [ {
+  "description" : "サンプル",
+  "id" : "123456789-t-12345678",
+  "title" : "サンプル",
+  "startDate" : "2019-09-01T09:00:00+9:00",
+  "timestamp" : "2019-09-01T09:00:00+9:00"
+}, {
+  "description" : "サンプル",
+  "id" : "123456789-t-12345678",
+  "title" : "サンプル",
+  "startDate" : "2019-09-01T09:00:00+9:00",
+  "timestamp" : "2019-09-01T09:00:00+9:00"
+} ];
+    if (Object.keys(examples).length > 0) {
+      resolve(examples[Object.keys(examples)[0]]);
+    } else {
+      resolve();
+    }
   });
 }
 
@@ -72,11 +85,23 @@ exports.userTtsTtsIdGET = function(ttsId) {
  * TTSデータ更新（メタデータのみ）
  *
  * ttsId String ID of tts to return
- * no response value expected for this operation
+ * returns TtsItem
  **/
-exports.userTtsTtsIdPOST = function(ttsId) {
+exports.updateUserTts = function(ttsId) {
   return new Promise(function(resolve, reject) {
-    resolve();
+    var examples = {};
+    examples['application/json'] = {
+  "description" : "サンプル",
+  "id" : "123456789-t-12345678",
+  "title" : "サンプル",
+  "startDate" : "2019-09-01T09:00:00+9:00",
+  "timestamp" : "2019-09-01T09:00:00+9:00"
+};
+    if (Object.keys(examples).length > 0) {
+      resolve(examples[Object.keys(examples)[0]]);
+    } else {
+      resolve();
+    }
   });
 }
 
