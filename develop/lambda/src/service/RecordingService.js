@@ -1,6 +1,6 @@
 'use strict';
 
-const { resources } = require("../../umesse/resources");
+const { bgm, narration, userRecording } = require("../../umesse/resources");
 
 
 /**
@@ -38,14 +38,22 @@ exports.userRecordingGET = function() {
  * no response value expected for this operation
  **/
 exports.userRecordingPOST = function(filename, recordedFile) {
+
   return new Promise(function(resolve, reject) {
-    var data = {
-      'filename': filename,
-      'resouces': recordedFile
-    };
-    console.log(data);
-    resources.userRecording.put(data);
-    resolve();
+    try {
+      var data = {
+        'filename': filename,
+        'resouces': recordedFile
+      };
+      console.log(data);
+      userRecording.put(data);
+
+      resolve();
+    } catch(e) {
+      console.log(e);
+      reject()
+    }
+
   });
 }
 
