@@ -14,7 +14,19 @@
 /**
  * 
  * @export
- * @interface NarrationSceneListItem
+ * @interface CmMaterialListItemEndChime
  */
-export interface NarrationSceneListItem extends Array<NarrationItem> {
+export interface CmMaterialListItemEndChime {
+    /**
+     * 
+     * @type {string}
+     * @memberof CmMaterialListItemEndChime
+     */
+    id?: any;
+    /**
+     * 
+     * @type {number}
+     * @memberof CmMaterialListItemEndChime
+     */
+    volume?: any;
 }

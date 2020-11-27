@@ -19,20 +19,74 @@
 export interface CenterItem {
     /**
      * 
+     * @type {string}
+     * @memberof CenterItem
+     */
+    dataProcessType?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof CenterItem
+     */
+    uMesseCmCd?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof CenterItem
+     */
+    url?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof CenterItem
+     */
+    cmName?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof CenterItem
+     */
+    cmCommentManuscript?: any;
+    /**
+     * 
+     * @type {Date}
+     * @memberof CenterItem
+     */
+    startDatetime?: any;
+    /**
+     * 
+     * @type {Date}
+     * @memberof CenterItem
+     */
+    endDatetime?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof CenterItem
+     */
+    productionType?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof CenterItem
+     */
+    fileName?: any;
+    /**
+     * 
      * @type {number}
      * @memberof CenterItem
      */
-    id?: any;
+    contentTime?: any;
+    /**
+     * 
+     * @type {number}
+     * @memberof CenterItem
+     */
+    fileSize?: any;
     /**
      * 
      * @type {string}
      * @memberof CenterItem
      */
-    title?: any;
-    /**
-     * 
-     * @type {string}
-     * @memberof CenterItem
-     */
-    detail?: any;
+    sceneCd?: any;
 }

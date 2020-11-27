@@ -19,7 +19,7 @@
 export interface IndustryItem {
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof IndustryItem
      */
     id?: any;
@@ -29,10 +29,4 @@ export interface IndustryItem {
      * @memberof IndustryItem
      */
     name?: any;
-    /**
-     * 
-     * @type {Array&lt;SceneItem&gt;}
-     * @memberof IndustryItem
-     */
-    scenes?: any;
 }

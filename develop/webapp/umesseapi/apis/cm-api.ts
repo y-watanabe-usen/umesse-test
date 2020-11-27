@@ -27,15 +27,54 @@ export const CmApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
          * 
+         * @summary CM新規結合
+         * @param {Body1} [body] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createUserCm: async (body?: Body1, options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/user/cm`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            const query = new URLSearchParams(localVarUrlObj.search);
+            for (const key in localVarQueryParameter) {
+                query.set(key, localVarQueryParameter[key]);
+            }
+            for (const key in options.query) {
+                query.set(key, options.query[key]);
+            }
+            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            const needsSerialization = (typeof body !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.data =  needsSerialization ? JSON.stringify(body !== undefined ? body : {}) : (body || "");
+
+            return {
+                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary CM情報削除
          * @param {number} cmId ID of cm to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userCmCmIdDelete: async (cmId: number, options: any = {}): Promise<RequestArgs> => {
+        deleteUserCm: async (cmId: number, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'cmId' is not null or undefined
             if (cmId === null || cmId === undefined) {
-                throw new RequiredError('cmId','Required parameter cmId was null or undefined when calling userCmCmIdDelete.');
+                throw new RequiredError('cmId','Required parameter cmId was null or undefined when calling deleteUserCm.');
             }
             const localVarPath = `/user/cm/{cmId}`
                 .replace(`{${"cmId"}}`, encodeURIComponent(String(cmId)));
@@ -72,13 +111,47 @@ export const CmApiAxiosParamCreator = function (configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userCmCmIdGet: async (cmId: string, options: any = {}): Promise<RequestArgs> => {
+        getUserCm: async (cmId: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'cmId' is not null or undefined
             if (cmId === null || cmId === undefined) {
-                throw new RequiredError('cmId','Required parameter cmId was null or undefined when calling userCmCmIdGet.');
+                throw new RequiredError('cmId','Required parameter cmId was null or undefined when calling getUserCm.');
             }
             const localVarPath = `/user/cm/{cmId}`
                 .replace(`{${"cmId"}}`, encodeURIComponent(String(cmId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            const query = new URLSearchParams(localVarUrlObj.search);
+            for (const key in localVarQueryParameter) {
+                query.set(key, localVarQueryParameter[key]);
+            }
+            for (const key in options.query) {
+                query.set(key, options.query[key]);
+            }
+            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary CMリスト取得
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listUserCm: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/user/cm`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
             let baseOptions;
@@ -113,86 +186,13 @@ export const CmApiAxiosParamCreator = function (configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userCmCmIdPost: async (cmId: string, body?: Body2, options: any = {}): Promise<RequestArgs> => {
+        updateUserCm: async (cmId: string, body?: Body2, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'cmId' is not null or undefined
             if (cmId === null || cmId === undefined) {
-                throw new RequiredError('cmId','Required parameter cmId was null or undefined when calling userCmCmIdPost.');
+                throw new RequiredError('cmId','Required parameter cmId was null or undefined when calling updateUserCm.');
             }
             const localVarPath = `/user/cm/{cmId}`
                 .replace(`{${"cmId"}}`, encodeURIComponent(String(cmId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            const query = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                query.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                query.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(query)).toString();
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            const needsSerialization = (typeof body !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
-            localVarRequestOptions.data =  needsSerialization ? JSON.stringify(body !== undefined ? body : {}) : (body || "");
-
-            return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @summary CMリスト取得
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        userCmGet: async (options: any = {}): Promise<RequestArgs> => {
-            const localVarPath = `/user/cm`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            const query = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                query.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                query.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(query)).toString();
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
-         * @summary CM新規結合
-         * @param {Body1} [body] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        userCmPost: async (body?: Body1, options: any = {}): Promise<RequestArgs> => {
-            const localVarPath = `/user/cm`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
             let baseOptions;
@@ -234,13 +234,27 @@ export const CmApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
+         * @summary CM新規結合
+         * @param {Body1} [body] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createUserCm(body?: Body1, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CmItem>> {
+            const localVarAxiosArgs = await CmApiAxiosParamCreator(configuration).createUserCm(body, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
+         * 
          * @summary CM情報削除
          * @param {number} cmId ID of cm to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async userCmCmIdDelete(cmId: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await CmApiAxiosParamCreator(configuration).userCmCmIdDelete(cmId, options);
+        async deleteUserCm(cmId: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CmItem>> {
+            const localVarAxiosArgs = await CmApiAxiosParamCreator(configuration).deleteUserCm(cmId, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -253,8 +267,21 @@ export const CmApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async userCmCmIdGet(cmId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CmItem>>> {
-            const localVarAxiosArgs = await CmApiAxiosParamCreator(configuration).userCmCmIdGet(cmId, options);
+        async getUserCm(cmId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CmItem>> {
+            const localVarAxiosArgs = await CmApiAxiosParamCreator(configuration).getUserCm(cmId, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
+         * 
+         * @summary CMリスト取得
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listUserCm(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CmItem>>> {
+            const localVarAxiosArgs = await CmApiAxiosParamCreator(configuration).listUserCm(options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -268,35 +295,8 @@ export const CmApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async userCmCmIdPost(cmId: string, body?: Body2, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await CmApiAxiosParamCreator(configuration).userCmCmIdPost(cmId, body, options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
-        },
-        /**
-         * 
-         * @summary CMリスト取得
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async userCmGet(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CmItem>>> {
-            const localVarAxiosArgs = await CmApiAxiosParamCreator(configuration).userCmGet(options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
-        },
-        /**
-         * 
-         * @summary CM新規結合
-         * @param {Body1} [body] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async userCmPost(body?: Body1, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CmItem>> {
-            const localVarAxiosArgs = await CmApiAxiosParamCreator(configuration).userCmPost(body, options);
+        async updateUserCm(cmId: string, body?: Body2, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CmItem>> {
+            const localVarAxiosArgs = await CmApiAxiosParamCreator(configuration).updateUserCm(cmId, body, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -313,13 +313,23 @@ export const CmApiFactory = function (configuration?: Configuration, basePath?: 
     return {
         /**
          * 
+         * @summary CM新規結合
+         * @param {Body1} [body] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createUserCm(body?: Body1, options?: any): AxiosPromise<CmItem> {
+            return CmApiFp(configuration).createUserCm(body, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
          * @summary CM情報削除
          * @param {number} cmId ID of cm to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userCmCmIdDelete(cmId: number, options?: any): AxiosPromise<void> {
-            return CmApiFp(configuration).userCmCmIdDelete(cmId, options).then((request) => request(axios, basePath));
+        deleteUserCm(cmId: number, options?: any): AxiosPromise<CmItem> {
+            return CmApiFp(configuration).deleteUserCm(cmId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -328,8 +338,17 @@ export const CmApiFactory = function (configuration?: Configuration, basePath?: 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userCmCmIdGet(cmId: string, options?: any): AxiosPromise<Array<CmItem>> {
-            return CmApiFp(configuration).userCmCmIdGet(cmId, options).then((request) => request(axios, basePath));
+        getUserCm(cmId: string, options?: any): AxiosPromise<CmItem> {
+            return CmApiFp(configuration).getUserCm(cmId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary CMリスト取得
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listUserCm(options?: any): AxiosPromise<Array<CmItem>> {
+            return CmApiFp(configuration).listUserCm(options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -339,27 +358,8 @@ export const CmApiFactory = function (configuration?: Configuration, basePath?: 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userCmCmIdPost(cmId: string, body?: Body2, options?: any): AxiosPromise<void> {
-            return CmApiFp(configuration).userCmCmIdPost(cmId, body, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @summary CMリスト取得
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        userCmGet(options?: any): AxiosPromise<Array<CmItem>> {
-            return CmApiFp(configuration).userCmGet(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @summary CM新規結合
-         * @param {Body1} [body] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        userCmPost(body?: Body1, options?: any): AxiosPromise<CmItem> {
-            return CmApiFp(configuration).userCmPost(body, options).then((request) => request(axios, basePath));
+        updateUserCm(cmId: string, body?: Body2, options?: any): AxiosPromise<CmItem> {
+            return CmApiFp(configuration).updateUserCm(cmId, body, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -373,14 +373,25 @@ export const CmApiFactory = function (configuration?: Configuration, basePath?: 
 export class CmApi extends BaseAPI {
     /**
      * 
+     * @summary CM新規結合
+     * @param {Body1} [body] 
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CmApi
+     */
+    public createUserCm(body?: Body1, options?: any) {
+        return CmApiFp(this.configuration).createUserCm(body, options).then((request) => request(this.axios, this.basePath));
+    }
+    /**
+     * 
      * @summary CM情報削除
      * @param {number} cmId ID of cm to return
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CmApi
      */
-    public userCmCmIdDelete(cmId: number, options?: any) {
-        return CmApiFp(this.configuration).userCmCmIdDelete(cmId, options).then((request) => request(this.axios, this.basePath));
+    public deleteUserCm(cmId: number, options?: any) {
+        return CmApiFp(this.configuration).deleteUserCm(cmId, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * 
@@ -390,8 +401,18 @@ export class CmApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof CmApi
      */
-    public userCmCmIdGet(cmId: string, options?: any) {
-        return CmApiFp(this.configuration).userCmCmIdGet(cmId, options).then((request) => request(this.axios, this.basePath));
+    public getUserCm(cmId: string, options?: any) {
+        return CmApiFp(this.configuration).getUserCm(cmId, options).then((request) => request(this.axios, this.basePath));
+    }
+    /**
+     * 
+     * @summary CMリスト取得
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof CmApi
+     */
+    public listUserCm(options?: any) {
+        return CmApiFp(this.configuration).listUserCm(options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * 
@@ -402,28 +423,7 @@ export class CmApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof CmApi
      */
-    public userCmCmIdPost(cmId: string, body?: Body2, options?: any) {
-        return CmApiFp(this.configuration).userCmCmIdPost(cmId, body, options).then((request) => request(this.axios, this.basePath));
-    }
-    /**
-     * 
-     * @summary CMリスト取得
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof CmApi
-     */
-    public userCmGet(options?: any) {
-        return CmApiFp(this.configuration).userCmGet(options).then((request) => request(this.axios, this.basePath));
-    }
-    /**
-     * 
-     * @summary CM新規結合
-     * @param {Body1} [body] 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof CmApi
-     */
-    public userCmPost(body?: Body1, options?: any) {
-        return CmApiFp(this.configuration).userCmPost(body, options).then((request) => request(this.axios, this.basePath));
+    public updateUserCm(cmId: string, body?: Body2, options?: any) {
+        return CmApiFp(this.configuration).updateUserCm(cmId, body, options).then((request) => request(this.axios, this.basePath));
     }
 }

@@ -14,13 +14,19 @@
 /**
  * 
  * @export
- * @interface InlineResponse2005
+ * @interface Body8
  */
-export interface InlineResponse2005 {
+export interface Body8 {
     /**
      * 
      * @type {string}
-     * @memberof InlineResponse2005
+     * @memberof Body8
      */
-    url?: any;
+    title?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof Body8
+     */
+    description?: any;
 }

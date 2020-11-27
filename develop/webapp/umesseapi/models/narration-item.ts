@@ -19,7 +19,7 @@
 export interface NarrationItem {
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof NarrationItem
      */
     id?: any;
@@ -28,13 +28,13 @@ export interface NarrationItem {
      * @type {string}
      * @memberof NarrationItem
      */
-    name?: any;
+    title?: any;
     /**
      * 
      * @type {string}
      * @memberof NarrationItem
      */
-    detail?: any;
+    description?: any;
     /**
      * 
      * @type {string}
@@ -52,5 +52,23 @@ export interface NarrationItem {
      * @type {number}
      * @memberof NarrationItem
      */
-    second?: any;
+    seconds?: any;
+    /**
+     * 
+     * @type {Array&lt;IndustryItem&gt;}
+     * @memberof NarrationItem
+     */
+    industry?: any;
+    /**
+     * 
+     * @type {Array&lt;SceneItem&gt;}
+     * @memberof NarrationItem
+     */
+    scene?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof NarrationItem
+     */
+    timestamp?: any;
 }

@@ -22,11 +22,11 @@ export interface InlineResponse200 {
      * @type {string}
      * @memberof InlineResponse200
      */
-    value?: any;
+    unisCustomerCd?: any;
     /**
      * 
      * @type {Array&lt;CenterItem&gt;}
      * @memberof InlineResponse200
      */
-    data?: any;
+    cmMetas?: any;
 }

@@ -28,7 +28,31 @@ export interface User {
      * @type {string}
      * @memberof User
      */
+    contractCd?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    serviceCd?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    serviceName?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
     customerName?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    customerNameKana?: any;
     /**
      * 
      * @type {string}
@@ -41,4 +65,28 @@ export interface User {
      * @memberof User
      */
     customerGroupName?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    contractStatusCd?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    contractStatusName?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    createDate?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof User
+     */
+    renewalDate?: any;
 }

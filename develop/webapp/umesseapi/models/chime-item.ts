@@ -19,7 +19,7 @@
 export interface ChimeItem {
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof ChimeItem
      */
     id?: any;
@@ -28,11 +28,29 @@ export interface ChimeItem {
      * @type {string}
      * @memberof ChimeItem
      */
-    name?: any;
+    title?: any;
     /**
      * 
      * @type {string}
      * @memberof ChimeItem
      */
-    detail?: any;
+    description?: any;
+    /**
+     * 試聴URL
+     * @type {string}
+     * @memberof ChimeItem
+     */
+    url?: any;
+    /**
+     * 
+     * @type {number}
+     * @memberof ChimeItem
+     */
+    seconds?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof ChimeItem
+     */
+    timestamp?: any;
 }

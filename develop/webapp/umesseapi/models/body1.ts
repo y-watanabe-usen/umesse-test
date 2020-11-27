@@ -19,26 +19,8 @@
 export interface Body1 {
     /**
      * 
-     * @type {Array&lt;UsercmNarration&gt;}
+     * @type {CmMaterialListItem}
      * @memberof Body1
      */
-    narration?: any;
-    /**
-     * 
-     * @type {UsercmStartChime}
-     * @memberof Body1
-     */
-    startChime?: any;
-    /**
-     * 
-     * @type {UsercmEndChime}
-     * @memberof Body1
-     */
-    endChime?: any;
-    /**
-     * 
-     * @type {UsercmBgm}
-     * @memberof Body1
-     */
-    bgm?: any;
+    materials?: any;
 }

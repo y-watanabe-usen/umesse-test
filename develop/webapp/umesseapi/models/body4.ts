@@ -22,11 +22,23 @@ export interface Body4 {
      * @type {string}
      * @memberof Body4
      */
-    filename?: any;
+    dataProcessType?: any;
     /**
      * 
      * @type {string}
      * @memberof Body4
      */
-    recordedFile?: any;
+    uMesseCmCd?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof Body4
+     */
+    errorCode?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof Body4
+     */
+    errorMessege?: any;
 }

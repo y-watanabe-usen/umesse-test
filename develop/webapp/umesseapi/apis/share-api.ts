@@ -25,55 +25,15 @@ export const ShareApiAxiosParamCreator = function (configuration?: Configuration
     return {
         /**
          * 
-         * @summary CM共有削除
-         * @param {number} cmId ID of cm to return
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        shareCmIdDelete: async (cmId: number, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'cmId' is not null or undefined
-            if (cmId === null || cmId === undefined) {
-                throw new RequiredError('cmId','Required parameter cmId was null or undefined when calling shareCmIdDelete.');
-            }
-            const localVarPath = `/share/{cmId}`
-                .replace(`{${"cmId"}}`, encodeURIComponent(String(cmId)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            const query = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                query.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                query.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(query)).toString();
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
          * @summary CM共有追加
          * @param {string} cmId ID of cm to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        shareCmIdPost: async (cmId: string, options: any = {}): Promise<RequestArgs> => {
+        createShare: async (cmId: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'cmId' is not null or undefined
             if (cmId === null || cmId === undefined) {
-                throw new RequiredError('cmId','Required parameter cmId was null or undefined when calling shareCmIdPost.');
+                throw new RequiredError('cmId','Required parameter cmId was null or undefined when calling createShare.');
             }
             const localVarPath = `/share/{cmId}`
                 .replace(`{${"cmId"}}`, encodeURIComponent(String(cmId)));
@@ -105,11 +65,51 @@ export const ShareApiAxiosParamCreator = function (configuration?: Configuration
         },
         /**
          * 
+         * @summary CM共有削除
+         * @param {number} cmId ID of cm to return
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteShare: async (cmId: number, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'cmId' is not null or undefined
+            if (cmId === null || cmId === undefined) {
+                throw new RequiredError('cmId','Required parameter cmId was null or undefined when calling deleteShare.');
+            }
+            const localVarPath = `/share/{cmId}`
+                .replace(`{${"cmId"}}`, encodeURIComponent(String(cmId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            const query = new URLSearchParams(localVarUrlObj.search);
+            for (const key in localVarQueryParameter) {
+                query.set(key, localVarQueryParameter[key]);
+            }
+            for (const key in options.query) {
+                query.set(key, options.query[key]);
+            }
+            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
          * @summary CM共有リスト取得
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        shareGet: async (options: any = {}): Promise<RequestArgs> => {
+        listShare: async (options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/share`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -148,13 +148,13 @@ export const ShareApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @summary CM共有削除
-         * @param {number} cmId ID of cm to return
+         * @summary CM共有追加
+         * @param {string} cmId ID of cm to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async shareCmIdDelete(cmId: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await ShareApiAxiosParamCreator(configuration).shareCmIdDelete(cmId, options);
+        async createShare(cmId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await ShareApiAxiosParamCreator(configuration).createShare(cmId, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -162,13 +162,13 @@ export const ShareApiFp = function(configuration?: Configuration) {
         },
         /**
          * 
-         * @summary CM共有追加
-         * @param {string} cmId ID of cm to return
+         * @summary CM共有削除
+         * @param {number} cmId ID of cm to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async shareCmIdPost(cmId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await ShareApiAxiosParamCreator(configuration).shareCmIdPost(cmId, options);
+        async deleteShare(cmId: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await ShareApiAxiosParamCreator(configuration).deleteShare(cmId, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -180,8 +180,8 @@ export const ShareApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async shareGet(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CmItem>>> {
-            const localVarAxiosArgs = await ShareApiAxiosParamCreator(configuration).shareGet(options);
+        async listShare(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CmItem>>> {
+            const localVarAxiosArgs = await ShareApiAxiosParamCreator(configuration).listShare(options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -198,23 +198,23 @@ export const ShareApiFactory = function (configuration?: Configuration, basePath
     return {
         /**
          * 
-         * @summary CM共有削除
-         * @param {number} cmId ID of cm to return
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        shareCmIdDelete(cmId: number, options?: any): AxiosPromise<void> {
-            return ShareApiFp(configuration).shareCmIdDelete(cmId, options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
          * @summary CM共有追加
          * @param {string} cmId ID of cm to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        shareCmIdPost(cmId: string, options?: any): AxiosPromise<void> {
-            return ShareApiFp(configuration).shareCmIdPost(cmId, options).then((request) => request(axios, basePath));
+        createShare(cmId: string, options?: any): AxiosPromise<void> {
+            return ShareApiFp(configuration).createShare(cmId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary CM共有削除
+         * @param {number} cmId ID of cm to return
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteShare(cmId: number, options?: any): AxiosPromise<void> {
+            return ShareApiFp(configuration).deleteShare(cmId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -222,8 +222,8 @@ export const ShareApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        shareGet(options?: any): AxiosPromise<Array<CmItem>> {
-            return ShareApiFp(configuration).shareGet(options).then((request) => request(axios, basePath));
+        listShare(options?: any): AxiosPromise<Array<CmItem>> {
+            return ShareApiFp(configuration).listShare(options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -237,25 +237,25 @@ export const ShareApiFactory = function (configuration?: Configuration, basePath
 export class ShareApi extends BaseAPI {
     /**
      * 
-     * @summary CM共有削除
-     * @param {number} cmId ID of cm to return
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof ShareApi
-     */
-    public shareCmIdDelete(cmId: number, options?: any) {
-        return ShareApiFp(this.configuration).shareCmIdDelete(cmId, options).then((request) => request(this.axios, this.basePath));
-    }
-    /**
-     * 
      * @summary CM共有追加
      * @param {string} cmId ID of cm to return
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ShareApi
      */
-    public shareCmIdPost(cmId: string, options?: any) {
-        return ShareApiFp(this.configuration).shareCmIdPost(cmId, options).then((request) => request(this.axios, this.basePath));
+    public createShare(cmId: string, options?: any) {
+        return ShareApiFp(this.configuration).createShare(cmId, options).then((request) => request(this.axios, this.basePath));
+    }
+    /**
+     * 
+     * @summary CM共有削除
+     * @param {number} cmId ID of cm to return
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ShareApi
+     */
+    public deleteShare(cmId: number, options?: any) {
+        return ShareApiFp(this.configuration).deleteShare(cmId, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * 
@@ -264,7 +264,7 @@ export class ShareApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof ShareApi
      */
-    public shareGet(options?: any) {
-        return ShareApiFp(this.configuration).shareGet(options).then((request) => request(this.axios, this.basePath));
+    public listShare(options?: any) {
+        return ShareApiFp(this.configuration).listShare(options).then((request) => request(this.axios, this.basePath));
     }
 }

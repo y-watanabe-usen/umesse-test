@@ -29,7 +29,7 @@ export const PingApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        pingGet: async (options: any = {}): Promise<RequestArgs> => {
+        ping: async (options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/ping`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -72,8 +72,8 @@ export const PingApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async pingGet(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponseDefault>> {
-            const localVarAxiosArgs = await PingApiAxiosParamCreator(configuration).pingGet(options);
+        async ping(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponseDefault>> {
+            const localVarAxiosArgs = await PingApiAxiosParamCreator(configuration).ping(options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -94,8 +94,8 @@ export const PingApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        pingGet(options?: any): AxiosPromise<InlineResponseDefault> {
-            return PingApiFp(configuration).pingGet(options).then((request) => request(axios, basePath));
+        ping(options?: any): AxiosPromise<InlineResponseDefault> {
+            return PingApiFp(configuration).ping(options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -114,7 +114,7 @@ export class PingApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof PingApi
      */
-    public pingGet(options?: any) {
-        return PingApiFp(this.configuration).pingGet(options).then((request) => request(this.axios, this.basePath));
+    public ping(options?: any) {
+        return PingApiFp(this.configuration).ping(options).then((request) => request(this.axios, this.basePath));
     }
 }

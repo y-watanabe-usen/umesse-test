@@ -14,19 +14,19 @@
 /**
  * 
  * @export
- * @interface UsercmBgm
+ * @interface CmMaterialListItemBgm
  */
-export interface UsercmBgm {
+export interface CmMaterialListItemBgm {
     /**
      * 
      * @type {string}
-     * @memberof UsercmBgm
+     * @memberof CmMaterialListItemBgm
      */
-    bgmId?: any;
+    id?: any;
     /**
      * 
      * @type {number}
-     * @memberof UsercmBgm
+     * @memberof CmMaterialListItemBgm
      */
     volume?: any;
 }

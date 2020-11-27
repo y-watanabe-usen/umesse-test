@@ -1,8 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * U-Messe API
- * U-Messe API
+ * U MESSE API
+ * U MESSE API
  *
  * OpenAPI spec version: 0.0.1
  * 
@@ -14,25 +14,19 @@
 /**
  * 
  * @export
- * @interface BGMItem
+ * @interface CmMaterialListItemStartChime
  */
-export interface BGMItem {
+export interface CmMaterialListItemStartChime {
     /**
      * 
-     * @type {number}
-     * @memberof BGMItem
+     * @type {string}
+     * @memberof CmMaterialListItemStartChime
      */
     id?: any;
     /**
      * 
-     * @type {string}
-     * @memberof BGMItem
+     * @type {number}
+     * @memberof CmMaterialListItemStartChime
      */
-    name?: any;
-    /**
-     * 
-     * @type {string}
-     * @memberof BGMItem
-     */
-    detail?: any;
+    volume?: any;
 }

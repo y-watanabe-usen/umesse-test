@@ -19,7 +19,7 @@
 export interface TtsItem {
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof TtsItem
      */
     id?: any;
@@ -34,5 +34,17 @@ export interface TtsItem {
      * @type {string}
      * @memberof TtsItem
      */
-    detail?: any;
+    description?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof TtsItem
+     */
+    startDate?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof TtsItem
+     */
+    timestamp?: any;
 }

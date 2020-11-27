@@ -14,49 +14,49 @@
 /**
  * 
  * @export
- * @interface Body2
+ * @interface WordItem
  */
-export interface Body2 {
+export interface WordItem {
     /**
      * 
      * @type {string}
-     * @memberof Body2
+     * @memberof WordItem
+     */
+    id?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof WordItem
      */
     title?: any;
     /**
      * 
      * @type {string}
-     * @memberof Body2
+     * @memberof WordItem
      */
     description?: any;
     /**
      * 
-     * @type {number}
-     * @memberof Body2
-     */
-    seconds?: any;
-    /**
-     * 
-     * @type {Date}
-     * @memberof Body2
-     */
-    startDate?: any;
-    /**
-     * 
-     * @type {Date}
-     * @memberof Body2
-     */
-    endDate?: any;
-    /**
-     * 
      * @type {string}
-     * @memberof Body2
+     * @memberof WordItem
+     */
+    manuscript?: any;
+    /**
+     * 
+     * @type {Array&lt;IndustryItem&gt;}
+     * @memberof WordItem
      */
     industry?: any;
     /**
      * 
-     * @type {string}
-     * @memberof Body2
+     * @type {Array&lt;SceneItem&gt;}
+     * @memberof WordItem
      */
     scene?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof WordItem
+     */
+    timestamp?: any;
 }
