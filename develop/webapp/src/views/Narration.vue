@@ -317,7 +317,7 @@
 import { defineComponent, computed, ref, onMounted, reactive } from "vue";
 import NarrationStore from "@/store/narration";
 import AudioStore from "@/store/audio";
-import AudioPlayer from "@/mixin/AudioPlayer";
+import AudioPlayer from "@/utils/AudioPlayer";
 import * as UMesseApi from "umesseapi";
 
 export default {

@@ -164,7 +164,12 @@
             <form>
               <div class="form-group">
                 <label for="title" class="col-form-label">タイトル(必須)</label>
-                <input type="text" class="form-control" id="title" v-model="file.title" />
+                <input
+                  type="text"
+                  class="form-control"
+                  id="title"
+                  v-model="file.title"
+                />
               </div>
               <div class="form-group">
                 <label for="description" class="col-form-label">説明</label>
@@ -186,7 +191,7 @@
               data-dismiss="modal"
               data-toggle="modal"
               data-target="#savedModal"
-	      @click="postData"
+              @click="postData"
             >
               保存する
             </button>
@@ -233,14 +238,14 @@
 
 <script lang="ts">
 import { defineComponent, reactive, computed, toRefs } from "vue";
-import AudioRecorder from "@/mixin/AudioRecorder";
-import AudioPlayer from "@/mixin/AudioPlayer";
-import * as UMesseApi from "umesseapi"
+import AudioRecorder from "@/utils/AudioRecorder";
+import AudioPlayer from "@/utils/AudioPlayer";
+import * as UMesseApi from "umesseapi";
 
 //FIXME: types等に移動.
 interface RecordingFile {
-  title: string | undefined,
-  description: string | undefined
+  title: string | undefined;
+  description: string | undefined;
 }
 export default defineComponent({
   setup() {
@@ -294,18 +299,17 @@ export default defineComponent({
     const play = async () => {
       const audioBuffer = await audioRecorder.getAudioBuffer();
       audioPlayer.start(audioBuffer!!);
-    }
+    };
     const deleteRecordedData = () => audioRecorder.reset();
 
     const postData = async () => {
       var api = new UMesseApi.RecordingApi();
-      
+
       const audioFile = await audioRecorder.getAudioFile();
       if (audioFile != null) {
         api.userRecordingPost(state.file.title, audioFile);
       }
-
-    }
+    };
 
     return {
       ...toRefs(state),
