@@ -29,6 +29,7 @@ export default () => {
   const sampleBuffer = new Float32Array(analyser.fftSize);
   var timer: number | undefined;
   var source: AudioBufferSourceNode
+
   const start = async (audioBuffer: AudioBuffer) => {
     source = context.createBufferSource();
 
@@ -73,6 +74,6 @@ export default () => {
     state.playbackTime = context.currentTime - state.startedTime;
   }
   return {
-    start, stop, getPowerDecibels, getPlaybackTime, getDuration, isPlaying
+    start: start, stop, getPowerDecibels, getPlaybackTime, getDuration, isPlaying
   };
 }
