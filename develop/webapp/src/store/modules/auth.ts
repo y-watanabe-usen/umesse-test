@@ -32,7 +32,7 @@ export default function authStore() {
         state.authenticating = true
         try {
             const api = new UMesseApi.AuthApi()
-            const response = await api.authPost()
+            const response = await api.auth()
             state.token = response.data.token
         } catch (e) {
             state.error = e.message

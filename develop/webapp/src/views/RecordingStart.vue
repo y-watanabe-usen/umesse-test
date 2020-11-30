@@ -307,7 +307,7 @@ export default defineComponent({
 
       const audioFile = await audioRecorder.getAudioFile();
       if (audioFile != null) {
-        api.userRecordingPost(state.file.title, audioFile);
+        api.createUserRecording(state.file.title, audioFile);
       }
     };
 

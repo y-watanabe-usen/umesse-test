@@ -17,7 +17,7 @@ export default {
 
     const send = async () => {
       // const api = new UMesseApi.AuthApi();
-      // const response = await api.authPost();
+      // const response = await api.auth();
       // console.log(response);
       // state.token = response.data.token;
       const api = new UMesseApi.ResourcesApi();
