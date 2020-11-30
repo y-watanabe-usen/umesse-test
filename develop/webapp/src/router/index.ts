@@ -7,6 +7,8 @@ import CreatedCm from '@/views/CreatedCm.vue'
 import OrderVoiceBgm from '@/views/OrderVoiceBgm.vue'
 import CreateCommercial from '@/views/CreateCommercial.vue'
 import NewOrder from '@/views/NewOrder.vue'
+import SelectTemplate from '@/views/SelectTemplate.vue'
+import CreateNarrationTextInput from '@/views/CreateNarrationTextInput.vue'
 import ApiConnectTest2 from '@/views/ApiConnectTest2.vue'
 
 const routes: Array<RouteRecordRaw> = [
@@ -50,6 +52,17 @@ const routes: Array<RouteRecordRaw> = [
     name: 'NewOrder',
     component: NewOrder
   },
+  {
+    path: '/selecttemplate',
+    name: 'SelectTemplate',
+    component: SelectTemplate
+  },
+  {
+    path: '/createnarrationtextinput',
+    name: 'CreateNarrationTextInput',
+    component: CreateNarrationTextInput
+  },
+
   // TODO: 実際には使わないので後で消す
   {
     path: '/apiconnecttest2',

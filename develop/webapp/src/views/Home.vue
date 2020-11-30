@@ -73,7 +73,7 @@
         </div>
         <div class="col content">
           <router-link
-            to="#"
+            :to="{ path: 'selecttemplate' }"
             class="btn btn-light border w-100 text-left my-4 font-weight-bold"
           >
             合成音声から作成
