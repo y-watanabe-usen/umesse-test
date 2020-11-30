@@ -19,7 +19,7 @@
 export interface RecordingItem {
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof RecordingItem
      */
     id?: any;
@@ -34,5 +34,17 @@ export interface RecordingItem {
      * @type {string}
      * @memberof RecordingItem
      */
-    detail?: any;
+    description?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof RecordingItem
+     */
+    startDate?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof RecordingItem
+     */
+    timestamp?: any;
 }

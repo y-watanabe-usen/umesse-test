@@ -119,63 +119,109 @@ webapp/
 
 ```none
 {
-  unis_customer_cd: {S: 'UNIS顧客CD'},
-  info: {
-   　contract_cd: {S: 'NeOS契約CD'},
-   　service_cd: {S: 'サービスCD'},
-   　service_name: {S: 'サービス名'},
-   　neos_item_cd: {S: 'NeOS品目CD'},
-   　neos_item_name: {S: 'NeOS品目名'},
-   　customer_name: {S: '顧客設置先名称'},
-   　customer_name_kana: {S: '顧客設置先名称カナ'},
-   　customer_chain_cd: {S: '顧客チェーン店CD'},
-   　customer_chain_name: {S: '顧客チェーン店名'},
-   　customer_group_cd: {S: '顧客グループCD'},
-   　customer_group_name: {S: '顧客グループ名'},
-   　contract_status_cd: {S: '契約ステータスCD'},
-   　contract_status_name: {S: '契約ステータス名'},
-   　create_date: {S: '2019-09-01T09:00:00+9:00'},
-   　renewal_date: {S: '2019-09-01T09:00:00+9:00'},
+  "unis_customer_cd": {"S": "UNIS顧客CD"},
+  "contract_cd": {"S": "NeOS契約CD"},
+  "service_cd": {"S": "サービスCD"},
+  "service_name": {"S": "サービス名"},
+  "customer_name": {"S": "顧客設置先名称"},
+  "customer_name_kana": {"S": "顧客設置先名称カナ"},
+  "customer_group_cd": {"S": "顧客グループCD"},
+  "customer_group_name": {"S": "顧客グループ名"},
+  "contract_status_cd": {"S": "契約ステータスCD"},
+  "contract_status_name": {"S": "契約ステータス名"},
+  "create_date": {"S": "2019-09-01T09:00:00+9:00"},
+  "renewal_date": {"S": "2019-09-01T09:00:00+9:00"},
+  "auth": {
+    "token": {"S": "トークンID"}
+    "expiration": {"S": "2019-09-01T09:00:00+9:00"},
   },
-  auth: {
-    token: {S: トークンID}
-    expiration: {S: Date},
+  "cm": {
+    "L": [
+      {
+        "M": {
+          "id": {"S": "ファイル名"},
+          "title": {"S": "タイトル名"},
+          "description": {"S": "説明文"},
+          "seconds": {"N": "秒数"},
+          "start_date": {"S": "2019-09-01T09:00:00+9:00"},
+          "end_date": {"S": "9999-12-31T23:59:59+09:00"},
+          "production_type": {"S": "01: 音楽系, 02: 素ナレ"},
+          "industry": {
+            "L": [
+              {
+                "M": {
+                  "id": {"S": "01"},
+                  "name": {"S": "全業種"}
+                }
+              }
+            ]
+          },
+          "scenes": {
+            "L": [
+              {
+                "M": {
+                  "id": {"S": "01"},
+                  "name": {"S": "全シーン"}
+                }
+              }
+            ]
+          },
+          "materials": {
+            "M": {
+              "narrations": {
+                "L": [
+                  {
+                    "M": {
+                      "id": {"S": "ファイル名"},
+                      "volume": {"N": "ボリューム値"}
+                    }
+                  },
+                  {
+                    "M": {
+                      "id": {"S": "ファイル名"},
+                      "volume": {"N": "ボリューム値"}
+                    }
+                  },
+                  {
+                    "M": {
+                      "id": {"S": "ファイル名"},
+                      "volume": {"N": "ボリューム値"}
+                    }
+                  },
+                  {
+                    "M": {
+                      "id": {"S": "ファイル名"},
+                      "volume": {"N": "ボリューム値"}
+                    }
+                  }
+                ]
+              },
+              "start_chime": {
+                "M": {
+                  "id": {"S": "ファイル名"},
+                  "volume": {"N": "ボリューム値"}
+                }
+              },
+              "end_chime": {
+                "M": {
+                  "id": {"S": "ファイル名"},
+                  "volume": {"N": "ボリューム値"}
+                }
+              },
+              "bgm": {
+                "M": {
+                  "id": {"S": "ファイル名"},
+                  "volume": {"N": "ボリューム値"}
+                }
+              }
+            }
+          },
+          "status": {"S": "00: CM削除, 01: CM作成中, 02: CM作成完了, 09: CM作成エラー, 11: センターアップロード中, 12: センターアップロード完了, 19: センターアップロードエラー"},
+          "timestamp": {"S": "2019-09-01T09:00:00+9:00"}
+        }
+      }
+    ]  
   },
-  cm: [
-    {
-      id: {S, 'ファイル名'},
-      title: {S, 'タイトル名'},
-      description: {S, '説明文'},
-      seconds: {I, '秒数'},
-      start_date: {S, '2014-10-10T13:50:40+09:00'},
-      end_date: {S, '9999-12-31T23:59:59+09:00'},
-      production_type: {S, '01: 音楽系, 02: 素ナレ'},
-      industry: {S: '業種名'},
-      scene: {S: 'シーン名'},
-      materials: {
-        narrations: [
-          {
-            id: {S, 'ファイル名'},
-            volume: {I, 'ボリューム値'},
-          }
-        ],
-        start_chime: {
-          id: {S, 'ファイル名'},
-          volume: {I, 'ボリューム値'},
-        },
-        end_chime: {
-          id: {S, 'ファイル名'},
-          volume: {I, 'ボリューム値'},
-        },
-        bgm: {
-          id: {S, 'ファイル名'},
-          volume: {I, 'ボリューム値'},
-        },
-      },
-      status: {S: '01: CM作成中, 02: CM作成完了, 09: CM作成エラー, 11: センターアップロード中, 12: センターアップロード完了, 19: センターアップロードエラー'}
-      timestamp: {S, '2014-10-10T13:50:40+09:00'}
-    }
-  ],
   recording: [
     {
       id: {S, 'ファイル名'},
@@ -203,14 +249,32 @@ webapp/
 
 ```none
 {
-  id: {S: 'ファイル名'},
-  title: {S: 'タイトル名'},
-  description: {S: '説明文'},
-  manuscript: {S: '原稿'},
-  seconds: {I: '秒数'},
-  industry: {S: '業種名'},
-  scene: {S: 'シーン名'},
-  timestamp: {S, '2014-10-10T13:50:40+09:00'}
+  "id": {"S": "ファイル名"},
+  "title": {"S": "タイトル名"},
+  "description": {"S": "説明文"},
+  "manuscript": {"S": "原稿"},
+  "seconds": {"N": "秒数"},
+  "industry": {
+    "L": [
+      {
+        "M": {
+          "id": {"S": "業種CD"},
+          "name": {"S": "業種名"}
+        }
+      }
+    ]
+  },
+  "scenes": {
+    "L": [
+      {
+        "M": {
+          "id": {"S": "シーンCD"},
+          "name": {"S": "シーン名"}
+        }
+      }
+    ]
+  },
+  "timestamp": {"S": "2019-09-01T09:00:00+9:00"}
 }
 ```
 
@@ -220,20 +284,20 @@ webapp/
 
 ```none
 {
-  unis_customer_cd: {S, '顧客CD'},
-  data_process_type: {S, '01: 追加, 02: 変更, 03: 削除'}
-  id: {S, 'ファイル名'},
-  title: {S, 'タイトル名'},
-  description: {S, '説明文'},
-  seconds: {I, '秒数'},
-  start_date: {S, '2014-10-10T13:50:40+09:00'},
-  end_date: {S, '9999-12-31T23:59:59+09:00'},
-  production_type: {S, '01: 音楽系, 02: 素ナレ'},
-  industry: {S: '業種名'},
-  scene: {S: 'シーン名'},
-  status: {I, '0: 連携準備中, 1: 連携可能, 9: 連携エラー'},
-  error_code: {S, 'エラーコード'},
-  error_message: {S, 'エラーメッセージ'},
-  timestamp: {S, '2014-10-10T13:50:40+09:00'}
+  "unis_customer_cd": {"S": "顧客CD"},
+  "data_process_type": {"S": "01: 追加, 02: 変更, 03: 削除"}
+  "id": {"S": "ファイル名"},
+  "title": {"S": "タイトル名"},
+  "description": {"S": "説明文"},
+  "seconds": {"N", "秒数"},
+  "start_date": {"S", "2014-10-10T13:50:40+09:00"},
+  "end_date": {"S", "9999-12-31T23:59:59+09:00"},
+  "production_type": {"S", "01: 音楽系, 02: 素ナレ"},
+  "industry": {"S": "業種名"},
+  "scene": {"S": "シーン名"},
+  "status": {"S": "0: 連携準備中, 1: 連携可能, 9: 連携エラー"},
+  "error_code": {"S": "エラーコード"},
+  "error_message": {"S": "エラーメッセージ"},
+  "timestamp: {"S": "2014-10-10T13:50:40+09:00"}
 }
 ```

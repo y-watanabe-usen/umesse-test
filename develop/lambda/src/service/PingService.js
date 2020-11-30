@@ -6,7 +6,7 @@
  *
  * returns inline_response_default
  **/
-exports.pingGET = function() {
+exports.ping = function() {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {

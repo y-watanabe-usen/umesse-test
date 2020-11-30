@@ -1,0 +1,147 @@
+{
+  "umesse-contents": [
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {"S": "chime/サンプル01"},
+          "title": {"S": "サンプル01"},
+          "description": {"S": "チャイム・サンプル01"},
+          "seconds": {"N": "5"},
+          "timestamp": {"S": "2019-09-01T09:00:00+9:00"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {"S": "chime/サンプル02"},
+          "title": {"S": "サンプル02"},
+          "description": {"S": "チャイム・サンプル02"},
+          "seconds": {"N": "5"},
+          "timestamp": {"S": "2019-09-01T09:00:00+9:00"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {"S": "chime/サンプル03"},
+          "title": {"S": "サンプル03"},
+          "description": {"S": "チャイム・サンプル03"},
+          "seconds": {"N": "5"},
+          "timestamp": {"S": "2019-09-01T09:00:00+9:00"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {"S": "chime/サンプル04"},
+          "title": {"S": "サンプル04"},
+          "description": {"S": "チャイム・サンプル04"},
+          "seconds": {"N": "5"},
+          "timestamp": {"S": "2019-09-01T09:00:00+9:00"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {"S": "chime/サンプル05"},
+          "title": {"S": "サンプル05"},
+          "description": {"S": "チャイム・サンプル05"},
+          "seconds": {"N": "5"},
+          "timestamp": {"S": "2019-09-01T09:00:00+9:00"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {"S": "chime/サンプル06"},
+          "title": {"S": "サンプル06"},
+          "description": {"S": "チャイム・サンプル06"},
+          "seconds": {"N": "5"},
+          "timestamp": {"S": "2019-09-01T09:00:00+9:00"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {"S": "chime/サンプル07"},
+          "title": {"S": "サンプル07"},
+          "description": {"S": "チャイム・サンプル07"},
+          "seconds": {"N": "5"},
+          "timestamp": {"S": "2019-09-01T09:00:00+9:00"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {"S": "chime/サンプル08"},
+          "title": {"S": "サンプル08"},
+          "description": {"S": "チャイム・サンプル08"},
+          "seconds": {"N": "5"},
+          "timestamp": {"S": "2019-09-01T09:00:00+9:00"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {"S": "chime/サンプル09"},
+          "title": {"S": "サンプル09"},
+          "description": {"S": "チャイム・サンプル09"},
+          "seconds": {"N": "5"},
+          "timestamp": {"S": "2019-09-01T09:00:00+9:00"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {"S": "chime/サンプル10"},
+          "title": {"S": "サンプル10"},
+          "description": {"S": "チャイム・サンプル10"},
+          "seconds": {"N": "5"},
+          "timestamp": {"S": "2019-09-01T09:00:00+9:00"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {"S": "chime/サンプル11"},
+          "title": {"S": "サンプル11"},
+          "description": {"S": "チャイム・サンプル11"},
+          "seconds": {"N": "5"},
+          "timestamp": {"S": "2019-09-01T09:00:00+9:00"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {"S": "chime/サンプル12"},
+          "title": {"S": "サンプル12"},
+          "description": {"S": "チャイム・サンプル12"},
+          "seconds": {"N": "5"},
+          "timestamp": {"S": "2019-09-01T09:00:00+9:00"}
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": {"S": "chime/サンプル13"},
+          "title": {"S": "サンプル13"},
+          "description": {"S": "チャイム・サンプル13"},
+          "seconds": {"N": "5"},
+          "timestamp": {"S": "2019-09-01T09:00:00+9:00"}
+        }
+      }
+    }
+  ]
+}

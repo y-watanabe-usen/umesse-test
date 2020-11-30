@@ -16,7 +16,7 @@ import { Configuration } from '../configuration';
 // Some imports not used depending on template conditions
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
-import { InlineResponse2005 } from '../models';
+import { InlineResponse2002 } from '../models';
 /**
  * S3Api - axios parameter creator
  * @export
@@ -29,7 +29,7 @@ export const S3ApiAxiosParamCreator = function (configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        signedUrlGet: async (options: any = {}): Promise<RequestArgs> => {
+        getSignedUrl: async (options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/signedUrl`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -72,8 +72,8 @@ export const S3ApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async signedUrlGet(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2005>> {
-            const localVarAxiosArgs = await S3ApiAxiosParamCreator(configuration).signedUrlGet(options);
+        async getSignedUrl(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2002>> {
+            const localVarAxiosArgs = await S3ApiAxiosParamCreator(configuration).getSignedUrl(options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -94,8 +94,8 @@ export const S3ApiFactory = function (configuration?: Configuration, basePath?: 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        signedUrlGet(options?: any): AxiosPromise<InlineResponse2005> {
-            return S3ApiFp(configuration).signedUrlGet(options).then((request) => request(axios, basePath));
+        getSignedUrl(options?: any): AxiosPromise<InlineResponse2002> {
+            return S3ApiFp(configuration).getSignedUrl(options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -114,7 +114,7 @@ export class S3Api extends BaseAPI {
      * @throws {RequiredError}
      * @memberof S3Api
      */
-    public signedUrlGet(options?: any) {
-        return S3ApiFp(this.configuration).signedUrlGet(options).then((request) => request(this.axios, this.basePath));
+    public getSignedUrl(options?: any) {
+        return S3ApiFp(this.configuration).getSignedUrl(options).then((request) => request(this.axios, this.basePath));
     }
 }

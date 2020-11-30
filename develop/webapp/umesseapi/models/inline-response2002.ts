@@ -22,11 +22,5 @@ export interface InlineResponse2002 {
      * @type {string}
      * @memberof InlineResponse2002
      */
-    value?: any;
-    /**
-     * 
-     * @type {Array&lt;TtsItem&gt;}
-     * @memberof InlineResponse2002
-     */
-    data?: any;
+    url?: any;
 }

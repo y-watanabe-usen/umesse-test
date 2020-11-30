@@ -14,19 +14,19 @@
 /**
  * 
  * @export
- * @interface InlineResponse2003
+ * @interface CmMaterialListItemNarrations
  */
-export interface InlineResponse2003 {
+export interface CmMaterialListItemNarrations {
     /**
      * 
      * @type {string}
-     * @memberof InlineResponse2003
+     * @memberof CmMaterialListItemNarrations
      */
-    value?: any;
+    id?: any;
     /**
      * 
-     * @type {Array&lt;BgmItem&gt;}
-     * @memberof InlineResponse2003
+     * @type {number}
+     * @memberof CmMaterialListItemNarrations
      */
-    data?: any;
+    volume?: any;
 }

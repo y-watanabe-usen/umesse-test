@@ -3,8 +3,8 @@
 var utils = require('../utils/writer.js');
 var Center = require('../service/CenterService');
 
-module.exports.centerCmIdDELETE = function centerCmIdDELETE (req, res, next, cmId) {
-  Center.centerCmIdDELETE(cmId)
+module.exports.createCenterCm = function createCenterCm (req, res, next, body, cmId) {
+  Center.createCenterCm(body, cmId)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -13,8 +13,8 @@ module.exports.centerCmIdDELETE = function centerCmIdDELETE (req, res, next, cmI
     });
 };
 
-module.exports.centerCmIdPOST = function centerCmIdPOST (req, res, next, body, cmId) {
-  Center.centerCmIdPOST(body, cmId)
+module.exports.deleteCenterCm = function deleteCenterCm (req, res, next, cmId) {
+  Center.deleteCenterCm(cmId)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -23,8 +23,8 @@ module.exports.centerCmIdPOST = function centerCmIdPOST (req, res, next, body, c
     });
 };
 
-module.exports.centerDownloadCmIdPOST = function centerDownloadCmIdPOST (req, res, next, cmId) {
-  Center.centerDownloadCmIdPOST(cmId)
+module.exports.getCenterUpload = function getCenterUpload (req, res, next) {
+  Center.getCenterUpload()
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -33,8 +33,8 @@ module.exports.centerDownloadCmIdPOST = function centerDownloadCmIdPOST (req, re
     });
 };
 
-module.exports.centerDownloadGET = function centerDownloadGET (req, res, next) {
-  Center.centerDownloadGET()
+module.exports.updateCenterUpload = function updateCenterUpload (req, res, next, body, unisCustomerCd) {
+  Center.updateCenterUpload(body, unisCustomerCd)
     .then(function (response) {
       utils.writeJson(res, response);
     })

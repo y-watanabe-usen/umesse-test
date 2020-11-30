@@ -31,7 +31,7 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        authPost: async (body?: Body, options: any = {}): Promise<RequestArgs> => {
+        auth: async (body?: Body, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/auth`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -79,8 +79,8 @@ export const AuthApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async authPost(body?: Body, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Auth>> {
-            const localVarAxiosArgs = await AuthApiAxiosParamCreator(configuration).authPost(body, options);
+        async auth(body?: Body, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Auth>> {
+            const localVarAxiosArgs = await AuthApiAxiosParamCreator(configuration).auth(body, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -102,8 +102,8 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        authPost(body?: Body, options?: any): AxiosPromise<Auth> {
-            return AuthApiFp(configuration).authPost(body, options).then((request) => request(axios, basePath));
+        auth(body?: Body, options?: any): AxiosPromise<Auth> {
+            return AuthApiFp(configuration).auth(body, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -123,7 +123,7 @@ export class AuthApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof AuthApi
      */
-    public authPost(body?: Body, options?: any) {
-        return AuthApiFp(this.configuration).authPost(body, options).then((request) => request(this.axios, this.basePath));
+    public auth(body?: Body, options?: any) {
+        return AuthApiFp(this.configuration).auth(body, options).then((request) => request(this.axios, this.basePath));
     }
 }

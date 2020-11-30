@@ -19,7 +19,7 @@
 export interface SceneItem {
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof SceneItem
      */
     id?: any;

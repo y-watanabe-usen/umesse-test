@@ -19,7 +19,7 @@
 export interface BgmItem {
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof BgmItem
      */
     id?: any;
@@ -28,11 +28,41 @@ export interface BgmItem {
      * @type {string}
      * @memberof BgmItem
      */
-    name?: any;
+    title?: any;
     /**
      * 
      * @type {string}
      * @memberof BgmItem
      */
-    detail?: any;
+    description?: any;
+    /**
+     * 
+     * @type {number}
+     * @memberof BgmItem
+     */
+    seconds?: any;
+    /**
+     * 試聴URL
+     * @type {string}
+     * @memberof BgmItem
+     */
+    url?: any;
+    /**
+     * 
+     * @type {Array&lt;IndustryItem&gt;}
+     * @memberof BgmItem
+     */
+    industry?: any;
+    /**
+     * 
+     * @type {Array&lt;SceneItem&gt;}
+     * @memberof BgmItem
+     */
+    scenes?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof BgmItem
+     */
+    timestamp?: any;
 }

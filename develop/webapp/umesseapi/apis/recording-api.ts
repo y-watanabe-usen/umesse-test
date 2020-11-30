@@ -16,7 +16,7 @@ import { Configuration } from '../configuration';
 // Some imports not used depending on template conditions
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
-import { InlineResponse2001 } from '../models';
+import { RecordingItem } from '../models';
 /**
  * RecordingApi - axios parameter creator
  * @export
@@ -25,47 +25,13 @@ export const RecordingApiAxiosParamCreator = function (configuration?: Configura
     return {
         /**
          * 
-         * @summary 録音データリスト取得
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        userRecordingGet: async (options: any = {}): Promise<RequestArgs> => {
-            const localVarPath = `/user/recording`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            const query = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                query.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                query.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(query)).toString();
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
          * @summary 新規録音データ
          * @param {string} [filename] 
          * @param {string} [recordedFile] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userRecordingPost: async (filename?: string, recordedFile?: string, options: any = {}): Promise<RequestArgs> => {
+        createUserRecording: async (filename?: string, recordedFile?: string, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/user/recording`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -112,10 +78,10 @@ export const RecordingApiAxiosParamCreator = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userRecordingRecordingIdDelete: async (recordingId: string, options: any = {}): Promise<RequestArgs> => {
+        deleteUserRecording: async (recordingId: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'recordingId' is not null or undefined
             if (recordingId === null || recordingId === undefined) {
-                throw new RequiredError('recordingId','Required parameter recordingId was null or undefined when calling userRecordingRecordingIdDelete.');
+                throw new RequiredError('recordingId','Required parameter recordingId was null or undefined when calling deleteUserRecording.');
             }
             const localVarPath = `/user/recording/{recordingId}`
                 .replace(`{${"recordingId"}}`, encodeURIComponent(String(recordingId)));
@@ -152,10 +118,10 @@ export const RecordingApiAxiosParamCreator = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userRecordingRecordingIdGet: async (recordingId: string, options: any = {}): Promise<RequestArgs> => {
+        getUserRecording: async (recordingId: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'recordingId' is not null or undefined
             if (recordingId === null || recordingId === undefined) {
-                throw new RequiredError('recordingId','Required parameter recordingId was null or undefined when calling userRecordingRecordingIdGet.');
+                throw new RequiredError('recordingId','Required parameter recordingId was null or undefined when calling getUserRecording.');
             }
             const localVarPath = `/user/recording/{recordingId}`
                 .replace(`{${"recordingId"}}`, encodeURIComponent(String(recordingId)));
@@ -187,17 +153,51 @@ export const RecordingApiAxiosParamCreator = function (configuration?: Configura
         },
         /**
          * 
-         * @summary 録音データ更新（メタデータのみ）
-         * @param {string} recordingId ID of recording to return
-         * @param {string} [filename] 
-         * @param {string} [recordedFile] 
+         * @summary 録音データリスト取得
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userRecordingRecordingIdPost: async (recordingId: string, filename?: string, recordedFile?: string, options: any = {}): Promise<RequestArgs> => {
+        listUserRecording: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/user/recording`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            const query = new URLSearchParams(localVarUrlObj.search);
+            for (const key in localVarQueryParameter) {
+                query.set(key, localVarQueryParameter[key]);
+            }
+            for (const key in options.query) {
+                query.set(key, options.query[key]);
+            }
+            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary 録音データ更新（メタデータのみ）
+         * @param {string} recordingId ID of recording to return
+         * @param {string} [title] 
+         * @param {string} [description] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateUserRecording: async (recordingId: string, title?: string, description?: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'recordingId' is not null or undefined
             if (recordingId === null || recordingId === undefined) {
-                throw new RequiredError('recordingId','Required parameter recordingId was null or undefined when calling userRecordingRecordingIdPost.');
+                throw new RequiredError('recordingId','Required parameter recordingId was null or undefined when calling updateUserRecording.');
             }
             const localVarPath = `/user/recording/{recordingId}`
                 .replace(`{${"recordingId"}}`, encodeURIComponent(String(recordingId)));
@@ -213,12 +213,12 @@ export const RecordingApiAxiosParamCreator = function (configuration?: Configura
             const localVarFormParams = new FormData();
 
 
-            if (filename !== undefined) { 
-                localVarFormParams.append('filename', filename as any);
+            if (title !== undefined) { 
+                localVarFormParams.append('title', title as any);
             }
 
-            if (recordedFile !== undefined) { 
-                localVarFormParams.append('recordedFile', recordedFile as any);
+            if (description !== undefined) { 
+                localVarFormParams.append('description', description as any);
             }
 
             localVarHeaderParameter['Content-Type'] = 'multipart/form-data';
@@ -250,27 +250,14 @@ export const RecordingApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @summary 録音データリスト取得
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async userRecordingGet(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2001>> {
-            const localVarAxiosArgs = await RecordingApiAxiosParamCreator(configuration).userRecordingGet(options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
-        },
-        /**
-         * 
          * @summary 新規録音データ
          * @param {string} [filename] 
          * @param {string} [recordedFile] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async userRecordingPost(filename?: string, recordedFile?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await RecordingApiAxiosParamCreator(configuration).userRecordingPost(filename, recordedFile, options);
+        async createUserRecording(filename?: string, recordedFile?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await RecordingApiAxiosParamCreator(configuration).createUserRecording(filename, recordedFile, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -283,8 +270,8 @@ export const RecordingApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async userRecordingRecordingIdDelete(recordingId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await RecordingApiAxiosParamCreator(configuration).userRecordingRecordingIdDelete(recordingId, options);
+        async deleteUserRecording(recordingId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await RecordingApiAxiosParamCreator(configuration).deleteUserRecording(recordingId, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -297,8 +284,21 @@ export const RecordingApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async userRecordingRecordingIdGet(recordingId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await RecordingApiAxiosParamCreator(configuration).userRecordingRecordingIdGet(recordingId, options);
+        async getUserRecording(recordingId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RecordingItem>> {
+            const localVarAxiosArgs = await RecordingApiAxiosParamCreator(configuration).getUserRecording(recordingId, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
+         * 
+         * @summary 録音データリスト取得
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listUserRecording(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<RecordingItem>>> {
+            const localVarAxiosArgs = await RecordingApiAxiosParamCreator(configuration).listUserRecording(options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -308,13 +308,13 @@ export const RecordingApiFp = function(configuration?: Configuration) {
          * 
          * @summary 録音データ更新（メタデータのみ）
          * @param {string} recordingId ID of recording to return
-         * @param {string} [filename] 
-         * @param {string} [recordedFile] 
+         * @param {string} [title] 
+         * @param {string} [description] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async userRecordingRecordingIdPost(recordingId: string, filename?: string, recordedFile?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await RecordingApiAxiosParamCreator(configuration).userRecordingRecordingIdPost(recordingId, filename, recordedFile, options);
+        async updateUserRecording(recordingId: string, title?: string, description?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RecordingItem>> {
+            const localVarAxiosArgs = await RecordingApiAxiosParamCreator(configuration).updateUserRecording(recordingId, title, description, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -331,23 +331,14 @@ export const RecordingApiFactory = function (configuration?: Configuration, base
     return {
         /**
          * 
-         * @summary 録音データリスト取得
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        userRecordingGet(options?: any): AxiosPromise<InlineResponse2001> {
-            return RecordingApiFp(configuration).userRecordingGet(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
          * @summary 新規録音データ
          * @param {string} [filename] 
          * @param {string} [recordedFile] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userRecordingPost(filename?: string, recordedFile?: string, options?: any): AxiosPromise<void> {
-            return RecordingApiFp(configuration).userRecordingPost(filename, recordedFile, options).then((request) => request(axios, basePath));
+        createUserRecording(filename?: string, recordedFile?: string, options?: any): AxiosPromise<void> {
+            return RecordingApiFp(configuration).createUserRecording(filename, recordedFile, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -356,8 +347,8 @@ export const RecordingApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userRecordingRecordingIdDelete(recordingId: string, options?: any): AxiosPromise<void> {
-            return RecordingApiFp(configuration).userRecordingRecordingIdDelete(recordingId, options).then((request) => request(axios, basePath));
+        deleteUserRecording(recordingId: string, options?: any): AxiosPromise<void> {
+            return RecordingApiFp(configuration).deleteUserRecording(recordingId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -366,20 +357,29 @@ export const RecordingApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userRecordingRecordingIdGet(recordingId: string, options?: any): AxiosPromise<void> {
-            return RecordingApiFp(configuration).userRecordingRecordingIdGet(recordingId, options).then((request) => request(axios, basePath));
+        getUserRecording(recordingId: string, options?: any): AxiosPromise<RecordingItem> {
+            return RecordingApiFp(configuration).getUserRecording(recordingId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary 録音データリスト取得
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listUserRecording(options?: any): AxiosPromise<Array<RecordingItem>> {
+            return RecordingApiFp(configuration).listUserRecording(options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary 録音データ更新（メタデータのみ）
          * @param {string} recordingId ID of recording to return
-         * @param {string} [filename] 
-         * @param {string} [recordedFile] 
+         * @param {string} [title] 
+         * @param {string} [description] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userRecordingRecordingIdPost(recordingId: string, filename?: string, recordedFile?: string, options?: any): AxiosPromise<void> {
-            return RecordingApiFp(configuration).userRecordingRecordingIdPost(recordingId, filename, recordedFile, options).then((request) => request(axios, basePath));
+        updateUserRecording(recordingId: string, title?: string, description?: string, options?: any): AxiosPromise<RecordingItem> {
+            return RecordingApiFp(configuration).updateUserRecording(recordingId, title, description, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -393,16 +393,6 @@ export const RecordingApiFactory = function (configuration?: Configuration, base
 export class RecordingApi extends BaseAPI {
     /**
      * 
-     * @summary 録音データリスト取得
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof RecordingApi
-     */
-    public userRecordingGet(options?: any) {
-        return RecordingApiFp(this.configuration).userRecordingGet(options).then((request) => request(this.axios, this.basePath));
-    }
-    /**
-     * 
      * @summary 新規録音データ
      * @param {string} [filename] 
      * @param {string} [recordedFile] 
@@ -410,8 +400,8 @@ export class RecordingApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof RecordingApi
      */
-    public userRecordingPost(filename?: string, recordedFile?: string, options?: any) {
-        return RecordingApiFp(this.configuration).userRecordingPost(filename, recordedFile, options).then((request) => request(this.axios, this.basePath));
+    public createUserRecording(filename?: string, recordedFile?: string, options?: any) {
+        return RecordingApiFp(this.configuration).createUserRecording(filename, recordedFile, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * 
@@ -421,8 +411,8 @@ export class RecordingApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof RecordingApi
      */
-    public userRecordingRecordingIdDelete(recordingId: string, options?: any) {
-        return RecordingApiFp(this.configuration).userRecordingRecordingIdDelete(recordingId, options).then((request) => request(this.axios, this.basePath));
+    public deleteUserRecording(recordingId: string, options?: any) {
+        return RecordingApiFp(this.configuration).deleteUserRecording(recordingId, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * 
@@ -432,20 +422,30 @@ export class RecordingApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof RecordingApi
      */
-    public userRecordingRecordingIdGet(recordingId: string, options?: any) {
-        return RecordingApiFp(this.configuration).userRecordingRecordingIdGet(recordingId, options).then((request) => request(this.axios, this.basePath));
+    public getUserRecording(recordingId: string, options?: any) {
+        return RecordingApiFp(this.configuration).getUserRecording(recordingId, options).then((request) => request(this.axios, this.basePath));
+    }
+    /**
+     * 
+     * @summary 録音データリスト取得
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof RecordingApi
+     */
+    public listUserRecording(options?: any) {
+        return RecordingApiFp(this.configuration).listUserRecording(options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * 
      * @summary 録音データ更新（メタデータのみ）
      * @param {string} recordingId ID of recording to return
-     * @param {string} [filename] 
-     * @param {string} [recordedFile] 
+     * @param {string} [title] 
+     * @param {string} [description] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RecordingApi
      */
-    public userRecordingRecordingIdPost(recordingId: string, filename?: string, recordedFile?: string, options?: any) {
-        return RecordingApiFp(this.configuration).userRecordingRecordingIdPost(recordingId, filename, recordedFile, options).then((request) => request(this.axios, this.basePath));
+    public updateUserRecording(recordingId: string, title?: string, description?: string, options?: any) {
+        return RecordingApiFp(this.configuration).updateUserRecording(recordingId, title, description, options).then((request) => request(this.axios, this.basePath));
     }
 }

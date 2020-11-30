@@ -3,8 +3,8 @@
 var utils = require('../utils/writer.js');
 var Tts = require('../service/TtsService');
 
-module.exports.userTtsGET = function userTtsGET (req, res, next) {
-  Tts.userTtsGET()
+module.exports.createUserTts = function createUserTts (req, res, next) {
+  Tts.createUserTts()
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -13,8 +13,8 @@ module.exports.userTtsGET = function userTtsGET (req, res, next) {
     });
 };
 
-module.exports.userTtsPOST = function userTtsPOST (req, res, next) {
-  Tts.userTtsPOST()
+module.exports.deleteUserTts = function deleteUserTts (req, res, next, ttsId) {
+  Tts.deleteUserTts(ttsId)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -23,8 +23,8 @@ module.exports.userTtsPOST = function userTtsPOST (req, res, next) {
     });
 };
 
-module.exports.userTtsTtsIdDELETE = function userTtsTtsIdDELETE (req, res, next, ttsId) {
-  Tts.userTtsTtsIdDELETE(ttsId)
+module.exports.getUserTts = function getUserTts (req, res, next, ttsId) {
+  Tts.getUserTts(ttsId)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -33,8 +33,8 @@ module.exports.userTtsTtsIdDELETE = function userTtsTtsIdDELETE (req, res, next,
     });
 };
 
-module.exports.userTtsTtsIdGET = function userTtsTtsIdGET (req, res, next, ttsId) {
-  Tts.userTtsTtsIdGET(ttsId)
+module.exports.listUserTts = function listUserTts (req, res, next) {
+  Tts.listUserTts()
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -43,8 +43,8 @@ module.exports.userTtsTtsIdGET = function userTtsTtsIdGET (req, res, next, ttsId
     });
 };
 
-module.exports.userTtsTtsIdPOST = function userTtsTtsIdPOST (req, res, next, ttsId) {
-  Tts.userTtsTtsIdPOST(ttsId)
+module.exports.updateUserTts = function updateUserTts (req, res, next, ttsId) {
+  Tts.updateUserTts(ttsId)
     .then(function (response) {
       utils.writeJson(res, response);
     })

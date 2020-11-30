@@ -19,7 +19,7 @@
 export interface CmItem {
     /**
      * 
-     * @type {number}
+     * @type {string}
      * @memberof CmItem
      */
     id?: any;
@@ -28,11 +28,65 @@ export interface CmItem {
      * @type {string}
      * @memberof CmItem
      */
-    name?: any;
+    title?: any;
     /**
      * 
      * @type {string}
      * @memberof CmItem
      */
-    detail?: any;
+    description?: any;
+    /**
+     * 
+     * @type {number}
+     * @memberof CmItem
+     */
+    seconds?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof CmItem
+     */
+    startDate?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof CmItem
+     */
+    endDate?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof CmItem
+     */
+    productionType?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof CmItem
+     */
+    industry?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof CmItem
+     */
+    scene?: any;
+    /**
+     * 
+     * @type {CmMaterialListItem}
+     * @memberof CmItem
+     */
+    materials?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof CmItem
+     */
+    status?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof CmItem
+     */
+    timestamp?: any;
 }

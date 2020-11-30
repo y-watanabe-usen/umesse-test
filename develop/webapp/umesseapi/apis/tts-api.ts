@@ -16,7 +16,7 @@ import { Configuration } from '../configuration';
 // Some imports not used depending on template conditions
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
-import { InlineResponse2002 } from '../models';
+import { TtsItem } from '../models';
 /**
  * TtsApi - axios parameter creator
  * @export
@@ -25,47 +25,13 @@ export const TtsApiAxiosParamCreator = function (configuration?: Configuration) 
     return {
         /**
          * 
-         * @summary TTSデータリスト取得
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        userTtsGet: async (options: any = {}): Promise<RequestArgs> => {
-            const localVarPath = `/user/tts`;
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            const query = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                query.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                query.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(query)).toString();
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-
-            return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
-                options: localVarRequestOptions,
-            };
-        },
-        /**
-         * 
          * @summary 新規録音データ
          * @param {string} [filename] 
          * @param {string} [recordedFile] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userTtsPost: async (filename?: string, recordedFile?: string, options: any = {}): Promise<RequestArgs> => {
+        createUserTts: async (filename?: string, recordedFile?: string, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/user/tts`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -112,10 +78,10 @@ export const TtsApiAxiosParamCreator = function (configuration?: Configuration) 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userTtsTtsIdDelete: async (ttsId: string, options: any = {}): Promise<RequestArgs> => {
+        deleteUserTts: async (ttsId: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'ttsId' is not null or undefined
             if (ttsId === null || ttsId === undefined) {
-                throw new RequiredError('ttsId','Required parameter ttsId was null or undefined when calling userTtsTtsIdDelete.');
+                throw new RequiredError('ttsId','Required parameter ttsId was null or undefined when calling deleteUserTts.');
             }
             const localVarPath = `/user/tts/{ttsId}`
                 .replace(`{${"ttsId"}}`, encodeURIComponent(String(ttsId)));
@@ -152,10 +118,10 @@ export const TtsApiAxiosParamCreator = function (configuration?: Configuration) 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userTtsTtsIdGet: async (ttsId: string, options: any = {}): Promise<RequestArgs> => {
+        getUserTts: async (ttsId: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'ttsId' is not null or undefined
             if (ttsId === null || ttsId === undefined) {
-                throw new RequiredError('ttsId','Required parameter ttsId was null or undefined when calling userTtsTtsIdGet.');
+                throw new RequiredError('ttsId','Required parameter ttsId was null or undefined when calling getUserTts.');
             }
             const localVarPath = `/user/tts/{ttsId}`
                 .replace(`{${"ttsId"}}`, encodeURIComponent(String(ttsId)));
@@ -187,17 +153,51 @@ export const TtsApiAxiosParamCreator = function (configuration?: Configuration) 
         },
         /**
          * 
-         * @summary TTSデータ更新（メタデータのみ）
-         * @param {string} ttsId ID of tts to return
-         * @param {string} [filename] 
-         * @param {string} [recordedFile] 
+         * @summary TTSデータリスト取得
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userTtsTtsIdPost: async (ttsId: string, filename?: string, recordedFile?: string, options: any = {}): Promise<RequestArgs> => {
+        listUserTts: async (options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/user/tts`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            const query = new URLSearchParams(localVarUrlObj.search);
+            for (const key in localVarQueryParameter) {
+                query.set(key, localVarQueryParameter[key]);
+            }
+            for (const key in options.query) {
+                query.set(key, options.query[key]);
+            }
+            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 
+         * @summary TTSデータ更新（メタデータのみ）
+         * @param {string} ttsId ID of tts to return
+         * @param {string} [title] 
+         * @param {string} [description] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateUserTts: async (ttsId: string, title?: string, description?: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'ttsId' is not null or undefined
             if (ttsId === null || ttsId === undefined) {
-                throw new RequiredError('ttsId','Required parameter ttsId was null or undefined when calling userTtsTtsIdPost.');
+                throw new RequiredError('ttsId','Required parameter ttsId was null or undefined when calling updateUserTts.');
             }
             const localVarPath = `/user/tts/{ttsId}`
                 .replace(`{${"ttsId"}}`, encodeURIComponent(String(ttsId)));
@@ -213,12 +213,12 @@ export const TtsApiAxiosParamCreator = function (configuration?: Configuration) 
             const localVarFormParams = new FormData();
 
 
-            if (filename !== undefined) { 
-                localVarFormParams.append('filename', filename as any);
+            if (title !== undefined) { 
+                localVarFormParams.append('title', title as any);
             }
 
-            if (recordedFile !== undefined) { 
-                localVarFormParams.append('recordedFile', recordedFile as any);
+            if (description !== undefined) { 
+                localVarFormParams.append('description', description as any);
             }
 
             localVarHeaderParameter['Content-Type'] = 'multipart/form-data';
@@ -250,27 +250,14 @@ export const TtsApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 
-         * @summary TTSデータリスト取得
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async userTtsGet(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2002>> {
-            const localVarAxiosArgs = await TtsApiAxiosParamCreator(configuration).userTtsGet(options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
-        },
-        /**
-         * 
          * @summary 新規録音データ
          * @param {string} [filename] 
          * @param {string} [recordedFile] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async userTtsPost(filename?: string, recordedFile?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await TtsApiAxiosParamCreator(configuration).userTtsPost(filename, recordedFile, options);
+        async createUserTts(filename?: string, recordedFile?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await TtsApiAxiosParamCreator(configuration).createUserTts(filename, recordedFile, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -283,8 +270,8 @@ export const TtsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async userTtsTtsIdDelete(ttsId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await TtsApiAxiosParamCreator(configuration).userTtsTtsIdDelete(ttsId, options);
+        async deleteUserTts(ttsId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await TtsApiAxiosParamCreator(configuration).deleteUserTts(ttsId, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -297,8 +284,21 @@ export const TtsApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async userTtsTtsIdGet(ttsId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await TtsApiAxiosParamCreator(configuration).userTtsTtsIdGet(ttsId, options);
+        async getUserTts(ttsId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TtsItem>> {
+            const localVarAxiosArgs = await TtsApiAxiosParamCreator(configuration).getUserTts(ttsId, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
+         * 
+         * @summary TTSデータリスト取得
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listUserTts(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<TtsItem>>> {
+            const localVarAxiosArgs = await TtsApiAxiosParamCreator(configuration).listUserTts(options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -308,13 +308,13 @@ export const TtsApiFp = function(configuration?: Configuration) {
          * 
          * @summary TTSデータ更新（メタデータのみ）
          * @param {string} ttsId ID of tts to return
-         * @param {string} [filename] 
-         * @param {string} [recordedFile] 
+         * @param {string} [title] 
+         * @param {string} [description] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async userTtsTtsIdPost(ttsId: string, filename?: string, recordedFile?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await TtsApiAxiosParamCreator(configuration).userTtsTtsIdPost(ttsId, filename, recordedFile, options);
+        async updateUserTts(ttsId: string, title?: string, description?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TtsItem>> {
+            const localVarAxiosArgs = await TtsApiAxiosParamCreator(configuration).updateUserTts(ttsId, title, description, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -331,23 +331,14 @@ export const TtsApiFactory = function (configuration?: Configuration, basePath?:
     return {
         /**
          * 
-         * @summary TTSデータリスト取得
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        userTtsGet(options?: any): AxiosPromise<InlineResponse2002> {
-            return TtsApiFp(configuration).userTtsGet(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
          * @summary 新規録音データ
          * @param {string} [filename] 
          * @param {string} [recordedFile] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userTtsPost(filename?: string, recordedFile?: string, options?: any): AxiosPromise<void> {
-            return TtsApiFp(configuration).userTtsPost(filename, recordedFile, options).then((request) => request(axios, basePath));
+        createUserTts(filename?: string, recordedFile?: string, options?: any): AxiosPromise<void> {
+            return TtsApiFp(configuration).createUserTts(filename, recordedFile, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -356,8 +347,8 @@ export const TtsApiFactory = function (configuration?: Configuration, basePath?:
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userTtsTtsIdDelete(ttsId: string, options?: any): AxiosPromise<void> {
-            return TtsApiFp(configuration).userTtsTtsIdDelete(ttsId, options).then((request) => request(axios, basePath));
+        deleteUserTts(ttsId: string, options?: any): AxiosPromise<void> {
+            return TtsApiFp(configuration).deleteUserTts(ttsId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -366,20 +357,29 @@ export const TtsApiFactory = function (configuration?: Configuration, basePath?:
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userTtsTtsIdGet(ttsId: string, options?: any): AxiosPromise<void> {
-            return TtsApiFp(configuration).userTtsTtsIdGet(ttsId, options).then((request) => request(axios, basePath));
+        getUserTts(ttsId: string, options?: any): AxiosPromise<TtsItem> {
+            return TtsApiFp(configuration).getUserTts(ttsId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 
+         * @summary TTSデータリスト取得
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listUserTts(options?: any): AxiosPromise<Array<TtsItem>> {
+            return TtsApiFp(configuration).listUserTts(options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary TTSデータ更新（メタデータのみ）
          * @param {string} ttsId ID of tts to return
-         * @param {string} [filename] 
-         * @param {string} [recordedFile] 
+         * @param {string} [title] 
+         * @param {string} [description] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userTtsTtsIdPost(ttsId: string, filename?: string, recordedFile?: string, options?: any): AxiosPromise<void> {
-            return TtsApiFp(configuration).userTtsTtsIdPost(ttsId, filename, recordedFile, options).then((request) => request(axios, basePath));
+        updateUserTts(ttsId: string, title?: string, description?: string, options?: any): AxiosPromise<TtsItem> {
+            return TtsApiFp(configuration).updateUserTts(ttsId, title, description, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -393,16 +393,6 @@ export const TtsApiFactory = function (configuration?: Configuration, basePath?:
 export class TtsApi extends BaseAPI {
     /**
      * 
-     * @summary TTSデータリスト取得
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof TtsApi
-     */
-    public userTtsGet(options?: any) {
-        return TtsApiFp(this.configuration).userTtsGet(options).then((request) => request(this.axios, this.basePath));
-    }
-    /**
-     * 
      * @summary 新規録音データ
      * @param {string} [filename] 
      * @param {string} [recordedFile] 
@@ -410,8 +400,8 @@ export class TtsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof TtsApi
      */
-    public userTtsPost(filename?: string, recordedFile?: string, options?: any) {
-        return TtsApiFp(this.configuration).userTtsPost(filename, recordedFile, options).then((request) => request(this.axios, this.basePath));
+    public createUserTts(filename?: string, recordedFile?: string, options?: any) {
+        return TtsApiFp(this.configuration).createUserTts(filename, recordedFile, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * 
@@ -421,8 +411,8 @@ export class TtsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof TtsApi
      */
-    public userTtsTtsIdDelete(ttsId: string, options?: any) {
-        return TtsApiFp(this.configuration).userTtsTtsIdDelete(ttsId, options).then((request) => request(this.axios, this.basePath));
+    public deleteUserTts(ttsId: string, options?: any) {
+        return TtsApiFp(this.configuration).deleteUserTts(ttsId, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * 
@@ -432,20 +422,30 @@ export class TtsApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof TtsApi
      */
-    public userTtsTtsIdGet(ttsId: string, options?: any) {
-        return TtsApiFp(this.configuration).userTtsTtsIdGet(ttsId, options).then((request) => request(this.axios, this.basePath));
+    public getUserTts(ttsId: string, options?: any) {
+        return TtsApiFp(this.configuration).getUserTts(ttsId, options).then((request) => request(this.axios, this.basePath));
+    }
+    /**
+     * 
+     * @summary TTSデータリスト取得
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TtsApi
+     */
+    public listUserTts(options?: any) {
+        return TtsApiFp(this.configuration).listUserTts(options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * 
      * @summary TTSデータ更新（メタデータのみ）
      * @param {string} ttsId ID of tts to return
-     * @param {string} [filename] 
-     * @param {string} [recordedFile] 
+     * @param {string} [title] 
+     * @param {string} [description] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TtsApi
      */
-    public userTtsTtsIdPost(ttsId: string, filename?: string, recordedFile?: string, options?: any) {
-        return TtsApiFp(this.configuration).userTtsTtsIdPost(ttsId, filename, recordedFile, options).then((request) => request(this.axios, this.basePath));
+    public updateUserTts(ttsId: string, title?: string, description?: string, options?: any) {
+        return TtsApiFp(this.configuration).updateUserTts(ttsId, title, description, options).then((request) => request(this.axios, this.basePath));
     }
 }

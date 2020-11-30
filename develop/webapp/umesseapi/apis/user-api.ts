@@ -29,7 +29,7 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userGet: async (options: any = {}): Promise<RequestArgs> => {
+        getUser: async (options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/user`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -72,8 +72,8 @@ export const UserApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async userGet(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
-            const localVarAxiosArgs = await UserApiAxiosParamCreator(configuration).userGet(options);
+        async getUser(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
+            const localVarAxiosArgs = await UserApiAxiosParamCreator(configuration).getUser(options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -94,8 +94,8 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        userGet(options?: any): AxiosPromise<User> {
-            return UserApiFp(configuration).userGet(options).then((request) => request(axios, basePath));
+        getUser(options?: any): AxiosPromise<User> {
+            return UserApiFp(configuration).getUser(options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -114,7 +114,7 @@ export class UserApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof UserApi
      */
-    public userGet(options?: any) {
-        return UserApiFp(this.configuration).userGet(options).then((request) => request(this.axios, this.basePath));
+    public getUser(options?: any) {
+        return UserApiFp(this.configuration).getUser(options).then((request) => request(this.axios, this.basePath));
     }
 }

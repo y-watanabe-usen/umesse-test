@@ -3,8 +3,8 @@
 var utils = require('../utils/writer.js');
 var Ping = require('../service/PingService');
 
-module.exports.pingGET = function pingGET (req, res, next) {
-  Ping.pingGET()
+module.exports.ping = function ping (req, res, next) {
+  Ping.ping()
     .then(function (response) {
       utils.writeJson(res, response);
     })
