@@ -1,51 +1,42 @@
 "use strict";
 
+const { constants } = require("../constants");
 const aws = require("aws-sdk");
-const dynamo = new aws.DynamoDB({
-  region: "ap-northeast-1",
-  endpoint: "localhost:4566",
-});
+const dynamo = new aws.DynamoDB(constants.dynamoDbConfig());
 
 exports.controller = {
-  scan: (table) => {
-    return dynamo
+  scan: (table) =>
+    dynamo
       .scan({
         TableName: table,
       })
-      .promise();
-  },
+      .promise(),
 
-  get: (table, key) => {
-    return dynamo
+  get: (table, key, projection) =>
+    dynamo
       .getItem({
         TableName: table,
         Key: key,
+        ProjectionExpression: projection,
       })
-      .promise();
-  },
+      .promise(),
 
-  put: (table, item) => {
-    return dynamo
+  put: (table, item) =>
+    dynamo
       .putItem({
         TableName: table,
         Item: item,
       })
-      .promise();
-  },
+      .promise(),
 
-  listTables: () => {
-    return dynamo.listTables({}).promise();
-  },
-
-  describeTable: (table) => {
-    return dynamo
-      .describeTable({
+  query: (table, keyCondition, filter, attributeName, attributeValue) =>
+    dynamo
+      .query({
         TableName: table,
+        KeyConditionExpression: keyCondition,
+        FilterExpression: filter,
+        ExpressionAttributeNames: attributeName,
+        ExpressionAttributeValues: attributeValue,
       })
-      .promise();
-  },
-
-  createTable: (params) => {
-    return dynamo.createTable(params).promise();
-  },
+      .promise(),
 };
