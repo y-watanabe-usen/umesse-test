@@ -267,7 +267,7 @@
 
 <script lang="ts">
 import { computed, reactive } from "vue";
-import AudioPlayer from "@/mixin/AudioPlayer";
+import AudioPlayer from "@/utils/AudioPlayer";
 import axios from "axios";
 import AudioStore from "@/store/audio";
 
