@@ -315,7 +315,7 @@
 
 <script lang="ts">
 import { defineComponent, computed, ref, onMounted, reactive } from "vue";
-import NarrationStore from "@/store/narration";
+// import NarrationStore from "@/store/narration";
 import AudioStore from "@/store/audio";
 import AudioPlayer from "@/utils/AudioPlayer";
 import * as UMesseApi from "umesseapi";
@@ -327,7 +327,7 @@ export default {
       Narration,
     }
 
-    const narrationStore = NarrationStore();
+    // const narrationStore = NarrationStore();
     const audioStore = AudioStore();
     const audioPlayer = AudioPlayer();
     const api = new UMesseApi.S3Api();
@@ -361,7 +361,7 @@ export default {
     };
     const play = async () => {
       if (state.isPlaying) return;
-      const response = await api.signedUrlGet();
+      const response = await api.getSignedUrl();
       await audioStore.download(response.data.url);
       audioPlayer.start(<AudioBuffer>audioStore.audioBuffer);
     };
@@ -371,15 +371,15 @@ export default {
     };
 
     // 表示する業種
-    const industries = computed(() => narrationStore.industries);
-    // 表示するシーン
-    const scenes = computed(() => narrationStore.scenes);
-    // 表示するナレーション
-    const narrations = computed(() => narrationStore.narrations);
+    // const industries = computed(() => narrationStore.industries);
+    // // 表示するシーン
+    // const scenes = computed(() => narrationStore.scenes);
+    // // 表示するナレーション
+    // const narrations = computed(() => narrationStore.narrations);
 
     // TODO: onCreatedがない？？
     onMounted(async () => {
-      await narrationStore.fetchNarrationLists();
+      // await narrationStore.fetchNarrationLists();
       clickIndustry(state.activeIndustryId);
     });
 
@@ -388,20 +388,20 @@ export default {
     };
     const clickIndustry = (id: number) => {
       state.activeIndustryId = id;
-      narrationStore.findIndustry(id);
+      // narrationStore.findIndustry(id);
       changeDisplayMode(DisplayMode.Scene);
     };
     const clickScene = (id: number) => {
-      narrationStore.fetchNarrationSceneLists(id);
+      // narrationStore.fetchNarrationSceneLists(id);
       changeDisplayMode(DisplayMode.Narration);
     };
 
     return {
       DisplayMode,
       state,
-      industries,
-      scenes,
-      narrations,
+      // industries,
+      // scenes,
+      // narrations,
       clickIndustry,
       clickScene,
       play,

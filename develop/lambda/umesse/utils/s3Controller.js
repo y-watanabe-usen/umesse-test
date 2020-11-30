@@ -2,7 +2,7 @@
 
 const { constants } = require("../constants");
 const aws = require("aws-sdk");
-const s3 = new aws.S3(constants.s3Config);
+const s3 = new aws.S3(constants.s3Config());
 
 exports.controller = {
   get: (bucket, key) =>
