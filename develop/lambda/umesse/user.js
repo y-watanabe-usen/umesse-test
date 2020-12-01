@@ -4,12 +4,12 @@ const { constants } = require("./constants");
 const dynamodb = require("./utils/dynamodbController").controller;
 
 exports.fetch = async (id) => {
-  constants.debuglog("getUser: " + id);
+  constants.debuglog("user: " + id);
   try {
     let response = await dynamodb.get(
       constants.usersTable,
       {
-        unis_customer_cd: { S: id },
+        unis_customer_cd: id,
       },
       "unis_customer_cd," +
         "contract_cd," +
@@ -24,7 +24,7 @@ exports.fetch = async (id) => {
         "create_date," +
         "renewal_date"
     );
-    return response;
+    return response.Item;
   } catch (e) {
     console.log(e);
   }
