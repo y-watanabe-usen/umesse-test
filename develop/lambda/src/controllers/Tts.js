@@ -3,8 +3,8 @@
 var utils = require('../utils/writer.js');
 var Tts = require('../service/TtsService');
 
-module.exports.createUserTts = function createUserTts (req, res, next) {
-  Tts.createUserTts()
+module.exports.createUserTts = function createUserTts (req, res, next, xToken, xUnisCustomerCd) {
+  Tts.createUserTts(xToken, xUnisCustomerCd)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -13,8 +13,8 @@ module.exports.createUserTts = function createUserTts (req, res, next) {
     });
 };
 
-module.exports.deleteUserTts = function deleteUserTts (req, res, next, ttsId) {
-  Tts.deleteUserTts(ttsId)
+module.exports.deleteUserTts = function deleteUserTts (req, res, next, xToken, xUnisCustomerCd, ttsId) {
+  Tts.deleteUserTts(xToken, xUnisCustomerCd, ttsId)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -23,8 +23,8 @@ module.exports.deleteUserTts = function deleteUserTts (req, res, next, ttsId) {
     });
 };
 
-module.exports.getUserTts = function getUserTts (req, res, next, ttsId) {
-  Tts.getUserTts(ttsId)
+module.exports.getUserTts = function getUserTts (req, res, next, xToken, xUnisCustomerCd, ttsId) {
+  Tts.getUserTts(xToken, xUnisCustomerCd, ttsId)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -33,8 +33,8 @@ module.exports.getUserTts = function getUserTts (req, res, next, ttsId) {
     });
 };
 
-module.exports.listUserTts = function listUserTts (req, res, next) {
-  Tts.listUserTts()
+module.exports.listUserTts = function listUserTts (req, res, next, xToken, xUnisCustomerCd) {
+  Tts.listUserTts(xToken, xUnisCustomerCd)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -43,8 +43,8 @@ module.exports.listUserTts = function listUserTts (req, res, next) {
     });
 };
 
-module.exports.updateUserTts = function updateUserTts (req, res, next, ttsId) {
-  Tts.updateUserTts(ttsId)
+module.exports.updateUserTts = function updateUserTts (req, res, next, ttsId, xToken, xUnisCustomerCd) {
+  Tts.updateUserTts(ttsId, xToken, xUnisCustomerCd)
     .then(function (response) {
       utils.writeJson(res, response);
     })

@@ -4,10 +4,12 @@
 /**
  * BGM
  *
+ * xToken String ID of token to return
+ * xUnisCustomerCd String ID of unis customer cd to return
  * industryId String ID of bgm to return (optional)
  * returns List
  **/
-exports.listBgm = function(industryId) {
+exports.listBgm = function(xToken,xUnisCustomerCd,industryId) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = [ {
@@ -65,9 +67,11 @@ exports.listBgm = function(industryId) {
 /**
  * Open/Endチャイム
  *
+ * xToken String ID of token to return
+ * xUnisCustomerCd String ID of unis customer cd to return
  * returns List
  **/
-exports.listChime = function() {
+exports.listChime = function(xToken,xUnisCustomerCd) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = [ {
@@ -97,11 +101,13 @@ exports.listChime = function() {
 /**
  * ナレーション
  *
+ * xToken String ID of token to return
+ * xUnisCustomerCd String ID of unis customer cd to return
  * industryId String ID of bgm to return (optional)
  * sceneId String ID of bgm to return (optional)
  * returns List
  **/
-exports.listNarration = function(industryId,sceneId) {
+exports.listNarration = function(xToken,xUnisCustomerCd,industryId,sceneId) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = [ {
@@ -161,11 +167,13 @@ exports.listNarration = function(industryId,sceneId) {
 /**
  * TTSテンプレート一覧
  *
+ * xToken String ID of token to return
+ * xUnisCustomerCd String ID of unis customer cd to return
  * industryId String ID of bgm to return (optional)
  * sceneId String ID of bgm to return (optional)
  * returns List
  **/
-exports.listTts = function(industryId,sceneId) {
+exports.listTts = function(xToken,xUnisCustomerCd,industryId,sceneId) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = [ {

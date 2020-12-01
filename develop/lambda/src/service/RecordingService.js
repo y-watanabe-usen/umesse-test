@@ -1,16 +1,34 @@
 'use strict';
 
-const { bgm, narration, userRecording } = require("../../umesse/resources");
-
 
 /**
  * 新規録音データ
  *
- * no response value expected for this operation
+ * xToken String ID of token to return
+ * xUnisCustomerCd String ID of unis customer cd to return
+ * returns List
  **/
-exports.createUserRecording = function() {
+exports.createUserRecording = function(xToken,xUnisCustomerCd) {
   return new Promise(function(resolve, reject) {
-    resolve();
+    var examples = {};
+    examples['application/json'] = [ {
+  "description" : "サンプル",
+  "id" : "123456789-r-12345678",
+  "title" : "サンプル",
+  "startDate" : "2019-09-01T09:00:00+9:00",
+  "timestamp" : "2019-09-01T09:00:00+9:00"
+}, {
+  "description" : "サンプル",
+  "id" : "123456789-r-12345678",
+  "title" : "サンプル",
+  "startDate" : "2019-09-01T09:00:00+9:00",
+  "timestamp" : "2019-09-01T09:00:00+9:00"
+} ];
+    if (Object.keys(examples).length > 0) {
+      resolve(examples[Object.keys(examples)[0]]);
+    } else {
+      resolve();
+    }
   });
 }
 
@@ -18,25 +36,14 @@ exports.createUserRecording = function() {
 /**
  * 録音データ削除
  *
+ * xToken String ID of token to return
+ * xUnisCustomerCd String ID of unis customer cd to return
  * recordingId String ID of recording to return
  * no response value expected for this operation
  **/
-exports.deleteUserRecording = function(filename, recordedFile) {
+exports.deleteUserRecording = function(xToken,xUnisCustomerCd,recordingId) {
   return new Promise(function(resolve, reject) {
-    try {
-      var data = {
-        'filename': filename,
-        'resouces': recordedFile
-      };
-      console.log(data);
-      userRecording.put(data);
-
-      resolve();
-    } catch(e) {
-      console.log(e);
-      reject()
-    }
-
+    resolve();
   });
 }
 
@@ -44,10 +51,12 @@ exports.deleteUserRecording = function(filename, recordedFile) {
 /**
  * 録音データ取得
  *
+ * xToken String ID of token to return
+ * xUnisCustomerCd String ID of unis customer cd to return
  * recordingId String ID of recording to return
  * returns RecordingItem
  **/
-exports.getUserRecording = function(recordingId) {
+exports.getUserRecording = function(xToken,xUnisCustomerCd,recordingId) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
@@ -69,9 +78,11 @@ exports.getUserRecording = function(recordingId) {
 /**
  * 録音データリスト取得
  *
+ * xToken String ID of token to return
+ * xUnisCustomerCd String ID of unis customer cd to return
  * returns List
  **/
-exports.listUserRecording = function() {
+exports.listUserRecording = function(xToken,xUnisCustomerCd) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = [ {
@@ -100,9 +111,11 @@ exports.listUserRecording = function() {
  * 録音データ更新（メタデータのみ）
  *
  * recordingId String ID of recording to return
+ * xToken String ID of token to return
+ * xUnisCustomerCd String ID of unis customer cd to return
  * returns RecordingItem
  **/
-exports.updateUserRecording = function(recordingId) {
+exports.updateUserRecording = function(recordingId,xToken,xUnisCustomerCd) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {

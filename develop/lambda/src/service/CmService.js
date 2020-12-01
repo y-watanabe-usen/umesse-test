@@ -5,9 +5,11 @@
  * CM新規結合
  *
  * body Body_1  (optional)
+ * xToken String ID of token to return
+ * xUnisCustomerCd String ID of unis customer cd to return
  * returns CmItem
  **/
-exports.createUserCm = function(body) {
+exports.createUserCm = function(body,xToken,xUnisCustomerCd) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
@@ -56,10 +58,12 @@ exports.createUserCm = function(body) {
 /**
  * CM情報削除
  *
- * cmId Long ID of cm to return
+ * xToken String ID of token to return
+ * xUnisCustomerCd String ID of unis customer cd to return
+ * cmId String ID of cm to return
  * returns CmItem
  **/
-exports.deleteUserCm = function(cmId) {
+exports.deleteUserCm = function(xToken,xUnisCustomerCd,cmId) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
@@ -108,10 +112,12 @@ exports.deleteUserCm = function(cmId) {
 /**
  * CM情報取得
  *
+ * xToken String ID of token to return
+ * xUnisCustomerCd String ID of unis customer cd to return
  * cmId String ID of cm to return
  * returns CmItem
  **/
-exports.getUserCm = function(cmId) {
+exports.getUserCm = function(xToken,xUnisCustomerCd,cmId) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
@@ -160,9 +166,11 @@ exports.getUserCm = function(cmId) {
 /**
  * CMリスト取得
  *
+ * xToken String ID of token to return
+ * xUnisCustomerCd String ID of unis customer cd to return
  * returns List
  **/
-exports.listUserCm = function() {
+exports.listUserCm = function(xToken,xUnisCustomerCd) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = [ {
@@ -246,9 +254,11 @@ exports.listUserCm = function() {
  *
  * body Body_2  (optional)
  * cmId String ID of cm to return
+ * xToken String ID of token to return
+ * xUnisCustomerCd String ID of unis customer cd to return
  * returns CmItem
  **/
-exports.updateUserCm = function(body,cmId) {
+exports.updateUserCm = function(body,cmId,xToken,xUnisCustomerCd) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {

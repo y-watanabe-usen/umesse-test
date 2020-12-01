@@ -3,8 +3,8 @@
 var utils = require('../utils/writer.js');
 var Cm = require('../service/CmService');
 
-module.exports.createUserCm = function createUserCm (req, res, next, body) {
-  Cm.createUserCm(body)
+module.exports.createUserCm = function createUserCm (req, res, next, body, xToken, xUnisCustomerCd) {
+  Cm.createUserCm(body, xToken, xUnisCustomerCd)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -13,8 +13,8 @@ module.exports.createUserCm = function createUserCm (req, res, next, body) {
     });
 };
 
-module.exports.deleteUserCm = function deleteUserCm (req, res, next, cmId) {
-  Cm.deleteUserCm(cmId)
+module.exports.deleteUserCm = function deleteUserCm (req, res, next, xToken, xUnisCustomerCd, cmId) {
+  Cm.deleteUserCm(xToken, xUnisCustomerCd, cmId)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -23,8 +23,8 @@ module.exports.deleteUserCm = function deleteUserCm (req, res, next, cmId) {
     });
 };
 
-module.exports.getUserCm = function getUserCm (req, res, next, cmId) {
-  Cm.getUserCm(cmId)
+module.exports.getUserCm = function getUserCm (req, res, next, xToken, xUnisCustomerCd, cmId) {
+  Cm.getUserCm(xToken, xUnisCustomerCd, cmId)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -33,8 +33,8 @@ module.exports.getUserCm = function getUserCm (req, res, next, cmId) {
     });
 };
 
-module.exports.listUserCm = function listUserCm (req, res, next) {
-  Cm.listUserCm()
+module.exports.listUserCm = function listUserCm (req, res, next, xToken, xUnisCustomerCd) {
+  Cm.listUserCm(xToken, xUnisCustomerCd)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -43,8 +43,8 @@ module.exports.listUserCm = function listUserCm (req, res, next) {
     });
 };
 
-module.exports.updateUserCm = function updateUserCm (req, res, next, body, cmId) {
-  Cm.updateUserCm(body, cmId)
+module.exports.updateUserCm = function updateUserCm (req, res, next, body, cmId, xToken, xUnisCustomerCd) {
+  Cm.updateUserCm(body, cmId, xToken, xUnisCustomerCd)
     .then(function (response) {
       utils.writeJson(res, response);
     })
