@@ -190,7 +190,6 @@
                 type="button"
                 class="btn btn-primary"
                 data-dismiss="modal"
-                @click="postData"
               >
                 保存する
               </button>
