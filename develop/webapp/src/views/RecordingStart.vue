@@ -185,50 +185,15 @@
             >
               キャンセル
             </button>
-            <button
-              type="button"
-              class="btn btn-primary"
-              data-dismiss="modal"
-              data-toggle="modal"
-              data-target="#savedModal"
-              @click="postData"
-            >
-              保存する
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      class="modal fade"
-      id="savedModal"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="savedModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="savedModalLabel">保存完了</h5>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">保存が完了しました。</div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-            >
-              閉じる
-            </button>
+            <router-link :to="{ path: '/createcommercial'}" >
+              <button
+                type="button"
+                class="btn btn-primary"
+                data-dismiss="modal"
+              >
+                保存する
+              </button>
+            </router-link>
           </div>
         </div>
       </div>
