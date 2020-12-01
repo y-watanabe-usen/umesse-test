@@ -23,11 +23,11 @@ exports.controller = {
       })
       .promise(),
 
-  list: (bucket, key) =>
+  list: (bucket, prefix) =>
     s3
       .listObjectsV2({
         Bucket: bucket,
-        Prefix: key,
+        Prefix: prefix,
       })
       .promise(),
 
