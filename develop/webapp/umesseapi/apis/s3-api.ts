@@ -26,10 +26,25 @@ export const S3ApiAxiosParamCreator = function (configuration?: Configuration) {
         /**
          * 試聴再生、録音音声アップロード
          * @summary S3オブジェクトの署名付きURLの取得
+         * @param {string} xToken ID of token to return
+         * @param {string} xUnisCustomerCd ID of unis customer cd to return
+         * @param {string} id ID of signed url to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSignedUrl: async (options: any = {}): Promise<RequestArgs> => {
+        getSignedUrl: async (xToken: string, xUnisCustomerCd: string, id: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'xToken' is not null or undefined
+            if (xToken === null || xToken === undefined) {
+                throw new RequiredError('xToken','Required parameter xToken was null or undefined when calling getSignedUrl.');
+            }
+            // verify required parameter 'xUnisCustomerCd' is not null or undefined
+            if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
+                throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling getSignedUrl.');
+            }
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling getSignedUrl.');
+            }
             const localVarPath = `/signedUrl`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -40,6 +55,26 @@ export const S3ApiAxiosParamCreator = function (configuration?: Configuration) {
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyAuth required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+                    ? await configuration.apiKey("x-api-key")
+                    : await configuration.apiKey;
+                localVarHeaderParameter["x-api-key"] = localVarApiKeyValue;
+            }
+
+            if (id !== undefined) {
+                localVarQueryParameter['id'] = id;
+            }
+
+            if (xToken !== undefined && xToken !== null) {
+                localVarHeaderParameter['x-token'] = String(xToken);
+            }
+
+            if (xUnisCustomerCd !== undefined && xUnisCustomerCd !== null) {
+                localVarHeaderParameter['x-unis-customer-cd'] = String(xUnisCustomerCd);
+            }
 
             const query = new URLSearchParams(localVarUrlObj.search);
             for (const key in localVarQueryParameter) {
@@ -69,11 +104,14 @@ export const S3ApiFp = function(configuration?: Configuration) {
         /**
          * 試聴再生、録音音声アップロード
          * @summary S3オブジェクトの署名付きURLの取得
+         * @param {string} xToken ID of token to return
+         * @param {string} xUnisCustomerCd ID of unis customer cd to return
+         * @param {string} id ID of signed url to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getSignedUrl(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2002>> {
-            const localVarAxiosArgs = await S3ApiAxiosParamCreator(configuration).getSignedUrl(options);
+        async getSignedUrl(xToken: string, xUnisCustomerCd: string, id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2002>> {
+            const localVarAxiosArgs = await S3ApiAxiosParamCreator(configuration).getSignedUrl(xToken, xUnisCustomerCd, id, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -91,11 +129,14 @@ export const S3ApiFactory = function (configuration?: Configuration, basePath?: 
         /**
          * 試聴再生、録音音声アップロード
          * @summary S3オブジェクトの署名付きURLの取得
+         * @param {string} xToken ID of token to return
+         * @param {string} xUnisCustomerCd ID of unis customer cd to return
+         * @param {string} id ID of signed url to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSignedUrl(options?: any): AxiosPromise<InlineResponse2002> {
-            return S3ApiFp(configuration).getSignedUrl(options).then((request) => request(axios, basePath));
+        getSignedUrl(xToken: string, xUnisCustomerCd: string, id: string, options?: any): AxiosPromise<InlineResponse2002> {
+            return S3ApiFp(configuration).getSignedUrl(xToken, xUnisCustomerCd, id, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -110,11 +151,14 @@ export class S3Api extends BaseAPI {
     /**
      * 試聴再生、録音音声アップロード
      * @summary S3オブジェクトの署名付きURLの取得
+     * @param {string} xToken ID of token to return
+     * @param {string} xUnisCustomerCd ID of unis customer cd to return
+     * @param {string} id ID of signed url to return
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof S3Api
      */
-    public getSignedUrl(options?: any) {
-        return S3ApiFp(this.configuration).getSignedUrl(options).then((request) => request(this.axios, this.basePath));
+    public getSignedUrl(xToken: string, xUnisCustomerCd: string, id: string, options?: any) {
+        return S3ApiFp(this.configuration).getSignedUrl(xToken, xUnisCustomerCd, id, options).then((request) => request(this.axios, this.basePath));
     }
 }

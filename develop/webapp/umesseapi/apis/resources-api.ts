@@ -29,11 +29,21 @@ export const ResourcesApiAxiosParamCreator = function (configuration?: Configura
         /**
          * 
          * @summary BGM
+         * @param {string} xToken ID of token to return
+         * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} [industryId] ID of bgm to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listBgm: async (industryId?: string, options: any = {}): Promise<RequestArgs> => {
+        listBgm: async (xToken: string, xUnisCustomerCd: string, industryId?: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'xToken' is not null or undefined
+            if (xToken === null || xToken === undefined) {
+                throw new RequiredError('xToken','Required parameter xToken was null or undefined when calling listBgm.');
+            }
+            // verify required parameter 'xUnisCustomerCd' is not null or undefined
+            if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
+                throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling listBgm.');
+            }
             const localVarPath = `/bgm`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -45,8 +55,24 @@ export const ResourcesApiAxiosParamCreator = function (configuration?: Configura
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication ApiKeyAuth required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+                    ? await configuration.apiKey("x-api-key")
+                    : await configuration.apiKey;
+                localVarHeaderParameter["x-api-key"] = localVarApiKeyValue;
+            }
+
             if (industryId !== undefined) {
                 localVarQueryParameter['industryId'] = industryId;
+            }
+
+            if (xToken !== undefined && xToken !== null) {
+                localVarHeaderParameter['x-token'] = String(xToken);
+            }
+
+            if (xUnisCustomerCd !== undefined && xUnisCustomerCd !== null) {
+                localVarHeaderParameter['x-unis-customer-cd'] = String(xUnisCustomerCd);
             }
 
             const query = new URLSearchParams(localVarUrlObj.search);
@@ -68,10 +94,20 @@ export const ResourcesApiAxiosParamCreator = function (configuration?: Configura
         /**
          * 
          * @summary Open/Endチャイム
+         * @param {string} xToken ID of token to return
+         * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listChime: async (options: any = {}): Promise<RequestArgs> => {
+        listChime: async (xToken: string, xUnisCustomerCd: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'xToken' is not null or undefined
+            if (xToken === null || xToken === undefined) {
+                throw new RequiredError('xToken','Required parameter xToken was null or undefined when calling listChime.');
+            }
+            // verify required parameter 'xUnisCustomerCd' is not null or undefined
+            if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
+                throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling listChime.');
+            }
             const localVarPath = `/chime`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -82,6 +118,22 @@ export const ResourcesApiAxiosParamCreator = function (configuration?: Configura
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            // authentication ApiKeyAuth required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+                    ? await configuration.apiKey("x-api-key")
+                    : await configuration.apiKey;
+                localVarHeaderParameter["x-api-key"] = localVarApiKeyValue;
+            }
+
+            if (xToken !== undefined && xToken !== null) {
+                localVarHeaderParameter['x-token'] = String(xToken);
+            }
+
+            if (xUnisCustomerCd !== undefined && xUnisCustomerCd !== null) {
+                localVarHeaderParameter['x-unis-customer-cd'] = String(xUnisCustomerCd);
+            }
 
             const query = new URLSearchParams(localVarUrlObj.search);
             for (const key in localVarQueryParameter) {
@@ -102,12 +154,22 @@ export const ResourcesApiAxiosParamCreator = function (configuration?: Configura
         /**
          * 
          * @summary ナレーション
+         * @param {string} xToken ID of token to return
+         * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} [industryId] ID of bgm to return
          * @param {string} [sceneId] ID of bgm to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listNarration: async (industryId?: string, sceneId?: string, options: any = {}): Promise<RequestArgs> => {
+        listNarration: async (xToken: string, xUnisCustomerCd: string, industryId?: string, sceneId?: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'xToken' is not null or undefined
+            if (xToken === null || xToken === undefined) {
+                throw new RequiredError('xToken','Required parameter xToken was null or undefined when calling listNarration.');
+            }
+            // verify required parameter 'xUnisCustomerCd' is not null or undefined
+            if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
+                throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling listNarration.');
+            }
             const localVarPath = `/narration`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -119,12 +181,28 @@ export const ResourcesApiAxiosParamCreator = function (configuration?: Configura
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication ApiKeyAuth required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+                    ? await configuration.apiKey("x-api-key")
+                    : await configuration.apiKey;
+                localVarHeaderParameter["x-api-key"] = localVarApiKeyValue;
+            }
+
             if (industryId !== undefined) {
                 localVarQueryParameter['industryId'] = industryId;
             }
 
             if (sceneId !== undefined) {
                 localVarQueryParameter['sceneId'] = sceneId;
+            }
+
+            if (xToken !== undefined && xToken !== null) {
+                localVarHeaderParameter['x-token'] = String(xToken);
+            }
+
+            if (xUnisCustomerCd !== undefined && xUnisCustomerCd !== null) {
+                localVarHeaderParameter['x-unis-customer-cd'] = String(xUnisCustomerCd);
             }
 
             const query = new URLSearchParams(localVarUrlObj.search);
@@ -146,12 +224,22 @@ export const ResourcesApiAxiosParamCreator = function (configuration?: Configura
         /**
          * 
          * @summary TTSテンプレート一覧
+         * @param {string} xToken ID of token to return
+         * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} [industryId] ID of bgm to return
          * @param {string} [sceneId] ID of bgm to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listTts: async (industryId?: string, sceneId?: string, options: any = {}): Promise<RequestArgs> => {
+        listTts: async (xToken: string, xUnisCustomerCd: string, industryId?: string, sceneId?: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'xToken' is not null or undefined
+            if (xToken === null || xToken === undefined) {
+                throw new RequiredError('xToken','Required parameter xToken was null or undefined when calling listTts.');
+            }
+            // verify required parameter 'xUnisCustomerCd' is not null or undefined
+            if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
+                throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling listTts.');
+            }
             const localVarPath = `/tts`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -163,12 +251,28 @@ export const ResourcesApiAxiosParamCreator = function (configuration?: Configura
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            // authentication ApiKeyAuth required
+            if (configuration && configuration.apiKey) {
+                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
+                    ? await configuration.apiKey("x-api-key")
+                    : await configuration.apiKey;
+                localVarHeaderParameter["x-api-key"] = localVarApiKeyValue;
+            }
+
             if (industryId !== undefined) {
                 localVarQueryParameter['industryId'] = industryId;
             }
 
             if (sceneId !== undefined) {
                 localVarQueryParameter['sceneId'] = sceneId;
+            }
+
+            if (xToken !== undefined && xToken !== null) {
+                localVarHeaderParameter['x-token'] = String(xToken);
+            }
+
+            if (xUnisCustomerCd !== undefined && xUnisCustomerCd !== null) {
+                localVarHeaderParameter['x-unis-customer-cd'] = String(xUnisCustomerCd);
             }
 
             const query = new URLSearchParams(localVarUrlObj.search);
@@ -199,12 +303,14 @@ export const ResourcesApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary BGM
+         * @param {string} xToken ID of token to return
+         * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} [industryId] ID of bgm to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listBgm(industryId?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<BgmItem>>> {
-            const localVarAxiosArgs = await ResourcesApiAxiosParamCreator(configuration).listBgm(industryId, options);
+        async listBgm(xToken: string, xUnisCustomerCd: string, industryId?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<BgmItem>>> {
+            const localVarAxiosArgs = await ResourcesApiAxiosParamCreator(configuration).listBgm(xToken, xUnisCustomerCd, industryId, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -213,11 +319,13 @@ export const ResourcesApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary Open/Endチャイム
+         * @param {string} xToken ID of token to return
+         * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listChime(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ChimeItem>>> {
-            const localVarAxiosArgs = await ResourcesApiAxiosParamCreator(configuration).listChime(options);
+        async listChime(xToken: string, xUnisCustomerCd: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ChimeItem>>> {
+            const localVarAxiosArgs = await ResourcesApiAxiosParamCreator(configuration).listChime(xToken, xUnisCustomerCd, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -226,13 +334,15 @@ export const ResourcesApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary ナレーション
+         * @param {string} xToken ID of token to return
+         * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} [industryId] ID of bgm to return
          * @param {string} [sceneId] ID of bgm to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listNarration(industryId?: string, sceneId?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<NarrationItem>>> {
-            const localVarAxiosArgs = await ResourcesApiAxiosParamCreator(configuration).listNarration(industryId, sceneId, options);
+        async listNarration(xToken: string, xUnisCustomerCd: string, industryId?: string, sceneId?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<NarrationItem>>> {
+            const localVarAxiosArgs = await ResourcesApiAxiosParamCreator(configuration).listNarration(xToken, xUnisCustomerCd, industryId, sceneId, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -241,13 +351,15 @@ export const ResourcesApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary TTSテンプレート一覧
+         * @param {string} xToken ID of token to return
+         * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} [industryId] ID of bgm to return
          * @param {string} [sceneId] ID of bgm to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listTts(industryId?: string, sceneId?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<WordItem>>> {
-            const localVarAxiosArgs = await ResourcesApiAxiosParamCreator(configuration).listTts(industryId, sceneId, options);
+        async listTts(xToken: string, xUnisCustomerCd: string, industryId?: string, sceneId?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<WordItem>>> {
+            const localVarAxiosArgs = await ResourcesApiAxiosParamCreator(configuration).listTts(xToken, xUnisCustomerCd, industryId, sceneId, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -265,43 +377,51 @@ export const ResourcesApiFactory = function (configuration?: Configuration, base
         /**
          * 
          * @summary BGM
+         * @param {string} xToken ID of token to return
+         * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} [industryId] ID of bgm to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listBgm(industryId?: string, options?: any): AxiosPromise<Array<BgmItem>> {
-            return ResourcesApiFp(configuration).listBgm(industryId, options).then((request) => request(axios, basePath));
+        listBgm(xToken: string, xUnisCustomerCd: string, industryId?: string, options?: any): AxiosPromise<Array<BgmItem>> {
+            return ResourcesApiFp(configuration).listBgm(xToken, xUnisCustomerCd, industryId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary Open/Endチャイム
+         * @param {string} xToken ID of token to return
+         * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listChime(options?: any): AxiosPromise<Array<ChimeItem>> {
-            return ResourcesApiFp(configuration).listChime(options).then((request) => request(axios, basePath));
+        listChime(xToken: string, xUnisCustomerCd: string, options?: any): AxiosPromise<Array<ChimeItem>> {
+            return ResourcesApiFp(configuration).listChime(xToken, xUnisCustomerCd, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary ナレーション
+         * @param {string} xToken ID of token to return
+         * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} [industryId] ID of bgm to return
          * @param {string} [sceneId] ID of bgm to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listNarration(industryId?: string, sceneId?: string, options?: any): AxiosPromise<Array<NarrationItem>> {
-            return ResourcesApiFp(configuration).listNarration(industryId, sceneId, options).then((request) => request(axios, basePath));
+        listNarration(xToken: string, xUnisCustomerCd: string, industryId?: string, sceneId?: string, options?: any): AxiosPromise<Array<NarrationItem>> {
+            return ResourcesApiFp(configuration).listNarration(xToken, xUnisCustomerCd, industryId, sceneId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary TTSテンプレート一覧
+         * @param {string} xToken ID of token to return
+         * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} [industryId] ID of bgm to return
          * @param {string} [sceneId] ID of bgm to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listTts(industryId?: string, sceneId?: string, options?: any): AxiosPromise<Array<WordItem>> {
-            return ResourcesApiFp(configuration).listTts(industryId, sceneId, options).then((request) => request(axios, basePath));
+        listTts(xToken: string, xUnisCustomerCd: string, industryId?: string, sceneId?: string, options?: any): AxiosPromise<Array<WordItem>> {
+            return ResourcesApiFp(configuration).listTts(xToken, xUnisCustomerCd, industryId, sceneId, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -316,46 +436,54 @@ export class ResourcesApi extends BaseAPI {
     /**
      * 
      * @summary BGM
+     * @param {string} xToken ID of token to return
+     * @param {string} xUnisCustomerCd ID of unis customer cd to return
      * @param {string} [industryId] ID of bgm to return
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ResourcesApi
      */
-    public listBgm(industryId?: string, options?: any) {
-        return ResourcesApiFp(this.configuration).listBgm(industryId, options).then((request) => request(this.axios, this.basePath));
+    public listBgm(xToken: string, xUnisCustomerCd: string, industryId?: string, options?: any) {
+        return ResourcesApiFp(this.configuration).listBgm(xToken, xUnisCustomerCd, industryId, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * 
      * @summary Open/Endチャイム
+     * @param {string} xToken ID of token to return
+     * @param {string} xUnisCustomerCd ID of unis customer cd to return
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ResourcesApi
      */
-    public listChime(options?: any) {
-        return ResourcesApiFp(this.configuration).listChime(options).then((request) => request(this.axios, this.basePath));
+    public listChime(xToken: string, xUnisCustomerCd: string, options?: any) {
+        return ResourcesApiFp(this.configuration).listChime(xToken, xUnisCustomerCd, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * 
      * @summary ナレーション
+     * @param {string} xToken ID of token to return
+     * @param {string} xUnisCustomerCd ID of unis customer cd to return
      * @param {string} [industryId] ID of bgm to return
      * @param {string} [sceneId] ID of bgm to return
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ResourcesApi
      */
-    public listNarration(industryId?: string, sceneId?: string, options?: any) {
-        return ResourcesApiFp(this.configuration).listNarration(industryId, sceneId, options).then((request) => request(this.axios, this.basePath));
+    public listNarration(xToken: string, xUnisCustomerCd: string, industryId?: string, sceneId?: string, options?: any) {
+        return ResourcesApiFp(this.configuration).listNarration(xToken, xUnisCustomerCd, industryId, sceneId, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * 
      * @summary TTSテンプレート一覧
+     * @param {string} xToken ID of token to return
+     * @param {string} xUnisCustomerCd ID of unis customer cd to return
      * @param {string} [industryId] ID of bgm to return
      * @param {string} [sceneId] ID of bgm to return
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ResourcesApi
      */
-    public listTts(industryId?: string, sceneId?: string, options?: any) {
-        return ResourcesApiFp(this.configuration).listTts(industryId, sceneId, options).then((request) => request(this.axios, this.basePath));
+    public listTts(xToken: string, xUnisCustomerCd: string, industryId?: string, sceneId?: string, options?: any) {
+        return ResourcesApiFp(this.configuration).listTts(xToken, xUnisCustomerCd, industryId, sceneId, options).then((request) => request(this.axios, this.basePath));
     }
 }
