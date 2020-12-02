@@ -5,11 +5,10 @@
  * CM新規結合
  *
  * body Body_1  (optional)
- * xToken String ID of token to return
  * xUnisCustomerCd String ID of unis customer cd to return
  * returns CmItem
  **/
-exports.createUserCm = function(body,xToken,xUnisCustomerCd) {
+exports.createUserCm = function(body,xUnisCustomerCd) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
@@ -58,12 +57,11 @@ exports.createUserCm = function(body,xToken,xUnisCustomerCd) {
 /**
  * CM情報削除
  *
- * xToken String ID of token to return
  * xUnisCustomerCd String ID of unis customer cd to return
  * cmId String ID of cm to return
  * returns CmItem
  **/
-exports.deleteUserCm = function(xToken,xUnisCustomerCd,cmId) {
+exports.deleteUserCm = function(xUnisCustomerCd,cmId) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
@@ -112,12 +110,11 @@ exports.deleteUserCm = function(xToken,xUnisCustomerCd,cmId) {
 /**
  * CM情報取得
  *
- * xToken String ID of token to return
  * xUnisCustomerCd String ID of unis customer cd to return
  * cmId String ID of cm to return
  * returns CmItem
  **/
-exports.getUserCm = function(xToken,xUnisCustomerCd,cmId) {
+exports.getUserCm = function(xUnisCustomerCd,cmId) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
@@ -166,11 +163,10 @@ exports.getUserCm = function(xToken,xUnisCustomerCd,cmId) {
 /**
  * CMリスト取得
  *
- * xToken String ID of token to return
  * xUnisCustomerCd String ID of unis customer cd to return
  * returns List
  **/
-exports.listUserCm = function(xToken,xUnisCustomerCd) {
+exports.listUserCm = function(xUnisCustomerCd) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = [ {
@@ -254,11 +250,10 @@ exports.listUserCm = function(xToken,xUnisCustomerCd) {
  *
  * body Body_2  (optional)
  * cmId String ID of cm to return
- * xToken String ID of token to return
  * xUnisCustomerCd String ID of unis customer cd to return
  * returns CmItem
  **/
-exports.updateUserCm = function(body,cmId,xToken,xUnisCustomerCd) {
+exports.updateUserCm = function(body,cmId,xUnisCustomerCd) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {

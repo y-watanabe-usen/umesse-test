@@ -3,8 +3,8 @@
 var utils = require('../utils/writer.js');
 var Center = require('../service/CenterService');
 
-module.exports.createCenterCm = function createCenterCm (req, res, next, body, cmId, xToken, xUnisCustomerCd) {
-  Center.createCenterCm(body, cmId, xToken, xUnisCustomerCd)
+module.exports.createCenterCm = function createCenterCm (req, res, next, body, cmId, xUnisCustomerCd) {
+  Center.createCenterCm(body, cmId, xUnisCustomerCd)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -13,8 +13,8 @@ module.exports.createCenterCm = function createCenterCm (req, res, next, body, c
     });
 };
 
-module.exports.deleteCenterCm = function deleteCenterCm (req, res, next, xToken, xUnisCustomerCd, cmId) {
-  Center.deleteCenterCm(xToken, xUnisCustomerCd, cmId)
+module.exports.deleteCenterCm = function deleteCenterCm (req, res, next, xUnisCustomerCd, cmId) {
+  Center.deleteCenterCm(xUnisCustomerCd, cmId)
     .then(function (response) {
       utils.writeJson(res, response);
     })

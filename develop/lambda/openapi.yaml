@@ -29,8 +29,8 @@ paths:
         - auth
       summary: 端末認証
       operationId: auth
-      security:
-        - ApiKeyAuth: []
+      # security:
+      #   - ApiKeyAuth: []
       requestBody:
         content: 
           application/json:
@@ -61,10 +61,10 @@ paths:
         - user
       summary: User情報取得
       operationId: getUser
-      security:
-        - ApiKeyAuth: []
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
-        - $ref: '#/components/parameters/Token'
+        # - $ref: '#/components/parameters/Token'
         - $ref: '#/components/parameters/UnisCustomerCd'
       responses:
         '200':
@@ -89,10 +89,10 @@ paths:
       summary: CMリスト取得
       description: ''
       operationId: listUserCm
-      security:
-        - ApiKeyAuth: []
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
-        - $ref: '#/components/parameters/Token'
+        # - $ref: '#/components/parameters/Token'
         - $ref: '#/components/parameters/UnisCustomerCd'
       responses:
         '200':
@@ -117,10 +117,10 @@ paths:
       summary: CM新規結合
       description: ''
       operationId: createUserCm
-      security:
-        - ApiKeyAuth: []
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
-        - $ref: '#/components/parameters/Token'
+        # - $ref: '#/components/parameters/Token'
         - $ref: '#/components/parameters/UnisCustomerCd'
       requestBody:
         content: 
@@ -153,10 +153,10 @@ paths:
       summary: CM情報取得
       description: ''
       operationId: getUserCm
-      security:
-        - ApiKeyAuth: []
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
-        - $ref: '#/components/parameters/Token'
+        # - $ref: '#/components/parameters/Token'
         - $ref: '#/components/parameters/UnisCustomerCd'
         - $ref: '#/components/parameters/CmId'
       responses:
@@ -180,10 +180,10 @@ paths:
       summary: CM情報更新
       description: ''
       operationId: updateUserCm
-      security:
-        - ApiKeyAuth: []
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
-        - $ref: '#/components/parameters/Token'
+        # - $ref: '#/components/parameters/Token'
         - $ref: '#/components/parameters/UnisCustomerCd'
         - $ref: '#/components/parameters/CmId'
       requestBody:
@@ -237,10 +237,10 @@ paths:
       summary: CM情報削除
       description: ''
       operationId: deleteUserCm
-      security:
-        - ApiKeyAuth: []
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
-        - $ref: '#/components/parameters/Token'
+        # - $ref: '#/components/parameters/Token'
         - $ref: '#/components/parameters/UnisCustomerCd'
         - $ref: '#/components/parameters/CmId'
       responses:
@@ -266,10 +266,10 @@ paths:
       summary: CMセンター連携追加
       description: ''
       operationId: createCenterCm
-      security:
-        - ApiKeyAuth: []
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
-        - $ref: '#/components/parameters/Token'
+        # - $ref: '#/components/parameters/Token'
         - $ref: '#/components/parameters/UnisCustomerCd'
         - $ref: '#/components/parameters/CmId'
       requestBody:
@@ -312,10 +312,10 @@ paths:
       summary: CMセンター連携削除
       description: ''
       operationId: deleteCenterCm
-      security:
-        - ApiKeyAuth: []
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
-        - $ref: '#/components/parameters/Token'
+        # - $ref: '#/components/parameters/Token'
         - $ref: '#/components/parameters/UnisCustomerCd'
         - $ref: '#/components/parameters/CmId'
       responses:
@@ -337,8 +337,8 @@ paths:
       summary: センターCM連携（センター専用）
       description: ''
       operationId: listCenterUpload
-      security:
-        - ApiKeyAuth: []
+      # security:
+      #   - ApiKeyAuth: []
       responses:
         '200':
           description: The response
@@ -370,8 +370,8 @@ paths:
       summary: センターCM連携取得（センター専用）
       description: ''
       operationId: getCenterUpload
-      security:
-        - ApiKeyAuth: []
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
         - name: unisCustomerCd
           in: path
@@ -408,8 +408,8 @@ paths:
       summary: センターCM連携完了（センター専用）
       description: ''
       operationId: updateCenterUpload
-      security:
-        - ApiKeyAuth: []
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
         - name: unisCustomerCd
           in: path
@@ -471,10 +471,10 @@ paths:
       summary: CM共有リスト取得
       description: ''
       operationId: listShare
-      security:
-        - ApiKeyAuth: []
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
-        - $ref: '#/components/parameters/Token'
+        # - $ref: '#/components/parameters/Token'
         - $ref: '#/components/parameters/UnisCustomerCd'
       responses:
         '200':
@@ -501,10 +501,10 @@ paths:
       summary: CM共有追加
       description: ''
       operationId: createShare
-      security:
-        - ApiKeyAuth: []
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
-        - $ref: '#/components/parameters/Token'
+        # - $ref: '#/components/parameters/Token'
         - $ref: '#/components/parameters/UnisCustomerCd'
         - $ref: '#/components/parameters/CmId'
       responses:
@@ -516,10 +516,10 @@ paths:
       summary: CM共有削除
       description: ''
       operationId: deleteShare
-      security:
-        - ApiKeyAuth: []
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
-        - $ref: '#/components/parameters/Token'
+        # - $ref: '#/components/parameters/Token'
         - $ref: '#/components/parameters/UnisCustomerCd'
         - $ref: '#/components/parameters/CmId'
       responses:
@@ -545,10 +545,10 @@ paths:
       summary: 録音データリスト取得
       description: ''
       operationId: listUserRecording
-      security:
-        - ApiKeyAuth: []
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
-        - $ref: '#/components/parameters/Token'
+        # - $ref: '#/components/parameters/Token'
         - $ref: '#/components/parameters/UnisCustomerCd'
       responses:
         '200':
@@ -572,10 +572,10 @@ paths:
       summary: 新規録音データ
       description: ''
       operationId: createUserRecording
-      security:
-        - ApiKeyAuth: []
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
-        - $ref: '#/components/parameters/Token'
+        # - $ref: '#/components/parameters/Token'
         - $ref: '#/components/parameters/UnisCustomerCd'
       requestBody:
         content: 
@@ -612,10 +612,10 @@ paths:
       summary: 録音データ取得
       description: ''
       operationId: getUserRecording
-      security:
-        - ApiKeyAuth: []
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
-        - $ref: '#/components/parameters/Token'
+        # - $ref: '#/components/parameters/Token'
         - $ref: '#/components/parameters/UnisCustomerCd'
         - $ref: '#/components/parameters/RecordingId'
       responses:
@@ -639,10 +639,10 @@ paths:
       summary: 録音データ更新（メタデータのみ）
       description: ''
       operationId: updateUserRecording
-      security:
-        - ApiKeyAuth: []
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
-        - $ref: '#/components/parameters/Token'
+        # - $ref: '#/components/parameters/Token'
         - $ref: '#/components/parameters/UnisCustomerCd'
         - $ref: '#/components/parameters/RecordingId'
       requestBody:
@@ -678,10 +678,10 @@ paths:
       summary: 録音データ削除
       description: ''
       operationId: deleteUserRecording
-      security:
-        - ApiKeyAuth: []
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
-        - $ref: '#/components/parameters/Token'
+        # - $ref: '#/components/parameters/Token'
         - $ref: '#/components/parameters/UnisCustomerCd'
         - $ref: '#/components/parameters/RecordingId'
       responses:
@@ -703,10 +703,10 @@ paths:
       summary: TTSデータリスト取得
       description: ''
       operationId: listUserTts
-      security:
-        - ApiKeyAuth: []
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
-        - $ref: '#/components/parameters/Token'
+        # - $ref: '#/components/parameters/Token'
         - $ref: '#/components/parameters/UnisCustomerCd'
       responses:
         '200':
@@ -730,10 +730,10 @@ paths:
       summary: 新規録音データ
       description: ''
       operationId: createUserTts
-      security:
-        - ApiKeyAuth: []
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
-        - $ref: '#/components/parameters/Token'
+        # - $ref: '#/components/parameters/Token'
         - $ref: '#/components/parameters/UnisCustomerCd'
       requestBody:
         content: 
@@ -770,10 +770,10 @@ paths:
       summary: TTSデータ取得
       description: ''
       operationId: getUserTts
-      security:
-        - ApiKeyAuth: []
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
-        - $ref: '#/components/parameters/Token'
+        # - $ref: '#/components/parameters/Token'
         - $ref: '#/components/parameters/UnisCustomerCd'
         - $ref: '#/components/parameters/TtsId'
       responses:
@@ -797,10 +797,10 @@ paths:
       summary: TTSデータ更新（メタデータのみ）
       description: ''
       operationId: updateUserTts
-      security:
-        - ApiKeyAuth: []
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
-        - $ref: '#/components/parameters/Token'
+        # - $ref: '#/components/parameters/Token'
         - $ref: '#/components/parameters/UnisCustomerCd'
         - $ref: '#/components/parameters/TtsId'
       requestBody:
@@ -836,10 +836,10 @@ paths:
       summary: TTSデータ削除
       description: ''
       operationId: deleteUserTts
-      security:
-        - ApiKeyAuth: []
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
-        - $ref: '#/components/parameters/Token'
+        # - $ref: '#/components/parameters/Token'
         - $ref: '#/components/parameters/UnisCustomerCd'
         - $ref: '#/components/parameters/TtsId'
       responses:
@@ -861,11 +861,10 @@ paths:
       summary: BGM
       description: ''
       operationId: listBgm
-      security:
-        - ApiKeyAuth: []
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
-        - $ref: '#/components/parameters/Token'
-        - $ref: '#/components/parameters/UnisCustomerCd'
+        # - $ref: '#/components/parameters/Token'
         - name: industryId
           in: query
           description: ID of bgm to return
@@ -896,11 +895,10 @@ paths:
       summary: ナレーション
       description: ''
       operationId: listNarration
-      security:
-        - ApiKeyAuth: []
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
-        - $ref: '#/components/parameters/Token'
-        - $ref: '#/components/parameters/UnisCustomerCd'
+        # - $ref: '#/components/parameters/Token'
         - name: industryId
           in: query
           description: ID of bgm to return
@@ -936,11 +934,10 @@ paths:
       summary: Open/Endチャイム
       description: ''
       operationId: listChime
-      security:
-        - ApiKeyAuth: []
-      parameters:
-        - $ref: '#/components/parameters/Token'
-        - $ref: '#/components/parameters/UnisCustomerCd'
+      # security:
+      #   - ApiKeyAuth: []
+      # parameters:
+        # - $ref: '#/components/parameters/Token'
       responses:
         '200':
           description: The response
@@ -966,11 +963,10 @@ paths:
       summary: TTSテンプレート一覧
       description: ''
       operationId: listTts
-      security:
-        - ApiKeyAuth: []
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
-        - $ref: '#/components/parameters/Token'
-        - $ref: '#/components/parameters/UnisCustomerCd'
+        # - $ref: '#/components/parameters/Token'
         - name: industryId
           in: query
           description: ID of bgm to return
@@ -1006,11 +1002,10 @@ paths:
       summary: S3オブジェクトの署名付きURLの取得
       description: '試聴再生、録音音声アップロード'
       operationId: getSignedUrl
-      security:
-        - ApiKeyAuth: []
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
-        - $ref: '#/components/parameters/Token'
-        - $ref: '#/components/parameters/UnisCustomerCd'
+        # - $ref: '#/components/parameters/Token'
         - name: id
           in: query
           description: ID of signed url to return
@@ -1046,7 +1041,6 @@ components:
       required: true
       schema:
         type: string
-        format: string
     UnisCustomerCd:
       name: x-unis-customer-cd
       in: header
@@ -1054,7 +1048,6 @@ components:
       required: true
       schema:
         type: string
-        format: string
     CmId:
       name: cmId
       in: path

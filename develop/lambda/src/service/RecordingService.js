@@ -4,11 +4,10 @@
 /**
  * 新規録音データ
  *
- * xToken String ID of token to return
  * xUnisCustomerCd String ID of unis customer cd to return
  * returns List
  **/
-exports.createUserRecording = function(xToken,xUnisCustomerCd) {
+exports.createUserRecording = function(xUnisCustomerCd) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = [ {
@@ -36,12 +35,11 @@ exports.createUserRecording = function(xToken,xUnisCustomerCd) {
 /**
  * 録音データ削除
  *
- * xToken String ID of token to return
  * xUnisCustomerCd String ID of unis customer cd to return
  * recordingId String ID of recording to return
  * no response value expected for this operation
  **/
-exports.deleteUserRecording = function(xToken,xUnisCustomerCd,recordingId) {
+exports.deleteUserRecording = function(xUnisCustomerCd,recordingId) {
   return new Promise(function(resolve, reject) {
     resolve();
   });
@@ -51,12 +49,11 @@ exports.deleteUserRecording = function(xToken,xUnisCustomerCd,recordingId) {
 /**
  * 録音データ取得
  *
- * xToken String ID of token to return
  * xUnisCustomerCd String ID of unis customer cd to return
  * recordingId String ID of recording to return
  * returns RecordingItem
  **/
-exports.getUserRecording = function(xToken,xUnisCustomerCd,recordingId) {
+exports.getUserRecording = function(xUnisCustomerCd,recordingId) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
@@ -78,11 +75,10 @@ exports.getUserRecording = function(xToken,xUnisCustomerCd,recordingId) {
 /**
  * 録音データリスト取得
  *
- * xToken String ID of token to return
  * xUnisCustomerCd String ID of unis customer cd to return
  * returns List
  **/
-exports.listUserRecording = function(xToken,xUnisCustomerCd) {
+exports.listUserRecording = function(xUnisCustomerCd) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = [ {
@@ -111,11 +107,10 @@ exports.listUserRecording = function(xToken,xUnisCustomerCd) {
  * 録音データ更新（メタデータのみ）
  *
  * recordingId String ID of recording to return
- * xToken String ID of token to return
  * xUnisCustomerCd String ID of unis customer cd to return
  * returns RecordingItem
  **/
-exports.updateUserRecording = function(recordingId,xToken,xUnisCustomerCd) {
+exports.updateUserRecording = function(recordingId,xUnisCustomerCd) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {

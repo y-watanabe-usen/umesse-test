@@ -4,12 +4,11 @@
 /**
  * CM共有追加
  *
- * xToken String ID of token to return
  * xUnisCustomerCd String ID of unis customer cd to return
  * cmId String ID of cm to return
  * no response value expected for this operation
  **/
-exports.createShare = function(xToken,xUnisCustomerCd,cmId) {
+exports.createShare = function(xUnisCustomerCd,cmId) {
   return new Promise(function(resolve, reject) {
     resolve();
   });
@@ -19,12 +18,11 @@ exports.createShare = function(xToken,xUnisCustomerCd,cmId) {
 /**
  * CM共有削除
  *
- * xToken String ID of token to return
  * xUnisCustomerCd String ID of unis customer cd to return
  * cmId String ID of cm to return
  * returns CmItem
  **/
-exports.deleteShare = function(xToken,xUnisCustomerCd,cmId) {
+exports.deleteShare = function(xUnisCustomerCd,cmId) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
@@ -73,11 +71,10 @@ exports.deleteShare = function(xToken,xUnisCustomerCd,cmId) {
 /**
  * CM共有リスト取得
  *
- * xToken String ID of token to return
  * xUnisCustomerCd String ID of unis customer cd to return
  * returns List
  **/
-exports.listShare = function(xToken,xUnisCustomerCd) {
+exports.listShare = function(xUnisCustomerCd) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = [ {

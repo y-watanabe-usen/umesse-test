@@ -3,8 +3,8 @@
 var utils = require('../utils/writer.js');
 var Share = require('../service/ShareService');
 
-module.exports.createShare = function createShare (req, res, next, xToken, xUnisCustomerCd, cmId) {
-  Share.createShare(xToken, xUnisCustomerCd, cmId)
+module.exports.createShare = function createShare (req, res, next, xUnisCustomerCd, cmId) {
+  Share.createShare(xUnisCustomerCd, cmId)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -13,8 +13,8 @@ module.exports.createShare = function createShare (req, res, next, xToken, xUnis
     });
 };
 
-module.exports.deleteShare = function deleteShare (req, res, next, xToken, xUnisCustomerCd, cmId) {
-  Share.deleteShare(xToken, xUnisCustomerCd, cmId)
+module.exports.deleteShare = function deleteShare (req, res, next, xUnisCustomerCd, cmId) {
+  Share.deleteShare(xUnisCustomerCd, cmId)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -23,8 +23,8 @@ module.exports.deleteShare = function deleteShare (req, res, next, xToken, xUnis
     });
 };
 
-module.exports.listShare = function listShare (req, res, next, xToken, xUnisCustomerCd) {
-  Share.listShare(xToken, xUnisCustomerCd)
+module.exports.listShare = function listShare (req, res, next, xUnisCustomerCd) {
+  Share.listShare(xUnisCustomerCd)
     .then(function (response) {
       utils.writeJson(res, response);
     })

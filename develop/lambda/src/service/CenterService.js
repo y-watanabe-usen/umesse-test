@@ -6,11 +6,10 @@
  *
  * body Body_3  (optional)
  * cmId String ID of cm to return
- * xToken String ID of token to return
  * xUnisCustomerCd String ID of unis customer cd to return
  * returns CmItem
  **/
-exports.createCenterCm = function(body,cmId,xToken,xUnisCustomerCd) {
+exports.createCenterCm = function(body,cmId,xUnisCustomerCd) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
@@ -59,12 +58,11 @@ exports.createCenterCm = function(body,cmId,xToken,xUnisCustomerCd) {
 /**
  * CMセンター連携削除
  *
- * xToken String ID of token to return
  * xUnisCustomerCd String ID of unis customer cd to return
  * cmId String ID of cm to return
  * no response value expected for this operation
  **/
-exports.deleteCenterCm = function(xToken,xUnisCustomerCd,cmId) {
+exports.deleteCenterCm = function(xUnisCustomerCd,cmId) {
   return new Promise(function(resolve, reject) {
     resolve();
   });

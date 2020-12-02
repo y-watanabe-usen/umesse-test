@@ -4,11 +4,10 @@
 /**
  * 新規録音データ
  *
- * xToken String ID of token to return
  * xUnisCustomerCd String ID of unis customer cd to return
  * returns List
  **/
-exports.createUserTts = function(xToken,xUnisCustomerCd) {
+exports.createUserTts = function(xUnisCustomerCd) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = [ {
@@ -36,12 +35,11 @@ exports.createUserTts = function(xToken,xUnisCustomerCd) {
 /**
  * TTSデータ削除
  *
- * xToken String ID of token to return
  * xUnisCustomerCd String ID of unis customer cd to return
  * ttsId String ID of tts to return
  * no response value expected for this operation
  **/
-exports.deleteUserTts = function(xToken,xUnisCustomerCd,ttsId) {
+exports.deleteUserTts = function(xUnisCustomerCd,ttsId) {
   return new Promise(function(resolve, reject) {
     resolve();
   });
@@ -51,12 +49,11 @@ exports.deleteUserTts = function(xToken,xUnisCustomerCd,ttsId) {
 /**
  * TTSデータ取得
  *
- * xToken String ID of token to return
  * xUnisCustomerCd String ID of unis customer cd to return
  * ttsId String ID of tts to return
  * returns TtsItem
  **/
-exports.getUserTts = function(xToken,xUnisCustomerCd,ttsId) {
+exports.getUserTts = function(xUnisCustomerCd,ttsId) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
@@ -78,11 +75,10 @@ exports.getUserTts = function(xToken,xUnisCustomerCd,ttsId) {
 /**
  * TTSデータリスト取得
  *
- * xToken String ID of token to return
  * xUnisCustomerCd String ID of unis customer cd to return
  * returns List
  **/
-exports.listUserTts = function(xToken,xUnisCustomerCd) {
+exports.listUserTts = function(xUnisCustomerCd) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = [ {
@@ -111,11 +107,10 @@ exports.listUserTts = function(xToken,xUnisCustomerCd) {
  * TTSデータ更新（メタデータのみ）
  *
  * ttsId String ID of tts to return
- * xToken String ID of token to return
  * xUnisCustomerCd String ID of unis customer cd to return
  * returns TtsItem
  **/
-exports.updateUserTts = function(ttsId,xToken,xUnisCustomerCd) {
+exports.updateUserTts = function(ttsId,xUnisCustomerCd) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {

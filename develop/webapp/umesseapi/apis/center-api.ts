@@ -30,18 +30,13 @@ export const CenterApiAxiosParamCreator = function (configuration?: Configuratio
         /**
          * 
          * @summary CMセンター連携追加
-         * @param {string} xToken ID of token to return
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} cmId ID of cm to return
          * @param {Body3} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createCenterCm: async (xToken: string, xUnisCustomerCd: string, cmId: string, body?: Body3, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'xToken' is not null or undefined
-            if (xToken === null || xToken === undefined) {
-                throw new RequiredError('xToken','Required parameter xToken was null or undefined when calling createCenterCm.');
-            }
+        createCenterCm: async (xUnisCustomerCd: string, cmId: string, body?: Body3, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'xUnisCustomerCd' is not null or undefined
             if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
                 throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling createCenterCm.');
@@ -61,18 +56,6 @@ export const CenterApiAxiosParamCreator = function (configuration?: Configuratio
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication ApiKeyAuth required
-            if (configuration && configuration.apiKey) {
-                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
-                    ? await configuration.apiKey("x-api-key")
-                    : await configuration.apiKey;
-                localVarHeaderParameter["x-api-key"] = localVarApiKeyValue;
-            }
-
-            if (xToken !== undefined && xToken !== null) {
-                localVarHeaderParameter['x-token'] = String(xToken);
-            }
 
             if (xUnisCustomerCd !== undefined && xUnisCustomerCd !== null) {
                 localVarHeaderParameter['x-unis-customer-cd'] = String(xUnisCustomerCd);
@@ -101,17 +84,12 @@ export const CenterApiAxiosParamCreator = function (configuration?: Configuratio
         /**
          * 
          * @summary CMセンター連携削除
-         * @param {string} xToken ID of token to return
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} cmId ID of cm to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteCenterCm: async (xToken: string, xUnisCustomerCd: string, cmId: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'xToken' is not null or undefined
-            if (xToken === null || xToken === undefined) {
-                throw new RequiredError('xToken','Required parameter xToken was null or undefined when calling deleteCenterCm.');
-            }
+        deleteCenterCm: async (xUnisCustomerCd: string, cmId: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'xUnisCustomerCd' is not null or undefined
             if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
                 throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling deleteCenterCm.');
@@ -131,18 +109,6 @@ export const CenterApiAxiosParamCreator = function (configuration?: Configuratio
             const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication ApiKeyAuth required
-            if (configuration && configuration.apiKey) {
-                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
-                    ? await configuration.apiKey("x-api-key")
-                    : await configuration.apiKey;
-                localVarHeaderParameter["x-api-key"] = localVarApiKeyValue;
-            }
-
-            if (xToken !== undefined && xToken !== null) {
-                localVarHeaderParameter['x-token'] = String(xToken);
-            }
 
             if (xUnisCustomerCd !== undefined && xUnisCustomerCd !== null) {
                 localVarHeaderParameter['x-unis-customer-cd'] = String(xUnisCustomerCd);
@@ -188,14 +154,6 @@ export const CenterApiAxiosParamCreator = function (configuration?: Configuratio
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            // authentication ApiKeyAuth required
-            if (configuration && configuration.apiKey) {
-                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
-                    ? await configuration.apiKey("x-api-key")
-                    : await configuration.apiKey;
-                localVarHeaderParameter["x-api-key"] = localVarApiKeyValue;
-            }
-
             const query = new URLSearchParams(localVarUrlObj.search);
             for (const key in localVarQueryParameter) {
                 query.set(key, localVarQueryParameter[key]);
@@ -229,14 +187,6 @@ export const CenterApiAxiosParamCreator = function (configuration?: Configuratio
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication ApiKeyAuth required
-            if (configuration && configuration.apiKey) {
-                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
-                    ? await configuration.apiKey("x-api-key")
-                    : await configuration.apiKey;
-                localVarHeaderParameter["x-api-key"] = localVarApiKeyValue;
-            }
 
             const query = new URLSearchParams(localVarUrlObj.search);
             for (const key in localVarQueryParameter) {
@@ -279,14 +229,6 @@ export const CenterApiAxiosParamCreator = function (configuration?: Configuratio
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
-            // authentication ApiKeyAuth required
-            if (configuration && configuration.apiKey) {
-                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
-                    ? await configuration.apiKey("x-api-key")
-                    : await configuration.apiKey;
-                localVarHeaderParameter["x-api-key"] = localVarApiKeyValue;
-            }
-
             localVarHeaderParameter['Content-Type'] = 'application/json';
 
             const query = new URLSearchParams(localVarUrlObj.search);
@@ -319,15 +261,14 @@ export const CenterApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary CMセンター連携追加
-         * @param {string} xToken ID of token to return
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} cmId ID of cm to return
          * @param {Body3} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createCenterCm(xToken: string, xUnisCustomerCd: string, cmId: string, body?: Body3, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CmItem>> {
-            const localVarAxiosArgs = await CenterApiAxiosParamCreator(configuration).createCenterCm(xToken, xUnisCustomerCd, cmId, body, options);
+        async createCenterCm(xUnisCustomerCd: string, cmId: string, body?: Body3, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CmItem>> {
+            const localVarAxiosArgs = await CenterApiAxiosParamCreator(configuration).createCenterCm(xUnisCustomerCd, cmId, body, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -336,14 +277,13 @@ export const CenterApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary CMセンター連携削除
-         * @param {string} xToken ID of token to return
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} cmId ID of cm to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteCenterCm(xToken: string, xUnisCustomerCd: string, cmId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await CenterApiAxiosParamCreator(configuration).deleteCenterCm(xToken, xUnisCustomerCd, cmId, options);
+        async deleteCenterCm(xUnisCustomerCd: string, cmId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await CenterApiAxiosParamCreator(configuration).deleteCenterCm(xUnisCustomerCd, cmId, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -403,27 +343,25 @@ export const CenterApiFactory = function (configuration?: Configuration, basePat
         /**
          * 
          * @summary CMセンター連携追加
-         * @param {string} xToken ID of token to return
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} cmId ID of cm to return
          * @param {Body3} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createCenterCm(xToken: string, xUnisCustomerCd: string, cmId: string, body?: Body3, options?: any): AxiosPromise<CmItem> {
-            return CenterApiFp(configuration).createCenterCm(xToken, xUnisCustomerCd, cmId, body, options).then((request) => request(axios, basePath));
+        createCenterCm(xUnisCustomerCd: string, cmId: string, body?: Body3, options?: any): AxiosPromise<CmItem> {
+            return CenterApiFp(configuration).createCenterCm(xUnisCustomerCd, cmId, body, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary CMセンター連携削除
-         * @param {string} xToken ID of token to return
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} cmId ID of cm to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteCenterCm(xToken: string, xUnisCustomerCd: string, cmId: string, options?: any): AxiosPromise<void> {
-            return CenterApiFp(configuration).deleteCenterCm(xToken, xUnisCustomerCd, cmId, options).then((request) => request(axios, basePath));
+        deleteCenterCm(xUnisCustomerCd: string, cmId: string, options?: any): AxiosPromise<void> {
+            return CenterApiFp(configuration).deleteCenterCm(xUnisCustomerCd, cmId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -468,7 +406,6 @@ export class CenterApi extends BaseAPI {
     /**
      * 
      * @summary CMセンター連携追加
-     * @param {string} xToken ID of token to return
      * @param {string} xUnisCustomerCd ID of unis customer cd to return
      * @param {string} cmId ID of cm to return
      * @param {Body3} [body] 
@@ -476,21 +413,20 @@ export class CenterApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof CenterApi
      */
-    public createCenterCm(xToken: string, xUnisCustomerCd: string, cmId: string, body?: Body3, options?: any) {
-        return CenterApiFp(this.configuration).createCenterCm(xToken, xUnisCustomerCd, cmId, body, options).then((request) => request(this.axios, this.basePath));
+    public createCenterCm(xUnisCustomerCd: string, cmId: string, body?: Body3, options?: any) {
+        return CenterApiFp(this.configuration).createCenterCm(xUnisCustomerCd, cmId, body, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * 
      * @summary CMセンター連携削除
-     * @param {string} xToken ID of token to return
      * @param {string} xUnisCustomerCd ID of unis customer cd to return
      * @param {string} cmId ID of cm to return
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CenterApi
      */
-    public deleteCenterCm(xToken: string, xUnisCustomerCd: string, cmId: string, options?: any) {
-        return CenterApiFp(this.configuration).deleteCenterCm(xToken, xUnisCustomerCd, cmId, options).then((request) => request(this.axios, this.basePath));
+    public deleteCenterCm(xUnisCustomerCd: string, cmId: string, options?: any) {
+        return CenterApiFp(this.configuration).deleteCenterCm(xUnisCustomerCd, cmId, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * 

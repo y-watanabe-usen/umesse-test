@@ -3,8 +3,8 @@
 var utils = require('../utils/writer.js');
 var Recording = require('../service/RecordingService');
 
-module.exports.createUserRecording = function createUserRecording (req, res, next, xToken, xUnisCustomerCd) {
-  Recording.createUserRecording(xToken, xUnisCustomerCd)
+module.exports.createUserRecording = function createUserRecording (req, res, next, xUnisCustomerCd) {
+  Recording.createUserRecording(xUnisCustomerCd)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -13,8 +13,8 @@ module.exports.createUserRecording = function createUserRecording (req, res, nex
     });
 };
 
-module.exports.deleteUserRecording = function deleteUserRecording (req, res, next, xToken, xUnisCustomerCd, recordingId) {
-  Recording.deleteUserRecording(xToken, xUnisCustomerCd, recordingId)
+module.exports.deleteUserRecording = function deleteUserRecording (req, res, next, xUnisCustomerCd, recordingId) {
+  Recording.deleteUserRecording(xUnisCustomerCd, recordingId)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -23,8 +23,8 @@ module.exports.deleteUserRecording = function deleteUserRecording (req, res, nex
     });
 };
 
-module.exports.getUserRecording = function getUserRecording (req, res, next, xToken, xUnisCustomerCd, recordingId) {
-  Recording.getUserRecording(xToken, xUnisCustomerCd, recordingId)
+module.exports.getUserRecording = function getUserRecording (req, res, next, xUnisCustomerCd, recordingId) {
+  Recording.getUserRecording(xUnisCustomerCd, recordingId)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -33,8 +33,8 @@ module.exports.getUserRecording = function getUserRecording (req, res, next, xTo
     });
 };
 
-module.exports.listUserRecording = function listUserRecording (req, res, next, xToken, xUnisCustomerCd) {
-  Recording.listUserRecording(xToken, xUnisCustomerCd)
+module.exports.listUserRecording = function listUserRecording (req, res, next, xUnisCustomerCd) {
+  Recording.listUserRecording(xUnisCustomerCd)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -43,8 +43,8 @@ module.exports.listUserRecording = function listUserRecording (req, res, next, x
     });
 };
 
-module.exports.updateUserRecording = function updateUserRecording (req, res, next, recordingId, xToken, xUnisCustomerCd) {
-  Recording.updateUserRecording(recordingId, xToken, xUnisCustomerCd)
+module.exports.updateUserRecording = function updateUserRecording (req, res, next, recordingId, xUnisCustomerCd) {
+  Recording.updateUserRecording(recordingId, xUnisCustomerCd)
     .then(function (response) {
       utils.writeJson(res, response);
     })

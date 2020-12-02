@@ -26,18 +26,13 @@ export const RecordingApiAxiosParamCreator = function (configuration?: Configura
         /**
          * 
          * @summary 新規録音データ
-         * @param {string} xToken ID of token to return
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} [filename] 
          * @param {string} [recordedFile] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createUserRecording: async (xToken: string, xUnisCustomerCd: string, filename?: string, recordedFile?: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'xToken' is not null or undefined
-            if (xToken === null || xToken === undefined) {
-                throw new RequiredError('xToken','Required parameter xToken was null or undefined when calling createUserRecording.');
-            }
+        createUserRecording: async (xUnisCustomerCd: string, filename?: string, recordedFile?: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'xUnisCustomerCd' is not null or undefined
             if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
                 throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling createUserRecording.');
@@ -53,18 +48,6 @@ export const RecordingApiAxiosParamCreator = function (configuration?: Configura
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
             const localVarFormParams = new FormData();
-
-            // authentication ApiKeyAuth required
-            if (configuration && configuration.apiKey) {
-                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
-                    ? await configuration.apiKey("x-api-key")
-                    : await configuration.apiKey;
-                localVarHeaderParameter["x-api-key"] = localVarApiKeyValue;
-            }
-
-            if (xToken !== undefined && xToken !== null) {
-                localVarHeaderParameter['x-token'] = String(xToken);
-            }
 
             if (xUnisCustomerCd !== undefined && xUnisCustomerCd !== null) {
                 localVarHeaderParameter['x-unis-customer-cd'] = String(xUnisCustomerCd);
@@ -100,17 +83,12 @@ export const RecordingApiAxiosParamCreator = function (configuration?: Configura
         /**
          * 
          * @summary 録音データ削除
-         * @param {string} xToken ID of token to return
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} recordingId ID of recording to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteUserRecording: async (xToken: string, xUnisCustomerCd: string, recordingId: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'xToken' is not null or undefined
-            if (xToken === null || xToken === undefined) {
-                throw new RequiredError('xToken','Required parameter xToken was null or undefined when calling deleteUserRecording.');
-            }
+        deleteUserRecording: async (xUnisCustomerCd: string, recordingId: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'xUnisCustomerCd' is not null or undefined
             if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
                 throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling deleteUserRecording.');
@@ -130,18 +108,6 @@ export const RecordingApiAxiosParamCreator = function (configuration?: Configura
             const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication ApiKeyAuth required
-            if (configuration && configuration.apiKey) {
-                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
-                    ? await configuration.apiKey("x-api-key")
-                    : await configuration.apiKey;
-                localVarHeaderParameter["x-api-key"] = localVarApiKeyValue;
-            }
-
-            if (xToken !== undefined && xToken !== null) {
-                localVarHeaderParameter['x-token'] = String(xToken);
-            }
 
             if (xUnisCustomerCd !== undefined && xUnisCustomerCd !== null) {
                 localVarHeaderParameter['x-unis-customer-cd'] = String(xUnisCustomerCd);
@@ -166,17 +132,12 @@ export const RecordingApiAxiosParamCreator = function (configuration?: Configura
         /**
          * 
          * @summary 録音データ取得
-         * @param {string} xToken ID of token to return
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} recordingId ID of recording to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getUserRecording: async (xToken: string, xUnisCustomerCd: string, recordingId: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'xToken' is not null or undefined
-            if (xToken === null || xToken === undefined) {
-                throw new RequiredError('xToken','Required parameter xToken was null or undefined when calling getUserRecording.');
-            }
+        getUserRecording: async (xUnisCustomerCd: string, recordingId: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'xUnisCustomerCd' is not null or undefined
             if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
                 throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling getUserRecording.');
@@ -196,18 +157,6 @@ export const RecordingApiAxiosParamCreator = function (configuration?: Configura
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication ApiKeyAuth required
-            if (configuration && configuration.apiKey) {
-                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
-                    ? await configuration.apiKey("x-api-key")
-                    : await configuration.apiKey;
-                localVarHeaderParameter["x-api-key"] = localVarApiKeyValue;
-            }
-
-            if (xToken !== undefined && xToken !== null) {
-                localVarHeaderParameter['x-token'] = String(xToken);
-            }
 
             if (xUnisCustomerCd !== undefined && xUnisCustomerCd !== null) {
                 localVarHeaderParameter['x-unis-customer-cd'] = String(xUnisCustomerCd);
@@ -232,16 +181,11 @@ export const RecordingApiAxiosParamCreator = function (configuration?: Configura
         /**
          * 
          * @summary 録音データリスト取得
-         * @param {string} xToken ID of token to return
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listUserRecording: async (xToken: string, xUnisCustomerCd: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'xToken' is not null or undefined
-            if (xToken === null || xToken === undefined) {
-                throw new RequiredError('xToken','Required parameter xToken was null or undefined when calling listUserRecording.');
-            }
+        listUserRecording: async (xUnisCustomerCd: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'xUnisCustomerCd' is not null or undefined
             if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
                 throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling listUserRecording.');
@@ -256,18 +200,6 @@ export const RecordingApiAxiosParamCreator = function (configuration?: Configura
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication ApiKeyAuth required
-            if (configuration && configuration.apiKey) {
-                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
-                    ? await configuration.apiKey("x-api-key")
-                    : await configuration.apiKey;
-                localVarHeaderParameter["x-api-key"] = localVarApiKeyValue;
-            }
-
-            if (xToken !== undefined && xToken !== null) {
-                localVarHeaderParameter['x-token'] = String(xToken);
-            }
 
             if (xUnisCustomerCd !== undefined && xUnisCustomerCd !== null) {
                 localVarHeaderParameter['x-unis-customer-cd'] = String(xUnisCustomerCd);
@@ -292,7 +224,6 @@ export const RecordingApiAxiosParamCreator = function (configuration?: Configura
         /**
          * 
          * @summary 録音データ更新（メタデータのみ）
-         * @param {string} xToken ID of token to return
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} recordingId ID of recording to return
          * @param {string} [title] 
@@ -300,11 +231,7 @@ export const RecordingApiAxiosParamCreator = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateUserRecording: async (xToken: string, xUnisCustomerCd: string, recordingId: string, title?: string, description?: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'xToken' is not null or undefined
-            if (xToken === null || xToken === undefined) {
-                throw new RequiredError('xToken','Required parameter xToken was null or undefined when calling updateUserRecording.');
-            }
+        updateUserRecording: async (xUnisCustomerCd: string, recordingId: string, title?: string, description?: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'xUnisCustomerCd' is not null or undefined
             if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
                 throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling updateUserRecording.');
@@ -325,18 +252,6 @@ export const RecordingApiAxiosParamCreator = function (configuration?: Configura
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
             const localVarFormParams = new FormData();
-
-            // authentication ApiKeyAuth required
-            if (configuration && configuration.apiKey) {
-                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
-                    ? await configuration.apiKey("x-api-key")
-                    : await configuration.apiKey;
-                localVarHeaderParameter["x-api-key"] = localVarApiKeyValue;
-            }
-
-            if (xToken !== undefined && xToken !== null) {
-                localVarHeaderParameter['x-token'] = String(xToken);
-            }
 
             if (xUnisCustomerCd !== undefined && xUnisCustomerCd !== null) {
                 localVarHeaderParameter['x-unis-customer-cd'] = String(xUnisCustomerCd);
@@ -381,15 +296,14 @@ export const RecordingApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary 新規録音データ
-         * @param {string} xToken ID of token to return
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} [filename] 
          * @param {string} [recordedFile] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createUserRecording(xToken: string, xUnisCustomerCd: string, filename?: string, recordedFile?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<RecordingItem>>> {
-            const localVarAxiosArgs = await RecordingApiAxiosParamCreator(configuration).createUserRecording(xToken, xUnisCustomerCd, filename, recordedFile, options);
+        async createUserRecording(xUnisCustomerCd: string, filename?: string, recordedFile?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<RecordingItem>>> {
+            const localVarAxiosArgs = await RecordingApiAxiosParamCreator(configuration).createUserRecording(xUnisCustomerCd, filename, recordedFile, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -398,14 +312,13 @@ export const RecordingApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary 録音データ削除
-         * @param {string} xToken ID of token to return
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} recordingId ID of recording to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteUserRecording(xToken: string, xUnisCustomerCd: string, recordingId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await RecordingApiAxiosParamCreator(configuration).deleteUserRecording(xToken, xUnisCustomerCd, recordingId, options);
+        async deleteUserRecording(xUnisCustomerCd: string, recordingId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await RecordingApiAxiosParamCreator(configuration).deleteUserRecording(xUnisCustomerCd, recordingId, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -414,14 +327,13 @@ export const RecordingApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary 録音データ取得
-         * @param {string} xToken ID of token to return
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} recordingId ID of recording to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getUserRecording(xToken: string, xUnisCustomerCd: string, recordingId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RecordingItem>> {
-            const localVarAxiosArgs = await RecordingApiAxiosParamCreator(configuration).getUserRecording(xToken, xUnisCustomerCd, recordingId, options);
+        async getUserRecording(xUnisCustomerCd: string, recordingId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RecordingItem>> {
+            const localVarAxiosArgs = await RecordingApiAxiosParamCreator(configuration).getUserRecording(xUnisCustomerCd, recordingId, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -430,13 +342,12 @@ export const RecordingApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary 録音データリスト取得
-         * @param {string} xToken ID of token to return
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listUserRecording(xToken: string, xUnisCustomerCd: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<RecordingItem>>> {
-            const localVarAxiosArgs = await RecordingApiAxiosParamCreator(configuration).listUserRecording(xToken, xUnisCustomerCd, options);
+        async listUserRecording(xUnisCustomerCd: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<RecordingItem>>> {
+            const localVarAxiosArgs = await RecordingApiAxiosParamCreator(configuration).listUserRecording(xUnisCustomerCd, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -445,7 +356,6 @@ export const RecordingApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary 録音データ更新（メタデータのみ）
-         * @param {string} xToken ID of token to return
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} recordingId ID of recording to return
          * @param {string} [title] 
@@ -453,8 +363,8 @@ export const RecordingApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateUserRecording(xToken: string, xUnisCustomerCd: string, recordingId: string, title?: string, description?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RecordingItem>> {
-            const localVarAxiosArgs = await RecordingApiAxiosParamCreator(configuration).updateUserRecording(xToken, xUnisCustomerCd, recordingId, title, description, options);
+        async updateUserRecording(xUnisCustomerCd: string, recordingId: string, title?: string, description?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RecordingItem>> {
+            const localVarAxiosArgs = await RecordingApiAxiosParamCreator(configuration).updateUserRecording(xUnisCustomerCd, recordingId, title, description, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -472,55 +382,50 @@ export const RecordingApiFactory = function (configuration?: Configuration, base
         /**
          * 
          * @summary 新規録音データ
-         * @param {string} xToken ID of token to return
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} [filename] 
          * @param {string} [recordedFile] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createUserRecording(xToken: string, xUnisCustomerCd: string, filename?: string, recordedFile?: string, options?: any): AxiosPromise<Array<RecordingItem>> {
-            return RecordingApiFp(configuration).createUserRecording(xToken, xUnisCustomerCd, filename, recordedFile, options).then((request) => request(axios, basePath));
+        createUserRecording(xUnisCustomerCd: string, filename?: string, recordedFile?: string, options?: any): AxiosPromise<Array<RecordingItem>> {
+            return RecordingApiFp(configuration).createUserRecording(xUnisCustomerCd, filename, recordedFile, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary 録音データ削除
-         * @param {string} xToken ID of token to return
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} recordingId ID of recording to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteUserRecording(xToken: string, xUnisCustomerCd: string, recordingId: string, options?: any): AxiosPromise<void> {
-            return RecordingApiFp(configuration).deleteUserRecording(xToken, xUnisCustomerCd, recordingId, options).then((request) => request(axios, basePath));
+        deleteUserRecording(xUnisCustomerCd: string, recordingId: string, options?: any): AxiosPromise<void> {
+            return RecordingApiFp(configuration).deleteUserRecording(xUnisCustomerCd, recordingId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary 録音データ取得
-         * @param {string} xToken ID of token to return
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} recordingId ID of recording to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getUserRecording(xToken: string, xUnisCustomerCd: string, recordingId: string, options?: any): AxiosPromise<RecordingItem> {
-            return RecordingApiFp(configuration).getUserRecording(xToken, xUnisCustomerCd, recordingId, options).then((request) => request(axios, basePath));
+        getUserRecording(xUnisCustomerCd: string, recordingId: string, options?: any): AxiosPromise<RecordingItem> {
+            return RecordingApiFp(configuration).getUserRecording(xUnisCustomerCd, recordingId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary 録音データリスト取得
-         * @param {string} xToken ID of token to return
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listUserRecording(xToken: string, xUnisCustomerCd: string, options?: any): AxiosPromise<Array<RecordingItem>> {
-            return RecordingApiFp(configuration).listUserRecording(xToken, xUnisCustomerCd, options).then((request) => request(axios, basePath));
+        listUserRecording(xUnisCustomerCd: string, options?: any): AxiosPromise<Array<RecordingItem>> {
+            return RecordingApiFp(configuration).listUserRecording(xUnisCustomerCd, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary 録音データ更新（メタデータのみ）
-         * @param {string} xToken ID of token to return
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} recordingId ID of recording to return
          * @param {string} [title] 
@@ -528,8 +433,8 @@ export const RecordingApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateUserRecording(xToken: string, xUnisCustomerCd: string, recordingId: string, title?: string, description?: string, options?: any): AxiosPromise<RecordingItem> {
-            return RecordingApiFp(configuration).updateUserRecording(xToken, xUnisCustomerCd, recordingId, title, description, options).then((request) => request(axios, basePath));
+        updateUserRecording(xUnisCustomerCd: string, recordingId: string, title?: string, description?: string, options?: any): AxiosPromise<RecordingItem> {
+            return RecordingApiFp(configuration).updateUserRecording(xUnisCustomerCd, recordingId, title, description, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -544,7 +449,6 @@ export class RecordingApi extends BaseAPI {
     /**
      * 
      * @summary 新規録音データ
-     * @param {string} xToken ID of token to return
      * @param {string} xUnisCustomerCd ID of unis customer cd to return
      * @param {string} [filename] 
      * @param {string} [recordedFile] 
@@ -552,51 +456,47 @@ export class RecordingApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof RecordingApi
      */
-    public createUserRecording(xToken: string, xUnisCustomerCd: string, filename?: string, recordedFile?: string, options?: any) {
-        return RecordingApiFp(this.configuration).createUserRecording(xToken, xUnisCustomerCd, filename, recordedFile, options).then((request) => request(this.axios, this.basePath));
+    public createUserRecording(xUnisCustomerCd: string, filename?: string, recordedFile?: string, options?: any) {
+        return RecordingApiFp(this.configuration).createUserRecording(xUnisCustomerCd, filename, recordedFile, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * 
      * @summary 録音データ削除
-     * @param {string} xToken ID of token to return
      * @param {string} xUnisCustomerCd ID of unis customer cd to return
      * @param {string} recordingId ID of recording to return
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RecordingApi
      */
-    public deleteUserRecording(xToken: string, xUnisCustomerCd: string, recordingId: string, options?: any) {
-        return RecordingApiFp(this.configuration).deleteUserRecording(xToken, xUnisCustomerCd, recordingId, options).then((request) => request(this.axios, this.basePath));
+    public deleteUserRecording(xUnisCustomerCd: string, recordingId: string, options?: any) {
+        return RecordingApiFp(this.configuration).deleteUserRecording(xUnisCustomerCd, recordingId, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * 
      * @summary 録音データ取得
-     * @param {string} xToken ID of token to return
      * @param {string} xUnisCustomerCd ID of unis customer cd to return
      * @param {string} recordingId ID of recording to return
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RecordingApi
      */
-    public getUserRecording(xToken: string, xUnisCustomerCd: string, recordingId: string, options?: any) {
-        return RecordingApiFp(this.configuration).getUserRecording(xToken, xUnisCustomerCd, recordingId, options).then((request) => request(this.axios, this.basePath));
+    public getUserRecording(xUnisCustomerCd: string, recordingId: string, options?: any) {
+        return RecordingApiFp(this.configuration).getUserRecording(xUnisCustomerCd, recordingId, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * 
      * @summary 録音データリスト取得
-     * @param {string} xToken ID of token to return
      * @param {string} xUnisCustomerCd ID of unis customer cd to return
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RecordingApi
      */
-    public listUserRecording(xToken: string, xUnisCustomerCd: string, options?: any) {
-        return RecordingApiFp(this.configuration).listUserRecording(xToken, xUnisCustomerCd, options).then((request) => request(this.axios, this.basePath));
+    public listUserRecording(xUnisCustomerCd: string, options?: any) {
+        return RecordingApiFp(this.configuration).listUserRecording(xUnisCustomerCd, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * 
      * @summary 録音データ更新（メタデータのみ）
-     * @param {string} xToken ID of token to return
      * @param {string} xUnisCustomerCd ID of unis customer cd to return
      * @param {string} recordingId ID of recording to return
      * @param {string} [title] 
@@ -605,7 +505,7 @@ export class RecordingApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof RecordingApi
      */
-    public updateUserRecording(xToken: string, xUnisCustomerCd: string, recordingId: string, title?: string, description?: string, options?: any) {
-        return RecordingApiFp(this.configuration).updateUserRecording(xToken, xUnisCustomerCd, recordingId, title, description, options).then((request) => request(this.axios, this.basePath));
+    public updateUserRecording(xUnisCustomerCd: string, recordingId: string, title?: string, description?: string, options?: any) {
+        return RecordingApiFp(this.configuration).updateUserRecording(xUnisCustomerCd, recordingId, title, description, options).then((request) => request(this.axios, this.basePath));
     }
 }

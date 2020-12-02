@@ -60,8 +60,6 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
-      security:
-      - ApiKeyAuth: []
       x-swagger-router-controller: Auth
   /user:
     get:
@@ -70,15 +68,6 @@ paths:
       summary: User情報取得
       operationId: getUser
       parameters:
-      - name: x-token
-        in: header
-        description: ID of token to return
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          format: string
       - name: x-unis-customer-cd
         in: header
         description: ID of unis customer cd to return
@@ -87,7 +76,6 @@ paths:
         explode: false
         schema:
           type: string
-          format: string
       responses:
         "200":
           description: User情報
@@ -117,8 +105,6 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
-      security:
-      - ApiKeyAuth: []
       x-swagger-router-controller: User
   /user/cm:
     get:
@@ -127,15 +113,6 @@ paths:
       summary: CMリスト取得
       operationId: listUserCm
       parameters:
-      - name: x-token
-        in: header
-        description: ID of token to return
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          format: string
       - name: x-unis-customer-cd
         in: header
         description: ID of unis customer cd to return
@@ -144,7 +121,6 @@ paths:
         explode: false
         schema:
           type: string
-          format: string
       responses:
         "200":
           description: The response
@@ -177,8 +153,6 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
-      security:
-      - ApiKeyAuth: []
       x-swagger-router-controller: Cm
     post:
       tags:
@@ -186,15 +160,6 @@ paths:
       summary: CM新規結合
       operationId: createUserCm
       parameters:
-      - name: x-token
-        in: header
-        description: ID of token to return
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          format: string
       - name: x-unis-customer-cd
         in: header
         description: ID of unis customer cd to return
@@ -203,7 +168,6 @@ paths:
         explode: false
         schema:
           type: string
-          format: string
       requestBody:
         content:
           application/json:
@@ -238,8 +202,6 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
-      security:
-      - ApiKeyAuth: []
       x-swagger-router-controller: Cm
   /user/cm/{cmId}:
     get:
@@ -248,15 +210,6 @@ paths:
       summary: CM情報取得
       operationId: getUserCm
       parameters:
-      - name: x-token
-        in: header
-        description: ID of token to return
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          format: string
       - name: x-unis-customer-cd
         in: header
         description: ID of unis customer cd to return
@@ -265,7 +218,6 @@ paths:
         explode: false
         schema:
           type: string
-          format: string
       - name: cmId
         in: path
         description: ID of cm to return
@@ -304,8 +256,6 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
-      security:
-      - ApiKeyAuth: []
       x-swagger-router-controller: Cm
     post:
       tags:
@@ -313,15 +263,6 @@ paths:
       summary: CM情報更新
       operationId: updateUserCm
       parameters:
-      - name: x-token
-        in: header
-        description: ID of token to return
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          format: string
       - name: x-unis-customer-cd
         in: header
         description: ID of unis customer cd to return
@@ -330,7 +271,6 @@ paths:
         explode: false
         schema:
           type: string
-          format: string
       - name: cmId
         in: path
         description: ID of cm to return
@@ -374,8 +314,6 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
-      security:
-      - ApiKeyAuth: []
       x-swagger-router-controller: Cm
     delete:
       tags:
@@ -383,15 +321,6 @@ paths:
       summary: CM情報削除
       operationId: deleteUserCm
       parameters:
-      - name: x-token
-        in: header
-        description: ID of token to return
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          format: string
       - name: x-unis-customer-cd
         in: header
         description: ID of unis customer cd to return
@@ -400,7 +329,6 @@ paths:
         explode: false
         schema:
           type: string
-          format: string
       - name: cmId
         in: path
         description: ID of cm to return
@@ -439,8 +367,6 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
-      security:
-      - ApiKeyAuth: []
       x-swagger-router-controller: Cm
   /center/{cmId}:
     post:
@@ -449,15 +375,6 @@ paths:
       summary: CMセンター連携追加
       operationId: createCenterCm
       parameters:
-      - name: x-token
-        in: header
-        description: ID of token to return
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          format: string
       - name: x-unis-customer-cd
         in: header
         description: ID of unis customer cd to return
@@ -466,7 +383,6 @@ paths:
         explode: false
         schema:
           type: string
-          format: string
       - name: cmId
         in: path
         description: ID of cm to return
@@ -510,8 +426,6 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
-      security:
-      - ApiKeyAuth: []
       x-swagger-router-controller: Center
     delete:
       tags:
@@ -519,15 +433,6 @@ paths:
       summary: CMセンター連携削除
       operationId: deleteCenterCm
       parameters:
-      - name: x-token
-        in: header
-        description: ID of token to return
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          format: string
       - name: x-unis-customer-cd
         in: header
         description: ID of unis customer cd to return
@@ -536,7 +441,6 @@ paths:
         explode: false
         schema:
           type: string
-          format: string
       - name: cmId
         in: path
         description: ID of cm to return
@@ -571,8 +475,6 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
-      security:
-      - ApiKeyAuth: []
       x-swagger-router-controller: Center
   /center/upload:
     get:
@@ -612,8 +514,6 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
-      security:
-      - ApiKeyAuth: []
       x-swagger-router-controller: Center
   /center/upload/{unisCustomerCd}:
     get:
@@ -660,8 +560,6 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
-      security:
-      - ApiKeyAuth: []
       x-swagger-router-controller: Center
     post:
       tags:
@@ -712,8 +610,6 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
-      security:
-      - ApiKeyAuth: []
       x-swagger-router-controller: Center
   /share:
     get:
@@ -722,15 +618,6 @@ paths:
       summary: CM共有リスト取得
       operationId: listShare
       parameters:
-      - name: x-token
-        in: header
-        description: ID of token to return
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          format: string
       - name: x-unis-customer-cd
         in: header
         description: ID of unis customer cd to return
@@ -739,7 +626,6 @@ paths:
         explode: false
         schema:
           type: string
-          format: string
       responses:
         "200":
           description: The response
@@ -772,8 +658,6 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
-      security:
-      - ApiKeyAuth: []
       x-swagger-router-controller: Share
   /share/{cmId}:
     post:
@@ -782,15 +666,6 @@ paths:
       summary: CM共有追加
       operationId: createShare
       parameters:
-      - name: x-token
-        in: header
-        description: ID of token to return
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          format: string
       - name: x-unis-customer-cd
         in: header
         description: ID of unis customer cd to return
@@ -799,7 +674,6 @@ paths:
         explode: false
         schema:
           type: string
-          format: string
       - name: cmId
         in: path
         description: ID of cm to return
@@ -812,8 +686,6 @@ paths:
       responses:
         default:
           description: Default response
-      security:
-      - ApiKeyAuth: []
       x-swagger-router-controller: Share
     delete:
       tags:
@@ -821,15 +693,6 @@ paths:
       summary: CM共有削除
       operationId: deleteShare
       parameters:
-      - name: x-token
-        in: header
-        description: ID of token to return
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          format: string
       - name: x-unis-customer-cd
         in: header
         description: ID of unis customer cd to return
@@ -838,7 +701,6 @@ paths:
         explode: false
         schema:
           type: string
-          format: string
       - name: cmId
         in: path
         description: ID of cm to return
@@ -877,8 +739,6 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
-      security:
-      - ApiKeyAuth: []
       x-swagger-router-controller: Share
   /user/recording:
     get:
@@ -887,15 +747,6 @@ paths:
       summary: 録音データリスト取得
       operationId: listUserRecording
       parameters:
-      - name: x-token
-        in: header
-        description: ID of token to return
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          format: string
       - name: x-unis-customer-cd
         in: header
         description: ID of unis customer cd to return
@@ -904,7 +755,6 @@ paths:
         explode: false
         schema:
           type: string
-          format: string
       responses:
         "200":
           description: The response
@@ -937,8 +787,6 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
-      security:
-      - ApiKeyAuth: []
       x-swagger-router-controller: Recording
     post:
       tags:
@@ -946,15 +794,6 @@ paths:
       summary: 新規録音データ
       operationId: createUserRecording
       parameters:
-      - name: x-token
-        in: header
-        description: ID of token to return
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          format: string
       - name: x-unis-customer-cd
         in: header
         description: ID of unis customer cd to return
@@ -963,7 +802,6 @@ paths:
         explode: false
         schema:
           type: string
-          format: string
       requestBody:
         content:
           multipart/form-data:
@@ -1001,8 +839,6 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
-      security:
-      - ApiKeyAuth: []
       x-swagger-router-controller: Recording
   /user/recording/{recordingId}:
     get:
@@ -1011,15 +847,6 @@ paths:
       summary: 録音データ取得
       operationId: getUserRecording
       parameters:
-      - name: x-token
-        in: header
-        description: ID of token to return
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          format: string
       - name: x-unis-customer-cd
         in: header
         description: ID of unis customer cd to return
@@ -1028,7 +855,6 @@ paths:
         explode: false
         schema:
           type: string
-          format: string
       - name: recordingId
         in: path
         description: ID of recording to return
@@ -1067,8 +893,6 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
-      security:
-      - ApiKeyAuth: []
       x-swagger-router-controller: Recording
     post:
       tags:
@@ -1076,15 +900,6 @@ paths:
       summary: 録音データ更新（メタデータのみ）
       operationId: updateUserRecording
       parameters:
-      - name: x-token
-        in: header
-        description: ID of token to return
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          format: string
       - name: x-unis-customer-cd
         in: header
         description: ID of unis customer cd to return
@@ -1093,7 +908,6 @@ paths:
         explode: false
         schema:
           type: string
-          format: string
       - name: recordingId
         in: path
         description: ID of recording to return
@@ -1137,8 +951,6 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
-      security:
-      - ApiKeyAuth: []
       x-swagger-router-controller: Recording
     delete:
       tags:
@@ -1146,15 +958,6 @@ paths:
       summary: 録音データ削除
       operationId: deleteUserRecording
       parameters:
-      - name: x-token
-        in: header
-        description: ID of token to return
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          format: string
       - name: x-unis-customer-cd
         in: header
         description: ID of unis customer cd to return
@@ -1163,7 +966,6 @@ paths:
         explode: false
         schema:
           type: string
-          format: string
       - name: recordingId
         in: path
         description: ID of recording to return
@@ -1198,8 +1000,6 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
-      security:
-      - ApiKeyAuth: []
       x-swagger-router-controller: Recording
   /user/tts:
     get:
@@ -1208,15 +1008,6 @@ paths:
       summary: TTSデータリスト取得
       operationId: listUserTts
       parameters:
-      - name: x-token
-        in: header
-        description: ID of token to return
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          format: string
       - name: x-unis-customer-cd
         in: header
         description: ID of unis customer cd to return
@@ -1225,7 +1016,6 @@ paths:
         explode: false
         schema:
           type: string
-          format: string
       responses:
         "200":
           description: The response
@@ -1258,8 +1048,6 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
-      security:
-      - ApiKeyAuth: []
       x-swagger-router-controller: Tts
     post:
       tags:
@@ -1267,15 +1055,6 @@ paths:
       summary: 新規録音データ
       operationId: createUserTts
       parameters:
-      - name: x-token
-        in: header
-        description: ID of token to return
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          format: string
       - name: x-unis-customer-cd
         in: header
         description: ID of unis customer cd to return
@@ -1284,7 +1063,6 @@ paths:
         explode: false
         schema:
           type: string
-          format: string
       requestBody:
         content:
           multipart/form-data:
@@ -1322,8 +1100,6 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
-      security:
-      - ApiKeyAuth: []
       x-swagger-router-controller: Tts
   /user/tts/{ttsId}:
     get:
@@ -1332,15 +1108,6 @@ paths:
       summary: TTSデータ取得
       operationId: getUserTts
       parameters:
-      - name: x-token
-        in: header
-        description: ID of token to return
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          format: string
       - name: x-unis-customer-cd
         in: header
         description: ID of unis customer cd to return
@@ -1349,7 +1116,6 @@ paths:
         explode: false
         schema:
           type: string
-          format: string
       - name: ttsId
         in: path
         description: ID of tts to return
@@ -1388,8 +1154,6 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
-      security:
-      - ApiKeyAuth: []
       x-swagger-router-controller: Tts
     post:
       tags:
@@ -1397,15 +1161,6 @@ paths:
       summary: TTSデータ更新（メタデータのみ）
       operationId: updateUserTts
       parameters:
-      - name: x-token
-        in: header
-        description: ID of token to return
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          format: string
       - name: x-unis-customer-cd
         in: header
         description: ID of unis customer cd to return
@@ -1414,7 +1169,6 @@ paths:
         explode: false
         schema:
           type: string
-          format: string
       - name: ttsId
         in: path
         description: ID of tts to return
@@ -1458,8 +1212,6 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
-      security:
-      - ApiKeyAuth: []
       x-swagger-router-controller: Tts
     delete:
       tags:
@@ -1467,15 +1219,6 @@ paths:
       summary: TTSデータ削除
       operationId: deleteUserTts
       parameters:
-      - name: x-token
-        in: header
-        description: ID of token to return
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          format: string
       - name: x-unis-customer-cd
         in: header
         description: ID of unis customer cd to return
@@ -1484,7 +1227,6 @@ paths:
         explode: false
         schema:
           type: string
-          format: string
       - name: ttsId
         in: path
         description: ID of tts to return
@@ -1519,8 +1261,6 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
-      security:
-      - ApiKeyAuth: []
       x-swagger-router-controller: Tts
   /bgm:
     get:
@@ -1529,24 +1269,6 @@ paths:
       summary: BGM
       operationId: listBgm
       parameters:
-      - name: x-token
-        in: header
-        description: ID of token to return
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          format: string
-      - name: x-unis-customer-cd
-        in: header
-        description: ID of unis customer cd to return
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          format: string
       - name: industryId
         in: query
         description: ID of bgm to return
@@ -1587,8 +1309,6 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
-      security:
-      - ApiKeyAuth: []
       x-swagger-router-controller: Resources
   /narration:
     get:
@@ -1597,24 +1317,6 @@ paths:
       summary: ナレーション
       operationId: listNarration
       parameters:
-      - name: x-token
-        in: header
-        description: ID of token to return
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          format: string
-      - name: x-unis-customer-cd
-        in: header
-        description: ID of unis customer cd to return
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          format: string
       - name: industryId
         in: query
         description: ID of bgm to return
@@ -1663,8 +1365,6 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
-      security:
-      - ApiKeyAuth: []
       x-swagger-router-controller: Resources
   /chime:
     get:
@@ -1672,25 +1372,6 @@ paths:
       - resources
       summary: Open/Endチャイム
       operationId: listChime
-      parameters:
-      - name: x-token
-        in: header
-        description: ID of token to return
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          format: string
-      - name: x-unis-customer-cd
-        in: header
-        description: ID of unis customer cd to return
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          format: string
       responses:
         "200":
           description: The response
@@ -1723,8 +1404,6 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
-      security:
-      - ApiKeyAuth: []
       x-swagger-router-controller: Resources
   /tts:
     get:
@@ -1733,24 +1412,6 @@ paths:
       summary: TTSテンプレート一覧
       operationId: listTts
       parameters:
-      - name: x-token
-        in: header
-        description: ID of token to return
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          format: string
-      - name: x-unis-customer-cd
-        in: header
-        description: ID of unis customer cd to return
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          format: string
       - name: industryId
         in: query
         description: ID of bgm to return
@@ -1799,8 +1460,6 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
-      security:
-      - ApiKeyAuth: []
       x-swagger-router-controller: Resources
   /signedUrl:
     get:
@@ -1810,24 +1469,6 @@ paths:
       description: 試聴再生、録音音声アップロード
       operationId: getSignedUrl
       parameters:
-      - name: x-token
-        in: header
-        description: ID of token to return
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          format: string
-      - name: x-unis-customer-cd
-        in: header
-        description: ID of unis customer cd to return
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-          format: string
       - name: id
         in: query
         description: ID of signed url to return
@@ -1866,8 +1507,6 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
-      security:
-      - ApiKeyAuth: []
       x-swagger-router-controller: S3
 components:
   schemas:
@@ -2571,7 +2210,6 @@ components:
       explode: false
       schema:
         type: string
-        format: string
     UnisCustomerCd:
       name: x-unis-customer-cd
       in: header
@@ -2581,7 +2219,6 @@ components:
       explode: false
       schema:
         type: string
-        format: string
     CmId:
       name: cmId
       in: path

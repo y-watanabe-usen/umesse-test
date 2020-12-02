@@ -26,17 +26,12 @@ export const ShareApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * 
          * @summary CM共有追加
-         * @param {string} xToken ID of token to return
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} cmId ID of cm to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createShare: async (xToken: string, xUnisCustomerCd: string, cmId: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'xToken' is not null or undefined
-            if (xToken === null || xToken === undefined) {
-                throw new RequiredError('xToken','Required parameter xToken was null or undefined when calling createShare.');
-            }
+        createShare: async (xUnisCustomerCd: string, cmId: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'xUnisCustomerCd' is not null or undefined
             if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
                 throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling createShare.');
@@ -56,18 +51,6 @@ export const ShareApiAxiosParamCreator = function (configuration?: Configuration
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication ApiKeyAuth required
-            if (configuration && configuration.apiKey) {
-                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
-                    ? await configuration.apiKey("x-api-key")
-                    : await configuration.apiKey;
-                localVarHeaderParameter["x-api-key"] = localVarApiKeyValue;
-            }
-
-            if (xToken !== undefined && xToken !== null) {
-                localVarHeaderParameter['x-token'] = String(xToken);
-            }
 
             if (xUnisCustomerCd !== undefined && xUnisCustomerCd !== null) {
                 localVarHeaderParameter['x-unis-customer-cd'] = String(xUnisCustomerCd);
@@ -92,17 +75,12 @@ export const ShareApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * 
          * @summary CM共有削除
-         * @param {string} xToken ID of token to return
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} cmId ID of cm to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteShare: async (xToken: string, xUnisCustomerCd: string, cmId: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'xToken' is not null or undefined
-            if (xToken === null || xToken === undefined) {
-                throw new RequiredError('xToken','Required parameter xToken was null or undefined when calling deleteShare.');
-            }
+        deleteShare: async (xUnisCustomerCd: string, cmId: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'xUnisCustomerCd' is not null or undefined
             if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
                 throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling deleteShare.');
@@ -122,18 +100,6 @@ export const ShareApiAxiosParamCreator = function (configuration?: Configuration
             const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication ApiKeyAuth required
-            if (configuration && configuration.apiKey) {
-                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
-                    ? await configuration.apiKey("x-api-key")
-                    : await configuration.apiKey;
-                localVarHeaderParameter["x-api-key"] = localVarApiKeyValue;
-            }
-
-            if (xToken !== undefined && xToken !== null) {
-                localVarHeaderParameter['x-token'] = String(xToken);
-            }
 
             if (xUnisCustomerCd !== undefined && xUnisCustomerCd !== null) {
                 localVarHeaderParameter['x-unis-customer-cd'] = String(xUnisCustomerCd);
@@ -158,16 +124,11 @@ export const ShareApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * 
          * @summary CM共有リスト取得
-         * @param {string} xToken ID of token to return
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listShare: async (xToken: string, xUnisCustomerCd: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'xToken' is not null or undefined
-            if (xToken === null || xToken === undefined) {
-                throw new RequiredError('xToken','Required parameter xToken was null or undefined when calling listShare.');
-            }
+        listShare: async (xUnisCustomerCd: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'xUnisCustomerCd' is not null or undefined
             if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
                 throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling listShare.');
@@ -182,18 +143,6 @@ export const ShareApiAxiosParamCreator = function (configuration?: Configuration
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-
-            // authentication ApiKeyAuth required
-            if (configuration && configuration.apiKey) {
-                const localVarApiKeyValue = typeof configuration.apiKey === 'function'
-                    ? await configuration.apiKey("x-api-key")
-                    : await configuration.apiKey;
-                localVarHeaderParameter["x-api-key"] = localVarApiKeyValue;
-            }
-
-            if (xToken !== undefined && xToken !== null) {
-                localVarHeaderParameter['x-token'] = String(xToken);
-            }
 
             if (xUnisCustomerCd !== undefined && xUnisCustomerCd !== null) {
                 localVarHeaderParameter['x-unis-customer-cd'] = String(xUnisCustomerCd);
@@ -227,14 +176,13 @@ export const ShareApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary CM共有追加
-         * @param {string} xToken ID of token to return
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} cmId ID of cm to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createShare(xToken: string, xUnisCustomerCd: string, cmId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await ShareApiAxiosParamCreator(configuration).createShare(xToken, xUnisCustomerCd, cmId, options);
+        async createShare(xUnisCustomerCd: string, cmId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await ShareApiAxiosParamCreator(configuration).createShare(xUnisCustomerCd, cmId, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -243,14 +191,13 @@ export const ShareApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary CM共有削除
-         * @param {string} xToken ID of token to return
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} cmId ID of cm to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteShare(xToken: string, xUnisCustomerCd: string, cmId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CmItem>> {
-            const localVarAxiosArgs = await ShareApiAxiosParamCreator(configuration).deleteShare(xToken, xUnisCustomerCd, cmId, options);
+        async deleteShare(xUnisCustomerCd: string, cmId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CmItem>> {
+            const localVarAxiosArgs = await ShareApiAxiosParamCreator(configuration).deleteShare(xUnisCustomerCd, cmId, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -259,13 +206,12 @@ export const ShareApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary CM共有リスト取得
-         * @param {string} xToken ID of token to return
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listShare(xToken: string, xUnisCustomerCd: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CmItem>>> {
-            const localVarAxiosArgs = await ShareApiAxiosParamCreator(configuration).listShare(xToken, xUnisCustomerCd, options);
+        async listShare(xUnisCustomerCd: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CmItem>>> {
+            const localVarAxiosArgs = await ShareApiAxiosParamCreator(configuration).listShare(xUnisCustomerCd, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -283,37 +229,34 @@ export const ShareApiFactory = function (configuration?: Configuration, basePath
         /**
          * 
          * @summary CM共有追加
-         * @param {string} xToken ID of token to return
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} cmId ID of cm to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createShare(xToken: string, xUnisCustomerCd: string, cmId: string, options?: any): AxiosPromise<void> {
-            return ShareApiFp(configuration).createShare(xToken, xUnisCustomerCd, cmId, options).then((request) => request(axios, basePath));
+        createShare(xUnisCustomerCd: string, cmId: string, options?: any): AxiosPromise<void> {
+            return ShareApiFp(configuration).createShare(xUnisCustomerCd, cmId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary CM共有削除
-         * @param {string} xToken ID of token to return
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} cmId ID of cm to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteShare(xToken: string, xUnisCustomerCd: string, cmId: string, options?: any): AxiosPromise<CmItem> {
-            return ShareApiFp(configuration).deleteShare(xToken, xUnisCustomerCd, cmId, options).then((request) => request(axios, basePath));
+        deleteShare(xUnisCustomerCd: string, cmId: string, options?: any): AxiosPromise<CmItem> {
+            return ShareApiFp(configuration).deleteShare(xUnisCustomerCd, cmId, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary CM共有リスト取得
-         * @param {string} xToken ID of token to return
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listShare(xToken: string, xUnisCustomerCd: string, options?: any): AxiosPromise<Array<CmItem>> {
-            return ShareApiFp(configuration).listShare(xToken, xUnisCustomerCd, options).then((request) => request(axios, basePath));
+        listShare(xUnisCustomerCd: string, options?: any): AxiosPromise<Array<CmItem>> {
+            return ShareApiFp(configuration).listShare(xUnisCustomerCd, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -328,39 +271,36 @@ export class ShareApi extends BaseAPI {
     /**
      * 
      * @summary CM共有追加
-     * @param {string} xToken ID of token to return
      * @param {string} xUnisCustomerCd ID of unis customer cd to return
      * @param {string} cmId ID of cm to return
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ShareApi
      */
-    public createShare(xToken: string, xUnisCustomerCd: string, cmId: string, options?: any) {
-        return ShareApiFp(this.configuration).createShare(xToken, xUnisCustomerCd, cmId, options).then((request) => request(this.axios, this.basePath));
+    public createShare(xUnisCustomerCd: string, cmId: string, options?: any) {
+        return ShareApiFp(this.configuration).createShare(xUnisCustomerCd, cmId, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * 
      * @summary CM共有削除
-     * @param {string} xToken ID of token to return
      * @param {string} xUnisCustomerCd ID of unis customer cd to return
      * @param {string} cmId ID of cm to return
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ShareApi
      */
-    public deleteShare(xToken: string, xUnisCustomerCd: string, cmId: string, options?: any) {
-        return ShareApiFp(this.configuration).deleteShare(xToken, xUnisCustomerCd, cmId, options).then((request) => request(this.axios, this.basePath));
+    public deleteShare(xUnisCustomerCd: string, cmId: string, options?: any) {
+        return ShareApiFp(this.configuration).deleteShare(xUnisCustomerCd, cmId, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * 
      * @summary CM共有リスト取得
-     * @param {string} xToken ID of token to return
      * @param {string} xUnisCustomerCd ID of unis customer cd to return
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ShareApi
      */
-    public listShare(xToken: string, xUnisCustomerCd: string, options?: any) {
-        return ShareApiFp(this.configuration).listShare(xToken, xUnisCustomerCd, options).then((request) => request(this.axios, this.basePath));
+    public listShare(xUnisCustomerCd: string, options?: any) {
+        return ShareApiFp(this.configuration).listShare(xUnisCustomerCd, options).then((request) => request(this.axios, this.basePath));
     }
 }
