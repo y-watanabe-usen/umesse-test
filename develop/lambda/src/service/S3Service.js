@@ -12,7 +12,7 @@ const { signedUrl } = require("../../umesse/s3");
 exports.getSignedUrl = function (id) {
   return new Promise(async function (resolve, reject) {
     var response = {};
-    const json = await signedUrl(xUnisCustomerCd);
+    const json = await signedUrl(id);
     response["application/json"] = json;
     if (Object.keys(response).length > 0) {
       resolve(response[Object.keys(response)[0]]);

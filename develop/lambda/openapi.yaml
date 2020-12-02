@@ -379,7 +379,6 @@ paths:
           required: true
           schema:
             type: string
-            format: string
       responses:
         '200':
           description: The response
@@ -417,7 +416,6 @@ paths:
           required: true
           schema:
             type: string
-            format: string
       requestBody:
         content: 
           application/json:
@@ -1012,7 +1010,6 @@ paths:
           required: true
           schema:
             type: string
-            format: string
       responses:
         '200':
           description: The response
@@ -1055,7 +1052,6 @@ components:
       required: true
       schema:
         type: string
-        format: string
     RecordingId:
       name: recordingId
       in: path
@@ -1063,7 +1059,6 @@ components:
       required: true
       schema:
         type: string
-        format: string
     TtsId:
       name: ttsId
       in: path
@@ -1071,7 +1066,6 @@ components:
       required: true
       schema:
         type: string
-        format: string
 
   schemas:
     Auth:
