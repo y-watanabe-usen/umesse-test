@@ -10,14 +10,16 @@
         >
           録音する
         </div>
-        <button
-          type="button"
-          class="btn btn-link navbar-brand text-white"
-          data-toggle="modal"
-          data-target="#saveModal"
-        >
+        <span v-if="hasRecordedData === true">
+          <button
+            type="button"
+            class="btn btn-link navbar-brand text-white"
+            data-toggle="modal"
+            data-target="#saveModal"
+          >
           確定
-        </button>
+          </button>
+        </span>
       </nav>
       <div class="row">
         <div class="m-5">
@@ -156,6 +158,8 @@
               class="close"
               data-dismiss="modal"
               aria-label="Close"
+              v-bind:disabled="saveResult.saving"
+              @click="resetSaveState"
             >
               <span aria-hidden="true">&times;</span>
             </button>
@@ -169,32 +173,68 @@
                   class="form-control"
                   id="title"
                   v-model="file.title"
+                  v-bind:disabled="saveResult.ready === false"
                 />
               </div>
               <div class="form-group">
                 <label for="description" class="col-form-label">説明</label>
-                <textarea class="form-control" id="description"></textarea>
+                <textarea 
+                  class="form-control"
+                  id="description"
+                  v-bind:disabled="saveResult.ready === false"
+                ></textarea>
               </div>
             </form>
+            <!-- 保存中 -->
+            <span v-if="saveResult.saving">
+              <div class="col-form-label">
+                クルクルインジケーターとか
+              </div>
+            </span>
+            <!-- 保存完了 -->
+            <span v-if="saveResult.success">
+              <div class="col-form-label">
+                保存が完了しました。
+              </div>
+            </span>
+            <!-- 保存失敗 -->
+            <span v-if="saveResult.failed">
+              <div class="failed">保存に失敗しました。再度お試しください。</div>
+            </span>
           </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-            >
-              キャンセル
-            </button>
-            <router-link :to="{ path: '/createcommercial'}" >
+          <span v-if="saveResult.ready">
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-dismiss="modal"
+                @click="resetSaveState"
+              >
+                キャンセル
+              </button>
+              <button
+                type="button"
+                class="btn btn-primary"
+                v-bind:disabled="file.title === undefined || file.title === ''"
+                @click="postData"
+              >
+                保存する
+              </button>
+            </div>
+          </span>
+          <!-- 保存完了 -->
+          <span v-if="saveResult.success">
+            <div class="modal-footer">
               <button
                 type="button"
                 class="btn btn-primary"
                 data-dismiss="modal"
+                @click="resetSaveState"
               >
-                保存する
+                OK
               </button>
-            </router-link>
-          </div>
+            </div>
+          </span>
         </div>
       </div>
     </div>
@@ -212,12 +252,26 @@ interface RecordingFile {
   title: string | undefined;
   description: string | undefined;
 }
+
+interface saveRecordingFileState {
+  saving: boolean;
+  success: boolean;
+  failed: boolean;
+  ready: boolean
+}
+
 export default defineComponent({
   setup() {
     const audioRecorder = AudioRecorder();
     const audioPlayer = AudioPlayer();
     const state = reactive({
       file: <RecordingFile>{},
+      saveResult: <saveRecordingFileState> {
+        saving: false,
+        success: false,
+        failed: false,
+        ready: true
+      },
       isRecording: computed(() => (audioRecorder.isRecording() ? true : false)),
       hasRecordedData: computed(() => {
         if (audioRecorder.getBlob() !== undefined) return true;
@@ -268,20 +322,46 @@ export default defineComponent({
     const deleteRecordedData = () => audioRecorder.reset();
 
     const postData = async () => {
+      state.saveResult = {
+        saving: true,
+        success: false,
+        failed: false,
+        ready: false
+      };
+
       var api = new UMesseApi.RecordingApi();
 
       const audioFile = await audioRecorder.getAudioFile();
       if (audioFile != null) {
-        api.createUserRecording(state.file.title, audioFile);
+        api.createUserRecording(state.file.title, audioFile).then((value) => {
+          state.saveResult = {
+            saving: false,
+            success: true,
+            failed: false,
+            ready: false
+          };
+
+        }).catch((error) => {
+          state.saveResult = {
+            saving: false,
+            success: false,
+            failed: true,
+            ready: true
+          };
+        });
       }
     };
 
+    const resetSaveState = () => {
+      state.saveResult.failed = false;
+    };
     return {
       ...toRefs(state),
       toggleVoiceRecorder,
       play,
       deleteRecordedData,
       postData,
+      resetSaveState
     };
   },
 });
@@ -299,6 +379,11 @@ svg {
   vertical-align: text-top;
   margin-right: 10px;
 }
+.btn-primary:disabled {
+  background-color: #264b7380;
+  border-color: #264b7380;
+  color: #fff;
+}
 .btn-play,
 .btn-delete {
   width: 170px;
@@ -314,6 +399,11 @@ h5 {
   margin-bottom: 0;
   margin-right: 26px;
   color: #ffffff;
+  font-weight: 400;
+  font-size: 17px;
+}
+.failed {
+  color: #ed6267;
   font-weight: 400;
   font-size: 17px;
 }
