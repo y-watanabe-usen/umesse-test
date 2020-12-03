@@ -122,7 +122,7 @@
         </div>
         <div class="col content right">
           <router-link
-            :to="{ path: 'new-order' }"
+            :to="{ path: 'orderinstoreannouncement1' }"
             class="btn btn-light border w-100 text-left my-4 font-weight-bold"
           >
             店内アナウンスを発注する
