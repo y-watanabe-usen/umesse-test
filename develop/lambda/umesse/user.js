@@ -4,7 +4,8 @@ const { constants } = require("./constants");
 const dynamodb = require("./utils/dynamodbController").controller;
 
 exports.fetch = async (unisCustomerCd) => {
-  constants.debuglog("unis customer cd: " + unisCustomerCd);
+  constants.debuglog(`user fetch unis_customer_cd: ${unisCustomerCd}`);
+
   try {
     const key = { unis_customer_cd: unisCustomerCd };
     const options = {
@@ -22,6 +23,10 @@ exports.fetch = async (unisCustomerCd) => {
         "create_date," +
         "renewal_date",
     };
+    constants.debuglog(
+      `key: ${JSON.stringify(key)}, options: ${JSON.stringify(options)}`
+    );
+
     const res = await dynamodb.get(constants.usersTable, key, options);
     if (!res || !res.Item) throw "not found";
     return res.Item;
