@@ -7,6 +7,8 @@ import CreatedCm from '@/views/CreatedCm.vue'
 import OrderVoiceBgm from '@/views/OrderVoiceBgm.vue'
 import CreateCommercial from '@/views/CreateCommercial.vue'
 import NewOrder from '@/views/NewOrder.vue'
+import OrderInStoreAnnouncement1 from '@/views/OrderInStoreAnnouncement1.vue'
+import OrderInStoreAnnouncement2 from '@/views/OrderInStoreAnnouncement2.vue'
 import SelectTemplate from '@/views/SelectTemplate.vue'
 import CreateNarrationTextInput from '@/views/CreateNarrationTextInput.vue'
 import ApiConnectTest2 from '@/views/ApiConnectTest2.vue'
@@ -51,6 +53,16 @@ const routes: Array<RouteRecordRaw> = [
     path: '/new-order',
     name: 'NewOrder',
     component: NewOrder
+  },
+  {
+    path: '/orderinstoreannouncement1',
+    name: 'OrderInStoreAnnouncement1',
+    component: OrderInStoreAnnouncement1
+  },
+  {
+    path: '/orderinstoreannouncement2',
+    name: 'OrderInStoreAnnouncement2',
+    component: OrderInStoreAnnouncement2
   },
   {
     path: '/selecttemplate',
