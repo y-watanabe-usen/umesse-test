@@ -8,9 +8,10 @@ exports.signedUrl = async (id) => {
   try {
     let response = await s3.getSignedUrl(
       constants.contentsBucket,
-      "bgm/サンプル02.mp3"
+      "bgm/サンプル02.mp3" // TODO: 一旦仮
     );
-    return response;
+    if (!response) throw "getSignedUrl failed";
+    return { url: response };
   } catch (e) {
     console.log(e);
   }

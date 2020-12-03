@@ -6,12 +6,10 @@ const dynamodb = require("./utils/dynamodbController").controller;
 exports.fetch = async (id) => {
   constants.debuglog("user: " + id);
   try {
-    let response = await dynamodb.get(
-      constants.usersTable,
-      {
-        unis_customer_cd: id,
-      },
-      "unis_customer_cd," +
+    const key = { unis_customer_cd: id };
+    const options = {
+      ProjectionExpression:
+        "unis_customer_cd," +
         "contract_cd," +
         "service_cd," +
         "service_name," +
@@ -22,9 +20,11 @@ exports.fetch = async (id) => {
         "contract_status_cd," +
         "contract_status_name," +
         "create_date," +
-        "renewal_date"
-    );
-    return response.Item;
+        "renewal_date",
+    };
+    let response = await dynamodb.get(constants.usersTable, key, options);
+    if (!response || !response.Count) throw "not found";
+    return response.Items;
   } catch (e) {
     console.log(e);
   }
