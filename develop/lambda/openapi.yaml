@@ -29,6 +29,8 @@ paths:
         - auth
       summary: 端末認証
       operationId: auth
+      # security:
+      #   - ApiKeyAuth: []
       requestBody:
         content: 
           application/json:
@@ -44,6 +46,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Auth'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/Unexpected'
 
   /user:
     get:
@@ -51,6 +61,11 @@ paths:
         - user
       summary: User情報取得
       operationId: getUser
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        # - $ref: '#/components/parameters/Token'
+        - $ref: '#/components/parameters/UnisCustomerCd'
       responses:
         '200':
           description: User情報
@@ -58,6 +73,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/Unexpected'
 
   /user/cm:
     get:
@@ -66,6 +89,11 @@ paths:
       summary: CMリスト取得
       description: ''
       operationId: listUserCm
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        # - $ref: '#/components/parameters/Token'
+        - $ref: '#/components/parameters/UnisCustomerCd'
       responses:
         '200':
           description: The response
@@ -76,17 +104,24 @@ paths:
                 items:
                   $ref: '#/components/schemas/CmItem'
         '400':
-          description: Response invalid
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/Unexpected'
     post:
       tags:
         - cm
       summary: CM新規結合
       description: ''
       operationId: createUserCm
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        # - $ref: '#/components/parameters/Token'
+        - $ref: '#/components/parameters/UnisCustomerCd'
       requestBody:
         content: 
           application/json:
@@ -102,8 +137,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CmItem'
-        default:
-          description: Default error sample response
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/Unexpected'
 
   '/user/cm/{cmId}':
     get:
@@ -112,7 +153,11 @@ paths:
       summary: CM情報取得
       description: ''
       operationId: getUserCm
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
+        # - $ref: '#/components/parameters/Token'
+        - $ref: '#/components/parameters/UnisCustomerCd'
         - $ref: '#/components/parameters/CmId'
       responses:
         '200':
@@ -122,18 +167,24 @@ paths:
               schema:
                 $ref: '#/components/schemas/CmItem'
         '400':
-          description: Response invalid
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/Unexpected'
     post:
       tags:
         - cm
       summary: CM情報更新
       description: ''
       operationId: updateUserCm
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
+        # - $ref: '#/components/parameters/Token'
+        - $ref: '#/components/parameters/UnisCustomerCd'
         - $ref: '#/components/parameters/CmId'
       requestBody:
         content: 
@@ -172,22 +223,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CmItem'
-        default:
-          description: Default response
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/Unexpected'
     delete:
       tags:
         - cm
       summary: CM情報削除
       description: ''
       operationId: deleteUserCm
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
-        - name: cmId
-          in: path
-          description: ID of cm to return
-          required: true
-          schema:
-            type: integer
-            format: int64
+        # - $ref: '#/components/parameters/Token'
+        - $ref: '#/components/parameters/UnisCustomerCd'
+        - $ref: '#/components/parameters/CmId'
       responses:
         '200':
           description: successful response
@@ -195,8 +250,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CmItem'
-        default:
-          description: Default response
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/Unexpected'
 
   '/center/{cmId}':
     post:
@@ -205,7 +266,11 @@ paths:
       summary: CMセンター連携追加
       description: ''
       operationId: createCenterCm
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
+        # - $ref: '#/components/parameters/Token'
+        - $ref: '#/components/parameters/UnisCustomerCd'
         - $ref: '#/components/parameters/CmId'
       requestBody:
         content: 
@@ -227,19 +292,43 @@ paths:
                   format: date-time
                   example: '掲載終了日時（固定）'
       responses:
-        default:
-          description: Default response
+        '200':
+          description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CmItem'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/Unexpected'
     delete:
       tags:
         - center
       summary: CMセンター連携削除
       description: ''
       operationId: deleteCenterCm
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
+        # - $ref: '#/components/parameters/Token'
+        - $ref: '#/components/parameters/UnisCustomerCd'
         - $ref: '#/components/parameters/CmId'
       responses:
-        default:
-          description: Default error sample response
+        '200':
+          description: successful response
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/Unexpected'
 
   /center/upload:
     get:
@@ -247,7 +336,9 @@ paths:
         - center
       summary: センターCM連携（センター専用）
       description: ''
-      operationId: getCenterUpload
+      operationId: listCenterUpload
+      # security:
+      #   - ApiKeyAuth: []
       responses:
         '200':
           description: The response
@@ -264,21 +355,67 @@ paths:
                       items:
                         $ref: '#/components/schemas/CenterItem'
         '400':
-          description: Response invalid
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/Unexpected'
+
+  '/center/upload/{unisCustomerCd}':
+    get:
+      tags:
+        - center
+      summary: センターCM連携取得（センター専用）
+      description: ''
+      operationId: getCenterUpload
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        - name: unisCustomerCd
+          in: path
+          description: ID of unis customer cd to return
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-
-  '/center/upload/{unisCustomerCd}':
+                properties:
+                  unisCustomerCd:
+                    type: string
+                    example: "123456789"
+                  cmMetas:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CenterItem'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/Unexpected'
     post:
       tags:
         - center
       summary: センターCM連携完了（センター専用）
       description: ''
       operationId: updateCenterUpload
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
-        - $ref: '#/components/parameters/UnisCustomerCd'
+        - name: unisCustomerCd
+          in: path
+          description: ID of unis customer cd to return
+          required: true
+          schema:
+            type: string
       requestBody:
         content: 
           application/json:
@@ -317,11 +454,13 @@ paths:
                     type: string
                     example: "CM名に規定外の文字が使用されています"
         '400':
-          description: Response invalid
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/Unexpected'
 
   /share:
     get:
@@ -330,6 +469,11 @@ paths:
       summary: CM共有リスト取得
       description: ''
       operationId: listShare
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        # - $ref: '#/components/parameters/Token'
+        - $ref: '#/components/parameters/UnisCustomerCd'
       responses:
         '200':
           description: The response
@@ -340,11 +484,13 @@ paths:
                 items:
                   $ref: '#/components/schemas/CmItem'
         '400':
-          description: Response invalid
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/Unexpected'
 
   '/share/{cmId}':
     post:
@@ -353,7 +499,11 @@ paths:
       summary: CM共有追加
       description: ''
       operationId: createShare
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
+        # - $ref: '#/components/parameters/Token'
+        - $ref: '#/components/parameters/UnisCustomerCd'
         - $ref: '#/components/parameters/CmId'
       responses:
         default:
@@ -364,17 +514,27 @@ paths:
       summary: CM共有削除
       description: ''
       operationId: deleteShare
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
-        - name: cmId
-          in: path
-          description: ID of cm to return
-          required: true
-          schema:
-            type: integer
-            format: int64
+        # - $ref: '#/components/parameters/Token'
+        - $ref: '#/components/parameters/UnisCustomerCd'
+        - $ref: '#/components/parameters/CmId'
       responses:
-        default:
-          description: Default error sample response
+        '200':
+          description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CmItem'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/Unexpected'
 
   /user/recording:
     get:
@@ -383,6 +543,11 @@ paths:
       summary: 録音データリスト取得
       description: ''
       operationId: listUserRecording
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        # - $ref: '#/components/parameters/Token'
+        - $ref: '#/components/parameters/UnisCustomerCd'
       responses:
         '200':
           description: The response
@@ -391,15 +556,25 @@ paths:
               schema:
                 items:
                   $ref: '#/components/schemas/RecordingItem'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/Unexpected'
     post:
       tags:
         - recording
       summary: 新規録音データ
       description: ''
       operationId: createUserRecording
-      responses:
-        '200':
-          description: successful
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        # - $ref: '#/components/parameters/Token'
+        - $ref: '#/components/parameters/UnisCustomerCd'
       requestBody:
         content: 
           multipart/form-data:
@@ -411,6 +586,22 @@ paths:
                 recordedFile:
                   type: string
                   format: binary
+      responses:
+        '200':
+          description: The response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/RecordingItem'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/Unexpected'
 
   '/user/recording/{recordingId}':
     get:
@@ -419,7 +610,11 @@ paths:
       summary: 録音データ取得
       description: ''
       operationId: getUserRecording
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
+        # - $ref: '#/components/parameters/Token'
+        - $ref: '#/components/parameters/UnisCustomerCd'
         - $ref: '#/components/parameters/RecordingId'
       responses:
         '200':
@@ -428,15 +623,25 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RecordingItem'
-        default:
-          description: Default response
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/Unexpected'
     post:
       tags:
         - recording
       summary: 録音データ更新（メタデータのみ）
       description: ''
       operationId: updateUserRecording
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
+        # - $ref: '#/components/parameters/Token'
+        - $ref: '#/components/parameters/UnisCustomerCd'
         - $ref: '#/components/parameters/RecordingId'
       requestBody:
         content: 
@@ -457,17 +662,37 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RecordingItem'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/Unexpected'
     delete:
       tags:
         - recording
       summary: 録音データ削除
       description: ''
       operationId: deleteUserRecording
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
+        # - $ref: '#/components/parameters/Token'
+        - $ref: '#/components/parameters/UnisCustomerCd'
         - $ref: '#/components/parameters/RecordingId'
       responses:
-        default:
-          description: Default response
+        '200':
+          description: The response
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/Unexpected'
 
   /user/tts:
     get:
@@ -476,6 +701,11 @@ paths:
       summary: TTSデータリスト取得
       description: ''
       operationId: listUserTts
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        # - $ref: '#/components/parameters/Token'
+        - $ref: '#/components/parameters/UnisCustomerCd'
       responses:
         '200':
           description: The response
@@ -484,15 +714,25 @@ paths:
               schema:
                 items:
                   $ref: '#/components/schemas/TtsItem'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/Unexpected'
     post:
       tags:
         - tts
       summary: 新規録音データ
       description: ''
       operationId: createUserTts
-      responses:
-        '200':
-          description: successful
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        # - $ref: '#/components/parameters/Token'
+        - $ref: '#/components/parameters/UnisCustomerCd'
       requestBody:
         content: 
           multipart/form-data:
@@ -504,6 +744,22 @@ paths:
                 recordedFile:
                   type: string
                   format: binary
+      responses:
+        '200':
+          description: The response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/TtsItem'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/Unexpected'
 
   '/user/tts/{ttsId}':
     get:
@@ -512,7 +768,11 @@ paths:
       summary: TTSデータ取得
       description: ''
       operationId: getUserTts
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
+        # - $ref: '#/components/parameters/Token'
+        - $ref: '#/components/parameters/UnisCustomerCd'
         - $ref: '#/components/parameters/TtsId'
       responses:
         '200':
@@ -521,15 +781,25 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TtsItem'
-        default:
-          description: Default response
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/Unexpected'
     post:
       tags:
         - tts
       summary: TTSデータ更新（メタデータのみ）
       description: ''
       operationId: updateUserTts
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
+        # - $ref: '#/components/parameters/Token'
+        - $ref: '#/components/parameters/UnisCustomerCd'
         - $ref: '#/components/parameters/TtsId'
       requestBody:
         content: 
@@ -550,17 +820,37 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TtsItem'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/Unexpected'
     delete:
       tags:
         - tts
       summary: TTSデータ削除
       description: ''
       operationId: deleteUserTts
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
+        # - $ref: '#/components/parameters/Token'
+        - $ref: '#/components/parameters/UnisCustomerCd'
         - $ref: '#/components/parameters/TtsId'
       responses:
-        default:
-          description: Default response
+        '200':
+          description: The response
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/Unexpected'
 
   /bgm:
     get:
@@ -569,7 +859,10 @@ paths:
       summary: BGM
       description: ''
       operationId: listBgm
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
+        # - $ref: '#/components/parameters/Token'
         - name: industryId
           in: query
           description: ID of bgm to return
@@ -585,11 +878,13 @@ paths:
                 items:
                   $ref: '#/components/schemas/BgmItem'
         '400':
-          description: Response invalid
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/Unexpected'
 
   /narration:
     get:
@@ -598,7 +893,10 @@ paths:
       summary: ナレーション
       description: ''
       operationId: listNarration
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
+        # - $ref: '#/components/parameters/Token'
         - name: industryId
           in: query
           description: ID of bgm to return
@@ -619,11 +917,13 @@ paths:
                 items:
                   $ref: '#/components/schemas/NarrationItem'
         '400':
-          description: Response invalid
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/Unexpected'
 
   /chime:
     get:
@@ -632,6 +932,10 @@ paths:
       summary: Open/Endチャイム
       description: ''
       operationId: listChime
+      # security:
+      #   - ApiKeyAuth: []
+      # parameters:
+        # - $ref: '#/components/parameters/Token'
       responses:
         '200':
           description: The response
@@ -642,11 +946,13 @@ paths:
                 items:
                   $ref: '#/components/schemas/ChimeItem'
         '400':
-          description: Response invalid
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/Unexpected'
 
   /tts:
     get:
@@ -655,7 +961,10 @@ paths:
       summary: TTSテンプレート一覧
       description: ''
       operationId: listTts
+      # security:
+      #   - ApiKeyAuth: []
       parameters:
+        # - $ref: '#/components/parameters/Token'
         - name: industryId
           in: query
           description: ID of bgm to return
@@ -676,11 +985,13 @@ paths:
                 items:
                   $ref: '#/components/schemas/WordItem'
         '400':
-          description: Response invalid
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/Unexpected'
 
   /signedUrl:
     get:
@@ -689,6 +1000,16 @@ paths:
       summary: S3オブジェクトの署名付きURLの取得
       description: '試聴再生、録音音声アップロード'
       operationId: getSignedUrl
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        # - $ref: '#/components/parameters/Token'
+        - name: id
+          in: query
+          description: ID of signed url to return
+          required: true
+          schema:
+            type: string
       responses:
         '200':
           description: The response
@@ -698,16 +1019,32 @@ paths:
                 properties:
                   url:
                     type: string
-                    example: "https://filesamples.com/samples/audio/aac/sample1.aac"
+                    example: "https://xxxxx/0999999900-c-sfja8eo1.aac?AWSAccessKeyId=xxxxxxxx"
         '400':
-          description: Response invalid
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/Unexpected'
 
 components:
   parameters:
+    Token:
+      name: x-token
+      in: header
+      description: ID of token to return
+      required: true
+      schema:
+        type: string
+    UnisCustomerCd:
+      name: x-unis-customer-cd
+      in: header
+      description: ID of unis customer cd to return
+      required: true
+      schema:
+        type: string
     CmId:
       name: cmId
       in: path
@@ -715,7 +1052,6 @@ components:
       required: true
       schema:
         type: string
-        format: string
     RecordingId:
       name: recordingId
       in: path
@@ -723,7 +1059,6 @@ components:
       required: true
       schema:
         type: string
-        format: string
     TtsId:
       name: ttsId
       in: path
@@ -731,15 +1066,7 @@ components:
       required: true
       schema:
         type: string
-        format: string
-    UnisCustomerCd:
-      name: unisCustomerCd
-      in: path
-      description: ID of unis customer cd to return
-      required: true
-      schema:
-        type: string
-        format: string
+
   schemas:
     Auth:
       properties:
@@ -1059,7 +1386,7 @@ components:
       properties:
         status:
           type: string
-          example: "status?"
+          example: "status"
         code:
           type: string
           example: "erorr code"
@@ -1069,3 +1396,31 @@ components:
         detail:
           type: string
           example: "error detail"
+
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+
+  responses:
+    BadRequest:
+      description: Bad request. Response invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'    
+    Unauthorized:
+      description: API key is missing or invalid
+      headers:
+        WWW_Authenticate:
+          schema:
+            type: string
+    NotFound:
+      description: A user with the specified ID was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'    
+    Unexpected:
+      description: Unexpected error.

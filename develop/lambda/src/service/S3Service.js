@@ -1,35 +1,23 @@
-'use strict';
-const { getSignedUrl } = require("../../umesse/backup/handler");
+"use strict";
 
-const bucket = "umesse-contents";
-
+const { signedUrl } = require("../../umesse/s3");
 
 /**
  * S3オブジェクトの署名付きURLの取得
  * 試聴再生、録音音声アップロード
  *
+ * id String ID of signed url to return
  * returns inline_response_200_2
  **/
-exports.getSignedUrl = function() {
-  return new Promise(async function(resolve, reject) {
-    var examples = {};
-//     examples['application/json'] = {
-//   "url" : "https://filesamples.com/samples/audio/aac/sample1.aac"
-// };
-
-// とりあえず適当な音源のsignedUrlを取得
-    const params = {
-      "bucket": bucket,
-      "key": "bgm/サンプル02.mp3",
-    }
-    const json = await getSignedUrl(params);
-    examples['application/json'] = json;
-
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
+exports.getSignedUrl = function (id) {
+  return new Promise(async function (resolve, reject) {
+    var response = {};
+    const json = await signedUrl(id);
+    response["application/json"] = json;
+    if (Object.keys(response).length > 0) {
+      resolve(response[Object.keys(response)[0]]);
     } else {
       resolve();
     }
   });
-}
-
+};

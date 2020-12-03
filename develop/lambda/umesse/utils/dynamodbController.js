@@ -5,56 +5,55 @@ const aws = require("aws-sdk");
 const docClient = new aws.DynamoDB.DocumentClient(constants.dynamoDbConfig());
 
 exports.controller = {
-  scan: (table) =>
+  scan: (table, options) =>
     docClient
       .scan({
         TableName: table,
+        ...options,
       })
       .promise(),
 
-  get: (table, key, expression) =>
+      get: (table, key, options) =>
     docClient
       .get({
         TableName: table,
         Key: key,
-        ProjectionExpression: expression,
+        ...options,
       })
       .promise(),
 
-  put: (table, item) =>
+  put: (table, item, options) =>
     docClient
       .put({
         TableName: table,
         Item: item,
+        ...options,
       })
       .promise(),
 
-  update: (table, key, expression, attributeValue) =>
+  update: (table, key, options) =>
     docClient
       .update({
         TableName: table,
         Key: key,
-        UpdateExpression: expression,
-        ExpressionAttributeValues: attributeValue,
+        ...options,
       })
       .promise(),
 
-  delete: (table, key) =>
+  delete: (table, key, options) =>
     docClient
       .delete({
         TableName: table,
         Key: key,
+        ...options,
       })
       .promise(),
 
-  query: (table, keyCondition, expression, attributeName, attributeValue) =>
+  query: (table, options) =>
     docClient
       .query({
         TableName: table,
-        KeyConditionExpression: keyCondition,
-        FilterExpression: expression,
-        ExpressionAttributeNames: attributeName,
-        ExpressionAttributeValues: attributeValue,
+        ...options,
       })
       .promise(),
 };

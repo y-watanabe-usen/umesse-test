@@ -38,6 +38,28 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Auth'
+        "400":
+          description: Bad request. Response invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: API key is missing or invalid
+          headers:
+            WWW_Authenticate:
+              style: simple
+              explode: false
+              schema:
+                type: string
+        "404":
+          description: A user with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error.
       x-swagger-router-controller: Auth
   /user:
     get:
@@ -45,6 +67,15 @@ paths:
       - user
       summary: User情報取得
       operationId: getUser
+      parameters:
+      - name: x-unis-customer-cd
+        in: header
+        description: ID of unis customer cd to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       responses:
         "200":
           description: User情報
@@ -52,6 +83,28 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+        "400":
+          description: Bad request. Response invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: API key is missing or invalid
+          headers:
+            WWW_Authenticate:
+              style: simple
+              explode: false
+              schema:
+                type: string
+        "404":
+          description: A user with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error.
       x-swagger-router-controller: User
   /user/cm:
     get:
@@ -59,6 +112,15 @@ paths:
       - cm
       summary: CMリスト取得
       operationId: listUserCm
+      parameters:
+      - name: x-unis-customer-cd
+        in: header
+        description: ID of unis customer cd to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       responses:
         "200":
           description: The response
@@ -70,17 +132,42 @@ paths:
                   $ref: '#/components/schemas/CmItem'
                 x-content-type: application/json
         "400":
-          description: Response invalid
+          description: Bad request. Response invalid.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+        "401":
+          description: API key is missing or invalid
+          headers:
+            WWW_Authenticate:
+              style: simple
+              explode: false
+              schema:
+                type: string
+        "404":
+          description: A user with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error.
       x-swagger-router-controller: Cm
     post:
       tags:
       - cm
       summary: CM新規結合
       operationId: createUserCm
+      parameters:
+      - name: x-unis-customer-cd
+        in: header
+        description: ID of unis customer cd to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       requestBody:
         content:
           application/json:
@@ -93,8 +180,28 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CmItem'
-        default:
-          description: Default error sample response
+        "400":
+          description: Bad request. Response invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: API key is missing or invalid
+          headers:
+            WWW_Authenticate:
+              style: simple
+              explode: false
+              schema:
+                type: string
+        "404":
+          description: A user with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error.
       x-swagger-router-controller: Cm
   /user/cm/{cmId}:
     get:
@@ -103,6 +210,14 @@ paths:
       summary: CM情報取得
       operationId: getUserCm
       parameters:
+      - name: x-unis-customer-cd
+        in: header
+        description: ID of unis customer cd to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       - name: cmId
         in: path
         description: ID of cm to return
@@ -111,7 +226,6 @@ paths:
         explode: false
         schema:
           type: string
-          format: string
       responses:
         "200":
           description: The response
@@ -120,11 +234,27 @@ paths:
               schema:
                 $ref: '#/components/schemas/CmItem'
         "400":
-          description: Response invalid
+          description: Bad request. Response invalid.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+        "401":
+          description: API key is missing or invalid
+          headers:
+            WWW_Authenticate:
+              style: simple
+              explode: false
+              schema:
+                type: string
+        "404":
+          description: A user with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error.
       x-swagger-router-controller: Cm
     post:
       tags:
@@ -132,6 +262,14 @@ paths:
       summary: CM情報更新
       operationId: updateUserCm
       parameters:
+      - name: x-unis-customer-cd
+        in: header
+        description: ID of unis customer cd to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       - name: cmId
         in: path
         description: ID of cm to return
@@ -140,7 +278,6 @@ paths:
         explode: false
         schema:
           type: string
-          format: string
       requestBody:
         content:
           application/json:
@@ -153,8 +290,28 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CmItem'
-        default:
-          description: Default response
+        "400":
+          description: Bad request. Response invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: API key is missing or invalid
+          headers:
+            WWW_Authenticate:
+              style: simple
+              explode: false
+              schema:
+                type: string
+        "404":
+          description: A user with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error.
       x-swagger-router-controller: Cm
     delete:
       tags:
@@ -162,6 +319,14 @@ paths:
       summary: CM情報削除
       operationId: deleteUserCm
       parameters:
+      - name: x-unis-customer-cd
+        in: header
+        description: ID of unis customer cd to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       - name: cmId
         in: path
         description: ID of cm to return
@@ -169,8 +334,7 @@ paths:
         style: simple
         explode: false
         schema:
-          type: integer
-          format: int64
+          type: string
       responses:
         "200":
           description: successful response
@@ -178,8 +342,28 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CmItem'
-        default:
-          description: Default response
+        "400":
+          description: Bad request. Response invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: API key is missing or invalid
+          headers:
+            WWW_Authenticate:
+              style: simple
+              explode: false
+              schema:
+                type: string
+        "404":
+          description: A user with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error.
       x-swagger-router-controller: Cm
   /center/{cmId}:
     post:
@@ -188,6 +372,14 @@ paths:
       summary: CMセンター連携追加
       operationId: createCenterCm
       parameters:
+      - name: x-unis-customer-cd
+        in: header
+        description: ID of unis customer cd to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       - name: cmId
         in: path
         description: ID of cm to return
@@ -196,15 +388,40 @@ paths:
         explode: false
         schema:
           type: string
-          format: string
       requestBody:
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/body_3'
       responses:
-        default:
-          description: Default response
+        "200":
+          description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CmItem'
+        "400":
+          description: Bad request. Response invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: API key is missing or invalid
+          headers:
+            WWW_Authenticate:
+              style: simple
+              explode: false
+              schema:
+                type: string
+        "404":
+          description: A user with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error.
       x-swagger-router-controller: Center
     delete:
       tags:
@@ -212,6 +429,14 @@ paths:
       summary: CMセンター連携削除
       operationId: deleteCenterCm
       parameters:
+      - name: x-unis-customer-cd
+        in: header
+        description: ID of unis customer cd to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       - name: cmId
         in: path
         description: ID of cm to return
@@ -220,17 +445,38 @@ paths:
         explode: false
         schema:
           type: string
-          format: string
       responses:
-        default:
-          description: Default error sample response
+        "200":
+          description: successful response
+        "400":
+          description: Bad request. Response invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: API key is missing or invalid
+          headers:
+            WWW_Authenticate:
+              style: simple
+              explode: false
+              schema:
+                type: string
+        "404":
+          description: A user with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error.
       x-swagger-router-controller: Center
   /center/upload:
     get:
       tags:
       - center
       summary: センターCM連携（センター専用）
-      operationId: getCenterUpload
+      operationId: listCenterUpload
       responses:
         "200":
           description: The response
@@ -242,13 +488,73 @@ paths:
                   $ref: '#/components/schemas/inline_response_200'
                 x-content-type: application/json
         "400":
-          description: Response invalid
+          description: Bad request. Response invalid.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+        "401":
+          description: API key is missing or invalid
+          headers:
+            WWW_Authenticate:
+              style: simple
+              explode: false
+              schema:
+                type: string
+        "404":
+          description: A user with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error.
       x-swagger-router-controller: Center
   /center/upload/{unisCustomerCd}:
+    get:
+      tags:
+      - center
+      summary: センターCM連携取得（センター専用）
+      operationId: getCenterUpload
+      parameters:
+      - name: unisCustomerCd
+        in: path
+        description: ID of unis customer cd to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: The response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+        "400":
+          description: Bad request. Response invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: API key is missing or invalid
+          headers:
+            WWW_Authenticate:
+              style: simple
+              explode: false
+              schema:
+                type: string
+        "404":
+          description: A user with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error.
+      x-swagger-router-controller: Center
     post:
       tags:
       - center
@@ -263,7 +569,6 @@ paths:
         explode: false
         schema:
           type: string
-          format: string
       requestBody:
         content:
           application/json:
@@ -277,11 +582,27 @@ paths:
               schema:
                 $ref: '#/components/schemas/inline_response_200_1'
         "400":
-          description: Response invalid
+          description: Bad request. Response invalid.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+        "401":
+          description: API key is missing or invalid
+          headers:
+            WWW_Authenticate:
+              style: simple
+              explode: false
+              schema:
+                type: string
+        "404":
+          description: A user with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error.
       x-swagger-router-controller: Center
   /share:
     get:
@@ -289,6 +610,15 @@ paths:
       - share
       summary: CM共有リスト取得
       operationId: listShare
+      parameters:
+      - name: x-unis-customer-cd
+        in: header
+        description: ID of unis customer cd to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       responses:
         "200":
           description: The response
@@ -300,11 +630,27 @@ paths:
                   $ref: '#/components/schemas/CmItem'
                 x-content-type: application/json
         "400":
-          description: Response invalid
+          description: Bad request. Response invalid.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+        "401":
+          description: API key is missing or invalid
+          headers:
+            WWW_Authenticate:
+              style: simple
+              explode: false
+              schema:
+                type: string
+        "404":
+          description: A user with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error.
       x-swagger-router-controller: Share
   /share/{cmId}:
     post:
@@ -313,6 +659,14 @@ paths:
       summary: CM共有追加
       operationId: createShare
       parameters:
+      - name: x-unis-customer-cd
+        in: header
+        description: ID of unis customer cd to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       - name: cmId
         in: path
         description: ID of cm to return
@@ -321,7 +675,6 @@ paths:
         explode: false
         schema:
           type: string
-          format: string
       responses:
         default:
           description: Default response
@@ -332,6 +685,14 @@ paths:
       summary: CM共有削除
       operationId: deleteShare
       parameters:
+      - name: x-unis-customer-cd
+        in: header
+        description: ID of unis customer cd to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       - name: cmId
         in: path
         description: ID of cm to return
@@ -339,11 +700,36 @@ paths:
         style: simple
         explode: false
         schema:
-          type: integer
-          format: int64
+          type: string
       responses:
-        default:
-          description: Default error sample response
+        "200":
+          description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CmItem'
+        "400":
+          description: Bad request. Response invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: API key is missing or invalid
+          headers:
+            WWW_Authenticate:
+              style: simple
+              explode: false
+              schema:
+                type: string
+        "404":
+          description: A user with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error.
       x-swagger-router-controller: Share
   /user/recording:
     get:
@@ -351,6 +737,15 @@ paths:
       - recording
       summary: 録音データリスト取得
       operationId: listUserRecording
+      parameters:
+      - name: x-unis-customer-cd
+        in: header
+        description: ID of unis customer cd to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       responses:
         "200":
           description: The response
@@ -361,12 +756,43 @@ paths:
                 items:
                   $ref: '#/components/schemas/RecordingItem'
                 x-content-type: application/json
+        "400":
+          description: Bad request. Response invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: API key is missing or invalid
+          headers:
+            WWW_Authenticate:
+              style: simple
+              explode: false
+              schema:
+                type: string
+        "404":
+          description: A user with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error.
       x-swagger-router-controller: Recording
     post:
       tags:
       - recording
       summary: 新規録音データ
       operationId: createUserRecording
+      parameters:
+      - name: x-unis-customer-cd
+        in: header
+        description: ID of unis customer cd to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       requestBody:
         content:
           multipart/form-data:
@@ -374,7 +800,36 @@ paths:
               $ref: '#/components/schemas/body_5'
       responses:
         "200":
-          description: successful
+          description: The response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RecordingItem'
+                x-content-type: application/json
+        "400":
+          description: Bad request. Response invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: API key is missing or invalid
+          headers:
+            WWW_Authenticate:
+              style: simple
+              explode: false
+              schema:
+                type: string
+        "404":
+          description: A user with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error.
       x-swagger-router-controller: Recording
   /user/recording/{recordingId}:
     get:
@@ -383,6 +838,14 @@ paths:
       summary: 録音データ取得
       operationId: getUserRecording
       parameters:
+      - name: x-unis-customer-cd
+        in: header
+        description: ID of unis customer cd to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       - name: recordingId
         in: path
         description: ID of recording to return
@@ -391,7 +854,6 @@ paths:
         explode: false
         schema:
           type: string
-          format: string
       responses:
         "200":
           description: The response
@@ -399,8 +861,28 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RecordingItem'
-        default:
-          description: Default response
+        "400":
+          description: Bad request. Response invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: API key is missing or invalid
+          headers:
+            WWW_Authenticate:
+              style: simple
+              explode: false
+              schema:
+                type: string
+        "404":
+          description: A user with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error.
       x-swagger-router-controller: Recording
     post:
       tags:
@@ -408,6 +890,14 @@ paths:
       summary: 録音データ更新（メタデータのみ）
       operationId: updateUserRecording
       parameters:
+      - name: x-unis-customer-cd
+        in: header
+        description: ID of unis customer cd to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       - name: recordingId
         in: path
         description: ID of recording to return
@@ -416,7 +906,6 @@ paths:
         explode: false
         schema:
           type: string
-          format: string
       requestBody:
         content:
           multipart/form-data:
@@ -429,6 +918,28 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/RecordingItem'
+        "400":
+          description: Bad request. Response invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: API key is missing or invalid
+          headers:
+            WWW_Authenticate:
+              style: simple
+              explode: false
+              schema:
+                type: string
+        "404":
+          description: A user with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error.
       x-swagger-router-controller: Recording
     delete:
       tags:
@@ -436,6 +947,14 @@ paths:
       summary: 録音データ削除
       operationId: deleteUserRecording
       parameters:
+      - name: x-unis-customer-cd
+        in: header
+        description: ID of unis customer cd to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       - name: recordingId
         in: path
         description: ID of recording to return
@@ -444,10 +963,31 @@ paths:
         explode: false
         schema:
           type: string
-          format: string
       responses:
-        default:
-          description: Default response
+        "200":
+          description: The response
+        "400":
+          description: Bad request. Response invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: API key is missing or invalid
+          headers:
+            WWW_Authenticate:
+              style: simple
+              explode: false
+              schema:
+                type: string
+        "404":
+          description: A user with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error.
       x-swagger-router-controller: Recording
   /user/tts:
     get:
@@ -455,6 +995,15 @@ paths:
       - tts
       summary: TTSデータリスト取得
       operationId: listUserTts
+      parameters:
+      - name: x-unis-customer-cd
+        in: header
+        description: ID of unis customer cd to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       responses:
         "200":
           description: The response
@@ -465,12 +1014,43 @@ paths:
                 items:
                   $ref: '#/components/schemas/TtsItem'
                 x-content-type: application/json
+        "400":
+          description: Bad request. Response invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: API key is missing or invalid
+          headers:
+            WWW_Authenticate:
+              style: simple
+              explode: false
+              schema:
+                type: string
+        "404":
+          description: A user with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error.
       x-swagger-router-controller: Tts
     post:
       tags:
       - tts
       summary: 新規録音データ
       operationId: createUserTts
+      parameters:
+      - name: x-unis-customer-cd
+        in: header
+        description: ID of unis customer cd to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       requestBody:
         content:
           multipart/form-data:
@@ -478,7 +1058,36 @@ paths:
               $ref: '#/components/schemas/body_7'
       responses:
         "200":
-          description: successful
+          description: The response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TtsItem'
+                x-content-type: application/json
+        "400":
+          description: Bad request. Response invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: API key is missing or invalid
+          headers:
+            WWW_Authenticate:
+              style: simple
+              explode: false
+              schema:
+                type: string
+        "404":
+          description: A user with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error.
       x-swagger-router-controller: Tts
   /user/tts/{ttsId}:
     get:
@@ -487,6 +1096,14 @@ paths:
       summary: TTSデータ取得
       operationId: getUserTts
       parameters:
+      - name: x-unis-customer-cd
+        in: header
+        description: ID of unis customer cd to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       - name: ttsId
         in: path
         description: ID of tts to return
@@ -495,7 +1112,6 @@ paths:
         explode: false
         schema:
           type: string
-          format: string
       responses:
         "200":
           description: The response
@@ -503,8 +1119,28 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TtsItem'
-        default:
-          description: Default response
+        "400":
+          description: Bad request. Response invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: API key is missing or invalid
+          headers:
+            WWW_Authenticate:
+              style: simple
+              explode: false
+              schema:
+                type: string
+        "404":
+          description: A user with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error.
       x-swagger-router-controller: Tts
     post:
       tags:
@@ -512,6 +1148,14 @@ paths:
       summary: TTSデータ更新（メタデータのみ）
       operationId: updateUserTts
       parameters:
+      - name: x-unis-customer-cd
+        in: header
+        description: ID of unis customer cd to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       - name: ttsId
         in: path
         description: ID of tts to return
@@ -520,7 +1164,6 @@ paths:
         explode: false
         schema:
           type: string
-          format: string
       requestBody:
         content:
           multipart/form-data:
@@ -533,6 +1176,28 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/TtsItem'
+        "400":
+          description: Bad request. Response invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: API key is missing or invalid
+          headers:
+            WWW_Authenticate:
+              style: simple
+              explode: false
+              schema:
+                type: string
+        "404":
+          description: A user with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error.
       x-swagger-router-controller: Tts
     delete:
       tags:
@@ -540,6 +1205,14 @@ paths:
       summary: TTSデータ削除
       operationId: deleteUserTts
       parameters:
+      - name: x-unis-customer-cd
+        in: header
+        description: ID of unis customer cd to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
       - name: ttsId
         in: path
         description: ID of tts to return
@@ -548,10 +1221,31 @@ paths:
         explode: false
         schema:
           type: string
-          format: string
       responses:
-        default:
-          description: Default response
+        "200":
+          description: The response
+        "400":
+          description: Bad request. Response invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: API key is missing or invalid
+          headers:
+            WWW_Authenticate:
+              style: simple
+              explode: false
+              schema:
+                type: string
+        "404":
+          description: A user with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error.
       x-swagger-router-controller: Tts
   /bgm:
     get:
@@ -579,11 +1273,27 @@ paths:
                   $ref: '#/components/schemas/BgmItem'
                 x-content-type: application/json
         "400":
-          description: Response invalid
+          description: Bad request. Response invalid.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+        "401":
+          description: API key is missing or invalid
+          headers:
+            WWW_Authenticate:
+              style: simple
+              explode: false
+              schema:
+                type: string
+        "404":
+          description: A user with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error.
       x-swagger-router-controller: Resources
   /narration:
     get:
@@ -619,11 +1329,27 @@ paths:
                   $ref: '#/components/schemas/NarrationItem'
                 x-content-type: application/json
         "400":
-          description: Response invalid
+          description: Bad request. Response invalid.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+        "401":
+          description: API key is missing or invalid
+          headers:
+            WWW_Authenticate:
+              style: simple
+              explode: false
+              schema:
+                type: string
+        "404":
+          description: A user with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error.
       x-swagger-router-controller: Resources
   /chime:
     get:
@@ -642,11 +1368,27 @@ paths:
                   $ref: '#/components/schemas/ChimeItem'
                 x-content-type: application/json
         "400":
-          description: Response invalid
+          description: Bad request. Response invalid.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+        "401":
+          description: API key is missing or invalid
+          headers:
+            WWW_Authenticate:
+              style: simple
+              explode: false
+              schema:
+                type: string
+        "404":
+          description: A user with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error.
       x-swagger-router-controller: Resources
   /tts:
     get:
@@ -682,11 +1424,27 @@ paths:
                   $ref: '#/components/schemas/WordItem'
                 x-content-type: application/json
         "400":
-          description: Response invalid
+          description: Bad request. Response invalid.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+        "401":
+          description: API key is missing or invalid
+          headers:
+            WWW_Authenticate:
+              style: simple
+              explode: false
+              schema:
+                type: string
+        "404":
+          description: A user with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error.
       x-swagger-router-controller: Resources
   /signedUrl:
     get:
@@ -695,6 +1453,15 @@ paths:
       summary: S3オブジェクトの署名付きURLの取得
       description: 試聴再生、録音音声アップロード
       operationId: getSignedUrl
+      parameters:
+      - name: id
+        in: query
+        description: ID of signed url to return
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
       responses:
         "200":
           description: The response
@@ -703,11 +1470,27 @@ paths:
               schema:
                 $ref: '#/components/schemas/inline_response_200_2'
         "400":
-          description: Response invalid
+          description: Bad request. Response invalid.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+        "401":
+          description: API key is missing or invalid
+          headers:
+            WWW_Authenticate:
+              style: simple
+              explode: false
+              schema:
+                type: string
+        "404":
+          description: A user with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error.
       x-swagger-router-controller: S3
 components:
   schemas:
@@ -1155,7 +1938,7 @@ components:
       properties:
         status:
           type: string
-          example: status?
+          example: status
         code:
           type: string
           example: erorr code
@@ -1332,9 +2115,9 @@ components:
       properties:
         url:
           type: string
-          example: https://filesamples.com/samples/audio/aac/sample1.aac
+          example: https://xxxxx/0999999900-c-sfja8eo1.aac?AWSAccessKeyId=xxxxxxxx
       example:
-        url: https://filesamples.com/samples/audio/aac/sample1.aac
+        url: https://xxxxx/0999999900-c-sfja8eo1.aac?AWSAccessKeyId=xxxxxxxx
     CmMaterialListItem_narrations:
       properties:
         id:
@@ -1378,7 +2161,48 @@ components:
       example:
         volume: 5
         id: bgm/サンプル01
+  responses:
+    BadRequest:
+      description: Bad request. Response invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: API key is missing or invalid
+      headers:
+        WWW_Authenticate:
+          style: simple
+          explode: false
+          schema:
+            type: string
+    NotFound:
+      description: A user with the specified ID was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unexpected:
+      description: Unexpected error.
   parameters:
+    Token:
+      name: x-token
+      in: header
+      description: ID of token to return
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+    UnisCustomerCd:
+      name: x-unis-customer-cd
+      in: header
+      description: ID of unis customer cd to return
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
     CmId:
       name: cmId
       in: path
@@ -1388,7 +2212,6 @@ components:
       explode: false
       schema:
         type: string
-        format: string
     RecordingId:
       name: recordingId
       in: path
@@ -1398,7 +2221,6 @@ components:
       explode: false
       schema:
         type: string
-        format: string
     TtsId:
       name: ttsId
       in: path
@@ -1408,14 +2230,8 @@ components:
       explode: false
       schema:
         type: string
-        format: string
-    UnisCustomerCd:
-      name: unisCustomerCd
-      in: path
-      description: ID of unis customer cd to return
-      required: true
-      style: simple
-      explode: false
-      schema:
-        type: string
-        format: string
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      name: x-api-key
+      in: header

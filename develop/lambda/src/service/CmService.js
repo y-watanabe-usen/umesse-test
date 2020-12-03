@@ -5,9 +5,10 @@
  * CM新規結合
  *
  * body Body_1  (optional)
+ * xUnisCustomerCd String ID of unis customer cd to return
  * returns CmItem
  **/
-exports.createUserCm = function(body) {
+exports.createUserCm = function(body,xUnisCustomerCd) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
@@ -56,10 +57,11 @@ exports.createUserCm = function(body) {
 /**
  * CM情報削除
  *
- * cmId Long ID of cm to return
+ * xUnisCustomerCd String ID of unis customer cd to return
+ * cmId String ID of cm to return
  * returns CmItem
  **/
-exports.deleteUserCm = function(cmId) {
+exports.deleteUserCm = function(xUnisCustomerCd,cmId) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
@@ -108,10 +110,11 @@ exports.deleteUserCm = function(cmId) {
 /**
  * CM情報取得
  *
+ * xUnisCustomerCd String ID of unis customer cd to return
  * cmId String ID of cm to return
  * returns CmItem
  **/
-exports.getUserCm = function(cmId) {
+exports.getUserCm = function(xUnisCustomerCd,cmId) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
@@ -160,9 +163,10 @@ exports.getUserCm = function(cmId) {
 /**
  * CMリスト取得
  *
+ * xUnisCustomerCd String ID of unis customer cd to return
  * returns List
  **/
-exports.listUserCm = function() {
+exports.listUserCm = function(xUnisCustomerCd) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = [ {
@@ -246,9 +250,10 @@ exports.listUserCm = function() {
  *
  * body Body_2  (optional)
  * cmId String ID of cm to return
+ * xUnisCustomerCd String ID of unis customer cd to return
  * returns CmItem
  **/
-exports.updateUserCm = function(body,cmId) {
+exports.updateUserCm = function(body,cmId,xUnisCustomerCd) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {

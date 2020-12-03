@@ -26,10 +26,15 @@ export const S3ApiAxiosParamCreator = function (configuration?: Configuration) {
         /**
          * 試聴再生、録音音声アップロード
          * @summary S3オブジェクトの署名付きURLの取得
+         * @param {string} id ID of signed url to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSignedUrl: async (options: any = {}): Promise<RequestArgs> => {
+        getSignedUrl: async (id: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling getSignedUrl.');
+            }
             const localVarPath = `/signedUrl`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -40,6 +45,10 @@ export const S3ApiAxiosParamCreator = function (configuration?: Configuration) {
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            if (id !== undefined) {
+                localVarQueryParameter['id'] = id;
+            }
 
             const query = new URLSearchParams(localVarUrlObj.search);
             for (const key in localVarQueryParameter) {
@@ -69,11 +78,12 @@ export const S3ApiFp = function(configuration?: Configuration) {
         /**
          * 試聴再生、録音音声アップロード
          * @summary S3オブジェクトの署名付きURLの取得
+         * @param {string} id ID of signed url to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getSignedUrl(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2002>> {
-            const localVarAxiosArgs = await S3ApiAxiosParamCreator(configuration).getSignedUrl(options);
+        async getSignedUrl(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2002>> {
+            const localVarAxiosArgs = await S3ApiAxiosParamCreator(configuration).getSignedUrl(id, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -91,11 +101,12 @@ export const S3ApiFactory = function (configuration?: Configuration, basePath?: 
         /**
          * 試聴再生、録音音声アップロード
          * @summary S3オブジェクトの署名付きURLの取得
+         * @param {string} id ID of signed url to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSignedUrl(options?: any): AxiosPromise<InlineResponse2002> {
-            return S3ApiFp(configuration).getSignedUrl(options).then((request) => request(axios, basePath));
+        getSignedUrl(id: string, options?: any): AxiosPromise<InlineResponse2002> {
+            return S3ApiFp(configuration).getSignedUrl(id, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -110,11 +121,12 @@ export class S3Api extends BaseAPI {
     /**
      * 試聴再生、録音音声アップロード
      * @summary S3オブジェクトの署名付きURLの取得
+     * @param {string} id ID of signed url to return
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof S3Api
      */
-    public getSignedUrl(options?: any) {
-        return S3ApiFp(this.configuration).getSignedUrl(options).then((request) => request(this.axios, this.basePath));
+    public getSignedUrl(id: string, options?: any) {
+        return S3ApiFp(this.configuration).getSignedUrl(id, options).then((request) => request(this.axios, this.basePath));
     }
 }
