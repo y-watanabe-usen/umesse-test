@@ -1,5 +1,7 @@
 "use strict";
 
+const { randomBytes } = require("crypto");
+
 exports.constants = {
   region: "ap-northeast-1",
   debug: process.env.debug,
@@ -39,7 +41,13 @@ exports.constants = {
   centerTable: this.debug ? "umesse-center" : "umesse-center",
 
   // debug log
-  debuglog: function(message) {
-    if (this.debug) console.log(message);
+  debuglog: function (message) {
+    if (this.debug) console.log(`[debug] ${message}`);
+  },
+
+  // generate id
+  generateId: function (unisCustomerCd, div) {
+    const id = randomBytes(8).reduce((p, i) => p + (i % 36).toString(36), "");
+    return `${unisCustomerCd}-${div}-${id}`;
   },
 };

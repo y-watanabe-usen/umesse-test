@@ -31,6 +31,7 @@ exports.fetch = async (unisCustomerCd) => {
     if (!res || !res.Item) throw "not found";
     return res.Item;
   } catch (e) {
+    // TODO: error handle
     console.log(e);
   }
 };

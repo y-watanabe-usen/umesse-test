@@ -11,6 +11,7 @@ exports.signedUrl = async (id) => {
     if (!res) throw "getSignedUrl failed";
     return { url: res };
   } catch (e) {
+    // TODO: error handle
     console.log(e);
   }
 };
