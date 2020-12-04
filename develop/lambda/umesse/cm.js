@@ -25,7 +25,7 @@ exports.fetch = async (unisCustomerCd, cmId) => {
 
     let json = res.Item.cm;
     if (cmId) {
-      json = json.filter((item) => item.id === cmId);
+      json = json.filter((item) => item.id === cmId).pop();
     }
     return json;
   } catch (e) {
@@ -59,9 +59,12 @@ exports.create = async (unisCustomerCd, body) => {
     const data = {
       id: id,
       materials: body.materials,
-      production_type: "bgm" in body.materials ? "01" : "02",
+      production_type:
+        "bgm" in body.materials
+          ? constants.cmProductionType.MUSIC
+          : constants.cmProductionType.NONE,
       seconds: seconds,
-      status: "01",
+      status: constants.cmStatus.CREATING,
       timestamp: new Date().toISOString(),
     };
     const key = { unis_customer_cd: unisCustomerCd };
@@ -80,6 +83,7 @@ exports.create = async (unisCustomerCd, body) => {
     if (!res || !res.Attributes) throw "update failed";
 
     let json = res.Attributes.cm.pop();
+    json["url"] = url;
     return json;
   } catch (e) {
     // TODO: error handle
@@ -123,23 +127,52 @@ exports.remove = async (unisCustomerCd, cmId) => {
   );
 
   try {
-    // TODO: Center upload
-    // TODO: Dynamodb update
+    const list = await this.fetch(unisCustomerCd);
+    if (!list) throw "not found";
+    const cm = list
+      .map((data, index) => {
+        if (data.id === cmId) return { data, index };
+      })
+      .pop();
+
+    switch (cm.data.status) {
+      case constants.cmStatus.CREATING:
+        throw "作成中";
+      case constants.cmStatus.SHARING:
+        throw "共有中";
+      case constants.cmStatus.CENTER_UPLOADING:
+      case constants.cmStatus.CENTER_COMPLETE:
+        throw "U MUSIC連携中";
+      case constants.cmStatus.ERROR:
+      case constants.cmStatus.CENTER_ERROR:
+        throw "エラー発生中";
+    }
+
+    // s3 delete
+    await s3.delete(
+      constants.usersBucket,
+      `users/${unisCustomerCd}/cm/${cmId}.mp3`
+    );
+
+    // dynamodb update
+    cm.data.status = constants.cmStatus.DELETE;
+    cm.data.timestamp = new Date().toISOString();
     const key = { unis_customer_cd: unisCustomerCd };
     const options = {
-      ProjectionExpression: "cm",
+      UpdateExpression: `SET cm[${cm.index}] = :cm`,
+      ExpressionAttributeValues: {
+        ":cm": cm.data,
+      },
+      ReturnValues: "UPDATED_NEW",
     };
     constants.debuglog(
       `key: ${JSON.stringify(key)}, options: ${JSON.stringify(options)}`
     );
 
-    const res = await dynamodb.get(constants.usersTable, key, options);
-    if (!res || !res.Item) throw "not found";
+    const res = await dynamodb.update(constants.usersTable, key, options);
+    if (!res || !res.Attributes) throw "update failed";
 
-    let json = res.Item.cm;
-    if (cmId) {
-      json = json.filter((item) => item.id === cmId);
-    }
+    let json = res.Attributes.cm;
     return json;
   } catch (e) {
     // TODO: error handle
