@@ -361,7 +361,7 @@ export default {
     };
     const play = async () => {
       if (state.isPlaying) return;
-      const response = await api.getSignedUrl();
+      const response = await api.getSignedUrl("ID");
       await audioStore.download(response.data.url);
       audioPlayer.start(<AudioBuffer>audioStore.audioBuffer);
     };

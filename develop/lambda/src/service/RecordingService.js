@@ -1,5 +1,5 @@
 'use strict';
-
+const { bgm, userRecording } = require("../../umesse/resources");
 
 /**
  * 新規録音データ
@@ -7,26 +7,20 @@
  * xUnisCustomerCd String ID of unis customer cd to return
  * returns List
  **/
-exports.createUserRecording = function(xUnisCustomerCd) {
+exports.createUserRecording = function(xUnisCustomerCd, filename, recordedFile) {
   return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = [ {
-  "description" : "サンプル",
-  "id" : "123456789-r-12345678",
-  "title" : "サンプル",
-  "startDate" : "2019-09-01T09:00:00+9:00",
-  "timestamp" : "2019-09-01T09:00:00+9:00"
-}, {
-  "description" : "サンプル",
-  "id" : "123456789-r-12345678",
-  "title" : "サンプル",
-  "startDate" : "2019-09-01T09:00:00+9:00",
-  "timestamp" : "2019-09-01T09:00:00+9:00"
-} ];
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
+    try {
+      var data = {
+        'filename': filename,
+        'resouces': recordedFile
+      };
+      console.log(data);
+      userRecording.put(data);
+
       resolve();
+    } catch(e) {
+      console.log(e);
+      reject()
     }
   });
 }
@@ -35,7 +29,6 @@ exports.createUserRecording = function(xUnisCustomerCd) {
 /**
  * 録音データ削除
  *
- * xUnisCustomerCd String ID of unis customer cd to return
  * recordingId String ID of recording to return
  * no response value expected for this operation
  **/

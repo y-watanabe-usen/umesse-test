@@ -158,8 +158,7 @@
               class="close"
               data-dismiss="modal"
               aria-label="Close"
-              v-bind:disabled="saveResult.saving"
-              @click="resetSaveState"
+              v-bind:disabled="saveResult === 0"
             >
               <span aria-hidden="true">&times;</span>
             </button>
@@ -173,7 +172,7 @@
                   class="form-control"
                   id="title"
                   v-model="file.title"
-                  v-bind:disabled="saveResult.ready === false"
+                  v-bind:disabled="saveResult !== 3 && saveResult !== 2"
                 />
               </div>
               <div class="form-group">
@@ -181,34 +180,33 @@
                 <textarea 
                   class="form-control"
                   id="description"
-                  v-bind:disabled="saveResult.ready === false"
+                  v-bind:disabled="saveResult !== 3 && saveResult !== 2"
                 ></textarea>
               </div>
             </form>
             <!-- 保存中 -->
-            <span v-if="saveResult.saving">
+            <span v-if="saveResult === 0">
               <div class="col-form-label">
                 クルクルインジケーターとか
               </div>
             </span>
             <!-- 保存完了 -->
-            <span v-if="saveResult.success">
+            <span v-if="saveResult === 1">
               <div class="col-form-label">
                 保存が完了しました。
               </div>
             </span>
             <!-- 保存失敗 -->
-            <span v-if="saveResult.failed">
+            <span v-if="saveResult === 2">
               <div class="failed">保存に失敗しました。再度お試しください。</div>
             </span>
           </div>
-          <span v-if="saveResult.ready">
+          <span v-if="saveResult === 3 || saveResult === 2">
             <div class="modal-footer">
               <button
                 type="button"
                 class="btn btn-secondary"
                 data-dismiss="modal"
-                @click="resetSaveState"
               >
                 キャンセル
               </button>
@@ -223,13 +221,12 @@
             </div>
           </span>
           <!-- 保存完了 -->
-          <span v-if="saveResult.success">
+          <span v-if="saveResult === 1">
             <div class="modal-footer">
               <button
                 type="button"
                 class="btn btn-primary"
                 data-dismiss="modal"
-                @click="resetSaveState"
               >
                 OK
               </button>
@@ -253,25 +250,23 @@ interface RecordingFile {
   description: string | undefined;
 }
 
-interface saveRecordingFileState {
-  saving: boolean;
-  success: boolean;
-  failed: boolean;
-  ready: boolean
+enum SaveRecordingFileState {
+  saving,
+  success,
+  failed,
+  ready
 }
 
 export default defineComponent({
+  enums: {
+    SaveRecordingFileState,
+  },
   setup() {
     const audioRecorder = AudioRecorder();
     const audioPlayer = AudioPlayer();
     const state = reactive({
       file: <RecordingFile>{},
-      saveResult: <saveRecordingFileState> {
-        saving: false,
-        success: false,
-        failed: false,
-        ready: true
-      },
+      saveResult: SaveRecordingFileState.ready,
       isRecording: computed(() => (audioRecorder.isRecording() ? true : false)),
       hasRecordedData: computed(() => {
         if (audioRecorder.getBlob() !== undefined) return true;
@@ -322,46 +317,26 @@ export default defineComponent({
     const deleteRecordedData = () => audioRecorder.reset();
 
     const postData = async () => {
-      state.saveResult = {
-        saving: true,
-        success: false,
-        failed: false,
-        ready: false
-      };
+      state.saveResult = SaveRecordingFileState.saving;
 
       var api = new UMesseApi.RecordingApi();
 
       const audioFile = await audioRecorder.getAudioFile();
       if (audioFile != null) {
-        api.createUserRecording(state.file.title, audioFile).then((value) => {
-          state.saveResult = {
-            saving: false,
-            success: true,
-            failed: false,
-            ready: false
-          };
-
+        api.createUserRecording("xUnisCustomerCd", state.file.title, audioFile).then((value) => {
+          state.saveResult = SaveRecordingFileState.success;
         }).catch((error) => {
-          state.saveResult = {
-            saving: false,
-            success: false,
-            failed: true,
-            ready: true
-          };
+          state.saveResult = SaveRecordingFileState.failed;
         });
       }
     };
 
-    const resetSaveState = () => {
-      state.saveResult.failed = false;
-    };
     return {
       ...toRefs(state),
       toggleVoiceRecorder,
       play,
       deleteRecordedData,
       postData,
-      resetSaveState
     };
   },
 });
