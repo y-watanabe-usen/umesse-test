@@ -42,12 +42,6 @@ export interface BgmItem {
      */
     seconds?: any;
     /**
-     * 試聴URL
-     * @type {string}
-     * @memberof BgmItem
-     */
-    url?: any;
-    /**
      * 
      * @type {Array&lt;IndustryItem&gt;}
      * @memberof BgmItem

@@ -76,19 +76,19 @@ export const CmApiAxiosParamCreator = function (configuration?: Configuration) {
         /**
          * 
          * @summary CM情報削除
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} cmId ID of cm to return
+         * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteUserCm: async (xUnisCustomerCd: string, cmId: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'xUnisCustomerCd' is not null or undefined
-            if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
-                throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling deleteUserCm.');
-            }
+        deleteUserCm: async (cmId: string, xUnisCustomerCd: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'cmId' is not null or undefined
             if (cmId === null || cmId === undefined) {
                 throw new RequiredError('cmId','Required parameter cmId was null or undefined when calling deleteUserCm.');
+            }
+            // verify required parameter 'xUnisCustomerCd' is not null or undefined
+            if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
+                throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling deleteUserCm.');
             }
             const localVarPath = `/user/cm/{cmId}`
                 .replace(`{${"cmId"}}`, encodeURIComponent(String(cmId)));
@@ -125,19 +125,19 @@ export const CmApiAxiosParamCreator = function (configuration?: Configuration) {
         /**
          * 
          * @summary CM情報取得
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} cmId ID of cm to return
+         * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getUserCm: async (xUnisCustomerCd: string, cmId: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'xUnisCustomerCd' is not null or undefined
-            if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
-                throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling getUserCm.');
-            }
+        getUserCm: async (cmId: string, xUnisCustomerCd: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'cmId' is not null or undefined
             if (cmId === null || cmId === undefined) {
                 throw new RequiredError('cmId','Required parameter cmId was null or undefined when calling getUserCm.');
+            }
+            // verify required parameter 'xUnisCustomerCd' is not null or undefined
+            if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
+                throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling getUserCm.');
             }
             const localVarPath = `/user/cm/{cmId}`
                 .replace(`{${"cmId"}}`, encodeURIComponent(String(cmId)));
@@ -295,13 +295,13 @@ export const CmApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary CM情報削除
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} cmId ID of cm to return
+         * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteUserCm(xUnisCustomerCd: string, cmId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CmItem>> {
-            const localVarAxiosArgs = await CmApiAxiosParamCreator(configuration).deleteUserCm(xUnisCustomerCd, cmId, options);
+        async deleteUserCm(cmId: string, xUnisCustomerCd: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CmItem>> {
+            const localVarAxiosArgs = await CmApiAxiosParamCreator(configuration).deleteUserCm(cmId, xUnisCustomerCd, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -310,13 +310,13 @@ export const CmApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary CM情報取得
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} cmId ID of cm to return
+         * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getUserCm(xUnisCustomerCd: string, cmId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CmItem>> {
-            const localVarAxiosArgs = await CmApiAxiosParamCreator(configuration).getUserCm(xUnisCustomerCd, cmId, options);
+        async getUserCm(cmId: string, xUnisCustomerCd: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CmItem>> {
+            const localVarAxiosArgs = await CmApiAxiosParamCreator(configuration).getUserCm(cmId, xUnisCustomerCd, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -375,24 +375,24 @@ export const CmApiFactory = function (configuration?: Configuration, basePath?: 
         /**
          * 
          * @summary CM情報削除
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} cmId ID of cm to return
+         * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteUserCm(xUnisCustomerCd: string, cmId: string, options?: any): AxiosPromise<CmItem> {
-            return CmApiFp(configuration).deleteUserCm(xUnisCustomerCd, cmId, options).then((request) => request(axios, basePath));
+        deleteUserCm(cmId: string, xUnisCustomerCd: string, options?: any): AxiosPromise<CmItem> {
+            return CmApiFp(configuration).deleteUserCm(cmId, xUnisCustomerCd, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary CM情報取得
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} cmId ID of cm to return
+         * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getUserCm(xUnisCustomerCd: string, cmId: string, options?: any): AxiosPromise<CmItem> {
-            return CmApiFp(configuration).getUserCm(xUnisCustomerCd, cmId, options).then((request) => request(axios, basePath));
+        getUserCm(cmId: string, xUnisCustomerCd: string, options?: any): AxiosPromise<CmItem> {
+            return CmApiFp(configuration).getUserCm(cmId, xUnisCustomerCd, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -441,26 +441,26 @@ export class CmApi extends BaseAPI {
     /**
      * 
      * @summary CM情報削除
-     * @param {string} xUnisCustomerCd ID of unis customer cd to return
      * @param {string} cmId ID of cm to return
+     * @param {string} xUnisCustomerCd ID of unis customer cd to return
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CmApi
      */
-    public deleteUserCm(xUnisCustomerCd: string, cmId: string, options?: any) {
-        return CmApiFp(this.configuration).deleteUserCm(xUnisCustomerCd, cmId, options).then((request) => request(this.axios, this.basePath));
+    public deleteUserCm(cmId: string, xUnisCustomerCd: string, options?: any) {
+        return CmApiFp(this.configuration).deleteUserCm(cmId, xUnisCustomerCd, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * 
      * @summary CM情報取得
-     * @param {string} xUnisCustomerCd ID of unis customer cd to return
      * @param {string} cmId ID of cm to return
+     * @param {string} xUnisCustomerCd ID of unis customer cd to return
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CmApi
      */
-    public getUserCm(xUnisCustomerCd: string, cmId: string, options?: any) {
-        return CmApiFp(this.configuration).getUserCm(xUnisCustomerCd, cmId, options).then((request) => request(this.axios, this.basePath));
+    public getUserCm(cmId: string, xUnisCustomerCd: string, options?: any) {
+        return CmApiFp(this.configuration).getUserCm(cmId, xUnisCustomerCd, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * 

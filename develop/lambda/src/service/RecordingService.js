@@ -1,5 +1,6 @@
-'use strict';
-const { fetch, userRecording } = require("../../umesse/resources");
+"use strict";
+
+const { fetch, create, update, remove } = require("../../umesse/recording");
 
 /**
  * 新規録音データ
@@ -7,24 +8,18 @@ const { fetch, userRecording } = require("../../umesse/resources");
  * xUnisCustomerCd String ID of unis customer cd to return
  * returns List
  **/
-exports.createUserRecording = function(xUnisCustomerCd, filename, recordedFile) {
-  return new Promise(function(resolve, reject) {
-    try {
-      var data = {
-        'filename': filename,
-        'resources': recordedFile
-      };
-      console.log(data);
-      userRecording.put(data);
-
+exports.createUserRecording = function (xUnisCustomerCd, filename, resources) {
+  return new Promise(async function (resolve, reject) {
+    var response = {};
+    const json = await create(xUnisCustomerCd, filename, resources);
+    response["application/json"] = json;
+    if (Object.keys(response).length > 0) {
+      resolve(response[Object.keys(response)[0]]);
+    } else {
       resolve();
-    } catch(e) {
-      console.log(e);
-      reject()
     }
   });
-}
-
+};
 
 /**
  * 録音データ削除
@@ -33,12 +28,18 @@ exports.createUserRecording = function(xUnisCustomerCd, filename, recordedFile) 
  * recordingId String ID of recording to return
  * no response value expected for this operation
  **/
-exports.deleteUserRecording = function(xUnisCustomerCd,recordingId) {
-  return new Promise(function(resolve, reject) {
-    resolve();
+exports.deleteUserRecording = function (recordingId, xUnisCustomerCd) {
+  return new Promise(async function (resolve, reject) {
+    var response = {};
+    const json = await remove(xUnisCustomerCd, recordingId);
+    response["application/json"] = json;
+    if (Object.keys(response).length > 0) {
+      resolve(response[Object.keys(response)[0]]);
+    } else {
+      resolve();
+    }
   });
-}
-
+};
 
 /**
  * 録音データ取得
@@ -47,24 +48,18 @@ exports.deleteUserRecording = function(xUnisCustomerCd,recordingId) {
  * recordingId String ID of recording to return
  * returns RecordingItem
  **/
-exports.getUserRecording = function(xUnisCustomerCd,recordingId) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "description" : "サンプル",
-  "id" : "123456789-r-12345678",
-  "title" : "サンプル",
-  "startDate" : "2019-09-01T09:00:00+9:00",
-  "timestamp" : "2019-09-01T09:00:00+9:00"
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
+exports.getUserRecording = function (recordingId, xUnisCustomerCd) {
+  return new Promise(async function (resolve, reject) {
+    var response = {};
+    const json = await fetch(xUnisCustomerCd, recordingId);
+    response["application/json"] = json;
+    if (Object.keys(response).length > 0) {
+      resolve(response[Object.keys(response)[0]]);
     } else {
       resolve();
     }
   });
-}
-
+};
 
 /**
  * 録音データリスト取得
@@ -72,30 +67,18 @@ exports.getUserRecording = function(xUnisCustomerCd,recordingId) {
  * xUnisCustomerCd String ID of unis customer cd to return
  * returns List
  **/
-exports.listUserRecording = function(xUnisCustomerCd) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = [ {
-  "description" : "サンプル",
-  "id" : "123456789-r-12345678",
-  "title" : "サンプル",
-  "startDate" : "2019-09-01T09:00:00+9:00",
-  "timestamp" : "2019-09-01T09:00:00+9:00"
-}, {
-  "description" : "サンプル",
-  "id" : "123456789-r-12345678",
-  "title" : "サンプル",
-  "startDate" : "2019-09-01T09:00:00+9:00",
-  "timestamp" : "2019-09-01T09:00:00+9:00"
-} ];
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
+exports.listUserRecording = function (xUnisCustomerCd) {
+  return new Promise(async function (resolve, reject) {
+    var response = {};
+    const json = await fetch(xUnisCustomerCd);
+    response["application/json"] = json;
+    if (Object.keys(response).length > 0) {
+      resolve(response[Object.keys(response)[0]]);
     } else {
       resolve();
     }
   });
-}
-
+};
 
 /**
  * 録音データ更新（メタデータのみ）
@@ -104,21 +87,15 @@ exports.listUserRecording = function(xUnisCustomerCd) {
  * xUnisCustomerCd String ID of unis customer cd to return
  * returns RecordingItem
  **/
-exports.updateUserRecording = function(recordingId,xUnisCustomerCd) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "description" : "サンプル",
-  "id" : "123456789-r-12345678",
-  "title" : "サンプル",
-  "startDate" : "2019-09-01T09:00:00+9:00",
-  "timestamp" : "2019-09-01T09:00:00+9:00"
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
+exports.updateUserRecording = function (body, recordingId, xUnisCustomerCd) {
+  return new Promise(async function (resolve, reject) {
+    var response = {};
+    const json = await update(xUnisCustomerCd, recordingId, body);
+    response["application/json"] = json;
+    if (Object.keys(response).length > 0) {
+      resolve(response[Object.keys(response)[0]]);
     } else {
       resolve();
     }
   });
-}
-
+};

@@ -16,6 +16,7 @@ import { Configuration } from '../configuration';
 // Some imports not used depending on template conditions
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { Body9 } from '../models';
 import { TtsItem } from '../models';
 /**
  * TtsApi - axios parameter creator
@@ -83,19 +84,19 @@ export const TtsApiAxiosParamCreator = function (configuration?: Configuration) 
         /**
          * 
          * @summary TTSデータ削除
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} ttsId ID of tts to return
+         * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteUserTts: async (xUnisCustomerCd: string, ttsId: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'xUnisCustomerCd' is not null or undefined
-            if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
-                throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling deleteUserTts.');
-            }
+        deleteUserTts: async (ttsId: string, xUnisCustomerCd: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'ttsId' is not null or undefined
             if (ttsId === null || ttsId === undefined) {
                 throw new RequiredError('ttsId','Required parameter ttsId was null or undefined when calling deleteUserTts.');
+            }
+            // verify required parameter 'xUnisCustomerCd' is not null or undefined
+            if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
+                throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling deleteUserTts.');
             }
             const localVarPath = `/user/tts/{ttsId}`
                 .replace(`{${"ttsId"}}`, encodeURIComponent(String(ttsId)));
@@ -132,19 +133,19 @@ export const TtsApiAxiosParamCreator = function (configuration?: Configuration) 
         /**
          * 
          * @summary TTSデータ取得
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} ttsId ID of tts to return
+         * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getUserTts: async (xUnisCustomerCd: string, ttsId: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'xUnisCustomerCd' is not null or undefined
-            if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
-                throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling getUserTts.');
-            }
+        getUserTts: async (ttsId: string, xUnisCustomerCd: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'ttsId' is not null or undefined
             if (ttsId === null || ttsId === undefined) {
                 throw new RequiredError('ttsId','Required parameter ttsId was null or undefined when calling getUserTts.');
+            }
+            // verify required parameter 'xUnisCustomerCd' is not null or undefined
+            if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
+                throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling getUserTts.');
             }
             const localVarPath = `/user/tts/{ttsId}`
                 .replace(`{${"ttsId"}}`, encodeURIComponent(String(ttsId)));
@@ -226,12 +227,11 @@ export const TtsApiAxiosParamCreator = function (configuration?: Configuration) 
          * @summary TTSデータ更新（メタデータのみ）
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} ttsId ID of tts to return
-         * @param {string} [title] 
-         * @param {string} [description] 
+         * @param {Body9} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateUserTts: async (xUnisCustomerCd: string, ttsId: string, title?: string, description?: string, options: any = {}): Promise<RequestArgs> => {
+        updateUserTts: async (xUnisCustomerCd: string, ttsId: string, body?: Body9, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'xUnisCustomerCd' is not null or undefined
             if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
                 throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling updateUserTts.');
@@ -251,22 +251,13 @@ export const TtsApiAxiosParamCreator = function (configuration?: Configuration) 
             const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
-            const localVarFormParams = new FormData();
 
             if (xUnisCustomerCd !== undefined && xUnisCustomerCd !== null) {
                 localVarHeaderParameter['x-unis-customer-cd'] = String(xUnisCustomerCd);
             }
 
+            localVarHeaderParameter['Content-Type'] = 'application/json';
 
-            if (title !== undefined) { 
-                localVarFormParams.append('title', title as any);
-            }
-
-            if (description !== undefined) { 
-                localVarFormParams.append('description', description as any);
-            }
-
-            localVarHeaderParameter['Content-Type'] = 'multipart/form-data';
             const query = new URLSearchParams(localVarUrlObj.search);
             for (const key in localVarQueryParameter) {
                 query.set(key, localVarQueryParameter[key]);
@@ -277,7 +268,8 @@ export const TtsApiAxiosParamCreator = function (configuration?: Configuration) 
             localVarUrlObj.search = (new URLSearchParams(query)).toString();
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            localVarRequestOptions.data = localVarFormParams;
+            const needsSerialization = (typeof body !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.data =  needsSerialization ? JSON.stringify(body !== undefined ? body : {}) : (body || "");
 
             return {
                 url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
@@ -312,13 +304,13 @@ export const TtsApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary TTSデータ削除
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} ttsId ID of tts to return
+         * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteUserTts(xUnisCustomerCd: string, ttsId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await TtsApiAxiosParamCreator(configuration).deleteUserTts(xUnisCustomerCd, ttsId, options);
+        async deleteUserTts(ttsId: string, xUnisCustomerCd: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await TtsApiAxiosParamCreator(configuration).deleteUserTts(ttsId, xUnisCustomerCd, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -327,13 +319,13 @@ export const TtsApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary TTSデータ取得
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} ttsId ID of tts to return
+         * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getUserTts(xUnisCustomerCd: string, ttsId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TtsItem>> {
-            const localVarAxiosArgs = await TtsApiAxiosParamCreator(configuration).getUserTts(xUnisCustomerCd, ttsId, options);
+        async getUserTts(ttsId: string, xUnisCustomerCd: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TtsItem>> {
+            const localVarAxiosArgs = await TtsApiAxiosParamCreator(configuration).getUserTts(ttsId, xUnisCustomerCd, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -358,13 +350,12 @@ export const TtsApiFp = function(configuration?: Configuration) {
          * @summary TTSデータ更新（メタデータのみ）
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} ttsId ID of tts to return
-         * @param {string} [title] 
-         * @param {string} [description] 
+         * @param {Body9} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateUserTts(xUnisCustomerCd: string, ttsId: string, title?: string, description?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TtsItem>> {
-            const localVarAxiosArgs = await TtsApiAxiosParamCreator(configuration).updateUserTts(xUnisCustomerCd, ttsId, title, description, options);
+        async updateUserTts(xUnisCustomerCd: string, ttsId: string, body?: Body9, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TtsItem>> {
+            const localVarAxiosArgs = await TtsApiAxiosParamCreator(configuration).updateUserTts(xUnisCustomerCd, ttsId, body, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -394,24 +385,24 @@ export const TtsApiFactory = function (configuration?: Configuration, basePath?:
         /**
          * 
          * @summary TTSデータ削除
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} ttsId ID of tts to return
+         * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteUserTts(xUnisCustomerCd: string, ttsId: string, options?: any): AxiosPromise<void> {
-            return TtsApiFp(configuration).deleteUserTts(xUnisCustomerCd, ttsId, options).then((request) => request(axios, basePath));
+        deleteUserTts(ttsId: string, xUnisCustomerCd: string, options?: any): AxiosPromise<void> {
+            return TtsApiFp(configuration).deleteUserTts(ttsId, xUnisCustomerCd, options).then((request) => request(axios, basePath));
         },
         /**
          * 
          * @summary TTSデータ取得
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} ttsId ID of tts to return
+         * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getUserTts(xUnisCustomerCd: string, ttsId: string, options?: any): AxiosPromise<TtsItem> {
-            return TtsApiFp(configuration).getUserTts(xUnisCustomerCd, ttsId, options).then((request) => request(axios, basePath));
+        getUserTts(ttsId: string, xUnisCustomerCd: string, options?: any): AxiosPromise<TtsItem> {
+            return TtsApiFp(configuration).getUserTts(ttsId, xUnisCustomerCd, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -428,13 +419,12 @@ export const TtsApiFactory = function (configuration?: Configuration, basePath?:
          * @summary TTSデータ更新（メタデータのみ）
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} ttsId ID of tts to return
-         * @param {string} [title] 
-         * @param {string} [description] 
+         * @param {Body9} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateUserTts(xUnisCustomerCd: string, ttsId: string, title?: string, description?: string, options?: any): AxiosPromise<TtsItem> {
-            return TtsApiFp(configuration).updateUserTts(xUnisCustomerCd, ttsId, title, description, options).then((request) => request(axios, basePath));
+        updateUserTts(xUnisCustomerCd: string, ttsId: string, body?: Body9, options?: any): AxiosPromise<TtsItem> {
+            return TtsApiFp(configuration).updateUserTts(xUnisCustomerCd, ttsId, body, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -462,26 +452,26 @@ export class TtsApi extends BaseAPI {
     /**
      * 
      * @summary TTSデータ削除
-     * @param {string} xUnisCustomerCd ID of unis customer cd to return
      * @param {string} ttsId ID of tts to return
+     * @param {string} xUnisCustomerCd ID of unis customer cd to return
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TtsApi
      */
-    public deleteUserTts(xUnisCustomerCd: string, ttsId: string, options?: any) {
-        return TtsApiFp(this.configuration).deleteUserTts(xUnisCustomerCd, ttsId, options).then((request) => request(this.axios, this.basePath));
+    public deleteUserTts(ttsId: string, xUnisCustomerCd: string, options?: any) {
+        return TtsApiFp(this.configuration).deleteUserTts(ttsId, xUnisCustomerCd, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * 
      * @summary TTSデータ取得
-     * @param {string} xUnisCustomerCd ID of unis customer cd to return
      * @param {string} ttsId ID of tts to return
+     * @param {string} xUnisCustomerCd ID of unis customer cd to return
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TtsApi
      */
-    public getUserTts(xUnisCustomerCd: string, ttsId: string, options?: any) {
-        return TtsApiFp(this.configuration).getUserTts(xUnisCustomerCd, ttsId, options).then((request) => request(this.axios, this.basePath));
+    public getUserTts(ttsId: string, xUnisCustomerCd: string, options?: any) {
+        return TtsApiFp(this.configuration).getUserTts(ttsId, xUnisCustomerCd, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * 
@@ -499,13 +489,12 @@ export class TtsApi extends BaseAPI {
      * @summary TTSデータ更新（メタデータのみ）
      * @param {string} xUnisCustomerCd ID of unis customer cd to return
      * @param {string} ttsId ID of tts to return
-     * @param {string} [title] 
-     * @param {string} [description] 
+     * @param {Body9} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TtsApi
      */
-    public updateUserTts(xUnisCustomerCd: string, ttsId: string, title?: string, description?: string, options?: any) {
-        return TtsApiFp(this.configuration).updateUserTts(xUnisCustomerCd, ttsId, title, description, options).then((request) => request(this.axios, this.basePath));
+    public updateUserTts(xUnisCustomerCd: string, ttsId: string, body?: Body9, options?: any) {
+        return TtsApiFp(this.configuration).updateUserTts(xUnisCustomerCd, ttsId, body, options).then((request) => request(this.axios, this.basePath));
     }
 }

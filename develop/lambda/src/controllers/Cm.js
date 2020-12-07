@@ -13,8 +13,8 @@ module.exports.createUserCm = function createUserCm (req, res, next, body, xUnis
     });
 };
 
-module.exports.deleteUserCm = function deleteUserCm (req, res, next, xUnisCustomerCd, cmId) {
-  Cm.deleteUserCm(xUnisCustomerCd, cmId)
+module.exports.deleteUserCm = function deleteUserCm (req, res, next, cmId, xUnisCustomerCd) {
+  Cm.deleteUserCm(cmId, xUnisCustomerCd)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -23,8 +23,8 @@ module.exports.deleteUserCm = function deleteUserCm (req, res, next, xUnisCustom
     });
 };
 
-module.exports.getUserCm = function getUserCm (req, res, next, xUnisCustomerCd, cmId) {
-  Cm.getUserCm(xUnisCustomerCd, cmId)
+module.exports.getUserCm = function getUserCm (req, res, next, cmId, xUnisCustomerCd) {
+  Cm.getUserCm(cmId, xUnisCustomerCd)
     .then(function (response) {
       utils.writeJson(res, response);
     })

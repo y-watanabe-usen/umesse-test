@@ -3,8 +3,8 @@
 var utils = require('../utils/writer.js');
 var Share = require('../service/ShareService');
 
-module.exports.createShare = function createShare (req, res, next, xUnisCustomerCd, cmId) {
-  Share.createShare(xUnisCustomerCd, cmId)
+module.exports.createShare = function createShare (req, res, next, cmId, xUnisCustomerCd) {
+  Share.createShare(cmId, xUnisCustomerCd)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -13,8 +13,8 @@ module.exports.createShare = function createShare (req, res, next, xUnisCustomer
     });
 };
 
-module.exports.deleteShare = function deleteShare (req, res, next, xUnisCustomerCd, cmId) {
-  Share.deleteShare(xUnisCustomerCd, cmId)
+module.exports.deleteShare = function deleteShare (req, res, next, cmId, xUnisCustomerCd) {
+  Share.deleteShare(cmId, xUnisCustomerCd)
     .then(function (response) {
       utils.writeJson(res, response);
     })

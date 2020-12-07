@@ -86,7 +86,7 @@ exports.create = async (unisCustomerCd, body) => {
     );
 
     const res = await dynamodb.update(constants.usersTable, key, options);
-    if (!res || !res.Attributes) throw "update failed";
+    if (!res) throw "update failed";
 
     let json = res.Attributes.cm.pop();
     json["url"] = url;
@@ -170,7 +170,7 @@ exports.update = async (unisCustomerCd, cmId, body) => {
     );
 
     const res = await dynamodb.update(constants.usersTable, key, options);
-    if (!res || !res.Attributes) throw "update failed";
+    if (!res) throw "update failed";
 
     let json = res.Attributes.cm;
     return json;
@@ -195,6 +195,7 @@ exports.remove = async (unisCustomerCd, cmId) => {
         if (data.id === cmId) return { data, index };
       })
       .pop();
+    if (!cm) throw "not found";
 
     // CMステータス状態によるチェック（作成中や共有、アップロード中は削除しない）
     switch (cm.data.status) {
@@ -238,7 +239,7 @@ exports.remove = async (unisCustomerCd, cmId) => {
     );
 
     const res = await dynamodb.update(constants.usersTable, key, options);
-    if (!res || !res.Attributes) throw "update failed";
+    if (!res) throw "update failed";
 
     let json = res.Attributes.cm;
     return json;
