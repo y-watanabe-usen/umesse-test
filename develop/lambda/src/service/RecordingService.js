@@ -1,5 +1,5 @@
 'use strict';
-const { bgm, userRecording } = require("../../umesse/resources");
+const { fetch, userRecording } = require("../../umesse/resources");
 
 /**
  * 新規録音データ
@@ -12,7 +12,7 @@ exports.createUserRecording = function(xUnisCustomerCd, filename, recordedFile) 
     try {
       var data = {
         'filename': filename,
-        'recordedFile': recordedFile
+        'resources': recordedFile
       };
       console.log(data);
       userRecording.put(data);

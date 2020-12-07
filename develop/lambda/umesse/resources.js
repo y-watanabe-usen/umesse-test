@@ -33,11 +33,12 @@ exports.fetch = async (filter, industryId, sceneId) => {
 
 exports.userRecording = {
 	getAll: () => {
-		return controller.list("umesse-contents","ユーザー録音データ");
+		return controller.list("umesse-contents","user_recording_data");
 	},
 	get : (id) => {},
 	put: (params) => {
-		controller.put("umesse-contents", "ユーザー録音データ/" + params['filename'], params['resources']);
+		console.log(params);
+		controller.put("umesse-contents", "user_recording_data/" + params['filename'], params['resources']);
 		return "ok";
 	}
 }
