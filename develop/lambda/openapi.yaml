@@ -639,7 +639,7 @@ paths:
         - $ref: '#/components/parameters/RecordingId'
       requestBody:
         content: 
-          multipart/form-data:
+          application/json:
             schema: 
               type: object
               properties:
@@ -797,7 +797,7 @@ paths:
         - $ref: '#/components/parameters/TtsId'
       requestBody:
         content: 
-          multipart/form-data:
+          application/json:
             schema: 
               type: object
               properties:
@@ -1195,10 +1195,6 @@ components:
         seconds:
           type: integer
           example: 300
-        url:
-          type: string
-          description: '試聴URL'
-          example: 'https://example.com'
         industry:
           items:
             $ref: '#/components/schemas/IndustryItem' 
@@ -1222,10 +1218,6 @@ components:
         manuscript:
           type: string
           example: '本日はご来店いただきましてありがとうございます。当店は18時30分閉店です'
-        url:
-          type: string
-          description: '試聴URL'
-          example: 'https://example.com'
         seconds:
           type: integer
           example: 30
@@ -1249,10 +1241,6 @@ components:
         description:
           type: string
           example: '開始チャイム'
-        url:
-          type: string
-          description: '試聴URL'
-          example: 'https://example.com'
         seconds:
           type: integer
           example: 30

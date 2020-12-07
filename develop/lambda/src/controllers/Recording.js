@@ -43,8 +43,8 @@ module.exports.listUserRecording = function listUserRecording (req, res, next, x
     });
 };
 
-module.exports.updateUserRecording = function updateUserRecording (req, res, next, recordingId, xUnisCustomerCd) {
-  Recording.updateUserRecording(recordingId, xUnisCustomerCd)
+module.exports.updateUserRecording = function updateUserRecording (req, res, next, body, recordingId, xUnisCustomerCd) {
+  Recording.updateUserRecording(body, recordingId, xUnisCustomerCd)
     .then(function (response) {
       utils.writeJson(res, response);
     })

@@ -36,12 +36,6 @@ export interface ChimeItem {
      */
     description?: any;
     /**
-     * 試聴URL
-     * @type {string}
-     * @memberof ChimeItem
-     */
-    url?: any;
-    /**
      * 
      * @type {number}
      * @memberof ChimeItem

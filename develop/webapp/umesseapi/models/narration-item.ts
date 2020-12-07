@@ -42,12 +42,6 @@ export interface NarrationItem {
      */
     manuscript?: any;
     /**
-     * 試聴URL
-     * @type {string}
-     * @memberof NarrationItem
-     */
-    url?: any;
-    /**
      * 
      * @type {number}
      * @memberof NarrationItem

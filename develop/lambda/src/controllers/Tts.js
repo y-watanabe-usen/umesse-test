@@ -43,8 +43,8 @@ module.exports.listUserTts = function listUserTts (req, res, next, xUnisCustomer
     });
 };
 
-module.exports.updateUserTts = function updateUserTts (req, res, next, ttsId, xUnisCustomerCd) {
-  Tts.updateUserTts(ttsId, xUnisCustomerCd)
+module.exports.updateUserTts = function updateUserTts (req, res, next, body, ttsId, xUnisCustomerCd) {
+  Tts.updateUserTts(body, ttsId, xUnisCustomerCd)
     .then(function (response) {
       utils.writeJson(res, response);
     })

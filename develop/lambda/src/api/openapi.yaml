@@ -913,7 +913,7 @@ paths:
           type: string
       requestBody:
         content:
-          multipart/form-data:
+          application/json:
             schema:
               $ref: '#/components/schemas/body_7'
       responses:
@@ -1171,7 +1171,7 @@ paths:
           type: string
       requestBody:
         content:
-          multipart/form-data:
+          application/json:
             schema:
               $ref: '#/components/schemas/body_9'
       responses:
@@ -1664,10 +1664,6 @@ components:
         seconds:
           type: integer
           example: 300
-        url:
-          type: string
-          description: 試聴URL
-          example: https://example.com
         industry:
           type: array
           items:
@@ -1694,7 +1690,6 @@ components:
           id: "01"
         id: bgm/サンプル01
         title: タイトル
-        url: https://example.com
         timestamp: 2019-09-01T09:00:00+9:00
     NarrationItem:
       properties:
@@ -1710,10 +1705,6 @@ components:
         manuscript:
           type: string
           example: 本日はご来店いただきましてありがとうございます。当店は18時30分閉店です
-        url:
-          type: string
-          description: 試聴URL
-          example: https://example.com
         seconds:
           type: integer
           example: 30
@@ -1739,7 +1730,6 @@ components:
           id: "01"
         id: narration/サンプル01
         title: 18時30分閉店
-        url: https://example.com
         scene:
         - name: シーン名
           id: "01"
@@ -1757,10 +1747,6 @@ components:
         description:
           type: string
           example: 開始チャイム
-        url:
-          type: string
-          description: 試聴URL
-          example: https://example.com
         seconds:
           type: integer
           example: 30
@@ -1772,7 +1758,6 @@ components:
         description: 開始チャイム
         id: chime/サンプル01
         title: 開始チャイム
-        url: https://example.com
         timestamp: 2019-09-01T09:00:00+9:00
     WordItem:
       properties:
