@@ -14,19 +14,19 @@
 /**
  * 
  * @export
- * @interface Body7
+ * @interface Body9
  */
-export interface Body7 {
+export interface Body9 {
     /**
      * 
      * @type {string}
-     * @memberof Body7
+     * @memberof Body9
      */
     title?: any;
     /**
      * 
      * @type {string}
-     * @memberof Body7
+     * @memberof Body9
      */
     description?: any;
 }

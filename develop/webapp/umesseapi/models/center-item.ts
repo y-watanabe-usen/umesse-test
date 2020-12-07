@@ -49,13 +49,13 @@ export interface CenterItem {
     cmCommentManuscript?: any;
     /**
      * 
-     * @type {Date}
+     * @type {string}
      * @memberof CenterItem
      */
     startDatetime?: any;
     /**
      * 
-     * @type {Date}
+     * @type {string}
      * @memberof CenterItem
      */
     endDatetime?: any;

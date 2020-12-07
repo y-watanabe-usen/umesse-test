@@ -22,23 +22,5 @@ export interface Body4 {
      * @type {string}
      * @memberof Body4
      */
-    dataProcessType?: any;
-    /**
-     * 
-     * @type {string}
-     * @memberof Body4
-     */
-    uMesseCmCd?: any;
-    /**
-     * 
-     * @type {string}
-     * @memberof Body4
-     */
-    errorCode?: any;
-    /**
-     * 
-     * @type {string}
-     * @memberof Body4
-     */
-    errorMessege?: any;
+    endDate?: any;
 }

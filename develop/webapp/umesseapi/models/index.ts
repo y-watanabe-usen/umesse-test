@@ -9,6 +9,7 @@ export * from './body5';
 export * from './body6';
 export * from './body7';
 export * from './body8';
+export * from './body9';
 export * from './center-item';
 export * from './chime-item';
 export * from './cm-item';

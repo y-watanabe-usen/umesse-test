@@ -29,6 +29,7 @@ exports.createUserRecording = function(xUnisCustomerCd, filename, recordedFile) 
 /**
  * 録音データ削除
  *
+ * xUnisCustomerCd String ID of unis customer cd to return
  * recordingId String ID of recording to return
  * no response value expected for this operation
  **/

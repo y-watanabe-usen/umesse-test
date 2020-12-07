@@ -31,32 +31,32 @@ export interface Body2 {
     description?: any;
     /**
      * 
-     * @type {number}
-     * @memberof Body2
-     */
-    seconds?: any;
-    /**
-     * 
-     * @type {Date}
+     * @type {string}
      * @memberof Body2
      */
     startDate?: any;
     /**
      * 
-     * @type {Date}
+     * @type {string}
      * @memberof Body2
      */
     endDate?: any;
     /**
      * 
-     * @type {string}
+     * @type {IndustryItem}
      * @memberof Body2
      */
     industry?: any;
     /**
      * 
-     * @type {string}
+     * @type {SceneItem}
      * @memberof Body2
      */
     scene?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof Body2
+     */
+    upload?: any;
 }

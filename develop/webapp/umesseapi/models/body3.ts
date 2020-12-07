@@ -22,23 +22,5 @@ export interface Body3 {
      * @type {string}
      * @memberof Body3
      */
-    title?: any;
-    /**
-     * 
-     * @type {string}
-     * @memberof Body3
-     */
-    description?: any;
-    /**
-     * 
-     * @type {Date}
-     * @memberof Body3
-     */
-    startDate?: any;
-    /**
-     * 
-     * @type {Date}
-     * @memberof Body3
-     */
-    endDate?: any;
+    upload?: any;
 }

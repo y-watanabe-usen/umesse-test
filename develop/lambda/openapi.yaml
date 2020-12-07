@@ -198,24 +198,19 @@ paths:
                 description:
                   type: string
                   example: "サンプル"
-                seconds:
-                  type: integer
-                  format: int64
-                  example: 540
                 startDate:
                   type: string
-                  format: date-time
                   example: "2019-09-01T09:00:00+9:00"
                 endDate:
                   type: string
-                  format: date-time
                   example: "9999-12-31T23:59:59+09:00"
                 industry:
-                  type: string
-                  example: ""
+                  $ref: '#/components/schemas/IndustryItem'
                 scene:
+                  $ref: '#/components/schemas/SceneItem'
+                upload:
                   type: string
-                  example: ""
+                  example: "01: センター, 02: S'sence"
       responses:
         '200':
           description: successful response
@@ -278,19 +273,9 @@ paths:
             schema: 
               type: object
               properties:
-                title:
+                upload:
                   type: string
-                  example: 'タイトル'
-                description:
-                  type: string
-                  example: '説明文'
-                startDate:
-                  type: string
-                  format: date-time
-                endDate:
-                  type: string
-                  format: date-time
-                  example: '掲載終了日時（固定）'
+                  example: "01: センター, 02: S'sence"
       responses:
         '200':
           description: successful response
@@ -318,6 +303,15 @@ paths:
         # - $ref: '#/components/parameters/Token'
         - $ref: '#/components/parameters/UnisCustomerCd'
         - $ref: '#/components/parameters/CmId'
+      requestBody:
+        content: 
+          application/json:
+            schema: 
+              type: object
+              properties:
+                endDate:
+                  type: string
+                  example: '掲載終了日時（固定）'
       responses:
         '200':
           description: successful response
@@ -1159,7 +1153,7 @@ components:
                 example: "narration/サンプル01"
               volume:
                 type: integer
-                example: 1.5
+                example: 150
         startChime:
           type: object
           properties:
@@ -1168,7 +1162,7 @@ components:
               example: "chime/サンプル01"
             volume:
               type: integer
-              example: 0.5
+              example: 50
         endChime:
           type: object
           properties:
@@ -1177,7 +1171,7 @@ components:
               example: "chime/サンプル02"
             volume:
               type: integer
-              example: 0.5
+              example: 50
         bgm:
           type: object
           properties:
@@ -1186,7 +1180,7 @@ components:
               example: "bgm/サンプル01"
             volume:
               type: integer
-              example: 0.5
+              example: 50
     BgmItem:
       properties:
         id:
@@ -1357,11 +1351,9 @@ components:
           example: "テストCMです"
         startDatetime:
           type: string
-          format: date-time
           example: "2020-01-01T12:34:56+09:00"
         endDatetime:
           type: string
-          format: date-time
           example: "9999-12-31T23:59:59+09:00"
         productionType:
           type: string
