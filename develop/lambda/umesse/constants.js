@@ -6,7 +6,7 @@ exports.constants = {
   region: "ap-northeast-1",
   debug: process.env.debug,
 
-  // S3 bucket name
+  // S3 設定
   // TODO: env local, dev, stg, prod
   s3Config: function () {
     return this.debug
@@ -24,7 +24,7 @@ exports.constants = {
   contentsBucket: this.debug ? "umesse-contents" : "umesse-contents",
   centerBucket: this.debug ? "umesse-center" : "umesse-center",
 
-  // DynamoDb table name
+  // DynamoDb 設定
   // TODO: env local, dev, stg, prod
   dynamoDbConfig: function () {
     return this.debug
@@ -51,25 +51,25 @@ exports.constants = {
     return `${unisCustomerCd}-${div}-${id}`;
   },
 
-  // cm status
+  // CMステータス
   cmStatus: {
-    DELETE: "00",
-    CREATING: "01",
-    COMPLETE: "02",
-    SHARING: "03",
-    ERROR: "09",
-    CENTER_UPLOADING: "11",
-    CENTER_COMPLETE: "12",
-    CENTER_ERROR: "19",
+    DELETE: "00", // CM削除
+    CREATING: "01", // CM作成中
+    COMPLETE: "02", // CM作成完了
+    SHARING: "03", // CM共有中
+    ERROR: "09", // CMエラー
+    CENTER_UPLOADING: "11", // センターアップロード中
+    CENTER_COMPLETE: "12", // センターアップロード完了
+    CENTER_ERROR: "19", // センターアップロードエラー
   },
 
-  // cm production type
+  // CMタイプ
   cmProductionType: {
-    MUSIC: "01",
-    NONE: "02",
+    MUSIC: "01", // 音楽系CM
+    NONE: "02", // 素ナレCM（BGMなし）
   },
 
-  // error code
+  // TODO: error code
   errorCode: {
     // system
     E000001: "E000001",

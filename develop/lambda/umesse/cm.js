@@ -6,6 +6,7 @@ const { constants } = require("./constants");
 const dynamodb = require("./utils/dynamodbController").controller;
 const s3 = require("./utils/s3Controller").controller;
 
+// CM取得（一覧・個別）
 exports.fetch = async (unisCustomerCd, cmId) => {
   constants.debuglog(
     `cm fetch unis_customer_cd: ${unisCustomerCd}, cm_id: ${cmId}`
@@ -34,6 +35,7 @@ exports.fetch = async (unisCustomerCd, cmId) => {
   }
 };
 
+// CM新規作成（結合処理）
 exports.create = async (unisCustomerCd, body) => {
   constants.debuglog(
     `cm create unis_customer_cd: ${unisCustomerCd}, body: ${JSON.stringify(
@@ -44,18 +46,18 @@ exports.create = async (unisCustomerCd, body) => {
   try {
     const id = constants.generateId(unisCustomerCd, "c");
 
-    // cm mixing and s3 put
+    // CM結合、S3へPUT
     const seconds = await generateCm(unisCustomerCd, id, body);
     if (!seconds) throw "generate cm failed";
 
-    // s3 signed url
+    // 署名付きURLの発行
     const url = await s3.getSignedUrl(
       constants.usersBucket,
       `users/${unisCustomerCd}/cm/${id}.mp3`
     );
     if (!url) throw "getSignedUrl failed";
 
-    // dynamodb update
+    // DynamoDBのデータ更新
     const data = {
       id: id,
       materials: body.materials,
@@ -91,6 +93,7 @@ exports.create = async (unisCustomerCd, body) => {
   }
 };
 
+// CM確定・更新
 exports.update = async (unisCustomerCd, cmId, body) => {
   constants.debuglog(
     `cm update unis_customer_cd: ${unisCustomerCd}, body: ${JSON.stringify(
@@ -121,6 +124,7 @@ exports.update = async (unisCustomerCd, cmId, body) => {
   }
 };
 
+// CM削除
 exports.remove = async (unisCustomerCd, cmId) => {
   constants.debuglog(
     `cm remove unis_customer_cd: ${unisCustomerCd}, cm_id: ${cmId}`
@@ -135,6 +139,7 @@ exports.remove = async (unisCustomerCd, cmId) => {
       })
       .pop();
 
+    // CMステータス状態によるチェック（作成中や共有、アップロード中は削除しない）
     switch (cm.data.status) {
       case constants.cmStatus.CREATING:
         throw "作成中";
@@ -148,13 +153,13 @@ exports.remove = async (unisCustomerCd, cmId) => {
         throw "エラー発生中";
     }
 
-    // s3 delete
+    // S3上のCMを削除（エラーは検知しなくてよいかも）
     await s3.delete(
       constants.usersBucket,
       `users/${unisCustomerCd}/cm/${cmId}.mp3`
     );
 
-    // dynamodb update
+    // DynamoDBのデータ更新
     cm.data.status = constants.cmStatus.DELETE;
     cm.data.timestamp = new Date().toISOString();
     const key = { unis_customer_cd: unisCustomerCd };
@@ -180,9 +185,10 @@ exports.remove = async (unisCustomerCd, cmId) => {
   }
 };
 
+// CM結合処理
 function generateCm(unisCustomerCd, id, materials) {
   return new Promise(async function (resolve, reject) {
-    // FIXME: materials
+    // FIXME: materials 一旦仮
     const list = [
       "chime/サンプル01.mp3",
       "chime/サンプル02.mp3",
@@ -205,7 +211,7 @@ function generateCm(unisCustomerCd, id, materials) {
         paths += `-i ${workDir}/${key}.mp3 `;
       }
 
-      // FIXME: ffmpeg path
+      // FIXME: ffmpeg path 相対パスでもよいか、各パラメーターをチューニング
       const command = `./umesse/bin/ffmpeg -hide_banner ${paths} \
         -filter_complex ' \
           [0:a]volume=0.5[start_chime]; \
@@ -222,7 +228,7 @@ function generateCm(unisCustomerCd, id, materials) {
       constants.debuglog(command);
       execSync(command);
 
-      // FIXME: get seconds...
+      // FIXME: get seconds... 他に方法があるか
       const seconds = execSync(
         `./umesse/bin/ffmpeg -hide_banner -i ${workDir}/${id}.mp3 2>&1 | \
           grep 'Duration' | cut -d ' ' -f 4 | cut -d '.' -f 1`

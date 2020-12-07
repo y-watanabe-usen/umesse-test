@@ -3,6 +3,7 @@
 const { constants } = require("./constants");
 const dynamodb = require("./utils/dynamodbController").controller;
 
+// ユーザーデータ取得
 exports.fetch = async (unisCustomerCd) => {
   constants.debuglog(`user fetch unis_customer_cd: ${unisCustomerCd}`);
 
