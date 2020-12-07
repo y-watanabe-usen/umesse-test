@@ -44,6 +44,10 @@ exports.create = async (unisCustomerCd, body) => {
   );
 
   try {
+    // TODO: body validation check
+    if (!body) throw "body parameter failed";
+
+    // ID作成
     const id = constants.generateId(unisCustomerCd, "c");
 
     // CM結合、S3へPUT
@@ -96,27 +100,79 @@ exports.create = async (unisCustomerCd, body) => {
 // CM確定・更新
 exports.update = async (unisCustomerCd, cmId, body) => {
   constants.debuglog(
-    `cm update unis_customer_cd: ${unisCustomerCd}, body: ${JSON.stringify(
+    `cm update unis_customer_cd: ${unisCustomerCd}, cmId: ${cmId}, body: ${JSON.stringify(
       body
     )}`
   );
 
   try {
-    // TODO: CM convert
-    // TODO: Center upload
-    // TODO: Dynamodb update
+    // TODO: body validation check
+    if (!body) throw "body parameter failed";
+
+    // CM一覧から該当CMを取得
+    const list = await this.fetch(unisCustomerCd);
+    if (!list) throw "not found";
+    const cm = list
+      .map((data, index) => {
+        if (data.id === cmId) return { data, index };
+      })
+      .pop();
+
+    // CMステータス状態によるチェック（アップロード中は更新しない）
+    switch (cm.data.status) {
+      case constants.cmStatus.CONVERT:
+        throw "CMエンコード中のため、更新できません";
+      case constants.cmStatus.CENTER_UPLOADING:
+        throw "U MUSICへの連携が完了していないため、更新できません";
+      case constants.cmStatus.SSENCE_UPLOADING:
+        throw "S'Senceへの連携が完了していないため、更新できません";
+      case constants.cmStatus.ERROR:
+      case constants.cmStatus.CENTER_ERROR:
+      case constants.cmStatus.SSENCE_ERROR:
+        throw "エラーが発生しているため、更新できません";
+    }
+
+    // CM作成中の場合
+    if (cm.data.status == constants.cmStatus.CREATING) {
+      // TODO: add sqs
+      cm.data.status = constants.cmStatus.CONVERT;
+    }
+
+    // CMアップロード
+    if (body.upload == constants.cmUploadSystem.CENTER) {
+      // センターアップロードの場合
+      // TODO:
+      cm.data.status = constants.cmStatus.CENTER_UPLOADING;
+    } else if (body.upload == constants.cmUploadSystem.SSENCE) {
+      // S'senceアップロードの場合
+      // TODO:
+      cm.data.status = constants.cmStatus.SSENCE_UPLOADING;
+    }
+
+    // DynamoDBのデータ更新
+    cm.data.title = body.title;
+    cm.data.description = body.description;
+    cm.data.startDate = body.startDate;
+    cm.data.endDate = body.endDate;
+    cm.data.industry = body.industry;
+    cm.data.scene = body.scene;
+    cm.data.timestamp = new Date().toISOString();
     const key = { unis_customer_cd: unisCustomerCd };
     const options = {
-      ProjectionExpression: "cm",
+      UpdateExpression: `SET cm[${cm.index}] = :cm`,
+      ExpressionAttributeValues: {
+        ":cm": cm.data,
+      },
+      ReturnValues: "UPDATED_NEW",
     };
     constants.debuglog(
       `key: ${JSON.stringify(key)}, options: ${JSON.stringify(options)}`
     );
 
-    const res = await dynamodb.get(constants.usersTable, key, options);
-    if (!res || !res.Item) throw "not found";
+    const res = await dynamodb.update(constants.usersTable, key, options);
+    if (!res || !res.Attributes) throw "update failed";
 
-    let json = res.Item.cm;
+    let json = res.Attributes.cm;
     return json;
   } catch (e) {
     // TODO: error handle
@@ -131,6 +187,7 @@ exports.remove = async (unisCustomerCd, cmId) => {
   );
 
   try {
+    // CM一覧から該当CMを取得
     const list = await this.fetch(unisCustomerCd);
     if (!list) throw "not found";
     const cm = list
@@ -142,15 +199,21 @@ exports.remove = async (unisCustomerCd, cmId) => {
     // CMステータス状態によるチェック（作成中や共有、アップロード中は削除しない）
     switch (cm.data.status) {
       case constants.cmStatus.CREATING:
-        throw "作成中";
+        throw "CM作成中のため、削除できません";
+      case constants.cmStatus.CONVERT:
+        throw "CMエンコード中のため、削除できません";
       case constants.cmStatus.SHARING:
-        throw "共有中";
+        throw "CM共有中のため、削除できません";
       case constants.cmStatus.CENTER_UPLOADING:
       case constants.cmStatus.CENTER_COMPLETE:
-        throw "U MUSIC連携中";
+        throw "U MUSICへ連携中のため、削除できません";
+      case constants.cmStatus.SSENCE_UPLOADING:
+      case constants.cmStatus.SSENCE_COMPLETE:
+        throw "S'Senceへ連携中のため、削除できません";
       case constants.cmStatus.ERROR:
       case constants.cmStatus.CENTER_ERROR:
-        throw "エラー発生中";
+      case constants.cmStatus.SSENCE_ERROR:
+        throw "エラーが発生しているため、削除できません";
     }
 
     // S3上のCMを削除（エラーは検知しなくてよいかも）

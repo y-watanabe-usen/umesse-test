@@ -56,17 +56,27 @@ exports.constants = {
     DELETE: "00", // CM削除
     CREATING: "01", // CM作成中
     COMPLETE: "02", // CM作成完了
-    SHARING: "03", // CM共有中
+    CONVERT: "03", // CMエンコード中
+    SHARING: "04", // CM共有中
     ERROR: "09", // CMエラー
     CENTER_UPLOADING: "11", // センターアップロード中
     CENTER_COMPLETE: "12", // センターアップロード完了
     CENTER_ERROR: "19", // センターアップロードエラー
+    SSENCE_UPLOADING: "21", // S'senceアップロード中
+    SSENCE_COMPLETE: "22", // S'senceアップロード完了
+    SSENCE_ERROR: "29", // S'senceアップロードエラー
   },
 
   // CMタイプ
   cmProductionType: {
     MUSIC: "01", // 音楽系CM
     NONE: "02", // 素ナレCM（BGMなし）
+  },
+
+  // CMアップロードシステム
+  cmUploadSystem: {
+    CENTER: "01",
+    SSENCE: "02",
   },
 
   // TODO: error code
