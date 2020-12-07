@@ -14,7 +14,7 @@ export enum UPLOAD_RECORDING_STATE {
 }
 
 interface FunctionInterface {
-    createUserRecording(s: string, s2: string): Promise<any>;
+    createUserRecording(s: string, s2: string, s3: string): Promise<any>;
 }
 export function useUploadRecordingService(api: FunctionInterface) {
     const state = reactive({
@@ -31,7 +31,7 @@ export function useUploadRecordingService(api: FunctionInterface) {
 
         const url = URL.createObjectURL(file.blob);
         api
-            .createUserRecording(file.title!, url)
+            .createUserRecording("sampleID", file.title!, url)
             .then((value) => (state.status = UPLOAD_RECORDING_STATE.UPLOADED))
             .catch((error) => (state.status = UPLOAD_RECORDING_STATE.ERROR))
             .finally(() => URL.revokeObjectURL(url));
