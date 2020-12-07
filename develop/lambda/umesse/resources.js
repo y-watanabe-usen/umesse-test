@@ -2,7 +2,6 @@
 
 const { constants } = require("./constants");
 const dynamodb = require("./utils/dynamodbController").controller;
-const { controller } = require("./utils/s3Controller") 
 
 exports.fetch = async (filter, industryId, sceneId) => {
   constants.debuglog(
@@ -30,15 +29,3 @@ exports.fetch = async (filter, industryId, sceneId) => {
     console.log(e);
   }
 };
-
-exports.userRecording = {
-	getAll: () => {
-		return controller.list("umesse-contents","user_recording_data");
-	},
-	get : (id) => {},
-	put: (params) => {
-		console.log(params);
-		controller.put("umesse-contents", "user_recording_data/" + params['filename'], params['resources']);
-		return "ok";
-	}
-}
