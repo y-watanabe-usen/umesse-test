@@ -12,7 +12,7 @@ exports.createUserRecording = function(xUnisCustomerCd, filename, recordedFile) 
     try {
       var data = {
         'filename': filename,
-        'resouces': recordedFile
+        'recordedFile': recordedFile
       };
       console.log(data);
       userRecording.put(data);
