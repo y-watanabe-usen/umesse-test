@@ -210,17 +210,17 @@ paths:
       summary: CM情報取得
       operationId: getUserCm
       parameters:
-      - name: x-unis-customer-cd
-        in: header
-        description: ID of unis customer cd to return
+      - name: cmId
+        in: path
+        description: ID of cm to return
         required: true
         style: simple
         explode: false
         schema:
           type: string
-      - name: cmId
-        in: path
-        description: ID of cm to return
+      - name: x-unis-customer-cd
+        in: header
+        description: ID of unis customer cd to return
         required: true
         style: simple
         explode: false
@@ -262,17 +262,17 @@ paths:
       summary: CM情報更新
       operationId: updateUserCm
       parameters:
-      - name: x-unis-customer-cd
-        in: header
-        description: ID of unis customer cd to return
+      - name: cmId
+        in: path
+        description: ID of cm to return
         required: true
         style: simple
         explode: false
         schema:
           type: string
-      - name: cmId
-        in: path
-        description: ID of cm to return
+      - name: x-unis-customer-cd
+        in: header
+        description: ID of unis customer cd to return
         required: true
         style: simple
         explode: false
@@ -319,17 +319,17 @@ paths:
       summary: CM情報削除
       operationId: deleteUserCm
       parameters:
-      - name: x-unis-customer-cd
-        in: header
-        description: ID of unis customer cd to return
+      - name: cmId
+        in: path
+        description: ID of cm to return
         required: true
         style: simple
         explode: false
         schema:
           type: string
-      - name: cmId
-        in: path
-        description: ID of cm to return
+      - name: x-unis-customer-cd
+        in: header
+        description: ID of unis customer cd to return
         required: true
         style: simple
         explode: false
@@ -372,17 +372,17 @@ paths:
       summary: CMセンター連携追加
       operationId: createCenterCm
       parameters:
-      - name: x-unis-customer-cd
-        in: header
-        description: ID of unis customer cd to return
+      - name: cmId
+        in: path
+        description: ID of cm to return
         required: true
         style: simple
         explode: false
         schema:
           type: string
-      - name: cmId
-        in: path
-        description: ID of cm to return
+      - name: x-unis-customer-cd
+        in: header
+        description: ID of unis customer cd to return
         required: true
         style: simple
         explode: false
@@ -429,17 +429,17 @@ paths:
       summary: CMセンター連携削除
       operationId: deleteCenterCm
       parameters:
-      - name: x-unis-customer-cd
-        in: header
-        description: ID of unis customer cd to return
+      - name: cmId
+        in: path
+        description: ID of cm to return
         required: true
         style: simple
         explode: false
         schema:
           type: string
-      - name: cmId
-        in: path
-        description: ID of cm to return
+      - name: x-unis-customer-cd
+        in: header
+        description: ID of unis customer cd to return
         required: true
         style: simple
         explode: false
@@ -664,17 +664,17 @@ paths:
       summary: CM共有追加
       operationId: createShare
       parameters:
-      - name: x-unis-customer-cd
-        in: header
-        description: ID of unis customer cd to return
+      - name: cmId
+        in: path
+        description: ID of cm to return
         required: true
         style: simple
         explode: false
         schema:
           type: string
-      - name: cmId
-        in: path
-        description: ID of cm to return
+      - name: x-unis-customer-cd
+        in: header
+        description: ID of unis customer cd to return
         required: true
         style: simple
         explode: false
@@ -690,17 +690,17 @@ paths:
       summary: CM共有削除
       operationId: deleteShare
       parameters:
-      - name: x-unis-customer-cd
-        in: header
-        description: ID of unis customer cd to return
+      - name: cmId
+        in: path
+        description: ID of cm to return
         required: true
         style: simple
         explode: false
         schema:
           type: string
-      - name: cmId
-        in: path
-        description: ID of cm to return
+      - name: x-unis-customer-cd
+        in: header
+        description: ID of unis customer cd to return
         required: true
         style: simple
         explode: false
@@ -843,17 +843,17 @@ paths:
       summary: 録音データ取得
       operationId: getUserRecording
       parameters:
-      - name: x-unis-customer-cd
-        in: header
-        description: ID of unis customer cd to return
+      - name: recordingId
+        in: path
+        description: ID of recording to return
         required: true
         style: simple
         explode: false
         schema:
           type: string
-      - name: recordingId
-        in: path
-        description: ID of recording to return
+      - name: x-unis-customer-cd
+        in: header
+        description: ID of unis customer cd to return
         required: true
         style: simple
         explode: false
@@ -895,17 +895,17 @@ paths:
       summary: 録音データ更新（メタデータのみ）
       operationId: updateUserRecording
       parameters:
-      - name: x-unis-customer-cd
-        in: header
-        description: ID of unis customer cd to return
+      - name: recordingId
+        in: path
+        description: ID of recording to return
         required: true
         style: simple
         explode: false
         schema:
           type: string
-      - name: recordingId
-        in: path
-        description: ID of recording to return
+      - name: x-unis-customer-cd
+        in: header
+        description: ID of unis customer cd to return
         required: true
         style: simple
         explode: false
@@ -952,17 +952,17 @@ paths:
       summary: 録音データ削除
       operationId: deleteUserRecording
       parameters:
-      - name: x-unis-customer-cd
-        in: header
-        description: ID of unis customer cd to return
+      - name: recordingId
+        in: path
+        description: ID of recording to return
         required: true
         style: simple
         explode: false
         schema:
           type: string
-      - name: recordingId
-        in: path
-        description: ID of recording to return
+      - name: x-unis-customer-cd
+        in: header
+        description: ID of unis customer cd to return
         required: true
         style: simple
         explode: false
@@ -1101,17 +1101,17 @@ paths:
       summary: TTSデータ取得
       operationId: getUserTts
       parameters:
-      - name: x-unis-customer-cd
-        in: header
-        description: ID of unis customer cd to return
+      - name: ttsId
+        in: path
+        description: ID of tts to return
         required: true
         style: simple
         explode: false
         schema:
           type: string
-      - name: ttsId
-        in: path
-        description: ID of tts to return
+      - name: x-unis-customer-cd
+        in: header
+        description: ID of unis customer cd to return
         required: true
         style: simple
         explode: false
@@ -1153,17 +1153,17 @@ paths:
       summary: TTSデータ更新（メタデータのみ）
       operationId: updateUserTts
       parameters:
-      - name: x-unis-customer-cd
-        in: header
-        description: ID of unis customer cd to return
+      - name: ttsId
+        in: path
+        description: ID of tts to return
         required: true
         style: simple
         explode: false
         schema:
           type: string
-      - name: ttsId
-        in: path
-        description: ID of tts to return
+      - name: x-unis-customer-cd
+        in: header
+        description: ID of unis customer cd to return
         required: true
         style: simple
         explode: false
@@ -1210,17 +1210,17 @@ paths:
       summary: TTSデータ削除
       operationId: deleteUserTts
       parameters:
-      - name: x-unis-customer-cd
-        in: header
-        description: ID of unis customer cd to return
+      - name: ttsId
+        in: path
+        description: ID of tts to return
         required: true
         style: simple
         explode: false
         schema:
           type: string
-      - name: ttsId
-        in: path
-        description: ID of tts to return
+      - name: x-unis-customer-cd
+        in: header
+        description: ID of unis customer cd to return
         required: true
         style: simple
         explode: false

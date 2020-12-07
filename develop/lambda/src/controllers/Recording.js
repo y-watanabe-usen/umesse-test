@@ -3,8 +3,8 @@
 var utils = require('../utils/writer.js');
 var Recording = require('../service/RecordingService');
 
-module.exports.createUserRecording = function createUserRecording (req, res, next, xUnisCustomerCd) {
-  Recording.createUserRecording(xUnisCustomerCd, req.body['filename'], req.body['recordedFile'])
+module.exports.createUserRecording = function createUserRecording (req, res, next, body, xUnisCustomerCd) {
+  Recording.createUserRecording(xUnisCustomerCd, body['filename'], body['recordedFile'])
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -13,8 +13,8 @@ module.exports.createUserRecording = function createUserRecording (req, res, nex
     });
 };
 
-module.exports.deleteUserRecording = function deleteUserRecording (req, res, next, xUnisCustomerCd, recordingId) {
-  Recording.deleteUserRecording(xUnisCustomerCd, recordingId)
+module.exports.deleteUserRecording = function deleteUserRecording (req, res, next, recordingId, xUnisCustomerCd) {
+  Recording.deleteUserRecording(recordingId, xUnisCustomerCd)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -23,8 +23,8 @@ module.exports.deleteUserRecording = function deleteUserRecording (req, res, nex
     });
 };
 
-module.exports.getUserRecording = function getUserRecording (req, res, next, xUnisCustomerCd, recordingId) {
-  Recording.getUserRecording(xUnisCustomerCd, recordingId)
+module.exports.getUserRecording = function getUserRecording (req, res, next, recordingId, xUnisCustomerCd) {
+  Recording.getUserRecording(recordingId, xUnisCustomerCd)
     .then(function (response) {
       utils.writeJson(res, response);
     })

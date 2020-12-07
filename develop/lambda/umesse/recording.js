@@ -34,16 +34,14 @@ exports.fetch = async (unisCustomerCd, recordingId) => {
 };
 
 // 録音音声新規作成
-exports.create = async (unisCustomerCd, params) => {
+exports.create = async (unisCustomerCd, fileName, resource) => {
   constants.debuglog(
-    `recording create unis_customer_cd: ${unisCustomerCd}, params: ${JSON.stringify(
-      params
-    )}`
+    `recording create unis_customer_cd: ${unisCustomerCd}, fileName: ${fileName}`
   );
 
   try {
-    // TODO: params validation check
-    if (!params) throw "params failed";
+    // TODO: resources validation check
+    if (!resource) throw "resources failed";
 
     // ID作成
     const id = constants.generateId(unisCustomerCd, "r");
@@ -52,7 +50,7 @@ exports.create = async (unisCustomerCd, params) => {
     await s3.put(
       constants.usersBucket,
       `users/${unisCustomerCd}/recording/${id}.mp3`,
-      params["resources"]
+      resource
     );
 
     const time = new Date().toISOString();
@@ -75,7 +73,7 @@ exports.create = async (unisCustomerCd, params) => {
     );
 
     const res = await dynamodb.update(constants.usersTable, key, options);
-    if (!res || !res.Attributes) throw "update failed";
+    if (!res) throw "update failed";
 
     let json = res.Attributes.recording.pop();
     return json;
@@ -107,8 +105,8 @@ exports.update = async (unisCustomerCd, recordingId, body) => {
       .pop();
 
     // DynamoDBのデータ更新
-    recording.data.title = body.title;
-    recording.data.description = body.description;
+    if (body.title) tts.data.title = body.title;
+    if (body.description) tts.data.description = body.description;
     recording.data.timestamp = new Date().toISOString();
     const key = { unis_customer_cd: unisCustomerCd };
     const options = {
@@ -123,7 +121,7 @@ exports.update = async (unisCustomerCd, recordingId, body) => {
     );
 
     const res = await dynamodb.update(constants.usersTable, key, options);
-    if (!res || !res.Attributes) throw "update failed";
+    if (!res) throw "update failed";
 
     let json = res.Attributes.recording;
     return json;
@@ -148,6 +146,7 @@ exports.remove = async (unisCustomerCd, recordingId) => {
         if (data.id === recordingId) return { data, index };
       })
       .pop();
+    if (!recording) throw "not found";
 
     // S3上の録音音声を削除（エラーは検知しなくてよいかも）
     await s3.delete(
@@ -166,7 +165,7 @@ exports.remove = async (unisCustomerCd, recordingId) => {
     );
 
     const res = await dynamodb.update(constants.usersTable, key, options);
-    if (!res || !res.Attributes) throw "update failed";
+    if (!res) throw "update failed";
 
     let json = res.Attributes.recording;
     return json;

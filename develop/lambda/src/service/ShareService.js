@@ -4,11 +4,11 @@
 /**
  * CM共有追加
  *
- * xUnisCustomerCd String ID of unis customer cd to return
  * cmId String ID of cm to return
+ * xUnisCustomerCd String ID of unis customer cd to return
  * no response value expected for this operation
  **/
-exports.createShare = function(xUnisCustomerCd,cmId) {
+exports.createShare = function(cmId,xUnisCustomerCd) {
   return new Promise(function(resolve, reject) {
     resolve();
   });
@@ -18,11 +18,11 @@ exports.createShare = function(xUnisCustomerCd,cmId) {
 /**
  * CM共有削除
  *
- * xUnisCustomerCd String ID of unis customer cd to return
  * cmId String ID of cm to return
+ * xUnisCustomerCd String ID of unis customer cd to return
  * returns CmItem
  **/
-exports.deleteShare = function(xUnisCustomerCd,cmId) {
+exports.deleteShare = function(cmId,xUnisCustomerCd) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {

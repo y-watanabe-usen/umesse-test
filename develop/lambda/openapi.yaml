@@ -156,9 +156,9 @@ paths:
       # security:
       #   - ApiKeyAuth: []
       parameters:
+        - $ref: '#/components/parameters/CmId'
         # - $ref: '#/components/parameters/Token'
         - $ref: '#/components/parameters/UnisCustomerCd'
-        - $ref: '#/components/parameters/CmId'
       responses:
         '200':
           description: The response
@@ -183,9 +183,9 @@ paths:
       # security:
       #   - ApiKeyAuth: []
       parameters:
+        - $ref: '#/components/parameters/CmId'
         # - $ref: '#/components/parameters/Token'
         - $ref: '#/components/parameters/UnisCustomerCd'
-        - $ref: '#/components/parameters/CmId'
       requestBody:
         content: 
           application/json:
@@ -235,9 +235,9 @@ paths:
       # security:
       #   - ApiKeyAuth: []
       parameters:
+        - $ref: '#/components/parameters/CmId'
         # - $ref: '#/components/parameters/Token'
         - $ref: '#/components/parameters/UnisCustomerCd'
-        - $ref: '#/components/parameters/CmId'
       responses:
         '200':
           description: successful response
@@ -264,9 +264,9 @@ paths:
       # security:
       #   - ApiKeyAuth: []
       parameters:
+        - $ref: '#/components/parameters/CmId'
         # - $ref: '#/components/parameters/Token'
         - $ref: '#/components/parameters/UnisCustomerCd'
-        - $ref: '#/components/parameters/CmId'
       requestBody:
         content: 
           application/json:
@@ -300,9 +300,9 @@ paths:
       # security:
       #   - ApiKeyAuth: []
       parameters:
+        - $ref: '#/components/parameters/CmId'
         # - $ref: '#/components/parameters/Token'
         - $ref: '#/components/parameters/UnisCustomerCd'
-        - $ref: '#/components/parameters/CmId'
       requestBody:
         content: 
           application/json:
@@ -496,9 +496,9 @@ paths:
       # security:
       #   - ApiKeyAuth: []
       parameters:
+        - $ref: '#/components/parameters/CmId'
         # - $ref: '#/components/parameters/Token'
         - $ref: '#/components/parameters/UnisCustomerCd'
-        - $ref: '#/components/parameters/CmId'
       responses:
         default:
           description: Default response
@@ -511,9 +511,9 @@ paths:
       # security:
       #   - ApiKeyAuth: []
       parameters:
+        - $ref: '#/components/parameters/CmId'
         # - $ref: '#/components/parameters/Token'
         - $ref: '#/components/parameters/UnisCustomerCd'
-        - $ref: '#/components/parameters/CmId'
       responses:
         '200':
           description: successful response
@@ -607,9 +607,9 @@ paths:
       # security:
       #   - ApiKeyAuth: []
       parameters:
+        - $ref: '#/components/parameters/RecordingId'
         # - $ref: '#/components/parameters/Token'
         - $ref: '#/components/parameters/UnisCustomerCd'
-        - $ref: '#/components/parameters/RecordingId'
       responses:
         '200':
           description: The response
@@ -634,9 +634,9 @@ paths:
       # security:
       #   - ApiKeyAuth: []
       parameters:
+        - $ref: '#/components/parameters/RecordingId'
         # - $ref: '#/components/parameters/Token'
         - $ref: '#/components/parameters/UnisCustomerCd'
-        - $ref: '#/components/parameters/RecordingId'
       requestBody:
         content: 
           application/json:
@@ -673,9 +673,9 @@ paths:
       # security:
       #   - ApiKeyAuth: []
       parameters:
+        - $ref: '#/components/parameters/RecordingId'
         # - $ref: '#/components/parameters/Token'
         - $ref: '#/components/parameters/UnisCustomerCd'
-        - $ref: '#/components/parameters/RecordingId'
       responses:
         '200':
           description: The response
@@ -765,9 +765,9 @@ paths:
       # security:
       #   - ApiKeyAuth: []
       parameters:
+        - $ref: '#/components/parameters/TtsId'
         # - $ref: '#/components/parameters/Token'
         - $ref: '#/components/parameters/UnisCustomerCd'
-        - $ref: '#/components/parameters/TtsId'
       responses:
         '200':
           description: The response
@@ -792,9 +792,9 @@ paths:
       # security:
       #   - ApiKeyAuth: []
       parameters:
+        - $ref: '#/components/parameters/TtsId'
         # - $ref: '#/components/parameters/Token'
         - $ref: '#/components/parameters/UnisCustomerCd'
-        - $ref: '#/components/parameters/TtsId'
       requestBody:
         content: 
           application/json:
@@ -831,9 +831,9 @@ paths:
       # security:
       #   - ApiKeyAuth: []
       parameters:
+        - $ref: '#/components/parameters/TtsId'
         # - $ref: '#/components/parameters/Token'
         - $ref: '#/components/parameters/UnisCustomerCd'
-        - $ref: '#/components/parameters/TtsId'
       responses:
         '200':
           description: The response

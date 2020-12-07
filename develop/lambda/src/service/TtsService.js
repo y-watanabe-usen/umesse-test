@@ -11,10 +11,7 @@ const { fetch, create, update, remove } = require("../../umesse/tts");
 exports.createUserTts = function (xUnisCustomerCd, filename, resources) {
   return new Promise(async function (resolve, reject) {
     var response = {};
-    const json = await create(xUnisCustomerCd, {
-      filename: filename,
-      resources: resources,
-    });
+    const json = await create(xUnisCustomerCd, filename, resources);
     response["application/json"] = json;
     if (Object.keys(response).length > 0) {
       resolve(response[Object.keys(response)[0]]);

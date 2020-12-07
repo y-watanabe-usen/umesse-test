@@ -3,8 +3,8 @@
 var utils = require('../utils/writer.js');
 var Tts = require('../service/TtsService');
 
-module.exports.createUserTts = function createUserTts (req, res, next, xUnisCustomerCd) {
-  Tts.createUserTts(xUnisCustomerCd)
+module.exports.createUserTts = function createUserTts (req, res, next, body, xUnisCustomerCd) {
+  Tts.createUserTts(xUnisCustomerCd, body['filename'], body['recordedFile'])
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -13,8 +13,8 @@ module.exports.createUserTts = function createUserTts (req, res, next, xUnisCust
     });
 };
 
-module.exports.deleteUserTts = function deleteUserTts (req, res, next, xUnisCustomerCd, ttsId) {
-  Tts.deleteUserTts(xUnisCustomerCd, ttsId)
+module.exports.deleteUserTts = function deleteUserTts (req, res, next, ttsId, xUnisCustomerCd) {
+  Tts.deleteUserTts(ttsId, xUnisCustomerCd)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -23,8 +23,8 @@ module.exports.deleteUserTts = function deleteUserTts (req, res, next, xUnisCust
     });
 };
 
-module.exports.getUserTts = function getUserTts (req, res, next, xUnisCustomerCd, ttsId) {
-  Tts.getUserTts(xUnisCustomerCd, ttsId)
+module.exports.getUserTts = function getUserTts (req, res, next, ttsId, xUnisCustomerCd) {
+  Tts.getUserTts(ttsId, xUnisCustomerCd)
     .then(function (response) {
       utils.writeJson(res, response);
     })

@@ -34,16 +34,14 @@ exports.fetch = async (unisCustomerCd, ttsId) => {
 };
 
 // TTS音声新規作成
-exports.create = async (unisCustomerCd, params) => {
+exports.create = async (unisCustomerCd, fileName, resources) => {
   constants.debuglog(
-    `tts create unis_customer_cd: ${unisCustomerCd}, params: ${JSON.stringify(
-      params
-    )}`
+    `tts create unis_customer_cd: ${unisCustomerCd}, fileName: ${fileName}`
   );
 
   try {
-    // TODO: params validation check
-    if (!params) throw "params failed";
+    // TODO: resources validation check
+    if (!resources) throw "resources failed";
 
     // ID作成
     const id = constants.generateId(unisCustomerCd, "t");
@@ -52,7 +50,7 @@ exports.create = async (unisCustomerCd, params) => {
     await s3.put(
       constants.usersBucket,
       `users/${unisCustomerCd}/tts/${id}.mp3`,
-      params["resources"]
+      resources
     );
 
     const time = new Date().toISOString();
@@ -75,7 +73,7 @@ exports.create = async (unisCustomerCd, params) => {
     );
 
     const res = await dynamodb.update(constants.usersTable, key, options);
-    if (!res || !res.Attributes) throw "update failed";
+    if (!res) throw "update failed";
 
     let json = res.Attributes.tts.pop();
     return json;
@@ -107,8 +105,8 @@ exports.update = async (unisCustomerCd, ttsId, body) => {
       .pop();
 
     // DynamoDBのデータ更新
-    tts.data.title = body.title;
-    tts.data.description = body.description;
+    if (body.title) tts.data.title = body.title;
+    if (body.description) tts.data.description = body.description;
     tts.data.timestamp = new Date().toISOString();
     const key = { unis_customer_cd: unisCustomerCd };
     const options = {
@@ -123,7 +121,7 @@ exports.update = async (unisCustomerCd, ttsId, body) => {
     );
 
     const res = await dynamodb.update(constants.usersTable, key, options);
-    if (!res || !res.Attributes) throw "update failed";
+    if (!res) throw "update failed";
 
     let json = res.Attributes.tts;
     return json;
@@ -148,6 +146,7 @@ exports.remove = async (unisCustomerCd, ttsId) => {
         if (data.id === ttsId) return { data, index };
       })
       .pop();
+    if (!tts) throw "not found";
 
     // S3上のTTS音声を削除（エラーは検知しなくてよいかも）
     await s3.delete(
@@ -166,7 +165,7 @@ exports.remove = async (unisCustomerCd, ttsId) => {
     );
 
     const res = await dynamodb.update(constants.usersTable, key, options);
-    if (!res || !res.Attributes) throw "update failed";
+    if (!res) throw "update failed";
 
     let json = res.Attributes.tts;
     return json;
