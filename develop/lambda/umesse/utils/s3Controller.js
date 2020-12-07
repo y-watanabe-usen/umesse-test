@@ -31,6 +31,14 @@ exports.controller = {
       })
       .promise(),
 
+  delete: (bucket, key) =>
+    s3
+      .deleteObject({
+        Bucket: bucket,
+        Key: key,
+      })
+      .promise(),
+
   getSignedUrl: (bucket, key) =>
     s3.getSignedUrl("getObject", {
       Bucket: bucket,

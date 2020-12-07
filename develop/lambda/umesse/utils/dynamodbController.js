@@ -13,7 +13,7 @@ exports.controller = {
       })
       .promise(),
 
-      get: (table, key, options) =>
+  get: (table, key, options) =>
     docClient
       .get({
         TableName: table,

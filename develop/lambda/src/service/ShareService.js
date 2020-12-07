@@ -30,22 +30,22 @@ exports.deleteShare = function(xUnisCustomerCd,cmId) {
   "endDate" : "9999-12-31T23:59:59+09:00",
   "materials" : {
     "startChime" : {
-      "volume" : 6,
+      "volume" : 50,
       "id" : "chime/サンプル01"
     },
     "narrations" : [ {
-      "volume" : 0,
+      "volume" : 150,
       "id" : "narration/サンプル01"
     }, {
-      "volume" : 0,
+      "volume" : 150,
       "id" : "narration/サンプル01"
     } ],
     "endChime" : {
-      "volume" : 1,
+      "volume" : 50,
       "id" : "chime/サンプル02"
     },
     "bgm" : {
-      "volume" : 5,
+      "volume" : 50,
       "id" : "bgm/サンプル01"
     }
   },
@@ -82,22 +82,22 @@ exports.listShare = function(xUnisCustomerCd) {
   "endDate" : "9999-12-31T23:59:59+09:00",
   "materials" : {
     "startChime" : {
-      "volume" : 6,
+      "volume" : 50,
       "id" : "chime/サンプル01"
     },
     "narrations" : [ {
-      "volume" : 0,
+      "volume" : 150,
       "id" : "narration/サンプル01"
     }, {
-      "volume" : 0,
+      "volume" : 150,
       "id" : "narration/サンプル01"
     } ],
     "endChime" : {
-      "volume" : 1,
+      "volume" : 50,
       "id" : "chime/サンプル02"
     },
     "bgm" : {
-      "volume" : 5,
+      "volume" : 50,
       "id" : "bgm/サンプル01"
     }
   },
@@ -115,22 +115,22 @@ exports.listShare = function(xUnisCustomerCd) {
   "endDate" : "9999-12-31T23:59:59+09:00",
   "materials" : {
     "startChime" : {
-      "volume" : 6,
+      "volume" : 50,
       "id" : "chime/サンプル01"
     },
     "narrations" : [ {
-      "volume" : 0,
+      "volume" : 150,
       "id" : "narration/サンプル01"
     }, {
-      "volume" : 0,
+      "volume" : 150,
       "id" : "narration/サンプル01"
     } ],
     "endChime" : {
-      "volume" : 1,
+      "volume" : 50,
       "id" : "chime/サンプル02"
     },
     "bgm" : {
-      "volume" : 5,
+      "volume" : 50,
       "id" : "bgm/サンプル01"
     }
   },

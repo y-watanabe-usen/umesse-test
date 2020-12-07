@@ -17,22 +17,22 @@ exports.createCenterCm = function(body,cmId,xUnisCustomerCd) {
   "endDate" : "9999-12-31T23:59:59+09:00",
   "materials" : {
     "startChime" : {
-      "volume" : 6,
+      "volume" : 50,
       "id" : "chime/サンプル01"
     },
     "narrations" : [ {
-      "volume" : 0,
+      "volume" : 150,
       "id" : "narration/サンプル01"
     }, {
-      "volume" : 0,
+      "volume" : 150,
       "id" : "narration/サンプル01"
     } ],
     "endChime" : {
-      "volume" : 1,
+      "volume" : 50,
       "id" : "chime/サンプル02"
     },
     "bgm" : {
-      "volume" : 5,
+      "volume" : 50,
       "id" : "bgm/サンプル01"
     }
   },
@@ -58,11 +58,12 @@ exports.createCenterCm = function(body,cmId,xUnisCustomerCd) {
 /**
  * CMセンター連携削除
  *
- * xUnisCustomerCd String ID of unis customer cd to return
+ * body Body_4  (optional)
  * cmId String ID of cm to return
+ * xUnisCustomerCd String ID of unis customer cd to return
  * no response value expected for this operation
  **/
-exports.deleteCenterCm = function(xUnisCustomerCd,cmId) {
+exports.deleteCenterCm = function(body,cmId,xUnisCustomerCd) {
   return new Promise(function(resolve, reject) {
     resolve();
   });
@@ -196,7 +197,7 @@ exports.listCenterUpload = function() {
 /**
  * センターCM連携完了（センター専用）
  *
- * body Body_4  (optional)
+ * body Body_5  (optional)
  * unisCustomerCd String ID of unis customer cd to return
  * returns inline_response_200_1
  **/

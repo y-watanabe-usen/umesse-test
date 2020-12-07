@@ -16,7 +16,7 @@ exports.fetch = async (filter, industryId, sceneId) => {
   };
   try {
     const res = await dynamodb.scan(constants.contentsTable, options);
-    if (!res || !res.Count) throw "not found";
+    if (!res || !res.Items) throw "not found";
 
     let json = res.Items;
     if (industryId) {

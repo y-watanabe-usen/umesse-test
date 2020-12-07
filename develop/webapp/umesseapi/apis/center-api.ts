@@ -18,6 +18,7 @@ import { Configuration } from '../configuration';
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
 import { Body3 } from '../models';
 import { Body4 } from '../models';
+import { Body5 } from '../models';
 import { CmItem } from '../models';
 import { InlineResponse200 } from '../models';
 import { InlineResponse2001 } from '../models';
@@ -86,10 +87,11 @@ export const CenterApiAxiosParamCreator = function (configuration?: Configuratio
          * @summary CMセンター連携削除
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} cmId ID of cm to return
+         * @param {Body4} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteCenterCm: async (xUnisCustomerCd: string, cmId: string, options: any = {}): Promise<RequestArgs> => {
+        deleteCenterCm: async (xUnisCustomerCd: string, cmId: string, body?: Body4, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'xUnisCustomerCd' is not null or undefined
             if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
                 throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling deleteCenterCm.');
@@ -114,6 +116,8 @@ export const CenterApiAxiosParamCreator = function (configuration?: Configuratio
                 localVarHeaderParameter['x-unis-customer-cd'] = String(xUnisCustomerCd);
             }
 
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
             const query = new URLSearchParams(localVarUrlObj.search);
             for (const key in localVarQueryParameter) {
                 query.set(key, localVarQueryParameter[key]);
@@ -124,6 +128,8 @@ export const CenterApiAxiosParamCreator = function (configuration?: Configuratio
             localVarUrlObj.search = (new URLSearchParams(query)).toString();
             let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
             localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            const needsSerialization = (typeof body !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.data =  needsSerialization ? JSON.stringify(body !== undefined ? body : {}) : (body || "");
 
             return {
                 url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
@@ -208,11 +214,11 @@ export const CenterApiAxiosParamCreator = function (configuration?: Configuratio
          * 
          * @summary センターCM連携完了（センター専用）
          * @param {string} unisCustomerCd ID of unis customer cd to return
-         * @param {Body4} [body] 
+         * @param {Body5} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateCenterUpload: async (unisCustomerCd: string, body?: Body4, options: any = {}): Promise<RequestArgs> => {
+        updateCenterUpload: async (unisCustomerCd: string, body?: Body5, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'unisCustomerCd' is not null or undefined
             if (unisCustomerCd === null || unisCustomerCd === undefined) {
                 throw new RequiredError('unisCustomerCd','Required parameter unisCustomerCd was null or undefined when calling updateCenterUpload.');
@@ -279,11 +285,12 @@ export const CenterApiFp = function(configuration?: Configuration) {
          * @summary CMセンター連携削除
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} cmId ID of cm to return
+         * @param {Body4} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteCenterCm(xUnisCustomerCd: string, cmId: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await CenterApiAxiosParamCreator(configuration).deleteCenterCm(xUnisCustomerCd, cmId, options);
+        async deleteCenterCm(xUnisCustomerCd: string, cmId: string, body?: Body4, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await CenterApiAxiosParamCreator(configuration).deleteCenterCm(xUnisCustomerCd, cmId, body, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -320,11 +327,11 @@ export const CenterApiFp = function(configuration?: Configuration) {
          * 
          * @summary センターCM連携完了（センター専用）
          * @param {string} unisCustomerCd ID of unis customer cd to return
-         * @param {Body4} [body] 
+         * @param {Body5} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateCenterUpload(unisCustomerCd: string, body?: Body4, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2001>> {
+        async updateCenterUpload(unisCustomerCd: string, body?: Body5, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2001>> {
             const localVarAxiosArgs = await CenterApiAxiosParamCreator(configuration).updateCenterUpload(unisCustomerCd, body, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
@@ -357,11 +364,12 @@ export const CenterApiFactory = function (configuration?: Configuration, basePat
          * @summary CMセンター連携削除
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} cmId ID of cm to return
+         * @param {Body4} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteCenterCm(xUnisCustomerCd: string, cmId: string, options?: any): AxiosPromise<void> {
-            return CenterApiFp(configuration).deleteCenterCm(xUnisCustomerCd, cmId, options).then((request) => request(axios, basePath));
+        deleteCenterCm(xUnisCustomerCd: string, cmId: string, body?: Body4, options?: any): AxiosPromise<void> {
+            return CenterApiFp(configuration).deleteCenterCm(xUnisCustomerCd, cmId, body, options).then((request) => request(axios, basePath));
         },
         /**
          * 
@@ -386,11 +394,11 @@ export const CenterApiFactory = function (configuration?: Configuration, basePat
          * 
          * @summary センターCM連携完了（センター専用）
          * @param {string} unisCustomerCd ID of unis customer cd to return
-         * @param {Body4} [body] 
+         * @param {Body5} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateCenterUpload(unisCustomerCd: string, body?: Body4, options?: any): AxiosPromise<InlineResponse2001> {
+        updateCenterUpload(unisCustomerCd: string, body?: Body5, options?: any): AxiosPromise<InlineResponse2001> {
             return CenterApiFp(configuration).updateCenterUpload(unisCustomerCd, body, options).then((request) => request(axios, basePath));
         },
     };
@@ -421,12 +429,13 @@ export class CenterApi extends BaseAPI {
      * @summary CMセンター連携削除
      * @param {string} xUnisCustomerCd ID of unis customer cd to return
      * @param {string} cmId ID of cm to return
+     * @param {Body4} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CenterApi
      */
-    public deleteCenterCm(xUnisCustomerCd: string, cmId: string, options?: any) {
-        return CenterApiFp(this.configuration).deleteCenterCm(xUnisCustomerCd, cmId, options).then((request) => request(this.axios, this.basePath));
+    public deleteCenterCm(xUnisCustomerCd: string, cmId: string, body?: Body4, options?: any) {
+        return CenterApiFp(this.configuration).deleteCenterCm(xUnisCustomerCd, cmId, body, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * 
@@ -453,12 +462,12 @@ export class CenterApi extends BaseAPI {
      * 
      * @summary センターCM連携完了（センター専用）
      * @param {string} unisCustomerCd ID of unis customer cd to return
-     * @param {Body4} [body] 
+     * @param {Body5} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CenterApi
      */
-    public updateCenterUpload(unisCustomerCd: string, body?: Body4, options?: any) {
+    public updateCenterUpload(unisCustomerCd: string, body?: Body5, options?: any) {
         return CenterApiFp(this.configuration).updateCenterUpload(unisCustomerCd, body, options).then((request) => request(this.axios, this.basePath));
     }
 }

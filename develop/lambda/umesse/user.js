@@ -3,10 +3,12 @@
 const { constants } = require("./constants");
 const dynamodb = require("./utils/dynamodbController").controller;
 
-exports.fetch = async (id) => {
-  constants.debuglog("user: " + id);
+// ユーザーデータ取得
+exports.fetch = async (unisCustomerCd) => {
+  constants.debuglog(`user fetch unis_customer_cd: ${unisCustomerCd}`);
+
   try {
-    const key = { unis_customer_cd: id };
+    const key = { unis_customer_cd: unisCustomerCd };
     const options = {
       ProjectionExpression:
         "unis_customer_cd," +
@@ -22,10 +24,15 @@ exports.fetch = async (id) => {
         "create_date," +
         "renewal_date",
     };
-    let response = await dynamodb.get(constants.usersTable, key, options);
-    if (!response || !response.Count) throw "not found";
-    return response.Items;
+    constants.debuglog(
+      `key: ${JSON.stringify(key)}, options: ${JSON.stringify(options)}`
+    );
+
+    const res = await dynamodb.get(constants.usersTable, key, options);
+    if (!res || !res.Item) throw "not found";
+    return res.Item;
   } catch (e) {
+    // TODO: error handle
     console.log(e);
   }
 };

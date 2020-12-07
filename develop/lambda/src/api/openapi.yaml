@@ -445,6 +445,11 @@ paths:
         explode: false
         schema:
           type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body_4'
       responses:
         "200":
           description: successful response
@@ -573,7 +578,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/body_4'
+              $ref: '#/components/schemas/body_5'
       responses:
         "200":
           description: The response
@@ -797,7 +802,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/body_5'
+              $ref: '#/components/schemas/body_6'
       responses:
         "200":
           description: The response
@@ -910,7 +915,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/body_6'
+              $ref: '#/components/schemas/body_7'
       responses:
         "200":
           description: The response
@@ -1055,7 +1060,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/body_7'
+              $ref: '#/components/schemas/body_8'
       responses:
         "200":
           description: The response
@@ -1168,7 +1173,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/body_8'
+              $ref: '#/components/schemas/body_9'
       responses:
         "200":
           description: The response
@@ -1595,18 +1600,18 @@ components:
         endDate: 9999-12-31T23:59:59+09:00
         materials:
           startChime:
-            volume: 6
+            volume: 50
             id: chime/サンプル01
           narrations:
-          - volume: 0
+          - volume: 150
             id: narration/サンプル01
-          - volume: 0
+          - volume: 150
             id: narration/サンプル01
           endChime:
-            volume: 1
+            volume: 50
             id: chime/サンプル02
           bgm:
-            volume: 5
+            volume: 50
             id: bgm/サンプル01
         productionType: '01: 音楽系, 02: 素ナレ'
         description: サンプル
@@ -1632,18 +1637,18 @@ components:
           $ref: '#/components/schemas/CmMaterialListItem_bgm'
       example:
         startChime:
-          volume: 6
+          volume: 50
           id: chime/サンプル01
         narrations:
-        - volume: 0
+        - volume: 150
           id: narration/サンプル01
-        - volume: 0
+        - volume: 150
           id: narration/サンプル01
         endChime:
-          volume: 1
+          volume: 50
           id: chime/サンプル02
         bgm:
-          volume: 5
+          volume: 50
           id: bgm/サンプル01
     BgmItem:
       properties:
@@ -1897,11 +1902,9 @@ components:
           example: テストCMです
         startDatetime:
           type: string
-          format: date-time
           example: 2020-01-01T12:34:56+09:00
         endDatetime:
           type: string
-          format: date-time
           example: 9999-12-31T23:59:59+09:00
         productionType:
           type: string
@@ -1975,38 +1978,31 @@ components:
         description:
           type: string
           example: サンプル
-        seconds:
-          type: integer
-          format: int64
-          example: 540
         startDate:
           type: string
-          format: date-time
+          example: 2019-09-01T09:00:00+9:00
         endDate:
           type: string
-          format: date-time
           example: 9999-12-31T23:59:59+09:00
         industry:
-          type: string
-          example: ""
+          $ref: '#/components/schemas/IndustryItem'
         scene:
+          $ref: '#/components/schemas/SceneItem'
+        upload:
           type: string
-          example: ""
+          example: '01: センター, 02: S''sence'
     body_3:
       type: object
       properties:
-        title:
+        upload:
           type: string
-          example: タイトル
-        description:
-          type: string
-          example: 説明文
-        startDate:
-          type: string
-          format: date-time
+          example: '01: センター, 02: S''sence'
+    body_4:
+      type: object
+      properties:
         endDate:
           type: string
-          format: date-time
+          example: 掲載終了日時（固定）
     inline_response_200:
       properties:
         unisCustomerCd:
@@ -2043,7 +2039,7 @@ components:
           url: https://xxxxx/0999999900-c-sfja8eo1.aac?AWSAccessKeyId=xxxxxxxx
           endDatetime: 9999-12-31T23:59:59+09:00
         unisCustomerCd: "123456789"
-    body_4:
+    body_5:
       type: object
       properties:
         dataProcessType:
@@ -2077,7 +2073,7 @@ components:
         uMesseCmCd: 0999999900-c-sfja8eo1
         dataProcessType: 01：正常完了、09：取込失敗
         errorCode: E0001
-    body_5:
+    body_6:
       type: object
       properties:
         filename:
@@ -2085,7 +2081,7 @@ components:
         recordedFile:
           type: string
           format: binary
-    body_6:
+    body_7:
       type: object
       properties:
         title:
@@ -2094,7 +2090,7 @@ components:
         description:
           type: string
           example: サンプル
-    body_7:
+    body_8:
       type: object
       properties:
         filename:
@@ -2102,7 +2098,7 @@ components:
         recordedFile:
           type: string
           format: binary
-    body_8:
+    body_9:
       type: object
       properties:
         title:
@@ -2125,8 +2121,9 @@ components:
           example: narration/サンプル01
         volume:
           type: integer
+          example: 150
       example:
-        volume: 0
+        volume: 150
         id: narration/サンプル01
     CmMaterialListItem_startChime:
       type: object
@@ -2136,8 +2133,9 @@ components:
           example: chime/サンプル01
         volume:
           type: integer
+          example: 50
       example:
-        volume: 6
+        volume: 50
         id: chime/サンプル01
     CmMaterialListItem_endChime:
       type: object
@@ -2147,8 +2145,9 @@ components:
           example: chime/サンプル02
         volume:
           type: integer
+          example: 50
       example:
-        volume: 1
+        volume: 50
         id: chime/サンプル02
     CmMaterialListItem_bgm:
       type: object
@@ -2158,8 +2157,9 @@ components:
           example: bgm/サンプル01
         volume:
           type: integer
+          example: 50
       example:
-        volume: 5
+        volume: 50
         id: bgm/サンプル01
   responses:
     BadRequest:
