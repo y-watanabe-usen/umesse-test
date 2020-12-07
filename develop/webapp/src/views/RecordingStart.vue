@@ -17,7 +17,7 @@
             data-toggle="modal"
             data-target="#saveModal"
           >
-          確定
+            確定
           </button>
         </span>
       </nav>
@@ -158,7 +158,9 @@
               class="close"
               data-dismiss="modal"
               aria-label="Close"
-              v-bind:disabled="saveResult === 0"
+              v-bind:disabled="
+                uploadRecoridngState === UPLOAD_RECORDING_STATE.UPLOADING
+              "
             >
               <span aria-hidden="true">&times;</span>
             </button>
@@ -172,36 +174,47 @@
                   class="form-control"
                   id="title"
                   v-model="file.title"
-                  v-bind:disabled="saveResult !== 3 && saveResult !== 2"
+                  v-bind:disabled="
+                    uploadRecoridngState !== UPLOAD_RECORDING_STATE.NONE &&
+                    uploadRecoridngState !== UPLOAD_RECORDING_STATE.ERROR
+                  "
                 />
               </div>
               <div class="form-group">
                 <label for="description" class="col-form-label">説明</label>
-                <textarea 
+                <textarea
                   class="form-control"
                   id="description"
-                  v-bind:disabled="saveResult !== 3 && saveResult !== 2"
+                  v-bind:disabled="
+                    uploadRecoridngState !== UPLOAD_RECORDING_STATE.NONE &&
+                    uploadRecoridngState !== UPLOAD_RECORDING_STATE.ERROR
+                  "
                 ></textarea>
               </div>
             </form>
             <!-- 保存中 -->
-            <span v-if="saveResult === 0">
-              <div class="col-form-label">
-                クルクルインジケーターとか
-              </div>
+            <span
+              v-if="uploadRecoridngState === UPLOAD_RECORDING_STATE.UPLOADING"
+            >
+              <div class="col-form-label">クルクルインジケーターとか</div>
             </span>
             <!-- 保存完了 -->
-            <span v-if="saveResult === 1">
-              <div class="col-form-label">
-                保存が完了しました。
-              </div>
+            <span
+              v-if="uploadRecoridngState === UPLOAD_RECORDING_STATE.UPLOADED"
+            >
+              <div class="col-form-label">保存が完了しました。</div>
             </span>
             <!-- 保存失敗 -->
-            <span v-if="saveResult === 2">
+            <span v-if="uploadRecoridngState === UPLOAD_RECORDING_STATE.ERROR">
               <div class="failed">保存に失敗しました。再度お試しください。</div>
             </span>
           </div>
-          <span v-if="saveResult === 3 || saveResult === 2">
+          <span
+            v-if="
+              uploadRecoridngState === UPLOAD_RECORDING_STATE.ERROR ||
+              uploadRecoridngState === UPLOAD_RECORDING_STATE.NONE
+            "
+          >
             <div class="modal-footer">
               <button
                 type="button"
@@ -214,14 +227,14 @@
                 type="button"
                 class="btn btn-primary"
                 v-bind:disabled="file.title === undefined || file.title === ''"
-                @click="postData"
+                @click="uploadRecordingFile"
               >
                 保存する
               </button>
             </div>
           </span>
           <!-- 保存完了 -->
-          <span v-if="saveResult === 1">
+          <span v-if="uploadRecoridngState === UPLOAD_RECORDING_STATE.UPLOADED">
             <div class="modal-footer">
               <button
                 type="button"
@@ -242,36 +255,26 @@
 import { defineComponent, reactive, computed, toRefs } from "vue";
 import AudioRecorder from "@/utils/AudioRecorder";
 import AudioPlayer from "@/utils/AudioPlayer";
+import {
+  RecordingFile,
+  useUploadRecordingService,
+  UPLOAD_RECORDING_STATE,
+} from "@/services/uploadRecordingService";
 import * as UMesseApi from "umesseapi";
 
-//FIXME: types等に移動.
-interface RecordingFile {
-  title: string | undefined;
-  description: string | undefined;
-}
-
-enum SaveRecordingFileState {
-  saving,
-  success,
-  failed,
-  ready
-}
-
 export default defineComponent({
-  enums: {
-    SaveRecordingFileState,
-  },
+  name: "RecordingStart",
   setup() {
+    const uploaRecordingService = useUploadRecordingService(
+      new UMesseApi.RecordingApi()
+    );
     const audioRecorder = AudioRecorder();
     const audioPlayer = AudioPlayer();
     const state = reactive({
       file: <RecordingFile>{},
-      saveResult: SaveRecordingFileState.ready,
-      isRecording: computed(() => (audioRecorder.isRecording() ? true : false)),
-      hasRecordedData: computed(() => {
-        if (audioRecorder.getBlob() !== undefined) return true;
-        return false;
-      }),
+      uploadRecoridngState: computed(() => uploaRecordingService.getStatus()),
+      isRecording: computed(() => audioRecorder.isRecording()),
+      hasRecordedData: computed(() => audioRecorder.hasRecording()),
       decibel: computed(() => {
         if (audioPlayer.getPowerDecibels() === -Infinity) return -100;
         return audioPlayer.getPowerDecibels();
@@ -303,7 +306,6 @@ export default defineComponent({
     const toggleVoiceRecorder = async () => {
       if (audioRecorder.isRecording()) {
         audioRecorder.stop();
-        const audioBuffer = await audioRecorder.getAudioBuffer();
       } else {
         audioRecorder.start();
       }
@@ -316,19 +318,10 @@ export default defineComponent({
     };
     const deleteRecordedData = () => audioRecorder.reset();
 
-    const postData = async () => {
-      state.saveResult = SaveRecordingFileState.saving;
-
-      var api = new UMesseApi.RecordingApi();
-
-      const audioFile = await audioRecorder.getAudioFile();
-      if (audioFile != null) {
-        api.createUserRecording("xUnisCustomerCd", state.file.title, audioFile).then((value) => {
-          state.saveResult = SaveRecordingFileState.success;
-        }).catch((error) => {
-          state.saveResult = SaveRecordingFileState.failed;
-        });
-      }
+    const uploadRecordingFile = async () => {
+      /// check state.file.
+      state.file.blob = await audioRecorder.getWaveBlob();
+      uploaRecordingService.upload(state.file);
     };
 
     return {
@@ -336,7 +329,8 @@ export default defineComponent({
       toggleVoiceRecorder,
       play,
       deleteRecordedData,
-      postData,
+      uploadRecordingFile,
+      UPLOAD_RECORDING_STATE,
     };
   },
 });
