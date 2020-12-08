@@ -9,6 +9,11 @@ import CreateCommercial from '@/views/CreateCommercial.vue'
 import NewOrder from '@/views/NewOrder.vue'
 import OrderInStoreAnnouncement1 from '@/views/OrderInStoreAnnouncement1.vue'
 import OrderInStoreAnnouncement2 from '@/views/OrderInStoreAnnouncement2.vue'
+import OrderInStoreAnnouncement3 from '@/views/OrderInStoreAnnouncement3.vue'
+import OrderInStoreAnnouncement4 from '@/views/OrderInStoreAnnouncement4.vue'
+import OrderInStoreAnnouncement5 from '@/views/OrderInStoreAnnouncement5.vue'
+import OrderInStoreAnnouncement6 from '@/views/OrderInStoreAnnouncement6.vue'
+import OrderCompleted from '@/views/OrderCompleted.vue'
 import SelectTemplate from '@/views/SelectTemplate.vue'
 import CreateNarrationTextInput from '@/views/CreateNarrationTextInput.vue'
 import ApiConnectTest2 from '@/views/ApiConnectTest2.vue'
@@ -63,6 +68,31 @@ const routes: Array<RouteRecordRaw> = [
     path: '/orderinstoreannouncement2',
     name: 'OrderInStoreAnnouncement2',
     component: OrderInStoreAnnouncement2
+  },
+  {
+    path: '/orderinstoreannouncement3',
+    name: 'OrderInStoreAnnouncement3',
+    component: OrderInStoreAnnouncement3
+  },
+  {
+    path: '/orderinstoreannouncement4',
+    name: 'OrderInStoreAnnouncement4',
+    component: OrderInStoreAnnouncement4
+  },
+  {
+    path: '/orderinstoreannouncement5',
+    name: 'OrderInStoreAnnouncement5',
+    component: OrderInStoreAnnouncement5
+  },
+  {
+    path: '/orderinstoreannouncement6',
+    name: 'OrderInStoreAnnouncement6',
+    component: OrderInStoreAnnouncement6
+  },
+  {
+    path: '/ordercompleted',
+    name: 'OrderCompleted',
+    component: OrderCompleted
   },
   {
     path: '/selecttemplate',
