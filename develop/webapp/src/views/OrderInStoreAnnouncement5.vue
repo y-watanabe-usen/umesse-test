@@ -12,7 +12,7 @@
         </div>
         <router-link
           class="navbar-brand"
-          :to="{ path: 'orderinstoreannouncement2' }"
+          :to="{ path: 'orderinstoreannouncement6' }"
           ><button class="btn" style="width: 100px">次へ</button></router-link
         >
       </nav>
@@ -20,8 +20,8 @@
         <div class="p-4">
           <div class="d-flex">
             <div class="d-flex col-2 pl-0">
-              <div class="step-number step-current">1</div>
-              <p style="color: #578ed9; line-height: 50px">基本情報</p>
+              <div class="step-number">1</div>
+              <p style="color: #888888; line-height: 50px">基本情報</p>
             </div>
             <div class="d-flex col-2 pl-0">
               <div class="step-number">2</div>
@@ -36,8 +36,8 @@
               <h6 style="color: #888888; line-height: 50px">BGM</h6>
             </div>
             <div class="d-flex col-2 pl-0">
-              <div class="step-number">5</div>
-              <h6 style="color: #888888; line-height: 50px">納期/金額</h6>
+              <div class="step-number step-current">5</div>
+              <h6 style="color: #578ed9; line-height: 50px">納期/金額</h6>
             </div>
             <div class="d-flex col-2 pl-0">
               <div class="step-number">6</div>
@@ -46,32 +46,27 @@
           </div>
           <hr />
           <div class="d-flex" style="line-height: 40px">
-            <div class="col-3">納品先</div>
-            <div class="col-9">Meguro Cafe様</div>
-          </div>
-          <hr />
-          <div class="d-flex" style="line-height: 40px">
-            <div class="col-3">CMタイトル</div>
-            <input
-              type="text"
-              class="w-100 form-control"
-              placeholder="タイトルを入力してください"
-            />
-          </div>
-          <hr />
-          <div class="d-flex" style="line-height: 40px">
-            <div class="col-3">シーン</div>
-            <select class="form-control">
-              <option value="">開始/終了</option>
-            </select>
-          </div>
-          <hr />
-          <div class="d-flex" style="line-height: 40px">
-            <div class="col-3">説明文</div>
+            <div class="col-3">備考</div>
             <textarea
               class="form-control"
-              placeholder="説明を入力してください"
+              style="height: 140px"
+              placeholder="その他制作に関する注意事項がありましたらご記入ください。"
             ></textarea>
+          </div>
+          <hr />
+          <div class="d-flex" style="line-height: 40px">
+            <div class="col-3">納期</div>
+            <input type="date" class="form-control" />
+          </div>
+          <hr />
+          <div class="d-flex" style="line-height: 40px">
+            <div class="col-3">計上予定日</div>
+            <div>2021年&emsp;10月&emsp;17日</div>
+          </div>
+          <hr />
+          <div class="d-flex" style="line-height: 40px">
+            <div class="col-3">計上予定額</div>
+            <div>&yen;5,000</div>
           </div>
         </div>
       </div>

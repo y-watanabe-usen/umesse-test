@@ -12,7 +12,7 @@
         </div>
         <router-link
           class="navbar-brand"
-          :to="{ path: 'orderinstoreannouncement2' }"
+          :to="{ path: 'orderinstoreannouncement5' }"
           ><button class="btn" style="width: 100px">次へ</button></router-link
         >
       </nav>
@@ -20,8 +20,8 @@
         <div class="p-4">
           <div class="d-flex">
             <div class="d-flex col-2 pl-0">
-              <div class="step-number step-current">1</div>
-              <p style="color: #578ed9; line-height: 50px">基本情報</p>
+              <div class="step-number">1</div>
+              <p style="color: #888888; line-height: 50px">基本情報</p>
             </div>
             <div class="d-flex col-2 pl-0">
               <div class="step-number">2</div>
@@ -32,8 +32,8 @@
               <h6 style="color: #888888; line-height: 50px">アナウンサー</h6>
             </div>
             <div class="d-flex col-2 pl-0">
-              <div class="step-number">4</div>
-              <h6 style="color: #888888; line-height: 50px">BGM</h6>
+              <div class="step-number step-current">4</div>
+              <h6 style="color: #578ed9; line-height: 50px">BGM</h6>
             </div>
             <div class="d-flex col-2 pl-0">
               <div class="step-number">5</div>
@@ -45,32 +45,32 @@
             </div>
           </div>
           <hr />
-          <div class="d-flex" style="line-height: 40px">
-            <div class="col-3">納品先</div>
-            <div class="col-9">Meguro Cafe様</div>
+          <div
+            class="col-12 d-flex justify-content-between"
+            style="line-height: 40px"
+          >
+            <div>BGMは必要ですか？</div>
+            <div style="font-size: 18px">
+              <input type="radio" name="y-n" value="" class="mr-2" />必要
+              <input type="radio" name="y-n" value="" class="mr-2 ml-4" />不要
+            </div>
           </div>
           <hr />
           <div class="d-flex" style="line-height: 40px">
-            <div class="col-3">CMタイトル</div>
-            <input
-              type="text"
-              class="w-100 form-control"
-              placeholder="タイトルを入力してください"
-            />
-          </div>
-          <hr />
-          <div class="d-flex" style="line-height: 40px">
-            <div class="col-3">シーン</div>
-            <select class="form-control">
-              <option value="">開始/終了</option>
-            </select>
-          </div>
-          <hr />
-          <div class="d-flex" style="line-height: 40px">
-            <div class="col-3">説明文</div>
+            <div class="col-3">BGMのジャンル</div>
             <textarea
               class="form-control"
-              placeholder="説明を入力してください"
+              style="height: 140px"
+              placeholder="BGMのジャンル、イメージをご記入ください。&#13;&#10;(希望ジャンルが無ければ、担当者の判断によりBGMを決めさせていただきます)"
+            ></textarea>
+          </div>
+          <hr />
+          <div class="d-flex" style="line-height: 40px">
+            <div class="col-3">編集方法</div>
+            <textarea
+              class="form-control"
+              style="height: 140px"
+              placeholder="希望編集方法がありましたら、ご記入ください。できるだけ詳しくお願いします。"
             ></textarea>
           </div>
         </div>
