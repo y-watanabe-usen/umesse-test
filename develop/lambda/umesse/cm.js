@@ -118,19 +118,9 @@ exports.update = async (unisCustomerCd, cmId, body) => {
       })
       .pop();
 
-    // CMステータス状態によるチェック（アップロード中は更新しない）
-    switch (cm.data.status) {
-      case constants.cmStatus.CONVERT:
-        throw "CMエンコード中のため、更新できません";
-      case constants.cmStatus.CENTER_UPLOADING:
-        throw "U MUSICへの連携が完了していないため、更新できません";
-      case constants.cmStatus.SSENCE_UPLOADING:
-        throw "S'Senceへの連携が完了していないため、更新できません";
-      case constants.cmStatus.ERROR:
-      case constants.cmStatus.CENTER_ERROR:
-      case constants.cmStatus.SSENCE_ERROR:
-        throw "エラーが発生しているため、更新できません";
-    }
+    // CMステータス状態によるチェック
+    const check = checkCmStatus(cm.data.status, "update");
+    if (check) throw check;
 
     // CM作成中の場合
     if (cm.data.status == constants.cmStatus.CREATING) {
@@ -197,25 +187,9 @@ exports.remove = async (unisCustomerCd, cmId) => {
       .pop();
     if (!cm) throw "not found";
 
-    // CMステータス状態によるチェック（作成中や共有、アップロード中は削除しない）
-    switch (cm.data.status) {
-      case constants.cmStatus.CREATING:
-        throw "CM作成中のため、削除できません";
-      case constants.cmStatus.CONVERT:
-        throw "CMエンコード中のため、削除できません";
-      case constants.cmStatus.SHARING:
-        throw "CM共有中のため、削除できません";
-      case constants.cmStatus.CENTER_UPLOADING:
-      case constants.cmStatus.CENTER_COMPLETE:
-        throw "U MUSICへ連携中のため、削除できません";
-      case constants.cmStatus.SSENCE_UPLOADING:
-      case constants.cmStatus.SSENCE_COMPLETE:
-        throw "S'Senceへ連携中のため、削除できません";
-      case constants.cmStatus.ERROR:
-      case constants.cmStatus.CENTER_ERROR:
-      case constants.cmStatus.SSENCE_ERROR:
-        throw "エラーが発生しているため、削除できません";
-    }
+    // CMステータス状態によるチェック
+    const check = checkCmStatus(cm.data.status, "remove");
+    if (check) throw check;
 
     // S3上のCMを削除（エラーは検知しなくてよいかも）
     await s3.delete(
@@ -248,6 +222,80 @@ exports.remove = async (unisCustomerCd, cmId) => {
     console.log(e);
   }
 };
+
+// CMステータス状態によるチェック
+function checkCmStatus(status, process) {
+  let message = "";
+
+  if (process == "update") {
+    switch (status) {
+      case constants.cmStatus.CREATING:
+        // OK
+        break;
+      case constants.cmStatus.COMPLETE:
+        // OK
+        break;
+      case constants.cmStatus.CONVERT:
+        message = "CMエンコード中のため、更新できません";
+        break;
+      case constants.cmStatus.SHARING:
+        // OK
+        break;
+      case constants.cmStatus.CENTER_UPLOADING:
+        message = "U MUSICへ連携中のため、更新できません";
+        break;
+      case constants.cmStatus.CENTER_COMPLETE:
+        // OK
+        break;
+      case constants.cmStatus.SSENCE_UPLOADING:
+        message = "S'Senceへ連携中のため、更新できません";
+        break;
+      case constants.cmStatus.SSENCE_COMPLETE:
+        // OK
+        break;
+      case constants.cmStatus.ERROR:
+      case constants.cmStatus.CENTER_ERROR:
+      case constants.cmStatus.SSENCE_ERROR:
+        message = "エラーが発生しているため、更新できません";
+        break;
+      default:
+        message = "unknown cm status";
+    }
+  } else if (process == "remove") {
+    switch (status) {
+      case constants.cmStatus.CREATING:
+        message = "CM作成中のため、削除できません";
+        break;
+      case constants.cmStatus.COMPLETE:
+        // OK
+        break;
+      case constants.cmStatus.CONVERT:
+        message = "CMエンコード中のため、削除できません";
+        break;
+      case constants.cmStatus.SHARING:
+        message = "CM共有中のため、削除できません";
+        break;
+      case constants.cmStatus.CENTER_UPLOADING:
+      case constants.cmStatus.CENTER_COMPLETE:
+        message = "U MUSICへ連携中のため、削除できません";
+        break;
+      case constants.cmStatus.SSENCE_UPLOADING:
+      case constants.cmStatus.SSENCE_COMPLETE:
+        message = "S'Senceへ連携中のため、削除できません";
+        break;
+      case constants.cmStatus.ERROR:
+      case constants.cmStatus.CENTER_ERROR:
+      case constants.cmStatus.SSENCE_ERROR:
+        message = "エラーが発生しているため、更新できません";
+        break;
+      default:
+        message = "unknown cm status";
+    }
+  } else {
+    message = "unknown process";
+  }
+  return message;
+}
 
 // CM結合処理
 function generateCm(unisCustomerCd, id, materials) {

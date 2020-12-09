@@ -53,7 +53,7 @@ exports.constants = {
 
   // CMステータス
   cmStatus: {
-    DELETE: "00", // CM削除
+    DELETE: "00", // CM削除(ユーザーミスによる復活のための定義)
     CREATING: "01", // CM作成中
     COMPLETE: "02", // CM作成完了
     CONVERT: "03", // CMエンコード中
