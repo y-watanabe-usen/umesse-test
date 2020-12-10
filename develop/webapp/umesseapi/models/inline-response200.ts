@@ -22,11 +22,5 @@ export interface InlineResponse200 {
      * @type {string}
      * @memberof InlineResponse200
      */
-    unisCustomerCd?: any;
-    /**
-     * 
-     * @type {Array&lt;CenterItem&gt;}
-     * @memberof InlineResponse200
-     */
-    cmMetas?: any;
+    url?: any;
 }

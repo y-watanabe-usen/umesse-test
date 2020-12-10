@@ -22,11 +22,11 @@ export interface Body8 {
      * @type {string}
      * @memberof Body8
      */
-    filename?: any;
+    title?: any;
     /**
      * 
      * @type {string}
      * @memberof Body8
      */
-    recordedFile?: any;
+    description?: any;
 }

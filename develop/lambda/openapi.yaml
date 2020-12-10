@@ -1,6 +1,6 @@
 openapi: 3.0.0
 servers:
-  - url: /api
+  - url: http://localhost:3000/api
 info:
   description: U MESSE API
   version: 0.0.1
@@ -59,7 +59,8 @@ paths:
     get:
       tags:
         - user
-      summary: User情報取得
+      summary: ユーザー情報取得
+      description: 'ユーザーの情報を取得する'
       operationId: getUser
       # security:
       #   - ApiKeyAuth: []
@@ -86,8 +87,8 @@ paths:
     get:
       tags:
         - cm
-      summary: CMリスト取得
-      description: ''
+      summary: CM一覧取得
+      description: 'CMの情報を一覧で取得する'
       operationId: listUserCm
       # security:
       #   - ApiKeyAuth: []
@@ -115,7 +116,7 @@ paths:
       tags:
         - cm
       summary: CM新規結合
-      description: ''
+      description: 'CMを新規作成する'
       operationId: createUserCm
       # security:
       #   - ApiKeyAuth: []
@@ -151,7 +152,7 @@ paths:
       tags:
         - cm
       summary: CM情報取得
-      description: ''
+      description: 'CMの情報を取得する'
       operationId: getUserCm
       # security:
       #   - ApiKeyAuth: []
@@ -178,7 +179,7 @@ paths:
       tags:
         - cm
       summary: CM情報更新
-      description: ''
+      description: 'CMの情報を更新する'
       operationId: updateUserCm
       # security:
       #   - ApiKeyAuth: []
@@ -230,7 +231,7 @@ paths:
       tags:
         - cm
       summary: CM情報削除
-      description: ''
+      description: 'CMを削除する'
       operationId: deleteUserCm
       # security:
       #   - ApiKeyAuth: []
@@ -254,13 +255,70 @@ paths:
         '5XX':
           $ref: '#/components/responses/Unexpected'
 
-  '/center/{cmId}':
+  /user/upload:
+    get:
+      tags:
+        - upload
+      summary: CM外部連携情報一覧取得
+      description: 'CMの外部連携状態を一覧で取得する'
+      operationId: listUploadCm
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        # - $ref: '#/components/parameters/Token'
+        - $ref: '#/components/parameters/UnisCustomerCd'
+      responses:
+        '200':
+          description: The response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ExternalItem'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/Unexpected'
+
+  '/user/upload/{cmId}':
+    get:
+      tags:
+        - upload
+      summary: CM外部連携情報取得
+      description: 'CMの外部連携状態を取得する'
+      operationId: getUploadCm
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        - $ref: '#/components/parameters/CmId'
+        # - $ref: '#/components/parameters/Token'
+        - $ref: '#/components/parameters/UnisCustomerCd'
+      responses:
+        '200':
+          description: The response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalItem'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/Unexpected'
     post:
       tags:
-        - center
-      summary: CMセンター連携追加
-      description: ''
-      operationId: createCenterCm
+        - upload
+      summary: CM外部連携追加
+      description: 'CMを外部連携する'
+      operationId: createUploadCm
       # security:
       #   - ApiKeyAuth: []
       parameters:
@@ -282,7 +340,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/CmItem'
+                $ref: '#/components/schemas/ExternalItem'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -293,10 +351,10 @@ paths:
           $ref: '#/components/responses/Unexpected'
     delete:
       tags:
-        - center
-      summary: CMセンター連携削除
-      description: ''
-      operationId: deleteCenterCm
+        - upload
+      summary: CM外部連携解除
+      description: 'CMの外部連携を解除する'
+      operationId: deleteUploadCm
       # security:
       #   - ApiKeyAuth: []
       parameters:
@@ -315,138 +373,10 @@ paths:
       responses:
         '200':
           description: successful response
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '5XX':
-          $ref: '#/components/responses/Unexpected'
-
-  /center/upload:
-    get:
-      tags:
-        - center
-      summary: センターCM連携（センター専用）
-      description: ''
-      operationId: listCenterUpload
-      # security:
-      #   - ApiKeyAuth: []
-      responses:
-        '200':
-          description: The response
           content:
             application/json:
               schema:
-                items:
-                  properties:
-                    unisCustomerCd:
-                      type: string
-                      example: "123456789"
-                    cmMetas:
-                      type: array
-                      items:
-                        $ref: '#/components/schemas/CenterItem'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '5XX':
-          $ref: '#/components/responses/Unexpected'
-
-  '/center/upload/{unisCustomerCd}':
-    get:
-      tags:
-        - center
-      summary: センターCM連携取得（センター専用）
-      description: ''
-      operationId: getCenterUpload
-      # security:
-      #   - ApiKeyAuth: []
-      parameters:
-        - name: unisCustomerCd
-          in: path
-          description: ID of unis customer cd to return
-          required: true
-          schema:
-            type: string
-      responses:
-        '200':
-          description: The response
-          content:
-            application/json:
-              schema:
-                properties:
-                  unisCustomerCd:
-                    type: string
-                    example: "123456789"
-                  cmMetas:
-                    type: array
-                    items:
-                      $ref: '#/components/schemas/CenterItem'
-        '400':
-          $ref: '#/components/responses/BadRequest'
-        '401':
-          $ref: '#/components/responses/Unauthorized'
-        '404':
-          $ref: '#/components/responses/NotFound'
-        '5XX':
-          $ref: '#/components/responses/Unexpected'
-    post:
-      tags:
-        - center
-      summary: センターCM連携完了（センター専用）
-      description: ''
-      operationId: updateCenterUpload
-      # security:
-      #   - ApiKeyAuth: []
-      parameters:
-        - name: unisCustomerCd
-          in: path
-          description: ID of unis customer cd to return
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content: 
-          application/json:
-            schema: 
-              type: object
-              properties:
-                dataProcessType:
-                  type: string
-                  example: "01：正常完了、09：取込失敗"
-                uMesseCmCd:
-                  type: string
-                  example: "0999999900-c-sfja8eo1"
-                errorCode:
-                  type: string
-                  example: "E0001"
-                errorMessege:
-                  type: string
-                  example: "CM名に規定外の文字が使用されています"
-      responses:
-        '200':
-          description: The response
-          content:
-            application/json:
-              schema:
-                properties:
-                  dataProcessType:
-                    type: string
-                    example: "01：正常完了、09：取込失敗"
-                  uMesseCmCd:
-                    type: string
-                    example: "0999999900-c-sfja8eo1"
-                  errorCode:
-                    type: string
-                    example: "E0001"
-                  errorMessege:
-                    type: string
-                    example: "CM名に規定外の文字が使用されています"
+                $ref: '#/components/schemas/ExternalItem'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -460,9 +390,9 @@ paths:
     get:
       tags:
         - share
-      summary: CM共有リスト取得
-      description: ''
-      operationId: listShare
+      summary: 共有CM一覧取得
+      description: '共有CMの情報を一覧で取得する'
+      operationId: listShareCm
       # security:
       #   - ApiKeyAuth: []
       parameters:
@@ -487,12 +417,38 @@ paths:
           $ref: '#/components/responses/Unexpected'
 
   '/share/{cmId}':
+    get:
+      tags:
+        - share
+      summary: 共有CM取得
+      description: '共有CMの情報を取得'
+      operationId: getShareCm
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        # - $ref: '#/components/parameters/Token'
+        - $ref: '#/components/parameters/UnisCustomerCd'
+      responses:
+        '200':
+          description: The response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CmItem'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/Unexpected'
     post:
       tags:
         - share
       summary: CM共有追加
-      description: ''
-      operationId: createShare
+      description: 'CMを共有する'
+      operationId: createShareCm
       # security:
       #   - ApiKeyAuth: []
       parameters:
@@ -500,14 +456,26 @@ paths:
         # - $ref: '#/components/parameters/Token'
         - $ref: '#/components/parameters/UnisCustomerCd'
       responses:
-        default:
-          description: Default response
+        '200':
+          description: The response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CmItem'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/Unexpected'
     delete:
       tags:
         - share
       summary: CM共有削除
-      description: ''
-      operationId: deleteShare
+      description: 'CMの共有を解除する'
+      operationId: deleteShareCm
       # security:
       #   - ApiKeyAuth: []
       parameters:
@@ -534,8 +502,8 @@ paths:
     get:
       tags:
         - recording
-      summary: 録音データリスト取得
-      description: ''
+      summary: 録音データ一覧取得
+      description: '録音音声素材の情報を一覧で取得する'
       operationId: listUserRecording
       # security:
       #   - ApiKeyAuth: []
@@ -562,7 +530,7 @@ paths:
       tags:
         - recording
       summary: 新規録音データ
-      description: ''
+      description: '録音音声素材を新規登録する'
       operationId: createUserRecording
       # security:
       #   - ApiKeyAuth: []
@@ -580,6 +548,12 @@ paths:
                 recordedFile:
                   type: string
                   format: binary
+                title:
+                  type: string
+                  example: "サンプル"
+                description:
+                  type: string
+                  example: "サンプル"
       responses:
         '200':
           description: The response
@@ -602,7 +576,7 @@ paths:
       tags:
         - recording
       summary: 録音データ取得
-      description: ''
+      description: '録音音声素材の情報を取得する'
       operationId: getUserRecording
       # security:
       #   - ApiKeyAuth: []
@@ -629,7 +603,7 @@ paths:
       tags:
         - recording
       summary: 録音データ更新（メタデータのみ）
-      description: ''
+      description: '録音音声素材の情報を更新する'
       operationId: updateUserRecording
       # security:
       #   - ApiKeyAuth: []
@@ -668,7 +642,7 @@ paths:
       tags:
         - recording
       summary: 録音データ削除
-      description: ''
+      description: '録音音声素材を削除する'
       operationId: deleteUserRecording
       # security:
       #   - ApiKeyAuth: []
@@ -692,8 +666,8 @@ paths:
     get:
       tags:
         - tts
-      summary: TTSデータリスト取得
-      description: ''
+      summary: TTSデータ一覧取得
+      description: '合成音声素材の情報を一覧で取得する'
       operationId: listUserTts
       # security:
       #   - ApiKeyAuth: []
@@ -720,7 +694,7 @@ paths:
       tags:
         - tts
       summary: 新規録音データ
-      description: ''
+      description: '合成音声素材を新規登録する'
       operationId: createUserTts
       # security:
       #   - ApiKeyAuth: []
@@ -738,6 +712,12 @@ paths:
                 recordedFile:
                   type: string
                   format: binary
+                title:
+                  type: string
+                  example: "サンプル"
+                description:
+                  type: string
+                  example: "サンプル"
       responses:
         '200':
           description: The response
@@ -760,7 +740,7 @@ paths:
       tags:
         - tts
       summary: TTSデータ取得
-      description: ''
+      description: '合成音声素材の情報を取得する'
       operationId: getUserTts
       # security:
       #   - ApiKeyAuth: []
@@ -826,7 +806,7 @@ paths:
       tags:
         - tts
       summary: TTSデータ削除
-      description: ''
+      description: '合成音声素材を削除する'
       operationId: deleteUserTts
       # security:
       #   - ApiKeyAuth: []
@@ -851,7 +831,7 @@ paths:
       tags:
         - resources
       summary: BGM
-      description: ''
+      description: 'BGM素材を一覧で取得する'
       operationId: listBgm
       # security:
       #   - ApiKeyAuth: []
@@ -862,6 +842,7 @@ paths:
           description: ID of bgm to return
           schema:
             type: string
+            example: "001"
       responses:
         '200':
           description: The response
@@ -885,7 +866,7 @@ paths:
       tags:
         - resources
       summary: ナレーション
-      description: ''
+      description: 'ナレーション素材を一覧で取得する'
       operationId: listNarration
       # security:
       #   - ApiKeyAuth: []
@@ -896,11 +877,13 @@ paths:
           description: ID of bgm to return
           schema:
             type: string
+            example: "001"
         - name: sceneId
           in: query
           description: ID of bgm to return
           schema:
             type: string
+            example: "001"
       responses:
         '200':
           description: The response
@@ -924,7 +907,7 @@ paths:
       tags:
         - resources
       summary: Open/Endチャイム
-      description: ''
+      description: '開始/終了チャイムを一覧で取得する'
       operationId: listChime
       # security:
       #   - ApiKeyAuth: []
@@ -953,7 +936,7 @@ paths:
       tags:
         - resources
       summary: TTSテンプレート一覧
-      description: ''
+      description: 'TTSのテンプレート素材を一覧で取得する'
       operationId: listTts
       # security:
       #   - ApiKeyAuth: []
@@ -964,11 +947,13 @@ paths:
           description: ID of bgm to return
           schema:
             type: string
+            example: "001"
         - name: sceneId
           in: query
           description: ID of bgm to return
           schema:
             type: string
+            example: "001"
       responses:
         '200':
           description: The response
@@ -992,7 +977,7 @@ paths:
       tags:
         - s3
       summary: S3オブジェクトの署名付きURLの取得
-      description: '試聴再生、録音音声アップロード'
+      description: '試聴再生、音声素材アップロードのURLを取得する'
       operationId: getSignedUrl
       # security:
       #   - ApiKeyAuth: []
@@ -1004,6 +989,7 @@ paths:
           required: true
           schema:
             type: string
+            example: "123456789-c-12345678"
       responses:
         '200':
           description: The response
@@ -1013,7 +999,163 @@ paths:
                 properties:
                   url:
                     type: string
-                    example: "https://xxxxx/0999999900-c-sfja8eo1.aac?AWSAccessKeyId=xxxxxxxx"
+                    example: "https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx"
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/Unexpected'
+
+  '/{external}/cm':
+    get:
+      tags:
+        - external
+      summary: CM外部連携情報一覧取得（外部システム専用）
+      description: '外部連携するCMの情報を一覧で取得する'
+      operationId: listExternalCm
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        - name: external
+          in: path
+          description: ID of external system to return
+          required: true
+          schema:
+            type: string
+            example: "center: センター, ssence: S'sence"
+      responses:
+        '200':
+          description: The response
+          content:
+            application/json:
+              schema:
+                items:
+                  properties:
+                    unisCustomerCd:
+                      type: string
+                      example: "123456789"
+                    cmMetas:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/ExternalItem'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/Unexpected'
+
+  '/{external}/cm/{unisCustomerCd}':
+    get:
+      tags:
+        - external
+      summary: CM外部連携情報取得（外部システム専用）
+      description: '外部連携するCMの情報を取得する'
+      operationId: getExternalCm
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        - name: external
+          in: path
+          description: ID of external system to return
+          required: true
+          schema:
+            type: string
+            example: "center: センター, ssence: S'sence"
+        - name: unisCustomerCd
+          in: path
+          description: ID of unis customer cd to return
+          required: true
+          schema:
+            type: string
+            example: "123456789"
+      responses:
+        '200':
+          description: The response
+          content:
+            application/json:
+              schema:
+                properties:
+                  unisCustomerCd:
+                    type: string
+                    example: "123456789"
+                  cmMetas:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ExternalItem'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '5XX':
+          $ref: '#/components/responses/Unexpected'
+    post:
+      tags:
+        - external
+      summary: CM外部連携完了（外部システム専用）
+      description: '外部連携したCMの結果を登録する'
+      operationId: completeExternalCm
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        - name: external
+          in: path
+          description: ID of external system to return
+          required: true
+          schema:
+            type: string
+            example: "center: センター, ssence: S'sence"
+        - name: unisCustomerCd
+          in: path
+          description: ID of unis customer cd to return
+          required: true
+          schema:
+            type: string
+            example: "123456789"
+      requestBody:
+        content: 
+          application/json:
+            schema: 
+              type: object
+              properties:
+                dataProcessType:
+                  type: string
+                  example: "01：正常完了、09：取込失敗"
+                uMesseCmId:
+                  type: string
+                  example: "123456789-c-12345678"
+                errorCode:
+                  type: string
+                  example: "E0001"
+                errorMessege:
+                  type: string
+                  example: "CM名に規定外の文字が使用されています"
+      responses:
+        '200':
+          description: The response
+          content:
+            application/json:
+              schema:
+                properties:
+                  dataProcessType:
+                    type: string
+                    example: "01：正常完了、09：取込失敗"
+                  uMesseCmId:
+                    type: string
+                    example: "123456789-c-12345678"
+                  errorCode:
+                    type: string
+                    example: "E0001"
+                  errorMessege:
+                    type: string
+                    example: "CM名に規定外の文字が使用されています"
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -1032,6 +1174,7 @@ components:
       required: true
       schema:
         type: string
+        example: "1234567890"
     UnisCustomerCd:
       name: x-unis-customer-cd
       in: header
@@ -1039,6 +1182,7 @@ components:
       required: true
       schema:
         type: string
+        example: "123456789"
     CmId:
       name: cmId
       in: path
@@ -1046,6 +1190,7 @@ components:
       required: true
       schema:
         type: string
+        example: "123456789-c-12345678"
     RecordingId:
       name: recordingId
       in: path
@@ -1053,6 +1198,7 @@ components:
       required: true
       schema:
         type: string
+        example: "123456789-r-12345678"
     TtsId:
       name: ttsId
       in: path
@@ -1060,6 +1206,7 @@ components:
       required: true
       schema:
         type: string
+        example: "123456789-t-12345678"
 
   schemas:
     Auth:
@@ -1320,17 +1467,17 @@ components:
         timestamp:
           type: string
           example: "2019-09-01T09:00:00+9:00"
-    CenterItem:
+    ExternalItem:
       properties:
         dataProcessType:
           type: string
           example: "01：追加、02：変更、03：削除"
-        uMesseCmCd:
+        uMesseCmId:
           type: string
-          example: "0999999900-c-sfja8eo1"
+          example: "123456789-c-12345678"
         url:
           type: string
-          example: "https://xxxxx/0999999900-c-sfja8eo1.aac?AWSAccessKeyId=xxxxxxxx"
+          example: "https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx"
         cmName:
           type: string
           example: "時報A"
@@ -1348,7 +1495,7 @@ components:
           example: "01：音楽系、02：素ナレ"
         fileName:
           type: string
-          example: "0999999900-c-sfja8eo1.aac"
+          example: "123456789-c-12345678.aac"
         contentTime:
           type: integer
           format: int64

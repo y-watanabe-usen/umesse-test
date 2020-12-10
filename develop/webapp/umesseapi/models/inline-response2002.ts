@@ -22,5 +22,23 @@ export interface InlineResponse2002 {
      * @type {string}
      * @memberof InlineResponse2002
      */
-    url?: any;
+    dataProcessType?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof InlineResponse2002
+     */
+    uMesseCmId?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof InlineResponse2002
+     */
+    errorCode?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof InlineResponse2002
+     */
+    errorMessege?: any;
 }

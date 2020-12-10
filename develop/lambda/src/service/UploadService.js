@@ -1,19 +1,21 @@
 "use strict";
 
-const { getCm, createCm, updateCm, deleteCm } = require("../../umesse/cm");
+const { linkCm, unlinkCm } = require("../../umesse/cm");
+const { getUserExternalCm } = require("../../umesse/external");
 
 /**
- * CM新規結合
- * CMを新規作成する
+ * CM外部連携追加
+ * CMを外部連携する
  *
- * body Body_1  (optional)
+ * body Body_3  (optional)
+ * cmId String ID of cm to return
  * xUnisCustomerCd String ID of unis customer cd to return
- * returns CmItem
+ * returns ExternalItem
  **/
-exports.createUserCm = function (body, xUnisCustomerCd) {
+exports.createUploadCm = function (body, cmId, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     var response = {};
-    const json = await createCm(xUnisCustomerCd, body);
+    const json = await linkCm(xUnisCustomerCd, cmId, body);
     response["application/json"] = json;
     if (Object.keys(response).length > 0 && !json.message) {
       resolve(response[Object.keys(response)[0]]);
@@ -24,17 +26,39 @@ exports.createUserCm = function (body, xUnisCustomerCd) {
 };
 
 /**
- * CM情報削除
- * CMを削除する
+ * CM外部連携解除
+ * CMの外部連携を解除する
+ *
+ * body Body_4  (optional)
+ * cmId String ID of cm to return
+ * xUnisCustomerCd String ID of unis customer cd to return
+ * returns ExternalItem
+ **/
+exports.deleteUploadCm = function (body, cmId, xUnisCustomerCd) {
+  return new Promise(async function (resolve, reject) {
+    var response = {};
+    const json = await unlinkCm(xUnisCustomerCd, cmId, body);
+    response["application/json"] = json;
+    if (Object.keys(response).length > 0 && !json.message) {
+      resolve(response[Object.keys(response)[0]]);
+    } else {
+      reject(response[Object.keys(response)[0]]);
+    }
+  });
+};
+
+/**
+ * CM外部連携情報取得
+ * CMの外部連携状態を取得する
  *
  * cmId String ID of cm to return
  * xUnisCustomerCd String ID of unis customer cd to return
- * returns CmItem
+ * returns ExternalItem
  **/
-exports.deleteUserCm = function (cmId, xUnisCustomerCd) {
+exports.getUploadCm = function (cmId, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     var response = {};
-    const json = await deleteCm(xUnisCustomerCd, cmId);
+    const json = await getUserExternalCm(xUnisCustomerCd, cmId);
     response["application/json"] = json;
     if (Object.keys(response).length > 0 && !json.message) {
       resolve(response[Object.keys(response)[0]]);
@@ -45,59 +69,16 @@ exports.deleteUserCm = function (cmId, xUnisCustomerCd) {
 };
 
 /**
- * CM情報取得
- * CMの情報を取得する
- *
- * cmId String ID of cm to return
- * xUnisCustomerCd String ID of unis customer cd to return
- * returns CmItem
- **/
-exports.getUserCm = function (cmId, xUnisCustomerCd) {
-  return new Promise(async function (resolve, reject) {
-    var response = {};
-    const json = await getCm(xUnisCustomerCd, cmId);
-    response["application/json"] = json;
-    if (Object.keys(response).length > 0 && !json.message) {
-      resolve(response[Object.keys(response)[0]]);
-    } else {
-      reject(response[Object.keys(response)[0]]);
-    }
-  });
-};
-
-/**
- * CM一覧取得
- * CMの情報を一覧で取得する
+ * CM外部連携情報一覧取得
+ * CMの外部連携状態を一覧で取得する
  *
  * xUnisCustomerCd String ID of unis customer cd to return
  * returns List
  **/
-exports.listUserCm = function (xUnisCustomerCd) {
+exports.listUploadCm = function (xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     var response = {};
-    const json = await getCm(xUnisCustomerCd);
-    response["application/json"] = json;
-    if (Object.keys(response).length > 0 && !json.message) {
-      resolve(response[Object.keys(response)[0]]);
-    } else {
-      reject(response[Object.keys(response)[0]]);
-    }
-  });
-};
-
-/**
- * CM情報更新
- * CMの情報を更新する
- *
- * body Body_2  (optional)
- * cmId String ID of cm to return
- * xUnisCustomerCd String ID of unis customer cd to return
- * returns CmItem
- **/
-exports.updateUserCm = function (body, cmId, xUnisCustomerCd) {
-  return new Promise(async function (resolve, reject) {
-    var response = {};
-    const json = await updateCm(xUnisCustomerCd, cmId, body);
+    const json = await getUserExternalCm(xUnisCustomerCd);
     response["application/json"] = json;
     if (Object.keys(response).length > 0 && !json.message) {
       resolve(response[Object.keys(response)[0]]);

@@ -1,5 +1,5 @@
-'use strict';
+"use strict";
 
-exports.check = function(params) {
-  return {'message': 'ok'};
-}
+exports.check = function (params) {
+  return { message: "ok" };
+};

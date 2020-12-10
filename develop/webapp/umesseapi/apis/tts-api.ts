@@ -16,7 +16,7 @@ import { Configuration } from '../configuration';
 // Some imports not used depending on template conditions
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
-import { Body9 } from '../models';
+import { Body8 } from '../models';
 import { TtsItem } from '../models';
 /**
  * TtsApi - axios parameter creator
@@ -25,15 +25,17 @@ import { TtsItem } from '../models';
 export const TtsApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * 
+         * 合成音声素材を新規登録する
          * @summary 新規録音データ
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} [filename] 
          * @param {string} [recordedFile] 
+         * @param {string} [title] 
+         * @param {string} [description] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createUserTts: async (xUnisCustomerCd: string, filename?: string, recordedFile?: string, options: any = {}): Promise<RequestArgs> => {
+        createUserTts: async (xUnisCustomerCd: string, filename?: string, recordedFile?: string, title?: string, description?: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'xUnisCustomerCd' is not null or undefined
             if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
                 throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling createUserTts.');
@@ -63,6 +65,14 @@ export const TtsApiAxiosParamCreator = function (configuration?: Configuration) 
                 localVarFormParams.append('recordedFile', recordedFile as any);
             }
 
+            if (title !== undefined) { 
+                localVarFormParams.append('title', title as any);
+            }
+
+            if (description !== undefined) { 
+                localVarFormParams.append('description', description as any);
+            }
+
             localVarHeaderParameter['Content-Type'] = 'multipart/form-data';
             const query = new URLSearchParams(localVarUrlObj.search);
             for (const key in localVarQueryParameter) {
@@ -82,7 +92,7 @@ export const TtsApiAxiosParamCreator = function (configuration?: Configuration) 
             };
         },
         /**
-         * 
+         * 合成音声素材を削除する
          * @summary TTSデータ削除
          * @param {string} ttsId ID of tts to return
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
@@ -131,7 +141,7 @@ export const TtsApiAxiosParamCreator = function (configuration?: Configuration) 
             };
         },
         /**
-         * 
+         * 合成音声素材の情報を取得する
          * @summary TTSデータ取得
          * @param {string} ttsId ID of tts to return
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
@@ -180,8 +190,8 @@ export const TtsApiAxiosParamCreator = function (configuration?: Configuration) 
             };
         },
         /**
-         * 
-         * @summary TTSデータリスト取得
+         * 合成音声素材の情報を一覧で取得する
+         * @summary TTSデータ一覧取得
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -227,11 +237,11 @@ export const TtsApiAxiosParamCreator = function (configuration?: Configuration) 
          * @summary TTSデータ更新（メタデータのみ）
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} ttsId ID of tts to return
-         * @param {Body9} [body] 
+         * @param {Body8} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateUserTts: async (xUnisCustomerCd: string, ttsId: string, body?: Body9, options: any = {}): Promise<RequestArgs> => {
+        updateUserTts: async (xUnisCustomerCd: string, ttsId: string, body?: Body8, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'xUnisCustomerCd' is not null or undefined
             if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
                 throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling updateUserTts.');
@@ -286,23 +296,25 @@ export const TtsApiAxiosParamCreator = function (configuration?: Configuration) 
 export const TtsApiFp = function(configuration?: Configuration) {
     return {
         /**
-         * 
+         * 合成音声素材を新規登録する
          * @summary 新規録音データ
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} [filename] 
          * @param {string} [recordedFile] 
+         * @param {string} [title] 
+         * @param {string} [description] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createUserTts(xUnisCustomerCd: string, filename?: string, recordedFile?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<TtsItem>>> {
-            const localVarAxiosArgs = await TtsApiAxiosParamCreator(configuration).createUserTts(xUnisCustomerCd, filename, recordedFile, options);
+        async createUserTts(xUnisCustomerCd: string, filename?: string, recordedFile?: string, title?: string, description?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<TtsItem>>> {
+            const localVarAxiosArgs = await TtsApiAxiosParamCreator(configuration).createUserTts(xUnisCustomerCd, filename, recordedFile, title, description, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
             };
         },
         /**
-         * 
+         * 合成音声素材を削除する
          * @summary TTSデータ削除
          * @param {string} ttsId ID of tts to return
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
@@ -317,7 +329,7 @@ export const TtsApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * 
+         * 合成音声素材の情報を取得する
          * @summary TTSデータ取得
          * @param {string} ttsId ID of tts to return
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
@@ -332,8 +344,8 @@ export const TtsApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * 
-         * @summary TTSデータリスト取得
+         * 合成音声素材の情報を一覧で取得する
+         * @summary TTSデータ一覧取得
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -350,11 +362,11 @@ export const TtsApiFp = function(configuration?: Configuration) {
          * @summary TTSデータ更新（メタデータのみ）
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} ttsId ID of tts to return
-         * @param {Body9} [body] 
+         * @param {Body8} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateUserTts(xUnisCustomerCd: string, ttsId: string, body?: Body9, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TtsItem>> {
+        async updateUserTts(xUnisCustomerCd: string, ttsId: string, body?: Body8, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TtsItem>> {
             const localVarAxiosArgs = await TtsApiAxiosParamCreator(configuration).updateUserTts(xUnisCustomerCd, ttsId, body, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
@@ -371,19 +383,21 @@ export const TtsApiFp = function(configuration?: Configuration) {
 export const TtsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     return {
         /**
-         * 
+         * 合成音声素材を新規登録する
          * @summary 新規録音データ
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} [filename] 
          * @param {string} [recordedFile] 
+         * @param {string} [title] 
+         * @param {string} [description] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createUserTts(xUnisCustomerCd: string, filename?: string, recordedFile?: string, options?: any): AxiosPromise<Array<TtsItem>> {
-            return TtsApiFp(configuration).createUserTts(xUnisCustomerCd, filename, recordedFile, options).then((request) => request(axios, basePath));
+        createUserTts(xUnisCustomerCd: string, filename?: string, recordedFile?: string, title?: string, description?: string, options?: any): AxiosPromise<Array<TtsItem>> {
+            return TtsApiFp(configuration).createUserTts(xUnisCustomerCd, filename, recordedFile, title, description, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * 合成音声素材を削除する
          * @summary TTSデータ削除
          * @param {string} ttsId ID of tts to return
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
@@ -394,7 +408,7 @@ export const TtsApiFactory = function (configuration?: Configuration, basePath?:
             return TtsApiFp(configuration).deleteUserTts(ttsId, xUnisCustomerCd, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * 合成音声素材の情報を取得する
          * @summary TTSデータ取得
          * @param {string} ttsId ID of tts to return
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
@@ -405,8 +419,8 @@ export const TtsApiFactory = function (configuration?: Configuration, basePath?:
             return TtsApiFp(configuration).getUserTts(ttsId, xUnisCustomerCd, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
-         * @summary TTSデータリスト取得
+         * 合成音声素材の情報を一覧で取得する
+         * @summary TTSデータ一覧取得
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -419,11 +433,11 @@ export const TtsApiFactory = function (configuration?: Configuration, basePath?:
          * @summary TTSデータ更新（メタデータのみ）
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} ttsId ID of tts to return
-         * @param {Body9} [body] 
+         * @param {Body8} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateUserTts(xUnisCustomerCd: string, ttsId: string, body?: Body9, options?: any): AxiosPromise<TtsItem> {
+        updateUserTts(xUnisCustomerCd: string, ttsId: string, body?: Body8, options?: any): AxiosPromise<TtsItem> {
             return TtsApiFp(configuration).updateUserTts(xUnisCustomerCd, ttsId, body, options).then((request) => request(axios, basePath));
         },
     };
@@ -437,20 +451,22 @@ export const TtsApiFactory = function (configuration?: Configuration, basePath?:
  */
 export class TtsApi extends BaseAPI {
     /**
-     * 
+     * 合成音声素材を新規登録する
      * @summary 新規録音データ
      * @param {string} xUnisCustomerCd ID of unis customer cd to return
      * @param {string} [filename] 
      * @param {string} [recordedFile] 
+     * @param {string} [title] 
+     * @param {string} [description] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TtsApi
      */
-    public createUserTts(xUnisCustomerCd: string, filename?: string, recordedFile?: string, options?: any) {
-        return TtsApiFp(this.configuration).createUserTts(xUnisCustomerCd, filename, recordedFile, options).then((request) => request(this.axios, this.basePath));
+    public createUserTts(xUnisCustomerCd: string, filename?: string, recordedFile?: string, title?: string, description?: string, options?: any) {
+        return TtsApiFp(this.configuration).createUserTts(xUnisCustomerCd, filename, recordedFile, title, description, options).then((request) => request(this.axios, this.basePath));
     }
     /**
-     * 
+     * 合成音声素材を削除する
      * @summary TTSデータ削除
      * @param {string} ttsId ID of tts to return
      * @param {string} xUnisCustomerCd ID of unis customer cd to return
@@ -462,7 +478,7 @@ export class TtsApi extends BaseAPI {
         return TtsApiFp(this.configuration).deleteUserTts(ttsId, xUnisCustomerCd, options).then((request) => request(this.axios, this.basePath));
     }
     /**
-     * 
+     * 合成音声素材の情報を取得する
      * @summary TTSデータ取得
      * @param {string} ttsId ID of tts to return
      * @param {string} xUnisCustomerCd ID of unis customer cd to return
@@ -474,8 +490,8 @@ export class TtsApi extends BaseAPI {
         return TtsApiFp(this.configuration).getUserTts(ttsId, xUnisCustomerCd, options).then((request) => request(this.axios, this.basePath));
     }
     /**
-     * 
-     * @summary TTSデータリスト取得
+     * 合成音声素材の情報を一覧で取得する
+     * @summary TTSデータ一覧取得
      * @param {string} xUnisCustomerCd ID of unis customer cd to return
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -489,12 +505,12 @@ export class TtsApi extends BaseAPI {
      * @summary TTSデータ更新（メタデータのみ）
      * @param {string} xUnisCustomerCd ID of unis customer cd to return
      * @param {string} ttsId ID of tts to return
-     * @param {Body9} [body] 
+     * @param {Body8} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TtsApi
      */
-    public updateUserTts(xUnisCustomerCd: string, ttsId: string, body?: Body9, options?: any) {
+    public updateUserTts(xUnisCustomerCd: string, ttsId: string, body?: Body8, options?: any) {
         return TtsApiFp(this.configuration).updateUserTts(xUnisCustomerCd, ttsId, body, options).then((request) => request(this.axios, this.basePath));
     }
 }

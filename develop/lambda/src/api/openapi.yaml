@@ -65,7 +65,8 @@ paths:
     get:
       tags:
       - user
-      summary: User情報取得
+      summary: ユーザー情報取得
+      description: ユーザーの情報を取得する
       operationId: getUser
       parameters:
       - name: x-unis-customer-cd
@@ -76,6 +77,7 @@ paths:
         explode: false
         schema:
           type: string
+          example: "123456789"
       responses:
         "200":
           description: User情報
@@ -110,7 +112,8 @@ paths:
     get:
       tags:
       - cm
-      summary: CMリスト取得
+      summary: CM一覧取得
+      description: CMの情報を一覧で取得する
       operationId: listUserCm
       parameters:
       - name: x-unis-customer-cd
@@ -121,6 +124,7 @@ paths:
         explode: false
         schema:
           type: string
+          example: "123456789"
       responses:
         "200":
           description: The response
@@ -158,6 +162,7 @@ paths:
       tags:
       - cm
       summary: CM新規結合
+      description: CMを新規作成する
       operationId: createUserCm
       parameters:
       - name: x-unis-customer-cd
@@ -168,6 +173,7 @@ paths:
         explode: false
         schema:
           type: string
+          example: "123456789"
       requestBody:
         content:
           application/json:
@@ -208,6 +214,7 @@ paths:
       tags:
       - cm
       summary: CM情報取得
+      description: CMの情報を取得する
       operationId: getUserCm
       parameters:
       - name: cmId
@@ -218,6 +225,7 @@ paths:
         explode: false
         schema:
           type: string
+          example: 123456789-c-12345678
       - name: x-unis-customer-cd
         in: header
         description: ID of unis customer cd to return
@@ -226,6 +234,7 @@ paths:
         explode: false
         schema:
           type: string
+          example: "123456789"
       responses:
         "200":
           description: The response
@@ -260,6 +269,7 @@ paths:
       tags:
       - cm
       summary: CM情報更新
+      description: CMの情報を更新する
       operationId: updateUserCm
       parameters:
       - name: cmId
@@ -270,6 +280,7 @@ paths:
         explode: false
         schema:
           type: string
+          example: 123456789-c-12345678
       - name: x-unis-customer-cd
         in: header
         description: ID of unis customer cd to return
@@ -278,6 +289,7 @@ paths:
         explode: false
         schema:
           type: string
+          example: "123456789"
       requestBody:
         content:
           application/json:
@@ -317,6 +329,7 @@ paths:
       tags:
       - cm
       summary: CM情報削除
+      description: CMを削除する
       operationId: deleteUserCm
       parameters:
       - name: cmId
@@ -327,6 +340,7 @@ paths:
         explode: false
         schema:
           type: string
+          example: 123456789-c-12345678
       - name: x-unis-customer-cd
         in: header
         description: ID of unis customer cd to return
@@ -335,6 +349,7 @@ paths:
         explode: false
         schema:
           type: string
+          example: "123456789"
       responses:
         "200":
           description: successful response
@@ -365,123 +380,23 @@ paths:
         "5XX":
           description: Unexpected error.
       x-swagger-router-controller: Cm
-  /center/{cmId}:
-    post:
-      tags:
-      - center
-      summary: CMセンター連携追加
-      operationId: createCenterCm
-      parameters:
-      - name: cmId
-        in: path
-        description: ID of cm to return
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-      - name: x-unis-customer-cd
-        in: header
-        description: ID of unis customer cd to return
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/body_3'
-      responses:
-        "200":
-          description: successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CmItem'
-        "400":
-          description: Bad request. Response invalid.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        "401":
-          description: API key is missing or invalid
-          headers:
-            WWW_Authenticate:
-              style: simple
-              explode: false
-              schema:
-                type: string
-        "404":
-          description: A user with the specified ID was not found.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        "5XX":
-          description: Unexpected error.
-      x-swagger-router-controller: Center
-    delete:
-      tags:
-      - center
-      summary: CMセンター連携削除
-      operationId: deleteCenterCm
-      parameters:
-      - name: cmId
-        in: path
-        description: ID of cm to return
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-      - name: x-unis-customer-cd
-        in: header
-        description: ID of unis customer cd to return
-        required: true
-        style: simple
-        explode: false
-        schema:
-          type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/body_4'
-      responses:
-        "200":
-          description: successful response
-        "400":
-          description: Bad request. Response invalid.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        "401":
-          description: API key is missing or invalid
-          headers:
-            WWW_Authenticate:
-              style: simple
-              explode: false
-              schema:
-                type: string
-        "404":
-          description: A user with the specified ID was not found.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        "5XX":
-          description: Unexpected error.
-      x-swagger-router-controller: Center
-  /center/upload:
+  /user/upload:
     get:
       tags:
-      - center
-      summary: センターCM連携（センター専用）
-      operationId: listCenterUpload
+      - upload
+      summary: CM外部連携情報一覧取得
+      description: CMの外部連携状態を一覧で取得する
+      operationId: listUploadCm
+      parameters:
+      - name: x-unis-customer-cd
+        in: header
+        description: ID of unis customer cd to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: "123456789"
       responses:
         "200":
           description: The response
@@ -490,7 +405,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/inline_response_200'
+                  $ref: '#/components/schemas/ExternalItem'
                 x-content-type: application/json
         "400":
           description: Bad request. Response invalid.
@@ -514,29 +429,40 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
-      x-swagger-router-controller: Center
-  /center/upload/{unisCustomerCd}:
+      x-swagger-router-controller: Upload
+  /user/upload/{cmId}:
     get:
       tags:
-      - center
-      summary: センターCM連携取得（センター専用）
-      operationId: getCenterUpload
+      - upload
+      summary: CM外部連携情報取得
+      description: CMの外部連携状態を取得する
+      operationId: getUploadCm
       parameters:
-      - name: unisCustomerCd
+      - name: cmId
         in: path
+        description: ID of cm to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: 123456789-c-12345678
+      - name: x-unis-customer-cd
+        in: header
         description: ID of unis customer cd to return
         required: true
         style: simple
         explode: false
         schema:
           type: string
+          example: "123456789"
       responses:
         "200":
           description: The response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200'
+                $ref: '#/components/schemas/ExternalItem'
         "400":
           description: Bad request. Response invalid.
           content:
@@ -559,33 +485,44 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
-      x-swagger-router-controller: Center
+      x-swagger-router-controller: Upload
     post:
       tags:
-      - center
-      summary: センターCM連携完了（センター専用）
-      operationId: updateCenterUpload
+      - upload
+      summary: CM外部連携追加
+      description: CMを外部連携する
+      operationId: createUploadCm
       parameters:
-      - name: unisCustomerCd
+      - name: cmId
         in: path
+        description: ID of cm to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: 123456789-c-12345678
+      - name: x-unis-customer-cd
+        in: header
         description: ID of unis customer cd to return
         required: true
         style: simple
         explode: false
         schema:
           type: string
+          example: "123456789"
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/body_5'
+              $ref: '#/components/schemas/body_3'
       responses:
         "200":
-          description: The response
+          description: successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_1'
+                $ref: '#/components/schemas/ExternalItem'
         "400":
           description: Bad request. Response invalid.
           content:
@@ -608,13 +545,74 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
-      x-swagger-router-controller: Center
+      x-swagger-router-controller: Upload
+    delete:
+      tags:
+      - upload
+      summary: CM外部連携解除
+      description: CMの外部連携を解除する
+      operationId: deleteUploadCm
+      parameters:
+      - name: cmId
+        in: path
+        description: ID of cm to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: 123456789-c-12345678
+      - name: x-unis-customer-cd
+        in: header
+        description: ID of unis customer cd to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: "123456789"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body_4'
+      responses:
+        "200":
+          description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalItem'
+        "400":
+          description: Bad request. Response invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: API key is missing or invalid
+          headers:
+            WWW_Authenticate:
+              style: simple
+              explode: false
+              schema:
+                type: string
+        "404":
+          description: A user with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error.
+      x-swagger-router-controller: Upload
   /share:
     get:
       tags:
       - share
-      summary: CM共有リスト取得
-      operationId: listShare
+      summary: 共有CM一覧取得
+      description: 共有CMの情報を一覧で取得する
+      operationId: listShareCm
       parameters:
       - name: x-unis-customer-cd
         in: header
@@ -624,6 +622,7 @@ paths:
         explode: false
         schema:
           type: string
+          example: "123456789"
       responses:
         "200":
           description: The response
@@ -658,11 +657,58 @@ paths:
           description: Unexpected error.
       x-swagger-router-controller: Share
   /share/{cmId}:
+    get:
+      tags:
+      - share
+      summary: 共有CM取得
+      description: 共有CMの情報を取得
+      operationId: getShareCm
+      parameters:
+      - name: x-unis-customer-cd
+        in: header
+        description: ID of unis customer cd to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: "123456789"
+      responses:
+        "200":
+          description: The response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CmItem'
+        "400":
+          description: Bad request. Response invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: API key is missing or invalid
+          headers:
+            WWW_Authenticate:
+              style: simple
+              explode: false
+              schema:
+                type: string
+        "404":
+          description: A user with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error.
+      x-swagger-router-controller: Share
     post:
       tags:
       - share
       summary: CM共有追加
-      operationId: createShare
+      description: CMを共有する
+      operationId: createShareCm
       parameters:
       - name: cmId
         in: path
@@ -672,6 +718,7 @@ paths:
         explode: false
         schema:
           type: string
+          example: 123456789-c-12345678
       - name: x-unis-customer-cd
         in: header
         description: ID of unis customer cd to return
@@ -680,15 +727,43 @@ paths:
         explode: false
         schema:
           type: string
+          example: "123456789"
       responses:
-        default:
-          description: Default response
+        "200":
+          description: The response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CmItem'
+        "400":
+          description: Bad request. Response invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: API key is missing or invalid
+          headers:
+            WWW_Authenticate:
+              style: simple
+              explode: false
+              schema:
+                type: string
+        "404":
+          description: A user with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error.
       x-swagger-router-controller: Share
     delete:
       tags:
       - share
       summary: CM共有削除
-      operationId: deleteShare
+      description: CMの共有を解除する
+      operationId: deleteShareCm
       parameters:
       - name: cmId
         in: path
@@ -698,6 +773,7 @@ paths:
         explode: false
         schema:
           type: string
+          example: 123456789-c-12345678
       - name: x-unis-customer-cd
         in: header
         description: ID of unis customer cd to return
@@ -706,6 +782,7 @@ paths:
         explode: false
         schema:
           type: string
+          example: "123456789"
       responses:
         "200":
           description: successful response
@@ -740,7 +817,8 @@ paths:
     get:
       tags:
       - recording
-      summary: 録音データリスト取得
+      summary: 録音データ一覧取得
+      description: 録音音声素材の情報を一覧で取得する
       operationId: listUserRecording
       parameters:
       - name: x-unis-customer-cd
@@ -751,6 +829,7 @@ paths:
         explode: false
         schema:
           type: string
+          example: "123456789"
       responses:
         "200":
           description: The response
@@ -788,6 +867,7 @@ paths:
       tags:
       - recording
       summary: 新規録音データ
+      description: 録音音声素材を新規登録する
       operationId: createUserRecording
       parameters:
       - name: x-unis-customer-cd
@@ -798,11 +878,12 @@ paths:
         explode: false
         schema:
           type: string
+          example: "123456789"
       requestBody:
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/body_6'
+              $ref: '#/components/schemas/body_5'
       responses:
         "200":
           description: The response
@@ -841,6 +922,7 @@ paths:
       tags:
       - recording
       summary: 録音データ取得
+      description: 録音音声素材の情報を取得する
       operationId: getUserRecording
       parameters:
       - name: recordingId
@@ -851,6 +933,7 @@ paths:
         explode: false
         schema:
           type: string
+          example: 123456789-r-12345678
       - name: x-unis-customer-cd
         in: header
         description: ID of unis customer cd to return
@@ -859,6 +942,7 @@ paths:
         explode: false
         schema:
           type: string
+          example: "123456789"
       responses:
         "200":
           description: The response
@@ -893,6 +977,7 @@ paths:
       tags:
       - recording
       summary: 録音データ更新（メタデータのみ）
+      description: 録音音声素材の情報を更新する
       operationId: updateUserRecording
       parameters:
       - name: recordingId
@@ -903,6 +988,7 @@ paths:
         explode: false
         schema:
           type: string
+          example: 123456789-r-12345678
       - name: x-unis-customer-cd
         in: header
         description: ID of unis customer cd to return
@@ -911,11 +997,12 @@ paths:
         explode: false
         schema:
           type: string
+          example: "123456789"
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/body_7'
+              $ref: '#/components/schemas/body_6'
       responses:
         "200":
           description: The response
@@ -950,6 +1037,7 @@ paths:
       tags:
       - recording
       summary: 録音データ削除
+      description: 録音音声素材を削除する
       operationId: deleteUserRecording
       parameters:
       - name: recordingId
@@ -960,6 +1048,7 @@ paths:
         explode: false
         schema:
           type: string
+          example: 123456789-r-12345678
       - name: x-unis-customer-cd
         in: header
         description: ID of unis customer cd to return
@@ -968,6 +1057,7 @@ paths:
         explode: false
         schema:
           type: string
+          example: "123456789"
       responses:
         "200":
           description: The response
@@ -998,7 +1088,8 @@ paths:
     get:
       tags:
       - tts
-      summary: TTSデータリスト取得
+      summary: TTSデータ一覧取得
+      description: 合成音声素材の情報を一覧で取得する
       operationId: listUserTts
       parameters:
       - name: x-unis-customer-cd
@@ -1009,6 +1100,7 @@ paths:
         explode: false
         schema:
           type: string
+          example: "123456789"
       responses:
         "200":
           description: The response
@@ -1046,6 +1138,7 @@ paths:
       tags:
       - tts
       summary: 新規録音データ
+      description: 合成音声素材を新規登録する
       operationId: createUserTts
       parameters:
       - name: x-unis-customer-cd
@@ -1056,11 +1149,12 @@ paths:
         explode: false
         schema:
           type: string
+          example: "123456789"
       requestBody:
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/body_8'
+              $ref: '#/components/schemas/body_7'
       responses:
         "200":
           description: The response
@@ -1099,6 +1193,7 @@ paths:
       tags:
       - tts
       summary: TTSデータ取得
+      description: 合成音声素材の情報を取得する
       operationId: getUserTts
       parameters:
       - name: ttsId
@@ -1109,6 +1204,7 @@ paths:
         explode: false
         schema:
           type: string
+          example: 123456789-t-12345678
       - name: x-unis-customer-cd
         in: header
         description: ID of unis customer cd to return
@@ -1117,6 +1213,7 @@ paths:
         explode: false
         schema:
           type: string
+          example: "123456789"
       responses:
         "200":
           description: The response
@@ -1161,6 +1258,7 @@ paths:
         explode: false
         schema:
           type: string
+          example: 123456789-t-12345678
       - name: x-unis-customer-cd
         in: header
         description: ID of unis customer cd to return
@@ -1169,11 +1267,12 @@ paths:
         explode: false
         schema:
           type: string
+          example: "123456789"
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/body_9'
+              $ref: '#/components/schemas/body_8'
       responses:
         "200":
           description: The response
@@ -1208,6 +1307,7 @@ paths:
       tags:
       - tts
       summary: TTSデータ削除
+      description: 合成音声素材を削除する
       operationId: deleteUserTts
       parameters:
       - name: ttsId
@@ -1218,6 +1318,7 @@ paths:
         explode: false
         schema:
           type: string
+          example: 123456789-t-12345678
       - name: x-unis-customer-cd
         in: header
         description: ID of unis customer cd to return
@@ -1226,6 +1327,7 @@ paths:
         explode: false
         schema:
           type: string
+          example: "123456789"
       responses:
         "200":
           description: The response
@@ -1257,6 +1359,7 @@ paths:
       tags:
       - resources
       summary: BGM
+      description: BGM素材を一覧で取得する
       operationId: listBgm
       parameters:
       - name: industryId
@@ -1267,6 +1370,7 @@ paths:
         explode: true
         schema:
           type: string
+          example: "001"
       responses:
         "200":
           description: The response
@@ -1305,6 +1409,7 @@ paths:
       tags:
       - resources
       summary: ナレーション
+      description: ナレーション素材を一覧で取得する
       operationId: listNarration
       parameters:
       - name: industryId
@@ -1315,6 +1420,7 @@ paths:
         explode: true
         schema:
           type: string
+          example: "001"
       - name: sceneId
         in: query
         description: ID of bgm to return
@@ -1323,6 +1429,7 @@ paths:
         explode: true
         schema:
           type: string
+          example: "001"
       responses:
         "200":
           description: The response
@@ -1361,6 +1468,7 @@ paths:
       tags:
       - resources
       summary: Open/Endチャイム
+      description: 開始/終了チャイムを一覧で取得する
       operationId: listChime
       responses:
         "200":
@@ -1400,6 +1508,7 @@ paths:
       tags:
       - resources
       summary: TTSテンプレート一覧
+      description: TTSのテンプレート素材を一覧で取得する
       operationId: listTts
       parameters:
       - name: industryId
@@ -1410,6 +1519,7 @@ paths:
         explode: true
         schema:
           type: string
+          example: "001"
       - name: sceneId
         in: query
         description: ID of bgm to return
@@ -1418,6 +1528,7 @@ paths:
         explode: true
         schema:
           type: string
+          example: "001"
       responses:
         "200":
           description: The response
@@ -1456,7 +1567,7 @@ paths:
       tags:
       - s3
       summary: S3オブジェクトの署名付きURLの取得
-      description: 試聴再生、録音音声アップロード
+      description: 試聴再生、音声素材アップロードのURLを取得する
       operationId: getSignedUrl
       parameters:
       - name: id
@@ -1467,6 +1578,173 @@ paths:
         explode: true
         schema:
           type: string
+          example: 123456789-c-12345678
+      responses:
+        "200":
+          description: The response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+        "400":
+          description: Bad request. Response invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: API key is missing or invalid
+          headers:
+            WWW_Authenticate:
+              style: simple
+              explode: false
+              schema:
+                type: string
+        "404":
+          description: A user with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error.
+      x-swagger-router-controller: S3
+  /{external}/cm:
+    get:
+      tags:
+      - external
+      summary: CM外部連携情報一覧取得（外部システム専用）
+      description: 外部連携するCMの情報を一覧で取得する
+      operationId: listExternalCm
+      parameters:
+      - name: external
+        in: path
+        description: ID of external system to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: 'center: センター, ssence: S''sence'
+      responses:
+        "200":
+          description: The response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/inline_response_200_1'
+                x-content-type: application/json
+        "400":
+          description: Bad request. Response invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: API key is missing or invalid
+          headers:
+            WWW_Authenticate:
+              style: simple
+              explode: false
+              schema:
+                type: string
+        "404":
+          description: A user with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error.
+      x-swagger-router-controller: External
+  /{external}/cm/{unisCustomerCd}:
+    get:
+      tags:
+      - external
+      summary: CM外部連携情報取得（外部システム専用）
+      description: 外部連携するCMの情報を取得する
+      operationId: getExternalCm
+      parameters:
+      - name: external
+        in: path
+        description: ID of external system to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: 'center: センター, ssence: S''sence'
+      - name: unisCustomerCd
+        in: path
+        description: ID of unis customer cd to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: "123456789"
+      responses:
+        "200":
+          description: The response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+        "400":
+          description: Bad request. Response invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: API key is missing or invalid
+          headers:
+            WWW_Authenticate:
+              style: simple
+              explode: false
+              schema:
+                type: string
+        "404":
+          description: A user with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error.
+      x-swagger-router-controller: External
+    post:
+      tags:
+      - external
+      summary: CM外部連携完了（外部システム専用）
+      description: 外部連携したCMの結果を登録する
+      operationId: completeExternalCm
+      parameters:
+      - name: external
+        in: path
+        description: ID of external system to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: 'center: センター, ssence: S''sence'
+      - name: unisCustomerCd
+        in: path
+        description: ID of unis customer cd to return
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: "123456789"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body_9'
       responses:
         "200":
           description: The response
@@ -1496,7 +1774,7 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
-      x-swagger-router-controller: S3
+      x-swagger-router-controller: External
 components:
   schemas:
     Auth:
@@ -1868,17 +2146,17 @@ components:
         title: サンプル
         startDate: 2019-09-01T09:00:00+9:00
         timestamp: 2019-09-01T09:00:00+9:00
-    CenterItem:
+    ExternalItem:
       properties:
         dataProcessType:
           type: string
           example: 01：追加、02：変更、03：削除
-        uMesseCmCd:
+        uMesseCmId:
           type: string
-          example: 0999999900-c-sfja8eo1
+          example: 123456789-c-12345678
         url:
           type: string
-          example: https://xxxxx/0999999900-c-sfja8eo1.aac?AWSAccessKeyId=xxxxxxxx
+          example: https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx
         cmName:
           type: string
           example: 時報A
@@ -1896,7 +2174,7 @@ components:
           example: 01：音楽系、02：素ナレ
         fileName:
           type: string
-          example: 0999999900-c-sfja8eo1.aac
+          example: 123456789-c-12345678.aac
         contentTime:
           type: integer
           format: int64
@@ -1911,15 +2189,15 @@ components:
       example:
         startDatetime: 2020-01-01T12:34:56+09:00
         cmName: 時報A
-        fileName: 0999999900-c-sfja8eo1.aac
+        fileName: 123456789-c-12345678.aac
         sceneCd: "001"
-        uMesseCmCd: 0999999900-c-sfja8eo1
         fileSize: 1234567
         dataProcessType: 01：追加、02：変更、03：削除
         cmCommentManuscript: テストCMです
         productionType: 01：音楽系、02：素ナレ
         contentTime: 30000
-        url: https://xxxxx/0999999900-c-sfja8eo1.aac?AWSAccessKeyId=xxxxxxxx
+        uMesseCmId: 123456789-c-12345678
+        url: https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx
         endDatetime: 9999-12-31T23:59:59+09:00
     Error:
       type: object
@@ -1988,77 +2266,7 @@ components:
         endDate:
           type: string
           example: 掲載終了日時（固定）
-    inline_response_200:
-      properties:
-        unisCustomerCd:
-          type: string
-          example: "123456789"
-        cmMetas:
-          type: array
-          items:
-            $ref: '#/components/schemas/CenterItem'
-      example:
-        cmMetas:
-        - startDatetime: 2020-01-01T12:34:56+09:00
-          cmName: 時報A
-          fileName: 0999999900-c-sfja8eo1.aac
-          sceneCd: "001"
-          uMesseCmCd: 0999999900-c-sfja8eo1
-          fileSize: 1234567
-          dataProcessType: 01：追加、02：変更、03：削除
-          cmCommentManuscript: テストCMです
-          productionType: 01：音楽系、02：素ナレ
-          contentTime: 30000
-          url: https://xxxxx/0999999900-c-sfja8eo1.aac?AWSAccessKeyId=xxxxxxxx
-          endDatetime: 9999-12-31T23:59:59+09:00
-        - startDatetime: 2020-01-01T12:34:56+09:00
-          cmName: 時報A
-          fileName: 0999999900-c-sfja8eo1.aac
-          sceneCd: "001"
-          uMesseCmCd: 0999999900-c-sfja8eo1
-          fileSize: 1234567
-          dataProcessType: 01：追加、02：変更、03：削除
-          cmCommentManuscript: テストCMです
-          productionType: 01：音楽系、02：素ナレ
-          contentTime: 30000
-          url: https://xxxxx/0999999900-c-sfja8eo1.aac?AWSAccessKeyId=xxxxxxxx
-          endDatetime: 9999-12-31T23:59:59+09:00
-        unisCustomerCd: "123456789"
     body_5:
-      type: object
-      properties:
-        dataProcessType:
-          type: string
-          example: 01：正常完了、09：取込失敗
-        uMesseCmCd:
-          type: string
-          example: 0999999900-c-sfja8eo1
-        errorCode:
-          type: string
-          example: E0001
-        errorMessege:
-          type: string
-          example: CM名に規定外の文字が使用されています
-    inline_response_200_1:
-      properties:
-        dataProcessType:
-          type: string
-          example: 01：正常完了、09：取込失敗
-        uMesseCmCd:
-          type: string
-          example: 0999999900-c-sfja8eo1
-        errorCode:
-          type: string
-          example: E0001
-        errorMessege:
-          type: string
-          example: CM名に規定外の文字が使用されています
-      example:
-        errorMessege: CM名に規定外の文字が使用されています
-        uMesseCmCd: 0999999900-c-sfja8eo1
-        dataProcessType: 01：正常完了、09：取込失敗
-        errorCode: E0001
-    body_6:
       type: object
       properties:
         filename:
@@ -2066,9 +2274,29 @@ components:
         recordedFile:
           type: string
           format: binary
+        title:
+          type: string
+          example: サンプル
+        description:
+          type: string
+          example: サンプル
+    body_6:
+      type: object
+      properties:
+        title:
+          type: string
+          example: サンプル
+        description:
+          type: string
+          example: サンプル
     body_7:
       type: object
       properties:
+        filename:
+          type: string
+        recordedFile:
+          type: string
+          format: binary
         title:
           type: string
           example: サンプル
@@ -2078,27 +2306,89 @@ components:
     body_8:
       type: object
       properties:
-        filename:
-          type: string
-        recordedFile:
-          type: string
-          format: binary
-    body_9:
-      type: object
-      properties:
         title:
           type: string
           example: サンプル
         description:
           type: string
           example: サンプル
-    inline_response_200_2:
+    inline_response_200:
       properties:
         url:
           type: string
-          example: https://xxxxx/0999999900-c-sfja8eo1.aac?AWSAccessKeyId=xxxxxxxx
+          example: https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx
       example:
-        url: https://xxxxx/0999999900-c-sfja8eo1.aac?AWSAccessKeyId=xxxxxxxx
+        url: https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx
+    inline_response_200_1:
+      properties:
+        unisCustomerCd:
+          type: string
+          example: "123456789"
+        cmMetas:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExternalItem'
+      example:
+        cmMetas:
+        - startDatetime: 2020-01-01T12:34:56+09:00
+          cmName: 時報A
+          fileName: 123456789-c-12345678.aac
+          sceneCd: "001"
+          fileSize: 1234567
+          dataProcessType: 01：追加、02：変更、03：削除
+          cmCommentManuscript: テストCMです
+          productionType: 01：音楽系、02：素ナレ
+          contentTime: 30000
+          uMesseCmId: 123456789-c-12345678
+          url: https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx
+          endDatetime: 9999-12-31T23:59:59+09:00
+        - startDatetime: 2020-01-01T12:34:56+09:00
+          cmName: 時報A
+          fileName: 123456789-c-12345678.aac
+          sceneCd: "001"
+          fileSize: 1234567
+          dataProcessType: 01：追加、02：変更、03：削除
+          cmCommentManuscript: テストCMです
+          productionType: 01：音楽系、02：素ナレ
+          contentTime: 30000
+          uMesseCmId: 123456789-c-12345678
+          url: https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx
+          endDatetime: 9999-12-31T23:59:59+09:00
+        unisCustomerCd: "123456789"
+    body_9:
+      type: object
+      properties:
+        dataProcessType:
+          type: string
+          example: 01：正常完了、09：取込失敗
+        uMesseCmId:
+          type: string
+          example: 123456789-c-12345678
+        errorCode:
+          type: string
+          example: E0001
+        errorMessege:
+          type: string
+          example: CM名に規定外の文字が使用されています
+    inline_response_200_2:
+      properties:
+        dataProcessType:
+          type: string
+          example: 01：正常完了、09：取込失敗
+        uMesseCmId:
+          type: string
+          example: 123456789-c-12345678
+        errorCode:
+          type: string
+          example: E0001
+        errorMessege:
+          type: string
+          example: CM名に規定外の文字が使用されています
+      example:
+        errorMessege: CM名に規定外の文字が使用されています
+        dataProcessType: 01：正常完了、09：取込失敗
+        errorCode: E0001
+        uMesseCmId: 123456789-c-12345678
     CmMaterialListItem_narrations:
       properties:
         id:
@@ -2179,6 +2469,7 @@ components:
       explode: false
       schema:
         type: string
+        example: "1234567890"
     UnisCustomerCd:
       name: x-unis-customer-cd
       in: header
@@ -2188,6 +2479,7 @@ components:
       explode: false
       schema:
         type: string
+        example: "123456789"
     CmId:
       name: cmId
       in: path
@@ -2197,6 +2489,7 @@ components:
       explode: false
       schema:
         type: string
+        example: 123456789-c-12345678
     RecordingId:
       name: recordingId
       in: path
@@ -2206,6 +2499,7 @@ components:
       explode: false
       schema:
         type: string
+        example: 123456789-r-12345678
     TtsId:
       name: ttsId
       in: path
@@ -2215,6 +2509,7 @@ components:
       explode: false
       schema:
         type: string
+        example: 123456789-t-12345678
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

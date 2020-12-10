@@ -2,14 +2,22 @@
 
 const { execSync } = require("child_process");
 const fs = require("fs");
-const { constants } = require("./constants");
+const {
+  constants,
+  debuglog,
+  generateId,
+  checkCmStatus,
+} = require("./constants");
 const dynamodb = require("./utils/dynamodbController").controller;
 const s3 = require("./utils/s3Controller").controller;
 
 // CM取得（一覧・個別）
-exports.fetch = async (unisCustomerCd, cmId) => {
-  constants.debuglog(
-    `cm fetch unis_customer_cd: ${unisCustomerCd}, cm_id: ${cmId}`
+exports.getCm = async (unisCustomerCd, cmId) => {
+  debuglog(
+    `[getCm] ${JSON.stringify({
+      unisCustomerCd: unisCustomerCd,
+      cmId: cmId,
+    })}`
   );
 
   try {
@@ -17,7 +25,7 @@ exports.fetch = async (unisCustomerCd, cmId) => {
     const options = {
       ProjectionExpression: "cm",
     };
-    constants.debuglog(
+    debuglog(
       `key: ${JSON.stringify(key)}, options: ${JSON.stringify(options)}`
     );
 
@@ -26,21 +34,23 @@ exports.fetch = async (unisCustomerCd, cmId) => {
 
     let json = res.Item.cm;
     if (cmId) {
-      json = json.filter((item) => item.id === cmId).pop();
+      json = json.filter((item) => item.id === cmId);
     }
     return json;
   } catch (e) {
     // TODO: error handle
     console.log(e);
+    return { message: e };
   }
 };
 
 // CM新規作成（結合処理）
-exports.create = async (unisCustomerCd, body) => {
-  constants.debuglog(
-    `cm create unis_customer_cd: ${unisCustomerCd}, body: ${JSON.stringify(
-      body
-    )}`
+exports.createCm = async (unisCustomerCd, body) => {
+  debuglog(
+    `[createCm] ${JSON.stringify({
+      unisCustomerCd: unisCustomerCd,
+      body: body,
+    })}`
   );
 
   try {
@@ -48,7 +58,7 @@ exports.create = async (unisCustomerCd, body) => {
     if (!body) throw "body parameter failed";
 
     // ID作成
-    const id = constants.generateId(unisCustomerCd, "c");
+    const id = generateId(unisCustomerCd, "c");
 
     // CM結合、S3へPUT
     const seconds = await generateCm(unisCustomerCd, id, body);
@@ -81,7 +91,7 @@ exports.create = async (unisCustomerCd, body) => {
       },
       ReturnValues: "UPDATED_NEW",
     };
-    constants.debuglog(
+    debuglog(
       `key: ${JSON.stringify(key)}, options: ${JSON.stringify(options)}`
     );
 
@@ -94,15 +104,18 @@ exports.create = async (unisCustomerCd, body) => {
   } catch (e) {
     // TODO: error handle
     console.log(e);
+    return { message: e };
   }
 };
 
 // CM確定・更新
-exports.update = async (unisCustomerCd, cmId, body) => {
-  constants.debuglog(
-    `cm update unis_customer_cd: ${unisCustomerCd}, cmId: ${cmId}, body: ${JSON.stringify(
-      body
-    )}`
+exports.updateCm = async (unisCustomerCd, cmId, body) => {
+  debuglog(
+    `[updateCm] ${JSON.stringify({
+      unisCustomerCd: unisCustomerCd,
+      cmId: cmId,
+      body: body,
+    })}`
   );
 
   try {
@@ -110,142 +123,266 @@ exports.update = async (unisCustomerCd, cmId, body) => {
     if (!body) throw "body parameter failed";
 
     // CM一覧から該当CMを取得
-    const list = await this.fetch(unisCustomerCd);
+    const list = await this.getCm(unisCustomerCd);
     if (!list) throw "not found";
-    const cm = list
-      .map((data, index) => {
-        if (data.id === cmId) return { data, index };
-      })
-      .pop();
+    const index = list.findIndex((item) => item.id === cmId);
+    if (index < 0) throw "not found";
+    const cm = list[index];
 
-    // CMステータス状態によるチェック（アップロード中は更新しない）
-    switch (cm.data.status) {
-      case constants.cmStatus.CONVERT:
-        throw "CMエンコード中のため、更新できません";
-      case constants.cmStatus.CENTER_UPLOADING:
-        throw "U MUSICへの連携が完了していないため、更新できません";
-      case constants.cmStatus.SSENCE_UPLOADING:
-        throw "S'Senceへの連携が完了していないため、更新できません";
-      case constants.cmStatus.ERROR:
-      case constants.cmStatus.CENTER_ERROR:
-      case constants.cmStatus.SSENCE_ERROR:
-        throw "エラーが発生しているため、更新できません";
-    }
+    // CMステータス状態によるチェック
+    const check = checkCmStatus("updateCm", cm.status);
+    if (check) throw check;
 
     // CM作成中の場合
-    if (cm.data.status == constants.cmStatus.CREATING) {
+    if (cm.status == constants.cmStatus.CREATING) {
       // TODO: add sqs
-      cm.data.status = constants.cmStatus.CONVERT;
+      cm.status = constants.cmStatus.CONVERT;
     }
 
     // CMアップロード
-    if (body.upload == constants.cmUploadSystem.CENTER) {
+    if (body.uploadSystem == constants.cmUploadSystem.CENTER) {
       // センターアップロードの場合
       // TODO:
-      cm.data.status = constants.cmStatus.CENTER_UPLOADING;
-    } else if (body.upload == constants.cmUploadSystem.SSENCE) {
+      cm.status = constants.cmStatus.CENTER_UPLOADING;
+    } else if (body.uploadSystem == constants.cmUploadSystem.SSENCE) {
       // S'senceアップロードの場合
       // TODO:
-      cm.data.status = constants.cmStatus.SSENCE_UPLOADING;
+      cm.status = constants.cmStatus.SSENCE_UPLOADING;
     }
 
     // DynamoDBのデータ更新
-    cm.data.title = body.title;
-    cm.data.description = body.description;
-    cm.data.startDate = body.startDate;
-    cm.data.endDate = body.endDate;
-    cm.data.industry = body.industry;
-    cm.data.scene = body.scene;
-    cm.data.timestamp = new Date().toISOString();
+    cm.title = body.title;
+    cm.description = body.description;
+    cm.start_date = body.startDate;
+    cm.end_date = body.endDate;
+    cm.industry = body.industry;
+    cm.scene = body.scene;
+    cm.timestamp = new Date().toISOString();
     const key = { unis_customer_cd: unisCustomerCd };
     const options = {
-      UpdateExpression: `SET cm[${cm.index}] = :cm`,
+      UpdateExpression: `SET cm[${index}] = :cm`,
       ExpressionAttributeValues: {
-        ":cm": cm.data,
+        ":cm": cm,
       },
       ReturnValues: "UPDATED_NEW",
     };
-    constants.debuglog(
+    debuglog(
       `key: ${JSON.stringify(key)}, options: ${JSON.stringify(options)}`
     );
 
     const res = await dynamodb.update(constants.usersTable, key, options);
     if (!res) throw "update failed";
 
-    let json = res.Attributes.cm;
+    let json = res.Attributes.cm[index];
     return json;
   } catch (e) {
     // TODO: error handle
     console.log(e);
+    return { message: e };
   }
 };
 
 // CM削除
-exports.remove = async (unisCustomerCd, cmId) => {
-  constants.debuglog(
-    `cm remove unis_customer_cd: ${unisCustomerCd}, cm_id: ${cmId}`
+exports.deleteCm = async (unisCustomerCd, cmId) => {
+  debuglog(
+    `[deleteCm] ${JSON.stringify({
+      unisCustomerCd: unisCustomerCd,
+      cmId: cmId,
+    })}`
   );
 
   try {
     // CM一覧から該当CMを取得
-    const list = await this.fetch(unisCustomerCd);
+    const list = await this.getCm(unisCustomerCd);
     if (!list) throw "not found";
-    const cm = list
-      .map((data, index) => {
-        if (data.id === cmId) return { data, index };
-      })
-      .pop();
-    if (!cm) throw "not found";
+    const index = list.findIndex((item) => item.id === cmId);
+    if (index < 0) throw "not found";
+    const cm = list[index];
 
-    // CMステータス状態によるチェック（作成中や共有、アップロード中は削除しない）
-    switch (cm.data.status) {
-      case constants.cmStatus.CREATING:
-        throw "CM作成中のため、削除できません";
-      case constants.cmStatus.CONVERT:
-        throw "CMエンコード中のため、削除できません";
-      case constants.cmStatus.SHARING:
-        throw "CM共有中のため、削除できません";
-      case constants.cmStatus.CENTER_UPLOADING:
-      case constants.cmStatus.CENTER_COMPLETE:
-        throw "U MUSICへ連携中のため、削除できません";
-      case constants.cmStatus.SSENCE_UPLOADING:
-      case constants.cmStatus.SSENCE_COMPLETE:
-        throw "S'Senceへ連携中のため、削除できません";
-      case constants.cmStatus.ERROR:
-      case constants.cmStatus.CENTER_ERROR:
-      case constants.cmStatus.SSENCE_ERROR:
-        throw "エラーが発生しているため、削除できません";
-    }
+    // CMステータス状態によるチェック
+    const check = checkCmStatus("deleteCm", cm.status);
+    if (check) throw check;
 
-    // S3上のCMを削除（エラーは検知しなくてよいかも）
+    // S3上のCMを削除
     await s3.delete(
       constants.usersBucket,
       `users/${unisCustomerCd}/cm/${cmId}.mp3`
     );
 
     // DynamoDBのデータ更新
-    cm.data.status = constants.cmStatus.DELETE;
-    cm.data.timestamp = new Date().toISOString();
+    cm.status = constants.cmStatus.DELETE;
+    cm.timestamp = new Date().toISOString();
     const key = { unis_customer_cd: unisCustomerCd };
     const options = {
-      UpdateExpression: `SET cm[${cm.index}] = :cm`,
+      UpdateExpression: `SET cm[${index}] = :cm`,
       ExpressionAttributeValues: {
-        ":cm": cm.data,
+        ":cm": cm,
       },
       ReturnValues: "UPDATED_NEW",
     };
-    constants.debuglog(
+    debuglog(
       `key: ${JSON.stringify(key)}, options: ${JSON.stringify(options)}`
     );
 
     const res = await dynamodb.update(constants.usersTable, key, options);
     if (!res) throw "update failed";
 
-    let json = res.Attributes.cm;
+    let json = res.Attributes.cm[index];
     return json;
   } catch (e) {
     // TODO: error handle
     console.log(e);
+    return { message: e };
+  }
+};
+
+// CM外部連携
+exports.linkCm = async (unisCustomerCd, cmId, body) => {
+  debuglog(
+    `[linkCm] ${JSON.stringify({
+      unisCustomerCd: unisCustomerCd,
+      cmId: cmId,
+      body: body,
+    })}`
+  );
+
+  try {
+    // TODO: body validation check
+    if (!body) throw "body parameter failed";
+
+    // CM一覧から該当CMを取得
+    const list = await this.getCm(unisCustomerCd);
+    if (!list) throw "not found";
+    const index = list.findIndex((item) => item.id === cmId);
+    if (index < 0) throw "not found";
+    const cm = list[index];
+
+    // CMステータス状態によるチェック
+    const check = checkCmStatus("linkCm", cm.status);
+    if (check) throw check;
+
+    // 連携用のデータ追加
+    const item = {
+      unis_customer_cd: unisCustomerCd,
+      data_process_type: "01",
+      id: cmId,
+      title: cm.title,
+      description: cm.description,
+      seconds: cm.seconds,
+      start_date: cm.start_date,
+      end_date: cm.end_date,
+      production_type: cm.production_type,
+      industry: cm.industry.id,
+      scene: cm.scenes.id,
+      upload_system: body.uploadSystem,
+      status: "1",
+      timestamp: new Date().toISOString(),
+    };
+
+    let res = await dynamodb.put(constants.centerTable, item, {});
+    if (!res) throw "put failed";
+
+    // DynamoDBのデータ更新
+    if (body.uploadSystem == constants.cmUploadSystem.CENTER)
+      cm.status = constants.cmStatus.CENTER_UPLOADING;
+    else if (body.uploadSystem == constants.cmUploadSystem.SSENCE)
+      cm.status = constants.cmStatus.SSENCE_UPLOADING;
+
+    cm.timestamp = new Date().toISOString();
+    const key = { unis_customer_cd: unisCustomerCd };
+    const options = {
+      UpdateExpression: `SET cm[${index}] = :cm`,
+      ExpressionAttributeValues: {
+        ":cm": cm,
+      },
+      ReturnValues: "UPDATED_NEW",
+    };
+    debuglog(
+      `key: ${JSON.stringify(key)}, options: ${JSON.stringify(options)}`
+    );
+
+    res = await dynamodb.update(constants.usersTable, key, options);
+    if (!res) throw "update failed";
+
+    let json = res.Attributes.cm[index];
+    return json;
+  } catch (e) {
+    // TODO: error handle
+    console.log(e);
+    return { message: e };
+  }
+};
+
+// CM外部連携解除
+exports.unlinkCm = async (unisCustomerCd, cmId, body) => {
+  debuglog(
+    `[unlinkCm] ${JSON.stringify({
+      unisCustomerCd: unisCustomerCd,
+      cmId: cmId,
+    })}`
+  );
+
+  try {
+    // TODO: body validation check
+    if (!body) throw "body parameter failed";
+
+    // CM一覧から該当CMを取得
+    const list = await this.getCm(unisCustomerCd);
+    if (!list) throw "not found";
+    const index = list.findIndex((item) => item.id === cmId);
+    if (index < 0) throw "not found";
+    const cm = list[index];
+
+    // CMステータス状態によるチェック
+    const check = checkCmStatus("unlinkCm", cm.status);
+    if (check) throw check;
+
+    let uploadSystem = "";
+    if (cm.status == constants.cmStatus.CENTER_COMPLETE) {
+      uploadSystem = constants.cmUploadSystem.CENTER;
+      cm.status = constants.cmStatus.CENTER_UPLOADING;
+    } else if (cm.status == constants.cmStatus.SSENCE_COMPLETE) {
+      uploadSystem = constants.cmUploadSystem.SSENCE;
+      cm.status = constants.cmStatus.SSENCE_UPLOADING;
+    }
+
+    // 連携用のデータ追加
+    const item = {
+      unis_customer_cd: unisCustomerCd,
+      data_process_type: "03",
+      id: cmId,
+      end_date: body.endDate,
+      upload_system: uploadSystem,
+      status: "1",
+      timestamp: new Date().toISOString(),
+    };
+
+    let res = await dynamodb.put(constants.centerTable, item, {});
+    if (!res) throw "put failed";
+
+    // DynamoDBのデータ更新
+    cm.timestamp = new Date().toISOString();
+    const key = { unis_customer_cd: unisCustomerCd };
+    const options = {
+      UpdateExpression: `SET cm[${index}] = :cm`,
+      ExpressionAttributeValues: {
+        ":cm": cm,
+      },
+      ReturnValues: "UPDATED_NEW",
+    };
+    debuglog(
+      `key: ${JSON.stringify(key)}, options: ${JSON.stringify(options)}`
+    );
+
+    res = await dynamodb.update(constants.usersTable, key, options);
+    if (!res) throw "update failed";
+
+    let json = res.Attributes.cm[index];
+    return json;
+  } catch (e) {
+    // TODO: error handle
+    console.log(e);
+    return { message: e };
   }
 };
 
@@ -268,7 +405,7 @@ function generateCm(unisCustomerCd, id, materials) {
 
       let paths = "";
       for (const [key, value] of list.entries()) {
-        constants.debuglog(`key: ${key}, value: ${value}`);
+        debuglog(`key: ${key}, value: ${value}`);
         const res = await s3.get(constants.contentsBucket, value);
         if (!res || !res.Body) throw "getObject failed";
         fs.writeFileSync(`${workDir}/${key}.mp3`, res.Body);
@@ -289,7 +426,7 @@ function generateCm(unisCustomerCd, id, materials) {
           [mix][end_chime]acrossfade=d=3[last]; \
           [start_chime][last]concat=n=2:v=0:a=1 \
         ' -y ${workDir}/${id}.mp3`;
-      constants.debuglog(command);
+      debuglog(command);
       execSync(command);
 
       // FIXME: get seconds... 他に方法があるか
@@ -299,7 +436,7 @@ function generateCm(unisCustomerCd, id, materials) {
       )
         .toString()
         .replace(/\n/g, "");
-      constants.debuglog(`seconds: ${seconds}`);
+      debuglog(`seconds: ${seconds}`);
 
       const fileStream = fs.createReadStream(`${workDir}/${id}.mp3`);
       fileStream.on("error", (e) => {
@@ -310,7 +447,7 @@ function generateCm(unisCustomerCd, id, materials) {
         `users/${unisCustomerCd}/cm/${id}.mp3`,
         fileStream
       );
-      constants.debuglog("generate complete");
+      debuglog("generate complete");
       resolve(seconds);
     } catch (e) {
       console.log(e);

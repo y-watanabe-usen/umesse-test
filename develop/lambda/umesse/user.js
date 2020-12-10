@@ -1,11 +1,15 @@
 "use strict";
 
-const { constants } = require("./constants");
+const { constants, debuglog } = require("./constants");
 const dynamodb = require("./utils/dynamodbController").controller;
 
 // ユーザーデータ取得
-exports.fetch = async (unisCustomerCd) => {
-  constants.debuglog(`user fetch unis_customer_cd: ${unisCustomerCd}`);
+exports.getUser = async (unisCustomerCd) => {
+  debuglog(
+    `[getUser] ${JSON.stringify({
+      unisCustomerCd: unisCustomerCd,
+    })}`
+  );
 
   try {
     const key = { unis_customer_cd: unisCustomerCd };
@@ -24,7 +28,7 @@ exports.fetch = async (unisCustomerCd) => {
         "create_date," +
         "renewal_date",
     };
-    constants.debuglog(
+    debuglog(
       `key: ${JSON.stringify(key)}, options: ${JSON.stringify(options)}`
     );
 
@@ -34,5 +38,6 @@ exports.fetch = async (unisCustomerCd) => {
   } catch (e) {
     // TODO: error handle
     console.log(e);
+    return { message: e };
   }
 };

@@ -18,35 +18,32 @@ import { Configuration } from '../configuration';
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
 import { Body3 } from '../models';
 import { Body4 } from '../models';
-import { Body5 } from '../models';
-import { CmItem } from '../models';
-import { InlineResponse200 } from '../models';
-import { InlineResponse2001 } from '../models';
+import { ExternalItem } from '../models';
 /**
- * CenterApi - axios parameter creator
+ * UploadApi - axios parameter creator
  * @export
  */
-export const CenterApiAxiosParamCreator = function (configuration?: Configuration) {
+export const UploadApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * 
-         * @summary CMセンター連携追加
+         * CMを外部連携する
+         * @summary CM外部連携追加
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} cmId ID of cm to return
          * @param {Body3} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createCenterCm: async (xUnisCustomerCd: string, cmId: string, body?: Body3, options: any = {}): Promise<RequestArgs> => {
+        createUploadCm: async (xUnisCustomerCd: string, cmId: string, body?: Body3, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'xUnisCustomerCd' is not null or undefined
             if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
-                throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling createCenterCm.');
+                throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling createUploadCm.');
             }
             // verify required parameter 'cmId' is not null or undefined
             if (cmId === null || cmId === undefined) {
-                throw new RequiredError('cmId','Required parameter cmId was null or undefined when calling createCenterCm.');
+                throw new RequiredError('cmId','Required parameter cmId was null or undefined when calling createUploadCm.');
             }
-            const localVarPath = `/center/{cmId}`
+            const localVarPath = `/user/upload/{cmId}`
                 .replace(`{${"cmId"}}`, encodeURIComponent(String(cmId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -83,24 +80,24 @@ export const CenterApiAxiosParamCreator = function (configuration?: Configuratio
             };
         },
         /**
-         * 
-         * @summary CMセンター連携削除
+         * CMの外部連携を解除する
+         * @summary CM外部連携解除
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} cmId ID of cm to return
          * @param {Body4} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteCenterCm: async (xUnisCustomerCd: string, cmId: string, body?: Body4, options: any = {}): Promise<RequestArgs> => {
+        deleteUploadCm: async (xUnisCustomerCd: string, cmId: string, body?: Body4, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'xUnisCustomerCd' is not null or undefined
             if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
-                throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling deleteCenterCm.');
+                throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling deleteUploadCm.');
             }
             // verify required parameter 'cmId' is not null or undefined
             if (cmId === null || cmId === undefined) {
-                throw new RequiredError('cmId','Required parameter cmId was null or undefined when calling deleteCenterCm.');
+                throw new RequiredError('cmId','Required parameter cmId was null or undefined when calling deleteUploadCm.');
             }
-            const localVarPath = `/center/{cmId}`
+            const localVarPath = `/user/upload/{cmId}`
                 .replace(`{${"cmId"}}`, encodeURIComponent(String(cmId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -137,19 +134,24 @@ export const CenterApiAxiosParamCreator = function (configuration?: Configuratio
             };
         },
         /**
-         * 
-         * @summary センターCM連携取得（センター専用）
-         * @param {string} unisCustomerCd ID of unis customer cd to return
+         * CMの外部連携状態を取得する
+         * @summary CM外部連携情報取得
+         * @param {string} cmId ID of cm to return
+         * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCenterUpload: async (unisCustomerCd: string, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'unisCustomerCd' is not null or undefined
-            if (unisCustomerCd === null || unisCustomerCd === undefined) {
-                throw new RequiredError('unisCustomerCd','Required parameter unisCustomerCd was null or undefined when calling getCenterUpload.');
+        getUploadCm: async (cmId: string, xUnisCustomerCd: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'cmId' is not null or undefined
+            if (cmId === null || cmId === undefined) {
+                throw new RequiredError('cmId','Required parameter cmId was null or undefined when calling getUploadCm.');
             }
-            const localVarPath = `/center/upload/{unisCustomerCd}`
-                .replace(`{${"unisCustomerCd"}}`, encodeURIComponent(String(unisCustomerCd)));
+            // verify required parameter 'xUnisCustomerCd' is not null or undefined
+            if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
+                throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling getUploadCm.');
+            }
+            const localVarPath = `/user/upload/{cmId}`
+                .replace(`{${"cmId"}}`, encodeURIComponent(String(cmId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
             let baseOptions;
@@ -160,6 +162,10 @@ export const CenterApiAxiosParamCreator = function (configuration?: Configuratio
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            if (xUnisCustomerCd !== undefined && xUnisCustomerCd !== null) {
+                localVarHeaderParameter['x-unis-customer-cd'] = String(xUnisCustomerCd);
+            }
+
             const query = new URLSearchParams(localVarUrlObj.search);
             for (const key in localVarQueryParameter) {
                 query.set(key, localVarQueryParameter[key]);
@@ -177,13 +183,18 @@ export const CenterApiAxiosParamCreator = function (configuration?: Configuratio
             };
         },
         /**
-         * 
-         * @summary センターCM連携（センター専用）
+         * CMの外部連携状態を一覧で取得する
+         * @summary CM外部連携情報一覧取得
+         * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listCenterUpload: async (options: any = {}): Promise<RequestArgs> => {
-            const localVarPath = `/center/upload`;
+        listUploadCm: async (xUnisCustomerCd: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'xUnisCustomerCd' is not null or undefined
+            if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
+                throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling listUploadCm.');
+            }
+            const localVarPath = `/user/upload`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
             let baseOptions;
@@ -194,6 +205,10 @@ export const CenterApiAxiosParamCreator = function (configuration?: Configuratio
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
 
+            if (xUnisCustomerCd !== undefined && xUnisCustomerCd !== null) {
+                localVarHeaderParameter['x-unis-customer-cd'] = String(xUnisCustomerCd);
+            }
+
             const query = new URLSearchParams(localVarUrlObj.search);
             for (const key in localVarQueryParameter) {
                 query.set(key, localVarQueryParameter[key]);
@@ -210,129 +225,71 @@ export const CenterApiAxiosParamCreator = function (configuration?: Configuratio
                 options: localVarRequestOptions,
             };
         },
-        /**
-         * 
-         * @summary センターCM連携完了（センター専用）
-         * @param {string} unisCustomerCd ID of unis customer cd to return
-         * @param {Body5} [body] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        updateCenterUpload: async (unisCustomerCd: string, body?: Body5, options: any = {}): Promise<RequestArgs> => {
-            // verify required parameter 'unisCustomerCd' is not null or undefined
-            if (unisCustomerCd === null || unisCustomerCd === undefined) {
-                throw new RequiredError('unisCustomerCd','Required parameter unisCustomerCd was null or undefined when calling updateCenterUpload.');
-            }
-            const localVarPath = `/center/upload/{unisCustomerCd}`
-                .replace(`{${"unisCustomerCd"}}`, encodeURIComponent(String(unisCustomerCd)));
-            // use dummy base URL string because the URL constructor only accepts absolute URLs.
-            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
-            let baseOptions;
-            if (configuration) {
-                baseOptions = configuration.baseOptions;
-            }
-            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
-            const localVarHeaderParameter = {} as any;
-            const localVarQueryParameter = {} as any;
-
-            localVarHeaderParameter['Content-Type'] = 'application/json';
-
-            const query = new URLSearchParams(localVarUrlObj.search);
-            for (const key in localVarQueryParameter) {
-                query.set(key, localVarQueryParameter[key]);
-            }
-            for (const key in options.query) {
-                query.set(key, options.query[key]);
-            }
-            localVarUrlObj.search = (new URLSearchParams(query)).toString();
-            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
-            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
-            const needsSerialization = (typeof body !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
-            localVarRequestOptions.data =  needsSerialization ? JSON.stringify(body !== undefined ? body : {}) : (body || "");
-
-            return {
-                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
-                options: localVarRequestOptions,
-            };
-        },
     }
 };
 
 /**
- * CenterApi - functional programming interface
+ * UploadApi - functional programming interface
  * @export
  */
-export const CenterApiFp = function(configuration?: Configuration) {
+export const UploadApiFp = function(configuration?: Configuration) {
     return {
         /**
-         * 
-         * @summary CMセンター連携追加
+         * CMを外部連携する
+         * @summary CM外部連携追加
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} cmId ID of cm to return
          * @param {Body3} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createCenterCm(xUnisCustomerCd: string, cmId: string, body?: Body3, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CmItem>> {
-            const localVarAxiosArgs = await CenterApiAxiosParamCreator(configuration).createCenterCm(xUnisCustomerCd, cmId, body, options);
+        async createUploadCm(xUnisCustomerCd: string, cmId: string, body?: Body3, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalItem>> {
+            const localVarAxiosArgs = await UploadApiAxiosParamCreator(configuration).createUploadCm(xUnisCustomerCd, cmId, body, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
             };
         },
         /**
-         * 
-         * @summary CMセンター連携削除
+         * CMの外部連携を解除する
+         * @summary CM外部連携解除
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} cmId ID of cm to return
          * @param {Body4} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteCenterCm(xUnisCustomerCd: string, cmId: string, body?: Body4, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
-            const localVarAxiosArgs = await CenterApiAxiosParamCreator(configuration).deleteCenterCm(xUnisCustomerCd, cmId, body, options);
+        async deleteUploadCm(xUnisCustomerCd: string, cmId: string, body?: Body4, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalItem>> {
+            const localVarAxiosArgs = await UploadApiAxiosParamCreator(configuration).deleteUploadCm(xUnisCustomerCd, cmId, body, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
             };
         },
         /**
-         * 
-         * @summary センターCM連携取得（センター専用）
-         * @param {string} unisCustomerCd ID of unis customer cd to return
+         * CMの外部連携状態を取得する
+         * @summary CM外部連携情報取得
+         * @param {string} cmId ID of cm to return
+         * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getCenterUpload(unisCustomerCd: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse200>> {
-            const localVarAxiosArgs = await CenterApiAxiosParamCreator(configuration).getCenterUpload(unisCustomerCd, options);
+        async getUploadCm(cmId: string, xUnisCustomerCd: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalItem>> {
+            const localVarAxiosArgs = await UploadApiAxiosParamCreator(configuration).getUploadCm(cmId, xUnisCustomerCd, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
             };
         },
         /**
-         * 
-         * @summary センターCM連携（センター専用）
+         * CMの外部連携状態を一覧で取得する
+         * @summary CM外部連携情報一覧取得
+         * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listCenterUpload(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<InlineResponse200>>> {
-            const localVarAxiosArgs = await CenterApiAxiosParamCreator(configuration).listCenterUpload(options);
-            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
-                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
-                return axios.request(axiosRequestArgs);
-            };
-        },
-        /**
-         * 
-         * @summary センターCM連携完了（センター専用）
-         * @param {string} unisCustomerCd ID of unis customer cd to return
-         * @param {Body5} [body] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        async updateCenterUpload(unisCustomerCd: string, body?: Body5, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2001>> {
-            const localVarAxiosArgs = await CenterApiAxiosParamCreator(configuration).updateCenterUpload(unisCustomerCd, body, options);
+        async listUploadCm(xUnisCustomerCd: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ExternalItem>>> {
+            const localVarAxiosArgs = await UploadApiAxiosParamCreator(configuration).listUploadCm(xUnisCustomerCd, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -342,132 +299,113 @@ export const CenterApiFp = function(configuration?: Configuration) {
 };
 
 /**
- * CenterApi - factory interface
+ * UploadApi - factory interface
  * @export
  */
-export const CenterApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+export const UploadApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     return {
         /**
-         * 
-         * @summary CMセンター連携追加
+         * CMを外部連携する
+         * @summary CM外部連携追加
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} cmId ID of cm to return
          * @param {Body3} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createCenterCm(xUnisCustomerCd: string, cmId: string, body?: Body3, options?: any): AxiosPromise<CmItem> {
-            return CenterApiFp(configuration).createCenterCm(xUnisCustomerCd, cmId, body, options).then((request) => request(axios, basePath));
+        createUploadCm(xUnisCustomerCd: string, cmId: string, body?: Body3, options?: any): AxiosPromise<ExternalItem> {
+            return UploadApiFp(configuration).createUploadCm(xUnisCustomerCd, cmId, body, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
-         * @summary CMセンター連携削除
+         * CMの外部連携を解除する
+         * @summary CM外部連携解除
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {string} cmId ID of cm to return
          * @param {Body4} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteCenterCm(xUnisCustomerCd: string, cmId: string, body?: Body4, options?: any): AxiosPromise<void> {
-            return CenterApiFp(configuration).deleteCenterCm(xUnisCustomerCd, cmId, body, options).then((request) => request(axios, basePath));
+        deleteUploadCm(xUnisCustomerCd: string, cmId: string, body?: Body4, options?: any): AxiosPromise<ExternalItem> {
+            return UploadApiFp(configuration).deleteUploadCm(xUnisCustomerCd, cmId, body, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
-         * @summary センターCM連携取得（センター専用）
-         * @param {string} unisCustomerCd ID of unis customer cd to return
+         * CMの外部連携状態を取得する
+         * @summary CM外部連携情報取得
+         * @param {string} cmId ID of cm to return
+         * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getCenterUpload(unisCustomerCd: string, options?: any): AxiosPromise<InlineResponse200> {
-            return CenterApiFp(configuration).getCenterUpload(unisCustomerCd, options).then((request) => request(axios, basePath));
+        getUploadCm(cmId: string, xUnisCustomerCd: string, options?: any): AxiosPromise<ExternalItem> {
+            return UploadApiFp(configuration).getUploadCm(cmId, xUnisCustomerCd, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
-         * @summary センターCM連携（センター専用）
+         * CMの外部連携状態を一覧で取得する
+         * @summary CM外部連携情報一覧取得
+         * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listCenterUpload(options?: any): AxiosPromise<Array<InlineResponse200>> {
-            return CenterApiFp(configuration).listCenterUpload(options).then((request) => request(axios, basePath));
-        },
-        /**
-         * 
-         * @summary センターCM連携完了（センター専用）
-         * @param {string} unisCustomerCd ID of unis customer cd to return
-         * @param {Body5} [body] 
-         * @param {*} [options] Override http request option.
-         * @throws {RequiredError}
-         */
-        updateCenterUpload(unisCustomerCd: string, body?: Body5, options?: any): AxiosPromise<InlineResponse2001> {
-            return CenterApiFp(configuration).updateCenterUpload(unisCustomerCd, body, options).then((request) => request(axios, basePath));
+        listUploadCm(xUnisCustomerCd: string, options?: any): AxiosPromise<Array<ExternalItem>> {
+            return UploadApiFp(configuration).listUploadCm(xUnisCustomerCd, options).then((request) => request(axios, basePath));
         },
     };
 };
 
 /**
- * CenterApi - object-oriented interface
+ * UploadApi - object-oriented interface
  * @export
- * @class CenterApi
+ * @class UploadApi
  * @extends {BaseAPI}
  */
-export class CenterApi extends BaseAPI {
+export class UploadApi extends BaseAPI {
     /**
-     * 
-     * @summary CMセンター連携追加
+     * CMを外部連携する
+     * @summary CM外部連携追加
      * @param {string} xUnisCustomerCd ID of unis customer cd to return
      * @param {string} cmId ID of cm to return
      * @param {Body3} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof CenterApi
+     * @memberof UploadApi
      */
-    public createCenterCm(xUnisCustomerCd: string, cmId: string, body?: Body3, options?: any) {
-        return CenterApiFp(this.configuration).createCenterCm(xUnisCustomerCd, cmId, body, options).then((request) => request(this.axios, this.basePath));
+    public createUploadCm(xUnisCustomerCd: string, cmId: string, body?: Body3, options?: any) {
+        return UploadApiFp(this.configuration).createUploadCm(xUnisCustomerCd, cmId, body, options).then((request) => request(this.axios, this.basePath));
     }
     /**
-     * 
-     * @summary CMセンター連携削除
+     * CMの外部連携を解除する
+     * @summary CM外部連携解除
      * @param {string} xUnisCustomerCd ID of unis customer cd to return
      * @param {string} cmId ID of cm to return
      * @param {Body4} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof CenterApi
+     * @memberof UploadApi
      */
-    public deleteCenterCm(xUnisCustomerCd: string, cmId: string, body?: Body4, options?: any) {
-        return CenterApiFp(this.configuration).deleteCenterCm(xUnisCustomerCd, cmId, body, options).then((request) => request(this.axios, this.basePath));
+    public deleteUploadCm(xUnisCustomerCd: string, cmId: string, body?: Body4, options?: any) {
+        return UploadApiFp(this.configuration).deleteUploadCm(xUnisCustomerCd, cmId, body, options).then((request) => request(this.axios, this.basePath));
     }
     /**
-     * 
-     * @summary センターCM連携取得（センター専用）
-     * @param {string} unisCustomerCd ID of unis customer cd to return
+     * CMの外部連携状態を取得する
+     * @summary CM外部連携情報取得
+     * @param {string} cmId ID of cm to return
+     * @param {string} xUnisCustomerCd ID of unis customer cd to return
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof CenterApi
+     * @memberof UploadApi
      */
-    public getCenterUpload(unisCustomerCd: string, options?: any) {
-        return CenterApiFp(this.configuration).getCenterUpload(unisCustomerCd, options).then((request) => request(this.axios, this.basePath));
+    public getUploadCm(cmId: string, xUnisCustomerCd: string, options?: any) {
+        return UploadApiFp(this.configuration).getUploadCm(cmId, xUnisCustomerCd, options).then((request) => request(this.axios, this.basePath));
     }
     /**
-     * 
-     * @summary センターCM連携（センター専用）
+     * CMの外部連携状態を一覧で取得する
+     * @summary CM外部連携情報一覧取得
+     * @param {string} xUnisCustomerCd ID of unis customer cd to return
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
-     * @memberof CenterApi
+     * @memberof UploadApi
      */
-    public listCenterUpload(options?: any) {
-        return CenterApiFp(this.configuration).listCenterUpload(options).then((request) => request(this.axios, this.basePath));
-    }
-    /**
-     * 
-     * @summary センターCM連携完了（センター専用）
-     * @param {string} unisCustomerCd ID of unis customer cd to return
-     * @param {Body5} [body] 
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     * @memberof CenterApi
-     */
-    public updateCenterUpload(unisCustomerCd: string, body?: Body5, options?: any) {
-        return CenterApiFp(this.configuration).updateCenterUpload(unisCustomerCd, body, options).then((request) => request(this.axios, this.basePath));
+    public listUploadCm(xUnisCustomerCd: string, options?: any) {
+        return UploadApiFp(this.configuration).listUploadCm(xUnisCustomerCd, options).then((request) => request(this.axios, this.basePath));
     }
 }

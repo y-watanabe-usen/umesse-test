@@ -14,79 +14,79 @@
 /**
  * 
  * @export
- * @interface CenterItem
+ * @interface ExternalItem
  */
-export interface CenterItem {
+export interface ExternalItem {
     /**
      * 
      * @type {string}
-     * @memberof CenterItem
+     * @memberof ExternalItem
      */
     dataProcessType?: any;
     /**
      * 
      * @type {string}
-     * @memberof CenterItem
+     * @memberof ExternalItem
      */
-    uMesseCmCd?: any;
+    uMesseCmId?: any;
     /**
      * 
      * @type {string}
-     * @memberof CenterItem
+     * @memberof ExternalItem
      */
     url?: any;
     /**
      * 
      * @type {string}
-     * @memberof CenterItem
+     * @memberof ExternalItem
      */
     cmName?: any;
     /**
      * 
      * @type {string}
-     * @memberof CenterItem
+     * @memberof ExternalItem
      */
     cmCommentManuscript?: any;
     /**
      * 
      * @type {string}
-     * @memberof CenterItem
+     * @memberof ExternalItem
      */
     startDatetime?: any;
     /**
      * 
      * @type {string}
-     * @memberof CenterItem
+     * @memberof ExternalItem
      */
     endDatetime?: any;
     /**
      * 
      * @type {string}
-     * @memberof CenterItem
+     * @memberof ExternalItem
      */
     productionType?: any;
     /**
      * 
      * @type {string}
-     * @memberof CenterItem
+     * @memberof ExternalItem
      */
     fileName?: any;
     /**
      * 
      * @type {number}
-     * @memberof CenterItem
+     * @memberof ExternalItem
      */
     contentTime?: any;
     /**
      * 
      * @type {number}
-     * @memberof CenterItem
+     * @memberof ExternalItem
      */
     fileSize?: any;
     /**
      * 
      * @type {string}
-     * @memberof CenterItem
+     * @memberof ExternalItem
      */
     sceneCd?: any;
 }
