@@ -1,5 +1,7 @@
-'use strict';
+"use strict";
 
+const { linkCm, unlinkCm } = require("../../umesse/cm");
+const { getUserExternalCm } = require("../../umesse/external");
 
 /**
  * CM外部連携追加
@@ -10,31 +12,18 @@
  * xUnisCustomerCd String ID of unis customer cd to return
  * returns ExternalItem
  **/
-exports.createUploadCm = function(body,cmId,xUnisCustomerCd) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "startDatetime" : "2020-01-01T12:34:56+09:00",
-  "cmName" : "時報A",
-  "fileName" : "123456789-c-12345678.aac",
-  "sceneCd" : "001",
-  "fileSize" : 1234567,
-  "dataProcessType" : "01：追加、02：変更、03：削除",
-  "cmCommentManuscript" : "テストCMです",
-  "productionType" : "01：音楽系、02：素ナレ",
-  "contentTime" : 30000,
-  "uMesseCmId" : "123456789-c-12345678",
-  "url" : "https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx",
-  "endDatetime" : "9999-12-31T23:59:59+09:00"
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
+exports.createUploadCm = function (body, cmId, xUnisCustomerCd) {
+  return new Promise(async function (resolve, reject) {
+    var response = {};
+    const json = await linkCm(xUnisCustomerCd, cmId, body);
+    response["application/json"] = json;
+    if (Object.keys(response).length > 0 && !json.message) {
+      resolve(response[Object.keys(response)[0]]);
     } else {
-      resolve();
+      reject(response[Object.keys(response)[0]]);
     }
   });
-}
-
+};
 
 /**
  * CM外部連携解除
@@ -45,31 +34,18 @@ exports.createUploadCm = function(body,cmId,xUnisCustomerCd) {
  * xUnisCustomerCd String ID of unis customer cd to return
  * returns ExternalItem
  **/
-exports.deleteUploadCm = function(body,cmId,xUnisCustomerCd) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "startDatetime" : "2020-01-01T12:34:56+09:00",
-  "cmName" : "時報A",
-  "fileName" : "123456789-c-12345678.aac",
-  "sceneCd" : "001",
-  "fileSize" : 1234567,
-  "dataProcessType" : "01：追加、02：変更、03：削除",
-  "cmCommentManuscript" : "テストCMです",
-  "productionType" : "01：音楽系、02：素ナレ",
-  "contentTime" : 30000,
-  "uMesseCmId" : "123456789-c-12345678",
-  "url" : "https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx",
-  "endDatetime" : "9999-12-31T23:59:59+09:00"
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
+exports.deleteUploadCm = function (body, cmId, xUnisCustomerCd) {
+  return new Promise(async function (resolve, reject) {
+    var response = {};
+    const json = await unlinkCm(xUnisCustomerCd, cmId, body);
+    response["application/json"] = json;
+    if (Object.keys(response).length > 0 && !json.message) {
+      resolve(response[Object.keys(response)[0]]);
     } else {
-      resolve();
+      reject(response[Object.keys(response)[0]]);
     }
   });
-}
-
+};
 
 /**
  * CM外部連携情報取得
@@ -79,31 +55,18 @@ exports.deleteUploadCm = function(body,cmId,xUnisCustomerCd) {
  * xUnisCustomerCd String ID of unis customer cd to return
  * returns ExternalItem
  **/
-exports.getUploadCm = function(cmId,xUnisCustomerCd) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "startDatetime" : "2020-01-01T12:34:56+09:00",
-  "cmName" : "時報A",
-  "fileName" : "123456789-c-12345678.aac",
-  "sceneCd" : "001",
-  "fileSize" : 1234567,
-  "dataProcessType" : "01：追加、02：変更、03：削除",
-  "cmCommentManuscript" : "テストCMです",
-  "productionType" : "01：音楽系、02：素ナレ",
-  "contentTime" : 30000,
-  "uMesseCmId" : "123456789-c-12345678",
-  "url" : "https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx",
-  "endDatetime" : "9999-12-31T23:59:59+09:00"
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
+exports.getUploadCm = function (cmId, xUnisCustomerCd) {
+  return new Promise(async function (resolve, reject) {
+    var response = {};
+    const json = await getUserExternalCm(xUnisCustomerCd, cmId);
+    response["application/json"] = json;
+    if (Object.keys(response).length > 0 && !json.message) {
+      resolve(response[Object.keys(response)[0]]);
     } else {
-      resolve();
+      reject(response[Object.keys(response)[0]]);
     }
   });
-}
-
+};
 
 /**
  * CM外部連携情報一覧取得
@@ -112,41 +75,15 @@ exports.getUploadCm = function(cmId,xUnisCustomerCd) {
  * xUnisCustomerCd String ID of unis customer cd to return
  * returns List
  **/
-exports.listUploadCm = function(xUnisCustomerCd) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = [ {
-  "startDatetime" : "2020-01-01T12:34:56+09:00",
-  "cmName" : "時報A",
-  "fileName" : "123456789-c-12345678.aac",
-  "sceneCd" : "001",
-  "fileSize" : 1234567,
-  "dataProcessType" : "01：追加、02：変更、03：削除",
-  "cmCommentManuscript" : "テストCMです",
-  "productionType" : "01：音楽系、02：素ナレ",
-  "contentTime" : 30000,
-  "uMesseCmId" : "123456789-c-12345678",
-  "url" : "https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx",
-  "endDatetime" : "9999-12-31T23:59:59+09:00"
-}, {
-  "startDatetime" : "2020-01-01T12:34:56+09:00",
-  "cmName" : "時報A",
-  "fileName" : "123456789-c-12345678.aac",
-  "sceneCd" : "001",
-  "fileSize" : 1234567,
-  "dataProcessType" : "01：追加、02：変更、03：削除",
-  "cmCommentManuscript" : "テストCMです",
-  "productionType" : "01：音楽系、02：素ナレ",
-  "contentTime" : 30000,
-  "uMesseCmId" : "123456789-c-12345678",
-  "url" : "https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx",
-  "endDatetime" : "9999-12-31T23:59:59+09:00"
-} ];
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
+exports.listUploadCm = function (xUnisCustomerCd) {
+  return new Promise(async function (resolve, reject) {
+    var response = {};
+    const json = await getUserExternalCm(xUnisCustomerCd);
+    response["application/json"] = json;
+    if (Object.keys(response).length > 0 && !json.message) {
+      resolve(response[Object.keys(response)[0]]);
     } else {
-      resolve();
+      reject(response[Object.keys(response)[0]]);
     }
   });
-}
-
+};

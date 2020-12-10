@@ -1,6 +1,12 @@
 "use strict";
 
-const { fetch, create, update, remove } = require("../../umesse/recording");
+const { constants } = require("../../umesse/constants");
+const {
+  getUserResource,
+  createUserResource,
+  updateUserResource,
+  deleteUserResource,
+} = require("../../umesse/resources");
 
 /**
  * 新規録音データ
@@ -12,12 +18,16 @@ const { fetch, create, update, remove } = require("../../umesse/recording");
 exports.createUserRecording = function (xUnisCustomerCd, filename, resources) {
   return new Promise(async function (resolve, reject) {
     var response = {};
-    const json = await create(xUnisCustomerCd, filename, resources);
+    const json = await createUserResource(
+      xUnisCustomerCd,
+      constants.userResource.RECORDING,
+      resources
+    );
     response["application/json"] = json;
-    if (Object.keys(response).length > 0) {
+    if (Object.keys(response).length > 0 && !json.message) {
       resolve(response[Object.keys(response)[0]]);
     } else {
-      resolve();
+      reject(response[Object.keys(response)[0]]);
     }
   });
 };
@@ -33,12 +43,16 @@ exports.createUserRecording = function (xUnisCustomerCd, filename, resources) {
 exports.deleteUserRecording = function (recordingId, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     var response = {};
-    const json = await remove(xUnisCustomerCd, recordingId);
+    const json = await deleteUserResource(
+      xUnisCustomerCd,
+      constants.userResource.RECORDING,
+      recordingId
+    );
     response["application/json"] = json;
-    if (Object.keys(response).length > 0) {
+    if (Object.keys(response).length > 0 && !json.message) {
       resolve(response[Object.keys(response)[0]]);
     } else {
-      resolve();
+      reject(response[Object.keys(response)[0]]);
     }
   });
 };
@@ -54,12 +68,16 @@ exports.deleteUserRecording = function (recordingId, xUnisCustomerCd) {
 exports.getUserRecording = function (recordingId, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     var response = {};
-    const json = await fetch(xUnisCustomerCd, recordingId);
+    const json = await getUserResource(
+      xUnisCustomerCd,
+      constants.userResource.RECORDING,
+      recordingId
+    );
     response["application/json"] = json;
-    if (Object.keys(response).length > 0) {
+    if (Object.keys(response).length > 0 && !json.message) {
       resolve(response[Object.keys(response)[0]]);
     } else {
-      resolve();
+      reject(response[Object.keys(response)[0]]);
     }
   });
 };
@@ -74,12 +92,15 @@ exports.getUserRecording = function (recordingId, xUnisCustomerCd) {
 exports.listUserRecording = function (xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     var response = {};
-    const json = await fetch(xUnisCustomerCd);
+    const json = await getUserResource(
+      xUnisCustomerCd,
+      constants.userResource.RECORDING
+    );
     response["application/json"] = json;
-    if (Object.keys(response).length > 0) {
+    if (Object.keys(response).length > 0 && !json.message) {
       resolve(response[Object.keys(response)[0]]);
     } else {
-      resolve();
+      reject(response[Object.keys(response)[0]]);
     }
   });
 };
@@ -96,12 +117,17 @@ exports.listUserRecording = function (xUnisCustomerCd) {
 exports.updateUserRecording = function (body, recordingId, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     var response = {};
-    const json = await update(xUnisCustomerCd, recordingId, body);
+    const json = await updateUserResource(
+      xUnisCustomerCd,
+      constants.userResource.RECORDING,
+      recordingId,
+      body
+    );
     response["application/json"] = json;
-    if (Object.keys(response).length > 0) {
+    if (Object.keys(response).length > 0 && !json.message) {
       resolve(response[Object.keys(response)[0]]);
     } else {
-      resolve();
+      reject(response[Object.keys(response)[0]]);
     }
   });
 };

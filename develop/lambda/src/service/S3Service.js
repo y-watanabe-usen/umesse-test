@@ -1,6 +1,6 @@
 "use strict";
 
-const { signedUrl } = require("../../umesse/s3");
+const { getSignedUrl } = require("../../umesse/resources");
 
 /**
  * S3オブジェクトの署名付きURLの取得
@@ -12,12 +12,12 @@ const { signedUrl } = require("../../umesse/s3");
 exports.getSignedUrl = function (id) {
   return new Promise(async function (resolve, reject) {
     var response = {};
-    const json = await signedUrl(id);
+    const json = await getSignedUrl(id);
     response["application/json"] = json;
-    if (Object.keys(response).length > 0) {
+    if (Object.keys(response).length > 0 && !json.message) {
       resolve(response[Object.keys(response)[0]]);
     } else {
-      resolve();
+      reject(response[Object.keys(response)[0]]);
     }
   });
 };

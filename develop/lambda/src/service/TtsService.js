@@ -1,6 +1,12 @@
 "use strict";
 
-const { fetch, create, update, remove } = require("../../umesse/tts");
+const { constants } = require("../../umesse/constants");
+const {
+  getUserResource,
+  createUserResource,
+  updateUserResource,
+  deleteUserResource,
+} = require("../../umesse/resources");
 
 /**
  * 新規録音データ
@@ -12,12 +18,16 @@ const { fetch, create, update, remove } = require("../../umesse/tts");
 exports.createUserTts = function (xUnisCustomerCd, filename, resources) {
   return new Promise(async function (resolve, reject) {
     var response = {};
-    const json = await create(xUnisCustomerCd, filename, resources);
+    const json = await createUserResource(
+      xUnisCustomerCd,
+      constants.userResource.TTS,
+      resources
+    );
     response["application/json"] = json;
-    if (Object.keys(response).length > 0) {
+    if (Object.keys(response).length > 0 && !json.message) {
       resolve(response[Object.keys(response)[0]]);
     } else {
-      resolve();
+      reject(response[Object.keys(response)[0]]);
     }
   });
 };
@@ -33,12 +43,16 @@ exports.createUserTts = function (xUnisCustomerCd, filename, resources) {
 exports.deleteUserTts = function (ttsId, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     var response = {};
-    const json = await remove(xUnisCustomerCd, ttsId);
+    const json = await deleteUserResource(
+      xUnisCustomerCd,
+      constants.userResource.TTS,
+      ttsId
+    );
     response["application/json"] = json;
-    if (Object.keys(response).length > 0) {
+    if (Object.keys(response).length > 0 && !json.message) {
       resolve(response[Object.keys(response)[0]]);
     } else {
-      resolve();
+      reject(response[Object.keys(response)[0]]);
     }
   });
 };
@@ -54,12 +68,16 @@ exports.deleteUserTts = function (ttsId, xUnisCustomerCd) {
 exports.getUserTts = function (ttsId, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     var response = {};
-    const json = await fetch(xUnisCustomerCd, ttsId);
+    const json = await getUserResource(
+      xUnisCustomerCd,
+      constants.userResource.TTS,
+      ttsId
+    );
     response["application/json"] = json;
-    if (Object.keys(response).length > 0) {
+    if (Object.keys(response).length > 0 && !json.message) {
       resolve(response[Object.keys(response)[0]]);
     } else {
-      resolve();
+      reject(response[Object.keys(response)[0]]);
     }
   });
 };
@@ -74,12 +92,15 @@ exports.getUserTts = function (ttsId, xUnisCustomerCd) {
 exports.listUserTts = function (xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     var response = {};
-    const json = await fetch(xUnisCustomerCd);
+    const json = await getUserResource(
+      xUnisCustomerCd,
+      constants.userResource.TTS
+    );
     response["application/json"] = json;
-    if (Object.keys(response).length > 0) {
+    if (Object.keys(response).length > 0 && !json.message) {
       resolve(response[Object.keys(response)[0]]);
     } else {
-      resolve();
+      reject(response[Object.keys(response)[0]]);
     }
   });
 };
@@ -95,12 +116,17 @@ exports.listUserTts = function (xUnisCustomerCd) {
 exports.updateUserTts = function (body, ttsId, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     var response = {};
-    const json = await update(xUnisCustomerCd, ttsId, body);
+    const json = await updateUserResource(
+      xUnisCustomerCd,
+      constants.userResource.TTS,
+      ttsId,
+      body
+    );
     response["application/json"] = json;
-    if (Object.keys(response).length > 0) {
+    if (Object.keys(response).length > 0 && !json.message) {
       resolve(response[Object.keys(response)[0]]);
     } else {
-      resolve();
+      reject(response[Object.keys(response)[0]]);
     }
   });
 };
