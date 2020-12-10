@@ -2,11 +2,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Home from '@/views/Home.vue'
 import Narration from '@/views/Narration.vue'
 import RecordingStart from '@/views/RecordingStart.vue'
-import RecordedMaterial from '@/views/RecordedMaterial.vue'
 import CreatedCm from '@/views/CreatedCm.vue'
-import OrderVoiceBgm from '@/views/OrderVoiceBgm.vue'
-import CreateCommercial from '@/views/CreateCommercial.vue'
-import NewOrder from '@/views/NewOrder.vue'
 import OrderInStoreAnnouncement1 from '@/views/OrderInStoreAnnouncement1.vue'
 import OrderInStoreAnnouncement2 from '@/views/OrderInStoreAnnouncement2.vue'
 import OrderInStoreAnnouncement3 from '@/views/OrderInStoreAnnouncement3.vue'
@@ -16,7 +12,6 @@ import OrderInStoreAnnouncement6 from '@/views/OrderInStoreAnnouncement6.vue'
 import OrderCompleted from '@/views/OrderCompleted.vue'
 import SelectTemplate from '@/views/SelectTemplate.vue'
 import CreateNarrationTextInput from '@/views/CreateNarrationTextInput.vue'
-import ApiConnectTest2 from '@/views/ApiConnectTest2.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -35,29 +30,9 @@ const routes: Array<RouteRecordRaw> = [
     component: RecordingStart
   },
   {
-    path: '/recordedmaterial',
-    name: 'RecordedMaterial',
-    component: RecordedMaterial
-  },
-  {
     path: '/createdcm',
     name: 'CreatedCm',
     component: CreatedCm
-  },
-  {
-    path: '/ordervoicebgm',
-    name: 'OrderVoiceBgm',
-    component: OrderVoiceBgm
-  },
-  {
-    path: '/createcommercial',
-    name: 'CreateCommercial',
-    component: CreateCommercial
-  },
-  {
-    path: '/new-order',
-    name: 'NewOrder',
-    component: NewOrder
   },
   {
     path: '/orderinstoreannouncement1',
@@ -103,13 +78,6 @@ const routes: Array<RouteRecordRaw> = [
     path: '/createnarrationtextinput',
     name: 'CreateNarrationTextInput',
     component: CreateNarrationTextInput
-  },
-
-  // TODO: 実際には使わないので後で消す
-  {
-    path: '/apiconnecttest2',
-    name: 'ApiConnectTest2',
-    component: ApiConnectTest2
   },
 ]
 
