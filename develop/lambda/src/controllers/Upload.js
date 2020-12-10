@@ -1,10 +1,10 @@
 'use strict';
 
 var utils = require('../utils/writer.js');
-var Share = require('../service/ShareService');
+var Upload = require('../service/UploadService');
 
-module.exports.createShareCm = function createShareCm (req, res, next, cmId, xUnisCustomerCd) {
-  Share.createShareCm(cmId, xUnisCustomerCd)
+module.exports.createUploadCm = function createUploadCm (req, res, next, body, cmId, xUnisCustomerCd) {
+  Upload.createUploadCm(body, cmId, xUnisCustomerCd)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -13,8 +13,8 @@ module.exports.createShareCm = function createShareCm (req, res, next, cmId, xUn
     });
 };
 
-module.exports.deleteShareCm = function deleteShareCm (req, res, next, cmId, xUnisCustomerCd) {
-  Share.deleteShareCm(cmId, xUnisCustomerCd)
+module.exports.deleteUploadCm = function deleteUploadCm (req, res, next, body, cmId, xUnisCustomerCd) {
+  Upload.deleteUploadCm(body, cmId, xUnisCustomerCd)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -23,8 +23,8 @@ module.exports.deleteShareCm = function deleteShareCm (req, res, next, cmId, xUn
     });
 };
 
-module.exports.getShareCm = function getShareCm (req, res, next, xUnisCustomerCd) {
-  Share.getShareCm(xUnisCustomerCd)
+module.exports.getUploadCm = function getUploadCm (req, res, next, cmId, xUnisCustomerCd) {
+  Upload.getUploadCm(cmId, xUnisCustomerCd)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -33,8 +33,8 @@ module.exports.getShareCm = function getShareCm (req, res, next, xUnisCustomerCd
     });
 };
 
-module.exports.listShareCm = function listShareCm (req, res, next, xUnisCustomerCd) {
-  Share.listShareCm(xUnisCustomerCd)
+module.exports.listUploadCm = function listUploadCm (req, res, next, xUnisCustomerCd) {
+  Upload.listUploadCm(xUnisCustomerCd)
     .then(function (response) {
       utils.writeJson(res, response);
     })

@@ -3,7 +3,8 @@
 const { fetch } = require("../../umesse/user");
 
 /**
- * User情報取得
+ * ユーザー情報取得
+ * ユーザーの情報を取得する
  *
  * xUnisCustomerCd String ID of unis customer cd to return
  * returns User

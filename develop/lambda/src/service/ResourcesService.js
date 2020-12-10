@@ -4,6 +4,7 @@ const { fetch } = require("../../umesse/resources");
 
 /**
  * BGM
+ * BGM素材を一覧で取得する
  *
  * industryId String ID of bgm to return (optional)
  * returns List
@@ -23,6 +24,7 @@ exports.listBgm = function (industryId) {
 
 /**
  * Open/Endチャイム
+ * 開始/終了チャイムを一覧で取得する
  *
  * returns List
  **/
@@ -41,6 +43,7 @@ exports.listChime = function () {
 
 /**
  * ナレーション
+ * ナレーション素材を一覧で取得する
  *
  * industryId String ID of bgm to return (optional)
  * sceneId String ID of bgm to return (optional)
@@ -61,6 +64,7 @@ exports.listNarration = function (industryId, sceneId) {
 
 /**
  * TTSテンプレート一覧
+ * TTSのテンプレート素材を一覧で取得する
  *
  * industryId String ID of bgm to return (optional)
  * sceneId String ID of bgm to return (optional)

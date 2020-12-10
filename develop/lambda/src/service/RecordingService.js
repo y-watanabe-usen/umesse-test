@@ -4,6 +4,7 @@ const { fetch, create, update, remove } = require("../../umesse/recording");
 
 /**
  * 新規録音データ
+ * 録音音声素材を新規登録する
  *
  * xUnisCustomerCd String ID of unis customer cd to return
  * returns List
@@ -23,9 +24,10 @@ exports.createUserRecording = function (xUnisCustomerCd, filename, resources) {
 
 /**
  * 録音データ削除
+ * 録音音声素材を削除する
  *
- * xUnisCustomerCd String ID of unis customer cd to return
  * recordingId String ID of recording to return
+ * xUnisCustomerCd String ID of unis customer cd to return
  * no response value expected for this operation
  **/
 exports.deleteUserRecording = function (recordingId, xUnisCustomerCd) {
@@ -43,9 +45,10 @@ exports.deleteUserRecording = function (recordingId, xUnisCustomerCd) {
 
 /**
  * 録音データ取得
+ * 録音音声素材の情報を取得する
  *
- * xUnisCustomerCd String ID of unis customer cd to return
  * recordingId String ID of recording to return
+ * xUnisCustomerCd String ID of unis customer cd to return
  * returns RecordingItem
  **/
 exports.getUserRecording = function (recordingId, xUnisCustomerCd) {
@@ -62,7 +65,8 @@ exports.getUserRecording = function (recordingId, xUnisCustomerCd) {
 };
 
 /**
- * 録音データリスト取得
+ * 録音データ一覧取得
+ * 録音音声素材の情報を一覧で取得する
  *
  * xUnisCustomerCd String ID of unis customer cd to return
  * returns List
@@ -82,7 +86,9 @@ exports.listUserRecording = function (xUnisCustomerCd) {
 
 /**
  * 録音データ更新（メタデータのみ）
+ * 録音音声素材の情報を更新する
  *
+ * body Body_6  (optional)
  * recordingId String ID of recording to return
  * xUnisCustomerCd String ID of unis customer cd to return
  * returns RecordingItem

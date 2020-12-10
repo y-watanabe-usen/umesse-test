@@ -22,11 +22,23 @@ export interface Body9 {
      * @type {string}
      * @memberof Body9
      */
-    title?: any;
+    dataProcessType?: any;
     /**
      * 
      * @type {string}
      * @memberof Body9
      */
-    description?: any;
+    uMesseCmId?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof Body9
+     */
+    errorCode?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof Body9
+     */
+    errorMessege?: any;
 }

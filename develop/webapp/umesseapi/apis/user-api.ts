@@ -24,8 +24,8 @@ import { User } from '../models';
 export const UserApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * 
-         * @summary User情報取得
+         * ユーザーの情報を取得する
+         * @summary ユーザー情報取得
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -76,8 +76,8 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
 export const UserApiFp = function(configuration?: Configuration) {
     return {
         /**
-         * 
-         * @summary User情報取得
+         * ユーザーの情報を取得する
+         * @summary ユーザー情報取得
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -99,8 +99,8 @@ export const UserApiFp = function(configuration?: Configuration) {
 export const UserApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     return {
         /**
-         * 
-         * @summary User情報取得
+         * ユーザーの情報を取得する
+         * @summary ユーザー情報取得
          * @param {string} xUnisCustomerCd ID of unis customer cd to return
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -119,8 +119,8 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
  */
 export class UserApi extends BaseAPI {
     /**
-     * 
-     * @summary User情報取得
+     * ユーザーの情報を取得する
+     * @summary ユーザー情報取得
      * @param {string} xUnisCustomerCd ID of unis customer cd to return
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}

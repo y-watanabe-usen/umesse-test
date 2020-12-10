@@ -22,6 +22,18 @@ export interface Body7 {
      * @type {string}
      * @memberof Body7
      */
+    filename?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof Body7
+     */
+    recordedFile?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof Body7
+     */
     title?: any;
     /**
      * 

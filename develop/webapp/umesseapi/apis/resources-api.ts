@@ -27,7 +27,7 @@ import { WordItem } from '../models';
 export const ResourcesApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * 
+         * BGM素材を一覧で取得する
          * @summary BGM
          * @param {string} [industryId] ID of bgm to return
          * @param {*} [options] Override http request option.
@@ -66,7 +66,7 @@ export const ResourcesApiAxiosParamCreator = function (configuration?: Configura
             };
         },
         /**
-         * 
+         * 開始/終了チャイムを一覧で取得する
          * @summary Open/Endチャイム
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -100,7 +100,7 @@ export const ResourcesApiAxiosParamCreator = function (configuration?: Configura
             };
         },
         /**
-         * 
+         * ナレーション素材を一覧で取得する
          * @summary ナレーション
          * @param {string} [industryId] ID of bgm to return
          * @param {string} [sceneId] ID of bgm to return
@@ -144,7 +144,7 @@ export const ResourcesApiAxiosParamCreator = function (configuration?: Configura
             };
         },
         /**
-         * 
+         * TTSのテンプレート素材を一覧で取得する
          * @summary TTSテンプレート一覧
          * @param {string} [industryId] ID of bgm to return
          * @param {string} [sceneId] ID of bgm to return
@@ -197,7 +197,7 @@ export const ResourcesApiAxiosParamCreator = function (configuration?: Configura
 export const ResourcesApiFp = function(configuration?: Configuration) {
     return {
         /**
-         * 
+         * BGM素材を一覧で取得する
          * @summary BGM
          * @param {string} [industryId] ID of bgm to return
          * @param {*} [options] Override http request option.
@@ -211,7 +211,7 @@ export const ResourcesApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * 
+         * 開始/終了チャイムを一覧で取得する
          * @summary Open/Endチャイム
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -224,7 +224,7 @@ export const ResourcesApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * 
+         * ナレーション素材を一覧で取得する
          * @summary ナレーション
          * @param {string} [industryId] ID of bgm to return
          * @param {string} [sceneId] ID of bgm to return
@@ -239,7 +239,7 @@ export const ResourcesApiFp = function(configuration?: Configuration) {
             };
         },
         /**
-         * 
+         * TTSのテンプレート素材を一覧で取得する
          * @summary TTSテンプレート一覧
          * @param {string} [industryId] ID of bgm to return
          * @param {string} [sceneId] ID of bgm to return
@@ -263,7 +263,7 @@ export const ResourcesApiFp = function(configuration?: Configuration) {
 export const ResourcesApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     return {
         /**
-         * 
+         * BGM素材を一覧で取得する
          * @summary BGM
          * @param {string} [industryId] ID of bgm to return
          * @param {*} [options] Override http request option.
@@ -273,7 +273,7 @@ export const ResourcesApiFactory = function (configuration?: Configuration, base
             return ResourcesApiFp(configuration).listBgm(industryId, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * 開始/終了チャイムを一覧で取得する
          * @summary Open/Endチャイム
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -282,7 +282,7 @@ export const ResourcesApiFactory = function (configuration?: Configuration, base
             return ResourcesApiFp(configuration).listChime(options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * ナレーション素材を一覧で取得する
          * @summary ナレーション
          * @param {string} [industryId] ID of bgm to return
          * @param {string} [sceneId] ID of bgm to return
@@ -293,7 +293,7 @@ export const ResourcesApiFactory = function (configuration?: Configuration, base
             return ResourcesApiFp(configuration).listNarration(industryId, sceneId, options).then((request) => request(axios, basePath));
         },
         /**
-         * 
+         * TTSのテンプレート素材を一覧で取得する
          * @summary TTSテンプレート一覧
          * @param {string} [industryId] ID of bgm to return
          * @param {string} [sceneId] ID of bgm to return
@@ -314,7 +314,7 @@ export const ResourcesApiFactory = function (configuration?: Configuration, base
  */
 export class ResourcesApi extends BaseAPI {
     /**
-     * 
+     * BGM素材を一覧で取得する
      * @summary BGM
      * @param {string} [industryId] ID of bgm to return
      * @param {*} [options] Override http request option.
@@ -325,7 +325,7 @@ export class ResourcesApi extends BaseAPI {
         return ResourcesApiFp(this.configuration).listBgm(industryId, options).then((request) => request(this.axios, this.basePath));
     }
     /**
-     * 
+     * 開始/終了チャイムを一覧で取得する
      * @summary Open/Endチャイム
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -335,7 +335,7 @@ export class ResourcesApi extends BaseAPI {
         return ResourcesApiFp(this.configuration).listChime(options).then((request) => request(this.axios, this.basePath));
     }
     /**
-     * 
+     * ナレーション素材を一覧で取得する
      * @summary ナレーション
      * @param {string} [industryId] ID of bgm to return
      * @param {string} [sceneId] ID of bgm to return
@@ -347,7 +347,7 @@ export class ResourcesApi extends BaseAPI {
         return ResourcesApiFp(this.configuration).listNarration(industryId, sceneId, options).then((request) => request(this.axios, this.basePath));
     }
     /**
-     * 
+     * TTSのテンプレート素材を一覧で取得する
      * @summary TTSテンプレート一覧
      * @param {string} [industryId] ID of bgm to return
      * @param {string} [sceneId] ID of bgm to return

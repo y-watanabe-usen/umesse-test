@@ -22,23 +22,23 @@ export interface Body5 {
      * @type {string}
      * @memberof Body5
      */
-    dataProcessType?: any;
+    filename?: any;
     /**
      * 
      * @type {string}
      * @memberof Body5
      */
-    uMesseCmCd?: any;
+    recordedFile?: any;
     /**
      * 
      * @type {string}
      * @memberof Body5
      */
-    errorCode?: any;
+    title?: any;
     /**
      * 
      * @type {string}
      * @memberof Body5
      */
-    errorMessege?: any;
+    description?: any;
 }
