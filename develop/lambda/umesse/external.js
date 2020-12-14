@@ -1,6 +1,11 @@
 "use strict";
 
-const { constants, debuglog, checkCmStatus } = require("./constants");
+const {
+  constants,
+  debuglog,
+  timestamp,
+  checkCmStatus,
+} = require("./constants");
 const dynamodb = require("./utils/dynamodbController").controller;
 const s3 = require("./utils/s3Controller").controller;
 const { getCm } = require("./cm");
@@ -15,7 +20,7 @@ exports.getExternalCm = async (unisCustomerCd, external) => {
   );
 
   try {
-    const res = await dynamodb.scan(constants.centerTable, {});
+    const res = await dynamodb.scan(constants.externalTable, {});
     if (!res || !res.Items) throw "not found";
 
     let json = res.Items;
@@ -56,7 +61,7 @@ exports.getUserExternalCm = async (unisCustomerCd, cmId) => {
   );
 
   try {
-    const res = await dynamodb.scan(constants.centerTable, {});
+    const res = await dynamodb.scan(constants.externalTable, {});
     if (!res || !res.Items) throw "not found";
 
     let json = res.Items;
@@ -107,7 +112,7 @@ exports.completeExternalCm = async (unisCustomerCd, external, body) => {
 
     if (body.dataProcessType == "01") {
       // 正常完了の場合
-      res = await dynamodb.delete(constants.centerTable, key, {});
+      res = await dynamodb.delete(constants.externalTable, key, {});
       if (!res) throw "delete failed";
       console.log(res);
 
@@ -124,18 +129,18 @@ exports.completeExternalCm = async (unisCustomerCd, external, body) => {
           ":status": "9",
           ":errorCode": body.errorCode,
           ":errorMessage": body.errorMessage,
-          ":timestamp": new Date().toISOString(),
+          ":timestamp": timestamp(),
         },
         ReturnValues: "UPDATED_NEW",
       };
-      res = await dynamodb.update(constants.centerTable, key, options);
+      res = await dynamodb.update(constants.externalTable, key, options);
       if (!res) throw "update failed";
 
       cm.status = constants.cmStatus[`${external.toUpperCase()}_ERROR`];
     }
 
     // DynamoDBのデータ更新
-    cm.timestamp = new Date().toISOString();
+    cm.timestamp = timestamp();
     const options = {
       UpdateExpression: `SET cm[${index}] = :cm`,
       ExpressionAttributeValues: {

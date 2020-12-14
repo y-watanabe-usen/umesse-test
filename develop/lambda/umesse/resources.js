@@ -1,6 +1,6 @@
 "use strict";
 
-const { constants, debuglog, generateId } = require("./constants");
+const { constants, debuglog, timestamp, generateId } = require("./constants");
 const dynamodb = require("./utils/dynamodbController").controller;
 const s3 = require("./utils/s3Controller").controller;
 
@@ -118,7 +118,7 @@ exports.createUserResource = async (unisCustomerCd, filter, resource) => {
       resource
     );
 
-    const time = new Date().toISOString();
+    const time = timestamp();
     // DynamoDBのデータ更新
     const data = {
       id: id,
@@ -170,25 +170,23 @@ exports.updateUserResource = async (unisCustomerCd, filter, id, body) => {
     // 音声一覧から該当音声を取得
     const list = await this.getUserResource(unisCustomerCd, filter);
     if (!list) throw "not found";
-    const resource = list
-      .map((data, index) => {
-        if (data.id === id) return { data, index };
-      })
-      .pop();
-    if (!resource) throw "not found";
+    const index = list.findIndex((item) => item.id === id);
+    if (index < 0) throw "not found";
+    const resource = list[index];
 
     // DynamoDBのデータ更新
-    if (body.title) resource.data.title = body.title;
-    if (body.description) resource.data.description = body.description;
-    resource.data.timestamp = new Date().toISOString();
+    Object.keys(body).map((key) => {
+      resource[key] = body[key];
+    });
+    resource.timestamp = timestamp();
     const key = { unis_customer_cd: unisCustomerCd };
     const options = {
-      UpdateExpression: `SET #filter[${resource.index}] = :data`,
+      UpdateExpression: `SET #filter[${index}] = :resource`,
       ExpressionAttributeName: {
         "#filter": filter,
       },
       ExpressionAttributeValues: {
-        ":data": resource.data,
+        ":resource": resource,
       },
       ReturnValues: "UPDATED_NEW",
     };
@@ -199,7 +197,7 @@ exports.updateUserResource = async (unisCustomerCd, filter, id, body) => {
     const res = await dynamodb.update(constants.usersTable, key, options);
     if (!res) throw "update failed";
 
-    let json = res.Attributes[filter];
+    let json = res.Attributes[filter][index];
     return json;
   } catch (e) {
     // TODO: error handle
@@ -222,12 +220,9 @@ exports.deleteUserResource = async (unisCustomerCd, filter, id) => {
     // 音声一覧から該当音声を取得
     const list = await this.getUserResource(unisCustomerCd, filter);
     if (!list) throw "not found";
-    const resource = list
-      .map((data, index) => {
-        if (data.id === id) return { data, index };
-      })
-      .pop();
-    if (!resource) throw "not found";
+    const index = list.findIndex((item) => item.id === id);
+    if (index < 0) throw "not found";
+    const resource = list[index];
 
     // S3上の録音音声を削除
     await s3.delete(
@@ -251,7 +246,7 @@ exports.deleteUserResource = async (unisCustomerCd, filter, id) => {
     const res = await dynamodb.update(constants.usersTable, key, options);
     if (!res) throw "update failed";
 
-    let json = res.Attributes[filter];
+    let json = res.Attributes[filter][index];
     return json;
   } catch (e) {
     // TODO: error handle

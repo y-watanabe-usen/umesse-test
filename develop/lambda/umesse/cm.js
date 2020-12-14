@@ -5,6 +5,7 @@ const fs = require("fs");
 const {
   constants,
   debuglog,
+  timestamp,
   generateId,
   checkCmStatus,
 } = require("./constants");
@@ -34,7 +35,7 @@ exports.getCm = async (unisCustomerCd, cmId) => {
 
     let json = res.Item.cm;
     if (cmId) {
-      json = json.filter((item) => item.id === cmId);
+      json = json.filter((item) => item.id === cmId)[0];
     }
     return json;
   } catch (e) {
@@ -81,7 +82,7 @@ exports.createCm = async (unisCustomerCd, body) => {
           : constants.cmProductionType.NONE,
       seconds: seconds,
       status: constants.cmStatus.CREATING,
-      timestamp: new Date().toISOString(),
+      timestamp: timestamp(),
     };
     const key = { unis_customer_cd: unisCustomerCd };
     const options = {
@@ -151,13 +152,10 @@ exports.updateCm = async (unisCustomerCd, cmId, body) => {
     }
 
     // DynamoDBのデータ更新
-    cm.title = body.title;
-    cm.description = body.description;
-    cm.start_date = body.startDate;
-    cm.end_date = body.endDate;
-    cm.industry = body.industry;
-    cm.scene = body.scene;
-    cm.timestamp = new Date().toISOString();
+    Object.keys(body).map((key) => {
+      cm[key] = body[key];
+    });
+    cm.timestamp = timestamp();
     const key = { unis_customer_cd: unisCustomerCd };
     const options = {
       UpdateExpression: `SET cm[${index}] = :cm`,
@@ -211,7 +209,7 @@ exports.deleteCm = async (unisCustomerCd, cmId) => {
 
     // DynamoDBのデータ更新
     cm.status = constants.cmStatus.DELETE;
-    cm.timestamp = new Date().toISOString();
+    cm.timestamp = timestamp();
     const key = { unis_customer_cd: unisCustomerCd };
     const options = {
       UpdateExpression: `SET cm[${index}] = :cm`,
@@ -276,10 +274,10 @@ exports.linkCm = async (unisCustomerCd, cmId, body) => {
       scene: cm.scenes.id,
       upload_system: body.uploadSystem,
       status: "1",
-      timestamp: new Date().toISOString(),
+      timestamp: timestamp(),
     };
 
-    let res = await dynamodb.put(constants.centerTable, item, {});
+    let res = await dynamodb.put(constants.externalTable, item, {});
     if (!res) throw "put failed";
 
     // DynamoDBのデータ更新
@@ -288,7 +286,7 @@ exports.linkCm = async (unisCustomerCd, cmId, body) => {
     else if (body.uploadSystem == constants.cmUploadSystem.SSENCE)
       cm.status = constants.cmStatus.SSENCE_UPLOADING;
 
-    cm.timestamp = new Date().toISOString();
+    cm.timestamp = timestamp();
     const key = { unis_customer_cd: unisCustomerCd };
     const options = {
       UpdateExpression: `SET cm[${index}] = :cm`,
@@ -354,14 +352,14 @@ exports.unlinkCm = async (unisCustomerCd, cmId, body) => {
       end_date: body.endDate,
       upload_system: uploadSystem,
       status: "1",
-      timestamp: new Date().toISOString(),
+      timestamp: timestamp(),
     };
 
-    let res = await dynamodb.put(constants.centerTable, item, {});
+    let res = await dynamodb.put(constants.externalTable, item, {});
     if (!res) throw "put failed";
 
     // DynamoDBのデータ更新
-    cm.timestamp = new Date().toISOString();
+    cm.timestamp = timestamp();
     const key = { unis_customer_cd: unisCustomerCd };
     const options = {
       UpdateExpression: `SET cm[${index}] = :cm`,
