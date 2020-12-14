@@ -26,9 +26,9 @@ resource "aws_dynamodb_table" "contents" {
   }
 }
 
-# Dynamodb Table umesse-center
-resource "aws_dynamodb_table" "center" {
-  name           = "umesse-center"
+# Dynamodb Table umesse-external
+resource "aws_dynamodb_table" "external" {
+  name           = "umesse-external"
   billing_mode   = "PROVISIONED"
   read_capacity  = 10
   write_capacity = 10
