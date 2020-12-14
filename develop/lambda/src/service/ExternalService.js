@@ -1,6 +1,6 @@
 "use strict";
 
-const { getExternalCm, completeExternalCm } = require("../../umesse/external");
+const { getExternal, completeExternal } = require("../../umesse/external");
 
 /**
  * CM外部連携完了（外部システム専用）
@@ -11,10 +11,10 @@ const { getExternalCm, completeExternalCm } = require("../../umesse/external");
  * unisCustomerCd String ID of unis customer cd to return
  * returns inline_response_200_2
  **/
-exports.completeExternalCm = function (body, external, unisCustomerCd) {
+exports.completeExternal = function (body, external, unisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     var response = {};
-    const json = await completeExternalCm(unisCustomerCd, external, body);
+    const json = await completeExternal(unisCustomerCd, external, body);
     response["application/json"] = json;
     if (Object.keys(response).length > 0 && !json.message) {
       resolve(response[Object.keys(response)[0]]);
@@ -32,10 +32,10 @@ exports.completeExternalCm = function (body, external, unisCustomerCd) {
  * unisCustomerCd String ID of unis customer cd to return
  * returns inline_response_200_1
  **/
-exports.getExternalCm = function (external, unisCustomerCd) {
+exports.getExternal = function (external, unisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     var response = {};
-    const json = await getExternalCm(unisCustomerCd, external);
+    const json = await getExternal(unisCustomerCd, external);
     response["application/json"] = json;
     if (Object.keys(response).length > 0 && !json.message) {
       resolve(response[Object.keys(response)[0]]);
@@ -55,7 +55,7 @@ exports.getExternalCm = function (external, unisCustomerCd) {
 exports.listExternalCm = function (external) {
   return new Promise(async function (resolve, reject) {
     var response = {};
-    const json = await getExternalCm("", external);
+    const json = await getExternal("", external);
     response["application/json"] = json;
     if (Object.keys(response).length > 0 && !json.message) {
       resolve(response[Object.keys(response)[0]]);

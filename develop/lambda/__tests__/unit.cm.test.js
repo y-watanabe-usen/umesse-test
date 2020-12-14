@@ -8,14 +8,7 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
 // TODO: mock
 const dynamodb = require("../umesse/utils/dynamodbController").controller;
 const s3 = require("../umesse/utils/s3Controller").controller;
-const {
-  getCm,
-  createCm,
-  updateCm,
-  deleteCm,
-  linkCm,
-  unlinkCm,
-} = require("../umesse/cm");
+const { getCm, createCm, updateCm, deleteCm } = require("../umesse/cm");
 
 beforeAll(() => {
   jest.setTimeout(30000);

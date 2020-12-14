@@ -74,23 +74,20 @@ exports.constants = {
   },
 
   // TODO: error code
+  // [Exx]: 区分 [xx]: 機能 [xxx]: コード
   errorCode: {
     // system
-    E000001: "E000001",
+    E0000001: "E0000001",
     // auth
-    E010001: "E010001",
+    E0100001: "E0100001",
+    // user
+    E0200001: "E0200001",
     // cm
-    E020001: "E020001",
-    // recording
-    E030001: "E030001",
-    // tts
-    E040001: "E040001",
-    // shear
-    E050001: "E050001",
+    E0300001: "E0300001",
     // resource
-    E060001: "E060001",
+    E0400001: "E0400001",
     // external
-    E070001: "E070001",
+    E0500001: "E0500001",
   },
 };
 
@@ -156,7 +153,7 @@ exports.checkCmStatus = (process, status) => {
         "S'Senceで連携エラーが発生しているため、削除できません",
     },
     // CM外部連携
-    linkCm: {
+    createExternal: {
       [this.constants.cmStatus.CREATING]:
         "CM作成中のため、アップロードできません",
       [this.constants.cmStatus.COMPLETE]: "", // OK
@@ -180,7 +177,7 @@ exports.checkCmStatus = (process, status) => {
         "S'Senceで連携エラーが発生しているため、アップロードできません",
     },
     // CM外部連携解除
-    unlinkCm: {
+    deleteExternal: {
       [this.constants.cmStatus.CREATING]:
         "CM連携していないため、解除できません",
       [this.constants.cmStatus.COMPLETE]:
@@ -201,7 +198,7 @@ exports.checkCmStatus = (process, status) => {
         "S'Senceで連携エラーが発生しているため、解除できません",
     },
     // CM外部連携完了
-    completeExternalCm: {
+    completeExternal: {
       [this.constants.cmStatus.CREATING]:
         "CM連携していないため、完了できません",
       [this.constants.cmStatus.COMPLETE]:
@@ -220,6 +217,54 @@ exports.checkCmStatus = (process, status) => {
         "S'Senceへ連携済みのため、完了できません",
       [this.constants.cmStatus.SSENCE_ERROR]:
         "S'Senceで連携エラーが発生しているため、完了できません",
+    },
+    // 共有CM追加
+    createShear: {
+      [this.constants.cmStatus.CREATING]:
+        "CM作成中のため、共有できません",
+      [this.constants.cmStatus.COMPLETE]: "", // OK
+      [this.constants.cmStatus.CONVERT]:
+        "CMエンコード中のため、共有できません",
+      [this.constants.cmStatus.SHARING]:
+        "CM共有中のため、共有できません",
+      [this.constants.cmStatus.ERROR]:
+        "エラーが発生しているため、共有できません",
+      [this.constants.cmStatus.CENTER_UPLOADING]:
+        "U MUSICへ連携中のため、共有できません",
+      [this.constants.cmStatus.CENTER_COMPLETE]:
+        "U MUSICへ連携済みのため、共有できません",
+      [this.constants.cmStatus.CENTER_ERROR]:
+        "U MUSICで連携エラーが発生しているため、共有できません",
+      [this.constants.cmStatus.SSENCE_UPLOADING]:
+        "S'Senceへ連携中のため、共有できません",
+      [this.constants.cmStatus.SSENCE_COMPLETE]:
+        "S'Senceへ連携済みのため、共有できません",
+      [this.constants.cmStatus.SSENCE_ERROR]:
+        "S'Senceで連携エラーが発生しているため、共有できません",
+    },
+    // 共有CM解除
+    deleteShear: {
+      [this.constants.cmStatus.CREATING]:
+        "CM作成中のため、共有できません",
+      [this.constants.cmStatus.COMPLETE]: "", // OK
+      [this.constants.cmStatus.CONVERT]:
+        "CMエンコード中のため、共有できません",
+      [this.constants.cmStatus.SHARING]:
+        "CM共有中のため、共有できません",
+      [this.constants.cmStatus.ERROR]:
+        "エラーが発生しているため、共有できません",
+      [this.constants.cmStatus.CENTER_UPLOADING]:
+        "U MUSICへ連携中のため、共有できません",
+      [this.constants.cmStatus.CENTER_COMPLETE]:
+        "U MUSICへ連携済みのため、共有できません",
+      [this.constants.cmStatus.CENTER_ERROR]:
+        "U MUSICで連携エラーが発生しているため、共有できません",
+      [this.constants.cmStatus.SSENCE_UPLOADING]:
+        "S'Senceへ連携中のため、共有できません",
+      [this.constants.cmStatus.SSENCE_COMPLETE]:
+        "S'Senceへ連携済みのため、共有できません",
+      [this.constants.cmStatus.SSENCE_ERROR]:
+        "S'Senceで連携エラーが発生しているため、共有できません",
     },
   };
 
