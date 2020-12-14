@@ -1,6 +1,6 @@
 {
-  "name": "U-Messe",
-  "description": "U-Messe",
+  "name": "u-messe",
+  "description": "U MESSE",
   "version": "0.0.1",
   "private": true,
   "main": "lambda.js",
@@ -13,7 +13,10 @@
     "express": "^4.17.1",
     "oas3-tools": "^2.0.2"
   },
+  "devDependencies": {
+    "jest": "^26.6.3"
+  },
   "scripts": {
-    "test": "jest"
+    "test": "cd ../../deploy && sh init.sh && cd ../develop/lambda && jest"
   }
 }

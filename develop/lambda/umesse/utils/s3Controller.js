@@ -23,6 +23,16 @@ exports.controller = {
       })
       .promise(),
 
+  copy: (bucket, key, source) =>
+    s3
+      .copyObject({
+        Bucket: bucket,
+        Key: key,
+        CopySource: source,
+        ACL: "private",
+      })
+      .promise(),
+
   list: (bucket, prefix) =>
     s3
       .listObjectsV2({

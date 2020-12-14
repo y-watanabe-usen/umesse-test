@@ -1,7 +1,10 @@
 "use strict";
 
-const { linkCm, unlinkCm } = require("../../umesse/cm");
-const { getUserExternalCm } = require("../../umesse/external");
+const {
+  createExternal,
+  deleteExternal,
+  getExternalUser,
+} = require("../../umesse/external");
 
 /**
  * CM外部連携追加
@@ -15,7 +18,7 @@ const { getUserExternalCm } = require("../../umesse/external");
 exports.createUploadCm = function (body, cmId, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     var response = {};
-    const json = await linkCm(xUnisCustomerCd, cmId, body);
+    const json = await createExternal(xUnisCustomerCd, cmId, body);
     response["application/json"] = json;
     if (Object.keys(response).length > 0 && !json.message) {
       resolve(response[Object.keys(response)[0]]);
@@ -37,7 +40,7 @@ exports.createUploadCm = function (body, cmId, xUnisCustomerCd) {
 exports.deleteUploadCm = function (body, cmId, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     var response = {};
-    const json = await unlinkCm(xUnisCustomerCd, cmId, body);
+    const json = await deleteExternal(xUnisCustomerCd, cmId, body);
     response["application/json"] = json;
     if (Object.keys(response).length > 0 && !json.message) {
       resolve(response[Object.keys(response)[0]]);
@@ -58,7 +61,7 @@ exports.deleteUploadCm = function (body, cmId, xUnisCustomerCd) {
 exports.getUploadCm = function (cmId, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     var response = {};
-    const json = await getUserExternalCm(xUnisCustomerCd, cmId);
+    const json = await getExternalUser(xUnisCustomerCd, cmId);
     response["application/json"] = json;
     if (Object.keys(response).length > 0 && !json.message) {
       resolve(response[Object.keys(response)[0]]);
@@ -78,7 +81,7 @@ exports.getUploadCm = function (cmId, xUnisCustomerCd) {
 exports.listUploadCm = function (xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     var response = {};
-    const json = await getUserExternalCm(xUnisCustomerCd);
+    const json = await getExternalUser(xUnisCustomerCd);
     response["application/json"] = json;
     if (Object.keys(response).length > 0 && !json.message) {
       resolve(response[Object.keys(response)[0]]);

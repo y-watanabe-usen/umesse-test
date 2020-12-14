@@ -5,6 +5,7 @@ const fs = require("fs");
 const {
   constants,
   debuglog,
+  timestamp,
   generateId,
   checkCmStatus,
 } = require("./constants");
@@ -34,7 +35,7 @@ exports.getCm = async (unisCustomerCd, cmId) => {
 
     let json = res.Item.cm;
     if (cmId) {
-      json = json.filter((item) => item.id === cmId);
+      json = json.filter((item) => item.id === cmId)[0];
     }
     return json;
   } catch (e) {
@@ -81,7 +82,7 @@ exports.createCm = async (unisCustomerCd, body) => {
           : constants.cmProductionType.NONE,
       seconds: seconds,
       status: constants.cmStatus.CREATING,
-      timestamp: new Date().toISOString(),
+      timestamp: timestamp(),
     };
     const key = { unis_customer_cd: unisCustomerCd };
     const options = {
@@ -151,13 +152,10 @@ exports.updateCm = async (unisCustomerCd, cmId, body) => {
     }
 
     // DynamoDBのデータ更新
-    cm.title = body.title;
-    cm.description = body.description;
-    cm.start_date = body.startDate;
-    cm.end_date = body.endDate;
-    cm.industry = body.industry;
-    cm.scene = body.scene;
-    cm.timestamp = new Date().toISOString();
+    Object.keys(body).map((key) => {
+      cm[key] = body[key];
+    });
+    cm.timestamp = timestamp();
     const key = { unis_customer_cd: unisCustomerCd };
     const options = {
       UpdateExpression: `SET cm[${index}] = :cm`,
@@ -211,7 +209,7 @@ exports.deleteCm = async (unisCustomerCd, cmId) => {
 
     // DynamoDBのデータ更新
     cm.status = constants.cmStatus.DELETE;
-    cm.timestamp = new Date().toISOString();
+    cm.timestamp = timestamp();
     const key = { unis_customer_cd: unisCustomerCd };
     const options = {
       UpdateExpression: `SET cm[${index}] = :cm`,
@@ -225,156 +223,6 @@ exports.deleteCm = async (unisCustomerCd, cmId) => {
     );
 
     const res = await dynamodb.update(constants.usersTable, key, options);
-    if (!res) throw "update failed";
-
-    let json = res.Attributes.cm[index];
-    return json;
-  } catch (e) {
-    // TODO: error handle
-    console.log(e);
-    return { message: e };
-  }
-};
-
-// CM外部連携
-exports.linkCm = async (unisCustomerCd, cmId, body) => {
-  debuglog(
-    `[linkCm] ${JSON.stringify({
-      unisCustomerCd: unisCustomerCd,
-      cmId: cmId,
-      body: body,
-    })}`
-  );
-
-  try {
-    // TODO: body validation check
-    if (!body) throw "body parameter failed";
-
-    // CM一覧から該当CMを取得
-    const list = await this.getCm(unisCustomerCd);
-    if (!list) throw "not found";
-    const index = list.findIndex((item) => item.id === cmId);
-    if (index < 0) throw "not found";
-    const cm = list[index];
-
-    // CMステータス状態によるチェック
-    const check = checkCmStatus("linkCm", cm.status);
-    if (check) throw check;
-
-    // 連携用のデータ追加
-    const item = {
-      unis_customer_cd: unisCustomerCd,
-      data_process_type: "01",
-      id: cmId,
-      title: cm.title,
-      description: cm.description,
-      seconds: cm.seconds,
-      start_date: cm.start_date,
-      end_date: cm.end_date,
-      production_type: cm.production_type,
-      industry: cm.industry.id,
-      scene: cm.scenes.id,
-      upload_system: body.uploadSystem,
-      status: "1",
-      timestamp: new Date().toISOString(),
-    };
-
-    let res = await dynamodb.put(constants.centerTable, item, {});
-    if (!res) throw "put failed";
-
-    // DynamoDBのデータ更新
-    if (body.uploadSystem == constants.cmUploadSystem.CENTER)
-      cm.status = constants.cmStatus.CENTER_UPLOADING;
-    else if (body.uploadSystem == constants.cmUploadSystem.SSENCE)
-      cm.status = constants.cmStatus.SSENCE_UPLOADING;
-
-    cm.timestamp = new Date().toISOString();
-    const key = { unis_customer_cd: unisCustomerCd };
-    const options = {
-      UpdateExpression: `SET cm[${index}] = :cm`,
-      ExpressionAttributeValues: {
-        ":cm": cm,
-      },
-      ReturnValues: "UPDATED_NEW",
-    };
-    debuglog(
-      `key: ${JSON.stringify(key)}, options: ${JSON.stringify(options)}`
-    );
-
-    res = await dynamodb.update(constants.usersTable, key, options);
-    if (!res) throw "update failed";
-
-    let json = res.Attributes.cm[index];
-    return json;
-  } catch (e) {
-    // TODO: error handle
-    console.log(e);
-    return { message: e };
-  }
-};
-
-// CM外部連携解除
-exports.unlinkCm = async (unisCustomerCd, cmId, body) => {
-  debuglog(
-    `[unlinkCm] ${JSON.stringify({
-      unisCustomerCd: unisCustomerCd,
-      cmId: cmId,
-    })}`
-  );
-
-  try {
-    // TODO: body validation check
-    if (!body) throw "body parameter failed";
-
-    // CM一覧から該当CMを取得
-    const list = await this.getCm(unisCustomerCd);
-    if (!list) throw "not found";
-    const index = list.findIndex((item) => item.id === cmId);
-    if (index < 0) throw "not found";
-    const cm = list[index];
-
-    // CMステータス状態によるチェック
-    const check = checkCmStatus("unlinkCm", cm.status);
-    if (check) throw check;
-
-    let uploadSystem = "";
-    if (cm.status == constants.cmStatus.CENTER_COMPLETE) {
-      uploadSystem = constants.cmUploadSystem.CENTER;
-      cm.status = constants.cmStatus.CENTER_UPLOADING;
-    } else if (cm.status == constants.cmStatus.SSENCE_COMPLETE) {
-      uploadSystem = constants.cmUploadSystem.SSENCE;
-      cm.status = constants.cmStatus.SSENCE_UPLOADING;
-    }
-
-    // 連携用のデータ追加
-    const item = {
-      unis_customer_cd: unisCustomerCd,
-      data_process_type: "03",
-      id: cmId,
-      end_date: body.endDate,
-      upload_system: uploadSystem,
-      status: "1",
-      timestamp: new Date().toISOString(),
-    };
-
-    let res = await dynamodb.put(constants.centerTable, item, {});
-    if (!res) throw "put failed";
-
-    // DynamoDBのデータ更新
-    cm.timestamp = new Date().toISOString();
-    const key = { unis_customer_cd: unisCustomerCd };
-    const options = {
-      UpdateExpression: `SET cm[${index}] = :cm`,
-      ExpressionAttributeValues: {
-        ":cm": cm,
-      },
-      ReturnValues: "UPDATED_NEW",
-    };
-    debuglog(
-      `key: ${JSON.stringify(key)}, options: ${JSON.stringify(options)}`
-    );
-
-    res = await dynamodb.update(constants.usersTable, key, options);
     if (!res) throw "update failed";
 
     let json = res.Attributes.cm[index];

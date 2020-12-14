@@ -278,9 +278,9 @@ webapp/
 }
 ```
 
-- センター連携管理
-- table: umesse-center : センター連携管理テーブル（本番）
-- table: stg-umesse-center : センター連携管理テーブル（ステージング）
+- 外部連携管理
+- table: umesse-external : 外部連携管理テーブル（本番）
+- table: stg-umesse-external : 外部連携管理テーブル（ステージング）
 
 ```none
 {
@@ -295,6 +295,7 @@ webapp/
   "production_type": {"S", "01: 音楽系, 02: 素ナレ"},
   "industry": {"S": "業種名"},
   "scene": {"S": "シーン名"},
+  "upload_system": {"S": "01: センター, 02: S'sence"},
   "status": {"S": "0: 連携準備中, 1: 連携可能, 9: 連携エラー"},
   "error_code": {"S": "エラーコード"},
   "error_message": {"S": "エラーメッセージ"},
