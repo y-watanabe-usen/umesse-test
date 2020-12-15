@@ -2,42 +2,104 @@
 
 const { randomBytes } = require("crypto");
 
-exports.constants = {
+exports.constants = Object.freeze({
   region: "ap-northeast-1",
   debug: process.env.debug,
+  environment: process.env.environment,
 
   // S3 設定
-  // TODO: env local, dev, stg, prod
   s3Config: function () {
-    return this.debug
-      ? {
+    switch (this.environment) {
+      case "local":
+        return {
           region: this.region,
           endpoint: "localhost:4566",
           signatureVersion: "v4",
           s3ForcePathStyle: "true", // local only
-        }
-      : {
+        };
+      case "dev":
+      case "stg":
+      case "prod":
+      default:
+        return {
           region: this.region,
         };
+    }
   },
-  usersBucket: this.debug ? "umesse-users" : "umesse-users",
-  contentsBucket: this.debug ? "umesse-contents" : "umesse-contents",
+  // S3 バケット
+  s3Bucket: function () {
+    switch (this.environment) {
+      case "local":
+        return {
+          users: "umesse-users",
+          contents: "umesse-contents",
+        };
+      case "dev":
+        return {
+          users: "dev-umesse-users",
+          contents: "dev-umesse-contents",
+        };
+      case "stg":
+        return {
+          users: "stg-umesse-users",
+          contents: "stg-umesse-contents",
+        };
+      case "prod":
+      default:
+        return {
+          users: "umesse-users",
+          contents: "umesse-contents",
+        };
+    }
+  },
 
-  // DynamoDb 設定
-  // TODO: env local, dev, stg, prod
+  // DynamoDB 設定
   dynamoDbConfig: function () {
-    return this.debug
-      ? {
+    switch (this.environment) {
+      case "local":
+        return {
           region: this.region,
           endpoint: "localhost:4566",
-        }
-      : {
+        };
+      case "dev":
+      case "stg":
+      case "prod":
+      default:
+        return {
           region: this.region,
         };
+    }
   },
-  usersTable: this.debug ? "umesse-users" : "umesse-users",
-  contentsTable: this.debug ? "umesse-contents" : "umesse-contents",
-  externalTable: this.debug ? "umesse-external" : "umesse-external",
+  // DynamoDB テーブル
+  dynamoDbTable: function () {
+    switch (this.environment) {
+      case "local":
+        return {
+          users: "umesse-users",
+          contents: "umesse-contents",
+          external: "umesse-external",
+        };
+      case "dev":
+        return {
+          users: "dev-umesse-users",
+          contents: "dev-umesse-contents",
+          external: "dev-umesse-external",
+        };
+      case "stg":
+        return {
+          users: "stg-umesse-users",
+          contents: "stg-umesse-contents",
+          external: "stg-umesse-external",
+        };
+      case "prod":
+      default:
+        return {
+          users: "umesse-users",
+          contents: "umesse-contents",
+          external: "umesse-external",
+        };
+    }
+  },
 
   // CMステータス
   cmStatus: {
@@ -72,24 +134,7 @@ exports.constants = {
     RECORDING: "recording",
     TTS: "tts",
   },
-
-  // TODO: error code
-  // [Exx]: 区分 [xx]: 機能 [xxx]: コード
-  errorCode: {
-    // system
-    E0000001: "E0000001",
-    // auth
-    E0100001: "E0100001",
-    // user
-    E0200001: "E0200001",
-    // cm
-    E0300001: "E0300001",
-    // resource
-    E0400001: "E0400001",
-    // external
-    E0500001: "E0500001",
-  },
-};
+});
 
 // debug log
 exports.debuglog = (message) => {
@@ -107,168 +152,4 @@ exports.timestamp = () => {
 exports.generateId = (unisCustomerCd, div) => {
   const id = randomBytes(8).reduce((p, i) => p + (i % 36).toString(36), "");
   return `${unisCustomerCd}-${div}-${id}`;
-};
-
-// CMステータス状態によるチェック
-exports.checkCmStatus = (process, status) => {
-  const checkMessages = {
-    // CM更新
-    updateCm: {
-      [this.constants.cmStatus.CREATING]: "", // OK
-      [this.constants.cmStatus.COMPLETE]: "", // OK
-      [this.constants.cmStatus.CONVERT]: "CMエンコード中のため、更新できません",
-      [this.constants.cmStatus.SHARING]: "", // OK
-      [this.constants.cmStatus.ERROR]:
-        "エラーが発生しているため、更新できません",
-      [this.constants.cmStatus.CENTER_UPLOADING]:
-        "U MUSICへ連携中のため、更新できません",
-      [this.constants.cmStatus.CENTER_COMPLETE]: "", // OK
-      [this.constants.cmStatus.CENTER_ERROR]:
-        "U MUSICで連携エラーが発生しているため、更新できません",
-      [this.constants.cmStatus.SSENCE_UPLOADING]:
-        "S'Senceへ連携中のため、更新できません",
-      [this.constants.cmStatus.SSENCE_COMPLETE]: "", // OK
-      [this.constants.cmStatus.SSENCE_ERROR]:
-        "S'Senceで連携エラーが発生しているため、更新できません",
-    },
-    // CM削除
-    deleteCm: {
-      [this.constants.cmStatus.CREATING]: "CM作成中のため、削除できません",
-      [this.constants.cmStatus.COMPLETE]: "", // OK
-      [this.constants.cmStatus.CONVERT]: "CMエンコード中のため、削除できません",
-      [this.constants.cmStatus.SHARING]: "CM共有中のため、削除できません",
-      [this.constants.cmStatus.ERROR]:
-        "エラーが発生しているため、削除できません",
-      [this.constants.cmStatus.CENTER_UPLOADING]:
-        "U MUSICへ連携中のため、削除できません",
-      [this.constants.cmStatus.CENTER_COMPLETE]:
-        "U MUSICへ連携済みのため、削除できません",
-      [this.constants.cmStatus.CENTER_ERROR]:
-        "U MUSICで連携エラーが発生しているため、削除できません",
-      [this.constants.cmStatus.SSENCE_UPLOADING]:
-        "S'Senceへ連携中のため、削除できません",
-      [this.constants.cmStatus.SSENCE_COMPLETE]:
-        "S'Senceへ連携済みのため、削除できません",
-      [this.constants.cmStatus.SSENCE_ERROR]:
-        "S'Senceで連携エラーが発生しているため、削除できません",
-    },
-    // CM外部連携
-    createExternal: {
-      [this.constants.cmStatus.CREATING]:
-        "CM作成中のため、アップロードできません",
-      [this.constants.cmStatus.COMPLETE]: "", // OK
-      [this.constants.cmStatus.CONVERT]:
-        "CMエンコード中のため、アップロードできません",
-      [this.constants.cmStatus.SHARING]:
-        "CM共有中のため、アップロードできません",
-      [this.constants.cmStatus.ERROR]:
-        "エラーが発生しているため、アップロードできません",
-      [this.constants.cmStatus.CENTER_UPLOADING]:
-        "U MUSICへ連携中のため、アップロードできません",
-      [this.constants.cmStatus.CENTER_COMPLETE]:
-        "U MUSICへ連携済みのため、アップロードできません",
-      [this.constants.cmStatus.CENTER_ERROR]:
-        "U MUSICで連携エラーが発生しているため、アップロードできません",
-      [this.constants.cmStatus.SSENCE_UPLOADING]:
-        "S'Senceへ連携中のため、アップロードできません",
-      [this.constants.cmStatus.SSENCE_COMPLETE]:
-        "S'Senceへ連携済みのため、アップロードできません",
-      [this.constants.cmStatus.SSENCE_ERROR]:
-        "S'Senceで連携エラーが発生しているため、アップロードできません",
-    },
-    // CM外部連携解除
-    deleteExternal: {
-      [this.constants.cmStatus.CREATING]:
-        "CM連携していないため、解除できません",
-      [this.constants.cmStatus.COMPLETE]:
-        "CM連携していないため、解除できません",
-      [this.constants.cmStatus.CONVERT]: "CM連携していないため、解除できません",
-      [this.constants.cmStatus.SHARING]: "CM連携していないため、解除できません",
-      [this.constants.cmStatus.ERROR]:
-        "エラーが発生しているため、解除できません",
-      [this.constants.cmStatus.CENTER_UPLOADING]:
-        "U MUSICへ連携中のため、解除できません",
-      [this.constants.cmStatus.CENTER_COMPLETE]: "", // OK
-      [this.constants.cmStatus.CENTER_ERROR]:
-        "U MUSICで連携エラーが発生しているため、解除できません",
-      [this.constants.cmStatus.SSENCE_UPLOADING]:
-        "S'Senceへ連携中のため、解除できません",
-      [this.constants.cmStatus.SSENCE_COMPLETE]: "", // OK
-      [this.constants.cmStatus.SSENCE_ERROR]:
-        "S'Senceで連携エラーが発生しているため、解除できません",
-    },
-    // CM外部連携完了
-    completeExternal: {
-      [this.constants.cmStatus.CREATING]:
-        "CM連携していないため、完了できません",
-      [this.constants.cmStatus.COMPLETE]:
-        "CM連携していないため、完了できません",
-      [this.constants.cmStatus.CONVERT]: "CM連携していないため、完了できません",
-      [this.constants.cmStatus.SHARING]: "CM連携していないため、完了できません",
-      [this.constants.cmStatus.ERROR]:
-        "エラーが発生しているため、完了できません",
-      [this.constants.cmStatus.CENTER_UPLOADING]: "", // OK
-      [this.constants.cmStatus.CENTER_COMPLETE]:
-        "U MUSICへ連携済みのため、完了できません",
-      [this.constants.cmStatus.CENTER_ERROR]:
-        "U MUSICで連携エラーが発生しているため、完了できません",
-      [this.constants.cmStatus.SSENCE_UPLOADING]: "", // OK
-      [this.constants.cmStatus.SSENCE_COMPLETE]:
-        "S'Senceへ連携済みのため、完了できません",
-      [this.constants.cmStatus.SSENCE_ERROR]:
-        "S'Senceで連携エラーが発生しているため、完了できません",
-    },
-    // 共有CM追加
-    createShear: {
-      [this.constants.cmStatus.CREATING]:
-        "CM作成中のため、共有できません",
-      [this.constants.cmStatus.COMPLETE]: "", // OK
-      [this.constants.cmStatus.CONVERT]:
-        "CMエンコード中のため、共有できません",
-      [this.constants.cmStatus.SHARING]:
-        "CM共有中のため、共有できません",
-      [this.constants.cmStatus.ERROR]:
-        "エラーが発生しているため、共有できません",
-      [this.constants.cmStatus.CENTER_UPLOADING]:
-        "U MUSICへ連携中のため、共有できません",
-      [this.constants.cmStatus.CENTER_COMPLETE]:
-        "U MUSICへ連携済みのため、共有できません",
-      [this.constants.cmStatus.CENTER_ERROR]:
-        "U MUSICで連携エラーが発生しているため、共有できません",
-      [this.constants.cmStatus.SSENCE_UPLOADING]:
-        "S'Senceへ連携中のため、共有できません",
-      [this.constants.cmStatus.SSENCE_COMPLETE]:
-        "S'Senceへ連携済みのため、共有できません",
-      [this.constants.cmStatus.SSENCE_ERROR]:
-        "S'Senceで連携エラーが発生しているため、共有できません",
-    },
-    // 共有CM解除
-    deleteShear: {
-      [this.constants.cmStatus.CREATING]:
-        "CM作成中のため、共有できません",
-      [this.constants.cmStatus.COMPLETE]: "", // OK
-      [this.constants.cmStatus.CONVERT]:
-        "CMエンコード中のため、共有できません",
-      [this.constants.cmStatus.SHARING]:
-        "CM共有中のため、共有できません",
-      [this.constants.cmStatus.ERROR]:
-        "エラーが発生しているため、共有できません",
-      [this.constants.cmStatus.CENTER_UPLOADING]:
-        "U MUSICへ連携中のため、共有できません",
-      [this.constants.cmStatus.CENTER_COMPLETE]:
-        "U MUSICへ連携済みのため、共有できません",
-      [this.constants.cmStatus.CENTER_ERROR]:
-        "U MUSICで連携エラーが発生しているため、共有できません",
-      [this.constants.cmStatus.SSENCE_UPLOADING]:
-        "S'Senceへ連携中のため、共有できません",
-      [this.constants.cmStatus.SSENCE_COMPLETE]:
-        "S'Senceへ連携済みのため、共有できません",
-      [this.constants.cmStatus.SSENCE_ERROR]:
-        "S'Senceで連携エラーが発生しているため、共有できません",
-    },
-  };
-
-  if (!process in checkMessages) return "unknown process";
-  if (!status in checkMessages[process]) return "unknown status";
-  return checkMessages[process][status];
 };

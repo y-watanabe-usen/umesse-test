@@ -1,11 +1,7 @@
 "use strict";
 
-const {
-  constants,
-  debuglog,
-  timestamp,
-  checkCmStatus,
-} = require("./constants");
+const { constants, debuglog, timestamp } = require("./constants");
+const { validation } = require("./validation");
 const dynamodb = require("./utils/dynamodbController").controller;
 const { getCm } = require("./cm");
 
@@ -20,8 +16,9 @@ exports.createExternal = async (unisCustomerCd, cmId, body) => {
   );
 
   try {
-    // TODO: body validation check
-    if (!body) throw "body parameter failed";
+    // パラメーターチェック
+    const checkParams = validation.checkParams("createExternal", body);
+    if (checkParams) throw checkParams;
 
     // CM一覧から該当CMを取得
     const list = await getCm(unisCustomerCd);
@@ -31,8 +28,8 @@ exports.createExternal = async (unisCustomerCd, cmId, body) => {
     const cm = list[index];
 
     // CMステータス状態によるチェック
-    const check = checkCmStatus("createExternal", cm.status);
-    if (check) throw check;
+    const checkCmStatus = validation.checkCmStatus("createExternal", cm.status);
+    if (checkCmStatus) throw checkCmStatus;
 
     // 連携用のデータ追加
     const item = {
@@ -46,13 +43,13 @@ exports.createExternal = async (unisCustomerCd, cmId, body) => {
       end_date: cm.end_date,
       production_type: cm.production_type,
       industry: cm.industry.id,
-      scene: cm.scenes.id,
+      scene: cm.scene.id,
       upload_system: body.uploadSystem,
       status: "1",
       timestamp: timestamp(),
     };
 
-    let res = await dynamodb.put(constants.externalTable, item, {});
+    let res = await dynamodb.put(constants.dynamoDbTable().external, item, {});
     if (!res) throw "put failed";
 
     // DynamoDBのデータ更新
@@ -70,11 +67,9 @@ exports.createExternal = async (unisCustomerCd, cmId, body) => {
       },
       ReturnValues: "UPDATED_NEW",
     };
-    debuglog(
-      `key: ${JSON.stringify(key)}, options: ${JSON.stringify(options)}`
-    );
+    debuglog(JSON.stringify({ key: key, options: options }));
 
-    res = await dynamodb.update(constants.usersTable, key, options);
+    res = await dynamodb.update(constants.dynamoDbTable().users, key, options);
     if (!res) throw "update failed";
 
     let json = res.Attributes.cm[index];
@@ -96,8 +91,9 @@ exports.deleteExternal = async (unisCustomerCd, cmId, body) => {
   );
 
   try {
-    // TODO: body validation check
-    if (!body) throw "body parameter failed";
+    // パラメーターチェック
+    const checkParams = validation.checkParams("deleteExternal", body);
+    if (checkParams) throw checkParams;
 
     // CM一覧から該当CMを取得
     const list = await getCm(unisCustomerCd);
@@ -107,8 +103,8 @@ exports.deleteExternal = async (unisCustomerCd, cmId, body) => {
     const cm = list[index];
 
     // CMステータス状態によるチェック
-    const check = checkCmStatus("deleteExternal", cm.status);
-    if (check) throw check;
+    const checkCmStatus = validation.checkCmStatus("deleteExternal", cm.status);
+    if (checkCmStatus) throw checkCmStatus;
 
     let uploadSystem = "";
     if (cm.status == constants.cmStatus.CENTER_COMPLETE) {
@@ -130,7 +126,7 @@ exports.deleteExternal = async (unisCustomerCd, cmId, body) => {
       timestamp: timestamp(),
     };
 
-    let res = await dynamodb.put(constants.externalTable, item, {});
+    let res = await dynamodb.put(constants.dynamoDbTable().external, item, {});
     if (!res) throw "put failed";
 
     // DynamoDBのデータ更新
@@ -143,11 +139,9 @@ exports.deleteExternal = async (unisCustomerCd, cmId, body) => {
       },
       ReturnValues: "UPDATED_NEW",
     };
-    debuglog(
-      `key: ${JSON.stringify(key)}, options: ${JSON.stringify(options)}`
-    );
+    debuglog(JSON.stringify({ key: key, options: options }));
 
-    res = await dynamodb.update(constants.usersTable, key, options);
+    res = await dynamodb.update(constants.dynamoDbTable().users, key, options);
     if (!res) throw "update failed";
 
     let json = res.Attributes.cm[index];
@@ -160,7 +154,7 @@ exports.deleteExternal = async (unisCustomerCd, cmId, body) => {
 };
 
 // 外部連携データ取得（一覧・個別）
-exports.getExternal = async (unisCustomerCd, external) => {
+exports.getExternal = async (unisCustomerCd, external, cmId) => {
   debuglog(
     `[getExternal] ${JSON.stringify({
       unisCustomerCd: unisCustomerCd,
@@ -169,7 +163,7 @@ exports.getExternal = async (unisCustomerCd, external) => {
   );
 
   try {
-    const res = await dynamodb.scan(constants.externalTable, {});
+    const res = await dynamodb.scan(constants.dynamoDbTable().external, {});
     if (!res || !res.Items) throw "not found";
 
     let json = res.Items;
@@ -188,34 +182,6 @@ exports.getExternal = async (unisCustomerCd, external) => {
           item.upload_system === constants.cmUploadSystem.SSENCE &&
           item.status === "1"
       );
-    } else {
-      throw "unknown external";
-    }
-
-    return json;
-  } catch (e) {
-    // TODO: error handle
-    console.log(e);
-    return { message: e };
-  }
-};
-
-// 外部連携データ取得（一覧・個別）ユーザー用
-exports.getExternalUser = async (unisCustomerCd, cmId) => {
-  debuglog(
-    `[getExternalUser] ${JSON.stringify({
-      unisCustomerCd: unisCustomerCd,
-      cmId: cmId,
-    })}`
-  );
-
-  try {
-    const res = await dynamodb.scan(constants.externalTable, {});
-    if (!res || !res.Items) throw "not found";
-
-    let json = res.Items;
-    if (unisCustomerCd) {
-      json = json.filter((item) => item.unis_customer_cd === unisCustomerCd);
     }
     if (cmId) {
       json = json.filter((item) => item.id === cmId);
@@ -239,8 +205,9 @@ exports.completeExternal = async (unisCustomerCd, external, body) => {
   );
 
   try {
-    // TODO: body validation check
-    if (!body) throw "body parameter failed";
+    // パラメーターチェック
+    const checkParams = validation.checkParams("completeExternal", body);
+    if (checkParams) throw checkParams;
 
     // CM一覧から該当CMを取得
     const list = await getCm(unisCustomerCd);
@@ -250,22 +217,28 @@ exports.completeExternal = async (unisCustomerCd, external, body) => {
     const cm = list[index];
 
     // CMステータス状態によるチェック
-    const check = checkCmStatus("completeExternal", cm.status);
-    if (check) throw check;
+    const checkCmStatus = validation.checkCmStatus(
+      "completeExternal",
+      cm.status
+    );
+    if (checkCmStatus) throw checkCmStatus;
 
-    const data = await this.getExternal(unisCustomerCd, external);
-    if (!data) throw "not found";
+    const external = await this.getExternal(
+      unisCustomerCd,
+      external,
+      body.uMesseCmId
+    );
+    if (!external) throw "not found";
 
     let res = "";
     const key = { unis_customer_cd: unisCustomerCd };
 
     if (body.dataProcessType == "01") {
       // 正常完了の場合
-      res = await dynamodb.delete(constants.externalTable, key, {});
+      res = await dynamodb.delete(constants.dynamoDbTable().external, key, {});
       if (!res) throw "delete failed";
-      console.log(res);
 
-      if (data[0].data_process_type == "03") {
+      if (external[0].data_process_type == "03") {
         cm.status = constants.cmStatus.COMPLETE;
       } else {
         cm.status = constants.cmStatus[`${external.toUpperCase()}_COMPLETE`];
@@ -282,7 +255,11 @@ exports.completeExternal = async (unisCustomerCd, external, body) => {
         },
         ReturnValues: "UPDATED_NEW",
       };
-      res = await dynamodb.update(constants.externalTable, key, options);
+      res = await dynamodb.update(
+        constants.dynamoDbTable().external,
+        key,
+        options
+      );
       if (!res) throw "update failed";
 
       cm.status = constants.cmStatus[`${external.toUpperCase()}_ERROR`];
@@ -297,11 +274,9 @@ exports.completeExternal = async (unisCustomerCd, external, body) => {
       },
       ReturnValues: "UPDATED_NEW",
     };
-    debuglog(
-      `key: ${JSON.stringify(key)}, options: ${JSON.stringify(options)}`
-    );
+    debuglog(JSON.stringify({ key: key, options: options }));
 
-    res = await dynamodb.update(constants.usersTable, key, options);
+    res = await dynamodb.update(constants.dynamoDbTable().users, key, options);
     if (!res) throw "update failed";
 
     let json = res.Attributes.cm[index];

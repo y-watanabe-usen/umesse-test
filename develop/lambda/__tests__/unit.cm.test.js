@@ -3,6 +3,7 @@
 process.env.AWS_ACCESS_KEY_ID = "local";
 process.env.AWS_SECRET_ACCESS_KEY = "local";
 process.env.debug = true;
+process.env.environment = "local";
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
 
 // TODO: mock
@@ -24,7 +25,7 @@ const defaultCm = {
   end_date: "9999-12-31T23:59:59+09:00",
   production_type: "01",
   industry: [{ id: "01", name: "全業種" }],
-  scenes: [{ id: "01", name: "全シーン" }],
+  scene: [{ id: "01", name: "全シーン" }],
   status: "02",
   materials: {
     narrations: [

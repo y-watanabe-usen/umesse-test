@@ -2,13 +2,8 @@
 
 const { execSync } = require("child_process");
 const fs = require("fs");
-const {
-  constants,
-  debuglog,
-  timestamp,
-  generateId,
-  checkCmStatus,
-} = require("./constants");
+const { constants, debuglog, timestamp, generateId } = require("./constants");
+const { validation } = require("./validation");
 const dynamodb = require("./utils/dynamodbController").controller;
 const s3 = require("./utils/s3Controller").controller;
 
@@ -26,11 +21,13 @@ exports.getCm = async (unisCustomerCd, cmId) => {
     const options = {
       ProjectionExpression: "cm",
     };
-    debuglog(
-      `key: ${JSON.stringify(key)}, options: ${JSON.stringify(options)}`
-    );
+    debuglog(JSON.stringify({ key: key, options: options }));
 
-    const res = await dynamodb.get(constants.usersTable, key, options);
+    const res = await dynamodb.get(
+      constants.dynamoDbTable().users,
+      key,
+      options
+    );
     if (!res || !res.Item) throw "not found";
 
     let json = res.Item.cm;
@@ -55,10 +52,11 @@ exports.createCm = async (unisCustomerCd, body) => {
   );
 
   try {
-    // TODO: body validation check
-    if (!body) throw "body parameter failed";
+    // パラメーターチェック
+    const checkParams = validation.checkParams("updateCm", body);
+    if (checkParams) throw checkParams;
 
-    // ID作成
+    // ID生成
     const id = generateId(unisCustomerCd, "c");
 
     // CM結合、S3へPUT
@@ -67,7 +65,7 @@ exports.createCm = async (unisCustomerCd, body) => {
 
     // 署名付きURLの発行
     const url = await s3.getSignedUrl(
-      constants.usersBucket,
+      constants.s3Bucket().users,
       `users/${unisCustomerCd}/cm/${id}.mp3`
     );
     if (!url) throw "getSignedUrl failed";
@@ -92,11 +90,13 @@ exports.createCm = async (unisCustomerCd, body) => {
       },
       ReturnValues: "UPDATED_NEW",
     };
-    debuglog(
-      `key: ${JSON.stringify(key)}, options: ${JSON.stringify(options)}`
-    );
+    debuglog(JSON.stringify({ key: key, options: options }));
 
-    const res = await dynamodb.update(constants.usersTable, key, options);
+    const res = await dynamodb.update(
+      constants.dynamoDbTable().users,
+      key,
+      options
+    );
     if (!res) throw "update failed";
 
     let json = res.Attributes.cm.pop();
@@ -120,8 +120,9 @@ exports.updateCm = async (unisCustomerCd, cmId, body) => {
   );
 
   try {
-    // TODO: body validation check
-    if (!body) throw "body parameter failed";
+    // パラメーターチェック
+    const checkParams = validation.checkParams("updateCm", body);
+    if (checkParams) throw checkParams;
 
     // CM一覧から該当CMを取得
     const list = await this.getCm(unisCustomerCd);
@@ -131,8 +132,8 @@ exports.updateCm = async (unisCustomerCd, cmId, body) => {
     const cm = list[index];
 
     // CMステータス状態によるチェック
-    const check = checkCmStatus("updateCm", cm.status);
-    if (check) throw check;
+    const checkCmStatus = validation.checkCmStatus("updateCm", cm.status);
+    if (checkCmStatus) throw checkCmStatus;
 
     // CM作成中の場合
     if (cm.status == constants.cmStatus.CREATING) {
@@ -164,11 +165,13 @@ exports.updateCm = async (unisCustomerCd, cmId, body) => {
       },
       ReturnValues: "UPDATED_NEW",
     };
-    debuglog(
-      `key: ${JSON.stringify(key)}, options: ${JSON.stringify(options)}`
-    );
+    debuglog(JSON.stringify({ key: key, options: options }));
 
-    const res = await dynamodb.update(constants.usersTable, key, options);
+    const res = await dynamodb.update(
+      constants.dynamoDbTable().users,
+      key,
+      options
+    );
     if (!res) throw "update failed";
 
     let json = res.Attributes.cm[index];
@@ -198,12 +201,12 @@ exports.deleteCm = async (unisCustomerCd, cmId) => {
     const cm = list[index];
 
     // CMステータス状態によるチェック
-    const check = checkCmStatus("deleteCm", cm.status);
-    if (check) throw check;
+    const checkCmStatus = validation.checkCmStatus("deleteCm", cm.status);
+    if (checkCmStatus) throw checkCmStatus;
 
     // S3上のCMを削除
     await s3.delete(
-      constants.usersBucket,
+      constants.s3Bucket().users,
       `users/${unisCustomerCd}/cm/${cmId}.mp3`
     );
 
@@ -218,11 +221,13 @@ exports.deleteCm = async (unisCustomerCd, cmId) => {
       },
       ReturnValues: "UPDATED_NEW",
     };
-    debuglog(
-      `key: ${JSON.stringify(key)}, options: ${JSON.stringify(options)}`
-    );
+    debuglog(JSON.stringify({ key: key, options: options }));
 
-    const res = await dynamodb.update(constants.usersTable, key, options);
+    const res = await dynamodb.update(
+      constants.dynamoDbTable().users,
+      key,
+      options
+    );
     if (!res) throw "update failed";
 
     let json = res.Attributes.cm[index];
@@ -254,7 +259,7 @@ function generateCm(unisCustomerCd, id, materials) {
       let paths = "";
       for (const [key, value] of list.entries()) {
         debuglog(`key: ${key}, value: ${value}`);
-        const res = await s3.get(constants.contentsBucket, value);
+        const res = await s3.get(constants.s3Bucket().contents, value);
         if (!res || !res.Body) throw "getObject failed";
         fs.writeFileSync(`${workDir}/${key}.mp3`, res.Body);
         paths += `-i ${workDir}/${key}.mp3 `;
@@ -291,7 +296,7 @@ function generateCm(unisCustomerCd, id, materials) {
         throw e;
       });
       await s3.put(
-        constants.usersBucket,
+        constants.s3Bucket().users,
         `users/${unisCustomerCd}/cm/${id}.mp3`,
         fileStream
       );

@@ -1,6 +1,7 @@
 "use strict";
 
 const { constants, debuglog, timestamp, generateId } = require("./constants");
+const { validation } = require("./validation");
 const dynamodb = require("./utils/dynamodbController").controller;
 const s3 = require("./utils/s3Controller").controller;
 
@@ -20,7 +21,10 @@ exports.getResource = async (filter, industryId, sceneId) => {
     },
   };
   try {
-    const res = await dynamodb.scan(constants.contentsTable, options);
+    const res = await dynamodb.scan(
+      constants.dynamoDbTable().contents,
+      options
+    );
     if (!res || !res.Items) throw "not found";
 
     let json = res.Items;
@@ -48,7 +52,11 @@ exports.getSignedUrl = async (id) => {
   );
 
   try {
-    const res = await s3.getSignedUrl(constants.contentsBucket, id);
+    let bucket = constants.s3Bucket().contents;
+    if (id.match(`[0-9]{9}-[crt]-[0-9a-z]{8}`))
+      bucket = constants.s3Bucket().users;
+
+    const res = await s3.getSignedUrl(bucket, id);
     if (!res) throw "getSignedUrl failed";
     return { url: res };
   } catch (e) {
@@ -73,11 +81,13 @@ exports.getUserResource = async (unisCustomerCd, filter, id) => {
     const options = {
       ProjectionExpression: filter,
     };
-    debuglog(
-      `key: ${JSON.stringify(key)}, options: ${JSON.stringify(options)}`
-    );
+    debuglog(JSON.stringify({ key: key, options: options }));
 
-    const res = await dynamodb.get(constants.usersTable, key, options);
+    const res = await dynamodb.get(
+      constants.dynamoDbTable().users,
+      key,
+      options
+    );
     if (!res || !res.Item) throw "not found";
 
     let json = res.Item[filter];
@@ -102,8 +112,9 @@ exports.createUserResource = async (unisCustomerCd, filter, resource) => {
   );
 
   try {
-    // TODO: resources validation check
-    if (!resource) throw "resources failed";
+    // パラメーターチェック
+    const checkParams = validation.checkParams("createUserResource", resource);
+    if (checkParams) throw checkParams;
 
     // ID作成
     let div = "";
@@ -112,11 +123,12 @@ exports.createUserResource = async (unisCustomerCd, filter, resource) => {
     const id = generateId(unisCustomerCd, div);
 
     // S3へPUT
-    await s3.put(
-      constants.usersBucket,
+    let res = await s3.put(
+      constants.s3Bucket().users,
       `users/${unisCustomerCd}/${filter}/${id}.mp3`,
       resource
     );
+    if (!res) throw "put failed";
 
     const time = timestamp();
     // DynamoDBのデータ更新
@@ -136,11 +148,9 @@ exports.createUserResource = async (unisCustomerCd, filter, resource) => {
       },
       ReturnValues: "UPDATED_NEW",
     };
-    debuglog(
-      `key: ${JSON.stringify(key)}, options: ${JSON.stringify(options)}`
-    );
+    debuglog(JSON.stringify({ key: key, options: options }));
 
-    const res = await dynamodb.update(constants.usersTable, key, options);
+    res = await dynamodb.update(constants.dynamoDbTable().users, key, options);
     if (!res) throw "update failed";
 
     let json = res.Attributes[filter];
@@ -164,8 +174,9 @@ exports.updateUserResource = async (unisCustomerCd, filter, id, body) => {
   );
 
   try {
-    // TODO: body validation check
-    if (!body) throw "body parameter failed";
+    // パラメーターチェック
+    const checkParams = validation.checkParams("updateUserResource", body);
+    if (checkParams) throw checkParams;
 
     // 音声一覧から該当音声を取得
     const list = await this.getUserResource(unisCustomerCd, filter);
@@ -190,11 +201,13 @@ exports.updateUserResource = async (unisCustomerCd, filter, id, body) => {
       },
       ReturnValues: "UPDATED_NEW",
     };
-    debuglog(
-      `key: ${JSON.stringify(key)}, options: ${JSON.stringify(options)}`
-    );
+    debuglog(JSON.stringify({ key: key, options: options }));
 
-    const res = await dynamodb.update(constants.usersTable, key, options);
+    const res = await dynamodb.update(
+      constants.dynamoDbTable().users,
+      key,
+      options
+    );
     if (!res) throw "update failed";
 
     let json = res.Attributes[filter][index];
@@ -226,7 +239,7 @@ exports.deleteUserResource = async (unisCustomerCd, filter, id) => {
 
     // S3上の録音音声を削除
     await s3.delete(
-      constants.usersBucket,
+      constants.s3Bucket().users,
       `users/${unisCustomerCd}/${filter}/${id}.mp3`
     );
 
@@ -239,11 +252,13 @@ exports.deleteUserResource = async (unisCustomerCd, filter, id) => {
       },
       ReturnValues: "UPDATED_NEW",
     };
-    debuglog(
-      `key: ${JSON.stringify(key)}, options: ${JSON.stringify(options)}`
-    );
+    debuglog(JSON.stringify({ key: key, options: options }));
 
-    const res = await dynamodb.update(constants.usersTable, key, options);
+    const res = await dynamodb.update(
+      constants.dynamoDbTable().users,
+      key,
+      options
+    );
     if (!res) throw "update failed";
 
     let json = res.Attributes[filter][index];

@@ -3,7 +3,7 @@
 const {
   createExternal,
   deleteExternal,
-  getExternalUser,
+  getExternal,
 } = require("../../umesse/external");
 
 /**
@@ -61,7 +61,7 @@ exports.deleteUploadCm = function (body, cmId, xUnisCustomerCd) {
 exports.getUploadCm = function (cmId, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     var response = {};
-    const json = await getExternalUser(xUnisCustomerCd, cmId);
+    const json = await getExternal(xUnisCustomerCd, "", cmId);
     response["application/json"] = json;
     if (Object.keys(response).length > 0 && !json.message) {
       resolve(response[Object.keys(response)[0]]);
@@ -81,7 +81,7 @@ exports.getUploadCm = function (cmId, xUnisCustomerCd) {
 exports.listUploadCm = function (xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     var response = {};
-    const json = await getExternalUser(xUnisCustomerCd);
+    const json = await getExternal(xUnisCustomerCd);
     response["application/json"] = json;
     if (Object.keys(response).length > 0 && !json.message) {
       resolve(response[Object.keys(response)[0]]);

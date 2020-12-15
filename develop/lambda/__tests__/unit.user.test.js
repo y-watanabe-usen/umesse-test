@@ -3,6 +3,7 @@
 process.env.AWS_ACCESS_KEY_ID = "local";
 process.env.AWS_SECRET_ACCESS_KEY = "local";
 process.env.debug = true;
+process.env.environment = "local";
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
 
 // TODO: mock

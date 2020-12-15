@@ -1,11 +1,7 @@
 "use strict";
 
-const {
-  constants,
-  debuglog,
-  timestamp,
-  checkCmStatus,
-} = require("./constants");
+const { constants, debuglog, timestamp } = require("./constants");
+const { validation } = require("./validation");
 const dynamodb = require("./utils/dynamodbController").controller;
 const s3 = require("./utils/s3Controller").controller;
 const { getCm } = require("./cm");
@@ -25,11 +21,13 @@ exports.getShear = async (unisCustomerCd, cmId) => {
     const options = {
       ProjectionExpression: "cm",
     };
-    debuglog(
-      `key: ${JSON.stringify(key)}, options: ${JSON.stringify(options)}`
-    );
+    debuglog(JSON.stringify({ key: key, options: options }));
 
-    const res = await dynamodb.get(constants.usersTable, key, options);
+    const res = await dynamodb.get(
+      constants.dynamoDbTable().users,
+      key,
+      options
+    );
     if (!res || !res.Item) throw "not found";
 
     let json = res.Item.cm;
@@ -67,15 +65,16 @@ exports.createShear = async (unisCustomerCd, cmId) => {
     if (!user) throw "not found";
 
     // S3上のCMをコピー
-    await s3.copy(
-      constants.usersBucket,
+    let res = await s3.copy(
+      constants.s3Bucket().users,
       `group/${user.customer_group_cd}/cm/${cmId}.mp3`,
       `users/${unisCustomerCd}/cm/${cmId}.mp3`
     );
+    if (!res) throw "copy failed";
 
     // CMステータス状態によるチェック
-    const check = checkCmStatus("createShear", cm.status);
-    if (check) throw check;
+    const checkCmStatus = validation.checkCmStatus("createShear", cm.status);
+    if (checkCmStatus) throw checkCmStatus;
 
     // DynamoDBのデータ更新
     cm.status = constants.cmStatus.SHARING;
@@ -88,11 +87,9 @@ exports.createShear = async (unisCustomerCd, cmId) => {
       },
       ReturnValues: "UPDATED_NEW",
     };
-    debuglog(
-      `key: ${JSON.stringify(key)}, options: ${JSON.stringify(options)}`
-    );
+    debuglog(JSON.stringify({ key: key, options: options }));
 
-    const res = await dynamodb.update(constants.usersTable, key, options);
+    res = await dynamodb.update(constants.dynamoDbTable().users, key, options);
     if (!res) throw "update failed";
 
     let json = res.Attributes.cm[index];
@@ -122,8 +119,8 @@ exports.deleteShear = async (unisCustomerCd, cmId) => {
     const cm = list[index];
 
     // CMステータス状態によるチェック
-    const check = checkCmStatus("deleteShear", cm.status);
-    if (check) throw check;
+    const checkCmStatus = validation.checkCmStatus("deleteShear", cm.status);
+    if (checkCmStatus) throw checkCmStatus;
 
     // ユーザー情報取得
     const user = await getUser(unisCustomerCd);
@@ -131,7 +128,7 @@ exports.deleteShear = async (unisCustomerCd, cmId) => {
 
     // S3上のCMを削除
     await s3.delete(
-      constants.usersBucket,
+      constants.s3Bucket().users,
       `group/${user.customer_group_cd}/cm/${cmId}.mp3`
     );
 
@@ -146,11 +143,13 @@ exports.deleteShear = async (unisCustomerCd, cmId) => {
       },
       ReturnValues: "UPDATED_NEW",
     };
-    debuglog(
-      `key: ${JSON.stringify(key)}, options: ${JSON.stringify(options)}`
-    );
+    debuglog(JSON.stringify({ key: key, options: options }));
 
-    const res = await dynamodb.update(constants.usersTable, key, options);
+    const res = await dynamodb.update(
+      constants.dynamoDbTable().users,
+      key,
+      options
+    );
     if (!res) throw "update failed";
 
     let json = res.Attributes.cm[index];
