@@ -5,12 +5,12 @@ const { validation } = require("./validation");
 const dynamodb = require("./utils/dynamodbController").controller;
 const s3 = require("./utils/s3Controller").controller;
 
-exports.getResource = async (filter, industryId, sceneId) => {
+exports.getResource = async (filter, industryCd, sceneCd) => {
   debuglog(
     `[getResource] ${JSON.stringify({
       filter: filter,
-      industryId: industryId,
-      sceneId: sceneId,
+      industryCd: industryCd,
+      sceneCd: sceneCd,
     })}`
   );
 
@@ -28,13 +28,13 @@ exports.getResource = async (filter, industryId, sceneId) => {
     if (!res || !res.Items) throw "not found";
 
     let json = res.Items;
-    if (industryId) {
+    if (industryCd) {
       json = json.filter((item) =>
-        item.industry.some((el) => el.id === industryId)
+        item.industry.some((el) => el.id === industryCd)
       );
     }
-    if (sceneId) {
-      json = json.filter((item) => item.scenes.some((el) => el.id === sceneId));
+    if (sceneCd) {
+      json = json.filter((item) => item.scenes.some((el) => el.id === sceneCd));
     }
     return json;
   } catch (e) {
@@ -103,7 +103,7 @@ exports.getUserResource = async (unisCustomerCd, filter, id) => {
 };
 
 // ユーザー作成の音声新規作成
-exports.createUserResource = async (unisCustomerCd, filter, resource) => {
+exports.createUserResource = async (unisCustomerCd, filter, body) => {
   debuglog(
     `[createUserResource] ${JSON.stringify({
       unisCustomerCd: unisCustomerCd,
@@ -113,7 +113,7 @@ exports.createUserResource = async (unisCustomerCd, filter, resource) => {
 
   try {
     // パラメーターチェック
-    const checkParams = validation.checkParams("createUserResource", resource);
+    const checkParams = validation.checkParams("createUserResource", body);
     if (checkParams) throw checkParams;
 
     // ID作成
@@ -126,7 +126,7 @@ exports.createUserResource = async (unisCustomerCd, filter, resource) => {
     let res = await s3.put(
       constants.s3Bucket().users,
       `users/${unisCustomerCd}/${filter}/${id}.mp3`,
-      resource
+      body["recordedFile"]
     );
     if (!res) throw "put failed";
 

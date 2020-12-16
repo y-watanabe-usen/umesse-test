@@ -410,6 +410,10 @@ paths:
       responses:
         200:
           description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RecordingItem"
         400:
           $ref: "#/components/responses/BadRequest"
         401:
@@ -574,6 +578,10 @@ paths:
       responses:
         200:
           description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TtsItem"
         400:
           $ref: "#/components/responses/BadRequest"
         401:
@@ -754,6 +762,7 @@ paths:
       # security:
       #   - ApiKeyAuth: []
       parameters:
+        - $ref: "#/components/parameters/CmId"
         # - $ref: "#/components/parameters/Token"
         - $ref: "#/components/parameters/UnisCustomerCd"
       responses:
@@ -1170,7 +1179,7 @@ components:
     Token:
       name: x-token
       in: header
-      description: ID of token to return
+      description: トークンID
       required: true
       schema:
         type: string
@@ -1186,7 +1195,7 @@ components:
     CmId:
       name: cmId
       in: path
-      description: ID of cm to return
+      description: CM ID
       required: true
       schema:
         type: string
@@ -1194,7 +1203,7 @@ components:
     RecordingId:
       name: recordingId
       in: path
-      description: ID of recording to return
+      description: 録音音声ID
       required: true
       schema:
         type: string
@@ -1202,7 +1211,7 @@ components:
     TtsId:
       name: ttsId
       in: path
-      description: ID of tts to return
+      description: 合成音声ID
       required: true
       schema:
         type: string

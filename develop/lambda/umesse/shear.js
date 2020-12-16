@@ -8,9 +8,9 @@ const { getCm } = require("./cm");
 const { getUser } = require("./user");
 
 // 共有CM取得（一覧・個別）
-exports.getShear = async (unisCustomerCd, cmId) => {
+exports.getShearCm = async (unisCustomerCd, cmId) => {
   debuglog(
-    `[getShear] ${JSON.stringify({
+    `[getShearCm] ${JSON.stringify({
       unisCustomerCd: unisCustomerCd,
       cmId: cmId,
     })}`
@@ -44,9 +44,9 @@ exports.getShear = async (unisCustomerCd, cmId) => {
 };
 
 // 共有CM追加
-exports.createShear = async (unisCustomerCd, cmId) => {
+exports.createShearCm = async (unisCustomerCd, cmId) => {
   debuglog(
-    `[createShear] ${JSON.stringify({
+    `[createShearCm] ${JSON.stringify({
       unisCustomerCd: unisCustomerCd,
       cmId: cmId,
     })}`
@@ -73,7 +73,7 @@ exports.createShear = async (unisCustomerCd, cmId) => {
     if (!res) throw "copy failed";
 
     // CMステータス状態によるチェック
-    const checkCmStatus = validation.checkCmStatus("createShear", cm.status);
+    const checkCmStatus = validation.checkCmStatus("createShearCm", cm.status);
     if (checkCmStatus) throw checkCmStatus;
 
     // DynamoDBのデータ更新
@@ -102,9 +102,9 @@ exports.createShear = async (unisCustomerCd, cmId) => {
 };
 
 // 共有CM解除
-exports.deleteShear = async (unisCustomerCd, cmId) => {
+exports.deleteShearCm = async (unisCustomerCd, cmId) => {
   debuglog(
-    `[deleteShear] ${JSON.stringify({
+    `[deleteShearCm] ${JSON.stringify({
       unisCustomerCd: unisCustomerCd,
       cmId: cmId,
     })}`
@@ -119,7 +119,7 @@ exports.deleteShear = async (unisCustomerCd, cmId) => {
     const cm = list[index];
 
     // CMステータス状態によるチェック
-    const checkCmStatus = validation.checkCmStatus("deleteShear", cm.status);
+    const checkCmStatus = validation.checkCmStatus("deleteShearCm", cm.status);
     if (checkCmStatus) throw checkCmStatus;
 
     // ユーザー情報取得
