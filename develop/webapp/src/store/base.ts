@@ -2,7 +2,7 @@ import { reactive } from 'vue'
 
 export default function baseStore() {
   const state = reactive({
-    isDarkTheme: true
+    isDarkTheme: false
   });
 
   return {

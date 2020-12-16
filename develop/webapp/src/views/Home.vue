@@ -3,7 +3,7 @@
     <div class="container">
       <nav class="navbar navbar-expand-lg navbar-light">
         <span class="navbar-brand mb-0 h1 text-white"
-          >U Messe
+          >U MESSE
           <span v-if="authenticating">Loading...</span>
           <span v-else> {{ token }} {{ error }} </span>
         </span>
@@ -16,126 +16,276 @@
                 data-toggle="modal"
                 data-target="#modalSetting"
                 ><svg
-                  width="1em"
-                  height="1em"
-                  viewBox="0 0 16 16"
-                  class="bi bi-gear-fill"
-                  fill="currentColor"
                   xmlns="http://www.w3.org/2000/svg"
+                  width="31.706"
+                  height="31.706"
+                  viewBox="0 0 31.706 31.706"
                 >
                   <path
-                    fill-rule="evenodd"
-                    d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 0 0-5.86 2.929 2.929 0 0 0 0 5.858z"
+                    id="パス_18"
+                    data-name="パス 18"
+                    d="M464.461,165.51h-1.975a.637.637,0,0,1-.571-.42l-1.525-3.671a.632.632,0,0,1,.105-.7l1.4-1.4a.443.443,0,0,0,0-.622l-3.28-3.28a.441.441,0,0,0-.62,0l-1.4,1.4a.634.634,0,0,1-.7.1l-3.671-1.523a.639.639,0,0,1-.418-.572v-1.975a.44.44,0,0,0-.439-.439h-4.64a.44.44,0,0,0-.439.439v1.975a.641.641,0,0,1-.418.572l-3.672,1.523a.635.635,0,0,1-.7-.1l-1.4-1.4a.442.442,0,0,0-.62,0l-3.28,3.28a.441.441,0,0,0,0,.622l1.4,1.4a.629.629,0,0,1,.1.7l-1.523,3.671a.637.637,0,0,1-.571.42h-1.977a.44.44,0,0,0-.439.439v4.638a.44.44,0,0,0,.439.439h1.977a.638.638,0,0,1,.571.418l1.523,3.672a.63.63,0,0,1-.1.7l-1.4,1.4a.439.439,0,0,0,0,.62l3.28,3.28a.439.439,0,0,0,.62,0l1.4-1.4a.629.629,0,0,1,.7-.1l3.672,1.523a.639.639,0,0,1,.418.571v1.977a.44.44,0,0,0,.439.439h4.64a.44.44,0,0,0,.439-.439v-1.977a.637.637,0,0,1,.418-.571l3.671-1.523a.632.632,0,0,1,.7.1l1.4,1.4a.439.439,0,0,0,.62,0l3.28-3.28a.442.442,0,0,0,0-.62l-1.4-1.4a.633.633,0,0,1-.105-.7l1.525-3.672a.638.638,0,0,1,.571-.418h1.975a.44.44,0,0,0,.439-.439v-4.638A.44.44,0,0,0,464.461,165.51Zm-15.414,11.1a8.34,8.34,0,1,1,8.34-8.34A8.34,8.34,0,0,1,449.047,176.608Z"
+                    transform="translate(-433.194 -152.415)"
+                    fill="#fff"
                   />
                 </svg>
-                設定</router-link
-              >
-            </li>
-            <li class="nav-item">
-              <router-link class="nav-link disabled text-white" to="#"
-                ><svg
-                  width="1em"
-                  height="1em"
-                  viewBox="0 0 16 16"
-                  class="bi bi-person-fill"
-                  fill="currentColor"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"
-                  />
-                </svg>
-                Meguro Cafe</router-link
-              >
+              </router-link>
             </li>
           </ul>
         </div>
       </nav>
-      <div class="row row-cols-4">
-        <div class="col image-content">
-          <img
-            class="card-img-top"
-            src="../assets/matt-botsford-OKLqGsCT8qs-unsp@2x.png"
-          />
-          <p class="title">店内アナウンスを作成</p>
-        </div>
-        <div class="col content">
-          <router-link
-            :to="{ path: 'RecordingStart' }"
-            class="btn btn-light border w-100 text-left my-4 font-weight-bold"
-          >
-            録音して作成
+      <h5 class="text-white">店内アナウンスを作成する</h5>
+      <div class="row top">
+        <div class="col-md-4 mb-4">
+          <router-link :to="{ path: 'RecordingStart' }">
+            <div class="content">
+              <p class="image">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="50.888"
+                  height="93.295"
+                  viewBox="0 0 50.888 93.295"
+                >
+                  <g
+                    id="アイコン"
+                    transform="translate(-169.279 -195.63)"
+                    opacity="0.8"
+                  >
+                    <path
+                      id="パス_45"
+                      data-name="パス 45"
+                      d="M186.5,287a12.761,12.761,0,0,0,12.722-12.722V240.352a12.722,12.722,0,1,0-25.444,0v33.926A12.761,12.761,0,0,0,186.5,287Z"
+                      transform="translate(8.222 -32)"
+                      fill="#61aed6"
+                    />
+                    <path
+                      id="パス_46"
+                      data-name="パス 46"
+                      d="M220.167,253.892V243.028a4.241,4.241,0,1,0-8.481,0v10.865a16.963,16.963,0,1,1-33.926,0V243.028a4.241,4.241,0,1,0-8.481,0v10.865a25.46,25.46,0,0,0,21.28,25.071c-.011.13-.076.24-.076.373v12.722H179.909a4.241,4.241,0,1,0,0,8.481h29.628a4.241,4.241,0,1,0,0-8.481H198.964V279.337c0-.133-.062-.243-.074-.373A25.46,25.46,0,0,0,220.167,253.892Z"
+                      transform="translate(0 -11.615)"
+                      fill="#61aed6"
+                    />
+                  </g>
+                </svg>
+              </p>
+              <p class="title">録音して作成</p>
+              <p class="lead small">
+                ご自身の声を録音して、店内アナウンスを作成します。
+              </p>
+            </div>
           </router-link>
-          <p class="lead small">
-            ご自身の声を録音して、店内アナウンスを作成します。
-          </p>
         </div>
-        <div class="col content">
-          <router-link
-            :to="{ path: 'selecttemplate' }"
-            class="btn btn-light border w-100 text-left my-4 font-weight-bold"
-          >
-            合成音声から作成
-          </router-link>
-          <p class="lead small">
-            テキストを入力し、アプリが読み上げた音声を店内アナウンスにします。
-          </p>
+        <div class="col-md-4">
+          <div class="content">
+            <p class="image">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="66.551"
+                height="84.324"
+                viewBox="0 0 66.551 84.324"
+              >
+                <g
+                  id="グループ_509"
+                  data-name="グループ 509"
+                  transform="translate(-588.73 -432)"
+                  opacity="0.8"
+                >
+                  <path
+                    id="パス_1204"
+                    data-name="パス 1204"
+                    d="M550.538,267.13H489.533a2.791,2.791,0,0,0-2.773,2.811v78.7a2.793,2.793,0,0,0,2.773,2.811h61.005a2.793,2.793,0,0,0,2.773-2.811v-78.7A2.791,2.791,0,0,0,550.538,267.13Zm-2.773,78.7H492.306V272.752h55.459Z"
+                    transform="translate(101.97 164.87)"
+                    fill="#61aed6"
+                  />
+                  <path
+                    id="パス_1205"
+                    data-name="パス 1205"
+                    d="M494.7,280.752h32.327a2.811,2.811,0,0,0,0-5.622H494.7a2.811,2.811,0,0,0,0,5.622Z"
+                    transform="translate(111.138 179.357)"
+                    fill="#61aed6"
+                  />
+                  <path
+                    id="パス_1206"
+                    data-name="パス 1206"
+                    d="M494.7,286.752h32.327a2.811,2.811,0,0,0,0-5.622H494.7a2.811,2.811,0,0,0,0,5.622Z"
+                    transform="translate(111.138 190.222)"
+                    fill="#61aed6"
+                  />
+                  <path
+                    id="パス_1207"
+                    data-name="パス 1207"
+                    d="M494.7,292.752h32.327a2.811,2.811,0,0,0,0-5.622H494.7a2.811,2.811,0,0,0,0,5.622Z"
+                    transform="translate(111.138 201.086)"
+                    fill="#61aed6"
+                  />
+                </g>
+              </svg>
+            </p>
+            <p class="title">
+              <span
+                class="dropdown-toggle"
+                id="dropdownMenuButton"
+                data-toggle="dropdown"
+              >
+                合成音声から作成
+              </span>
+              <span class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <router-link
+                  :to="{ path: 'selecttemplate' }"
+                  class="dropdown-item"
+                >
+                  テンプレートから作成</router-link
+                >
+                <a class="dropdown-item" href="#">フリー入力から作成</a>
+              </span>
+            </p>
+            <p class="lead small">
+              テキストを入力し、アプリが読み上げた音声を店内アナウンスにします。
+            </p>
+          </div>
         </div>
-        <div class="col content right">
-          <router-link
-            :to="{ path: 'narration' }"
-            class="btn btn-light border w-100 text-left my-4 font-weight-bold"
-          >
-            ナレーション素材から作成
+        <div class="col-md-4">
+          <router-link :to="{ path: 'narration' }">
+            <div class="content">
+              <p class="image">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="56.359"
+                  height="52.662"
+                  viewBox="0 0 56.359 52.662"
+                >
+                  <path
+                    id="パス_1203"
+                    data-name="パス 1203"
+                    d="M437.277,251.13h-26.3a15.072,15.072,0,0,0-15.03,15.027v11.272a15.073,15.073,0,0,0,15.03,15.03h4.047c.566.133,1.112.66.417,2.478-1.143,2.6-3.941,5.935-10.607,8.794,0,0,19.558,1.385,27.347-9.081v.019s1.795-2.21,4.132-2.21h.963a15.073,15.073,0,0,0,15.03-15.03V266.157A15.072,15.072,0,0,0,437.277,251.13Z"
+                    transform="translate(-395.948 -251.13)"
+                    fill="#61aed6"
+                  />
+                </svg>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="49.33"
+                  height="57.81"
+                  viewBox="0 0 49.33 57.81"
+                >
+                  <g
+                    id="グループ_581"
+                    data-name="グループ 581"
+                    transform="translate(-74.261 -69.225)"
+                  >
+                    <path
+                      id="パス_1239"
+                      data-name="パス 1239"
+                      d="M122.675,69.233,89.913,73.681a1.1,1.1,0,0,0-.92,1.052v37.86a11.861,11.861,0,0,0-8.293,1.027c-4.912,2.388-7.582,7.016-5.967,10.336s6.906,4.073,11.815,1.685c3.969-1.933,6.428-5.317,6.392-8.3l.017.011v-32.9a1.12,1.12,0,0,1,.914-1.072l24.843-3.93a.771.771,0,0,1,.917.782v28.438a11.863,11.863,0,0,0-8.324,1.018c-4.912,2.388-7.581,7.016-5.967,10.338s6.9,4.073,11.815,1.682c4.341-2.113,6.92-5.972,6.344-9.134l.093.079V70.035A.79.79,0,0,0,122.675,69.233Z"
+                      fill="#80bede"
+                    />
+                  </g>
+                </svg>
+              </p>
+              <p class="title">ナレーションから作成</p>
+              <p class="lead small">
+                USENが提供する音声素材から、店内アナウンスを作成します。
+              </p>
+            </div>
           </router-link>
-          <p class="lead small">
-            USENが提供する音声素材から、店内アナウンスを作成します。
-          </p>
         </div>
       </div>
-      <div class="row row-cols-4 py-4">
-        <div class="col image-content">
-          <img class="card-img-top" src="../assets/_dm@2x.png" />
-          <p class="title">管理</p>
+      <div class="row bottom">
+        <div class="col-md-4">
+          <div class="content">
+            <p class="image">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="51"
+                height="46"
+                viewBox="0 0 51 46"
+              >
+                <g
+                  id="グループ_576"
+                  data-name="グループ 576"
+                  transform="translate(-63 -473)"
+                >
+                  <path
+                    id="合体_3"
+                    data-name="合体 3"
+                    d="M6426-5455a3,3,0,0,1-3-3v-40a3,3,0,0,1,3-3h23a3,3,0,0,1,3,3v4h19a3,3,0,0,1,3,3v33a3,3,0,0,1-3,3Z"
+                    transform="translate(-6360 5974)"
+                    fill="#6a5cb7"
+                  />
+                  <rect
+                    id="長方形_464"
+                    data-name="長方形 464"
+                    width="51"
+                    height="32"
+                    rx="3"
+                    transform="translate(63 487)"
+                    fill="#a095d8"
+                  />
+                </g>
+              </svg>
+              <span class="title">&nbsp;&nbsp;管理する</span>
+            </p>
+            <router-link
+              :to="{ path: 'createdcm' }"
+              class="btn btn-light border w-100 my-4 text-left"
+            >
+              店内アナウンスを管理
+            </router-link>
+            <p class="lead small">
+              自分で作成した店内アナウンスや、発注で作成した店内アナウンスを確認、試聴することができます。
+            </p>
+          </div>
         </div>
-        <div class="col content right">
-          <router-link
-            :to="{ path: 'createdcm' }"
-            class="btn btn-light border w-100 text-left my-4 font-weight-bold"
-          >
-            店内アナウンスを管理する
-          </router-link>
-          <p class="lead small">
-            自分で作成した店内アナウンスや、発注で作成した店内アナウンスを確認、試聴することができます。
-          </p>
-          <button
-            type="button"
-            class="btn btn-light border w-100 text-left my-4 font-weight-bold"
-          >
-            発注したアナウンスが完成しました。（5件）
-          </button>
-        </div>
-        <div class="col image-content">
-          <img class="card-img-top" src="../assets/_c@2x.png" />
-          <p class="title">発注</p>
-        </div>
-        <div class="col content right">
-          <router-link
-            :to="{ path: 'orderinstoreannouncement1' }"
-            class="btn btn-light border w-100 text-left my-4 font-weight-bold"
-          >
-            店内アナウンスを発注する
-          </router-link>
-          <p class="lead small">
-            USENのプロのアナウンサーが、ご希望のアナウンスを収録して店内アナウンスを製作いたします。
-          </p>
-          <button
-            type="button"
-            class="btn btn-light border w-100 text-left my-4 font-weight-bold"
-          >
-            発注履歴を確認する
-          </button>
+        <div class="col-md-8">
+          <div class="content">
+            <p class="image">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="56.532"
+                height="52.824"
+                viewBox="0 0 56.532 52.824"
+              >
+                <g
+                  id="グループ_572"
+                  data-name="グループ 572"
+                  transform="translate(-315.26 -253.41)"
+                >
+                  <path
+                    id="パス_1203"
+                    data-name="パス 1203"
+                    d="M437.4,251.13h-26.38A15.118,15.118,0,0,0,395.948,266.2V277.51a15.119,15.119,0,0,0,15.076,15.076h4.06c.568.133,1.115.662.419,2.486-1.147,2.609-3.953,5.954-10.64,8.821,0,0,19.618,1.39,27.431-9.109v.019s1.8-2.217,4.145-2.217h.966A15.119,15.119,0,0,0,452.48,277.51V266.2A15.118,15.118,0,0,0,437.4,251.13Z"
+                    transform="translate(-80.688 2.28)"
+                    fill="#b4b97f"
+                  />
+                </g>
+              </svg>
+              <span class="title">&nbsp;&nbsp;発注する</span>
+            </p>
+            <div class="row">
+              <div class="col">
+                <router-link
+                  :to="{ path: 'orderinstoreannouncement1' }"
+                  class="btn btn-light border w-100 my-4 text-left"
+                >
+                  店内アナウンスを発注
+                </router-link>
+                <p class="lead small">
+                  USENのプロのアナウンサーが、ご希望のアナウンスを収録して店内アナウンスを製作いたします。
+                </p>
+              </div>
+              <div class="col">
+                <router-link
+                  :to="{ path: '' }"
+                  class="btn btn-light border w-100 my-4 text-left"
+                >
+                  発注履歴
+                </router-link>
+                <p class="lead small">
+                  今までの発注したアナウンスの履歴を確認できます。
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -201,26 +351,40 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.image-content {
-  padding: 0;
+.top .content {
+  padding: 20px;
+  background: #fff;
+  border-radius: 1em;
 }
-.content {
-  background: #e2e2e2;
+
+.top a:link,
+.top a:visited,
+.top a:hover,
+.top a:active {
+  text-decoration: none;
+  color: #212529;
 }
-.content.right {
-  border-radius: 0 1em 1em 0;
+.top .content .image {
+  text-align: center;
+  height: 115px;
 }
-.image-content p.title {
-  position: absolute;
-  color: white;
+.top .content .title {
   font-size: 18px;
-  top: 100px;
-  left: 40%;
-  transform: translate(-50%, -50%);
-  margin: 0;
-  padding: 0;
-  width: 70%;
 }
+
+.bottom .content {
+  padding: 20px;
+  background: #fff;
+  border-radius: 1em 1em 0 0;
+}
+.bottom .content .image {
+  text-align: left;
+  height: 55px;
+}
+.bottom .content .title {
+  font-size: 24px;
+}
+
 .dark .content {
   background: #272727;
   color: #fff;

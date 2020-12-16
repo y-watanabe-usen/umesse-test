@@ -19,9 +19,12 @@ export default {
 };
 </script>
 <style>
+.navbar {
+  padding: .5rem 0;
+}
 .bg-umesse {
-  background: -moz-linear-gradient(top, #525e72, #7c8389);
-  background: -webkit-linear-gradient(top, #525e72, #7c8389);
-  background: linear-gradient(to bottom, #525e72, #7c8389);
+  background: -moz-linear-gradient(top, #177dd1, #489fdf);
+  background: -webkit-linear-gradient(top, #177dd1, #489fdf);
+  background: linear-gradient(to bottom, #177dd1, #489fdf);
 }
 </style>
