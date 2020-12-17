@@ -17,6 +17,6 @@
     "jest": "^26.6.3"
   },
   "scripts": {
-    "test": "cd ../../deploy && sh init.sh && cd ../develop/lambda && jest"
+    "test": "jest"
   }
 }

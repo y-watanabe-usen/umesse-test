@@ -1,6 +1,6 @@
 "use strict";
 
-const { getResource } = require("../../umesse/resources");
+const { getResource, getSignedUrl } = require("../../umesse/resources");
 
 /**
  * S3オブジェクトの署名付きURLの取得
