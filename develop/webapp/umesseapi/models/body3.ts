@@ -22,5 +22,23 @@ export interface Body3 {
      * @type {string}
      * @memberof Body3
      */
-    upload?: any;
+    filename?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof Body3
+     */
+    recordedFile?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof Body3
+     */
+    title?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof Body3
+     */
+    description?: any;
 }

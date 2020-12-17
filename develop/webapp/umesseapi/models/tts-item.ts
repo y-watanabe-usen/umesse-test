@@ -18,25 +18,25 @@
  */
 export interface TtsItem {
     /**
-     * 
+     * 合成音声ID
      * @type {string}
      * @memberof TtsItem
      */
     id?: any;
     /**
-     * 
+     * タイトル名
      * @type {string}
      * @memberof TtsItem
      */
     title?: any;
     /**
-     * 
+     * 説明文
      * @type {string}
      * @memberof TtsItem
      */
     description?: any;
     /**
-     * 
+     * 掲載開始日
      * @type {string}
      * @memberof TtsItem
      */

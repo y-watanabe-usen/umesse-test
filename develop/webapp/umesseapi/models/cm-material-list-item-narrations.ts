@@ -18,13 +18,13 @@
  */
 export interface CmMaterialListItemNarrations {
     /**
-     * 
+     * ナレーションID
      * @type {string}
      * @memberof CmMaterialListItemNarrations
      */
     id?: any;
     /**
-     * 
+     * ボリューム値
      * @type {number}
      * @memberof CmMaterialListItemNarrations
      */

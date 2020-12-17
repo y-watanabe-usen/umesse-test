@@ -16,8 +16,8 @@ import { Configuration } from '../configuration';
 // Some imports not used depending on template conditions
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
-import { Body3 } from '../models';
-import { Body4 } from '../models';
+import { Body7 } from '../models';
+import { Body8 } from '../models';
 import { ExternalItem } from '../models';
 /**
  * UploadApi - axios parameter creator
@@ -28,13 +28,13 @@ export const UploadApiAxiosParamCreator = function (configuration?: Configuratio
         /**
          * CMを外部連携する
          * @summary CM外部連携追加
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
-         * @param {string} cmId ID of cm to return
-         * @param {Body3} [body] 
+         * @param {string} xUnisCustomerCd UNIS顧客CD
+         * @param {string} cmId CM ID
+         * @param {Body7} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createUploadCm: async (xUnisCustomerCd: string, cmId: string, body?: Body3, options: any = {}): Promise<RequestArgs> => {
+        createUploadCm: async (xUnisCustomerCd: string, cmId: string, body?: Body7, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'xUnisCustomerCd' is not null or undefined
             if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
                 throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling createUploadCm.');
@@ -43,7 +43,7 @@ export const UploadApiAxiosParamCreator = function (configuration?: Configuratio
             if (cmId === null || cmId === undefined) {
                 throw new RequiredError('cmId','Required parameter cmId was null or undefined when calling createUploadCm.');
             }
-            const localVarPath = `/user/upload/{cmId}`
+            const localVarPath = `/upload/cm/{cmId}`
                 .replace(`{${"cmId"}}`, encodeURIComponent(String(cmId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -82,13 +82,13 @@ export const UploadApiAxiosParamCreator = function (configuration?: Configuratio
         /**
          * CMの外部連携を解除する
          * @summary CM外部連携解除
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
-         * @param {string} cmId ID of cm to return
-         * @param {Body4} [body] 
+         * @param {string} xUnisCustomerCd UNIS顧客CD
+         * @param {string} cmId CM ID
+         * @param {Body8} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteUploadCm: async (xUnisCustomerCd: string, cmId: string, body?: Body4, options: any = {}): Promise<RequestArgs> => {
+        deleteUploadCm: async (xUnisCustomerCd: string, cmId: string, body?: Body8, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'xUnisCustomerCd' is not null or undefined
             if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
                 throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling deleteUploadCm.');
@@ -97,7 +97,7 @@ export const UploadApiAxiosParamCreator = function (configuration?: Configuratio
             if (cmId === null || cmId === undefined) {
                 throw new RequiredError('cmId','Required parameter cmId was null or undefined when calling deleteUploadCm.');
             }
-            const localVarPath = `/user/upload/{cmId}`
+            const localVarPath = `/upload/cm/{cmId}`
                 .replace(`{${"cmId"}}`, encodeURIComponent(String(cmId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -136,8 +136,8 @@ export const UploadApiAxiosParamCreator = function (configuration?: Configuratio
         /**
          * CMの外部連携状態を取得する
          * @summary CM外部連携情報取得
-         * @param {string} cmId ID of cm to return
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
+         * @param {string} cmId CM ID
+         * @param {string} xUnisCustomerCd UNIS顧客CD
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -150,7 +150,7 @@ export const UploadApiAxiosParamCreator = function (configuration?: Configuratio
             if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
                 throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling getUploadCm.');
             }
-            const localVarPath = `/user/upload/{cmId}`
+            const localVarPath = `/upload/cm/{cmId}`
                 .replace(`{${"cmId"}}`, encodeURIComponent(String(cmId)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -185,7 +185,7 @@ export const UploadApiAxiosParamCreator = function (configuration?: Configuratio
         /**
          * CMの外部連携状態を一覧で取得する
          * @summary CM外部連携情報一覧取得
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
+         * @param {string} xUnisCustomerCd UNIS顧客CD
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -194,7 +194,7 @@ export const UploadApiAxiosParamCreator = function (configuration?: Configuratio
             if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
                 throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling listUploadCm.');
             }
-            const localVarPath = `/user/upload`;
+            const localVarPath = `/upload/cm`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
             let baseOptions;
@@ -237,13 +237,13 @@ export const UploadApiFp = function(configuration?: Configuration) {
         /**
          * CMを外部連携する
          * @summary CM外部連携追加
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
-         * @param {string} cmId ID of cm to return
-         * @param {Body3} [body] 
+         * @param {string} xUnisCustomerCd UNIS顧客CD
+         * @param {string} cmId CM ID
+         * @param {Body7} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createUploadCm(xUnisCustomerCd: string, cmId: string, body?: Body3, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalItem>> {
+        async createUploadCm(xUnisCustomerCd: string, cmId: string, body?: Body7, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalItem>> {
             const localVarAxiosArgs = await UploadApiAxiosParamCreator(configuration).createUploadCm(xUnisCustomerCd, cmId, body, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
@@ -253,13 +253,13 @@ export const UploadApiFp = function(configuration?: Configuration) {
         /**
          * CMの外部連携を解除する
          * @summary CM外部連携解除
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
-         * @param {string} cmId ID of cm to return
-         * @param {Body4} [body] 
+         * @param {string} xUnisCustomerCd UNIS顧客CD
+         * @param {string} cmId CM ID
+         * @param {Body8} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteUploadCm(xUnisCustomerCd: string, cmId: string, body?: Body4, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalItem>> {
+        async deleteUploadCm(xUnisCustomerCd: string, cmId: string, body?: Body8, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalItem>> {
             const localVarAxiosArgs = await UploadApiAxiosParamCreator(configuration).deleteUploadCm(xUnisCustomerCd, cmId, body, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
@@ -269,8 +269,8 @@ export const UploadApiFp = function(configuration?: Configuration) {
         /**
          * CMの外部連携状態を取得する
          * @summary CM外部連携情報取得
-         * @param {string} cmId ID of cm to return
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
+         * @param {string} cmId CM ID
+         * @param {string} xUnisCustomerCd UNIS顧客CD
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -284,7 +284,7 @@ export const UploadApiFp = function(configuration?: Configuration) {
         /**
          * CMの外部連携状態を一覧で取得する
          * @summary CM外部連携情報一覧取得
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
+         * @param {string} xUnisCustomerCd UNIS顧客CD
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -307,32 +307,32 @@ export const UploadApiFactory = function (configuration?: Configuration, basePat
         /**
          * CMを外部連携する
          * @summary CM外部連携追加
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
-         * @param {string} cmId ID of cm to return
-         * @param {Body3} [body] 
+         * @param {string} xUnisCustomerCd UNIS顧客CD
+         * @param {string} cmId CM ID
+         * @param {Body7} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createUploadCm(xUnisCustomerCd: string, cmId: string, body?: Body3, options?: any): AxiosPromise<ExternalItem> {
+        createUploadCm(xUnisCustomerCd: string, cmId: string, body?: Body7, options?: any): AxiosPromise<ExternalItem> {
             return UploadApiFp(configuration).createUploadCm(xUnisCustomerCd, cmId, body, options).then((request) => request(axios, basePath));
         },
         /**
          * CMの外部連携を解除する
          * @summary CM外部連携解除
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
-         * @param {string} cmId ID of cm to return
-         * @param {Body4} [body] 
+         * @param {string} xUnisCustomerCd UNIS顧客CD
+         * @param {string} cmId CM ID
+         * @param {Body8} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteUploadCm(xUnisCustomerCd: string, cmId: string, body?: Body4, options?: any): AxiosPromise<ExternalItem> {
+        deleteUploadCm(xUnisCustomerCd: string, cmId: string, body?: Body8, options?: any): AxiosPromise<ExternalItem> {
             return UploadApiFp(configuration).deleteUploadCm(xUnisCustomerCd, cmId, body, options).then((request) => request(axios, basePath));
         },
         /**
          * CMの外部連携状態を取得する
          * @summary CM外部連携情報取得
-         * @param {string} cmId ID of cm to return
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
+         * @param {string} cmId CM ID
+         * @param {string} xUnisCustomerCd UNIS顧客CD
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -342,7 +342,7 @@ export const UploadApiFactory = function (configuration?: Configuration, basePat
         /**
          * CMの外部連携状態を一覧で取得する
          * @summary CM外部連携情報一覧取得
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
+         * @param {string} xUnisCustomerCd UNIS顧客CD
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -362,34 +362,34 @@ export class UploadApi extends BaseAPI {
     /**
      * CMを外部連携する
      * @summary CM外部連携追加
-     * @param {string} xUnisCustomerCd ID of unis customer cd to return
-     * @param {string} cmId ID of cm to return
-     * @param {Body3} [body] 
+     * @param {string} xUnisCustomerCd UNIS顧客CD
+     * @param {string} cmId CM ID
+     * @param {Body7} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UploadApi
      */
-    public createUploadCm(xUnisCustomerCd: string, cmId: string, body?: Body3, options?: any) {
+    public createUploadCm(xUnisCustomerCd: string, cmId: string, body?: Body7, options?: any) {
         return UploadApiFp(this.configuration).createUploadCm(xUnisCustomerCd, cmId, body, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * CMの外部連携を解除する
      * @summary CM外部連携解除
-     * @param {string} xUnisCustomerCd ID of unis customer cd to return
-     * @param {string} cmId ID of cm to return
-     * @param {Body4} [body] 
+     * @param {string} xUnisCustomerCd UNIS顧客CD
+     * @param {string} cmId CM ID
+     * @param {Body8} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UploadApi
      */
-    public deleteUploadCm(xUnisCustomerCd: string, cmId: string, body?: Body4, options?: any) {
+    public deleteUploadCm(xUnisCustomerCd: string, cmId: string, body?: Body8, options?: any) {
         return UploadApiFp(this.configuration).deleteUploadCm(xUnisCustomerCd, cmId, body, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * CMの外部連携状態を取得する
      * @summary CM外部連携情報取得
-     * @param {string} cmId ID of cm to return
-     * @param {string} xUnisCustomerCd ID of unis customer cd to return
+     * @param {string} cmId CM ID
+     * @param {string} xUnisCustomerCd UNIS顧客CD
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UploadApi
@@ -400,7 +400,7 @@ export class UploadApi extends BaseAPI {
     /**
      * CMの外部連携状態を一覧で取得する
      * @summary CM外部連携情報一覧取得
-     * @param {string} xUnisCustomerCd ID of unis customer cd to return
+     * @param {string} xUnisCustomerCd UNIS顧客CD
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UploadApi

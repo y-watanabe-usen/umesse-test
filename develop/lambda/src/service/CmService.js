@@ -7,7 +7,7 @@ const { getCm, createCm, updateCm, deleteCm } = require("../../umesse/cm");
  * CMを新規作成する
  *
  * body Body_1  (optional)
- * xUnisCustomerCd String ID of unis customer cd to return
+ * xUnisCustomerCd String UNIS顧客CD
  * returns CmItem
  **/
 exports.createUserCm = function (body, xUnisCustomerCd) {
@@ -27,8 +27,8 @@ exports.createUserCm = function (body, xUnisCustomerCd) {
  * CM情報削除
  * CMを削除する
  *
- * cmId String ID of cm to return
- * xUnisCustomerCd String ID of unis customer cd to return
+ * cmId String CM ID
+ * xUnisCustomerCd String UNIS顧客CD
  * returns CmItem
  **/
 exports.deleteUserCm = function (cmId, xUnisCustomerCd) {
@@ -48,8 +48,8 @@ exports.deleteUserCm = function (cmId, xUnisCustomerCd) {
  * CM情報取得
  * CMの情報を取得する
  *
- * cmId String ID of cm to return
- * xUnisCustomerCd String ID of unis customer cd to return
+ * cmId String CM ID
+ * xUnisCustomerCd String UNIS顧客CD
  * returns CmItem
  **/
 exports.getUserCm = function (cmId, xUnisCustomerCd) {
@@ -69,7 +69,7 @@ exports.getUserCm = function (cmId, xUnisCustomerCd) {
  * CM一覧取得
  * CMの情報を一覧で取得する
  *
- * xUnisCustomerCd String ID of unis customer cd to return
+ * xUnisCustomerCd String UNIS顧客CD
  * returns List
  **/
 exports.listUserCm = function (xUnisCustomerCd) {
@@ -90,8 +90,8 @@ exports.listUserCm = function (xUnisCustomerCd) {
  * CMの情報を更新する
  *
  * body Body_2  (optional)
- * cmId String ID of cm to return
- * xUnisCustomerCd String ID of unis customer cd to return
+ * cmId String CM ID
+ * xUnisCustomerCd String UNIS顧客CD
  * returns CmItem
  **/
 exports.updateUserCm = function (body, cmId, xUnisCustomerCd) {

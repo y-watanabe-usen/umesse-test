@@ -18,19 +18,19 @@
  */
 export interface WordItem {
     /**
-     * 
+     * TTSテンプレートID
      * @type {string}
      * @memberof WordItem
      */
     id?: any;
     /**
-     * 
+     * タイトル
      * @type {string}
      * @memberof WordItem
      */
     title?: any;
     /**
-     * 
+     * 説明文
      * @type {string}
      * @memberof WordItem
      */

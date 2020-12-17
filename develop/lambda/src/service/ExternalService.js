@@ -1,20 +1,20 @@
 "use strict";
 
-const { getExternal, completeExternal } = require("../../umesse/external");
+const { getExternalCm, completeExternalCm } = require("../../umesse/external");
 
 /**
  * CM外部連携完了（外部システム専用）
  * 外部連携したCMの結果を登録する
  *
  * body Body_9  (optional)
- * external String ID of external system to return
- * unisCustomerCd String ID of unis customer cd to return
+ * external String 外部システム区分
+ * unisCustomerCd String UNIS顧客CD
  * returns inline_response_200_2
  **/
-exports.completeExternal = function (body, external, unisCustomerCd) {
+exports.completeExternalCm = function (body, external, unisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     var response = {};
-    const json = await completeExternal(unisCustomerCd, external, body);
+    const json = await completeExternalCm(unisCustomerCd, external, body);
     response["application/json"] = json;
     if (Object.keys(response).length > 0 && !json.message) {
       resolve(response[Object.keys(response)[0]]);
@@ -28,14 +28,14 @@ exports.completeExternal = function (body, external, unisCustomerCd) {
  * CM外部連携情報取得（外部システム専用）
  * 外部連携するCMの情報を取得する
  *
- * external String ID of external system to return
- * unisCustomerCd String ID of unis customer cd to return
+ * external String 外部システム区分
+ * unisCustomerCd String UNIS顧客CD
  * returns inline_response_200_1
  **/
-exports.getExternal = function (external, unisCustomerCd) {
+exports.getExternalCm = function (external, unisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     var response = {};
-    const json = await getExternal(unisCustomerCd, external);
+    const json = await getExternalCm(unisCustomerCd, external);
     response["application/json"] = json;
     if (Object.keys(response).length > 0 && !json.message) {
       resolve(response[Object.keys(response)[0]]);
@@ -49,13 +49,13 @@ exports.getExternal = function (external, unisCustomerCd) {
  * CM外部連携情報一覧取得（外部システム専用）
  * 外部連携するCMの情報を一覧で取得する
  *
- * external String ID of external system to return
+ * external String 外部システム区分
  * returns List
  **/
 exports.listExternalCm = function (external) {
   return new Promise(async function (resolve, reject) {
     var response = {};
-    const json = await getExternal("", external);
+    const json = await getExternalCm("", external);
     response["application/json"] = json;
     if (Object.keys(response).length > 0 && !json.message) {
       resolve(response[Object.keys(response)[0]]);

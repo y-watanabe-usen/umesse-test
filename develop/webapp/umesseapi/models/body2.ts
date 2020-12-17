@@ -58,5 +58,5 @@ export interface Body2 {
      * @type {string}
      * @memberof Body2
      */
-    upload?: any;
+    uploadSystem?: any;
 }

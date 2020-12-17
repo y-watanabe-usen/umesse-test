@@ -18,25 +18,25 @@
  */
 export interface RecordingItem {
     /**
-     * 
+     * 録音音声ID
      * @type {string}
      * @memberof RecordingItem
      */
     id?: any;
     /**
-     * 
+     * タイトル名
      * @type {string}
      * @memberof RecordingItem
      */
     title?: any;
     /**
-     * 
+     * 説明文
      * @type {string}
      * @memberof RecordingItem
      */
     description?: any;
     /**
-     * 
+     * 掲載開始日
      * @type {string}
      * @memberof RecordingItem
      */

@@ -22,11 +22,5 @@ export interface Body8 {
      * @type {string}
      * @memberof Body8
      */
-    title?: any;
-    /**
-     * 
-     * @type {string}
-     * @memberof Body8
-     */
-    description?: any;
+    endDate?: any;
 }

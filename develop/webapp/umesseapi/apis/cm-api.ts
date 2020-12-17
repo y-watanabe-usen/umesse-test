@@ -28,7 +28,7 @@ export const CmApiAxiosParamCreator = function (configuration?: Configuration) {
         /**
          * CMを新規作成する
          * @summary CM新規結合
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
+         * @param {string} xUnisCustomerCd UNIS顧客CD
          * @param {Body1} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -76,8 +76,8 @@ export const CmApiAxiosParamCreator = function (configuration?: Configuration) {
         /**
          * CMを削除する
          * @summary CM情報削除
-         * @param {string} cmId ID of cm to return
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
+         * @param {string} cmId CM ID
+         * @param {string} xUnisCustomerCd UNIS顧客CD
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -125,8 +125,8 @@ export const CmApiAxiosParamCreator = function (configuration?: Configuration) {
         /**
          * CMの情報を取得する
          * @summary CM情報取得
-         * @param {string} cmId ID of cm to return
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
+         * @param {string} cmId CM ID
+         * @param {string} xUnisCustomerCd UNIS顧客CD
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -174,7 +174,7 @@ export const CmApiAxiosParamCreator = function (configuration?: Configuration) {
         /**
          * CMの情報を一覧で取得する
          * @summary CM一覧取得
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
+         * @param {string} xUnisCustomerCd UNIS顧客CD
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -217,8 +217,8 @@ export const CmApiAxiosParamCreator = function (configuration?: Configuration) {
         /**
          * CMの情報を更新する
          * @summary CM情報更新
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
-         * @param {string} cmId ID of cm to return
+         * @param {string} xUnisCustomerCd UNIS顧客CD
+         * @param {string} cmId CM ID
          * @param {Body2} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -280,7 +280,7 @@ export const CmApiFp = function(configuration?: Configuration) {
         /**
          * CMを新規作成する
          * @summary CM新規結合
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
+         * @param {string} xUnisCustomerCd UNIS顧客CD
          * @param {Body1} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -295,8 +295,8 @@ export const CmApiFp = function(configuration?: Configuration) {
         /**
          * CMを削除する
          * @summary CM情報削除
-         * @param {string} cmId ID of cm to return
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
+         * @param {string} cmId CM ID
+         * @param {string} xUnisCustomerCd UNIS顧客CD
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -310,8 +310,8 @@ export const CmApiFp = function(configuration?: Configuration) {
         /**
          * CMの情報を取得する
          * @summary CM情報取得
-         * @param {string} cmId ID of cm to return
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
+         * @param {string} cmId CM ID
+         * @param {string} xUnisCustomerCd UNIS顧客CD
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -325,7 +325,7 @@ export const CmApiFp = function(configuration?: Configuration) {
         /**
          * CMの情報を一覧で取得する
          * @summary CM一覧取得
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
+         * @param {string} xUnisCustomerCd UNIS顧客CD
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -339,8 +339,8 @@ export const CmApiFp = function(configuration?: Configuration) {
         /**
          * CMの情報を更新する
          * @summary CM情報更新
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
-         * @param {string} cmId ID of cm to return
+         * @param {string} xUnisCustomerCd UNIS顧客CD
+         * @param {string} cmId CM ID
          * @param {Body2} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -364,7 +364,7 @@ export const CmApiFactory = function (configuration?: Configuration, basePath?: 
         /**
          * CMを新規作成する
          * @summary CM新規結合
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
+         * @param {string} xUnisCustomerCd UNIS顧客CD
          * @param {Body1} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -375,8 +375,8 @@ export const CmApiFactory = function (configuration?: Configuration, basePath?: 
         /**
          * CMを削除する
          * @summary CM情報削除
-         * @param {string} cmId ID of cm to return
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
+         * @param {string} cmId CM ID
+         * @param {string} xUnisCustomerCd UNIS顧客CD
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -386,8 +386,8 @@ export const CmApiFactory = function (configuration?: Configuration, basePath?: 
         /**
          * CMの情報を取得する
          * @summary CM情報取得
-         * @param {string} cmId ID of cm to return
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
+         * @param {string} cmId CM ID
+         * @param {string} xUnisCustomerCd UNIS顧客CD
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -397,7 +397,7 @@ export const CmApiFactory = function (configuration?: Configuration, basePath?: 
         /**
          * CMの情報を一覧で取得する
          * @summary CM一覧取得
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
+         * @param {string} xUnisCustomerCd UNIS顧客CD
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -407,8 +407,8 @@ export const CmApiFactory = function (configuration?: Configuration, basePath?: 
         /**
          * CMの情報を更新する
          * @summary CM情報更新
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
-         * @param {string} cmId ID of cm to return
+         * @param {string} xUnisCustomerCd UNIS顧客CD
+         * @param {string} cmId CM ID
          * @param {Body2} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -429,7 +429,7 @@ export class CmApi extends BaseAPI {
     /**
      * CMを新規作成する
      * @summary CM新規結合
-     * @param {string} xUnisCustomerCd ID of unis customer cd to return
+     * @param {string} xUnisCustomerCd UNIS顧客CD
      * @param {Body1} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -441,8 +441,8 @@ export class CmApi extends BaseAPI {
     /**
      * CMを削除する
      * @summary CM情報削除
-     * @param {string} cmId ID of cm to return
-     * @param {string} xUnisCustomerCd ID of unis customer cd to return
+     * @param {string} cmId CM ID
+     * @param {string} xUnisCustomerCd UNIS顧客CD
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CmApi
@@ -453,8 +453,8 @@ export class CmApi extends BaseAPI {
     /**
      * CMの情報を取得する
      * @summary CM情報取得
-     * @param {string} cmId ID of cm to return
-     * @param {string} xUnisCustomerCd ID of unis customer cd to return
+     * @param {string} cmId CM ID
+     * @param {string} xUnisCustomerCd UNIS顧客CD
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CmApi
@@ -465,7 +465,7 @@ export class CmApi extends BaseAPI {
     /**
      * CMの情報を一覧で取得する
      * @summary CM一覧取得
-     * @param {string} xUnisCustomerCd ID of unis customer cd to return
+     * @param {string} xUnisCustomerCd UNIS顧客CD
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CmApi
@@ -476,8 +476,8 @@ export class CmApi extends BaseAPI {
     /**
      * CMの情報を更新する
      * @summary CM情報更新
-     * @param {string} xUnisCustomerCd ID of unis customer cd to return
-     * @param {string} cmId ID of cm to return
+     * @param {string} xUnisCustomerCd UNIS顧客CD
+     * @param {string} cmId CM ID
      * @param {Body2} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}

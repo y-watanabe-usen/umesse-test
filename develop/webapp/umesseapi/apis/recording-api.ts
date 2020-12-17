@@ -16,7 +16,7 @@ import { Configuration } from '../configuration';
 // Some imports not used depending on template conditions
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
-import { Body6 } from '../models';
+import { Body4 } from '../models';
 import { RecordingItem } from '../models';
 /**
  * RecordingApi - axios parameter creator
@@ -27,7 +27,7 @@ export const RecordingApiAxiosParamCreator = function (configuration?: Configura
         /**
          * 録音音声素材を新規登録する
          * @summary 新規録音データ
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
+         * @param {string} xUnisCustomerCd UNIS顧客CD
          * @param {string} [filename] 
          * @param {string} [recordedFile] 
          * @param {string} [title] 
@@ -94,8 +94,8 @@ export const RecordingApiAxiosParamCreator = function (configuration?: Configura
         /**
          * 録音音声素材を削除する
          * @summary 録音データ削除
-         * @param {string} recordingId ID of recording to return
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
+         * @param {string} recordingId 録音音声ID
+         * @param {string} xUnisCustomerCd UNIS顧客CD
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -143,8 +143,8 @@ export const RecordingApiAxiosParamCreator = function (configuration?: Configura
         /**
          * 録音音声素材の情報を取得する
          * @summary 録音データ取得
-         * @param {string} recordingId ID of recording to return
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
+         * @param {string} recordingId 録音音声ID
+         * @param {string} xUnisCustomerCd UNIS顧客CD
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -192,7 +192,7 @@ export const RecordingApiAxiosParamCreator = function (configuration?: Configura
         /**
          * 録音音声素材の情報を一覧で取得する
          * @summary 録音データ一覧取得
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
+         * @param {string} xUnisCustomerCd UNIS顧客CD
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -235,13 +235,13 @@ export const RecordingApiAxiosParamCreator = function (configuration?: Configura
         /**
          * 録音音声素材の情報を更新する
          * @summary 録音データ更新（メタデータのみ）
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
-         * @param {string} recordingId ID of recording to return
-         * @param {Body6} [body] 
+         * @param {string} xUnisCustomerCd UNIS顧客CD
+         * @param {string} recordingId 録音音声ID
+         * @param {Body4} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateUserRecording: async (xUnisCustomerCd: string, recordingId: string, body?: Body6, options: any = {}): Promise<RequestArgs> => {
+        updateUserRecording: async (xUnisCustomerCd: string, recordingId: string, body?: Body4, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'xUnisCustomerCd' is not null or undefined
             if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
                 throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling updateUserRecording.');
@@ -298,7 +298,7 @@ export const RecordingApiFp = function(configuration?: Configuration) {
         /**
          * 録音音声素材を新規登録する
          * @summary 新規録音データ
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
+         * @param {string} xUnisCustomerCd UNIS顧客CD
          * @param {string} [filename] 
          * @param {string} [recordedFile] 
          * @param {string} [title] 
@@ -316,12 +316,12 @@ export const RecordingApiFp = function(configuration?: Configuration) {
         /**
          * 録音音声素材を削除する
          * @summary 録音データ削除
-         * @param {string} recordingId ID of recording to return
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
+         * @param {string} recordingId 録音音声ID
+         * @param {string} xUnisCustomerCd UNIS顧客CD
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteUserRecording(recordingId: string, xUnisCustomerCd: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+        async deleteUserRecording(recordingId: string, xUnisCustomerCd: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RecordingItem>> {
             const localVarAxiosArgs = await RecordingApiAxiosParamCreator(configuration).deleteUserRecording(recordingId, xUnisCustomerCd, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
@@ -331,8 +331,8 @@ export const RecordingApiFp = function(configuration?: Configuration) {
         /**
          * 録音音声素材の情報を取得する
          * @summary 録音データ取得
-         * @param {string} recordingId ID of recording to return
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
+         * @param {string} recordingId 録音音声ID
+         * @param {string} xUnisCustomerCd UNIS顧客CD
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -346,7 +346,7 @@ export const RecordingApiFp = function(configuration?: Configuration) {
         /**
          * 録音音声素材の情報を一覧で取得する
          * @summary 録音データ一覧取得
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
+         * @param {string} xUnisCustomerCd UNIS顧客CD
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -360,13 +360,13 @@ export const RecordingApiFp = function(configuration?: Configuration) {
         /**
          * 録音音声素材の情報を更新する
          * @summary 録音データ更新（メタデータのみ）
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
-         * @param {string} recordingId ID of recording to return
-         * @param {Body6} [body] 
+         * @param {string} xUnisCustomerCd UNIS顧客CD
+         * @param {string} recordingId 録音音声ID
+         * @param {Body4} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateUserRecording(xUnisCustomerCd: string, recordingId: string, body?: Body6, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RecordingItem>> {
+        async updateUserRecording(xUnisCustomerCd: string, recordingId: string, body?: Body4, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RecordingItem>> {
             const localVarAxiosArgs = await RecordingApiAxiosParamCreator(configuration).updateUserRecording(xUnisCustomerCd, recordingId, body, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
@@ -385,7 +385,7 @@ export const RecordingApiFactory = function (configuration?: Configuration, base
         /**
          * 録音音声素材を新規登録する
          * @summary 新規録音データ
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
+         * @param {string} xUnisCustomerCd UNIS顧客CD
          * @param {string} [filename] 
          * @param {string} [recordedFile] 
          * @param {string} [title] 
@@ -399,19 +399,19 @@ export const RecordingApiFactory = function (configuration?: Configuration, base
         /**
          * 録音音声素材を削除する
          * @summary 録音データ削除
-         * @param {string} recordingId ID of recording to return
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
+         * @param {string} recordingId 録音音声ID
+         * @param {string} xUnisCustomerCd UNIS顧客CD
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteUserRecording(recordingId: string, xUnisCustomerCd: string, options?: any): AxiosPromise<void> {
+        deleteUserRecording(recordingId: string, xUnisCustomerCd: string, options?: any): AxiosPromise<RecordingItem> {
             return RecordingApiFp(configuration).deleteUserRecording(recordingId, xUnisCustomerCd, options).then((request) => request(axios, basePath));
         },
         /**
          * 録音音声素材の情報を取得する
          * @summary 録音データ取得
-         * @param {string} recordingId ID of recording to return
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
+         * @param {string} recordingId 録音音声ID
+         * @param {string} xUnisCustomerCd UNIS顧客CD
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -421,7 +421,7 @@ export const RecordingApiFactory = function (configuration?: Configuration, base
         /**
          * 録音音声素材の情報を一覧で取得する
          * @summary 録音データ一覧取得
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
+         * @param {string} xUnisCustomerCd UNIS顧客CD
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -431,13 +431,13 @@ export const RecordingApiFactory = function (configuration?: Configuration, base
         /**
          * 録音音声素材の情報を更新する
          * @summary 録音データ更新（メタデータのみ）
-         * @param {string} xUnisCustomerCd ID of unis customer cd to return
-         * @param {string} recordingId ID of recording to return
-         * @param {Body6} [body] 
+         * @param {string} xUnisCustomerCd UNIS顧客CD
+         * @param {string} recordingId 録音音声ID
+         * @param {Body4} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateUserRecording(xUnisCustomerCd: string, recordingId: string, body?: Body6, options?: any): AxiosPromise<RecordingItem> {
+        updateUserRecording(xUnisCustomerCd: string, recordingId: string, body?: Body4, options?: any): AxiosPromise<RecordingItem> {
             return RecordingApiFp(configuration).updateUserRecording(xUnisCustomerCd, recordingId, body, options).then((request) => request(axios, basePath));
         },
     };
@@ -453,7 +453,7 @@ export class RecordingApi extends BaseAPI {
     /**
      * 録音音声素材を新規登録する
      * @summary 新規録音データ
-     * @param {string} xUnisCustomerCd ID of unis customer cd to return
+     * @param {string} xUnisCustomerCd UNIS顧客CD
      * @param {string} [filename] 
      * @param {string} [recordedFile] 
      * @param {string} [title] 
@@ -468,8 +468,8 @@ export class RecordingApi extends BaseAPI {
     /**
      * 録音音声素材を削除する
      * @summary 録音データ削除
-     * @param {string} recordingId ID of recording to return
-     * @param {string} xUnisCustomerCd ID of unis customer cd to return
+     * @param {string} recordingId 録音音声ID
+     * @param {string} xUnisCustomerCd UNIS顧客CD
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RecordingApi
@@ -480,8 +480,8 @@ export class RecordingApi extends BaseAPI {
     /**
      * 録音音声素材の情報を取得する
      * @summary 録音データ取得
-     * @param {string} recordingId ID of recording to return
-     * @param {string} xUnisCustomerCd ID of unis customer cd to return
+     * @param {string} recordingId 録音音声ID
+     * @param {string} xUnisCustomerCd UNIS顧客CD
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RecordingApi
@@ -492,7 +492,7 @@ export class RecordingApi extends BaseAPI {
     /**
      * 録音音声素材の情報を一覧で取得する
      * @summary 録音データ一覧取得
-     * @param {string} xUnisCustomerCd ID of unis customer cd to return
+     * @param {string} xUnisCustomerCd UNIS顧客CD
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RecordingApi
@@ -503,14 +503,14 @@ export class RecordingApi extends BaseAPI {
     /**
      * 録音音声素材の情報を更新する
      * @summary 録音データ更新（メタデータのみ）
-     * @param {string} xUnisCustomerCd ID of unis customer cd to return
-     * @param {string} recordingId ID of recording to return
-     * @param {Body6} [body] 
+     * @param {string} xUnisCustomerCd UNIS顧客CD
+     * @param {string} recordingId 録音音声ID
+     * @param {Body4} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RecordingApi
      */
-    public updateUserRecording(xUnisCustomerCd: string, recordingId: string, body?: Body6, options?: any) {
+    public updateUserRecording(xUnisCustomerCd: string, recordingId: string, body?: Body4, options?: any) {
         return RecordingApiFp(this.configuration).updateUserRecording(xUnisCustomerCd, recordingId, body, options).then((request) => request(this.axios, this.basePath));
     }
 }

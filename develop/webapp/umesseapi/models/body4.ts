@@ -22,5 +22,11 @@ export interface Body4 {
      * @type {string}
      * @memberof Body4
      */
-    endDate?: any;
+    title?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof Body4
+     */
+    description?: any;
 }

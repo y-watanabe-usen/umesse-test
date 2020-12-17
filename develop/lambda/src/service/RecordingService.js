@@ -12,16 +12,16 @@ const {
  * 新規録音データ
  * 録音音声素材を新規登録する
  *
- * xUnisCustomerCd String ID of unis customer cd to return
+ * xUnisCustomerCd String UNIS顧客CD
  * returns List
  **/
-exports.createUserRecording = function (xUnisCustomerCd, filename, resources) {
+exports.createUserRecording = function (body, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     var response = {};
     const json = await createUserResource(
       xUnisCustomerCd,
       constants.userResource.RECORDING,
-      resources
+      body
     );
     response["application/json"] = json;
     if (Object.keys(response).length > 0 && !json.message) {
@@ -36,9 +36,9 @@ exports.createUserRecording = function (xUnisCustomerCd, filename, resources) {
  * 録音データ削除
  * 録音音声素材を削除する
  *
- * recordingId String ID of recording to return
- * xUnisCustomerCd String ID of unis customer cd to return
- * no response value expected for this operation
+ * recordingId String 録音音声ID
+ * xUnisCustomerCd String UNIS顧客CD
+ * returns RecordingItem
  **/
 exports.deleteUserRecording = function (recordingId, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
@@ -61,8 +61,8 @@ exports.deleteUserRecording = function (recordingId, xUnisCustomerCd) {
  * 録音データ取得
  * 録音音声素材の情報を取得する
  *
- * recordingId String ID of recording to return
- * xUnisCustomerCd String ID of unis customer cd to return
+ * recordingId String 録音音声ID
+ * xUnisCustomerCd String UNIS顧客CD
  * returns RecordingItem
  **/
 exports.getUserRecording = function (recordingId, xUnisCustomerCd) {
@@ -86,7 +86,7 @@ exports.getUserRecording = function (recordingId, xUnisCustomerCd) {
  * 録音データ一覧取得
  * 録音音声素材の情報を一覧で取得する
  *
- * xUnisCustomerCd String ID of unis customer cd to return
+ * xUnisCustomerCd String UNIS顧客CD
  * returns List
  **/
 exports.listUserRecording = function (xUnisCustomerCd) {
@@ -109,9 +109,9 @@ exports.listUserRecording = function (xUnisCustomerCd) {
  * 録音データ更新（メタデータのみ）
  * 録音音声素材の情報を更新する
  *
- * body Body_6  (optional)
- * recordingId String ID of recording to return
- * xUnisCustomerCd String ID of unis customer cd to return
+ * body Body_4  (optional)
+ * recordingId String 録音音声ID
+ * xUnisCustomerCd String UNIS顧客CD
  * returns RecordingItem
  **/
 exports.updateUserRecording = function (body, recordingId, xUnisCustomerCd) {

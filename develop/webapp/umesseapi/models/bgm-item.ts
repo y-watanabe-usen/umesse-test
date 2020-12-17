@@ -18,25 +18,25 @@
  */
 export interface BgmItem {
     /**
-     * 
+     * BGM ID
      * @type {string}
      * @memberof BgmItem
      */
     id?: any;
     /**
-     * 
+     * タイトル
      * @type {string}
      * @memberof BgmItem
      */
     title?: any;
     /**
-     * 
+     * 説明文
      * @type {string}
      * @memberof BgmItem
      */
     description?: any;
     /**
-     * 
+     * 秒数
      * @type {number}
      * @memberof BgmItem
      */
@@ -52,7 +52,7 @@ export interface BgmItem {
      * @type {Array&lt;SceneItem&gt;}
      * @memberof BgmItem
      */
-    scenes?: any;
+    scene?: any;
     /**
      * 
      * @type {string}
