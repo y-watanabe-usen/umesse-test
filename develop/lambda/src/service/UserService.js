@@ -6,7 +6,7 @@ const { getUser } = require("../../umesse/user");
  * ユーザー情報取得
  * ユーザーの情報を取得する
  *
- * xUnisCustomerCd String ID of unis customer cd to return
+ * xUnisCustomerCd String UNIS顧客CD
  * returns User
  **/
 exports.getUser = function (xUnisCustomerCd) {

@@ -35,10 +35,4 @@ export interface ModelError {
      * @memberof ModelError
      */
     message?: any;
-    /**
-     * 
-     * @type {string}
-     * @memberof ModelError
-     */
-    detail?: any;
 }

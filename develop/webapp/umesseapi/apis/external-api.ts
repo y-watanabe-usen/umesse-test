@@ -28,8 +28,8 @@ export const ExternalApiAxiosParamCreator = function (configuration?: Configurat
         /**
          * 外部連携したCMの結果を登録する
          * @summary CM外部連携完了（外部システム専用）
-         * @param {string} external ID of external system to return
-         * @param {string} unisCustomerCd ID of unis customer cd to return
+         * @param {string} external 外部システム区分
+         * @param {string} unisCustomerCd UNIS顧客CD
          * @param {Body9} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -79,8 +79,8 @@ export const ExternalApiAxiosParamCreator = function (configuration?: Configurat
         /**
          * 外部連携するCMの情報を取得する
          * @summary CM外部連携情報取得（外部システム専用）
-         * @param {string} external ID of external system to return
-         * @param {string} unisCustomerCd ID of unis customer cd to return
+         * @param {string} external 外部システム区分
+         * @param {string} unisCustomerCd UNIS顧客CD
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -125,7 +125,7 @@ export const ExternalApiAxiosParamCreator = function (configuration?: Configurat
         /**
          * 外部連携するCMの情報を一覧で取得する
          * @summary CM外部連携情報一覧取得（外部システム専用）
-         * @param {string} external ID of external system to return
+         * @param {string} external 外部システム区分
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -174,8 +174,8 @@ export const ExternalApiFp = function(configuration?: Configuration) {
         /**
          * 外部連携したCMの結果を登録する
          * @summary CM外部連携完了（外部システム専用）
-         * @param {string} external ID of external system to return
-         * @param {string} unisCustomerCd ID of unis customer cd to return
+         * @param {string} external 外部システム区分
+         * @param {string} unisCustomerCd UNIS顧客CD
          * @param {Body9} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -190,8 +190,8 @@ export const ExternalApiFp = function(configuration?: Configuration) {
         /**
          * 外部連携するCMの情報を取得する
          * @summary CM外部連携情報取得（外部システム専用）
-         * @param {string} external ID of external system to return
-         * @param {string} unisCustomerCd ID of unis customer cd to return
+         * @param {string} external 外部システム区分
+         * @param {string} unisCustomerCd UNIS顧客CD
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -205,7 +205,7 @@ export const ExternalApiFp = function(configuration?: Configuration) {
         /**
          * 外部連携するCMの情報を一覧で取得する
          * @summary CM外部連携情報一覧取得（外部システム専用）
-         * @param {string} external ID of external system to return
+         * @param {string} external 外部システム区分
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -228,8 +228,8 @@ export const ExternalApiFactory = function (configuration?: Configuration, baseP
         /**
          * 外部連携したCMの結果を登録する
          * @summary CM外部連携完了（外部システム専用）
-         * @param {string} external ID of external system to return
-         * @param {string} unisCustomerCd ID of unis customer cd to return
+         * @param {string} external 外部システム区分
+         * @param {string} unisCustomerCd UNIS顧客CD
          * @param {Body9} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
@@ -240,8 +240,8 @@ export const ExternalApiFactory = function (configuration?: Configuration, baseP
         /**
          * 外部連携するCMの情報を取得する
          * @summary CM外部連携情報取得（外部システム専用）
-         * @param {string} external ID of external system to return
-         * @param {string} unisCustomerCd ID of unis customer cd to return
+         * @param {string} external 外部システム区分
+         * @param {string} unisCustomerCd UNIS顧客CD
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -251,7 +251,7 @@ export const ExternalApiFactory = function (configuration?: Configuration, baseP
         /**
          * 外部連携するCMの情報を一覧で取得する
          * @summary CM外部連携情報一覧取得（外部システム専用）
-         * @param {string} external ID of external system to return
+         * @param {string} external 外部システム区分
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
@@ -271,8 +271,8 @@ export class ExternalApi extends BaseAPI {
     /**
      * 外部連携したCMの結果を登録する
      * @summary CM外部連携完了（外部システム専用）
-     * @param {string} external ID of external system to return
-     * @param {string} unisCustomerCd ID of unis customer cd to return
+     * @param {string} external 外部システム区分
+     * @param {string} unisCustomerCd UNIS顧客CD
      * @param {Body9} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -284,8 +284,8 @@ export class ExternalApi extends BaseAPI {
     /**
      * 外部連携するCMの情報を取得する
      * @summary CM外部連携情報取得（外部システム専用）
-     * @param {string} external ID of external system to return
-     * @param {string} unisCustomerCd ID of unis customer cd to return
+     * @param {string} external 外部システム区分
+     * @param {string} unisCustomerCd UNIS顧客CD
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ExternalApi
@@ -296,7 +296,7 @@ export class ExternalApi extends BaseAPI {
     /**
      * 外部連携するCMの情報を一覧で取得する
      * @summary CM外部連携情報一覧取得（外部システム専用）
-     * @param {string} external ID of external system to return
+     * @param {string} external 外部システム区分
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ExternalApi

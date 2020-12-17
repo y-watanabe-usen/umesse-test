@@ -18,67 +18,67 @@
  */
 export interface CmItem {
     /**
-     * 
+     * CM ID
      * @type {string}
      * @memberof CmItem
      */
     id?: any;
     /**
-     * 
+     * タイトル名
      * @type {string}
      * @memberof CmItem
      */
     title?: any;
     /**
-     * 
+     * 説明文
      * @type {string}
      * @memberof CmItem
      */
     description?: any;
     /**
-     * 
+     * 秒数
      * @type {number}
      * @memberof CmItem
      */
     seconds?: any;
     /**
-     * 
+     * 掲載開始日
      * @type {string}
      * @memberof CmItem
      */
     startDate?: any;
     /**
-     * 
+     * 掲載終了日
      * @type {string}
      * @memberof CmItem
      */
     endDate?: any;
     /**
-     * 
+     * CM区分(音楽系:BGMあり, 素ナレ:BGMなし)
      * @type {string}
      * @memberof CmItem
      */
     productionType?: any;
     /**
      * 
-     * @type {string}
+     * @type {Array&lt;IndustryItem&gt;}
      * @memberof CmItem
      */
     industry?: any;
     /**
      * 
-     * @type {string}
+     * @type {Array&lt;SceneItem&gt;}
      * @memberof CmItem
      */
     scene?: any;
     /**
      * 
-     * @type {CmMaterialListItem}
+     * @type {Array&lt;CmMaterialListItem&gt;}
      * @memberof CmItem
      */
     materials?: any;
     /**
-     * 
+     * CMステータス
      * @type {string}
      * @memberof CmItem
      */

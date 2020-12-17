@@ -18,25 +18,25 @@
  */
 export interface ChimeItem {
     /**
-     * 
+     * チャイムID
      * @type {string}
      * @memberof ChimeItem
      */
     id?: any;
     /**
-     * 
+     * タイトル
      * @type {string}
      * @memberof ChimeItem
      */
     title?: any;
     /**
-     * 
+     * 説明文
      * @type {string}
      * @memberof ChimeItem
      */
     description?: any;
     /**
-     * 
+     * 秒数
      * @type {number}
      * @memberof ChimeItem
      */

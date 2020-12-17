@@ -1,21 +1,18 @@
 "use strict";
 
+const { getCm, createCm, updateCm, deleteCm } = require("../umesse/cm");
+
+// TODO: mock
+const isMock = false;
+
 process.env.AWS_ACCESS_KEY_ID = "local";
 process.env.AWS_SECRET_ACCESS_KEY = "local";
 process.env.debug = true;
+process.env.environment = "local";
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = 0;
 
-// TODO: mock
-const dynamodb = require("../umesse/utils/dynamodbController").controller;
-const s3 = require("../umesse/utils/s3Controller").controller;
-const { getCm, createCm, updateCm, deleteCm } = require("../umesse/cm");
-
-beforeAll(() => {
-  jest.setTimeout(30000);
-});
-
 const unisCustomerCd = "123456789";
-const defaultCm = {
+const data = {
   id: "123456789-c-12345678",
   title: "サンプル",
   description: "サンプル",
@@ -24,7 +21,7 @@ const defaultCm = {
   end_date: "9999-12-31T23:59:59+09:00",
   production_type: "01",
   industry: [{ id: "01", name: "全業種" }],
-  scenes: [{ id: "01", name: "全シーン" }],
+  scene: [{ id: "01", name: "全シーン" }],
   status: "02",
   materials: {
     narrations: [
@@ -39,21 +36,73 @@ const defaultCm = {
   timestamp: "2019-09-01T09:00:00+9:00",
 };
 
+const mockDynamoDb = jest.fn();
+const mockS3 = jest.fn();
+if (isMock) {
+  jest.mock("aws-sdk", () => {
+    return {
+      DynamoDB: {
+        DocumentClient: jest.fn(() => {
+          return {
+            get: () => {
+              return {
+                promise: mockDynamoDb,
+              };
+            },
+            update: () => {
+              return {
+                promise: mockDynamoDb,
+              };
+            },
+          };
+        }),
+      },
+      S3: jest.fn(() => {
+        return {
+          getObject: () => {
+            return {
+              promise: mockS3,
+            };
+          },
+          putObject: () => {
+            return {
+              promise: mockS3,
+            };
+          },
+          getSignedUrl: () => {
+            return {
+              promise: mockS3,
+            };
+          },
+        };
+      }),
+    };
+  });
+}
+
+beforeAll(() => {
+  jest.setTimeout(1000 * 30); // 30 min
+  jest.resetAllMocks();
+});
+
 // TODO: draft
 describe("cm", () => {
-  test("getCm", async () => {
+  test("getCm success", async () => {
+    if (isMock) mockDynamoDb.mockResolvedValue({ Item: data });
+    const response = await getCm(unisCustomerCd, data.id);
+    console.log(response);
+    expect(response).toEqual(data);
+  });
+
+  test("getCm all success", async () => {
+    if (isMock) mockDynamoDb.mockResolvedValue({ Item: data });
     const response = await getCm(unisCustomerCd);
     console.log(response);
-    expect(response).toEqual([defaultCm]);
+    expect(response).toEqual([data]);
   });
 
-  test("getCm", async () => {
-    const response = await getCm(unisCustomerCd, defaultCm.id);
-    console.log(response);
-    expect(response).toEqual(defaultCm);
-  });
-
-  test("createCm", async () => {
+  test("createCm success", async () => {
+    if (isMock) mockDynamoDb.mockResolvedValue({ cm: data });
     const body = {
       materials: {
         narrations: [{ id: "narration/サンプル01", volume: 150 }],
@@ -76,24 +125,26 @@ describe("cm", () => {
   });
 
   test("updateCm", async () => {
+    if (isMock) mockDynamoDb.mockResolvedValue({ cm: data });
     const body = {
       title: "テスト",
       description: "テスト",
     };
-    const response = await updateCm(unisCustomerCd, defaultCm.id, body);
+    const response = await updateCm(unisCustomerCd, data.id, body);
     console.log(response);
     expect(response).toEqual({
-      ...defaultCm,
+      ...data,
       ...body,
       timestamp: expect.anything(),
     });
   });
 
   test("deleteCm", async () => {
-    const response = await deleteCm(unisCustomerCd, defaultCm.id);
+    if (isMock) mockDynamoDb.mockResolvedValue({ cm: data });
+    const response = await deleteCm(unisCustomerCd, data.id);
     console.log(response);
     expect(response).toEqual({
-      ...defaultCm,
+      ...data,
       title: "テスト",
       description: "テスト",
       status: "00",
@@ -101,4 +152,4 @@ describe("cm", () => {
     });
   });
 });
-// FIXME: error
+// FIXME: error test

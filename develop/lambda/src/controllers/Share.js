@@ -23,8 +23,8 @@ module.exports.deleteShareCm = function deleteShareCm (req, res, next, cmId, xUn
     });
 };
 
-module.exports.getShareCm = function getShareCm (req, res, next, xUnisCustomerCd) {
-  Share.getShareCm(xUnisCustomerCd)
+module.exports.getShareCm = function getShareCm (req, res, next, cmId, xUnisCustomerCd) {
+  Share.getShareCm(cmId, xUnisCustomerCd)
     .then(function (response) {
       utils.writeJson(res, response);
     })

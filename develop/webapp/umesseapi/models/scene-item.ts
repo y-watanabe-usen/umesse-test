@@ -18,13 +18,13 @@
  */
 export interface SceneItem {
     /**
-     * 
+     * シーンCD
      * @type {string}
      * @memberof SceneItem
      */
-    id?: any;
+    cd?: any;
     /**
-     * 
+     * シーン名
      * @type {string}
      * @memberof SceneItem
      */

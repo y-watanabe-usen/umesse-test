@@ -28,11 +28,13 @@ exports.getUser = async (unisCustomerCd) => {
         "create_date," +
         "renewal_date",
     };
-    debuglog(
-      `key: ${JSON.stringify(key)}, options: ${JSON.stringify(options)}`
-    );
+    debuglog(JSON.stringify({ key: key, options: options }));
 
-    const res = await dynamodb.get(constants.usersTable, key, options);
+    const res = await dynamodb.get(
+      constants.dynamoDbTable().users,
+      key,
+      options
+    );
     if (!res || !res.Item) throw "not found";
     return res.Item;
   } catch (e) {

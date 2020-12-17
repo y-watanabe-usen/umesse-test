@@ -18,31 +18,31 @@
  */
 export interface NarrationItem {
     /**
-     * 
+     * ナレーションID
      * @type {string}
      * @memberof NarrationItem
      */
     id?: any;
     /**
-     * 
+     * タイトル
      * @type {string}
      * @memberof NarrationItem
      */
     title?: any;
     /**
-     * 
+     * 説明文
      * @type {string}
      * @memberof NarrationItem
      */
     description?: any;
     /**
-     * 
+     * 原稿
      * @type {string}
      * @memberof NarrationItem
      */
     manuscript?: any;
     /**
-     * 
+     * 秒数
      * @type {number}
      * @memberof NarrationItem
      */

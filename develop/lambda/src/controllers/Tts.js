@@ -4,7 +4,7 @@ var utils = require('../utils/writer.js');
 var Tts = require('../service/TtsService');
 
 module.exports.createUserTts = function createUserTts (req, res, next, body, xUnisCustomerCd) {
-  Tts.createUserTts(xUnisCustomerCd, body['filename'], body['recordedFile'])
+  Tts.createUserTts(body, xUnisCustomerCd)
     .then(function (response) {
       utils.writeJson(res, response);
     })

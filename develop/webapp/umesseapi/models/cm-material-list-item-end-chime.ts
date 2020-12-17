@@ -18,13 +18,13 @@
  */
 export interface CmMaterialListItemEndChime {
     /**
-     * 
+     * チャイムID
      * @type {string}
      * @memberof CmMaterialListItemEndChime
      */
     id?: any;
     /**
-     * 
+     * ボリューム値
      * @type {number}
      * @memberof CmMaterialListItemEndChime
      */

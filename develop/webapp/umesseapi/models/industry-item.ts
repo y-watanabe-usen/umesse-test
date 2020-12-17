@@ -18,13 +18,13 @@
  */
 export interface IndustryItem {
     /**
-     * 
+     * 業種CD
      * @type {string}
      * @memberof IndustryItem
      */
-    id?: any;
+    cd?: any;
     /**
-     * 
+     * 業種名
      * @type {string}
      * @memberof IndustryItem
      */

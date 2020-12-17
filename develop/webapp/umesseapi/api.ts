@@ -16,7 +16,6 @@ export * from './apis/external-api';
 export * from './apis/ping-api';
 export * from './apis/recording-api';
 export * from './apis/resources-api';
-export * from './apis/s3-api';
 export * from './apis/share-api';
 export * from './apis/tts-api';
 export * from './apis/upload-api';

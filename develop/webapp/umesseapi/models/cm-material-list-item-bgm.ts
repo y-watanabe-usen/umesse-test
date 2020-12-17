@@ -18,13 +18,13 @@
  */
 export interface CmMaterialListItemBgm {
     /**
-     * 
+     * BGM ID
      * @type {string}
      * @memberof CmMaterialListItemBgm
      */
     id?: any;
     /**
-     * 
+     * ボリューム値
      * @type {number}
      * @memberof CmMaterialListItemBgm
      */
