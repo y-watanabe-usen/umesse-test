@@ -19,9 +19,9 @@ note right
   title: {S, 'タイトル名'},
   description: {S, '説明文'},
   seconds: {I, '秒数'},
-  start_date: {S, '2014-10-10T13:50:40+09:00'},
-  end_date: {S, '9999-12-31T23:59:59+09:00'},
-  production_type: {S, '01: 音楽系, 02: 素ナレ'},
+  startDate: {S, '2014-10-10T13:50:40+09:00'},
+  endDate: {S, '9999-12-31T23:59:59+09:00'},
+  productionType: {S, '01: 音楽系, 02: 素ナレ'},
   industry: {S: '業種名'},
   scene: {S: 'シーン名'},
   materials: {
@@ -31,11 +31,11 @@ note right
         volume: {I, 'ボリューム値'},
       }
     ],
-    start_chime: {
+    startChime: {
       id: {S, 'ファイル名'},
       volume: {I, 'ボリューム値'},
     },
-    end_chime: {
+    endChime: {
       id: {S, 'ファイル名'},
       volume: {I, 'ボリューム値'},
     },
@@ -52,15 +52,15 @@ Lambda <-- DynamoDB: レスポンス
 Lambda --> DynamoDB: データ追加（センター連携用）
 note right
 {
-  unis_customer_cd: {S, '顧客CD'},
-  data_process_type: {S, '01: 追加, 02: 変更, 03: 削除'}
+  unisCustomerCd: {S, '顧客CD'},
+  dataProcessType: {S, '01: 追加, 02: 変更, 03: 削除'}
   id: {S, 'ファイル名'},
   title: {S, 'タイトル名'},
   description: {S, '説明文'},
   seconds: {I, '秒数'},
-  start_date: {S, '2014-10-10T13:50:40+09:00'},
-  end_date: {S, '9999-12-31T23:59:59+09:00'},
-  production_type: {S, '01: 音楽系, 02: 素ナレ'},
+  startDate: {S, '2014-10-10T13:50:40+09:00'},
+  endDate: {S, '9999-12-31T23:59:59+09:00'},
+  productionType: {S, '01: 音楽系, 02: 素ナレ'},
   industry: {S: '業種名'},
   scene: {S: 'シーン名'},
   status: {I, '0: 連携準備中}
@@ -90,7 +90,7 @@ Lambda <-- DynamoDB: レスポンス
 Lambda --> DynamoDB: データ追加（センター連携用）
 note right
 {
-  unis_customer_cd: {S, '顧客CD'},
+  unisCustomerCd: {S, '顧客CD'},
   id: {S, 'ファイル名'},
   status: {I, '1: 可能}
   timestamp: {S, '2014-10-10T13:50:40+09:00'}
@@ -114,8 +114,8 @@ Lambda <-- DynamoDB: レスポンス
 Lambda --> DynamoDB: データ追加（センター連携用）
 note right
 {
-  unis_customer_cd: {S, '顧客CD'},
-  data_process_type: {S, '02: 変更'}
+  unisCustomerCd: {S, '顧客CD'},
+  dataProcessType: {S, '02: 変更'}
   id: {S, 'ファイル名'},
   title: {S, 'タイトル名'},
   description: {S, '説明文'},
@@ -131,17 +131,17 @@ Lambda --> DynamoDB: データ更新（CMメタデータ）
 note right
 {
   id: {S, 'ファイル名'},
-  end_date: {S, '9999-12-31T23:59:59+09:00'},
+  endDate: {S, '9999-12-31T23:59:59+09:00'},
   status: {S: '11: センターアップロード中'}
-  time_stamp: {S, '2014-10-10T13:50:40+09:00'}
+  timestamp: {S, '2014-10-10T13:50:40+09:00'}
 }
 end note
 Lambda <-- DynamoDB: レスポンス
 Lambda --> DynamoDB: データ追加（センター連携用）
 note right
 {
-  unis_customer_cd: {S, '顧客CD'},
-  data_process_type: {S, '03: 削除'}
+  unisCustomerCd: {S, '顧客CD'},
+  dataProcessType: {S, '03: 削除'}
   id: {S, 'ファイル名'},
   status: {I, '1: 連携可能}
   timestamp: {S, '2014-10-10T13:50:40+09:00'}

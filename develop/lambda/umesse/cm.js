@@ -17,7 +17,7 @@ exports.getCm = async (unisCustomerCd, cmId) => {
   );
 
   try {
-    const key = { unis_customer_cd: unisCustomerCd };
+    const key = { unisCustomerCd: unisCustomerCd };
     const options = {
       ProjectionExpression: "cm",
     };
@@ -74,7 +74,7 @@ exports.createCm = async (unisCustomerCd, body) => {
     const data = {
       id: id,
       materials: body.materials,
-      production_type:
+      productionType:
         "bgm" in body.materials
           ? constants.cmProductionType.MUSIC
           : constants.cmProductionType.NONE,
@@ -82,7 +82,7 @@ exports.createCm = async (unisCustomerCd, body) => {
       status: constants.cmStatus.CREATING,
       timestamp: timestamp(),
     };
-    const key = { unis_customer_cd: unisCustomerCd };
+    const key = { unisCustomerCd: unisCustomerCd };
     const options = {
       UpdateExpression: "SET cm = list_append(cm, :cm)",
       ExpressionAttributeValues: {
@@ -157,7 +157,7 @@ exports.updateCm = async (unisCustomerCd, cmId, body) => {
       cm[key] = body[key];
     });
     cm.timestamp = timestamp();
-    const key = { unis_customer_cd: unisCustomerCd };
+    const key = { unisCustomerCd: unisCustomerCd };
     const options = {
       UpdateExpression: `SET cm[${index}] = :cm`,
       ExpressionAttributeValues: {
@@ -213,7 +213,7 @@ exports.deleteCm = async (unisCustomerCd, cmId) => {
     // DynamoDBのデータ更新
     cm.status = constants.cmStatus.DELETE;
     cm.timestamp = timestamp();
-    const key = { unis_customer_cd: unisCustomerCd };
+    const key = { unisCustomerCd: unisCustomerCd };
     const options = {
       UpdateExpression: `SET cm[${index}] = :cm`,
       ExpressionAttributeValues: {

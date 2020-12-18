@@ -4,10 +4,10 @@ resource "aws_dynamodb_table" "users" {
   billing_mode   = "PROVISIONED"
   read_capacity  = 10
   write_capacity = 10
-  hash_key       = "unis_customer_cd"
+  hash_key       = "unisCustomerCd"
 
   attribute {
-    name = "unis_customer_cd"
+    name = "unisCustomerCd"
     type = "S"
   }
 }
@@ -32,10 +32,10 @@ resource "aws_dynamodb_table" "external" {
   billing_mode   = "PROVISIONED"
   read_capacity  = 10
   write_capacity = 10
-  hash_key       = "unis_customer_cd"
+  hash_key       = "unisCustomerCd"
 
   attribute {
-    name = "unis_customer_cd"
+    name = "unisCustomerCd"
     type = "S"
   }
 }

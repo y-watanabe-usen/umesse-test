@@ -14,15 +14,15 @@ Center --> Lambda: CM連携リスト取得
 Lambda --> DynamoDB: データ取得（センター連携用）
 note right
 {
-  unis_customer_cd: {S, '顧客CD'},
-  data_process_type: {S, '01: 追加, 02: 変更, 03: 削除'}
+  unisCustomerCd: {S, '顧客CD'},
+  dataProcessType: {S, '01: 追加, 02: 変更, 03: 削除'}
   id: {S, 'ファイル名'},
   title: {S, 'タイトル名'},
   description: {S, '説明文'},
   seconds: {I, '秒数'},
-  start_date: {S, '2014-10-10T13:50:40+09:00'},
-  end_date: {S, '9999-12-31T23:59:59+09:00'},
-  production_type: {S, '01: 音楽系, 02: 素ナレ'},
+  startDate: {S, '2014-10-10T13:50:40+09:00'},
+  endDate: {S, '9999-12-31T23:59:59+09:00'},
+  productionType: {S, '01: 音楽系, 02: 素ナレ'},
   industry: {S: '業種名'},
   scene: {S: 'シーン名'},
   status: {I, '1: 連携可能}
@@ -76,11 +76,11 @@ Center --> Lambda: CM連携エラー
 Lambda --> DynamoDB: データ更新（センター連携用）
 note right
 {
-  unis_customer_cd: {S, '顧客CD'},
+  unisCustomerCd: {S, '顧客CD'},
   id: {S, 'ファイル名'},
   status: {I, '9: 連携失敗},
-  error_code: {S, 'エラーコード'},
-  error_message: {S, 'エラーメッセージ'},
+  errorCode: {S, 'エラーコード'},
+  errorMessage: {S, 'エラーメッセージ'},
   timestamp: {S, '2014-10-10T13:50:40+09:00'}
 }
 end note

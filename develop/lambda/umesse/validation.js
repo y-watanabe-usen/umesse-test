@@ -55,7 +55,7 @@ const cmStatusMessage = Object.freeze({
       "S'Senceで連携エラーが発生しているため、削除できません",
   },
   // CM外部連携
-  createExternal: {
+  createUploadCm: {
     [constants.cmStatus.CREATING]: "CM作成中のため、アップロードできません",
     [constants.cmStatus.COMPLETE]: "", // OK
     [constants.cmStatus.CONVERT]:
@@ -77,7 +77,7 @@ const cmStatusMessage = Object.freeze({
       "S'Senceで連携エラーが発生しているため、アップロードできません",
   },
   // CM外部連携解除
-  deleteExternal: {
+  deleteUploadCm: {
     [constants.cmStatus.CREATING]: "CM連携していないため、解除できません",
     [constants.cmStatus.COMPLETE]: "CM連携していないため、解除できません",
     [constants.cmStatus.CONVERT]: "CM連携していないため、解除できません",
@@ -95,7 +95,7 @@ const cmStatusMessage = Object.freeze({
       "S'Senceで連携エラーが発生しているため、解除できません",
   },
   // CM外部連携完了
-  completeExternal: {
+  completeExternalCm: {
     [constants.cmStatus.CREATING]: "CM連携していないため、完了できません",
     [constants.cmStatus.COMPLETE]: "CM連携していないため、完了できません",
     [constants.cmStatus.CONVERT]: "CM連携していないため、完了できません",
@@ -113,7 +113,7 @@ const cmStatusMessage = Object.freeze({
       "S'Senceで連携エラーが発生しているため、完了できません",
   },
   // 共有CM追加
-  createShear: {
+  createShareCm: {
     [constants.cmStatus.CREATING]: "CM作成中のため、共有できません",
     [constants.cmStatus.COMPLETE]: "", // OK
     [constants.cmStatus.CONVERT]: "CMエンコード中のため、共有できません",
@@ -133,7 +133,7 @@ const cmStatusMessage = Object.freeze({
       "S'Senceで連携エラーが発生しているため、共有できません",
   },
   // 共有CM解除
-  deleteShear: {
+  deleteShareCm: {
     [constants.cmStatus.CREATING]: "CM作成中のため、共有できません",
     [constants.cmStatus.COMPLETE]: "", // OK
     [constants.cmStatus.CONVERT]: "CMエンコード中のため、共有できません",

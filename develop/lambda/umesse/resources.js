@@ -77,7 +77,7 @@ exports.getUserResource = async (unisCustomerCd, filter, id) => {
   );
 
   try {
-    const key = { unis_customer_cd: unisCustomerCd };
+    const key = { unisCustomerCd: unisCustomerCd };
     const options = {
       ProjectionExpression: filter,
     };
@@ -134,10 +134,10 @@ exports.createUserResource = async (unisCustomerCd, filter, body) => {
     // DynamoDBのデータ更新
     const data = {
       id: id,
-      start_date: time,
+      startDate: time,
       timestamp: time,
     };
-    const key = { unis_customer_cd: unisCustomerCd };
+    const key = { unisCustomerCd: unisCustomerCd };
     const options = {
       UpdateExpression: "SET #filter = list_append(#filter, :data)",
       ExpressionAttributeName: {
@@ -190,7 +190,7 @@ exports.updateUserResource = async (unisCustomerCd, filter, id, body) => {
       resource[key] = body[key];
     });
     resource.timestamp = timestamp();
-    const key = { unis_customer_cd: unisCustomerCd };
+    const key = { unisCustomerCd: unisCustomerCd };
     const options = {
       UpdateExpression: `SET #filter[${index}] = :resource`,
       ExpressionAttributeName: {
@@ -244,7 +244,7 @@ exports.deleteUserResource = async (unisCustomerCd, filter, id) => {
     );
 
     // DynamoDBのデータ更新
-    const key = { unis_customer_cd: unisCustomerCd };
+    const key = { unisCustomerCd: unisCustomerCd };
     const options = {
       UpdateExpression: `REMOVE #filter[${resource.index}]`,
       ExpressionAttributeName: {
