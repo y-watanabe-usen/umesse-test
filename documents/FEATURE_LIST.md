@@ -88,9 +88,10 @@
 - bucket: stg-umesse-users (private) : ユーザーデータ管理（ステージング）
 
 ```none
-users/(unis_customer_cd)/cm/(id).aac // CM
-                        /recording/(id).mp3 // 録音音声
-                        /tts/(id).mp3 // TTS音声
+users/(UNIS顧客CD)/cm/(id).aac // CM
+                  /recording/(id).mp3 // 録音音声
+                  /tts/(id).mp3 // TTS音声
+group/(グループCD)/cm/(id).aac // 共有CM
 ```
 
 - USEN収録音源を管理
@@ -119,18 +120,18 @@ webapp/
 
 ```none
 {
-  "unis_customer_cd": {"S": "UNIS顧客CD"},
-  "contract_cd": {"S": "NeOS契約CD"},
-  "service_cd": {"S": "サービスCD"},
-  "service_name": {"S": "サービス名"},
-  "customer_name": {"S": "顧客設置先名称"},
-  "customer_name_kana": {"S": "顧客設置先名称カナ"},
-  "customer_group_cd": {"S": "顧客グループCD"},
-  "customer_group_name": {"S": "顧客グループ名"},
-  "contract_status_cd": {"S": "契約ステータスCD"},
-  "contract_status_name": {"S": "契約ステータス名"},
-  "create_date": {"S": "2019-09-01T09:00:00+9:00"},
-  "renewal_date": {"S": "2019-09-01T09:00:00+9:00"},
+  "unisCustomerCd": {"S": "UNIS顧客CD"},
+  "contractCd": {"S": "NeOS契約CD"},
+  "serviceCd": {"S": "サービスCD"},
+  "serviceName": {"S": "サービス名"},
+  "customerName": {"S": "顧客設置先名称"},
+  "customerNameKana": {"S": "顧客設置先名称カナ"},
+  "customerGroupCd": {"S": "顧客グループCD"},
+  "customerGroupName": {"S": "顧客グループ名"},
+  "contractStatusCd": {"S": "契約ステータスCD"},
+  "contractStatusName": {"S": "契約ステータス名"},
+  "createDate": {"S": "2019-09-01T09:00:00+9:00"},
+  "renewalDate": {"S": "2019-09-01T09:00:00+9:00"},
   "auth": {
     "token": {"S": "トークンID"}
     "expiration": {"S": "2019-09-01T09:00:00+9:00"},
@@ -143,9 +144,9 @@ webapp/
           "title": {"S": "タイトル名"},
           "description": {"S": "説明文"},
           "seconds": {"N": "秒数"},
-          "start_date": {"S": "2019-09-01T09:00:00+9:00"},
-          "end_date": {"S": "9999-12-31T23:59:59+09:00"},
-          "production_type": {"S": "01: 音楽系, 02: 素ナレ"},
+          "startDate": {"S": "2019-09-01T09:00:00+9:00"},
+          "endDate": {"S": "9999-12-31T23:59:59+09:00"},
+          "productionType": {"S": "01: 音楽系, 02: 素ナレ"},
           "industry": {
             "L": [
               {
@@ -196,13 +197,13 @@ webapp/
                   }
                 ]
               },
-              "start_chime": {
+              "startChime": {
                 "M": {
                   "id": {"S": "ファイル名"},
                   "volume": {"N": "ボリューム値"}
                 }
               },
-              "end_chime": {
+              "endChime": {
                 "M": {
                   "id": {"S": "ファイル名"},
                   "volume": {"N": "ボリューム値"}
@@ -227,7 +228,7 @@ webapp/
       id: {S, 'ファイル名'},
       title: {S, 'タイトル名'},
       description: {S, '説明文'},
-      start_date: {S, '2014-10-10T13:50:40+09:00'},
+      startDate: {S, '2014-10-10T13:50:40+09:00'},
       timestamp: {S, '2014-10-10T13:50:40+09:00'}
     }
   ],
@@ -236,7 +237,7 @@ webapp/
       id: {S, 'ファイル名'},
       title: {S, 'タイトル名'},
       description: {S, '説明文'},
-      start_date: {S, '2014-10-10T13:50:40+09:00'},
+      startDate: {S, '2014-10-10T13:50:40+09:00'},
       timestamp: {S, '2014-10-10T13:50:40+09:00'}
     }
   ],
@@ -284,21 +285,21 @@ webapp/
 
 ```none
 {
-  "unis_customer_cd": {"S": "顧客CD"},
-  "data_process_type": {"S": "01: 追加, 02: 変更, 03: 削除"}
+  "unisCustomerCd": {"S": "顧客CD"},
+  "dataProcessType": {"S": "01: 追加, 02: 変更, 03: 削除"}
   "id": {"S": "ファイル名"},
   "title": {"S": "タイトル名"},
   "description": {"S": "説明文"},
   "seconds": {"N", "秒数"},
-  "start_date": {"S", "2014-10-10T13:50:40+09:00"},
-  "end_date": {"S", "9999-12-31T23:59:59+09:00"},
-  "production_type": {"S", "01: 音楽系, 02: 素ナレ"},
+  "startDate": {"S", "2014-10-10T13:50:40+09:00"},
+  "endDate": {"S", "9999-12-31T23:59:59+09:00"},
+  "productionType": {"S", "01: 音楽系, 02: 素ナレ"},
   "industry": {"S": "業種名"},
   "scene": {"S": "シーン名"},
-  "upload_system": {"S": "01: センター, 02: S'sence"},
+  "uploadSystem": {"S": "01: センター, 02: S'sence"},
   "status": {"S": "0: 連携準備中, 1: 連携可能, 9: 連携エラー"},
-  "error_code": {"S": "エラーコード"},
-  "error_message": {"S": "エラーメッセージ"},
+  "errorCode": {"S": "エラーコード"},
+  "errorMessage": {"S": "エラーメッセージ"},
   "timestamp: {"S": "2014-10-10T13:50:40+09:00"}
 }
 ```

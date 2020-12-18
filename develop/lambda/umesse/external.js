@@ -6,9 +6,9 @@ const dynamodb = require("./utils/dynamodbController").controller;
 const { getCm } = require("./cm");
 
 // 外部連携データ取得（一覧・個別）
-exports.getExternal = async (unisCustomerCd, external) => {
+exports.getExternalCm = async (unisCustomerCd, external) => {
   debuglog(
-    `[getExternal] ${JSON.stringify({
+    `[getExternalCm] ${JSON.stringify({
       unisCustomerCd: unisCustomerCd,
       external: external,
     })}`
@@ -20,18 +20,18 @@ exports.getExternal = async (unisCustomerCd, external) => {
 
     let json = res.Items;
     if (unisCustomerCd) {
-      json = json.filter((item) => item.unis_customer_cd === unisCustomerCd);
+      json = json.filter((item) => item.unisCustomerCd === unisCustomerCd);
     }
     if (external == "center") {
       json = json.filter(
         (item) =>
-          item.upload_system === constants.cmUploadSystem.CENTER &&
+          item.uploadSystem === constants.cmUploadSystem.CENTER &&
           item.status === "1"
       );
     } else if (external == "ssence") {
       json = json.filter(
         (item) =>
-          item.upload_system === constants.cmUploadSystem.SSENCE &&
+          item.uploadSystem === constants.cmUploadSystem.SSENCE &&
           item.status === "1"
       );
     }
@@ -44,9 +44,9 @@ exports.getExternal = async (unisCustomerCd, external) => {
 };
 
 // 外部連携完了
-exports.completeExternal = async (unisCustomerCd, external, body) => {
+exports.completeExternalCm = async (unisCustomerCd, external, body) => {
   debuglog(
-    `[completeExternal] ${JSON.stringify({
+    `[completeExternalCm] ${JSON.stringify({
       unisCustomerCd: unisCustomerCd,
       body: body,
     })}`
@@ -54,7 +54,7 @@ exports.completeExternal = async (unisCustomerCd, external, body) => {
 
   try {
     // パラメーターチェック
-    const checkParams = validation.checkParams("completeExternal", body);
+    const checkParams = validation.checkParams("completeExternalCm", body);
     if (checkParams) throw checkParams;
 
     // CM一覧から該当CMを取得
@@ -66,7 +66,7 @@ exports.completeExternal = async (unisCustomerCd, external, body) => {
 
     // CMステータス状態によるチェック
     const checkCmStatus = validation.checkCmStatus(
-      "completeExternal",
+      "completeExternalCm",
       cm.status
     );
     if (checkCmStatus) throw checkCmStatus;
@@ -79,14 +79,14 @@ exports.completeExternal = async (unisCustomerCd, external, body) => {
     if (!external) throw "not found";
 
     let res = "";
-    const key = { unis_customer_cd: unisCustomerCd };
+    const key = { unisCustomerCd: unisCustomerCd };
 
     if (body.dataProcessType == "01") {
       // 正常完了の場合
       res = await dynamodb.delete(constants.dynamoDbTable().external, key, {});
       if (!res) throw "delete failed";
 
-      if (external[0].data_process_type == "03") {
+      if (external[0].dataProcessType == "03") {
         cm.status = constants.cmStatus.COMPLETE;
       } else {
         cm.status = constants.cmStatus[`${external.toUpperCase()}_COMPLETE`];
@@ -94,7 +94,7 @@ exports.completeExternal = async (unisCustomerCd, external, body) => {
     } else {
       // エラー終了の場合
       const options = {
-        UpdateExpression: `SET status = :status, error_code = :errorCode, error_message = :errorMessage, timestamp = :timestamp`,
+        UpdateExpression: `SET status = :status, errorCode = :errorCode, errorMessage = :errorMessage, timestamp = :timestamp`,
         ExpressionAttributeValues: {
           ":status": "9",
           ":errorCode": body.errorCode,

@@ -16,9 +16,9 @@ exports.getUploadCm = async (unisCustomerCd, cmId) => {
 
   try {
     const options = {
-      KeyConditionExpression: "unis_customer_cd: :unis_customer_cd",
+      KeyConditionExpression: "unisCustomerCd: :unisCustomerCd",
       ExpressionAttributeValues: {
-        ":unis_customer_cd": unisCustomerCd,
+        ":unisCustomerCd": unisCustomerCd,
       },
     };
     const res = await dynamodb.query(
@@ -27,7 +27,7 @@ exports.getUploadCm = async (unisCustomerCd, cmId) => {
     );
     if (!res || !res.Items) throw "not found";
 
-    let json = res.Item.cm;
+    let json = res.Items.cm;
     if (cmId) {
       json = json.filter((item) => item.id === cmId)[0];
     }
@@ -67,18 +67,18 @@ exports.createUploadCm = async (unisCustomerCd, cmId, body) => {
 
     // 連携用のデータ追加
     const item = {
-      unis_customer_cd: unisCustomerCd,
-      data_process_type: "01",
+      unisCustomerCd: unisCustomerCd,
+      dataProcessType: "01",
       id: cmId,
       title: cm.title,
       description: cm.description,
       seconds: cm.seconds,
-      start_date: cm.start_date,
-      end_date: cm.end_date,
-      production_type: cm.production_type,
+      startDate: cm.startDate,
+      endDate: cm.endDate,
+      productionType: cm.productionType,
       industry: cm.industry.id,
       scene: cm.scene.id,
-      upload_system: body.uploadSystem,
+      uploadSystem: body.uploadSystem,
       status: "1",
       timestamp: timestamp(),
     };
@@ -93,7 +93,7 @@ exports.createUploadCm = async (unisCustomerCd, cmId, body) => {
       cm.status = constants.cmStatus.SSENCE_UPLOADING;
 
     cm.timestamp = timestamp();
-    const key = { unis_customer_cd: unisCustomerCd };
+    const key = { unisCustomerCd: unisCustomerCd };
     const options = {
       UpdateExpression: `SET cm[${index}] = :cm`,
       ExpressionAttributeValues: {
@@ -151,11 +151,11 @@ exports.deleteUploadCm = async (unisCustomerCd, cmId, body) => {
 
     // 連携用のデータ追加
     const item = {
-      unis_customer_cd: unisCustomerCd,
-      data_process_type: "03",
+      unisCustomerCd: unisCustomerCd,
+      dataProcessType: "03",
       id: cmId,
-      end_date: body.endDate,
-      upload_system: uploadSystem,
+      endDate: body.endDate,
+      uploadSystem: uploadSystem,
       status: "1",
       timestamp: timestamp(),
     };
@@ -165,7 +165,7 @@ exports.deleteUploadCm = async (unisCustomerCd, cmId, body) => {
 
     // DynamoDBのデータ更新
     cm.timestamp = timestamp();
-    const key = { unis_customer_cd: unisCustomerCd };
+    const key = { unisCustomerCd: unisCustomerCd };
     const options = {
       UpdateExpression: `SET cm[${index}] = :cm`,
       ExpressionAttributeValues: {

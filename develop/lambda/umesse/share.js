@@ -17,7 +17,7 @@ exports.getShareCm = async (unisCustomerCd, cmId) => {
   );
 
   try {
-    const key = { unis_customer_cd: unisCustomerCd };
+    const key = { unisCustomerCd: unisCustomerCd };
     const options = {
       ProjectionExpression: "cm",
     };
@@ -67,7 +67,7 @@ exports.createShareCm = async (unisCustomerCd, cmId) => {
     // S3上のCMをコピー
     let res = await s3.copy(
       constants.s3Bucket().users,
-      `group/${user.customer_group_cd}/cm/${cmId}.mp3`,
+      `group/${user.customerGroupCd}/cm/${cmId}.mp3`,
       `users/${unisCustomerCd}/cm/${cmId}.mp3`
     );
     if (!res) throw "copy failed";
@@ -79,7 +79,7 @@ exports.createShareCm = async (unisCustomerCd, cmId) => {
     // DynamoDBのデータ更新
     cm.status = constants.cmStatus.SHARING;
     cm.timestamp = timestamp();
-    const key = { unis_customer_cd: unisCustomerCd };
+    const key = { unisCustomerCd: unisCustomerCd };
     const options = {
       UpdateExpression: `SET cm[${index}] = :cm`,
       ExpressionAttributeValues: {
@@ -129,13 +129,13 @@ exports.deleteShareCm = async (unisCustomerCd, cmId) => {
     // S3上のCMを削除
     await s3.delete(
       constants.s3Bucket().users,
-      `group/${user.customer_group_cd}/cm/${cmId}.mp3`
+      `group/${user.customerGroupCd}/cm/${cmId}.mp3`
     );
 
     // DynamoDBのデータ更新
     cm.status = constants.cmStatus.COMPLETE;
     cm.timestamp = timestamp();
-    const key = { unis_customer_cd: unisCustomerCd };
+    const key = { unisCustomerCd: unisCustomerCd };
     const options = {
       UpdateExpression: `SET cm[${index}] = :cm`,
       ExpressionAttributeValues: {

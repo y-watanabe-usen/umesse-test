@@ -13,7 +13,7 @@ exports.constants = Object.freeze({
       case "local":
         return {
           region: this.region,
-          endpoint: "localhost:4566",
+          endpoint: "http://localhost:4566",
           signatureVersion: "v4",
           s3ForcePathStyle: "true", // local only
         };
@@ -59,7 +59,7 @@ exports.constants = Object.freeze({
       case "local":
         return {
           region: this.region,
-          endpoint: "localhost:4566",
+          endpoint: "http://localhost:4566",
         };
       case "dev":
       case "stg":
