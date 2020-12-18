@@ -2,7 +2,7 @@
   <div class="bg-umesse">
     <div class="container">
       <nav class="navbar navbar-expand-lg navbar-light">
-        <router-link class="navbar-brand" :to="{ name: 'OrderHistoryList' }"
+        <router-link class="navbar-brand" :to="{ name: 'OrderHistory' }"
           >&lt;戻る</router-link
         >
         <div
