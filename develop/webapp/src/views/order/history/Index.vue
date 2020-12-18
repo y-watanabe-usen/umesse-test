@@ -2,17 +2,17 @@
   <div class="bg-umesse">
     <div class="container">
       <nav class="navbar navbar-expand-lg navbar-light">
-        <router-link class="navbar-brand text-white" :to="{ path: '/' }"
+        <router-link class="navbar-brand" :to="{ name: 'Home' }"
           >&lt;戻る</router-link
         >
         <div
-          class="collapse navbar-collapse justify-content-center text-white h4"
+          class="collapse navbar-collapse justify-content-center h4"
         >
           発注履歴
         </div>
       </nav>
 
-      <div class="bg-white order">
+      <div class="bg-white order rounded">
         <div class="item py-3" v-for="data in state.datas" :key="data.id">
           <div class="row w-100">
             <div class="col left">
@@ -41,7 +41,8 @@
             </div>
             <div class="col-6 lead small center">{{ data.description }}</div>
             <div class="col right">
-              <router-link :to="{ path: 'orderhistorydetail' }"
+              <router-link
+                :to="{ name: 'OrderHistoryDetail', params: { id: data.id } }"
                 >詳細を確認&nbsp;&gt;</router-link
               >
             </div>
@@ -115,10 +116,6 @@ export default {
 </script>
 
 <style scoped>
-.order {
-  border-radius: 1em 1em 0 0;
-}
-
 .order .left {
   text-align: center;
 }

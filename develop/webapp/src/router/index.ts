@@ -1,19 +1,19 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Home from '@/views/Home.vue'
-import Narration from '@/views/Narration.vue'
-import RecordingStart from '@/views/RecordingStart.vue'
-import CreatedCm from '@/views/CreatedCm.vue'
-import OrderInStoreAnnouncement1 from '@/views/OrderInStoreAnnouncement1.vue'
-import OrderInStoreAnnouncement2 from '@/views/OrderInStoreAnnouncement2.vue'
-import OrderInStoreAnnouncement3 from '@/views/OrderInStoreAnnouncement3.vue'
-import OrderInStoreAnnouncement4 from '@/views/OrderInStoreAnnouncement4.vue'
-import OrderInStoreAnnouncement5 from '@/views/OrderInStoreAnnouncement5.vue'
-import OrderInStoreAnnouncement6 from '@/views/OrderInStoreAnnouncement6.vue'
-import OrderCompleted from '@/views/OrderCompleted.vue'
-import SelectTemplate from '@/views/SelectTemplate.vue'
-import CreateNarrationTextInput from '@/views/CreateNarrationTextInput.vue'
-import OrderHistoryList from '@/views/OrderHistoryList.vue'
-import OrderHistoryDetail from '@/views/OrderHistoryDetail.vue'
+import Narration from '@/views/narration/Index.vue'
+import Recording from '@/views/recording/Index.vue'
+import Management from '@/views/management/Index.vue'
+import VoiceTemplate from '@/views/voice/template/Index.vue'
+import VoiceFree from '@/views/voice/free/Index.vue'
+import OrderFlow1 from '@/views/order/Flow1.vue'
+import OrderFlow2 from '@/views/order/Flow2.vue'
+import OrderFlow3 from '@/views/order/Flow3.vue'
+import OrderFlow4 from '@/views/order/Flow4.vue'
+import OrderFlow5 from '@/views/order/Flow5.vue'
+import OrderFlow6 from '@/views/order/Flow6.vue'
+import OrderEnd from '@/views/order/End.vue'
+import OrderHistory from '@/views/order/history/Index.vue'
+import OrderHistoryDetail from '@/views/order/history/Detail.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -27,67 +27,67 @@ const routes: Array<RouteRecordRaw> = [
     component: Narration
   },
   {
-    path: '/recordingStart',
-    name: 'RecordingStart',
-    component: RecordingStart
+    path: '/recording',
+    name: 'Recording',
+    component: Recording
   },
   {
-    path: '/createdcm',
-    name: 'CreatedCm',
-    component: CreatedCm
+    path: '/management',
+    name: 'Management',
+    component: Management
   },
   {
-    path: '/orderinstoreannouncement1',
-    name: 'OrderInStoreAnnouncement1',
-    component: OrderInStoreAnnouncement1
+    path: '/voice/template',
+    name: 'VoiceTemplate',
+    component: VoiceTemplate
   },
   {
-    path: '/orderinstoreannouncement2',
-    name: 'OrderInStoreAnnouncement2',
-    component: OrderInStoreAnnouncement2
+    path: '/voice/free',
+    name: 'VoiceFree',
+    component: VoiceFree
   },
   {
-    path: '/orderinstoreannouncement3',
-    name: 'OrderInStoreAnnouncement3',
-    component: OrderInStoreAnnouncement3
+    path: '/order/flow1',
+    name: 'OrderFlow1',
+    component: OrderFlow1
   },
   {
-    path: '/orderinstoreannouncement4',
-    name: 'OrderInStoreAnnouncement4',
-    component: OrderInStoreAnnouncement4
+    path: '/order/flow2',
+    name: 'OrderFlow2',
+    component: OrderFlow2
   },
   {
-    path: '/orderinstoreannouncement5',
-    name: 'OrderInStoreAnnouncement5',
-    component: OrderInStoreAnnouncement5
+    path: '/order/flow3',
+    name: 'OrderFlow3',
+    component: OrderFlow3
   },
   {
-    path: '/orderinstoreannouncement6',
-    name: 'OrderInStoreAnnouncement6',
-    component: OrderInStoreAnnouncement6
+    path: '/order/flow4',
+    name: 'OrderFlow4',
+    component: OrderFlow4
   },
   {
-    path: '/ordercompleted',
-    name: 'OrderCompleted',
-    component: OrderCompleted
+    path: '/order/flow5',
+    name: 'OrderFlow5',
+    component: OrderFlow5
   },
   {
-    path: '/selecttemplate',
-    name: 'SelectTemplate',
-    component: SelectTemplate
+    path: '/order/flow6',
+    name: 'OrderFlow6',
+    component: OrderFlow6
   },
   {
-    path: '/createnarrationtextinput',
-    name: 'CreateNarrationTextInput',
-    component: CreateNarrationTextInput
+    path: '/order/end',
+    name: 'OrderEnd',
+    component: OrderEnd
   },
   {
-    path: '/orderhistorylist',
-    name: 'OrderHistoryList',
-    component: OrderHistoryList
+    path: '/order/history',
+    name: 'OrderHistory',
+    component: OrderHistory
   },
   {
-    path: '/orderhistorydetail',
+    path: '/order/history/:id',
     name: 'OrderHistoryDetail',
     component: OrderHistoryDetail
   },

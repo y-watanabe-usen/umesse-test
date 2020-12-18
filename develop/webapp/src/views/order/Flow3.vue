@@ -2,21 +2,21 @@
   <div class="bg-umesse">
     <div class="container">
       <nav class="navbar navbar-expand-lg navbar-light">
-        <router-link class="navbar-brand text-white" :to="{ path: '/' }"
+        <router-link class="navbar-brand" :to="{ name: 'OrderFlow2' }"
           >&lt;戻る</router-link
         >
         <div
-          class="collapse navbar-collapse justify-content-center text-white h4"
+          class="collapse navbar-collapse justify-content-center h4"
         >
           店内アナウンスを発注する
         </div>
         <router-link
           class="navbar-brand"
-          :to="{ path: 'orderinstoreannouncement4' }"
+          :to="{ name: 'OrderFlow4' }"
           ><button class="btn" style="width: 100px">次へ</button></router-link
         >
       </nav>
-      <div class="rounded" style="height: 600px; background-color: #e6e6e6">
+      <div class="rounded bg-white" style="height: 600px;">
         <div class="p-4">
           <div class="d-flex">
             <div class="d-flex col-2 pl-0">
@@ -95,7 +95,7 @@ hr {
   font-size: 16px;
   text-align: center;
   line-height: 45px;
-  background-color: #ffffff;
+  background-color: #e6e6e6;
   color: #888888;
   margin-right: 10px;
 }

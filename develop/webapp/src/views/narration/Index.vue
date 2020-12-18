@@ -2,11 +2,11 @@
   <div class="bg-umesse pb-5">
     <div class="container">
       <nav class="navbar navbar-expand-lg navbar-light">
-        <router-link class="navbar-brand text-white" :to="{ path: '/' }"
+        <router-link class="navbar-brand" :to="{ name: 'Home' }"
           >&lt;戻る</router-link
         >
         <div
-          class="collapse navbar-collapse justify-content-center text-white h4"
+          class="collapse navbar-collapse justify-content-center h4"
         >
           ナレーション選択
         </div>

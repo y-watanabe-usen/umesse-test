@@ -2,17 +2,17 @@
   <div class="bg-umesse">
     <div class="container">
       <nav class="navbar navbar-expand-lg navbar-light">
-        <router-link class="navbar-brand text-white" :to="{ path: '/' }"
+        <router-link class="navbar-brand" :to="{ name: 'OrderHistoryList' }"
           >&lt;戻る</router-link
         >
         <div
-          class="collapse navbar-collapse justify-content-center text-white h4"
+          class="collapse navbar-collapse justify-content-center h4"
         >
           発注履歴
         </div>
       </nav>
 
-      <div class="bg-white order">
+      <div class="bg-white order rounded">
         <div class="item py-3">
           <div class="row w-100">
             <div class="col left ml-3" style="margin: auto;">
@@ -89,10 +89,6 @@ export default {
 </script>
 
 <style scoped>
-.order {
-  border-radius: 1em 1em 0 0;
-}
-
 .order .left {
   text-align: left;
 }

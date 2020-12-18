@@ -2,13 +2,13 @@
   <div class="bg-umesse pb-5">
     <div class="container">
       <nav class="navbar navbar-expand-lg navbar-light">
-        <router-link class="navbar-brand text-white" :to="{ path: '/' }"
+        <router-link class="navbar-brand" :to="{ name: 'Home' }"
           >&lt;戻る</router-link
         >
         <div
-          class="collapse navbar-collapse justify-content-center text-white h4"
+          class="collapse navbar-collapse justify-content-center h4"
         >
-          テンプレート選択
+          店内アナウンスの管理
         </div>
       </nav>
       <div class="row">
@@ -54,7 +54,7 @@
                   <div>
                     <button
                       type="button"
-                      class="btn btn-light shadow btn-try mr-3"
+                      class="btn btn-light shadow btn-try"
                       data-toggle="modal"
                       data-target=".bd-try-modal-lg"
                     >
@@ -72,31 +72,45 @@
                       </svg>
                       試聴
                     </button>
-                    <router-link :to="{ path: 'createnarrationtextinput' }">
                     <button
+                      class="btn btn-link dropdown-toggle btn-lg"
                       type="button"
-                      class="btn btn-light shadow btn-try"
+                      id="dropdownMenuButton"
+                      data-toggle="dropdown"
+                      aria-haspopup="true"
+                      aria-expanded="false"
                     >
-                        選択
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="7.099"
-                          height="12.198"
-                          viewBox="0 0 7.099 12.198"
-                          class="ml-2"
-                        >
-                          <path
-                            d="M933.947,184.472l4.685,4.685-4.685,4.685"
-                            transform="translate(-932.533 -183.057)"
-                            fill="none"
-                            stroke="#578ed9"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                          />
-                        </svg>
+                      <svg
+                        width="2.5em"
+                        height="2.5em"
+                        viewBox="0 0 16 16"
+                        class="bi bi-three-dots"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"
+                        />
+                      </svg>
                     </button>
-                        </router-link>
+                    <div
+                      class="dropdown-menu"
+                      aria-labelledby="dropdownMenuButton"
+                    >
+                      <a
+                        class="dropdown-item"
+                        href="#"
+                        data-toggle="modal"
+                        data-target="#saveModal"
+                        >タイトル/説明 編集</a
+                      >
+                      <a class="dropdown-item" href="#">コンテンツ編集</a>
+                      <a class="dropdown-item" href="#"
+                        >U MUSICにアップロード</a
+                      >
+                      <a class="dropdown-item" href="#">削除</a>
+                    </div>
                   </div>
                 </div>
                 <span class="d-block pb-2"
@@ -134,47 +148,59 @@
           <div class="modal-body">
             <div class="row">
               <div class="col-4">
-                <template v-if="!state.isPlaying">
-                  <button
-                    type="button"
-                    class="btn btn-light shadow btn-play"
-                    @click="play"
-                  >
-                    <svg
-                      width="1em"
-                      height="1em"
-                      viewBox="0 0 16 16"
-                      class="bi bi-play-fill"
-                      fill="currentColor"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M11.596 8.697l-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"
-                      />
-                    </svg>
-                    再生
+                <template v-if="state.isDownloading">
+                  <button class="btn btn-play btn-light" type="button" disabled>
+                    <span
+                      class="spinner-border spinner-border-sm"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
+                    <span class="sr-only">Loading...</span>
                   </button>
                 </template>
                 <template v-else>
-                  <button
-                    type="button"
-                    class="btn btn-light shadow btn-play"
-                    @click="stop"
-                  >
-                    <svg
-                      width="1em"
-                      height="1em"
-                      viewBox="0 0 16 16"
-                      class="bi bi-stop-fill"
-                      fill="currentColor"
-                      xmlns="http://www.w3.org/2000/svg"
+                  <template v-if="!state.isPlaying">
+                    <button
+                      type="button"
+                      class="btn btn-light shadow btn-play"
+                      @click="play"
                     >
-                      <path
-                        d="M5 3.5h6A1.5 1.5 0 0 1 12.5 5v6a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 11V5A1.5 1.5 0 0 1 5 3.5z"
-                      />
-                    </svg>
-                    停止
-                  </button>
+                      <svg
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 16 16"
+                        class="bi bi-play-fill"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M11.596 8.697l-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"
+                        />
+                      </svg>
+                      再生
+                    </button>
+                  </template>
+                  <template v-else>
+                    <button
+                      type="button"
+                      class="btn btn-light shadow btn-play"
+                      @click="stop"
+                    >
+                      <svg
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 16 16"
+                        class="bi bi-stop-fill"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M5 3.5h6A1.5 1.5 0 0 1 12.5 5v6a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 11V5A1.5 1.5 0 0 1 5 3.5z"
+                        />
+                      </svg>
+                      停止
+                    </button>
+                  </template>
                 </template>
               </div>
               <div class="col-8">
@@ -262,6 +288,96 @@
         </div>
       </div>
     </div>
+    <div
+      class="modal fade"
+      id="saveModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="saveModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="saveModalLabel">
+              タイトルと説明の編集
+            </h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <label for="title" class="col-form-label">タイトル(必須)</label>
+                <input type="text" class="form-control" id="title" />
+              </div>
+              <div class="form-group">
+                <label for="description" class="col-form-label">説明</label>
+                <textarea class="form-control" id="description"></textarea>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              キャンセル
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-dismiss="modal"
+              data-toggle="modal"
+              data-target="#savedModal"
+            >
+              保存する
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="modal fade"
+      id="savedModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="savedModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="savedModalLabel">保存完了</h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">保存が完了しました。</div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              閉じる
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -270,67 +386,55 @@ import { computed, reactive } from "vue";
 import AudioPlayer from "@/utils/AudioPlayer";
 import axios from "axios";
 import AudioStore from "@/store/audio";
+import * as UMesseApi from "umesseapi";
 
 export default {
   setup() {
     const audioPlayer = AudioPlayer();
     const audioStore = AudioStore();
+    const api = new UMesseApi.ResourcesApi();
+
     const state = reactive({
       menus: [
         {
           id: 1,
-          title: "テンプレート1",
+          title: "ユーザー作成",
         },
         {
           id: 2,
-          title: "テンプレート2",
-        },
-        {
-          id: 3,
-          title: "テンプレート3",
-        },
-        {
-          id: 4,
-          title: "テンプレート4",
-        },
-        {
-          id: 5,
-          title: "テンプレート5",
-        },
-        {
-          id: 6,
-          title: "テンプレート6",
+          title: "企業オリジナル",
         },
       ],
       activeMenuId: 1,
       sorts: ["名前順", "作成日順", "更新日順"],
       narrationDatas: [
         {
-          title: "XXXXXXの案内1",
+          title: "18時30分閉店",
           description1:
             "本日はご来店いただきまして、誠にありがとうございます。お客様に…",
           description2: "00:24 放送開始日2020年10月15日 有効期限2020年10月20日",
         },
         {
-          title: "XXXXXXの案内1",
+          title: "アルバイト募集",
           description1:
             "お客様にご案内申し上げます。当店ではアルバイトを募集いたしており…",
           description2: "00:15 放送開始日2020年10月15日 有効期限2020年10月20日",
         },
         {
-          title: "XXXXXXの案内1",
+          title: "チャイルドチェア",
           description1:
             "本日はご来店いただきまして、誠にありがとうございます。お客様に…",
           description2: "00:24 放送開始日2020年10月15日 有効期限2020年10月20日",
         },
         {
-          title: "XXXXXXの案内1",
+          title: "デリバリー",
           description1:
             "本日はご来店いただきまして、誠にありがとうございます。お客様に…",
           description2: "00:24 放送開始日2020年10月15日 有効期限2020年10月20日",
         },
       ],
       isPlaying: computed(() => audioPlayer.isPlaying()),
+      isDownloading: computed(() => audioStore.isDownloading),
       playbackTime: computed(() => {
         return audioPlayer.getPlaybackTime();
       }),
@@ -354,10 +458,9 @@ export default {
     };
     const play = async () => {
       if (state.isPlaying) return;
-      // TODO: umesse apiから取得
-      const signedUrl = "/audio/asahi/music/myuu/wave/hana.mp3";
-
-      await audioStore.download(signedUrl);
+      const response = await api.getSignedUrl("ID");
+      console.log(response.data.url)
+      await audioStore.download(response.data.url);
       audioPlayer.start(<AudioBuffer>audioStore.audioBuffer);
     };
 
