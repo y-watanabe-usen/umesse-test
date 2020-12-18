@@ -17,8 +17,8 @@
             type="button"
             class="btn btn-menu text-left text-white"
             :class="[
-              menu.id == state.activeMenuId ? 'btn-light' : 'btn-link',
-              menu.id == state.activeMenuId ? 'text-dark' : 'text-white',
+              menu.id == state.activeMenuId ? 'btn-primary' : 'btn-link',
+              menu.id == state.activeMenuId ? 'text-white' : 'text-dark',
               menu.id == 1 ? 'mt-2' : '',
             ]"
             v-for="menu in state.menus"
@@ -398,11 +398,31 @@ export default {
       menus: [
         {
           id: 1,
-          title: "ユーザー作成",
+          title: "開店",
         },
         {
           id: 2,
-          title: "企業オリジナル",
+          title: "閉店",
+        },
+        {
+          id: 3,
+          title: "エスカレーター",
+        },
+        {
+          id: 4,
+          title: "案内",
+        },
+        {
+          id: 5,
+          title: "年末年始告知",
+        },
+        {
+          id: 6,
+          title: "年末営業告知",
+        },
+        {
+          id: 7,
+          title: "年中行事販促",
         },
       ],
       activeMenuId: 1,
@@ -479,9 +499,7 @@ export default {
 
 <style scoped>
 .bg-menu {
-  background: -moz-linear-gradient(top, #89929e, #a4a8ad);
-  background: -webkit-linear-gradient(top, #89929e, #a4a8ad);
-  background: linear-gradient(to bottom, #89929e, #a4a8ad);
+  background: #d9d9d9;
 }
 .btn-menu {
   width: 100%;
