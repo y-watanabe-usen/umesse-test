@@ -4,6 +4,7 @@ import Narration from '@/views/narration/Index.vue'
 import Recording from '@/views/recording/Index.vue'
 import Management from '@/views/management/Index.vue'
 import VoiceTemplate from '@/views/voice/template/Index.vue'
+import VoiceTemplateDetail from '@/views/voice/template/Detail.vue'
 import VoiceFree from '@/views/voice/free/Index.vue'
 import OrderFlow1 from '@/views/order/Flow1.vue'
 import OrderFlow2 from '@/views/order/Flow2.vue'
@@ -40,6 +41,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/voice/template',
     name: 'VoiceTemplate',
     component: VoiceTemplate
+  },
+  {
+    path: '/voice/template/detail',
+    name: 'VoiceTemplateDetail',
+    component: VoiceTemplateDetail
   },
   {
     path: '/voice/free',

@@ -30,4 +30,7 @@ export default {
 .bg-umesse {
   background: #ebebeb;
 }
+.m-auto {
+  margin: auto;
+}
 </style>
