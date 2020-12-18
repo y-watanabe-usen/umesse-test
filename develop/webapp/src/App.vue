@@ -22,9 +22,12 @@ export default {
 .navbar {
   padding: .5rem 0;
 }
-.bg-umesse {
+.bg-umesse-home {
   background: -moz-linear-gradient(top, #177dd1, #489fdf);
   background: -webkit-linear-gradient(top, #177dd1, #489fdf);
   background: linear-gradient(to bottom, #177dd1, #489fdf);
+}
+.bg-umesse {
+  background: #ebebeb;
 }
 </style>

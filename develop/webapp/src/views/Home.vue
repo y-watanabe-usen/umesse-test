@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-umesse">
+  <div class="bg-umesse-home">
     <div class="container">
       <nav class="navbar navbar-expand-lg navbar-light">
         <span class="navbar-brand mb-0 h1 text-white"
@@ -37,7 +37,7 @@
       <h5 class="text-white">店内アナウンスを作成する</h5>
       <div class="row top">
         <div class="col-md-4 mb-4">
-          <router-link :to="{ path: 'RecordingStart' }">
+          <router-link :to="{ name: 'Recording' }">
             <div class="content">
               <p class="image">
                 <svg
@@ -131,12 +131,17 @@
               </span>
               <span class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <router-link
-                  :to="{ path: 'selecttemplate' }"
+                  :to="{ name: 'VoiceTemplate' }"
                   class="dropdown-item"
                 >
                   テンプレートから作成</router-link
                 >
-                <a class="dropdown-item" href="#">フリー入力から作成</a>
+                <router-link
+                  :to="{ name: 'VoiceFree' }"
+                  class="dropdown-item"
+                >
+                  フリー入力から作成</router-link
+                >
               </span>
             </p>
             <p class="lead small">
@@ -145,7 +150,7 @@
           </div>
         </div>
         <div class="col-md-4">
-          <router-link :to="{ path: 'narration' }">
+          <router-link :to="{ name: 'Narration' }">
             <div class="content">
               <p class="image">
                 <svg
@@ -226,7 +231,7 @@
               <span class="title">&nbsp;&nbsp;管理する</span>
             </p>
             <router-link
-              :to="{ path: 'createdcm' }"
+              :to="{ name: 'Management' }"
               class="btn btn-light border w-100 my-4 text-left"
             >
               店内アナウンスを管理
@@ -264,7 +269,7 @@
             <div class="row">
               <div class="col">
                 <router-link
-                  :to="{ path: 'orderinstoreannouncement1' }"
+                  :to="{ name: 'OrderFlow1' }"
                   class="btn btn-light border w-100 my-4 text-left"
                 >
                   店内アナウンスを発注
@@ -275,7 +280,7 @@
               </div>
               <div class="col">
                 <router-link
-                  :to="{ path: 'orderhistorylist' }"
+                  :to="{ name: 'OrderHistory' }"
                   class="btn btn-light border w-100 my-4 text-left"
                 >
                   発注履歴

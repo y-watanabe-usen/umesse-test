@@ -2,18 +2,18 @@
   <div class="bg-umesse pb-5">
     <div class="container">
       <nav class="navbar navbar-expand-lg navbar-light">
-        <router-link class="navbar-brand text-white" :to="{ path: '/' }"
+        <router-link class="navbar-brand" :to="{ name: 'Home' }"
           >&lt;戻る</router-link
         >
         <div
-          class="collapse navbar-collapse justify-content-center text-white h4"
+          class="collapse navbar-collapse justify-content-center h4"
         >
           録音する
         </div>
         <span v-if="hasRecordedData === true">
           <button
             type="button"
-            class="btn btn-link navbar-brand text-white"
+            class="btn btn-link navbar-brand"
             data-toggle="modal"
             data-target="#saveModal"
           >
@@ -25,10 +25,10 @@
         <div class="m-5">
           <p class="recording" @click="toggleVoiceRecorder">
             <span v-if="isRecording === false">
-              <img class="card-img-top" src="../assets/_rec@2x.png" />
+              <img class="card-img-top" src="../../assets/_rec@2x.png" />
             </span>
             <span v-else>
-              <img class="card-img-top" src="../assets/_stop@2x.png" />
+              <img class="card-img-top" src="../../assets/_stop@2x.png" />
             </span>
           </p>
         </div>
@@ -68,12 +68,12 @@
                 style="height: 40px"
               ></meter>
               <span id="avg-level-text"> {{ decibel }} </span> dB
-              <h5 class="text-white mt-4">録音したデータ１</h5>
+              <h5 class="mt-4">録音したデータ１</h5>
               <div class="row">
-                <div class="col text-left text-white" style="font-size: 17px">
+                <div class="col text-left" style="font-size: 17px">
                   {{ playbackTimeHms }}
                 </div>
-                <div class="col text-right text-white" style="font-size: 17px">
+                <div class="col text-right" style="font-size: 17px">
                   {{ durationHms }}
                 </div>
               </div>
@@ -129,7 +129,6 @@
                 style="
                   font-size: 14px;
                   font-weight: bold;
-                  color: #ffffff;
                   text-align: center;
                 "
               >
@@ -351,7 +350,7 @@ svg {
 .btn-primary:disabled {
   background-color: #264b7380;
   border-color: #264b7380;
-  color: #fff;
+  /* color: #fff; */
 }
 .btn-play,
 .btn-delete {
@@ -367,7 +366,7 @@ svg {
 h5 {
   margin-bottom: 0;
   margin-right: 26px;
-  color: #ffffff;
+  /* color: #ffffff; */
   font-weight: 400;
   font-size: 17px;
 }
@@ -379,7 +378,7 @@ h5 {
 .scale {
   width: 2px;
   height: 8px;
-  background-color: #ffffff;
+  background-color: #aaa;
   margin-right: 49px;
 }
 .scale:first-child {

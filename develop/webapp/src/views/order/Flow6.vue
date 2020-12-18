@@ -2,17 +2,17 @@
   <div class="bg-umesse">
     <div class="container">
       <nav class="navbar navbar-expand-lg navbar-light d-flex">
-        <router-link class="navbar-brand text-white" :to="{ path: '/' }"
+        <router-link class="navbar-brand" :to="{ name: 'OrderFlow5' }"
           >&lt;戻る</router-link
         >
         <div
-          class="collapse navbar-collapse justify-content-center text-white h4"
+          class="collapse navbar-collapse justify-content-center h4"
         >
           店内アナウンスを発注する
         </div>
         <div style="width: 116px; height: 46px"></div>
       </nav>
-      <div class="rounded" style="height: 600px; background-color: #e6e6e6">
+      <div class="rounded bg-white" style="height: 600px;">
         <div class="p-4">
           <div class="d-flex">
             <div class="d-flex col-2 pl-0">
@@ -40,7 +40,7 @@
               <h6 style="color: #578ed9; line-height: 50px">確認/発注</h6>
             </div>
           </div>
-          <div style="height: 320px; overflow-y: scroll">
+          <div style="height: 440px; overflow-y: scroll">
             <hr />
             <div class="d-flex" style="line-height: 40px">
               <div class="col-3">納品先</div>
@@ -114,12 +114,12 @@
             </div>
           </div>
           <div class="d-flex justify-content-center">
-            <router-link :to="{ path: '/' }">
+            <router-link :to="{ name: 'Home' }">
               <button class="btn btn-light m-4" style="width: 200px">
                 キャンセル
               </button>
             </router-link>
-            <router-link :to="{ path: 'ordercompleted' }">
+            <router-link :to="{ name: 'OrderEnd' }">
               <button class="btn btn-primary m-4" style="width: 200px">
                 発注する
               </button>
@@ -150,7 +150,7 @@ hr {
   font-size: 16px;
   text-align: center;
   line-height: 45px;
-  background-color: #ffffff;
+  background-color: #e6e6e6;
   color: #888888;
   margin-right: 10px;
 }
