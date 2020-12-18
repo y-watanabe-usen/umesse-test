@@ -275,7 +275,7 @@
               </div>
               <div class="col">
                 <router-link
-                  :to="{ path: '' }"
+                  :to="{ path: 'orderhistorylist' }"
                   class="btn btn-light border w-100 my-4 text-left"
                 >
                   発注履歴

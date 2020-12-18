@@ -12,6 +12,8 @@ import OrderInStoreAnnouncement6 from '@/views/OrderInStoreAnnouncement6.vue'
 import OrderCompleted from '@/views/OrderCompleted.vue'
 import SelectTemplate from '@/views/SelectTemplate.vue'
 import CreateNarrationTextInput from '@/views/CreateNarrationTextInput.vue'
+import OrderHistoryList from '@/views/OrderHistoryList.vue'
+import OrderHistoryDetail from '@/views/OrderHistoryDetail.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -78,6 +80,16 @@ const routes: Array<RouteRecordRaw> = [
     path: '/createnarrationtextinput',
     name: 'CreateNarrationTextInput',
     component: CreateNarrationTextInput
+  },
+  {
+    path: '/orderhistorylist',
+    name: 'OrderHistoryList',
+    component: OrderHistoryList
+  },
+  {
+    path: '/orderhistorydetail',
+    name: 'OrderHistoryDetail',
+    component: OrderHistoryDetail
   },
 ]
 

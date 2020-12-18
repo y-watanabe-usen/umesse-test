@@ -392,7 +392,7 @@ export default {
   setup() {
     const audioPlayer = AudioPlayer();
     const audioStore = AudioStore();
-    const api = new UMesseApi.S3Api();
+    const api = new UMesseApi.ResourcesApi();
 
     const state = reactive({
       menus: [
