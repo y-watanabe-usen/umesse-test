@@ -196,10 +196,6 @@ import * as UMesseApi from "umesseapi";
 
 export default {
   setup() {
-    const audioPlayer = AudioPlayer();
-    const audioStore = AudioStore();
-    const api = new UMesseApi.ResourcesApi();
-
     const state = reactive({
       menus: [
         {
@@ -259,45 +255,9 @@ export default {
           description2: "00:24 放送開始日2020年10月15日 有効期限2020年10月20日",
         },
       ],
-      isPlaying: computed(() => audioPlayer.isPlaying()),
-      isDownloading: computed(() => audioStore.isDownloading),
-      playbackTime: computed(() => {
-        return audioPlayer.getPlaybackTime();
-      }),
-      playbackTimeHms: computed(() => {
-        return sToHms(Math.floor(audioPlayer.getPlaybackTime()));
-      }),
-      duration: computed(() => {
-        return audioPlayer.getDuration();
-      }),
-      durationHms: computed(() => {
-        return sToHms(Math.floor(audioPlayer.getDuration()));
-      }),
     });
-    // 秒を時分秒に変換
-    const sToHms = (second: number) => {
-      const h = "" + ((second / 36000) | 0) + ((second / 3600) % 10 | 0);
-      const m =
-        "" + (((second % 3600) / 600) | 0) + (((second % 3600) / 60) % 10 | 0);
-      const s = "" + (((second % 60) / 10) | 0) + ((second % 60) % 10);
-      return h + ":" + m + ":" + s;
-    };
-    const play = async () => {
-      if (state.isPlaying) return;
-      const response = await api.getSignedUrl("ID");
-      console.log(response.data.url);
-      await audioStore.download(response.data.url);
-      audioPlayer.start(<AudioBuffer>audioStore.audioBuffer);
-    };
-
-    const stop = () => {
-      if (state.isPlaying) audioPlayer.stop();
-    };
-
     return {
       state,
-      play,
-      stop,
     };
   },
 };
