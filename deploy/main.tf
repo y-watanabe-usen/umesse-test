@@ -1,6 +1,17 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "3.21.0"
+    }
+    archive = {
+      source  = "hashicorp/archive"
+      version = "2.0.0"
+    }
+  }
+}
 
 provider "aws" {
-  version                     = "~> 2.70"
   region                      = var.aws_region
   access_key                  = var.access_key
   secret_key                  = var.secret_key
@@ -11,26 +22,23 @@ provider "aws" {
   endpoints {
     apigateway = var.aws_endpoint_url
     # cloudformation = "http://localhost:4581"
-    cloudwatch     = var.aws_endpoint_url
-    dynamodb =var.aws_endpoint_url 
+    cloudwatch = var.aws_endpoint_url
+    dynamodb   = var.aws_endpoint_url
     # es             = "http://localhost:4578"
     # firehose       = "http://localhost:4573"
-    iam            = var.aws_endpoint_url
+    iam = var.aws_endpoint_url
     # kinesis        = "http://localhost:4568"
-    lambda     = var.aws_endpoint_url
+    lambda = var.aws_endpoint_url
     # route53        = "http://localhost:4580"
     # redshift       = "http://localhost:4577"
-    s3       =var.aws_endpoint_url 
+    s3 = var.aws_endpoint_url
     # secretsmanager = "http://localhost:4584"
     # ses            = "http://localhost:4579"
     # sns            = "http://localhost:4575"
-    sqs            = var.aws_endpoint_url
+    sqs = var.aws_endpoint_url
     # ssm            = "http://localhost:4583"
     # stepfunctions  = "http://localhost:4585"
     # sts            = "http://localhost:4592"
   }
 }
 
-provider "archive" {
-  version = "~> 1.3.0"
-}

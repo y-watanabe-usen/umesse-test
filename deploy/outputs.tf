@@ -1,5 +1,5 @@
 output "sqs_url" {
-  value = "${aws_sqs_queue.umesse_converter_queue.id}"
+  value = aws_sqs_queue.umesse_converter_queue.id
 }
 
 output "rest_api_id" {

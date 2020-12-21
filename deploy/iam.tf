@@ -4,7 +4,7 @@ resource "aws_iam_role" "umesse_converter_lambda" {
 
 resource "aws_iam_role_policy_attachment" "umesse_converter_lambda" {
   policy_arn = aws_iam_policy.umesse_converter_lambda.arn
-  role = aws_iam_role.umesse_converter_lambda.name
+  role       = aws_iam_role.umesse_converter_lambda.name
 }
 
 resource "aws_iam_policy" "umesse_converter_lambda" {
