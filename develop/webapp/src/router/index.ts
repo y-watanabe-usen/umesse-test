@@ -6,6 +6,7 @@ import Management from '@/views/management/Index.vue'
 import VoiceTemplate from '@/views/voice/template/Index.vue'
 import VoiceTemplateDetail from '@/views/voice/template/Detail.vue'
 import VoiceFree from '@/views/voice/free/Index.vue'
+import VoiceFreeSelectTemplate from '@/views/voice/free/SelectTemplate.vue'
 import OrderFlow1 from '@/views/order/Flow1.vue'
 import OrderFlow2 from '@/views/order/Flow2.vue'
 import OrderFlow3 from '@/views/order/Flow3.vue'
@@ -51,6 +52,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/voice/free',
     name: 'VoiceFree',
     component: VoiceFree
+  },
+  {
+    path: '/voice/free/select_template',
+    name: 'VoiceFreeSelectTemplate',
+    component: VoiceFreeSelectTemplate
   },
   {
     path: '/order/flow1',
