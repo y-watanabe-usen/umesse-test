@@ -188,49 +188,13 @@
             >
               終了
             </button>
-            <button
-              type="button"
+            <router-link
               class="btn btn-primary btn-save"
               data-dismiss="modal"
-              data-toggle="modal"
-              data-target="#savedModal"
+              :to="{ name: 'Cm' }"
             >
-              保存する
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      class="modal fade"
-      id="savedModal"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="savedModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="savedModalLabel">保存完了</h5>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">保存が完了しました。</div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-            >
-              閉じる
-            </button>
+              保存して作成を続ける
+            </router-link>
           </div>
         </div>
       </div>
