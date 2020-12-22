@@ -17,8 +17,16 @@ exports.getShareCm = async (unisCustomerCd, cmId) => {
   );
 
   try {
+    // パラメーターチェック
+    const checkParams = validation.checkParams("getShareCm", unisCustomerCd);
+    if (checkParams) throw checkParams;
+
     const key = { unisCustomerCd: unisCustomerCd };
     const options = {
+      KeyConditionExpression: "status = :status",
+      ExpressionAttributeValues: {
+        ":status": constants.cmStatus.SHARING,
+      },
       ProjectionExpression: "cm",
     };
     debuglog(JSON.stringify({ key: key, options: options }));

@@ -15,8 +15,12 @@ exports.getUploadCm = async (unisCustomerCd, cmId) => {
   );
 
   try {
+    // パラメーターチェック
+    const checkParams = validation.checkParams("getUploadCm", unisCustomerCd);
+    if (checkParams) throw checkParams;
+
     const options = {
-      KeyConditionExpression: "unisCustomerCd: :unisCustomerCd",
+      KeyConditionExpression: "unisCustomerCd = :unisCustomerCd",
       ExpressionAttributeValues: {
         ":unisCustomerCd": unisCustomerCd,
       },
@@ -25,9 +29,9 @@ exports.getUploadCm = async (unisCustomerCd, cmId) => {
       constants.dynamoDbTable().external,
       options
     );
-    if (!res || !res.Items) throw "not found";
+    if (!res || !res.Items.length) throw "not found";
 
-    let json = res.Items.cm;
+    let json = res.Items;
     if (cmId) {
       json = json.filter((item) => item.id === cmId)[0];
     }

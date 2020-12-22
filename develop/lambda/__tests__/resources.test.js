@@ -1,9 +1,7 @@
 "use strict";
 
-process.env.debug = false;
+// process.env.debug = true;
 process.env.environment = "local";
-// TODO: mock
-const isMock = true;
 
 const {
   getSignedUrl,
@@ -11,98 +9,126 @@ const {
   getUserResource,
 } = require("../umesse/resources");
 
-const bgmData = {
-  id: "bgm/サンプル01",
-  title: "タイトル",
-  description: "説明文",
-  seconds: 300,
-  industry: [
-    {
-      cd: "01",
-      name: "業種名",
-    },
-  ],
-  scene: [
-    {
-      cd: "01",
-      name: "シーン名",
-    },
-  ],
-  timestamp: "2019-09-01T09:00:00+9:00",
-};
-
-const userData = {
-  unisCustomerCd: "123456789",
-  recording: [
-    {
-      id: "123456789-r-12345678",
-      title: "サンプル",
-      description: "サンプル",
-      startDate: "2019-09-01T09:00:00+9:00",
-      timestamp: "2019-09-01T09:00:00+9:00",
-    },
-  ],
-};
-
-const mock = jest.fn();
-// TODO: mock
-jest.mock("aws-sdk", () => {
-  return {
-    DynamoDB: {
-      DocumentClient: jest.fn(() => {
-        return {
-          get: () => {
-            return {
-              promise: mock,
-            };
-          },
-          scan: () => {
-            return {
-              promise: mock,
-            };
-          },
-        };
-      }),
-    },
-    S3: jest.fn(() => {
-      return {
-        getSignedUrl: () => {
-          return {
-            promise: mock,
-          };
-        },
-      };
-    }),
-  };
-});
-
 beforeAll(() => {
-  jest.setTimeout(1000 * 30); // 30 min
-  if (isMock) jest.resetAllMocks();
+  jest.setTimeout(1000 * 30); // 30 sec
 });
 
 // TODO: draft
 describe("resources", () => {
   test("getSignedUrl success", async () => {
-    if (isMock) mock.mockResolvedValue("signed url");
-    const response = await getSignedUrl("123456789-c-12345678");
+    const response = await getSignedUrl("020000000-c-00000001");
     expect(response).toEqual({ url: expect.anything() });
   });
 
-  test("getResource success", async () => {
-    if (isMock) mock.mockResolvedValue({ Items: bgmData });
-    const response = await getResource("bgm");
-    expect(response).toEqual(bgmData);
+  test("getResource bgm success", async () => {
+    const response = await getResource(
+      "bgm",
+      bgmData.industry[0].cd,
+      bgmData.scene[0].cd
+    );
+    expect(response).toEqual([bgmData]);
   });
 
-  test("getUserResource success", async () => {
-    if (isMock) mock.mockResolvedValue({ Item: userData });
-    const response = await getUserResource(
-      userData.unisCustomerCd,
-      "recording"
+  test("getResource narration success", async () => {
+    const response = await getResource(
+      "narration",
+      narrationData.industry[0].cd,
+      narrationData.scene[0].cd
     );
-    expect(response).toEqual(userData.recording);
+    expect(response).toEqual([narrationData]);
+  });
+
+  test("getUserResource recording success", async () => {
+    const response = await getUserResource(
+      recordingData.unisCustomerCd,
+      "recording",
+      recordingData.data.id
+    );
+    expect(response).toEqual(recordingData.data);
+  });
+
+  test("getUserResource tts success", async () => {
+    const response = await getUserResource(
+      ttsData.unisCustomerCd,
+      "tts",
+      ttsData.data.id
+    );
+    expect(response).toEqual(ttsData.data);
+  });
+
+  test("getUserResource not found", async () => {
+    const response = await getUserResource("999999999");
+    expect(response).toEqual({ message: "not found" });
+  });
+
+  test("getUserResource not params", async () => {
+    const response = await getUserResource("");
+    expect(response).toEqual({ message: "params failed" });
   });
 });
 
 // FIXME: error test
+
+// test data
+const bgmData = {
+  id: "bgm/サンプル01",
+  title: "サンプル01",
+  description: "BGM・サンプル01",
+  seconds: 60,
+  industry: [
+    {
+      cd: "01",
+      name: "業種01",
+    },
+  ],
+  scene: [
+    {
+      cd: "01",
+      name: "シーン01",
+    },
+  ],
+  timestamp: "2019-09-01T09:00:00+9:00",
+};
+
+const narrationData = {
+  id: "narration/サンプル05",
+  title: "サンプル05",
+  description: "ナレーション・サンプル05",
+  manuscript: "あいうえお",
+  seconds: 60,
+  industry: [
+    {
+      cd: "05",
+      name: "業種05",
+    },
+  ],
+  scene: [
+    {
+      cd: "05",
+      name: "シーン05",
+    },
+  ],
+  timestamp: "2019-09-01T09:00:00+9:00",
+};
+
+const recordingData = {
+  unisCustomerCd: "020000000",
+  data: {
+    id: "020000000-r-00000001",
+    title: "録音テスト01",
+    description: "録音テスト01",
+    startDate: "2019-09-01T09:00:00+9:00",
+    timestamp: "2019-09-01T09:00:00+9:00",
+  },
+};
+
+const ttsData = {
+  unisCustomerCd: "020000000",
+  data: {
+    id: "020000000-t-00000003",
+    title: "合成音声テスト03",
+    description: "合成音声テスト03",
+    startDate: "2019-09-01T09:00:00+9:00",
+    timestamp: "2019-09-01T09:00:00+9:00",
+  },
+};

@@ -17,6 +17,12 @@
     "jest": "^26.6.3"
   },
   "scripts": {
-    "test": "cd ../../deploy/ && sh init.sh && cd ../develop/lambda && jest -i"
+    "test": "sh ./__tests__/data/init.sh && jest -i --coverage"
+  },
+  "jest": {
+    "verbose": false,
+    "testMatch": [
+      "**/__tests__/*.test.js"
+    ]
   }
 }

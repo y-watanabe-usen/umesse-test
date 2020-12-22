@@ -1,6 +1,7 @@
 "use strict";
 
 const { constants, debuglog } = require("./constants");
+const { validation } = require("./validation");
 const dynamodb = require("./utils/dynamodbController").controller;
 
 // ユーザーデータ取得
@@ -12,6 +13,10 @@ exports.getUser = async (unisCustomerCd) => {
   );
 
   try {
+    // パラメーターチェック
+    const checkParams = validation.checkParams("getUser", unisCustomerCd);
+    if (checkParams) throw checkParams;
+
     const key = { unisCustomerCd: unisCustomerCd };
     const options = {
       ProjectionExpression:

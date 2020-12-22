@@ -1,0 +1,113 @@
+{
+  "umesse-users": [
+    {
+      "PutRequest": {
+        "Item": {
+          "unisCustomerCd": { "S": "030000000" },
+          "contractCd": { "S": "N0300000000" },
+          "serviceCd": { "S": "U01" },
+          "serviceName": { "S": "U∞MUSNC" },
+          "customerName": { "S": "テスト03" },
+          "customerNameKana": { "S": "テスト03" },
+          "customerGroupCd": { "S": "030000000" },
+          "customerGroupName": { "S": "テスト03グループ" },
+          "contractStatusCd": { "S": "2" },
+          "contractStatusName": { "S": "確定" },
+          "createDate": { "S": "2019-09-01T09:00:00+9:00" },
+          "renewalDate": { "S": "2019-09-01T09:00:00+9:00" },
+          "cm": {
+            "L": [
+              {
+                "M": {
+                  "id": { "S": "030000000-c-00000001" },
+                  "title": { "S": "CMテスト01" },
+                  "description": { "S": "CMテスト01" },
+                  "seconds": { "N": "60" },
+                  "startDate": { "S": "2019-09-01T09:00:00+9:00" },
+                  "endDate": { "S": "9999-12-31T23:59:59+09:00" },
+                  "productionType": { "S": "01" },
+                  "industry": {
+                    "L": [
+                      {
+                        "M": {
+                          "id": { "S": "01" },
+                          "name": { "S": "業種01" }
+                        }
+                      }
+                    ]
+                  },
+                  "scene": {
+                    "L": [
+                      {
+                        "M": {
+                          "id": { "S": "01" },
+                          "name": { "S": "シーン01" }
+                        }
+                      }
+                    ]
+                  },
+                  "materials": {
+                    "M": {
+                      "narrations": {
+                        "L": [
+                          {
+                            "M": {
+                              "id": { "S": "narration/サンプル01" },
+                              "volume": { "N": "150" }
+                            }
+                          }
+                        ]
+                      },
+                      "startChime": {
+                        "M": {
+                          "id": { "S": "chime/サンプル01" },
+                          "volume": { "N": "50" }
+                        }
+                      },
+                      "endChime": {
+                        "M": {
+                          "id": { "S": "chime/サンプル02" },
+                          "volume": { "N": "50" }
+                        }
+                      },
+                      "bgm": {
+                        "M": {
+                          "id": { "S": "bgm/サンプル01" },
+                          "volume": { "N": "50" }
+                        }
+                      }
+                    }
+                  },
+                  "status": { "S": "11" },
+                  "timestamp": { "S": "2019-09-01T09:00:00+9:00" }
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "umesse-external": [
+    {
+      "PutRequest": {
+        "Item": {
+          "unisCustomerCd": { "S": "030000000" },
+          "dataProcessType": { "S": "01" },
+          "id": { "S": "030000000-c-00000001" },
+          "title": { "S": "時報A" },
+          "description": { "S": "テストCMです" },
+          "seconds": { "N": "60" },
+          "startDate": { "S": "2020-01-01T12:34:56+09:00" },
+          "endDate": { "S": "9999-12-31T23:59:59+09:00" },
+          "productionType": { "S": "01" },
+          "industry": { "S": "01" },
+          "scene": { "S": "01" },
+          "uploadSystem": { "S": "01" },
+          "status": { "S": "1" },
+          "timestamp": { "S": "2020-01-01T12:34:56+09:00" }
+        }
+      }
+    }
+  ]
+}
