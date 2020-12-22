@@ -17,6 +17,10 @@ exports.getCm = async (unisCustomerCd, cmId) => {
   );
 
   try {
+    // パラメーターチェック
+    const checkParams = validation.checkParams("getCm", unisCustomerCd);
+    if (checkParams) throw checkParams;
+
     const key = { unisCustomerCd: unisCustomerCd };
     const options = {
       ProjectionExpression: "cm",
@@ -53,7 +57,7 @@ exports.createCm = async (unisCustomerCd, body) => {
 
   try {
     // パラメーターチェック
-    const checkParams = validation.checkParams("updateCm", body);
+    const checkParams = validation.checkParams("createCm", body);
     if (checkParams) throw checkParams;
 
     // ID生成

@@ -25,16 +25,16 @@ exports.getResource = async (filter, industryCd, sceneCd) => {
       constants.dynamoDbTable().contents,
       options
     );
-    if (!res || !res.Items) throw "not found";
+    if (!res || !res.Items.length) throw "not found";
 
     let json = res.Items;
     if (industryCd) {
       json = json.filter((item) =>
-        item.industry.some((el) => el.id === industryCd)
+        item.industry.some((el) => el.cd === industryCd)
       );
     }
     if (sceneCd) {
-      json = json.filter((item) => item.scenes.some((el) => el.id === sceneCd));
+      json = json.filter((item) => item.scene.some((el) => el.cd === sceneCd));
     }
     return json;
   } catch (e) {
@@ -77,6 +77,13 @@ exports.getUserResource = async (unisCustomerCd, filter, id) => {
   );
 
   try {
+    // パラメーターチェック
+    const checkParams = validation.checkParams(
+      "getUserResource",
+      unisCustomerCd
+    );
+    if (checkParams) throw checkParams;
+
     const key = { unisCustomerCd: unisCustomerCd };
     const options = {
       ProjectionExpression: filter,
@@ -92,7 +99,7 @@ exports.getUserResource = async (unisCustomerCd, filter, id) => {
 
     let json = res.Item[filter];
     if (id) {
-      json = json.filter((item) => item.id === id);
+      json = json.filter((item) => item.id === id)[0];
     }
     return json;
   } catch (e) {

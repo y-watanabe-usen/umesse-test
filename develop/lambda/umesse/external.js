@@ -16,12 +16,9 @@ exports.getExternalCm = async (unisCustomerCd, external) => {
 
   try {
     const res = await dynamodb.scan(constants.dynamoDbTable().external, {});
-    if (!res || !res.Items) throw "not found";
+    if (!res || !res.Items.length) throw "not found";
 
     let json = res.Items;
-    if (unisCustomerCd) {
-      json = json.filter((item) => item.unisCustomerCd === unisCustomerCd);
-    }
     if (external == "center") {
       json = json.filter(
         (item) =>
@@ -34,6 +31,11 @@ exports.getExternalCm = async (unisCustomerCd, external) => {
           item.uploadSystem === constants.cmUploadSystem.SSENCE &&
           item.status === "1"
       );
+    }
+    if (!json.length) throw "nothing";
+
+    if (unisCustomerCd) {
+      json = json.filter((item) => item.unisCustomerCd === unisCustomerCd)[0];
     }
     return json;
   } catch (e) {
