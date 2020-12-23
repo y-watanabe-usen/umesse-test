@@ -129,11 +129,12 @@ exports.createUserResource = async (unisCustomerCd, filter, body) => {
     else if (filter == constants.userResource.TTS) div = "t";
     const id = generateId(unisCustomerCd, div);
 
+    const binaryData = Buffer.from(body["recordedFile"], 'binary');
     // S3へPUT
     let res = await s3.put(
       constants.s3Bucket().users,
-      `users/${unisCustomerCd}/${filter}/${id}.mp3`,
-      body["recordedFile"]
+      `users/${unisCustomerCd}/${filter}/${id}.wav`,
+      binaryData
     );
     if (!res) throw "put failed";
 
