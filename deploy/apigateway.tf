@@ -41,10 +41,10 @@ resource "aws_api_gateway_deployment" "umesse_v1" {
 }
 
 ## permission:   API Gateway ----> Lambda
-resource "aws_lambda_permission" "umesse" {
-  statement_id = "AllowExecutionFromAPIGateway"
-  #  statement_id  = "AllowAPIGatewayInvoke"
-  action        = "lambda:InvokeFunction"
-  function_name = aws_lambda_function.lambda.function_name
-  principal     = "apigateway.amazonaws.com"
-}
+#resource "aws_lambda_permission" "umesse" {
+#  statement_id = "AllowExecutionFromAPIGateway"
+#  #  statement_id  = "AllowAPIGatewayInvoke"
+#  action        = "lambda:InvokeFunction"
+#  function_name = aws_lambda_function.lambda.function_name
+#  principal     = "apigateway.amazonaws.com"
+#}
