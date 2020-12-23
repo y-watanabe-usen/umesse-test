@@ -17,7 +17,7 @@ export default function authStore() {
     const getState = async () => {
 
     }
-
+    const getToken = () => state.token;
     const requestAuth = async () => {
         if (state.authenticating) return
         // 認証済み
@@ -44,7 +44,8 @@ export default function authStore() {
 
     return {
         ...toRefs(state),
-        requestAuth
+        requestAuth,
+        getToken
     };
 }
 

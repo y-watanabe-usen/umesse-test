@@ -389,7 +389,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, computed, toRefs } from "vue";
+import { defineComponent, reactive, computed, toRefs, provide } from "vue";
 import AudioRecorder from "@/utils/AudioRecorder";
 import AudioPlayer from "@/utils/AudioPlayer";
 import {
@@ -398,18 +398,17 @@ import {
   UPLOAD_RECORDING_STATE,
 } from "@/services/uploadRecordingService";
 import * as UMesseApi from "umesseapi";
+import provideCMStore from "@/store/cm";
 
 export default defineComponent({
   name: "RecordingStart",
   setup() {
-    const uploaRecordingService = useUploadRecordingService(
-      new UMesseApi.RecordingApi()
-    );
+    const cmStore = provideCMStore(); //FIXME: provide name.
     const audioRecorder = AudioRecorder();
     const audioPlayer = AudioPlayer();
     const state = reactive({
       file: <RecordingFile>{},
-      uploadRecoridngState: computed(() => uploaRecordingService.getStatus()),
+      uploadRecoridngState: computed(() => cmStore.getStatus()),
       isRecording: computed(() => audioRecorder.isRecording()),
       hasRecordedData: computed(() => audioRecorder.hasRecording()),
       decibel: computed(() => {
@@ -458,7 +457,7 @@ export default defineComponent({
     const uploadRecordingFile = async () => {
       /// check state.file.
       state.file.blob = await audioRecorder.getWaveBlob();
-      uploaRecordingService.upload(state.file);
+      cmStore.uploadRecordingData(state.file);
     };
 
     return {
