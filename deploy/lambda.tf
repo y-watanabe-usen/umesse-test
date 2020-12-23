@@ -10,6 +10,19 @@ data "archive_file" "lambda_file" {
   output_path = "lambda_src.zip"
 }
 
+
+### attach policy.
+resource "aws_iam_role_policy_attachment" "pollicy-attachment" {
+  role       = aws_iam_role.iam_for_lambda.name
+  policy_arn = aws_iam_policy.policy.arn
+}
+
+resource "aws_iam_policy" "policy" {
+  name        = "lambda-policy"
+  description = "policy"
+  policy      = file("policy.json")
+}
+
 resource "aws_iam_role" "iam_for_lambda" {
   name               = "iam_for_lambda"
   assume_role_policy = file("iam_role_policy.json")
