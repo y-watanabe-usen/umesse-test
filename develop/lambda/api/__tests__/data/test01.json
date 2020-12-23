@@ -1,0 +1,22 @@
+{
+  "umesse-users": [
+    {
+      "PutRequest": {
+        "Item": {
+          "unisCustomerCd": { "S": "010000000" },
+          "contractCd": { "S": "N0100000000" },
+          "serviceCd": { "S": "U01" },
+          "serviceName": { "S": "U∞MUSNC" },
+          "customerName": { "S": "テスト01" },
+          "customerNameKana": { "S": "テスト01" },
+          "customerGroupCd": { "S": "010000000" },
+          "customerGroupName": { "S": "テスト01グループ" },
+          "contractStatusCd": { "S": "2" },
+          "contractStatusName": { "S": "確定" },
+          "createDate": { "S": "2019-09-01T09:00:00+9:00" },
+          "renewalDate": { "S": "2019-09-01T09:00:00+9:00" }
+        }
+      }
+    }
+  ]
+}
