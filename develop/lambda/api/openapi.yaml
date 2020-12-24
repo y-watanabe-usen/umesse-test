@@ -1,0 +1,1628 @@
+openapi: 3.0.0
+servers:
+  - url: /api
+info:
+  description: U MESSE API
+  version: 0.0.1
+  title: U MESSE API
+paths:
+  /ping:
+    get:
+      tags:
+        - ping
+      summary: ping
+      operationId: ping
+      responses:
+        default:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                properties:
+                  message:
+                    type: string
+                    example: "ok"
+
+  /auth:
+    post:
+      tags:
+        - auth
+      summary: 端末認証
+      operationId: auth
+      # security:
+      #   - ApiKeyAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                unisCustomerCd:
+                  type: string
+      responses:
+        200:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Auth"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        5XX:
+          $ref: "#/components/responses/Unexpected"
+
+  /user:
+    get:
+      tags:
+        - user
+      summary: ユーザー情報取得
+      description: ユーザーの情報を取得する
+      operationId: getUser
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        # - $ref: "#/components/parameters/Token"
+        - $ref: "#/components/parameters/UnisCustomerCd"
+      responses:
+        200:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        5XX:
+          $ref: "#/components/responses/Unexpected"
+
+  /user/cm:
+    get:
+      tags:
+        - cm
+      summary: CM一覧取得
+      description: CMの情報を一覧で取得する
+      operationId: listUserCm
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        # - $ref: "#/components/parameters/Token"
+        - $ref: "#/components/parameters/UnisCustomerCd"
+      responses:
+        200:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CmItem"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        5XX:
+          $ref: "#/components/responses/Unexpected"
+    post:
+      tags:
+        - cm
+      summary: CM新規結合
+      description: CMを新規作成する
+      operationId: createUserCm
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        # - $ref: "#/components/parameters/Token"
+        - $ref: "#/components/parameters/UnisCustomerCd"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                materials:
+                  $ref: "#/components/schemas/CmMaterialListItem"
+      responses:
+        200:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CmItem"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        5XX:
+          $ref: "#/components/responses/Unexpected"
+
+  /user/cm/{cmId}:
+    get:
+      tags:
+        - cm
+      summary: CM情報取得
+      description: CMの情報を取得する
+      operationId: getUserCm
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        - $ref: "#/components/parameters/CmId"
+        # - $ref: "#/components/parameters/Token"
+        - $ref: "#/components/parameters/UnisCustomerCd"
+      responses:
+        200:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CmItem"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        5XX:
+          $ref: "#/components/responses/Unexpected"
+    post:
+      tags:
+        - cm
+      summary: CM情報更新
+      description: CMの情報を更新する
+      operationId: updateUserCm
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        - $ref: "#/components/parameters/CmId"
+        # - $ref: "#/components/parameters/Token"
+        - $ref: "#/components/parameters/UnisCustomerCd"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: "サンプル"
+                description:
+                  type: string
+                  example: "サンプル"
+                startDate:
+                  type: string
+                  example: "2019-09-01T09:00:00+9:00"
+                endDate:
+                  type: string
+                  example: "9999-12-31T23:59:59+09:00"
+                industry:
+                  $ref: "#/components/schemas/IndustryItem"
+                scene:
+                  $ref: "#/components/schemas/SceneItem"
+                uploadSystem:
+                  type: string
+                  example: "01: センター, 02: S'sence"
+      responses:
+        200:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CmItem"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        5XX:
+          $ref: "#/components/responses/Unexpected"
+    delete:
+      tags:
+        - cm
+      summary: CM情報削除
+      description: CMを削除する
+      operationId: deleteUserCm
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        - $ref: "#/components/parameters/CmId"
+        # - $ref: "#/components/parameters/Token"
+        - $ref: "#/components/parameters/UnisCustomerCd"
+      responses:
+        200:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CmItem"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        5XX:
+          $ref: "#/components/responses/Unexpected"
+
+  /user/recording:
+    get:
+      tags:
+        - recording
+      summary: 録音データ一覧取得
+      description: 録音音声素材の情報を一覧で取得する
+      operationId: listUserRecording
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        # - $ref: "#/components/parameters/Token"
+        - $ref: "#/components/parameters/UnisCustomerCd"
+      responses:
+        200:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/RecordingItem"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        5XX:
+          $ref: "#/components/responses/Unexpected"
+    post:
+      tags:
+        - recording
+      summary: 新規録音データ
+      description: 録音音声素材を新規登録する
+      operationId: createUserRecording
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        # - $ref: "#/components/parameters/Token"
+        - $ref: "#/components/parameters/UnisCustomerCd"
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                filename:
+                  type: string
+                recordedFile:
+                  type: string
+                  format: binary
+                title:
+                  type: string
+                  example: "サンプル"
+                description:
+                  type: string
+                  example: "サンプル"
+      responses:
+        200:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/RecordingItem"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        5XX:
+          $ref: "#/components/responses/Unexpected"
+
+  /user/recording/{recordingId}:
+    get:
+      tags:
+        - recording
+      summary: 録音データ取得
+      description: 録音音声素材の情報を取得する
+      operationId: getUserRecording
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        - $ref: "#/components/parameters/RecordingId"
+        # - $ref: "#/components/parameters/Token"
+        - $ref: "#/components/parameters/UnisCustomerCd"
+      responses:
+        200:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RecordingItem"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        5XX:
+          $ref: "#/components/responses/Unexpected"
+    post:
+      tags:
+        - recording
+      summary: 録音データ更新（メタデータのみ）
+      description: 録音音声素材の情報を更新する
+      operationId: updateUserRecording
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        - $ref: "#/components/parameters/RecordingId"
+        # - $ref: "#/components/parameters/Token"
+        - $ref: "#/components/parameters/UnisCustomerCd"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: "サンプル"
+                description:
+                  type: string
+                  example: "サンプル"
+      responses:
+        200:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RecordingItem"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        5XX:
+          $ref: "#/components/responses/Unexpected"
+    delete:
+      tags:
+        - recording
+      summary: 録音データ削除
+      description: 録音音声素材を削除する
+      operationId: deleteUserRecording
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        - $ref: "#/components/parameters/RecordingId"
+        # - $ref: "#/components/parameters/Token"
+        - $ref: "#/components/parameters/UnisCustomerCd"
+      responses:
+        200:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RecordingItem"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        5XX:
+          $ref: "#/components/responses/Unexpected"
+
+  /user/tts:
+    get:
+      tags:
+        - tts
+      summary: TTSデータ一覧取得
+      description: 合成音声素材の情報を一覧で取得する
+      operationId: listUserTts
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        # - $ref: "#/components/parameters/Token"
+        - $ref: "#/components/parameters/UnisCustomerCd"
+      responses:
+        200:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/TtsItem"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        5XX:
+          $ref: "#/components/responses/Unexpected"
+    post:
+      tags:
+        - tts
+      summary: 新規録音データ
+      description: 合成音声素材を新規登録する
+      operationId: createUserTts
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        # - $ref: "#/components/parameters/Token"
+        - $ref: "#/components/parameters/UnisCustomerCd"
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                filename:
+                  type: string
+                recordedFile:
+                  type: string
+                  format: binary
+                title:
+                  type: string
+                  example: "サンプル"
+                description:
+                  type: string
+                  example: "サンプル"
+      responses:
+        200:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/TtsItem"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        5XX:
+          $ref: "#/components/responses/Unexpected"
+
+  /user/tts/{ttsId}:
+    get:
+      tags:
+        - tts
+      summary: TTSデータ取得
+      description: 合成音声素材の情報を取得する
+      operationId: getUserTts
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        - $ref: "#/components/parameters/TtsId"
+        # - $ref: "#/components/parameters/Token"
+        - $ref: "#/components/parameters/UnisCustomerCd"
+      responses:
+        200:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TtsItem"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        5XX:
+          $ref: "#/components/responses/Unexpected"
+    post:
+      tags:
+        - tts
+      summary: TTSデータ更新（メタデータのみ）
+      description: 合成音声素材の情報を更新する
+      operationId: updateUserTts
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        - $ref: "#/components/parameters/TtsId"
+        # - $ref: "#/components/parameters/Token"
+        - $ref: "#/components/parameters/UnisCustomerCd"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: "サンプル"
+                description:
+                  type: string
+                  example: "サンプル"
+      responses:
+        200:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TtsItem"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        5XX:
+          $ref: "#/components/responses/Unexpected"
+    delete:
+      tags:
+        - tts
+      summary: TTSデータ削除
+      description: 合成音声素材を削除する
+      operationId: deleteUserTts
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        - $ref: "#/components/parameters/TtsId"
+        # - $ref: "#/components/parameters/Token"
+        - $ref: "#/components/parameters/UnisCustomerCd"
+      responses:
+        200:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TtsItem"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        5XX:
+          $ref: "#/components/responses/Unexpected"
+
+  /upload/cm:
+    get:
+      tags:
+        - upload
+      summary: CM外部連携情報一覧取得
+      description: CMの外部連携状態を一覧で取得する
+      operationId: listUploadCm
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        # - $ref: "#/components/parameters/Token"
+        - $ref: "#/components/parameters/UnisCustomerCd"
+      responses:
+        200:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ExternalItem"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        5XX:
+          $ref: "#/components/responses/Unexpected"
+
+  /upload/cm/{cmId}:
+    get:
+      tags:
+        - upload
+      summary: CM外部連携情報取得
+      description: CMの外部連携状態を取得する
+      operationId: getUploadCm
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        - $ref: "#/components/parameters/CmId"
+        # - $ref: "#/components/parameters/Token"
+        - $ref: "#/components/parameters/UnisCustomerCd"
+      responses:
+        200:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExternalItem"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        5XX:
+          $ref: "#/components/responses/Unexpected"
+    post:
+      tags:
+        - upload
+      summary: CM外部連携追加
+      description: CMを外部連携する
+      operationId: createUploadCm
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        - $ref: "#/components/parameters/CmId"
+        # - $ref: "#/components/parameters/Token"
+        - $ref: "#/components/parameters/UnisCustomerCd"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                uploadSystem:
+                  type: string
+                  example: "01: センター, 02: S'sence"
+      responses:
+        200:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExternalItem"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        5XX:
+          $ref: "#/components/responses/Unexpected"
+    delete:
+      tags:
+        - upload
+      summary: CM外部連携解除
+      description: CMの外部連携を解除する
+      operationId: deleteUploadCm
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        - $ref: "#/components/parameters/CmId"
+        # - $ref: "#/components/parameters/Token"
+        - $ref: "#/components/parameters/UnisCustomerCd"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                endDate:
+                  type: string
+                  example: "掲載終了日時（固定）"
+      responses:
+        200:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ExternalItem"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        5XX:
+          $ref: "#/components/responses/Unexpected"
+
+  /share/cm:
+    get:
+      tags:
+        - share
+      summary: 共有CM一覧取得
+      description: 共有CMの情報を一覧で取得する
+      operationId: listShareCm
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        # - $ref: "#/components/parameters/Token"
+        - $ref: "#/components/parameters/UnisCustomerCd"
+      responses:
+        200:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CmItem"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        5XX:
+          $ref: "#/components/responses/Unexpected"
+
+  /share/cm/{cmId}:
+    get:
+      tags:
+        - share
+      summary: 共有CM取得
+      description: 共有CMの情報を取得
+      operationId: getShareCm
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        - $ref: "#/components/parameters/CmId"
+        # - $ref: "#/components/parameters/Token"
+        - $ref: "#/components/parameters/UnisCustomerCd"
+      responses:
+        200:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CmItem"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        5XX:
+          $ref: "#/components/responses/Unexpected"
+    post:
+      tags:
+        - share
+      summary: CM共有追加
+      description: CMを共有する
+      operationId: createShareCm
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        - $ref: "#/components/parameters/CmId"
+        # - $ref: "#/components/parameters/Token"
+        - $ref: "#/components/parameters/UnisCustomerCd"
+      responses:
+        200:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CmItem"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        5XX:
+          $ref: "#/components/responses/Unexpected"
+    delete:
+      tags:
+        - share
+      summary: CM共有削除
+      description: CMの共有を解除する
+      operationId: deleteShareCm
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        - $ref: "#/components/parameters/CmId"
+        # - $ref: "#/components/parameters/Token"
+        - $ref: "#/components/parameters/UnisCustomerCd"
+      responses:
+        200:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CmItem"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        5XX:
+          $ref: "#/components/responses/Unexpected"
+
+  /bgm:
+    get:
+      tags:
+        - resources
+      summary: BGM
+      description: BGM素材を一覧で取得する
+      operationId: listBgm
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        # - $ref: "#/components/parameters/Token"
+        - name: industryCd
+          in: query
+          description: 業種CD
+          schema:
+            type: string
+            example: "001"
+      responses:
+        200:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BgmItem"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        5XX:
+          $ref: "#/components/responses/Unexpected"
+
+  /narration:
+    get:
+      tags:
+        - resources
+      summary: ナレーション
+      description: ナレーション素材を一覧で取得する
+      operationId: listNarration
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        # - $ref: "#/components/parameters/Token"
+        - name: industryCd
+          in: query
+          description: 業種CD
+          schema:
+            type: string
+            example: "001"
+        - name: sceneCd
+          in: query
+          description: シーンCD
+          schema:
+            type: string
+            example: "001"
+      responses:
+        200:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/NarrationItem"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        5XX:
+          $ref: "#/components/responses/Unexpected"
+
+  /chime:
+    get:
+      tags:
+        - resources
+      summary: Open/Endチャイム
+      description: 開始/終了チャイムを一覧で取得する
+      operationId: listChime
+      # security:
+      #   - ApiKeyAuth: []
+      # parameters:
+      # - $ref: "#/components/parameters/Token"
+      responses:
+        200:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ChimeItem"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        5XX:
+          $ref: "#/components/responses/Unexpected"
+
+  /tts:
+    get:
+      tags:
+        - resources
+      summary: TTSテンプレート一覧
+      description: TTSのテンプレート素材を一覧で取得する
+      operationId: listTts
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        # - $ref: "#/components/parameters/Token"
+        - name: industryCd
+          in: query
+          description: 業種CD
+          schema:
+            type: string
+            example: "001"
+        - name: sceneCd
+          in: query
+          description: シーンCD
+          schema:
+            type: string
+            example: "001"
+      responses:
+        200:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/WordItem"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        5XX:
+          $ref: "#/components/responses/Unexpected"
+
+  /signedUrl:
+    get:
+      tags:
+        - resources
+      summary: S3オブジェクトの署名付きURLの取得
+      description: 試聴再生、音声素材アップロードのURLを取得する
+      operationId: getSignedUrl
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        # - $ref: "#/components/parameters/Token"
+        - name: id
+          in: query
+          description: 音源ID
+          required: true
+          schema:
+            type: string
+            example: "123456789-c-12345678"
+      responses:
+        200:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    example: "https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        5XX:
+          $ref: "#/components/responses/Unexpected"
+
+  /{external}/cm:
+    get:
+      tags:
+        - external
+      summary: CM外部連携情報一覧取得（外部システム専用）
+      description: 外部連携するCMの情報を一覧で取得する
+      operationId: listExternalCm
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        - name: external
+          in: path
+          description: 外部システム区分
+          required: true
+          schema:
+            type: string
+            example: "center: センター, ssence: S'sence"
+      responses:
+        200:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                items:
+                  properties:
+                    unisCustomerCd:
+                      type: string
+                      example: "123456789"
+                    cmMetas:
+                      type: array
+                      items:
+                        $ref: "#/components/schemas/ExternalItem"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        5XX:
+          $ref: "#/components/responses/Unexpected"
+
+  /{external}/cm/{unisCustomerCd}:
+    get:
+      tags:
+        - external
+      summary: CM外部連携情報取得（外部システム専用）
+      description: 外部連携するCMの情報を取得する
+      operationId: getExternalCm
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        - name: external
+          in: path
+          description: 外部システム区分
+          required: true
+          schema:
+            type: string
+            example: "center: センター, ssence: S'sence"
+        - name: unisCustomerCd
+          in: path
+          description: UNIS顧客CD
+          required: true
+          schema:
+            type: string
+            example: "123456789"
+      responses:
+        200:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                properties:
+                  unisCustomerCd:
+                    type: string
+                    example: "123456789"
+                  cmMetas:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ExternalItem"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        5XX:
+          $ref: "#/components/responses/Unexpected"
+    post:
+      tags:
+        - external
+      summary: CM外部連携完了（外部システム専用）
+      description: 外部連携したCMの結果を登録する
+      operationId: completeExternalCm
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        - name: external
+          in: path
+          description: 外部システム区分
+          required: true
+          schema:
+            type: string
+            example: "center: センター, ssence: S'sence"
+        - name: unisCustomerCd
+          in: path
+          description: UNIS顧客CD
+          required: true
+          schema:
+            type: string
+            example: "123456789"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                dataProcessType:
+                  type: string
+                  example: "01：正常完了、09：取込失敗"
+                uMesseCmId:
+                  type: string
+                  example: "123456789-c-12345678"
+                errorCode:
+                  type: string
+                  example: "E0001"
+                errorMessege:
+                  type: string
+                  example: "CM名に規定外の文字が使用されています"
+      responses:
+        200:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                properties:
+                  dataProcessType:
+                    type: string
+                    example: "01：正常完了、09：取込失敗"
+                  uMesseCmId:
+                    type: string
+                    example: "123456789-c-12345678"
+                  errorCode:
+                    type: string
+                    example: "E0001"
+                  errorMessege:
+                    type: string
+                    example: "CM名に規定外の文字が使用されています"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        5XX:
+          $ref: "#/components/responses/Unexpected"
+
+components:
+  parameters:
+    Token:
+      name: x-token
+      in: header
+      description: トークンID
+      required: true
+      schema:
+        type: string
+        example: "1234567890"
+    UnisCustomerCd:
+      name: x-unis-customer-cd
+      in: header
+      description: UNIS顧客CD
+      required: true
+      schema:
+        type: string
+        example: "123456789"
+    CmId:
+      name: cmId
+      in: path
+      description: CM ID
+      required: true
+      schema:
+        type: string
+        example: "123456789-c-12345678"
+    RecordingId:
+      name: recordingId
+      in: path
+      description: 録音音声ID
+      required: true
+      schema:
+        type: string
+        example: "123456789-r-12345678"
+    TtsId:
+      name: ttsId
+      in: path
+      description: 合成音声ID
+      required: true
+      schema:
+        type: string
+        example: "123456789-t-12345678"
+
+  schemas:
+    Auth:
+      properties:
+        token:
+          type: string
+          example: "1234567890"
+    User:
+      properties:
+        unisCustomerCd:
+          type: string
+          description: UNIS顧客CD
+          example: "123456789"
+        contractCd:
+          description: 契約CD
+          type: string
+          example: "N01234567890123456789"
+        serviceCd:
+          type: string
+          description: サービスCD
+          example: "U01"
+        serviceName:
+          type: string
+          description: サービス名
+          example: "U∞MUSIC"
+        customerName:
+          type: string
+          description: 顧客名
+          example: "カフェUSEN"
+        customerNameKana:
+          type: string
+          description: 顧客名カナ
+          example: "カフェユーセン"
+        customerGroupCd:
+          type: string
+          description: グループCD
+          example: "1234567"
+        customerGroupName:
+          type: string
+          description: グループ名
+          example: "CAFÉ USENグループ"
+        contractStatusCd:
+          type: string
+          description: 契約ステータス
+          example: "2"
+        contractStatusName:
+          type: string
+          description: 契約ステータス名
+          example: "確定"
+        createDate:
+          type: string
+          description: 登録日
+          example: "2019-09-01T09:00:00+9:00"
+        renewalDate:
+          type: string
+          description: 更新日
+          example: "2019-09-01T09:00:00+9:00"
+    CmItem:
+      properties:
+        id:
+          type: string
+          description: CM ID
+          example: "123456789-c-12345678"
+        title:
+          type: string
+          description: タイトル名
+          example: "タイムセール"
+        description:
+          type: string
+          description: 説明文
+          example: "タイムセールサンプル１"
+        seconds:
+          type: integer
+          description: 秒数
+          example: 540
+        startDate:
+          type: string
+          description: 掲載開始日
+          example: "2019-09-01T09:00:00+9:00"
+        endDate:
+          type: string
+          description: 掲載終了日
+          example: "9999-12-31T23:59:59+09:00"
+        productionType:
+          type: string
+          description: CM区分(音楽系:BGMあり, 素ナレ:BGMなし)
+          example: "01: 音楽系, 02: 素ナレ"
+        industry:
+          items:
+            $ref: "#/components/schemas/IndustryItem"
+        scene:
+          items:
+            $ref: "#/components/schemas/SceneItem"
+        materials:
+          items:
+            $ref: "#/components/schemas/CmMaterialListItem"
+        status:
+          type: string
+          description: CMステータス
+          example: "00:CM削除, 01: CM作成中, 02: CM作成完了, 09: CM作成エラー, 11: センターアップロード中, 12: センターアップロード完了, 19: センターアップロードエラー, 21: S'senceアップロード中, 22: S'senceアップロード完了, 29: S'senceアップロードエラー"
+        timestamp:
+          type: string
+          example: "2019-09-01T09:00:00+9:00"
+    CmMaterialListItem:
+      properties:
+        narrations:
+          type: array
+          items:
+            properties:
+              id:
+                type: string
+                description: ナレーションID
+                example: "narration/サンプル01"
+              volume:
+                type: integer
+                description: ボリューム値
+                example: 150
+        startChime:
+          type: object
+          properties:
+            id:
+              type: string
+              description: チャイムID
+              example: "chime/サンプル01"
+            volume:
+              type: integer
+              description: ボリューム値
+              example: 50
+        endChime:
+          type: object
+          properties:
+            id:
+              type: string
+              description: チャイムID
+              example: "chime/サンプル02"
+            volume:
+              type: integer
+              description: ボリューム値
+              example: 50
+        bgm:
+          type: object
+          properties:
+            id:
+              type: string
+              description: BGM ID
+              example: "bgm/サンプル01"
+            volume:
+              type: integer
+              description: ボリューム値
+              example: 50
+    BgmItem:
+      properties:
+        id:
+          type: string
+          description: BGM ID
+          example: "bgm/サンプル01"
+        title:
+          type: string
+          description: タイトル
+          example: "タイトル"
+        description:
+          type: string
+          description: 説明文
+          example: "説明文"
+        seconds:
+          type: integer
+          description: 秒数
+          example: 300
+        industry:
+          items:
+            $ref: "#/components/schemas/IndustryItem"
+        scene:
+          items:
+            $ref: "#/components/schemas/SceneItem"
+        timestamp:
+          type: string
+          example: "2019-09-01T09:00:00+9:00"
+    NarrationItem:
+      properties:
+        id:
+          type: string
+          description: ナレーションID
+          example: "narration/サンプル01"
+        title:
+          type: string
+          description: タイトル
+          example: "18時30分閉店"
+        description:
+          type: string
+          description: 説明文
+          example: "放送開始日2020年10月15日 有効期限2020年10月20日"
+        manuscript:
+          type: string
+          description: 原稿
+          example: "本日はご来店いただきましてありがとうございます。当店は18時30分閉店です"
+        seconds:
+          type: integer
+          description: 秒数
+          example: 30
+        industry:
+          items:
+            $ref: "#/components/schemas/IndustryItem"
+        scene:
+          items:
+            $ref: "#/components/schemas/SceneItem"
+        timestamp:
+          type: string
+          example: "2019-09-01T09:00:00+9:00"
+    ChimeItem:
+      properties:
+        id:
+          type: string
+          description: チャイムID
+          example: "chime/サンプル01"
+        title:
+          type: string
+          description: タイトル
+          example: "開始チャイム"
+        description:
+          type: string
+          description: 説明文
+          example: "開始チャイム"
+        seconds:
+          type: integer
+          description: 秒数
+          example: 30
+        timestamp:
+          type: string
+          example: "2019-09-01T09:00:00+9:00"
+    WordItem:
+      properties:
+        id:
+          type: string
+          description: TTSテンプレートID
+          example: "123456789"
+        title:
+          type: string
+          description: タイトル
+          example: "18時30分閉店"
+        description:
+          type: string
+          description: 説明文
+          example: "放送開始日2020年10月15日 有効期限2020年10月20日"
+        manuscript:
+          type: string
+          example: "本日はご来店いただきましてありがとうございます。当店は18時30分閉店です"
+        industry:
+          items:
+            $ref: "#/components/schemas/IndustryItem"
+        scene:
+          items:
+            $ref: "#/components/schemas/SceneItem"
+        timestamp:
+          type: string
+          example: "2019-09-01T09:00:00+9:00"
+    IndustryItem:
+      properties:
+        cd:
+          type: string
+          description: 業種CD
+          example: "01"
+        name:
+          type: string
+          description: 業種名
+          example: "業種名"
+    SceneItem:
+      properties:
+        cd:
+          type: string
+          description: シーンCD
+          example: "01"
+        name:
+          type: string
+          description: シーン名
+          example: "シーン名"
+    RecordingItem:
+      properties:
+        id:
+          type: string
+          description: 録音音声ID
+          example: "123456789-r-12345678"
+        title:
+          type: string
+          description: タイトル名
+          example: "サンプル"
+        description:
+          type: string
+          description: 説明文
+          example: "サンプル"
+        startDate:
+          type: string
+          description: 掲載開始日
+          example: "2019-09-01T09:00:00+9:00"
+        timestamp:
+          type: string
+          example: "2019-09-01T09:00:00+9:00"
+    TtsItem:
+      properties:
+        id:
+          type: string
+          description: 合成音声ID
+          example: "123456789-t-12345678"
+        title:
+          type: string
+          description: タイトル名
+          example: "サンプル"
+        description:
+          type: string
+          description: 説明文
+          example: "サンプル"
+        startDate:
+          type: string
+          description: 掲載開始日
+          example: "2019-09-01T09:00:00+9:00"
+        timestamp:
+          type: string
+          example: "2019-09-01T09:00:00+9:00"
+    ExternalItem:
+      properties:
+        dataProcessType:
+          type: string
+          description: データ処理区分
+          example: "01：追加、02：変更、03：削除"
+        uMesseCmId:
+          type: string
+          description: CM ID
+          example: "123456789-c-12345678"
+        url:
+          type: string
+          description: 音源URL
+          example: "https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx"
+        cmName:
+          type: string
+          description: CM名
+          example: "時報A"
+        cmCommentManuscript:
+          type: string
+          description: CMコメント原稿
+          example: "テストCMです"
+        startDatetime:
+          type: string
+          description: 放送開始日時
+          example: "2020-01-01T12:34:56+09:00"
+        endDatetime:
+          type: string
+          description: 放送終了日時
+          example: "9999-12-31T23:59:59+09:00"
+        productionType:
+          type: string
+          description: 制作種別
+          example: "01：音楽系、02：素ナレ"
+        fileName:
+          type: string
+          description: ファイル名
+          example: "123456789-c-12345678.aac"
+        contentTime:
+          type: integer
+          description: 尺時間
+          format: int64
+          example: 30000
+        fileSize:
+          type: integer
+          description: ファイルサイズ
+          format: int64
+          example: 1234567
+        sceneCd:
+          type: string
+          description: シーンCD
+          example: "001"
+    Error:
+      description: Error
+      type: object
+      properties:
+        status:
+          type: string
+          example: "status"
+        code:
+          type: string
+          example: "erorr code"
+        message:
+          type: string
+          example: "error message"
+
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+
+  responses:
+    BadRequest:
+      description: Bad request. Response invalid.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    Unauthorized:
+      description: API key is missing or invalid
+      headers:
+        WWW_Authenticate:
+          schema:
+            type: string
+    NotFound:
+      description: A user with the specified ID was not found.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
+    Unexpected:
+      description: Unexpected error.

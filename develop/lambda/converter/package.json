@@ -1,0 +1,16 @@
+{
+  "name": "umesse-converter",
+  "description": "U MESSE AUDIO CONVERTER",
+  "version": "0.0.1",
+  "private": true,
+  "main": "lambda.js",
+  "dependencies": {
+    "aws-sdk": "^2.442.0"
+  },
+  "devDependencies": {
+    "jest": "^26.6.3"
+  },
+  "scripts": {
+    "test": "jest -i --coverage"
+  }
+}
