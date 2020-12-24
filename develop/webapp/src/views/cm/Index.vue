@@ -52,49 +52,42 @@
 
       <div class="row mt-3">
         <div class="col-2 my-auto">
-          <div class="bg-white rounded open-chime py-3">
-            <div class="alert alert-dark small mx-auto mb-4" role="alert">
-              Openチャイム
+          <template v-if="state.openChime">
+            <div class="bg-white rounded open-chime py-3">
+              <div class="alert alert-dark small mx-auto mb-4" role="alert">
+                Openチャイム
+              </div>
+              <div class="text-center mb-4">
+                <div class="small">{{ state.openChime.title }}</div>
+                <div class="small">{{ state.openChime.description }}</div>
+                <div class="my-3">
+                  <img src="@/assets/try-play.svg" />
+                </div>
+                <div class="small">
+                  <router-link
+                    :to="{ name: 'CmChime', params: { div: 'open' } }"
+                    >変更</router-link
+                  >
+                </div>
+                <div class="small">
+                  <a href="#" @click="clearOpenChime">削除</a>
+                </div>
+              </div>
             </div>
-            <div class="text-center mb-4">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="100"
-                height="100"
-                viewBox="0 0 100 100"
-              >
-                <g
-                  id="楕円形_5"
-                  data-name="楕円形 5"
-                  fill="#fff"
-                  stroke="#dbdbdb"
-                  stroke-width="1"
-                >
-                  <circle cx="50" cy="50" r="50" stroke="none" />
-                  <circle cx="50" cy="50" r="49.5" fill="none" />
-                </g>
-                <rect
-                  id="長方形_44"
-                  data-name="長方形 44"
-                  width="40"
-                  height="8"
-                  rx="1"
-                  transform="translate(30 46)"
-                  fill="#2d8fcc"
-                />
-                <rect
-                  id="長方形_45"
-                  data-name="長方形 45"
-                  width="40"
-                  height="8"
-                  rx="1"
-                  transform="translate(54 30) rotate(90)"
-                  fill="#2d8fcc"
-                />
-              </svg>
+          </template>
+          <template v-else>
+            <div class="bg-white rounded open-chime py-3">
+              <div class="alert alert-dark small mx-auto mb-4" role="alert">
+                Openチャイム
+              </div>
+              <div class="text-center mb-4">
+                <router-link :to="{ name: 'CmChime', params: { div: 'open' } }">
+                  <img src="@/assets/plus.svg" />
+                </router-link>
+              </div>
+              <div class="text-center small">素材追加</div>
             </div>
-            <div class="text-center small">素材追加</div>
-          </div>
+          </template>
         </div>
         <div class="col-8">
           <div class="row">
@@ -107,248 +100,7 @@
                   <div class="text-center small mb-3">
                     祝日用 閉店アナウンス
                   </div>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    xmlns:xlink="http://www.w3.org/1999/xlink"
-                    width="70"
-                    height="70"
-                    viewBox="0 0 70 70"
-                  >
-                    <defs>
-                      <clipPath id="clip-path">
-                        <path
-                          id="パス_20"
-                          data-name="パス 20"
-                          d="M23.655-24.332,18.725-19.4H15.931a.934.934,0,0,0-.931.931v5.588a.934.934,0,0,0,.931.931h2.794l4.929,4.929c.362.362.659.239.659-.273V-24.059c0-.512-.3-.635-.659-.273"
-                          transform="translate(-15 24.54)"
-                          fill="none"
-                          clip-rule="evenodd"
-                        />
-                      </clipPath>
-                      <clipPath id="clip-path-2">
-                        <path
-                          id="パス_24"
-                          data-name="パス 24"
-                          d="M0,2.748H29.271V-15.879H0Z"
-                          transform="translate(0 15.879)"
-                          fill="none"
-                        />
-                      </clipPath>
-                      <clipPath id="clip-path-3">
-                        <rect
-                          id="長方形_12"
-                          data-name="長方形 12"
-                          width="31"
-                          height="20"
-                          transform="translate(0 -0.305)"
-                          fill="none"
-                        />
-                      </clipPath>
-                      <clipPath id="clip-path-4">
-                        <path
-                          id="パス_23"
-                          data-name="パス 23"
-                          d="M28.991-7.016A3.144,3.144,0,0,1,26.73-8L25.28-9.455V.087H3.992v-13.3H18.341A3.577,3.577,0,0,1,17.3-15.746v-.133H1.331A1.334,1.334,0,0,0,0-14.548V1.418a1.334,1.334,0,0,0,1.33,1.33h26.61a1.334,1.334,0,0,0,1.33-1.33v-8.47A2.79,2.79,0,0,1,28.991-7.016Z"
-                          transform="translate(0 15.879)"
-                          fill="none"
-                          clip-rule="evenodd"
-                        />
-                      </clipPath>
-                      <clipPath id="clip-path-5">
-                        <path
-                          id="パス_22"
-                          data-name="パス 22"
-                          d="M0,3.957H30.6V-16H0Z"
-                          transform="translate(0 16)"
-                          fill="none"
-                        />
-                      </clipPath>
-                      <clipPath id="clip-path-6">
-                        <path
-                          id="パス_26"
-                          data-name="パス 26"
-                          d="M25.331-9.171a1.327,1.327,0,0,1-.941-.39,1.329,1.329,0,0,1,0-1.881,6.611,6.611,0,0,0,1.949-4.7,6.61,6.61,0,0,0-1.949-4.7,1.329,1.329,0,0,1,0-1.881,1.329,1.329,0,0,1,1.881,0A9.253,9.253,0,0,1,29-16.147a9.254,9.254,0,0,1-2.729,6.586,1.327,1.327,0,0,1-.941.39"
-                          transform="translate(-24 23.121)"
-                          fill="none"
-                          clip-rule="evenodd"
-                        />
-                      </clipPath>
-                      <clipPath id="clip-path-7">
-                        <path
-                          id="パス_30"
-                          data-name="パス 30"
-                          d="M26.878-4.389h6.586V-26H26.878Z"
-                          transform="translate(-26.878 26)"
-                          fill="none"
-                        />
-                      </clipPath>
-                      <clipPath id="clip-path-8">
-                        <rect
-                          id="長方形_13"
-                          data-name="長方形 13"
-                          width="8"
-                          height="24"
-                          transform="translate(0.407 0.331)"
-                          fill="none"
-                        />
-                      </clipPath>
-                      <clipPath id="clip-path-9">
-                        <path
-                          id="パス_29"
-                          data-name="パス 29"
-                          d="M28.209-4.389a1.327,1.327,0,0,1-.941-.39,1.329,1.329,0,0,1,0-1.881A11.99,11.99,0,0,0,30.8-15.194a11.99,11.99,0,0,0-3.535-8.534,1.331,1.331,0,0,1,0-1.883,1.331,1.331,0,0,1,1.881,0,14.636,14.636,0,0,1,4.315,10.416A14.633,14.633,0,0,1,29.15-4.779a1.327,1.327,0,0,1-.941.39"
-                          transform="translate(-26.878 26)"
-                          fill="none"
-                          clip-rule="evenodd"
-                        />
-                      </clipPath>
-                      <clipPath id="clip-path-10">
-                        <path
-                          id="パス_28"
-                          data-name="パス 28"
-                          d="M26-3.382h7.983V-26H26Z"
-                          transform="translate(-26 26)"
-                          fill="none"
-                        />
-                      </clipPath>
-                    </defs>
-                    <g id="試聴" transform="translate(-293 -236)">
-                      <g
-                        id="長方形_33"
-                        data-name="長方形 33"
-                        transform="translate(293 236)"
-                        fill="#fff"
-                        stroke="#cbcbcb"
-                        stroke-width="1"
-                      >
-                        <rect width="70" height="70" rx="35" stroke="none" />
-                        <rect
-                          x="0.5"
-                          y="0.5"
-                          width="69"
-                          height="69"
-                          rx="34.5"
-                          fill="none"
-                        />
-                      </g>
-                      <g
-                        id="グループ_34"
-                        data-name="グループ 34"
-                        transform="translate(307 281)"
-                      >
-                        <g
-                          id="グループ_22"
-                          data-name="グループ 22"
-                          transform="translate(19.957 -24.058)"
-                          clip-path="url(#clip-path)"
-                        >
-                          <path
-                            id="パス_19"
-                            data-name="パス 19"
-                            d="M10-29.54H32.619V1.491H10Z"
-                            transform="translate(-16.653 22.888)"
-                            fill="#578ed9"
-                          />
-                        </g>
-                        <g
-                          id="グループ_27"
-                          data-name="グループ 27"
-                          transform="translate(0 -12.534)"
-                          clip-path="url(#clip-path-2)"
-                        >
-                          <g
-                            id="グループ_26"
-                            data-name="グループ 26"
-                            transform="translate(0 -0.162)"
-                            style="isolation: isolate"
-                          >
-                            <g
-                              id="グループ_25"
-                              data-name="グループ 25"
-                              clip-path="url(#clip-path-3)"
-                            >
-                              <g
-                                id="グループ_24"
-                                data-name="グループ 24"
-                                transform="translate(0 0.162)"
-                                clip-path="url(#clip-path-4)"
-                              >
-                                <g
-                                  id="グループ_23"
-                                  data-name="グループ 23"
-                                  transform="translate(0 -0.162)"
-                                  clip-path="url(#clip-path-5)"
-                                >
-                                  <path
-                                    id="パス_21"
-                                    data-name="パス 21"
-                                    d="M-5-20.879H37.576V11.053H-5Z"
-                                    transform="translate(-1.652 14.388)"
-                                    fill="#578ed9"
-                                  />
-                                </g>
-                              </g>
-                            </g>
-                          </g>
-                        </g>
-                        <g
-                          id="グループ_28"
-                          data-name="グループ 28"
-                          transform="translate(31.932 -22.17)"
-                          clip-path="url(#clip-path-6)"
-                        >
-                          <path
-                            id="パス_25"
-                            data-name="パス 25"
-                            d="M19-28.121H37.305V-.866H19Z"
-                            transform="translate(-25.652 21.469)"
-                            fill="#578ed9"
-                          />
-                        </g>
-                        <g
-                          id="グループ_33"
-                          data-name="グループ 33"
-                          transform="translate(35.762 -26)"
-                          clip-path="url(#clip-path-7)"
-                        >
-                          <g
-                            id="グループ_32"
-                            data-name="グループ 32"
-                            transform="translate(-1.169 -1.331)"
-                            style="isolation: isolate"
-                          >
-                            <g
-                              id="グループ_31"
-                              data-name="グループ 31"
-                              clip-path="url(#clip-path-8)"
-                            >
-                              <g
-                                id="グループ_30"
-                                data-name="グループ 30"
-                                transform="translate(1.169 1.331)"
-                                clip-path="url(#clip-path-9)"
-                              >
-                                <g
-                                  id="グループ_29"
-                                  data-name="グループ 29"
-                                  transform="translate(-1.169 0)"
-                                  clip-path="url(#clip-path-10)"
-                                >
-                                  <path
-                                    id="パス_27"
-                                    data-name="パス 27"
-                                    d="M21.878-31H41.77V3.916H21.878Z"
-                                    transform="translate(-27.362 24.348)"
-                                    fill="#578ed9"
-                                  />
-                                </g>
-                              </g>
-                            </g>
-                          </g>
-                        </g>
-                      </g>
-                    </g>
-                  </svg>
+                  <img src="@/assets/try-play.svg" />
                 </div>
                 <div class="text-center small">00:24</div>
               </div>
@@ -465,41 +217,7 @@
                   ナレーション 2/4
                 </div>
                 <div class="text-center mb-4">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="100"
-                    height="100"
-                    viewBox="0 0 100 100"
-                  >
-                    <g
-                      id="楕円形_5"
-                      data-name="楕円形 5"
-                      fill="#fff"
-                      stroke="#dbdbdb"
-                      stroke-width="1"
-                    >
-                      <circle cx="50" cy="50" r="50" stroke="none" />
-                      <circle cx="50" cy="50" r="49.5" fill="none" />
-                    </g>
-                    <rect
-                      id="長方形_44"
-                      data-name="長方形 44"
-                      width="40"
-                      height="8"
-                      rx="1"
-                      transform="translate(30 46)"
-                      fill="#2d8fcc"
-                    />
-                    <rect
-                      id="長方形_45"
-                      data-name="長方形 45"
-                      width="40"
-                      height="8"
-                      rx="1"
-                      transform="translate(54 30) rotate(90)"
-                      fill="#2d8fcc"
-                    />
-                  </svg>
+                  <img src="@/assets/plus.svg" />
                 </div>
                 <div class="text-center small">素材追加</div>
               </div>
@@ -512,41 +230,7 @@
                   BGM
                 </div>
                 <div class="text-center mb-4">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="100"
-                    height="100"
-                    viewBox="0 0 100 100"
-                  >
-                    <g
-                      id="楕円形_5"
-                      data-name="楕円形 5"
-                      fill="#fff"
-                      stroke="#dbdbdb"
-                      stroke-width="1"
-                    >
-                      <circle cx="50" cy="50" r="50" stroke="none" />
-                      <circle cx="50" cy="50" r="49.5" fill="none" />
-                    </g>
-                    <rect
-                      id="長方形_44"
-                      data-name="長方形 44"
-                      width="40"
-                      height="8"
-                      rx="1"
-                      transform="translate(30 46)"
-                      fill="#2d8fcc"
-                    />
-                    <rect
-                      id="長方形_45"
-                      data-name="長方形 45"
-                      width="40"
-                      height="8"
-                      rx="1"
-                      transform="translate(54 30) rotate(90)"
-                      fill="#2d8fcc"
-                    />
-                  </svg>
+                  <img src="@/assets/plus.svg" />
                 </div>
                 <div class="text-center small">素材追加</div>
               </div>
@@ -554,49 +238,41 @@
           </div>
         </div>
         <div class="col-2 my-auto">
-          <div class="bg-white rounded end-chime py-3">
-            <div class="alert alert-dark small mx-auto mb-4" role="alert">
-              Endチャイム
+          <template v-if="state.endChime">
+            <div class="bg-white rounded open-chime py-3">
+              <div class="alert alert-dark small mx-auto mb-4" role="alert">
+                Endチャイム
+              </div>
+              <div class="text-center mb-4">
+                <div class="small">{{ state.endChime.title }}</div>
+                <div class="small">{{ state.endChime.description }}</div>
+                <div class="my-3">
+                  <img src="@/assets/try-play.svg" />
+                </div>
+                <div class="small">
+                  <router-link :to="{ name: 'CmChime', params: { div: 'end' } }"
+                    >変更
+                  </router-link>
+                </div>
+                <div class="small">
+                  <a href="#" @click="clearEndChime">削除</a>
+                </div>
+              </div>
             </div>
-            <div class="text-center mb-4">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="100"
-                height="100"
-                viewBox="0 0 100 100"
-              >
-                <g
-                  id="楕円形_5"
-                  data-name="楕円形 5"
-                  fill="#fff"
-                  stroke="#dbdbdb"
-                  stroke-width="1"
-                >
-                  <circle cx="50" cy="50" r="50" stroke="none" />
-                  <circle cx="50" cy="50" r="49.5" fill="none" />
-                </g>
-                <rect
-                  id="長方形_44"
-                  data-name="長方形 44"
-                  width="40"
-                  height="8"
-                  rx="1"
-                  transform="translate(30 46)"
-                  fill="#2d8fcc"
-                />
-                <rect
-                  id="長方形_45"
-                  data-name="長方形 45"
-                  width="40"
-                  height="8"
-                  rx="1"
-                  transform="translate(54 30) rotate(90)"
-                  fill="#2d8fcc"
-                />
-              </svg>
+          </template>
+          <template v-else>
+            <div class="bg-white rounded open-chime py-3">
+              <div class="alert alert-dark small mx-auto mb-4" role="alert">
+                Endチャイム
+              </div>
+              <div class="text-center mb-4">
+                <router-link :to="{ name: 'CmChime', params: { div: 'end' } }">
+                  <img src="@/assets/plus.svg" />
+                </router-link>
+              </div>
+              <div class="text-center small">素材追加</div>
             </div>
-            <div class="text-center small">素材追加</div>
-          </div>
+          </template>
         </div>
       </div>
     </div>
@@ -848,20 +524,43 @@
 </template>
 
 <script lang="ts">
-import { computed, reactive } from "vue";
+import { defineComponent, computed, reactive, onMounted } from "vue";
+import { useGlobalStore } from "@/store";
+import * as UMesseApi from "umesseapi";
 
-export default {
+export default defineComponent({
   setup() {
+    const api = new UMesseApi.ResourcesApi();
+    const { cm } = useGlobalStore();
     const state = reactive({
       scenes: ["開店", "閉店", "etc"],
       uploads: ["U MUSIC", "etc"],
+      openChime: computed(() => cm.openChime),
+      narrarions: computed(() => cm.narrationItems),
+      bgms: computed(() => cm.bgmItems),
+      endChime: computed(() => cm.endChime),
     });
+
+    const clearOpenChime = () => {
+      cm.clearOpenChime();
+    };
+    const clearEndChime = () => {
+      cm.clearEndChime();
+    };
+    // onMounted(async () => {
+    //   const response = await api.listChime();
+    //   // console.log(response)
+    //   cmStore.setOpenChime(response.data[0]);
+    //   console.log(cmStore.openChimeItem);
+    // });
 
     return {
       state,
+      clearOpenChime,
+      clearEndChime,
     };
   },
-};
+});
 </script>
 
 <style scoped>
