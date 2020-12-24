@@ -1,5 +1,7 @@
 "use strict";
 
+const fs = require("fs");
+
 // process.env.debug = true;
 process.env.environment = "local";
 
@@ -7,6 +9,7 @@ const {
   getSignedUrl,
   getResource,
   getUserResource,
+  createUserResource,
 } = require("../umesse/resources");
 
 beforeAll(() => {
@@ -64,6 +67,27 @@ describe("resources", () => {
   test("getUserResource not params", async () => {
     const response = await getUserResource("");
     expect(response).toEqual({ message: "params failed" });
+  });
+
+  test("createUserResource recording success", async () => {
+    const file = fs.readFileSync(
+      "../../../sample_data/s3/umesse-users/users/123456789/recording/123456789-r-12345678.mp3"
+    );
+    const body = {
+      recordedFile: file,
+    };
+    const response = await createUserResource(
+      recordingData.unisCustomerCd,
+      "recording",
+      body
+    );
+    expect(response).toEqual({
+      id: expect.stringMatching(
+        `^${recordingData.unisCustomerCd}-r-[0-9a-z]{8}$`
+      ),
+      startDate: expect.anything(),
+      timestamp: expect.anything(),
+    });
   });
 });
 
