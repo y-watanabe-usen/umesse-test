@@ -129,7 +129,7 @@ exports.createUserResource = async (unisCustomerCd, filter, body) => {
     else if (filter == constants.userResource.TTS) div = "t";
     const id = generateId(unisCustomerCd, div);
 
-    const binaryData = Buffer.from(body["recordedFile"], 'binary');
+    const binaryData = Buffer.from(body["recordedFile"], "binary");
     // S3へPUT
     let res = await s3.put(
       constants.s3Bucket().users,
@@ -138,17 +138,16 @@ exports.createUserResource = async (unisCustomerCd, filter, body) => {
     );
     if (!res) throw "put failed";
 
-    const time = timestamp();
     // DynamoDBのデータ更新
     const data = {
       id: id,
-      startDate: time,
-      timestamp: time,
+      startDate: timestamp(),
+      timestamp: timestamp(),
     };
     const key = { unisCustomerCd: unisCustomerCd };
     const options = {
       UpdateExpression: "SET #filter = list_append(#filter, :data)",
-      ExpressionAttributeName: {
+      ExpressionAttributeNames: {
         "#filter": filter,
       },
       ExpressionAttributeValues: {
@@ -161,7 +160,7 @@ exports.createUserResource = async (unisCustomerCd, filter, body) => {
     res = await dynamodb.update(constants.dynamoDbTable().users, key, options);
     if (!res) throw "update failed";
 
-    let json = res.Attributes[filter];
+    let json = res.Attributes[filter].pop();
     return json;
   } catch (e) {
     // TODO: error handle
@@ -201,7 +200,7 @@ exports.updateUserResource = async (unisCustomerCd, filter, id, body) => {
     const key = { unisCustomerCd: unisCustomerCd };
     const options = {
       UpdateExpression: `SET #filter[${index}] = :resource`,
-      ExpressionAttributeName: {
+      ExpressionAttributeNames: {
         "#filter": filter,
       },
       ExpressionAttributeValues: {
@@ -255,7 +254,7 @@ exports.deleteUserResource = async (unisCustomerCd, filter, id) => {
     const key = { unisCustomerCd: unisCustomerCd };
     const options = {
       UpdateExpression: `REMOVE #filter[${resource.index}]`,
-      ExpressionAttributeName: {
+      ExpressionAttributeNames: {
         "#filter": filter,
       },
       ReturnValues: "UPDATED_NEW",
