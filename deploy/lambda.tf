@@ -42,7 +42,7 @@ resource "aws_lambda_function" "umesse_api_function" {
   environment {
     variables = {
       "debug" = true
-      "enviroment" = "localstack"
+      "environment" = "localstack"
     }
   }
 
@@ -64,7 +64,7 @@ resource "aws_lambda_function" "umesse_converter_function" {
   environment {
     variables = {
       "debug" = true
-      "enviroment" = "localstack"
+      "environment" = "localstack"
     }
   }
 
