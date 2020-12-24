@@ -398,17 +398,17 @@ import {
   UPLOAD_RECORDING_STATE,
 } from "@/services/uploadRecordingService";
 import * as UMesseApi from "umesseapi";
-import provideCMStore from "@/store/cm";
+import provideRecordingStore from "@/store/recording";
 
 export default defineComponent({
   name: "RecordingStart",
   setup() {
-    const cmStore = provideCMStore(); //FIXME: provide name.
+    const recordingStore = provideRecordingStore(); //FIXME: provide name.
     const audioRecorder = AudioRecorder();
     const audioPlayer = AudioPlayer();
     const state = reactive({
       file: <RecordingFile>{},
-      uploadRecoridngState: computed(() => cmStore.getStatus()),
+      uploadRecoridngState: computed(() => recordingStore.getStatus()),
       isRecording: computed(() => audioRecorder.isRecording()),
       hasRecordedData: computed(() => audioRecorder.hasRecording()),
       decibel: computed(() => {
@@ -457,7 +457,7 @@ export default defineComponent({
     const uploadRecordingFile = async () => {
       /// check state.file.
       state.file.blob = await audioRecorder.getWaveBlob();
-      cmStore.uploadRecordingData(state.file);
+      recordingStore.uploadRecordingData(state.file);
     };
 
     return {

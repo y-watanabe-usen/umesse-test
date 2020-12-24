@@ -6,8 +6,8 @@ import {
 import { useGlobalStore } from "@/store";
 import { inject, InjectionKey, provide } from "vue";
 
-// generate cm.
-export default function cmStore() {
+// recording.
+export default function recordingStore() {
   const umesseApi = new UMesseApi.RecordingApi();
   const uploadRecordingService = useUploadRecordingService(umesseApi);
   const { auth } = useGlobalStore();
@@ -23,17 +23,17 @@ export default function cmStore() {
   };
 }
 
-export type CMStore = ReturnType<typeof cmStore>;
-export const CMStoreKey: InjectionKey<CMStore> = Symbol("CMStore");
-export function useCMStore() {
-  const store = inject(CMStoreKey);
+export type RecordingStore = ReturnType<typeof recordingStore>;
+export const RecordingStoreKey: InjectionKey<RecordingStore> = Symbol("RecordingStore");
+export function useRecordingStore() {
+  const store = inject(RecordingStoreKey);
   if (!store) {
-    throw new Error(`${CMStoreKey} is not provided`);
+    throw new Error(`${RecordingStoreKey} is not provided`);
   }
   return store;
 }
-export function provideCMStore() {
-  const store = cmStore();
-  provide(CMStoreKey, store);
+export function provideRecordingStore() {
+  const store = recordingStore();
+  provide(RecordingStoreKey, store);
   return store;
 }
