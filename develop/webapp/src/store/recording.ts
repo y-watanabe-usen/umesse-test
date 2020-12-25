@@ -40,9 +40,12 @@ export default function recordingStore() {
   const deleteUserRecording = async (id: string) => {
     await umesseApi.deleteUserRecording(id, token());
   };
-  const updateUserRecording = async (title: string, description: string) => {
-    const lastId = state.recordingItems[state.recordingItems.length - 1].id;
-    umesseApi.updateUserRecording(token(), lastId, {
+  const updateUserRecording = async (
+    id: string,
+    title: string,
+    description: string
+  ) => {
+    umesseApi.updateUserRecording(token(), id, {
       title: title,
       description: description,
     });
