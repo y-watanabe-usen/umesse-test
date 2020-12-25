@@ -1,23 +1,13 @@
-import * as UMesseApi from "umesseapi";
-import {
-  RecordingFile,
-  useUploadRecordingService,
-} from "@/services/uploadRecordingService";
-import { useGlobalStore } from "@/store";
 import { inject, InjectionKey, provide, reactive, toRefs } from "vue";
 import { ChimeItem } from "umesseapi/models/chime-item";
 import { NarrationItem } from "umesseapi/models/narration-item";
 import { BgmItem } from "umesseapi/models/bgm-item";
 
-// recording.
 export default function cmStore() {
-  const umesseApi = new UMesseApi.RecordingApi();
-  // const uploadRecordingService = useUploadRecordingService(umesseApi);
-  // const { auth } = useGlobalStore();
   const state = reactive({
     openChimeItem: null as ChimeItem | null,
     narrationItems: [] as NarrationItem[],
-    bgmItems: [] as BgmItem[],
+    bgmItem: null as BgmItem | null,
     endChimeItem: null as ChimeItem | null,
     error: undefined as string | undefined,
   });
@@ -28,27 +18,18 @@ export default function cmStore() {
   const clearEndChime = () => {
     state.endChimeItem = null
   }
+  const clearBgm = () => {
+    state.bgmItem = null
+  }
   const setOpenChime = (chimeItem: ChimeItem) => {
     state.openChimeItem = chimeItem
   }
   const setEndChime = (chimeItem: ChimeItem) => {
     state.endChimeItem = chimeItem
   }
-  // const token = () => auth.getToken() || "123456789";
-
-  // const fetchRecordingData = async () => {
-  //   try {
-  //     const response = await umesseApi.listUserRecording(token());
-  //     state.recordingItems = response.data;
-  //   } catch (err) {
-  //     state.error = err.message;
-  //   }
-  // };
-
-  // const uploadRecordingData = async (recordingFile: RecordingFile) => {
-  //   await uploadRecordingService.upload(token(), recordingFile);
-  //   fetchRecordingData();
-  // };
+  const setBgm = (bgmItem: BgmItem) => {
+    state.bgmItem = bgmItem
+  }
 
   return {
     ...toRefs(state),
@@ -58,12 +39,15 @@ export default function cmStore() {
     get endChime() {
       return state.endChimeItem
     },
+    get bgm() {
+      return state.bgmItem
+    },
     clearOpenChime,
     clearEndChime,
+    clearBgm,
     setOpenChime,
     setEndChime,
-    // uploadRecordingData,
-    // ...uploadRecordingService,
+    setBgm,
   };
 }
 

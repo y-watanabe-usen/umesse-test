@@ -34,7 +34,7 @@
           </ul>
         </div>
       </nav>
-      <h5 class="text-white">店内アナウンスを作成する</h5>
+      <h5 class="text-white"><router-link :to="{name: 'Cm'}">店内アナウンスを作成する</router-link></h5>
       <div class="row top">
         <div class="col-md-4 mb-4">
           <router-link :to="{ name: 'Recording' }">

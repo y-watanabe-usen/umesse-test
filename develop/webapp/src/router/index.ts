@@ -2,6 +2,7 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router'
 import Home from '@/views/Home.vue'
 import Cm from '@/views/cm/Index.vue'
 import CmChime from '@/views/cm/Chime.vue'
+import CmBgm from '@/views/cm/Bgm.vue'
 import Narration from '@/views/narration/Index.vue'
 import Recording from '@/views/recording/Index.vue'
 import Management from '@/views/management/Index.vue'
@@ -34,6 +35,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/cm/chime/:div',
     name: 'CmChime',
     component: CmChime
+  },
+  {
+    path: '/cm/bgm',
+    name: 'CmBgm',
+    component: CmBgm
   },
   {
     path: '/narration',

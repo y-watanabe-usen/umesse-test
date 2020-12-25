@@ -225,15 +225,39 @@
           </div>
           <div class="row">
             <div class="col mb-3">
-              <div class="bg-white rounded bgm py-3">
-                <div class="alert alert-dark small mx-auto mb-4" role="alert">
-                  BGM
+              <template v-if="state.bgm">
+                <div class="bg-white rounded bgm py-3">
+                  <div class="alert alert-dark small mx-auto mb-4" role="alert">
+                    BGM
+                  </div>
+                  <div class="text-center mb-4">
+                    <div class="small">{{ state.bgm.title }}</div>
+                    <div class="small">{{ state.bgm.description }}</div>
+                    <div class="my-3">
+                      <img src="@/assets/try-play.svg" />
+                    </div>
+                    <div class="small">
+                      <router-link :to="{ name: 'CmBgm' }">変更</router-link>
+                    </div>
+                    <div class="small">
+                      <a href="#" @click="clearBgm">削除</a>
+                    </div>
+                  </div>
                 </div>
-                <div class="text-center mb-4">
-                  <img src="@/assets/plus.svg" />
+              </template>
+              <template v-else>
+                <div class="bg-white rounded bgm py-3">
+                  <div class="alert alert-dark small mx-auto mb-4" role="alert">
+                    BGM
+                  </div>
+                  <div class="text-center mb-4">
+                    <router-link :to="{ name: 'CmBgm' }">
+                      <img src="@/assets/plus.svg" />
+                    </router-link>
+                  </div>
+                  <div class="text-center small">素材追加</div>
                 </div>
-                <div class="text-center small">素材追加</div>
-              </div>
+              </template>
             </div>
           </div>
         </div>
@@ -537,7 +561,7 @@ export default defineComponent({
       uploads: ["U MUSIC", "etc"],
       openChime: computed(() => cm.openChime),
       narrarions: computed(() => cm.narrationItems),
-      bgms: computed(() => cm.bgmItems),
+      bgm: computed(() => cm.bgm),
       endChime: computed(() => cm.endChime),
     });
 
@@ -547,17 +571,15 @@ export default defineComponent({
     const clearEndChime = () => {
       cm.clearEndChime();
     };
-    // onMounted(async () => {
-    //   const response = await api.listChime();
-    //   // console.log(response)
-    //   cmStore.setOpenChime(response.data[0]);
-    //   console.log(cmStore.openChimeItem);
-    // });
+    const clearBgm = () => {
+      cm.clearBgm();
+    };
 
     return {
       state,
       clearOpenChime,
       clearEndChime,
+      clearBgm,
     };
   },
 });
