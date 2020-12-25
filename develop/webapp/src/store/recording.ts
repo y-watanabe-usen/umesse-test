@@ -28,6 +28,26 @@ export default function recordingStore() {
     }
   };
 
+  const getUserRecording = async (id: string) => {
+    const item = state.recordingItems.find((element) => element.id === id);
+    return item;
+    //    const item = await umesseApi.getUserRecording(
+    //      state.recordingItems[0].id,
+    //      token()
+    //    );
+  };
+
+  const deleteUserRecording = async (id: string) => {
+    await umesseApi.deleteUserRecording(id, token());
+  };
+  const updateUserRecording = async (title: string, description: string) => {
+    const lastId = state.recordingItems[state.recordingItems.length - 1].id;
+    umesseApi.updateUserRecording(token(), lastId, {
+      title: title,
+      description: description,
+    });
+  };
+
   const uploadRecordingData = async (recordingFile: RecordingFile) => {
     await uploadRecordingService.upload(token(), recordingFile);
     fetchRecordingData();
@@ -36,6 +56,10 @@ export default function recordingStore() {
   return {
     ...toRefs(state),
     uploadRecordingData,
+    fetchRecordingData,
+    getUserRecording,
+    deleteUserRecording,
+    updateUserRecording,
     ...uploadRecordingService,
   };
 }
