@@ -6,11 +6,27 @@
           >&lt;戻る</router-link
         >
         <div class="collapse navbar-collapse justify-content-center h4">
-          {{ state.title }}
+          BGM
         </div>
       </nav>
       <div class="row">
-        <div class="col bg-white rounded-right">
+        <div class="col-2 bg-menu pl-1 pr-1 rounded-left">
+          <button
+            type="button"
+            class="btn btn-menu text-left text-white"
+            :class="[
+              menu.id == state.activeMenuId ? 'btn-primary' : 'btn-link',
+              menu.id == state.activeMenuId ? 'text-white' : 'text-dark',
+              menu.id == 1 ? 'mt-2' : '',
+            ]"
+            v-for="menu in state.menus"
+            :key="menu.id"
+            @click="state.activeMenuId = menu.id"
+          >
+            {{ menu.title }}
+          </button>
+        </div>
+        <div class="col-10 bg-white rounded-right">
           <div class="my-3">
             <h6 class="border-bottom border-gray pb-2 mb-0">
               <select class="form-control w-25">
@@ -21,8 +37,8 @@
             </h6>
             <div
               class="media text-muted pt-3"
-              v-for="chime in state.chimes"
-              :key="chime.id"
+              v-for="bgm in state.bgms"
+              :key="bgm.id"
             >
               <div
                 class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray pl-3"
@@ -31,7 +47,7 @@
                   class="d-flex justify-content-between align-items-center w-100"
                 >
                   <strong class="text-dark h5 pt-2 pb-2">{{
-                    chime.title
+                    bgm.title
                   }}</strong>
                   <div>
                     <button
@@ -57,7 +73,7 @@
                     <button
                       type="button"
                       class="btn btn-light shadow btn-try ml-2"
-                      @click="setChime(chime)"
+                      @click="setBgm(bgm)"
                     >
                       <svg
                         width="1em"
@@ -75,7 +91,7 @@
                     </button>
                   </div>
                 </div>
-                <span class="d-block pb-2">{{ chime.description }}</span>
+                <span class="d-block pb-2">{{ bgm.description }}</span>
               </div>
             </div>
           </div>
@@ -345,7 +361,7 @@ import AudioPlayer from "@/utils/AudioPlayer";
 import axios from "axios";
 import AudioStore from "@/store/audio";
 import * as UMesseApi from "umesseapi";
-import { ChimeItem } from "umesseapi/models";
+import { BgmItem, ChimeItem } from "umesseapi/models";
 import ChimeVue from "./Chime.vue";
 import { useGlobalStore } from "@/store";
 import { useRoute, useRouter } from "vue-router";
@@ -358,34 +374,29 @@ export default {
     const { cm } = useGlobalStore();
 
     const state = reactive({
-      title: route.params.div == "open" ? "Openチャイム" : "Endチャイム",
       menus: [
         {
           id: 1,
-          title: "チャイム",
+          title: "BGM",
         },
       ],
       activeMenuId: 1,
       sorts: ["名前順", "作成日順", "更新日順"],
-      chimes: [] as ChimeItem[],
+      bgms: [] as BgmItem[],
     });
 
-    const setChime = (chime: ChimeItem) => {
-      if (route.params.div == "open") {
-        cm.setOpenChime(chime);
-      } else {
-        cm.setEndChime(chime);
-      }
+    const setBgm = (bgm: BgmItem) => {
+      cm.setBgm(bgm);
       router.push({ name: "Cm" });
     };
 
     onMounted(async () => {
-      const response = await api.listChime();
-      state.chimes = response.data;
+      const response = await api.listBgm();
+      state.bgms = response.data;
     });
     return {
       state,
-      setChime,
+      setBgm,
     };
   },
 };
