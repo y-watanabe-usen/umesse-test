@@ -14,7 +14,7 @@ export enum UPLOAD_RECORDING_STATE {
 }
 
 interface FunctionInterface {
-  createUserRecording(s: string, s2: string, s3: string): Promise<any>;
+  createUserRecording(xUnisCustomerCd: string, filename?: string, recordedFile?: string, title?: string, description?: string): Promise<any>;
 }
 export function useUploadRecordingService(api: FunctionInterface) {
   const state = reactive({
@@ -35,7 +35,7 @@ export function useUploadRecordingService(api: FunctionInterface) {
 
       fr.onload = function() {
         api
-          .createUserRecording(authToken, file.title!, fr.result as string)
+          .createUserRecording(authToken, file.title!, fr.result as string,file.title,'FIXME: file.description')
           .then((value) =>
             resolve((state.status = UPLOAD_RECORDING_STATE.UPLOADED))
           )
