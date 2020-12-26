@@ -1,6 +1,6 @@
 # ffmpeg compile libfdk-aac
 
-[Compile FFmpeg for Ubuntu, Debian, or Mint](https://trac.ffmpeg.org/wiki/CompilationGuide/Ubuntu)
+[Compile FFmpeg on CentOS](https://trac.ffmpeg.org/wiki/CompilationGuide/Centos)
 
 ## build
 
