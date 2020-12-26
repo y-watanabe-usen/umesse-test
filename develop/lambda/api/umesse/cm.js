@@ -255,10 +255,11 @@ function generateCm(unisCustomerCd, id, materials) {
       "narration/サンプル02.mp3",
       "narration/サンプル03.mp3",
     ];
-    const workDir = `/tmp/${unisCustomerCd}`;
+    const workDir = `/tmp/${unisCustomerCd}/mix`;
+    const ffmpeg = `./bin/ffmpeg`;
 
     try {
-      execSync(`mkdir -p ${workDir} && rm -rf ${workDir}/*.mp3`);
+      execSync(`mkdir -p ${workDir} && rm -f ${workDir}/*`);
 
       let paths = "";
       for (const [key, value] of list.entries()) {
@@ -269,8 +270,8 @@ function generateCm(unisCustomerCd, id, materials) {
         paths += `-i ${workDir}/${key}.mp3 `;
       }
 
-      // FIXME: ffmpeg path 相対パスでもよいか、各パラメーターをチューニング
-      const command = `./umesse/bin/ffmpeg -hide_banner ${paths} \
+      // FIXME: 各パラメーターをチューニング
+      const command = `${ffmpeg} -hide_banner ${paths} \
         -filter_complex ' \
           [0:a]volume=0.5[start_chime]; \
           [1:a]volume=0.5,adelay=3s|3s[end_chime]; \
@@ -288,7 +289,7 @@ function generateCm(unisCustomerCd, id, materials) {
 
       // FIXME: get seconds... 他に方法があるか
       const seconds = execSync(
-        `./umesse/bin/ffmpeg -hide_banner -i ${workDir}/${id}.mp3 2>&1 | \
+        `${ffmpeg} -hide_banner -i ${workDir}/${id}.mp3 2>&1 | \
           grep 'Duration' | cut -d ' ' -f 4 | cut -d '.' -f 1`
       )
         .toString()
