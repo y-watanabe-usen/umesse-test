@@ -9,9 +9,6 @@ RUN yum install -y \
   bzip2-devel \
   cmake \
   freetype-devel \
-  libvorbis-devel \
-  nasm \
-  yasm \
   gcc \
   gcc-c++ \
   git \
@@ -19,7 +16,9 @@ RUN yum install -y \
   make \
   mercurial \
   pkgconfig \
-  zlib-devel
+  zlib-devel \
+  nasm \
+  yasm
 
 RUN mkdir ~/ffmpeg_sources
 
@@ -67,23 +66,22 @@ RUN cd ~/ffmpeg_sources && \
   --extra-libs=-lpthread \
   --extra-libs=-lm \
   --bindir="$HOME/bin" \
-  # --enable-gpl \
-  # --enable-version3 \
+  --enable-gpl \
+  --enable-version3 \
+  --enable-nonfree \
   --enable-static \
   --enable-small \
-  --enable-cross-compile \
   --disable-doc \
   --disable-debug \
   --disable-ffplay \
   --disable-indev=sndio \
   --disable-outdev=sndio \
   --disable-shared \
+  --disable-libxcb \
   --cc=gcc \
   --enable-libfdk_aac \
   --enable-libmp3lame \
-  --enable-libvorbis \
   --enable-libopus
-  # --enable-nonfree
 
 RUN cd ~/ffmpeg_sources && \
   cd ffmpeg && \
