@@ -392,7 +392,7 @@ export default {
   setup() {
     const audioPlayer = AudioPlayer();
     const audioStore = AudioStore();
-    const api = new UMesseApi.ResourcesApi();
+    const api = new UMesseApi.ResourcesApi(new UMesseApi.Configuration({basePath:process.env.VUE_APP_BASE_URL}));
 
     const state = reactive({
       menus: [

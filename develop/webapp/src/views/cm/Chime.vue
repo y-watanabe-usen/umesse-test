@@ -354,7 +354,7 @@ export default {
   setup() {
     const router = useRouter();
     const route = useRoute();
-    const api = new UMesseApi.ResourcesApi();
+    const api = new UMesseApi.ResourcesApi(new UMesseApi.Configuration({basePath:process.env.VUE_APP_BASE_URL}));
     const { cm } = useGlobalStore();
 
     const state = reactive({
