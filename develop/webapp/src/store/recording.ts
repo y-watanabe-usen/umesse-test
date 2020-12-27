@@ -9,7 +9,9 @@ import { RecordingItem } from "umesseapi/models/recording-item";
 
 // recording.
 export default function recordingStore() {
-  const umesseApi = new UMesseApi.RecordingApi();
+  const config = new UMesseApi.Configuration({ basePath: process.env.VUE_APP_BASE_URL })
+  const umesseApi = new UMesseApi.RecordingApi(config);
+  const resourcesApi = new UMesseApi.ResourcesApi(config)
   const uploadRecordingService = useUploadRecordingService(umesseApi);
   const { auth } = useGlobalStore();
   const state = reactive({

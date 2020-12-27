@@ -554,7 +554,7 @@ import * as UMesseApi from "umesseapi";
 
 export default defineComponent({
   setup() {
-    const api = new UMesseApi.ResourcesApi();
+    const api = new UMesseApi.ResourcesApi(new UMesseApi.Configuration({basePath:process.env.VUE_APP_BASE_URL}));
     const { cm } = useGlobalStore();
     const state = reactive({
       scenes: ["開店", "閉店", "etc"],

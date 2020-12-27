@@ -330,7 +330,7 @@ export default {
     // const narrationStore = NarrationStore();
     const audioStore = AudioStore();
     const audioPlayer = AudioPlayer();
-    const api = new UMesseApi.ResourcesApi();
+    const api = new UMesseApi.ResourcesApi(new UMesseApi.Configuration({basePath:process.env.VUE_APP_BASE_URL}));
 
     const state = reactive({
       sorts: ["名前順", "作成日順", "更新日順"],
