@@ -10,6 +10,7 @@ const {
   getResource,
   getUserResource,
   createUserResource,
+  deleteUserResource,
 } = require("../umesse/resources");
 
 beforeAll(() => {
@@ -75,6 +76,8 @@ describe("resources", () => {
     );
     const body = {
       recordedFile: file,
+      title: "録音テスト04",
+      description: "録音テスト04",
     };
     const response = await createUserResource(
       recordingData.unisCustomerCd,
@@ -85,9 +88,44 @@ describe("resources", () => {
       id: expect.stringMatching(
         `^${recordingData.unisCustomerCd}-r-[0-9a-z]{8}$`
       ),
+      title: body.title,
+      description: body.description,
       startDate: expect.anything(),
       timestamp: expect.anything(),
     });
+  });
+
+  test("deleteUserResource recording success", async () => {
+    const response = await deleteUserResource(
+      recordingData.unisCustomerCd,
+      "recording",
+      recordingData.data.id
+    );
+    expect(response).toEqual([
+      {
+        id: "020000000-r-00000002",
+        title: "録音テスト02",
+        description: "録音テスト02",
+        startDate: "2019-09-01T09:00:00+9:00",
+        timestamp: "2019-09-01T09:00:00+9:00",
+      },
+      {
+        id: "020000000-r-00000003",
+        title: "録音テスト03",
+        description: "録音テスト03",
+        startDate: "2019-09-01T09:00:00+9:00",
+        timestamp: "2019-09-01T09:00:00+9:00",
+      },
+      {
+        id: expect.stringMatching(
+          `^${recordingData.unisCustomerCd}-r-[0-9a-z]{8}$`
+        ),
+        title: "録音テスト04",
+        description: "録音テスト04",
+        startDate: expect.anything(),
+        timestamp: expect.anything(),
+      },
+    ]);
   });
 });
 
