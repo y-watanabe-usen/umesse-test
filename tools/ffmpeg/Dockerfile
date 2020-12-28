@@ -18,7 +18,10 @@ RUN yum install -y \
   pkgconfig \
   zlib-devel \
   nasm \
-  yasm
+  yasm \
+  bzip2-devel \
+  xz-devel \
+  ldconfig
 
 RUN mkdir ~/ffmpeg_sources
 
@@ -56,20 +59,22 @@ RUN cd ~/ffmpeg_sources && \
 # ffmpeg
 RUN cd ~/ffmpeg_sources && \
   curl -O -L https://ffmpeg.org/releases/ffmpeg-snapshot.tar.bz2 && \
-  tar xjvf ffmpeg-snapshot.tar.bz2 && \
+  tar xjvf ffmpeg-snapshot.tar.bz2
+
+RUN cd ~/ffmpeg_sources && \
   cd ffmpeg && \
   PATH="$HOME/bin:$PATH" PKG_CONFIG_PATH="$HOME/ffmpeg_build/lib/pkgconfig" ./configure \
   --prefix="$HOME/ffmpeg_build" \
   --pkg-config-flags="--static" \
   --extra-cflags="-I$HOME/ffmpeg_build/include" \
   --extra-ldflags="-L$HOME/ffmpeg_build/lib" \
-  --extra-libs=-lpthread \
-  --extra-libs=-lm \
+  --extra-libs="-lm -lpthread" \
   --bindir="$HOME/bin" \
   --enable-gpl \
   --enable-version3 \
   --enable-nonfree \
   --enable-static \
+  --enable-cross-compile \
   --enable-small \
   --disable-doc \
   --disable-debug \
@@ -77,7 +82,10 @@ RUN cd ~/ffmpeg_sources && \
   --disable-indev=sndio \
   --disable-outdev=sndio \
   --disable-shared \
+  --disable-bzlib \
+  --disable-lzma \
   --disable-libxcb \
+  --disable-zlib \
   --cc=gcc \
   --enable-libfdk_aac \
   --enable-libmp3lame \
