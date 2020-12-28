@@ -1,12 +1,11 @@
 "use strict";
 
-process.env.FONTCONFIG_PATH = process.env.LAMBDA_TASK_ROOT + "/bin";
-
 const { execSync } = require("child_process");
 const fs = require("fs");
-const { constants, debuglog, timestamp } = require("./constants");
-const dynamodb = require("./utils/dynamodbController").controller;
-const s3 = require("./utils/s3Controller").controller;
+
+const { constants, debuglog, timestamp } = require("./nodejs/constants");
+const { updateDynamoDb } = require("./nodejs/dynamodbManager");
+const { getS3, putS3, deleteS3 } = require("./nodejs/s3Manager");
 
 exports.handler = async (event, context, callback) => {
   debuglog(
@@ -37,7 +36,7 @@ function convertCm(unisCustomerCd, cmId) {
     try {
       execSync(`mkdir -p ${workDir} && rm -f ${workDir}/*`);
 
-      let res = await s3.get(
+      let res = await getS3(
         constants.s3Bucket().users,
         `users/${unisCustomerCd}/cm/${cmId}.mp3`
       );
@@ -92,9 +91,9 @@ function convertCm(unisCustomerCd, cmId) {
       fileStream.on("error", (e) => {
         throw e;
       });
-      res = await s3.put(
+      res = await putS3(
         constants.s3Bucket().users,
-        `users/${unisCustomerCd}/cm/${id}.aac`,
+        `users/${unisCustomerCd}/cm/${cmId}.aac`,
         fileStream
       );
       if (!res) throw "putObject failed";
@@ -105,9 +104,8 @@ function convertCm(unisCustomerCd, cmId) {
       // TODO: 外部連携の場合、データ更新
       // 外部連携のパラメータが来た場合は、連携データのステータス更新（0 → 1）
 
-      // TODO: エンコード前の音源は削除する？
-      // S3上のCMを削除
-      // await s3.delete(
+      // TODO: エンコード前の音源は削除するか検討
+      // await deleteS3(
       //   constants.s3Bucket().users,
       //   `users/${unisCustomerCd}/cm/${cmId}.mp3`
       // );
