@@ -52,11 +52,22 @@ exports.getSignedUrl = async (id) => {
   );
 
   try {
-    let bucket = constants.s3Bucket().contents;
-    if (id.match(`[0-9]{9}-[crt]-[0-9a-z]{8}`))
+    let bucket = "";
+    let path = "";
+    let match = id.match(`([0-9]{9})-([crt])-[0-9a-z]{8}`);
+    if (match && match.length) {
       bucket = constants.s3Bucket().users;
+      let div = "";
+      if (match[2] == "c") div = "cm";
+      else if (match[2] == "r") div = "recording";
+      else if (match[2] == "t") div = "tts";
+      path = `users/${match[1]}/${div}/${id}.wav`;
+    } else {
+      bucket = constants.s3Bucket().contents;
+      path = id;
+    }
 
-    const res = await s3.getSignedUrl(bucket, id);
+    const res = await s3.getSignedUrl(bucket, path);
     if (!res) throw "getSignedUrl failed";
     return { url: res };
   } catch (e) {
@@ -141,6 +152,8 @@ exports.createUserResource = async (unisCustomerCd, filter, body) => {
     // DynamoDBのデータ更新
     const data = {
       id: id,
+      title: body["title"],
+      description: body["description"],
       startDate: timestamp(),
       timestamp: timestamp(),
     };
@@ -247,13 +260,13 @@ exports.deleteUserResource = async (unisCustomerCd, filter, id) => {
     // S3上の録音音声を削除
     await s3.delete(
       constants.s3Bucket().users,
-      `users/${unisCustomerCd}/${filter}/${id}.mp3`
+      `users/${unisCustomerCd}/${filter}/${id}.wav`
     );
 
     // DynamoDBのデータ更新
     const key = { unisCustomerCd: unisCustomerCd };
     const options = {
-      UpdateExpression: `REMOVE #filter[${resource.index}]`,
+      UpdateExpression: `REMOVE #filter[${index}]`,
       ExpressionAttributeNames: {
         "#filter": filter,
       },
@@ -268,7 +281,7 @@ exports.deleteUserResource = async (unisCustomerCd, filter, id) => {
     );
     if (!res) throw "update failed";
 
-    let json = res.Attributes[filter][index];
+    let json = res.Attributes[filter];
     return json;
   } catch (e) {
     // TODO: error handle

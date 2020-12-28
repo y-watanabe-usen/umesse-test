@@ -255,8 +255,8 @@ function generateCm(unisCustomerCd, id, materials) {
       "narration/サンプル02.mp3",
       "narration/サンプル03.mp3",
     ];
-    const workDir = `/tmp/${unisCustomerCd}/mix`;
-    const ffmpeg = `./bin/ffmpeg`;
+    const workDir = `/tmp/${unisCustomerCd}/mix/${id}`;
+    const ffmpeg = `./umesse/bin/ffmpeg`;
 
     try {
       execSync(`mkdir -p ${workDir} && rm -f ${workDir}/*`);
