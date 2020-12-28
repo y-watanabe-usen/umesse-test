@@ -4,10 +4,9 @@
   "version": "0.0.1",
   "private": true,
   "main": "lambda.js",
-  "dependencies": {
-    "aws-sdk": "^2.442.0"
-  },
+  "dependencies": {},
   "devDependencies": {
+    "aws-sdk": "^2.442.0",
     "jest": "^26.6.3"
   },
   "scripts": {

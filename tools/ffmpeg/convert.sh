@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 set -u
 
-DATA_DIR="../../sample_data"
+DATA_DIR="../../sample_data/s3/umesse-contents"
 
 DATA_LIST="
-チャイム/サンプル01.mp3
-チャイム/サンプル02.mp3
-BGM/サンプル01.mp3
-ナレーション/サンプル01.mp3
-ナレーション/サンプル02.mp3
-ナレーション/サンプル03.mp3
+chime/サンプル01.mp3
+chime/サンプル02.mp3
+bgm/サンプル01.mp3
+narration/サンプル01.mp3
+narration/サンプル02.mp3
+narration/サンプル03.mp3
 "
 
 INPUT_FILE=""
