@@ -3,11 +3,11 @@
 const { execSync } = require("child_process");
 const fs = require("fs");
 
-const { constants, debuglog, timestamp } = require("./nodejs/constants");
-const { updateDynamoDb } = require("./nodejs/dynamodbManager");
-const { getS3, putS3, deleteS3 } = require("./nodejs/s3Manager");
+const { constants, debuglog, timestamp } = require("umesse-lib/constants");
+const { updateDynamoDb } = require("umesse-lib/utils/dynamodbManager");
+const { getS3, putS3, deleteS3 } = require("umesse-lib/utils/s3Manager");
 
-exports.handler = async (event, context, callback) => {
+exports.handler = async (event, context) => {
   debuglog(
     `[converter] ${JSON.stringify({
       event: event,
@@ -16,14 +16,33 @@ exports.handler = async (event, context, callback) => {
   );
 
   try {
-    // TODO: とりあえず固定
-    const res = await convertCm("123456789", "123456789-c-99999999");
-    callback("", res);
+    const body = JSON.parse(event.Records[0].body);
+    const unisCustomerCd = body.unisCustomerCd;
+    const cmId = body.cmId;
+
+    // TODO: body message check
+
+    // TODO: データ存在確認
+
+    // TODO: CMステータスの確認
+
+    //
+    const res = await convertCm(unisCustomerCd, cmId);
+    if (!res) throw "convert failed";
+
+    // TODO: DynamoDbデータ更新
+    // CMステータスを完了へ変更(03 → 02)
+
+    // TODO: 外部連携の場合、データ更新
+    // 外部連携のパラメータが来た場合は、連携データのステータス更新（0 → 1）
+
+    return { message: "complete" };
   } catch (e) {
     // TODO: 該当のCMステータスをエラーに変更
+
     // error handler
     console.log(e);
-    callback(e, "");
+    return { message: e };
   }
 };
 
@@ -98,13 +117,7 @@ function convertCm(unisCustomerCd, cmId) {
       );
       if (!res) throw "putObject failed";
 
-      // TODO: DynamoDbデータ更新
-      // CMステータスを完了へ変更(03 → 02)
-
-      // TODO: 外部連携の場合、データ更新
-      // 外部連携のパラメータが来た場合は、連携データのステータス更新（0 → 1）
-
-      // TODO: エンコード前の音源は削除するか検討
+      // TODO: エンコード前の音源は削除するか検討（一旦コメントアウト）
       // await deleteS3(
       //   constants.s3Bucket().users,
       //   `users/${unisCustomerCd}/cm/${cmId}.mp3`
