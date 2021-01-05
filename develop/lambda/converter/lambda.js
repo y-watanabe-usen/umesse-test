@@ -2,10 +2,9 @@
 
 const { execSync } = require("child_process");
 const fs = require("fs");
-
 const { constants, debuglog, timestamp } = require("umesse-lib/constants");
-const { updateDynamoDb } = require("umesse-lib/utils/dynamodbManager");
-const { getS3, putS3, deleteS3 } = require("umesse-lib/utils/s3Manager");
+const { dynamodbManager } = require("umesse-lib/utils/dynamodbManager");
+const { s3Manager } = require("umesse-lib/utils/s3Manager");
 
 exports.handler = async (event, context) => {
   debuglog(
@@ -55,7 +54,7 @@ function convertCm(unisCustomerCd, cmId) {
     try {
       execSync(`mkdir -p ${workDir} && rm -f ${workDir}/*`);
 
-      let res = await getS3(
+      let res = await s3Manager.get(
         constants.s3Bucket().users,
         `users/${unisCustomerCd}/cm/${cmId}.mp3`
       );
@@ -110,7 +109,7 @@ function convertCm(unisCustomerCd, cmId) {
       fileStream.on("error", (e) => {
         throw e;
       });
-      res = await putS3(
+      res = await s3Manager.put(
         constants.s3Bucket().users,
         `users/${unisCustomerCd}/cm/${cmId}.aac`,
         fileStream
@@ -118,7 +117,7 @@ function convertCm(unisCustomerCd, cmId) {
       if (!res) throw "putObject failed";
 
       // TODO: エンコード前の音源は削除するか検討（一旦コメントアウト）
-      // await deleteS3(
+      // await s3Manager.delete(
       //   constants.s3Bucket().users,
       //   `users/${unisCustomerCd}/cm/${cmId}.mp3`
       // );

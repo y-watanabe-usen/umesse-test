@@ -1,8 +1,8 @@
 "use strict";
 
-const { constants, debuglog, timestamp } = require("./constants");
+const { constants, debuglog, timestamp } = require("umesse-lib/constants");
+const { dynamodbManager } = require("umesse-lib/utils/dynamodbManager");
 const { validation } = require("./validation");
-const dynamodb = require("./utils/dynamodbController").controller;
 const { getCm } = require("./cm");
 
 // 外部連携データ取得（一覧・個別）
@@ -25,7 +25,7 @@ exports.getUploadCm = async (unisCustomerCd, cmId) => {
         ":unisCustomerCd": unisCustomerCd,
       },
     };
-    const res = await dynamodb.query(
+    const res = await dynamodbManager.query(
       constants.dynamoDbTable().external,
       options
     );
@@ -87,7 +87,11 @@ exports.createUploadCm = async (unisCustomerCd, cmId, body) => {
       timestamp: timestamp(),
     };
 
-    let res = await dynamodb.put(constants.dynamoDbTable().external, item, {});
+    let res = await dynamodbManager.put(
+      constants.dynamoDbTable().external,
+      item,
+      {}
+    );
     if (!res) throw "put failed";
 
     // DynamoDBのデータ更新
@@ -107,7 +111,11 @@ exports.createUploadCm = async (unisCustomerCd, cmId, body) => {
     };
     debuglog(JSON.stringify({ key: key, options: options }));
 
-    res = await dynamodb.update(constants.dynamoDbTable().users, key, options);
+    res = await dynamodbManager.update(
+      constants.dynamoDbTable().users,
+      key,
+      options
+    );
     if (!res) throw "update failed";
 
     let json = res.Attributes.cm[index];
@@ -164,7 +172,11 @@ exports.deleteUploadCm = async (unisCustomerCd, cmId, body) => {
       timestamp: timestamp(),
     };
 
-    let res = await dynamodb.put(constants.dynamoDbTable().external, item, {});
+    let res = await dynamodbManager.put(
+      constants.dynamoDbTable().external,
+      item,
+      {}
+    );
     if (!res) throw "put failed";
 
     // DynamoDBのデータ更新
@@ -179,7 +191,11 @@ exports.deleteUploadCm = async (unisCustomerCd, cmId, body) => {
     };
     debuglog(JSON.stringify({ key: key, options: options }));
 
-    res = await dynamodb.update(constants.dynamoDbTable().users, key, options);
+    res = await dynamodbManager.update(
+      constants.dynamoDbTable().users,
+      key,
+      options
+    );
     if (!res) throw "update failed";
 
     let json = res.Attributes.cm[index];

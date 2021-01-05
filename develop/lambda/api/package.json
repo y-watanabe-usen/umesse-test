@@ -21,8 +21,7 @@
     "build": "npm install --no-save $(npm pack ../layer/umesse-lib/ | tail -1)",
     "build:prod": "npm install --production",
     "pretest": "sh ./__tests__/data/init.sh",
-    "test": "jest -i",
-    "coverage": "jest --coverage"
+    "test": "jest --coverage"
   },
   "jest": {
     "verbose": false,
