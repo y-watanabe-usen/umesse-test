@@ -1,6 +1,6 @@
 "use strict";
 
-const { constants } = require("../../umesse/constants");
+const { constants } = require("umesse-lib/constants");
 const {
   getUserResource,
   createUserResource,
