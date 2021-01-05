@@ -8,5 +8,8 @@
   "devDependencies": {
     "umesse-lib": "file:../layer/umesse-lib"
   },
-  "scripts": {}
+  "scripts": {
+    "build": "npm install --no-save $(npm pack ../layer/umesse-lib/ | tail -1)",
+    "build:prod": "npm install --production"
+  }
 }

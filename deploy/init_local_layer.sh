@@ -15,7 +15,7 @@ DOCKER_LAMBDA_CONVERTER=localstack_lambda_arn_aws_lambda_ap-northeast-1_00000000
 # localstack freeではLambdaレイヤーが利用できないため、
 # localstack LAMBDA_EXECUTOR=docker-reuse にして、コンテナを起動し続け、
 # 共通処理を docker cp して各Lambda Functionで利用する
-# 実際のLambdaレイヤーと配置が異なるが、一旦PATHが通っている箇所に配置し利用する
+# 実際のLambdaレイヤーと配置が異なるが、一旦PATHが通っている箇所にffmpegを配置し利用する
 
 # docker container start pi
 API_ID=$($AWSCLI apigateway get-rest-apis --query "items[?name==\`${API_NAME}\`].id" --output text)
@@ -37,6 +37,3 @@ sleep 1
 docker cp ${LAMBDA_LAYER_DIR}/bin ${DOCKER_LAMBDA_API}:/opt/bin
 docker cp ${LAMBDA_LAYER_DIR}/bin ${DOCKER_LAMBDA_CONVERTER}:/opt/bin
 
-# umesse lib cp
-docker cp ${LAMBDA_LAYER_DIR}/umesse-lib ${DOCKER_LAMBDA_API}:/umesse-lib
-docker cp ${LAMBDA_LAYER_DIR}/umesse-lib ${DOCKER_LAMBDA_CONVERTER}:/umesse-lib
