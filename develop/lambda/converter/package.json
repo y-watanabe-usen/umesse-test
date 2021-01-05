@@ -6,6 +6,7 @@
   "main": "lambda.js",
   "dependencies": {},
   "devDependencies": {
+    "aws-sdk": "^2.442.0",
     "umesse-lib": "file:../layer/umesse-lib"
   },
   "scripts": {

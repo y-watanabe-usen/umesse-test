@@ -1,10 +1,15 @@
 # U MESSE
 
-- [Index](#Index)
-- [環境構築](#環境構築)
-  - [準備](#準備)
-  - [ローカル環境](#ローカル環境)
-- [検討](#検討)
+- [U MESSE](#u-messe)
+  - [Index](#index)
+  - [プロジェクト構成](#プロジェクト構成)
+  - [環境構築](#環境構築)
+    - [準備](#準備)
+    - [ローカル環境](#ローカル環境)
+      - [AWS](#aws)
+      - [Lambda](#lambda)
+      - [VueJs](#vuejs)
+  - [Swagger](#swagger)
 
 ## Index
 
@@ -47,21 +52,23 @@
 ```bash
 cd localstack
 docker-compose up -d
-cd ../develop/lambda
-npm install
+cd ../develop/api
+npm run build
+cd ../develop/converter
+npm run build
 cd ../../deploy
 terraform init
 terraform plan
 terraform apply
-./curl_lambda.sh
+./init.sh
 ```
 
 #### Lambda
 
 ```bash
-cd develop/lambda
+cd develop/api
 npm install
-node ./src/app.local.js
+node ./app.local.js
 ```
 
 #### VueJs

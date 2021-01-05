@@ -50,7 +50,7 @@ exports.handler = async (event, context) => {
 function convertCm(unisCustomerCd, cmId) {
   return new Promise(async function (resolve, reject) {
     const workDir = `/tmp/${unisCustomerCd}/convert`;
-    const ffmpeg = `./bin/ffmpeg`;
+    const ffmpeg = `ffmpeg`;
 
     try {
       execSync(`mkdir -p ${workDir} && rm -f ${workDir}/*`);
