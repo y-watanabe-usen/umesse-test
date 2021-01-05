@@ -2,10 +2,10 @@
 
 const { execSync } = require("child_process");
 const fs = require("fs");
-const { constants, debuglog, timestamp, generateId } = require("./constants");
+const { constants, debuglog, timestamp, generateId } = require("umesse-lib/constants");
+const { dynamodbManager } = require("umesse-lib/utils/dynamodbManager");
+const { s3Manager } = require("umesse-lib/utils/s3Manager");
 const { validation } = require("./validation");
-const dynamodb = require("./utils/dynamodbController").controller;
-const s3 = require("./utils/s3Controller").controller;
 
 // CM取得（一覧・個別）
 exports.getCm = async (unisCustomerCd, cmId) => {
@@ -27,7 +27,7 @@ exports.getCm = async (unisCustomerCd, cmId) => {
     };
     debuglog(JSON.stringify({ key: key, options: options }));
 
-    const res = await dynamodb.get(
+    const res = await dynamodbManager.get(
       constants.dynamoDbTable().users,
       key,
       options
@@ -68,7 +68,7 @@ exports.createCm = async (unisCustomerCd, body) => {
     if (!seconds) throw "generate cm failed";
 
     // 署名付きURLの発行
-    const url = await s3.getSignedUrl(
+    const url = await s3Manager.getSignedUrl(
       constants.s3Bucket().users,
       `users/${unisCustomerCd}/cm/${id}.mp3`
     );
@@ -96,7 +96,7 @@ exports.createCm = async (unisCustomerCd, body) => {
     };
     debuglog(JSON.stringify({ key: key, options: options }));
 
-    const res = await dynamodb.update(
+    const res = await dynamodbManager.update(
       constants.dynamoDbTable().users,
       key,
       options
@@ -171,7 +171,7 @@ exports.updateCm = async (unisCustomerCd, cmId, body) => {
     };
     debuglog(JSON.stringify({ key: key, options: options }));
 
-    const res = await dynamodb.update(
+    const res = await dynamodbManager.update(
       constants.dynamoDbTable().users,
       key,
       options
@@ -209,7 +209,7 @@ exports.deleteCm = async (unisCustomerCd, cmId) => {
     if (checkCmStatus) throw checkCmStatus;
 
     // S3上のCMを削除
-    await s3.delete(
+    await s3Manager.delete(
       constants.s3Bucket().users,
       `users/${unisCustomerCd}/cm/${cmId}.mp3`
     );
@@ -227,7 +227,7 @@ exports.deleteCm = async (unisCustomerCd, cmId) => {
     };
     debuglog(JSON.stringify({ key: key, options: options }));
 
-    const res = await dynamodb.update(
+    const res = await dynamodbManager.update(
       constants.dynamoDbTable().users,
       key,
       options
@@ -256,7 +256,7 @@ function generateCm(unisCustomerCd, id, materials) {
       "narration/サンプル03.mp3",
     ];
     const workDir = `/tmp/${unisCustomerCd}/mix/${id}`;
-    const ffmpeg = `./umesse/bin/ffmpeg`;
+    const ffmpeg = `ffmpeg`;
 
     try {
       execSync(`mkdir -p ${workDir} && rm -f ${workDir}/*`);
@@ -264,7 +264,7 @@ function generateCm(unisCustomerCd, id, materials) {
       let paths = "";
       for (const [key, value] of list.entries()) {
         debuglog(`key: ${key}, value: ${value}`);
-        const res = await s3.get(constants.s3Bucket().contents, value);
+        const res = await s3Manager.get(constants.s3Bucket().contents, value);
         if (!res || !res.Body) throw "getObject failed";
         fs.writeFileSync(`${workDir}/${key}.mp3`, res.Body);
         paths += `-i ${workDir}/${key}.mp3 `;
@@ -300,7 +300,7 @@ function generateCm(unisCustomerCd, id, materials) {
       fileStream.on("error", (e) => {
         throw e;
       });
-      await s3.put(
+      await s3Manager.put(
         constants.s3Bucket().users,
         `users/${unisCustomerCd}/cm/${id}.mp3`,
         fileStream

@@ -1,0 +1,12 @@
+{
+  "name": "umesse-lib",
+  "description": "UMesse Lib",
+  "version": "0.0.1",
+  "private": true,
+  "main": "constants.js",
+  "dependencies": {},
+  "devDependencies": {
+    "aws-sdk": "^2.442.0"
+  },
+  "scripts": {}
+}

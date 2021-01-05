@@ -5,7 +5,6 @@
   "private": true,
   "main": "lambda.js",
   "dependencies": {
-    "aws-sdk": "^2.442.0",
     "aws-serverless-express": "^3.3.8",
     "body-parser": "^1.19.0",
     "compression": "^1.7.4",
@@ -14,10 +13,15 @@
     "oas3-tools": "^2.0.2"
   },
   "devDependencies": {
+    "aws-sdk": "^2.442.0",
+    "umesse-lib": "file:../layer/umesse-lib",
     "jest": "^26.6.3"
   },
   "scripts": {
-    "test": "sh ./__tests__/data/init.sh && jest -i --coverage"
+    "build": "npm install --no-save $(npm pack ../layer/umesse-lib/ | tail -1)",
+    "build:prod": "npm install --production",
+    "pretest": "sh ./__tests__/data/init.sh",
+    "test": "jest --coverage"
   },
   "jest": {
     "verbose": false,

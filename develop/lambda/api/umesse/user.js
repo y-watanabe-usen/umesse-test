@@ -1,8 +1,8 @@
 "use strict";
 
-const { constants, debuglog } = require("./constants");
+const { constants, debuglog } = require("umesse-lib/constants");
+const { dynamodbManager } = require("umesse-lib/utils/dynamodbManager");
 const { validation } = require("./validation");
-const dynamodb = require("./utils/dynamodbController").controller;
 
 // ユーザーデータ取得
 exports.getUser = async (unisCustomerCd) => {
@@ -35,7 +35,7 @@ exports.getUser = async (unisCustomerCd) => {
     };
     debuglog(JSON.stringify({ key: key, options: options }));
 
-    const res = await dynamodb.get(
+    const res = await dynamodbManager.get(
       constants.dynamoDbTable().users,
       key,
       options

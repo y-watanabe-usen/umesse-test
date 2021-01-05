@@ -1,8 +1,8 @@
 "use strict";
 
-const { constants, debuglog, timestamp } = require("./constants");
+const { constants, debuglog, timestamp } = require("umesse-lib/constants");
+const { dynamodbManager } = require("umesse-lib/utils/dynamodbManager");
 const { validation } = require("./validation");
-const dynamodb = require("./utils/dynamodbController").controller;
 const { getCm } = require("./cm");
 
 // 外部連携データ取得（一覧・個別）
@@ -15,7 +15,10 @@ exports.getExternalCm = async (unisCustomerCd, external) => {
   );
 
   try {
-    const res = await dynamodb.scan(constants.dynamoDbTable().external, {});
+    const res = await dynamodbManager.scan(
+      constants.dynamoDbTable().external,
+      {}
+    );
     if (!res || !res.Items.length) throw "not found";
 
     let json = res.Items;
@@ -85,7 +88,11 @@ exports.completeExternalCm = async (unisCustomerCd, external, body) => {
 
     if (body.dataProcessType == "01") {
       // 正常完了の場合
-      res = await dynamodb.delete(constants.dynamoDbTable().external, key, {});
+      res = await dynamodbManager.delete(
+        constants.dynamoDbTable().external,
+        key,
+        {}
+      );
       if (!res) throw "delete failed";
 
       if (external[0].dataProcessType == "03") {
@@ -105,7 +112,7 @@ exports.completeExternalCm = async (unisCustomerCd, external, body) => {
         },
         ReturnValues: "UPDATED_NEW",
       };
-      res = await dynamodb.update(
+      res = await dynamodbManager.update(
         constants.dynamoDbTable().external,
         key,
         options
@@ -126,7 +133,11 @@ exports.completeExternalCm = async (unisCustomerCd, external, body) => {
     };
     debuglog(JSON.stringify({ key: key, options: options }));
 
-    res = await dynamodb.update(constants.dynamoDbTable().users, key, options);
+    res = await dynamodbManager.update(
+      constants.dynamoDbTable().users,
+      key,
+      options
+    );
     if (!res) throw "update failed";
 
     let json = res.Attributes.cm[index];

@@ -7,9 +7,10 @@
   "dependencies": {},
   "devDependencies": {
     "aws-sdk": "^2.442.0",
-    "jest": "^26.6.3"
+    "umesse-lib": "file:../layer/umesse-lib"
   },
   "scripts": {
-    "test": "jest -i --coverage"
+    "build": "npm install --no-save $(npm pack ../layer/umesse-lib/ | tail -1)",
+    "build:prod": "npm install --production"
   }
 }

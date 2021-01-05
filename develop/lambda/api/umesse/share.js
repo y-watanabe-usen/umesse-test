@@ -1,9 +1,9 @@
 "use strict";
 
-const { constants, debuglog, timestamp } = require("./constants");
+const { constants, debuglog, timestamp } = require("umesse-lib/constants");
+const { dynamodbManager } = require("umesse-lib/utils/dynamodbManager");
+const { s3Manager } = require("umesse-lib/utils/s3Manager");
 const { validation } = require("./validation");
-const dynamodb = require("./utils/dynamodbController").controller;
-const s3 = require("./utils/s3Controller").controller;
 const { getCm } = require("./cm");
 const { getUser } = require("./user");
 
@@ -31,7 +31,7 @@ exports.getShareCm = async (unisCustomerCd, cmId) => {
     };
     debuglog(JSON.stringify({ key: key, options: options }));
 
-    const res = await dynamodb.get(
+    const res = await dynamodbManager.get(
       constants.dynamoDbTable().users,
       key,
       options
@@ -73,7 +73,7 @@ exports.createShareCm = async (unisCustomerCd, cmId) => {
     if (!user) throw "not found";
 
     // S3上のCMをコピー
-    let res = await s3.copy(
+    let res = await s3Manager.copy(
       constants.s3Bucket().users,
       `group/${user.customerGroupCd}/cm/${cmId}.mp3`,
       `users/${unisCustomerCd}/cm/${cmId}.mp3`
@@ -97,7 +97,11 @@ exports.createShareCm = async (unisCustomerCd, cmId) => {
     };
     debuglog(JSON.stringify({ key: key, options: options }));
 
-    res = await dynamodb.update(constants.dynamoDbTable().users, key, options);
+    res = await dynamodbManager.update(
+      constants.dynamoDbTable().users,
+      key,
+      options
+    );
     if (!res) throw "update failed";
 
     let json = res.Attributes.cm[index];
@@ -135,7 +139,7 @@ exports.deleteShareCm = async (unisCustomerCd, cmId) => {
     if (!user) throw "not found";
 
     // S3上のCMを削除
-    await s3.delete(
+    await s3Manager.delete(
       constants.s3Bucket().users,
       `group/${user.customerGroupCd}/cm/${cmId}.mp3`
     );
@@ -153,7 +157,7 @@ exports.deleteShareCm = async (unisCustomerCd, cmId) => {
     };
     debuglog(JSON.stringify({ key: key, options: options }));
 
-    const res = await dynamodb.update(
+    const res = await dynamodbManager.update(
       constants.dynamoDbTable().users,
       key,
       options

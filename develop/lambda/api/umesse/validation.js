@@ -1,6 +1,6 @@
 "use strict";
 
-const { constants } = require("./constants");
+const { constants } = require("umesse-lib/constants");
 
 exports.validation = {
   checkParams: (process, params) => {
