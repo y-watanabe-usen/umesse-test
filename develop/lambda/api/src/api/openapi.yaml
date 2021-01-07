@@ -2246,7 +2246,7 @@ components:
           type: string
           description: データ処理区分
           example: 01：追加、02：変更、03：削除
-        uMesseCmId:
+        cmId:
           type: string
           description: CM ID
           example: 123456789-c-12345678
@@ -2302,7 +2302,7 @@ components:
         cmCommentManuscript: テストCMです
         productionType: 01：音楽系、02：素ナレ
         contentTime: 30000
-        uMesseCmId: 123456789-c-12345678
+        cmId: 123456789-c-12345678
         url: https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx
         endDatetime: 9999-12-31T23:59:59+09:00
     Error:
@@ -2442,7 +2442,7 @@ components:
           cmCommentManuscript: テストCMです
           productionType: 01：音楽系、02：素ナレ
           contentTime: 30000
-          uMesseCmId: 123456789-c-12345678
+          cmId: 123456789-c-12345678
           url: https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx
           endDatetime: 9999-12-31T23:59:59+09:00
         - startDatetime: 2020-01-01T12:34:56+09:00
@@ -2454,7 +2454,7 @@ components:
           cmCommentManuscript: テストCMです
           productionType: 01：音楽系、02：素ナレ
           contentTime: 30000
-          uMesseCmId: 123456789-c-12345678
+          cmId: 123456789-c-12345678
           url: https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx
           endDatetime: 9999-12-31T23:59:59+09:00
         unisCustomerCd: "123456789"
@@ -2464,7 +2464,7 @@ components:
         dataProcessType:
           type: string
           example: 01：正常完了、09：取込失敗
-        uMesseCmId:
+        cmId:
           type: string
           example: 123456789-c-12345678
         errorCode:
@@ -2478,7 +2478,7 @@ components:
         dataProcessType:
           type: string
           example: 01：正常完了、09：取込失敗
-        uMesseCmId:
+        cmId:
           type: string
           example: 123456789-c-12345678
         errorCode:
@@ -2491,7 +2491,7 @@ components:
         errorMessege: CM名に規定外の文字が使用されています
         dataProcessType: 01：正常完了、09：取込失敗
         errorCode: E0001
-        uMesseCmId: 123456789-c-12345678
+        cmId: 123456789-c-12345678
     CmMaterialListItem_narrations:
       properties:
         id:

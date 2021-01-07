@@ -28,7 +28,7 @@ export interface ExternalItem {
      * @type {string}
      * @memberof ExternalItem
      */
-    uMesseCmId?: any;
+    cmId?: any;
     /**
      * 音源URL
      * @type {string}

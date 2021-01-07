@@ -1137,7 +1137,7 @@ paths:
                 dataProcessType:
                   type: string
                   example: "01：正常完了、09：取込失敗"
-                uMesseCmId:
+                cmId:
                   type: string
                   example: "123456789-c-12345678"
                 errorCode:
@@ -1156,7 +1156,7 @@ paths:
                   dataProcessType:
                     type: string
                     example: "01：正常完了、09：取込失敗"
-                  uMesseCmId:
+                  cmId:
                     type: string
                     example: "123456789-c-12345678"
                   errorCode:
@@ -1539,7 +1539,7 @@ components:
           type: string
           description: データ処理区分
           example: "01：追加、02：変更、03：削除"
-        uMesseCmId:
+        cmId:
           type: string
           description: CM ID
           example: "123456789-c-12345678"
