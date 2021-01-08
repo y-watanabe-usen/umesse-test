@@ -16,24 +16,82 @@ exports.handler = async (event, context) => {
 
   try {
     const body = JSON.parse(event.Records[0].body);
+
+    // TODO: body message check
     const unisCustomerCd = body.unisCustomerCd;
     const cmId = body.cmId;
 
-    // TODO: body message check
+    // CMデータ取得
+    const key = { unisCustomerCd: unisCustomerCd };
+    let options = "";
+    options = {
+      ProjectionExpression: "cm",
+    };
+    debuglog(JSON.stringify({ key: key, options: options }));
 
-    // TODO: データ存在確認
+    let res = "";
+    res = await dynamodbManager.get(
+      constants.dynamoDbTable().users,
+      key,
+      options
+    );
+    if (!res || !res.Item) throw "not found";
+    const list = res.Item.cm;
+    if (!list) throw "not found";
+    const index = list.findIndex((item) => item.id === cmId);
+    if (index < 0) throw "not found";
+    const cm = list[index];
 
-    // TODO: CMステータスの確認
+    // CMステータスの確認
+    if (cm.status != constants.cmStatus.CONVERT)
+      throw "音圧調整/エンコードができません";
 
-    //
-    const res = await convertCm(unisCustomerCd, cmId);
-    if (!res) throw "convert failed";
+    // CMコンバート処理
+    await convertCm(unisCustomerCd, cmId);
 
-    // TODO: DynamoDbデータ更新
+    // DynamoDbデータ更新
     // CMステータスを完了へ変更(03 → 02)
+    cm.status = constants.cmStatus.COMPLETE;
+    cm.timestamp = timestamp();
+    options = {
+      UpdateExpression: `SET cm[${index}] = :cm`,
+      ExpressionAttributeValues: {
+        ":cm": cm,
+      },
+      ReturnValues: "UPDATED_NEW",
+    };
+    debuglog(JSON.stringify({ key: key, options: options }));
 
-    // TODO: 外部連携の場合、データ更新
-    // 外部連携のパラメータが来た場合は、連携データのステータス更新（0 → 1）
+    res = await dynamodbManager.update(
+      constants.dynamoDbTable().users,
+      key,
+      options
+    );
+    if (!res) throw "update failed";
+
+    // 外部連携データがある場合、データ更新
+    options = {
+      UpdateExpression: "SET #status = :status, #timestamp = :timestamp",
+      ConditionExpression: "cmId = :cmId",
+      ExpressionAttributeNames: {
+        "#status": "status",
+        "#timestamp": "timestamp",
+      },
+      ExpressionAttributeValues: {
+        ":status": "1",
+        ":timestamp": timestamp(),
+        ":cmId": cm.id,
+      },
+      ReturnValues: "UPDATED_NEW",
+    };
+    debuglog(JSON.stringify({ key: key, options: options }));
+
+    res = await dynamodbManager.update(
+      constants.dynamoDbTable().external,
+      key,
+      options
+    );
+    if (!res) throw "update failed";
 
     return { message: "complete" };
   } catch (e) {
@@ -123,10 +181,10 @@ function convertCm(unisCustomerCd, cmId) {
       // );
 
       debuglog("converter complete");
-      resolve(true);
+      resolve();
     } catch (e) {
       console.log(e);
-      reject(false);
+      reject("convert failed");
     }
   });
 }
