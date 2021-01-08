@@ -5,6 +5,7 @@ const fs = require("fs");
 // process.env.debug = true;
 process.env.environment = "local";
 
+const aws = require("aws-sdk");
 const {
   getSignedUrl,
   getResource,
@@ -13,125 +14,11 @@ const {
   deleteUserResource,
 } = require("../umesse/resources");
 
-beforeAll(() => {
-  jest.setTimeout(1000 * 30); // 30 sec
-});
-
-// TODO: draft
-describe("resources", () => {
-  test("getSignedUrl success", async () => {
-    const response = await getSignedUrl("020000000-c-00000001");
-    expect(response).toEqual({ url: expect.anything() });
-  });
-
-  test("getResource bgm success", async () => {
-    const response = await getResource(
-      "bgm",
-      bgmData.industry[0].cd,
-      bgmData.scene[0].cd
-    );
-    expect(response).toEqual([bgmData]);
-  });
-
-  test("getResource narration success", async () => {
-    const response = await getResource(
-      "narration",
-      narrationData.industry[0].cd,
-      narrationData.scene[0].cd
-    );
-    expect(response).toEqual([narrationData]);
-  });
-
-  test("getUserResource recording success", async () => {
-    const response = await getUserResource(
-      recordingData.unisCustomerCd,
-      "recording",
-      recordingData.data.id
-    );
-    expect(response).toEqual(recordingData.data);
-  });
-
-  test("getUserResource tts success", async () => {
-    const response = await getUserResource(
-      ttsData.unisCustomerCd,
-      "tts",
-      ttsData.data.id
-    );
-    expect(response).toEqual(ttsData.data);
-  });
-
-  test("getUserResource not found", async () => {
-    const response = await getUserResource("999999999");
-    expect(response).toEqual({ message: "not found" });
-  });
-
-  test("getUserResource not params", async () => {
-    const response = await getUserResource("");
-    expect(response).toEqual({ message: "params failed" });
-  });
-
-  test("createUserResource recording success", async () => {
-    const file = fs.readFileSync(
-      "../../../sample_data/s3/umesse-users/users/123456789/recording/123456789-r-12345678.mp3"
-    );
-    const body = {
-      recordedFile: file,
-      title: "録音テスト04",
-      description: "録音テスト04",
-    };
-    const response = await createUserResource(
-      recordingData.unisCustomerCd,
-      "recording",
-      body
-    );
-    expect(response).toEqual({
-      id: expect.stringMatching(
-        `^${recordingData.unisCustomerCd}-r-[0-9a-z]{8}$`
-      ),
-      title: body.title,
-      description: body.description,
-      startDate: expect.anything(),
-      timestamp: expect.anything(),
-    });
-  });
-
-  test("deleteUserResource recording success", async () => {
-    const response = await deleteUserResource(
-      recordingData.unisCustomerCd,
-      "recording",
-      recordingData.data.id
-    );
-    expect(response).toEqual([
-      {
-        id: "020000000-r-00000002",
-        title: "録音テスト02",
-        description: "録音テスト02",
-        startDate: "2019-09-01T09:00:00+9:00",
-        timestamp: "2019-09-01T09:00:00+9:00",
-      },
-      {
-        id: "020000000-r-00000003",
-        title: "録音テスト03",
-        description: "録音テスト03",
-        startDate: "2019-09-01T09:00:00+9:00",
-        timestamp: "2019-09-01T09:00:00+9:00",
-      },
-      {
-        id: expect.stringMatching(
-          `^${recordingData.unisCustomerCd}-r-[0-9a-z]{8}$`
-        ),
-        title: "録音テスト04",
-        description: "録音テスト04",
-        startDate: expect.anything(),
-        timestamp: expect.anything(),
-      },
-    ]);
-  });
-});
-
-// FIXME: error test
-
 // test data
+const json = require("./data/resources.test.json");
+const data = aws.DynamoDB.Converter.unmarshall(
+  json["umesse-users"][0].PutRequest.Item
+);
 const bgmData = {
   id: "bgm/サンプル01",
   title: "サンプル01",
@@ -151,7 +38,6 @@ const bgmData = {
   ],
   timestamp: "2019-09-01T09:00:00+9:00",
 };
-
 const narrationData = {
   id: "narration/サンプル05",
   title: "サンプル05",
@@ -173,24 +59,117 @@ const narrationData = {
   timestamp: "2019-09-01T09:00:00+9:00",
 };
 
-const recordingData = {
-  unisCustomerCd: "020000000",
-  data: {
-    id: "020000000-r-00000001",
-    title: "録音テスト01",
-    description: "録音テスト01",
-    startDate: "2019-09-01T09:00:00+9:00",
-    timestamp: "2019-09-01T09:00:00+9:00",
-  },
-};
+beforeAll(() => {
+  jest.setTimeout(1000 * 30); // 30 sec
+});
 
-const ttsData = {
-  unisCustomerCd: "020000000",
-  data: {
-    id: "020000000-t-00000003",
-    title: "合成音声テスト03",
-    description: "合成音声テスト03",
-    startDate: "2019-09-01T09:00:00+9:00",
-    timestamp: "2019-09-01T09:00:00+9:00",
-  },
-};
+// 署名付きデータ取得
+describe("署名付きデータ取得", () => {
+  test("[success] 署名付きURLデータ取得", async () => {
+    const response = await getSignedUrl(data.cm[0].id);
+    expect(response).toEqual({ url: expect.anything() });
+  });
+});
+
+// USEN素材データ取得
+describe("USEN素材データ取得", () => {
+  test("[success] BGMデータ取得", async () => {
+    const response = await getResource(
+      "bgm",
+      bgmData.industry[0].cd,
+      bgmData.scene[0].cd
+    );
+    expect(response).toEqual([bgmData]);
+  });
+
+  test("[success] ナレーションデータ取得", async () => {
+    const response = await getResource(
+      "narration",
+      narrationData.industry[0].cd,
+      narrationData.scene[0].cd
+    );
+    expect(response).toEqual([narrationData]);
+  });
+});
+
+// ユーザー音声データ取得
+describe("ユーザー音声データ取得", () => {
+  test("[success] 録音音声データ取得", async () => {
+    const response = await getUserResource(
+      data.unisCustomerCd,
+      "recording",
+      data.recording[0].id
+    );
+    expect(response).toEqual(data.recording[0]);
+  });
+
+  test("[success] 合成音声データ取得", async () => {
+    const response = await getUserResource(
+      data.unisCustomerCd,
+      "tts",
+      data.tts[2].id
+    );
+    expect(response).toEqual(data.tts[2]);
+  });
+
+  test("[error] ユーザー音声データ取得　データ存在しない", async () => {
+    const response = await getUserResource(
+      data.unisCustomerCd,
+      "recording",
+      "999999999"
+    );
+    expect(response).toEqual({ message: "not found" });
+  });
+
+  test("[error] ユーザー音声データ取得　パラメータなし", async () => {
+    const response = await getUserResource("");
+    expect(response).toEqual({ message: "params failed" });
+  });
+});
+
+// ユーザー音声作成
+describe("ユーザー音声作成", () => {
+  test("[success] 録音音声新規登録", async () => {
+    const file = fs.readFileSync(
+      "../../../sample_data/s3/umesse-users/users/123456789/recording/123456789-r-12345678.mp3"
+    );
+    const body = {
+      recordedFile: file,
+      title: "録音テスト04",
+      description: "録音テスト04",
+    };
+    const response = await createUserResource(
+      data.unisCustomerCd,
+      "recording",
+      body
+    );
+    expect(response).toEqual({
+      id: expect.stringMatching(`^${data.unisCustomerCd}-r-[0-9a-z]{8}$`),
+      title: body.title,
+      description: body.description,
+      startDate: expect.anything(),
+      timestamp: expect.anything(),
+    });
+  });
+
+  test("[success] 録音音声データ削除", async () => {
+    const response = await deleteUserResource(
+      data.unisCustomerCd,
+      "recording",
+      data.recording[0].id
+    );
+    expect(response).toEqual([
+      data.recording[1],
+      data.recording[2],
+      {
+        id: expect.stringMatching(`^${data.unisCustomerCd}-r-[0-9a-z]{8}$`),
+        title: "録音テスト04",
+        description: "録音テスト04",
+        startDate: expect.anything(),
+        timestamp: expect.anything(),
+      },
+    ]);
+  });
+});
+
+// FIXME: error test

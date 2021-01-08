@@ -33,8 +33,9 @@ exports.getUploadCm = async (unisCustomerCd, cmId) => {
 
     let json = res.Items;
     if (cmId) {
-      json = json.filter((item) => item.id === cmId)[0];
+      json = json.filter((item) => item.cmId === cmId)[0];
     }
+    if (!json) throw "not found";
     return json;
   } catch (e) {
     // TODO: error handle
@@ -60,7 +61,7 @@ exports.createUploadCm = async (unisCustomerCd, cmId, body) => {
 
     // CM一覧から該当CMを取得
     const list = await getCm(unisCustomerCd);
-    if (!list) throw "not found";
+    if (!list || !list.length) throw "not found";
     const index = list.findIndex((item) => item.id === cmId);
     if (index < 0) throw "not found";
     const cm = list[index];
@@ -143,7 +144,7 @@ exports.deleteUploadCm = async (unisCustomerCd, cmId, body) => {
 
     // CM一覧から該当CMを取得
     const list = await getCm(unisCustomerCd);
-    if (!list) throw "not found";
+    if (!list || !list.length) throw "not found";
     const index = list.findIndex((item) => item.id === cmId);
     if (index < 0) throw "not found";
     const cm = list[index];

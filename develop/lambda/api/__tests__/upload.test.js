@@ -3,46 +3,40 @@
 // process.env.debug = true;
 process.env.environment = "local";
 
+const aws = require("aws-sdk");
 const { getUploadCm } = require("../umesse/upload");
+
+// test data
+const json = require("./data/upload.test.json");
+const data = aws.DynamoDB.Converter.unmarshall(
+  json["umesse-external"][0].PutRequest.Item
+);
 
 beforeAll(() => {
   jest.setTimeout(1000 * 30); // 30 sec
 });
 
-// TODO: draft
-describe("upload", () => {
-  test("getUploadCm success", async () => {
-    const response = await getUploadCm(data.unisCustomerCd, data.id);
+// 外部連携CMデータ取得
+describe("外部連携CMデータ", () => {
+  test("[success] 外部連携CMデータ取得", async () => {
+    const response = await getUploadCm(data.unisCustomerCd, data.cmId);
     expect(response).toEqual(data);
   });
 
-  test("getUploadCm not found", async () => {
+  test("[success] 外部連携CMデータ一覧取得", async () => {
+    const response = await getUploadCm(data.unisCustomerCd);
+    expect(response).toEqual([data]);
+  });
+
+  test("[error] 外部連携CMデータ取得　データ存在しない", async () => {
     const response = await getUploadCm("999999999");
     expect(response).toEqual({ message: "not found" });
   });
 
-  test("getUploadCm not params", async () => {
+  test("[error] 外部連携CMデータ取得　パラメータなし", async () => {
     const response = await getUploadCm("");
     expect(response).toEqual({ message: "params failed" });
   });
 });
 
 // FIXME: error test
-
-// test data
-const data = {
-  unisCustomerCd: "030000000",
-  dataProcessType: "01",
-  id: "030000000-c-00000001",
-  title: "時報A",
-  description: "テストCMです",
-  seconds: 60,
-  startDate: "2020-01-01T12:34:56+09:00",
-  endDate: "9999-12-31T23:59:59+09:00",
-  productionType: "01",
-  industry: "01",
-  scene: "01",
-  uploadSystem: "01",
-  status: "1",
-  timestamp: "2020-01-01T12:34:56+09:00",
-};
