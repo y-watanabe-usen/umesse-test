@@ -3,44 +3,35 @@
 // process.env.debug = true;
 process.env.environment = "local";
 
+const aws = require("aws-sdk");
 const { getUser } = require("../umesse/user");
+
+// test data
+const json = require("./data/user.test.json");
+const data = aws.DynamoDB.Converter.unmarshall(
+  json["umesse-users"][0].PutRequest.Item
+);
 
 beforeAll(() => {
   jest.setTimeout(1000 * 30); // 30 sec
 });
 
-// TODO: draft
-describe("user", () => {
-  test("getUser success", async () => {
+// ユーザーデータ取得
+describe("ユーザーデータ取得", () => {
+  test("[success] ユーザーデータ取得", async () => {
     const response = await getUser(data.unisCustomerCd);
     expect(response).toEqual(data);
   });
 
-  test("getUser not found", async () => {
+  test("[error] ユーザーデータ取得　顧客データ存在しない", async () => {
     const response = await getUser("999999999");
     expect(response).toEqual({ message: "not found" });
   });
 
-  test("getUser not params", async () => {
+  test("[error] ユーザーデータ取得　パラメータなし", async () => {
     const response = await getUser("");
     expect(response).toEqual({ message: "params failed" });
   });
 });
 
 // FIXME: error test
-
-// test data
-const data = {
-  unisCustomerCd: "010000000",
-  serviceCd: "U01",
-  serviceName: "U∞MUSNC",
-  contractCd: "N0100000000",
-  contractStatusCd: "2",
-  contractStatusName: "確定",
-  customerName: "テスト01",
-  customerNameKana: "テスト01",
-  customerGroupCd: "010000000",
-  customerGroupName: "テスト01グループ",
-  createDate: "2019-09-01T09:00:00+9:00",
-  renewalDate: "2019-09-01T09:00:00+9:00",
-};
