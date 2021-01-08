@@ -184,7 +184,7 @@ function convertCm(unisCustomerCd, cmId) {
       resolve();
     } catch (e) {
       console.log(e);
-      reject("convert failed");
+      reject("converter failed");
     }
   });
 }

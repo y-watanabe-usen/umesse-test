@@ -14,7 +14,7 @@
     "build": "npm install --no-save $(npm pack ../layer/umesse-lib/ | tail -1)",
     "build:prod": "npm install --production",
     "pretest": "sh ./__tests__/init.sh",
-    "test": "PATH=$PATH:../layer/bin jest --coverage"
+    "test": "PATH=$PATH:../layer/bin jest -i --coverage"
   },
   "jest": {
     "verbose": false,

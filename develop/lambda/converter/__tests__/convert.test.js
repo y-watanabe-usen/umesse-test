@@ -120,7 +120,7 @@ describe("convert", () => {
       ],
     };
     const response = await handler(event);
-    expect(response).toEqual({ message: "convert failed" });
+    expect(response).toEqual({ message: "converter failed" });
   });
 });
 

@@ -1,0 +1,60 @@
+{
+  "umesse-users": [
+    {
+      "PutRequest": {
+        "Item": {
+          "unisCustomerCd": { "S": "030000000" },
+          "contractCd": { "S": "N0300000000" },
+          "serviceCd": { "S": "U01" },
+          "serviceName": { "S": "U∞MUSNC" },
+          "customerName": { "S": "テスト03" },
+          "customerNameKana": { "S": "テスト03" },
+          "customerGroupCd": { "S": "030000000" },
+          "customerGroupName": { "S": "テスト03グループ" },
+          "contractStatusCd": { "S": "2" },
+          "contractStatusName": { "S": "確定" },
+          "createDate": { "S": "2019-09-01T09:00:00+9:00" },
+          "renewalDate": { "S": "2019-09-01T09:00:00+9:00" },
+          "cm": {
+            "L": [
+              {
+                "M": {
+                  "id": { "S": "030000000-c-00000001" },
+                  "title": { "S": "CMテスト01" },
+                  "description": { "S": "CMテスト01" },
+                  "seconds": { "N": "60" },
+                  "startDate": { "S": "2019-09-01T09:00:00+9:00" },
+                  "endDate": { "S": "9999-12-31T23:59:59+09:00" },
+                  "productionType": { "S": "01" },
+                  "status": { "S": "11" },
+                  "timestamp": { "S": "2019-09-01T09:00:00+9:00" }
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "umesse-external": [
+    {
+      "PutRequest": {
+        "Item": {
+          "unisCustomerCd": { "S": "030000000" },
+          "dataProcessType": { "S": "01" },
+          "cmId": { "S": "030000000-c-00000001" },
+          "cmName": { "S": "時報A" },
+          "cmCommentManuscript": { "S": "テストCMです" },
+          "startDatetime": { "S": "2020-01-01T12:34:56+09:00" },
+          "endDatetime": { "S": "9999-12-31T23:59:59+09:00" },
+          "productionType": { "S": "01" },
+          "contentTime": { "N": "60" },
+          "sceneCd": { "S": "01" },
+          "uploadSystem": { "S": "01" },
+          "status": { "S": "1" },
+          "timestamp": { "S": "2020-01-01T12:34:56+09:00" }
+        }
+      }
+    }
+  ]
+}
