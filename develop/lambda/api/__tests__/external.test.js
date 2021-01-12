@@ -23,11 +23,6 @@ describe("外部連携CMデータ", () => {
     expect(response).toEqual(data);
   });
 
-  test("[success] 外部連携CMデータ一覧取得", async () => {
-    const response = await getExternalCm("", "center");
-    expect(response).toEqual(data);
-  });
-
   test("[error] 外部連携CMデータ取得　データ存在しない", async () => {
     const response = await getExternalCm("", "ssence");
     expect(response).toEqual({ message: "not found" });
