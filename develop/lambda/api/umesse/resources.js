@@ -36,6 +36,7 @@ exports.getResource = async (filter, industryCd, sceneCd) => {
     if (sceneCd) {
       json = json.filter((item) => item.scene.some((el) => el.cd === sceneCd));
     }
+    if (!json) throw "not found";
     return json;
   } catch (e) {
     console.log(e);
@@ -112,6 +113,7 @@ exports.getUserResource = async (unisCustomerCd, filter, id) => {
     if (id) {
       json = json.filter((item) => item.id === id)[0];
     }
+    if (!json) throw "not found";
     return json;
   } catch (e) {
     // TODO: error handle
@@ -204,7 +206,7 @@ exports.updateUserResource = async (unisCustomerCd, filter, id, body) => {
 
     // 音声一覧から該当音声を取得
     const list = await this.getUserResource(unisCustomerCd, filter);
-    if (!list) throw "not found";
+    if (!list || !list.length) throw "not found";
     const index = list.findIndex((item) => item.id === id);
     if (index < 0) throw "not found";
     const resource = list[index];
@@ -256,7 +258,7 @@ exports.deleteUserResource = async (unisCustomerCd, filter, id) => {
   try {
     // 音声一覧から該当音声を取得
     const list = await this.getUserResource(unisCustomerCd, filter);
-    if (!list) throw "not found";
+    if (!list || !list.length) throw "not found";
     const index = list.findIndex((item) => item.id === id);
     if (index < 0) throw "not found";
     const resource = list[index];

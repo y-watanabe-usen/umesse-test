@@ -2,7 +2,12 @@
 
 const { execSync } = require("child_process");
 const fs = require("fs");
-const { constants, debuglog, timestamp, generateId } = require("umesse-lib/constants");
+const {
+  constants,
+  debuglog,
+  timestamp,
+  generateId,
+} = require("umesse-lib/constants");
 const { dynamodbManager } = require("umesse-lib/utils/dynamodbManager");
 const { s3Manager } = require("umesse-lib/utils/s3Manager");
 const { validation } = require("./validation");
@@ -38,6 +43,7 @@ exports.getCm = async (unisCustomerCd, cmId) => {
     if (cmId) {
       json = json.filter((item) => item.id === cmId)[0];
     }
+    if (!json) throw "not found";
     return json;
   } catch (e) {
     // TODO: error handle
@@ -61,22 +67,22 @@ exports.createCm = async (unisCustomerCd, body) => {
     if (checkParams) throw checkParams;
 
     // ID生成
-    const id = generateId(unisCustomerCd, "c");
+    const cmId = generateId(unisCustomerCd, "c");
 
     // CM結合、S3へPUT
-    const seconds = await generateCm(unisCustomerCd, id, body);
+    const seconds = await generateCm(unisCustomerCd, cmId, body);
     if (!seconds) throw "generate cm failed";
 
     // 署名付きURLの発行
     const url = await s3Manager.getSignedUrl(
       constants.s3Bucket().users,
-      `users/${unisCustomerCd}/cm/${id}.mp3`
+      `users/${unisCustomerCd}/cm/${cmId}.mp3`
     );
     if (!url) throw "getSignedUrl failed";
 
     // DynamoDBのデータ更新
     const data = {
-      id: id,
+      id: cmId,
       materials: body.materials,
       productionType:
         "bgm" in body.materials
@@ -130,7 +136,7 @@ exports.updateCm = async (unisCustomerCd, cmId, body) => {
 
     // CM一覧から該当CMを取得
     const list = await this.getCm(unisCustomerCd);
-    if (!list) throw "not found";
+    if (!list || !list.length) throw "not found";
     const index = list.findIndex((item) => item.id === cmId);
     if (index < 0) throw "not found";
     const cm = list[index];
@@ -197,9 +203,13 @@ exports.deleteCm = async (unisCustomerCd, cmId) => {
   );
 
   try {
+    // パラメーターチェック
+    const checkParams = validation.checkParams("deleteCm", cmId);
+    if (checkParams) throw checkParams;
+
     // CM一覧から該当CMを取得
     const list = await this.getCm(unisCustomerCd);
-    if (!list) throw "not found";
+    if (!list || !list.length) throw "not found";
     const index = list.findIndex((item) => item.id === cmId);
     if (index < 0) throw "not found";
     const cm = list[index];

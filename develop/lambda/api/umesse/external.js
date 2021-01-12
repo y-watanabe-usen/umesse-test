@@ -15,6 +15,10 @@ exports.getExternalCm = async (unisCustomerCd, external) => {
   );
 
   try {
+    // パラメーターチェック
+    const checkParams = validation.checkParams("getExternalCm", external);
+    if (checkParams) throw checkParams;
+
     const res = await dynamodbManager.scan(
       constants.dynamoDbTable().external,
       {}
@@ -35,11 +39,12 @@ exports.getExternalCm = async (unisCustomerCd, external) => {
           item.status === "1"
       );
     }
-    if (!json.length) throw "nothing";
+    if (!json.length) throw "not found";
 
     if (unisCustomerCd) {
       json = json.filter((item) => item.unisCustomerCd === unisCustomerCd)[0];
     }
+    if (!json) throw "not found";
     return json;
   } catch (e) {
     // TODO: error handle
@@ -64,8 +69,8 @@ exports.completeExternalCm = async (unisCustomerCd, external, body) => {
 
     // CM一覧から該当CMを取得
     const list = await getCm(unisCustomerCd);
-    if (!list) throw "not found";
-    const index = list.findIndex((item) => item.id === body.uMesseCmId);
+    if (!list || !list.length) throw "not found";
+    const index = list.findIndex((item) => item.id === body.cmId);
     if (index < 0) throw "not found";
     const cm = list[index];
 
@@ -79,7 +84,7 @@ exports.completeExternalCm = async (unisCustomerCd, external, body) => {
     const external = await this.getExternal(
       unisCustomerCd,
       external,
-      body.uMesseCmId
+      body.cmId
     );
     if (!external) throw "not found";
 

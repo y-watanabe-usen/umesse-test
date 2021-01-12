@@ -28,7 +28,7 @@ export interface InlineResponse2002 {
      * @type {string}
      * @memberof InlineResponse2002
      */
-    uMesseCmId?: any;
+    cmId?: any;
     /**
      * 
      * @type {string}

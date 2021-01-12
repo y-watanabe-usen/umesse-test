@@ -43,6 +43,7 @@ exports.getShareCm = async (unisCustomerCd, cmId) => {
     if (cmId) {
       json = json.filter((item) => item.id === cmId)[0];
     }
+    if (!json) throw "not found";
     return json;
   } catch (e) {
     // TODO: error handle
@@ -63,7 +64,7 @@ exports.createShareCm = async (unisCustomerCd, cmId) => {
   try {
     // CM一覧から該当CMを取得
     const list = await getCm(unisCustomerCd);
-    if (!list) throw "not found";
+    if (!list || !list.length) throw "not found";
     const index = list.findIndex((item) => item.id === cmId);
     if (index < 0) throw "not found";
     const cm = list[index];
@@ -125,7 +126,7 @@ exports.deleteShareCm = async (unisCustomerCd, cmId) => {
   try {
     // CM一覧から該当CMを取得
     const list = await this.getCm(unisCustomerCd);
-    if (!list) throw "not found";
+    if (!list || !list.length) throw "not found";
     const index = list.findIndex((item) => item.id === cmId);
     if (index < 0) throw "not found";
     const cm = list[index];

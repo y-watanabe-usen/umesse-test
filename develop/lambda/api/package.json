@@ -14,14 +14,14 @@
   },
   "devDependencies": {
     "aws-sdk": "^2.442.0",
-    "umesse-lib": "file:../layer/umesse-lib",
-    "jest": "^26.6.3"
+    "jest": "^26.6.3",
+    "umesse-lib": "file:../layer/umesse-lib"
   },
   "scripts": {
     "build": "npm install --no-save $(npm pack ../layer/umesse-lib/ | tail -1)",
     "build:prod": "npm install --production",
-    "pretest": "sh ./__tests__/data/init.sh",
-    "test": "jest --coverage"
+    "pretest": "sh ./__tests__/init.sh",
+    "test": "PATH=$PATH:../layer/bin jest -i --coverage"
   },
   "jest": {
     "verbose": false,

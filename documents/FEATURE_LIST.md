@@ -74,8 +74,10 @@
 | 区分 | 内容 | 詳細 |
 | --- | --- | --- |
 | 00 | CM削除 | CMを削除した状態（情報は保持している状態） |
-| 01 | CM作成中 | CMを結合し、音圧調整を行っている段階 |
+| 01 | CM作成中 | CMを結合している状態 |
 | 02 | CM作成完了 | CM作成が完了した状態（再生やセンターアップロードができる状態） |
+| 03 | CMエンコード中 | CMを音圧調整している状態 |
+| 04 | CM共有中 | 顧客グループでCMを共有している状態 |
 | 09 | CM作成エラー | 音圧調整が失敗などCM作成時に何らかエラーがあり完了していない状態 |
 | 11 | センターアップロード中 | CMをセンター連携している状態（追加・更新・削除連携時） |
 | 12 | センターアップロード完了 | センター連携完了した状態 |
@@ -86,6 +88,7 @@
 - ユーザー作成音源、CMを管理
 - bucket: umesse-users (private) : ユーザーデータ管理（本番）
 - bucket: stg-umesse-users (private) : ユーザーデータ管理（ステージング）
+- bucket: dev-umesse-users (private) : ユーザーデータ管理（開発）
 
 ```none
 users/(UNIS顧客CD)/cm/(id).aac // CM
@@ -97,6 +100,7 @@ group/(グループCD)/cm/(id).aac // 共有CM
 - USEN収録音源を管理
 - bucket: umesse-contents (private) : USEN収録音源管理（本番）
 - bucket: stg-umesse-contents (private) : USEN収録音源管理（ステージング）
+- bucket: dev-umesse-contents (private) : USEN収録音源管理（開発）
 
 ```none
 narration/(id).mp3 // ナレーション音源
@@ -107,6 +111,7 @@ bgm/(id).mp3   // BGM音源
 - Webアプリを管理
 - bucket: umesse-webapp (private) : 静的コンテンツ管理（本番）
 - bucket: stg-umesse-webapp (private) : 静的コンテンツ管理（ステージング）
+- bucket: dev-umesse-webapp (private) : 静的コンテンツ管理（開発）
 
 ```none
 webapp/
@@ -114,9 +119,10 @@ webapp/
 
 ### dynamodb
 
-- ユーザーの認証情報、CM情報を管理
+- ユーザー情報を管理(UDS APIからデータ取得)
 - table: umesse-users : ユーザー管理テーブル（本番）
 - table: stg-umesse-users : ユーザー管理テーブル（ステージング）
+- table: dev-umesse-users : ユーザー管理テーブル（開発）
 
 ```none
 {
@@ -151,7 +157,7 @@ webapp/
             "L": [
               {
                 "M": {
-                  "id": {"S": "01"},
+                  "cd": {"S": "01"},
                   "name": {"S": "全業種"}
                 }
               }
@@ -161,7 +167,7 @@ webapp/
             "L": [
               {
                 "M": {
-                  "id": {"S": "01"},
+                  "cd": {"S": "01"},
                   "name": {"S": "全シーン"}
                 }
               }
@@ -247,6 +253,7 @@ webapp/
 - USEN収録音源のメタ情報管理
 - table: umesse-contents : コンテンツ管理テーブル（本番）
 - table: stg-umesse-contents : コンテンツ管理テーブル（ステージング）
+- table: dev-umesse-contents : コンテンツ管理テーブル（開発）
 
 ```none
 {
@@ -259,7 +266,7 @@ webapp/
     "L": [
       {
         "M": {
-          "id": {"S": "業種CD"},
+          "cd": {"S": "業種CD"},
           "name": {"S": "業種名"}
         }
       }
@@ -269,7 +276,7 @@ webapp/
     "L": [
       {
         "M": {
-          "id": {"S": "シーンCD"},
+          "cd": {"S": "シーンCD"},
           "name": {"S": "シーン名"}
         }
       }
@@ -282,20 +289,20 @@ webapp/
 - 外部連携管理
 - table: umesse-external : 外部連携管理テーブル（本番）
 - table: stg-umesse-external : 外部連携管理テーブル（ステージング）
+- table: dev-umesse-external : 外部連携管理テーブル（開発）
 
 ```none
 {
   "unisCustomerCd": {"S": "顧客CD"},
   "dataProcessType": {"S": "01: 追加, 02: 変更, 03: 削除"}
-  "id": {"S": "ファイル名"},
-  "title": {"S": "タイトル名"},
-  "description": {"S": "説明文"},
-  "seconds": {"N", "秒数"},
-  "startDate": {"S", "2014-10-10T13:50:40+09:00"},
-  "endDate": {"S", "9999-12-31T23:59:59+09:00"},
+  "cmId": {"S": "ファイル名"},
+  "cmName": {"S": "タイトル名"},
+  "cmCommentManuscript": {"S": "説明文"},
+  "startDatetime": {"S", "2014-10-10T13:50:40+09:00"},
+  "endDatetime": {"S", "9999-12-31T23:59:59+09:00"},
   "productionType": {"S", "01: 音楽系, 02: 素ナレ"},
-  "industry": {"S": "業種名"},
-  "scene": {"S": "シーン名"},
+  "contentTime": {"N", "秒数"},
+  "sceneCd": {"S": "シーンCD"},
   "uploadSystem": {"S": "01: センター, 02: S'sence"},
   "status": {"S": "0: 連携準備中, 1: 連携可能, 9: 連携エラー"},
   "errorCode": {"S": "エラーコード"},

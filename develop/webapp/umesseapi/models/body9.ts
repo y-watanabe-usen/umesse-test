@@ -28,7 +28,7 @@ export interface Body9 {
      * @type {string}
      * @memberof Body9
      */
-    uMesseCmId?: any;
+    cmId?: any;
     /**
      * 
      * @type {string}
