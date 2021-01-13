@@ -18,10 +18,16 @@ resource "aws_dynamodb_table" "contents" {
   billing_mode   = "PROVISIONED"
   read_capacity  = 10
   write_capacity = 10
-  hash_key       = "id"
+  hash_key       = "contentsId"
+  range_key      = "category"
 
   attribute {
-    name = "id"
+    name = "contentsId"
+    type = "S"
+  }
+
+  attribute {
+    name = "category"
     type = "S"
   }
 }
@@ -32,7 +38,13 @@ resource "aws_dynamodb_table" "external" {
   billing_mode   = "PROVISIONED"
   read_capacity  = 10
   write_capacity = 10
-  hash_key       = "unisCustomerCd"
+  hash_key       = "cmId"
+  range_key      = "unisCustomerCd"
+
+  attribute {
+    name = "cmId"
+    type = "S"
+  }
 
   attribute {
     name = "unisCustomerCd"

@@ -3,7 +3,8 @@
     {
       "PutRequest": {
         "Item": {
-          "id": { "S": "bgm/サンプル01" },
+          "contentsId": { "S": "サンプル01" },
+          "category": { "S": "bgm" },
           "title": { "S": "サンプル01" },
           "description": { "S": "BGM・サンプル01" },
           "seconds": { "N": "60" },
@@ -11,8 +12,8 @@
             "L": [
               {
                 "M": {
-                  "cd": { "S": "01" },
-                  "name": { "S": "業種01" }
+                  "industryCd": { "S": "01" },
+                  "industryName": { "S": "業種01" }
                 }
               }
             ]
@@ -21,8 +22,8 @@
             "L": [
               {
                 "M": {
-                  "cd": { "S": "01" },
-                  "name": { "S": "シーン01" }
+                  "sceneCd": { "S": "01" },
+                  "sceneName": { "S": "シーン01" }
                 }
               }
             ]
@@ -34,7 +35,8 @@
     {
       "PutRequest": {
         "Item": {
-          "id": { "S": "bgm/サンプル02" },
+          "contentsId": { "S": "サンプル02" },
+          "category": { "S": "bgm" },
           "title": { "S": "サンプル02" },
           "description": { "S": "BGM・サンプル02" },
           "seconds": { "N": "60" },
@@ -42,8 +44,8 @@
             "L": [
               {
                 "M": {
-                  "cd": { "S": "02" },
-                  "name": { "S": "業種02" }
+                  "industryCd": { "S": "02" },
+                  "industryName": { "S": "業種02" }
                 }
               }
             ]
@@ -52,8 +54,8 @@
             "L": [
               {
                 "M": {
-                  "cd": { "S": "02" },
-                  "name": { "S": "シーン02" }
+                  "sceneCd": { "S": "02" },
+                  "sceneName": { "S": "シーン02" }
                 }
               }
             ]
@@ -65,7 +67,8 @@
     {
       "PutRequest": {
         "Item": {
-          "id": { "S": "bgm/サンプル03" },
+          "contentsId": { "S": "サンプル03" },
+          "category": { "S": "bgm" },
           "title": { "S": "サンプル03" },
           "description": { "S": "BGM・サンプル03" },
           "seconds": { "N": "60" },
@@ -73,8 +76,8 @@
             "L": [
               {
                 "M": {
-                  "cd": { "S": "03" },
-                  "name": { "S": "業種03" }
+                  "industryCd": { "S": "03" },
+                  "industryName": { "S": "業種03" }
                 }
               }
             ]
@@ -83,8 +86,8 @@
             "L": [
               {
                 "M": {
-                  "cd": { "S": "03" },
-                  "name": { "S": "シーン03" }
+                  "sceneCd": { "S": "03" },
+                  "sceneName": { "S": "シーン03" }
                 }
               }
             ]
@@ -96,7 +99,8 @@
     {
       "PutRequest": {
         "Item": {
-          "id": { "S": "bgm/サンプル04" },
+          "contentsId": { "S": "サンプル04" },
+          "category": { "S": "bgm" },
           "title": { "S": "サンプル04" },
           "description": { "S": "BGM・サンプル04" },
           "seconds": { "N": "60" },
@@ -104,8 +108,8 @@
             "L": [
               {
                 "M": {
-                  "cd": { "S": "04" },
-                  "name": { "S": "業種04" }
+                  "industryCd": { "S": "04" },
+                  "industryName": { "S": "業種04" }
                 }
               }
             ]
@@ -114,8 +118,8 @@
             "L": [
               {
                 "M": {
-                  "cd": { "S": "04" },
-                  "name": { "S": "シーン04" }
+                  "sceneCd": { "S": "04" },
+                  "sceneName": { "S": "シーン04" }
                 }
               }
             ]
@@ -127,7 +131,8 @@
     {
       "PutRequest": {
         "Item": {
-          "id": { "S": "bgm/サンプル05" },
+          "contentsId": { "S": "サンプル05" },
+          "category": { "S": "bgm" },
           "title": { "S": "サンプル05" },
           "description": { "S": "BGM・サンプル05" },
           "seconds": { "N": "60" },
@@ -135,8 +140,8 @@
             "L": [
               {
                 "M": {
-                  "cd": { "S": "05" },
-                  "name": { "S": "業種05" }
+                  "industryCd": { "S": "05" },
+                  "industryName": { "S": "業種05" }
                 }
               }
             ]
@@ -145,8 +150,8 @@
             "L": [
               {
                 "M": {
-                  "cd": { "S": "05" },
-                  "name": { "S": "シーン05" }
+                  "sceneCd": { "S": "05" },
+                  "sceneName": { "S": "シーン05" }
                 }
               }
             ]
@@ -158,7 +163,8 @@
     {
       "PutRequest": {
         "Item": {
-          "id": { "S": "bgm/サンプル06" },
+          "contentsId": { "S": "サンプル06" },
+          "category": { "S": "bgm" },
           "title": { "S": "サンプル06" },
           "description": { "S": "BGM・サンプル06" },
           "seconds": { "N": "60" },
@@ -166,8 +172,8 @@
             "L": [
               {
                 "M": {
-                  "cd": { "S": "06" },
-                  "name": { "S": "業種06" }
+                  "industryCd": { "S": "06" },
+                  "industryName": { "S": "業種06" }
                 }
               }
             ]
@@ -176,8 +182,8 @@
             "L": [
               {
                 "M": {
-                  "cd": { "S": "06" },
-                  "name": { "S": "シーン06" }
+                  "sceneCd": { "S": "06" },
+                  "sceneName": { "S": "シーン06" }
                 }
               }
             ]
@@ -189,7 +195,8 @@
     {
       "PutRequest": {
         "Item": {
-          "id": { "S": "bgm/サンプル07" },
+          "contentsId": { "S": "サンプル07" },
+          "category": { "S": "bgm" },
           "title": { "S": "サンプル07" },
           "description": { "S": "BGM・サンプル07" },
           "seconds": { "N": "60" },
@@ -197,8 +204,8 @@
             "L": [
               {
                 "M": {
-                  "cd": { "S": "07" },
-                  "name": { "S": "業種07" }
+                  "industryCd": { "S": "07" },
+                  "industryName": { "S": "業種07" }
                 }
               }
             ]
@@ -207,8 +214,8 @@
             "L": [
               {
                 "M": {
-                  "cd": { "S": "07" },
-                  "name": { "S": "シーン07" }
+                  "sceneCd": { "S": "07" },
+                  "sceneName": { "S": "シーン07" }
                 }
               }
             ]
@@ -220,7 +227,8 @@
     {
       "PutRequest": {
         "Item": {
-          "id": { "S": "bgm/サンプル08" },
+          "contentsId": { "S": "サンプル08" },
+          "category": { "S": "bgm" },
           "title": { "S": "サンプル08" },
           "description": { "S": "BGM・サンプル08" },
           "seconds": { "N": "60" },
@@ -228,8 +236,8 @@
             "L": [
               {
                 "M": {
-                  "cd": { "S": "08" },
-                  "name": { "S": "業種08" }
+                  "industryCd": { "S": "08" },
+                  "industryName": { "S": "業種08" }
                 }
               }
             ]
@@ -238,8 +246,8 @@
             "L": [
               {
                 "M": {
-                  "cd": { "S": "08" },
-                  "name": { "S": "シーン08" }
+                  "sceneCd": { "S": "08" },
+                  "sceneName": { "S": "シーン08" }
                 }
               }
             ]
@@ -251,7 +259,8 @@
     {
       "PutRequest": {
         "Item": {
-          "id": { "S": "bgm/サンプル09" },
+          "contentsId": { "S": "サンプル09" },
+          "category": { "S": "bgm" },
           "title": { "S": "サンプル09" },
           "description": { "S": "BGM・サンプル09" },
           "seconds": { "N": "60" },
@@ -259,8 +268,8 @@
             "L": [
               {
                 "M": {
-                  "cd": { "S": "09" },
-                  "name": { "S": "業種09" }
+                  "industryCd": { "S": "09" },
+                  "industryName": { "S": "業種09" }
                 }
               }
             ]
@@ -269,8 +278,8 @@
             "L": [
               {
                 "M": {
-                  "cd": { "S": "09" },
-                  "name": { "S": "シーン09" }
+                  "sceneCd": { "S": "09" },
+                  "sceneName": { "S": "シーン09" }
                 }
               }
             ]
@@ -282,7 +291,8 @@
     {
       "PutRequest": {
         "Item": {
-          "id": { "S": "bgm/サンプル10" },
+          "contentsId": { "S": "サンプル10" },
+          "category": { "S": "bgm" },
           "title": { "S": "サンプル10" },
           "description": { "S": "BGM・サンプル10" },
           "seconds": { "N": "60" },
@@ -290,8 +300,8 @@
             "L": [
               {
                 "M": {
-                  "cd": { "S": "10" },
-                  "name": { "S": "業種10" }
+                  "industryCd": { "S": "10" },
+                  "industryName": { "S": "業種10" }
                 }
               }
             ]
@@ -300,8 +310,8 @@
             "L": [
               {
                 "M": {
-                  "cd": { "S": "10" },
-                  "name": { "S": "シーン10" }
+                  "sceneCd": { "S": "10" },
+                  "sceneName": { "S": "シーン10" }
                 }
               }
             ]

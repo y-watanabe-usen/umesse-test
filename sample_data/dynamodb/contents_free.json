@@ -1,0 +1,100 @@
+{
+  "umesse-contents": [
+    {
+      "PutRequest": {
+        "Item": {
+          "contentsId": { "S": "サンプル01" },
+          "category": { "S": "free" },
+          "title": { "S": "サンプル01" },
+          "description": { "S": "フリー・サンプル01" },
+          "manuscript": { "S": "おはようございます。" },
+          "industry": {
+            "L": [
+              {
+                "M": {
+                  "industryCd": { "S": "01" },
+                  "industryName": { "S": "業種01" }
+                }
+              }
+            ]
+          },
+          "scene": {
+            "L": [
+              {
+                "M": {
+                  "sceneCd": { "S": "01" },
+                  "sceneName": { "S": "シーン01" }
+                }
+              }
+            ]
+          },
+          "timestamp": { "S": "2019-09-01T09:00:00+9:00" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "contentsId": { "S": "サンプル02" },
+          "category": { "S": "free" },
+          "title": { "S": "サンプル02" },
+          "description": { "S": "フリー・サンプル02" },
+          "manuscript": { "S": "こんにちは。" },
+          "industry": {
+            "L": [
+              {
+                "M": {
+                  "industryCd": { "S": "02" },
+                  "industryName": { "S": "業種02" }
+                }
+              }
+            ]
+          },
+          "scene": {
+            "L": [
+              {
+                "M": {
+                  "sceneCd": { "S": "02" },
+                  "sceneName": { "S": "シーン02" }
+                }
+              }
+            ]
+          },
+          "timestamp": { "S": "2019-09-01T09:00:00+9:00" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "contentsId": { "S": "サンプル03" },
+          "category": { "S": "free" },
+          "title": { "S": "サンプル03" },
+          "description": { "S": "フリー・サンプル03" },
+          "manuscript": { "S": "こんばんは。" },
+          "industry": {
+            "L": [
+              {
+                "M": {
+                  "industryCd": { "S": "03" },
+                  "industryName": { "S": "業種03" }
+                }
+              }
+            ]
+          },
+          "scene": {
+            "L": [
+              {
+                "M": {
+                  "sceneCd": { "S": "03" },
+                  "sceneName": { "S": "シーン03" }
+                }
+              }
+            ]
+          },
+          "timestamp": { "S": "2019-09-01T09:00:00+9:00" }
+        }
+      }
+    }
+  ]
+}

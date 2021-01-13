@@ -3,16 +3,17 @@
     {
       "PutRequest": {
         "Item": {
-          "id": { "S": "tts/サンプル01" },
+          "contentsId": { "S": "サンプル01" },
+          "category": { "S": "template" },
           "title": { "S": "サンプル01" },
           "description": { "S": "テンプレート・サンプル01" },
-          "manuscript": { "S": "おはようございます。" },
+          "manuscript": { "S": "本日は ${customerName} へお越しいただき、誠にありがとうございます。" },
           "industry": {
             "L": [
               {
                 "M": {
-                  "cd": { "S": "01" },
-                  "name": { "S": "業種01" }
+                  "industryCd": { "S": "01" },
+                  "industryName": { "S": "業種01" }
                 }
               }
             ]
@@ -21,8 +22,8 @@
             "L": [
               {
                 "M": {
-                  "cd": { "S": "01" },
-                  "name": { "S": "シーン01" }
+                  "sceneCd": { "S": "01" },
+                  "sceneName": { "S": "シーン01" }
                 }
               }
             ]
@@ -34,16 +35,17 @@
     {
       "PutRequest": {
         "Item": {
-          "id": { "S": "tts/サンプル02" },
+          "contentsId": { "S": "サンプル02" },
+          "category": { "S": "template" },
           "title": { "S": "サンプル02" },
           "description": { "S": "テンプレート・サンプル02" },
-          "manuscript": { "S": "こんにちは。" },
+          "manuscript": { "S": "Thank you for visiting ${customerName} today." },
           "industry": {
             "L": [
               {
                 "M": {
-                  "cd": { "S": "02" },
-                  "name": { "S": "業種02" }
+                  "industryCd": { "S": "02" },
+                  "industryName": { "S": "業種02" }
                 }
               }
             ]
@@ -52,8 +54,8 @@
             "L": [
               {
                 "M": {
-                  "cd": { "S": "02" },
-                  "name": { "S": "シーン02" }
+                  "sceneCd": { "S": "02" },
+                  "sceneName": { "S": "シーン02" }
                 }
               }
             ]
@@ -65,16 +67,17 @@
     {
       "PutRequest": {
         "Item": {
-          "id": { "S": "tts/サンプル03" },
+          "contentsId": { "S": "サンプル03" },
+          "category": { "S": "template" },
           "title": { "S": "サンプル03" },
           "description": { "S": "テンプレート・サンプル03" },
-          "manuscript": { "S": "こんばんは。" },
+          "manuscript": { "S": "感谢您今天访问 ${customerName}。" },
           "industry": {
             "L": [
               {
                 "M": {
-                  "cd": { "S": "03" },
-                  "name": { "S": "業種03" }
+                  "industryCd": { "S": "03" },
+                  "industryName": { "S": "業種03" }
                 }
               }
             ]
@@ -83,8 +86,8 @@
             "L": [
               {
                 "M": {
-                  "cd": { "S": "03" },
-                  "name": { "S": "シーン03" }
+                  "sceneCd": { "S": "03" },
+                  "sceneName": { "S": "シーン03" }
                 }
               }
             ]
