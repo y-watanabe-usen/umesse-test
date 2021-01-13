@@ -14,19 +14,31 @@
 /**
  * 
  * @export
- * @interface IndustryItem
+ * @interface Body10
  */
-export interface IndustryItem {
+export interface Body10 {
     /**
-     * 業種CD
+     * 
      * @type {string}
-     * @memberof IndustryItem
+     * @memberof Body10
      */
-    industryCd?: any;
+    dataProcessType?: any;
     /**
-     * 業種名
+     * 
      * @type {string}
-     * @memberof IndustryItem
+     * @memberof Body10
      */
-    industryName?: any;
+    cmId?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof Body10
+     */
+    errorCode?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof Body10
+     */
+    errorMessege?: any;
 }

@@ -22,7 +22,7 @@ export interface CmItem {
      * @type {string}
      * @memberof CmItem
      */
-    id?: any;
+    cmId?: any;
     /**
      * タイトル名
      * @type {string}

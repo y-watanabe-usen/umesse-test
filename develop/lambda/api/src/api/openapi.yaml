@@ -1521,13 +1521,13 @@ paths:
         "5XX":
           description: Unexpected error.
       x-swagger-router-controller: Resources
-  /tts:
+  /free:
     get:
       tags:
       - resources
-      summary: TTSテンプレート一覧
-      description: TTSのテンプレート素材を一覧で取得する
-      operationId: listTts
+      summary: TTSフリーワード一覧
+      description: TTSのフリーワード素材を一覧で取得する
+      operationId: listFree
       parameters:
       - name: industryCd
         in: query
@@ -1555,7 +1555,66 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/WordItem'
+                  $ref: '#/components/schemas/FreeItem'
+                x-content-type: application/json
+        "400":
+          description: Bad request. Response invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: API key is missing or invalid
+          headers:
+            WWW_Authenticate:
+              style: simple
+              explode: false
+              schema:
+                type: string
+        "404":
+          description: A user with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error.
+      x-swagger-router-controller: Resources
+  /template:
+    get:
+      tags:
+      - resources
+      summary: TTSテンプレート一覧
+      description: TTSのテンプレート素材を一覧で取得する
+      operationId: listTemplate
+      parameters:
+      - name: industryCd
+        in: query
+        description: 業種CD
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: "001"
+      - name: sceneCd
+        in: query
+        description: シーンCD
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: "001"
+      responses:
+        "200":
+          description: successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TemplateItem'
                 x-content-type: application/json
         "400":
           description: Bad request. Response invalid.
@@ -1597,6 +1656,15 @@ paths:
         schema:
           type: string
           example: 123456789-c-12345678
+      - name: category
+        in: query
+        description: カテゴリー
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: cm
       responses:
         "200":
           description: successful response
@@ -1604,6 +1672,50 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/inline_response_200'
+        "400":
+          description: Bad request. Response invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: API key is missing or invalid
+          headers:
+            WWW_Authenticate:
+              style: simple
+              explode: false
+              schema:
+                type: string
+        "404":
+          description: A user with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error.
+      x-swagger-router-controller: Resources
+  /tts:
+    post:
+      tags:
+      - resources
+      summary: TTS音声作成
+      description: TTS音声を作成する
+      operationId: createTts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body_9'
+      responses:
+        "200":
+          description: successful response
+          content:
+            audio/mpeg:
+              schema:
+                type: string
+                format: binary
+                x-content-type: audio/mpeg
         "400":
           description: Bad request. Response invalid.
           content:
@@ -1762,7 +1874,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/body_9'
+              $ref: '#/components/schemas/body_10'
       responses:
         "200":
           description: successful response
@@ -1867,7 +1979,7 @@ components:
         createDate: 2019-09-01T09:00:00+9:00
     CmItem:
       properties:
-        id:
+        cmId:
           type: string
           description: CM ID
           example: 123456789-c-12345678
@@ -1921,48 +2033,48 @@ components:
         endDate: 9999-12-31T23:59:59+09:00
         materials:
         - startChime:
+            contentsId: サンプル01
             volume: 50
-            id: chime/サンプル01
           narrations:
-          - volume: 150
-            id: narration/サンプル01
-          - volume: 150
-            id: narration/サンプル01
+          - contentsId: サンプル01
+            volume: 150
+          - contentsId: サンプル01
+            volume: 150
           endChime:
+            contentsId: サンプル02
             volume: 50
-            id: chime/サンプル02
           bgm:
+            contentsId: サンプル01
             volume: 50
-            id: bgm/サンプル01
         - startChime:
+            contentsId: サンプル01
             volume: 50
-            id: chime/サンプル01
           narrations:
-          - volume: 150
-            id: narration/サンプル01
-          - volume: 150
-            id: narration/サンプル01
+          - contentsId: サンプル01
+            volume: 150
+          - contentsId: サンプル01
+            volume: 150
           endChime:
+            contentsId: サンプル02
             volume: 50
-            id: chime/サンプル02
           bgm:
+            contentsId: サンプル01
             volume: 50
-            id: bgm/サンプル01
         productionType: '01: 音楽系, 02: 素ナレ'
         description: タイムセールサンプル１
         industry:
-        - cd: "01"
-          name: 業種名
-        - cd: "01"
-          name: 業種名
-        id: 123456789-c-12345678
+        - industryName: 業種名
+          industryCd: "01"
+        - industryName: 業種名
+          industryCd: "01"
+        cmId: 123456789-c-12345678
         title: タイムセール
         startDate: 2019-09-01T09:00:00+9:00
         scene:
-        - cd: "01"
-          name: シーン名
-        - cd: "01"
-          name: シーン名
+        - sceneCd: "01"
+          sceneName: シーン名
+        - sceneCd: "01"
+          sceneName: シーン名
         status: '00:CM削除, 01: CM作成中, 02: CM作成完了, 09: CM作成エラー, 11: センターアップロード中, 12:
           センターアップロード完了, 19: センターアップロードエラー, 21: S''senceアップロード中, 22: S''senceアップロード完了,
           29: S''senceアップロードエラー'
@@ -1981,25 +2093,29 @@ components:
           $ref: '#/components/schemas/CmMaterialListItem_bgm'
       example:
         startChime:
+          contentsId: サンプル01
           volume: 50
-          id: chime/サンプル01
         narrations:
-        - volume: 150
-          id: narration/サンプル01
-        - volume: 150
-          id: narration/サンプル01
+        - contentsId: サンプル01
+          volume: 150
+        - contentsId: サンプル01
+          volume: 150
         endChime:
+          contentsId: サンプル02
           volume: 50
-          id: chime/サンプル02
         bgm:
+          contentsId: サンプル01
           volume: 50
-          id: bgm/サンプル01
     BgmItem:
       properties:
-        id:
+        contentsId:
           type: string
           description: BGM ID
-          example: bgm/サンプル01
+          example: サンプル01
+        category:
+          type: string
+          description: カテゴリー
+          example: bgm
         title:
           type: string
           description: タイトル
@@ -2024,27 +2140,32 @@ components:
           type: string
           example: 2019-09-01T09:00:00+9:00
       example:
+        contentsId: サンプル01
         seconds: 300
         description: 説明文
         industry:
-        - cd: "01"
-          name: 業種名
-        - cd: "01"
-          name: 業種名
-        id: bgm/サンプル01
+        - industryName: 業種名
+          industryCd: "01"
+        - industryName: 業種名
+          industryCd: "01"
+        category: bgm
         title: タイトル
         scene:
-        - cd: "01"
-          name: シーン名
-        - cd: "01"
-          name: シーン名
+        - sceneCd: "01"
+          sceneName: シーン名
+        - sceneCd: "01"
+          sceneName: シーン名
         timestamp: 2019-09-01T09:00:00+9:00
     NarrationItem:
       properties:
-        id:
+        contentsId:
           type: string
           description: ナレーションID
-          example: narration/サンプル01
+          example: サンプル01
+        category:
+          type: string
+          description: カテゴリー
+          example: narration
         title:
           type: string
           description: タイトル
@@ -2073,28 +2194,33 @@ components:
           type: string
           example: 2019-09-01T09:00:00+9:00
       example:
+        contentsId: サンプル01
         seconds: 30
         manuscript: 本日はご来店いただきましてありがとうございます。当店は18時30分閉店です
         description: 放送開始日2020年10月15日 有効期限2020年10月20日
         industry:
-        - cd: "01"
-          name: 業種名
-        - cd: "01"
-          name: 業種名
-        id: narration/サンプル01
+        - industryName: 業種名
+          industryCd: "01"
+        - industryName: 業種名
+          industryCd: "01"
+        category: narration
         title: 18時30分閉店
         scene:
-        - cd: "01"
-          name: シーン名
-        - cd: "01"
-          name: シーン名
+        - sceneCd: "01"
+          sceneName: シーン名
+        - sceneCd: "01"
+          sceneName: シーン名
         timestamp: 2019-09-01T09:00:00+9:00
     ChimeItem:
       properties:
-        id:
+        contentsId:
           type: string
           description: チャイムID
-          example: chime/サンプル01
+          example: サンプル01
+        category:
+          type: string
+          description: カテゴリー
+          example: chime
         title:
           type: string
           description: タイトル
@@ -2111,17 +2237,22 @@ components:
           type: string
           example: 2019-09-01T09:00:00+9:00
       example:
+        contentsId: サンプル01
         seconds: 30
         description: 開始チャイム
-        id: chime/サンプル01
+        category: chime
         title: 開始チャイム
         timestamp: 2019-09-01T09:00:00+9:00
-    WordItem:
+    FreeItem:
       properties:
-        id:
+        contentsId:
           type: string
-          description: TTSテンプレートID
+          description: TTSフリーワードID
           example: "123456789"
+        category:
+          type: string
+          description: カテゴリー
+          example: free
         title:
           type: string
           description: タイトル
@@ -2145,50 +2276,100 @@ components:
           type: string
           example: 2019-09-01T09:00:00+9:00
       example:
+        contentsId: "123456789"
         manuscript: 本日はご来店いただきましてありがとうございます。当店は18時30分閉店です
         description: 放送開始日2020年10月15日 有効期限2020年10月20日
         industry:
-        - cd: "01"
-          name: 業種名
-        - cd: "01"
-          name: 業種名
-        id: "123456789"
+        - industryName: 業種名
+          industryCd: "01"
+        - industryName: 業種名
+          industryCd: "01"
+        category: free
         title: 18時30分閉店
         scene:
-        - cd: "01"
-          name: シーン名
-        - cd: "01"
-          name: シーン名
+        - sceneCd: "01"
+          sceneName: シーン名
+        - sceneCd: "01"
+          sceneName: シーン名
+        timestamp: 2019-09-01T09:00:00+9:00
+    TemplateItem:
+      properties:
+        contentsId:
+          type: string
+          description: TTSテンプレートID
+          example: "123456789"
+        category:
+          type: string
+          description: カテゴリー
+          example: template
+        title:
+          type: string
+          description: タイトル
+          example: 18時30分閉店
+        description:
+          type: string
+          description: 説明文
+          example: 放送開始日2020年10月15日 有効期限2020年10月20日
+        manuscript:
+          type: string
+          example: 本日はご来店いただきましてありがとうございます。当店は18時30分閉店です
+        industry:
+          type: array
+          items:
+            $ref: '#/components/schemas/IndustryItem'
+        scene:
+          type: array
+          items:
+            $ref: '#/components/schemas/SceneItem'
+        timestamp:
+          type: string
+          example: 2019-09-01T09:00:00+9:00
+      example:
+        contentsId: "123456789"
+        manuscript: 本日はご来店いただきましてありがとうございます。当店は18時30分閉店です
+        description: 放送開始日2020年10月15日 有効期限2020年10月20日
+        industry:
+        - industryName: 業種名
+          industryCd: "01"
+        - industryName: 業種名
+          industryCd: "01"
+        category: template
+        title: 18時30分閉店
+        scene:
+        - sceneCd: "01"
+          sceneName: シーン名
+        - sceneCd: "01"
+          sceneName: シーン名
         timestamp: 2019-09-01T09:00:00+9:00
     IndustryItem:
       properties:
-        cd:
+        industryCd:
           type: string
           description: 業種CD
           example: "01"
-        name:
+        industryName:
           type: string
           description: 業種名
           example: 業種名
       example:
-        cd: "01"
-        name: 業種名
+        industryName: 業種名
+        industryCd: "01"
     SceneItem:
       properties:
-        cd:
+        sceneCd:
           type: string
           description: シーンCD
           example: "01"
-        name:
+        sceneName:
           type: string
           description: シーン名
           example: シーン名
       example:
-        cd: "01"
-        name: シーン名
+        sceneCd: "01"
+        sceneName: シーン名
     RecordingItem:
       properties:
-        id:
+        recordingId:
           type: string
           description: 録音音声ID
           example: 123456789-r-12345678
@@ -2209,13 +2390,13 @@ components:
           example: 2019-09-01T09:00:00+9:00
       example:
         description: サンプル
-        id: 123456789-r-12345678
+        recordingId: 123456789-r-12345678
         title: サンプル
         startDate: 2019-09-01T09:00:00+9:00
         timestamp: 2019-09-01T09:00:00+9:00
     TtsItem:
       properties:
-        id:
+        ttsId:
           type: string
           description: 合成音声ID
           example: 123456789-t-12345678
@@ -2235,8 +2416,8 @@ components:
           type: string
           example: 2019-09-01T09:00:00+9:00
       example:
+        ttsId: 123456789-t-12345678
         description: サンプル
-        id: 123456789-t-12345678
         title: サンプル
         startDate: 2019-09-01T09:00:00+9:00
         timestamp: 2019-09-01T09:00:00+9:00
@@ -2422,6 +2603,17 @@ components:
           example: https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx
       example:
         url: https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx
+    body_9:
+      type: object
+      properties:
+        text:
+          type: string
+        speaker:
+          type: string
+        pitch:
+          type: string
+        speed:
+          type: string
     inline_response_200_1:
       properties:
         unisCustomerCd:
@@ -2458,7 +2650,7 @@ components:
           url: https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx
           endDatetime: 9999-12-31T23:59:59+09:00
         unisCustomerCd: "123456789"
-    body_9:
+    body_10:
       type: object
       properties:
         dataProcessType:
@@ -2494,59 +2686,59 @@ components:
         cmId: 123456789-c-12345678
     CmMaterialListItem_narrations:
       properties:
-        id:
+        contentsId:
           type: string
           description: ナレーションID
-          example: narration/サンプル01
+          example: サンプル01
         volume:
           type: integer
           description: ボリューム値
           example: 150
       example:
+        contentsId: サンプル01
         volume: 150
-        id: narration/サンプル01
     CmMaterialListItem_startChime:
       type: object
       properties:
-        id:
+        contentsId:
           type: string
           description: チャイムID
-          example: chime/サンプル01
+          example: サンプル01
         volume:
           type: integer
           description: ボリューム値
           example: 50
       example:
+        contentsId: サンプル01
         volume: 50
-        id: chime/サンプル01
     CmMaterialListItem_endChime:
       type: object
       properties:
-        id:
+        contentsId:
           type: string
           description: チャイムID
-          example: chime/サンプル02
+          example: サンプル02
         volume:
           type: integer
           description: ボリューム値
           example: 50
       example:
+        contentsId: サンプル02
         volume: 50
-        id: chime/サンプル02
     CmMaterialListItem_bgm:
       type: object
       properties:
-        id:
+        contentsId:
           type: string
           description: BGM ID
-          example: bgm/サンプル01
+          example: サンプル01
         volume:
           type: integer
           description: ボリューム値
           example: 50
       example:
+        contentsId: サンプル01
         volume: 50
-        id: bgm/サンプル01
   responses:
     BadRequest:
       description: Bad request. Response invalid.

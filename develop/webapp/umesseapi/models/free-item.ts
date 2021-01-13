@@ -14,55 +14,55 @@
 /**
  * 
  * @export
- * @interface BgmItem
+ * @interface FreeItem
  */
-export interface BgmItem {
+export interface FreeItem {
     /**
-     * BGM ID
+     * TTSフリーワードID
      * @type {string}
-     * @memberof BgmItem
+     * @memberof FreeItem
      */
     contentsId?: any;
     /**
      * カテゴリー
      * @type {string}
-     * @memberof BgmItem
+     * @memberof FreeItem
      */
     category?: any;
     /**
      * タイトル
      * @type {string}
-     * @memberof BgmItem
+     * @memberof FreeItem
      */
     title?: any;
     /**
      * 説明文
      * @type {string}
-     * @memberof BgmItem
+     * @memberof FreeItem
      */
     description?: any;
     /**
-     * 秒数
-     * @type {number}
-     * @memberof BgmItem
+     * 
+     * @type {string}
+     * @memberof FreeItem
      */
-    seconds?: any;
+    manuscript?: any;
     /**
      * 
      * @type {Array&lt;IndustryItem&gt;}
-     * @memberof BgmItem
+     * @memberof FreeItem
      */
     industry?: any;
     /**
      * 
      * @type {Array&lt;SceneItem&gt;}
-     * @memberof BgmItem
+     * @memberof FreeItem
      */
     scene?: any;
     /**
      * 
      * @type {string}
-     * @memberof BgmItem
+     * @memberof FreeItem
      */
     timestamp?: any;
 }

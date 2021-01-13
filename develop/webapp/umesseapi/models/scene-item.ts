@@ -22,11 +22,11 @@ export interface SceneItem {
      * @type {string}
      * @memberof SceneItem
      */
-    cd?: any;
+    sceneCd?: any;
     /**
      * シーン名
      * @type {string}
      * @memberof SceneItem
      */
-    name?: any;
+    sceneName?: any;
 }

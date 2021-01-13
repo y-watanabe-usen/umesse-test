@@ -22,23 +22,23 @@ export interface Body9 {
      * @type {string}
      * @memberof Body9
      */
-    dataProcessType?: any;
+    text?: any;
     /**
      * 
      * @type {string}
      * @memberof Body9
      */
-    cmId?: any;
+    speaker?: any;
     /**
      * 
      * @type {string}
      * @memberof Body9
      */
-    errorCode?: any;
+    pitch?: any;
     /**
      * 
      * @type {string}
      * @memberof Body9
      */
-    errorMessege?: any;
+    speed?: any;
 }

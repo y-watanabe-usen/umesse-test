@@ -16,7 +16,7 @@ import { Configuration } from '../configuration';
 // Some imports not used depending on template conditions
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
-import { Body9 } from '../models';
+import { Body10 } from '../models';
 import { InlineResponse2001 } from '../models';
 import { InlineResponse2002 } from '../models';
 /**
@@ -30,11 +30,11 @@ export const ExternalApiAxiosParamCreator = function (configuration?: Configurat
          * @summary CM外部連携完了（外部システム専用）
          * @param {string} external 外部システム区分
          * @param {string} unisCustomerCd UNIS顧客CD
-         * @param {Body9} [body] 
+         * @param {Body10} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        completeExternalCm: async (external: string, unisCustomerCd: string, body?: Body9, options: any = {}): Promise<RequestArgs> => {
+        completeExternalCm: async (external: string, unisCustomerCd: string, body?: Body10, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'external' is not null or undefined
             if (external === null || external === undefined) {
                 throw new RequiredError('external','Required parameter external was null or undefined when calling completeExternalCm.');
@@ -176,11 +176,11 @@ export const ExternalApiFp = function(configuration?: Configuration) {
          * @summary CM外部連携完了（外部システム専用）
          * @param {string} external 外部システム区分
          * @param {string} unisCustomerCd UNIS顧客CD
-         * @param {Body9} [body] 
+         * @param {Body10} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async completeExternalCm(external: string, unisCustomerCd: string, body?: Body9, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2002>> {
+        async completeExternalCm(external: string, unisCustomerCd: string, body?: Body10, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2002>> {
             const localVarAxiosArgs = await ExternalApiAxiosParamCreator(configuration).completeExternalCm(external, unisCustomerCd, body, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
@@ -230,11 +230,11 @@ export const ExternalApiFactory = function (configuration?: Configuration, baseP
          * @summary CM外部連携完了（外部システム専用）
          * @param {string} external 外部システム区分
          * @param {string} unisCustomerCd UNIS顧客CD
-         * @param {Body9} [body] 
+         * @param {Body10} [body] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        completeExternalCm(external: string, unisCustomerCd: string, body?: Body9, options?: any): AxiosPromise<InlineResponse2002> {
+        completeExternalCm(external: string, unisCustomerCd: string, body?: Body10, options?: any): AxiosPromise<InlineResponse2002> {
             return ExternalApiFp(configuration).completeExternalCm(external, unisCustomerCd, body, options).then((request) => request(axios, basePath));
         },
         /**
@@ -273,12 +273,12 @@ export class ExternalApi extends BaseAPI {
      * @summary CM外部連携完了（外部システム専用）
      * @param {string} external 外部システム区分
      * @param {string} unisCustomerCd UNIS顧客CD
-     * @param {Body9} [body] 
+     * @param {Body10} [body] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ExternalApi
      */
-    public completeExternalCm(external: string, unisCustomerCd: string, body?: Body9, options?: any) {
+    public completeExternalCm(external: string, unisCustomerCd: string, body?: Body10, options?: any) {
         return ExternalApiFp(this.configuration).completeExternalCm(external, unisCustomerCd, body, options).then((request) => request(this.axios, this.basePath));
     }
     /**
