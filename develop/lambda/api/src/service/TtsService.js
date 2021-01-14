@@ -1,12 +1,12 @@
 "use strict";
 
-const { constants } = require("umesse-lib/constants");
 const {
   getUserResource,
   createUserResource,
   updateUserResource,
   deleteUserResource,
 } = require("../../umesse/resources");
+const category = "tts";
 
 /**
  * 新規録音データ
@@ -18,11 +18,7 @@ const {
 exports.createUserTts = function (body, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     var response = {};
-    const json = await createUserResource(
-      xUnisCustomerCd,
-      constants.userResource.TTS,
-      body
-    );
+    const json = await createUserResource(xUnisCustomerCd, category, body);
     response["application/json"] = json;
     if (Object.keys(response).length > 0 && !json.message) {
       resolve(response[Object.keys(response)[0]]);
@@ -43,11 +39,7 @@ exports.createUserTts = function (body, xUnisCustomerCd) {
 exports.deleteUserTts = function (ttsId, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     var response = {};
-    const json = await deleteUserResource(
-      xUnisCustomerCd,
-      constants.userResource.TTS,
-      ttsId
-    );
+    const json = await deleteUserResource(xUnisCustomerCd, category, ttsId);
     response["application/json"] = json;
     if (Object.keys(response).length > 0 && !json.message) {
       resolve(response[Object.keys(response)[0]]);
@@ -68,11 +60,7 @@ exports.deleteUserTts = function (ttsId, xUnisCustomerCd) {
 exports.getUserTts = function (ttsId, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     var response = {};
-    const json = await getUserResource(
-      xUnisCustomerCd,
-      constants.userResource.TTS,
-      ttsId
-    );
+    const json = await getUserResource(xUnisCustomerCd, category, ttsId);
     response["application/json"] = json;
     if (Object.keys(response).length > 0 && !json.message) {
       resolve(response[Object.keys(response)[0]]);
@@ -92,10 +80,7 @@ exports.getUserTts = function (ttsId, xUnisCustomerCd) {
 exports.listUserTts = function (xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     var response = {};
-    const json = await getUserResource(
-      xUnisCustomerCd,
-      constants.userResource.TTS
-    );
+    const json = await getUserResource(xUnisCustomerCd, category);
     response["application/json"] = json;
     if (Object.keys(response).length > 0 && !json.message) {
       resolve(response[Object.keys(response)[0]]);
@@ -119,7 +104,7 @@ exports.updateUserTts = function (body, ttsId, xUnisCustomerCd) {
     var response = {};
     const json = await updateUserResource(
       xUnisCustomerCd,
-      constants.userResource.TTS,
+      category,
       ttsId,
       body
     );

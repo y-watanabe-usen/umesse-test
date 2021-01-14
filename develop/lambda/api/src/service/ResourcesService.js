@@ -1,6 +1,10 @@
 "use strict";
 
-const { getResource, getSignedUrl } = require("../../umesse/resources");
+const {
+  getResource,
+  getSignedUrl,
+  createTts,
+} = require("../../umesse/resources");
 
 /**
  * TTS音声作成
@@ -10,13 +14,14 @@ const { getResource, getSignedUrl } = require("../../umesse/resources");
  * returns byte[]
  **/
 exports.createTts = function (body) {
-  return new Promise(function (resolve, reject) {
-    var examples = {};
-    examples["application/json"] = "";
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
+  return new Promise(async function (resolve, reject) {
+    var response = {};
+    const json = await createTts(body);
+    response["audio/mpeg"] = json;
+    if (Object.keys(response).length > 0 && !json.message) {
+      resolve(response[Object.keys(response)[0]]);
     } else {
-      resolve();
+      reject(response[Object.keys(response)[0]]);
     }
   });
 };

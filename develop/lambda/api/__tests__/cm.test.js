@@ -19,7 +19,7 @@ beforeAll(() => {
 // CMデータ取得
 describe("CMデータ取得", () => {
   test("[success] CMデータ取得", async () => {
-    const response = await getCm(data.unisCustomerCd, data.cm[0].id);
+    const response = await getCm(data.unisCustomerCd, data.cm[0].cmId);
     expect(response).toEqual(data.cm[0]);
   });
 
@@ -44,14 +44,14 @@ describe("CM新規作成", () => {
   test("[success] CM新規作成", async () => {
     const body = {
       materials: {
-        narrations: [{ id: "narration/サンプル01", volume: 150 }],
-        startChime: { id: "chime/サンプル01", volume: 50 },
-        endChime: { id: "chime/サンプル02", volume: 50 },
+        narrations: [{ contentsId: "narration/サンプル01", volume: 150 }],
+        startChime: { contentsId: "chime/サンプル01", volume: 50 },
+        endChime: { contentsId: "chime/サンプル02", volume: 50 },
       },
     };
     const response = await createCm(data.unisCustomerCd, body);
     expect(response).toEqual({
-      id: expect.stringMatching(`^${data.unisCustomerCd}-c-[0-9a-z]{8}$`),
+      cmId: expect.stringMatching(`^${data.unisCustomerCd}-c-[0-9a-z]{8}$`),
       seconds: expect.anything(),
       productionType: "02",
       status: "01",
@@ -74,7 +74,7 @@ describe("CMデータ更新", () => {
       title: "テスト",
       description: "テスト",
     };
-    const response = await updateCm(data.unisCustomerCd, data.cm[1].id, body);
+    const response = await updateCm(data.unisCustomerCd, data.cm[1].cmId, body);
     expect(response).toEqual({
       ...data.cm[1],
       ...body,
@@ -100,7 +100,7 @@ describe("CMデータ更新", () => {
 // CMデータ削除
 describe("CMデータ削除", () => {
   test("[success] CMデータ削除", async () => {
-    const response = await deleteCm(data.unisCustomerCd, data.cm[1].id);
+    const response = await deleteCm(data.unisCustomerCd, data.cm[1].cmId);
     expect(response).toEqual({
       ...data.cm[1],
       title: "テスト",

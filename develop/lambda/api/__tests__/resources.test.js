@@ -66,7 +66,7 @@ beforeAll(() => {
 // 署名付きデータ取得
 describe("署名付きデータ取得", () => {
   test("[success] 署名付きURLデータ取得", async () => {
-    const response = await getSignedUrl(data.cm[0].id);
+    const response = await getSignedUrl(data.cm[0].cmId);
     expect(response).toEqual({ url: expect.anything() });
   });
 });
@@ -98,7 +98,7 @@ describe("ユーザー音声データ取得", () => {
     const response = await getUserResource(
       data.unisCustomerCd,
       "recording",
-      data.recording[0].id
+      data.recording[0].recordingId
     );
     expect(response).toEqual(data.recording[0]);
   });
@@ -107,7 +107,7 @@ describe("ユーザー音声データ取得", () => {
     const response = await getUserResource(
       data.unisCustomerCd,
       "tts",
-      data.tts[2].id
+      data.tts[2].ttsId
     );
     expect(response).toEqual(data.tts[2]);
   });
@@ -156,7 +156,7 @@ describe("ユーザー音声作成", () => {
     const response = await deleteUserResource(
       data.unisCustomerCd,
       "recording",
-      data.recording[0].id
+      data.recording[0].recordingId
     );
     expect(response).toEqual([
       data.recording[1],

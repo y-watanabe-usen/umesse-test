@@ -4,35 +4,25 @@
       "PutRequest": {
         "Item": {
           "unisCustomerCd": { "S": "110000000" },
-          "contractCd": { "S": "N1100000000" },
-          "serviceCd": { "S": "U01" },
-          "serviceName": { "S": "U∞MUSNC" },
-          "customerName": { "S": "テスト11" },
-          "customerNameKana": { "S": "テスト11" },
-          "customerGroupCd": { "S": "110000000" },
-          "customerGroupName": { "S": "テスト11グループ" },
-          "contractStatusCd": { "S": "2" },
-          "contractStatusName": { "S": "確定" },
-          "createDate": { "S": "2019-09-01T09:00:00+9:00" },
-          "renewalDate": { "S": "2019-09-01T09:00:00+9:00" },
           "cm": {
             "L": [
               {
                 "M": {
-                  "id": { "S": "110000000-c-00000001" },
+                  "cmId": { "S": "110000000-c-00000001" },
                   "title": { "S": "CMテスト01" },
                   "description": { "S": "CMテスト01" },
                   "seconds": { "N": "60" },
                   "startDate": { "S": "2019-09-01T09:00:00+9:00" },
                   "endDate": { "S": "9999-12-31T23:59:59+09:00" },
                   "productionType": { "S": "01" },
+                  "uploadSystem": { "S": "01" },
                   "status": { "S": "03" },
                   "timestamp": { "S": "2019-09-01T09:00:00+9:00" }
                 }
               },
               {
                 "M": {
-                  "id": { "S": "110000000-c-00000002" },
+                  "cmId": { "S": "110000000-c-00000002" },
                   "title": { "S": "CMテスト02" },
                   "description": { "S": "CMテスト02" },
                   "seconds": { "N": "60" },
@@ -45,7 +35,7 @@
               },
               {
                 "M": {
-                  "id": { "S": "110000000-c-00000003" },
+                  "cmId": { "S": "110000000-c-00000003" },
                   "title": { "S": "CMテスト03" },
                   "description": { "S": "CMテスト03" },
                   "seconds": { "N": "60" },

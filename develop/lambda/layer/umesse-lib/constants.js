@@ -159,12 +159,9 @@ exports.constants = Object.freeze({
     CONVERT: "03", // CMエンコード中
     SHARING: "04", // CM共有中
     ERROR: "09", // CMエラー
-    CENTER_UPLOADING: "11", // センターアップロード中
-    CENTER_COMPLETE: "12", // センターアップロード完了
-    CENTER_ERROR: "19", // センターアップロードエラー
-    SSENCE_UPLOADING: "21", // S'senceアップロード中
-    SSENCE_COMPLETE: "22", // S'senceアップロード完了
-    SSENCE_ERROR: "29", // S'senceアップロードエラー
+    EXTERNAL_UPLOADING: "11", // 外部システムアップロード中
+    EXTERNAL_COMPLETE: "12", // 外部システムアップロード完了
+    EXTERNAL_ERROR: "19", // 外部システムアップロードエラー
   },
 
   // CMタイプ
@@ -177,12 +174,6 @@ exports.constants = Object.freeze({
   cmUploadSystem: {
     CENTER: "01",
     SSENCE: "02",
-  },
-
-  // ユーザー作成の音声区分
-  userResource: {
-    RECORDING: "recording",
-    TTS: "tts",
   },
 });
 

@@ -1,8 +1,8 @@
 "use strict";
 
 const { constants, debuglog } = require("umesse-lib/constants");
+const { validation } = require("umesse-lib/validation");
 const { dynamodbManager } = require("umesse-lib/utils/dynamodbManager");
-const { validation } = require("./validation");
 
 // ユーザーデータ取得
 exports.getUser = async (unisCustomerCd) => {
@@ -14,7 +14,9 @@ exports.getUser = async (unisCustomerCd) => {
 
   try {
     // パラメーターチェック
-    const checkParams = validation.checkParams("getUser", unisCustomerCd);
+    const checkParams = validation.checkParams({
+      unisCustomerCd: unisCustomerCd,
+    });
     if (checkParams) throw checkParams;
 
     const key = { unisCustomerCd: unisCustomerCd };

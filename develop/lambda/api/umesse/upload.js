@@ -1,8 +1,8 @@
 "use strict";
 
 const { constants, debuglog, timestamp } = require("umesse-lib/constants");
+const { validation } = require("umesse-lib/validation");
 const { dynamodbManager } = require("umesse-lib/utils/dynamodbManager");
-const { validation } = require("./validation");
 const { getCm } = require("./cm");
 
 // 外部連携データ取得（一覧・個別）
@@ -16,7 +16,9 @@ exports.getUploadCm = async (unisCustomerCd, cmId) => {
 
   try {
     // パラメーターチェック
-    const checkParams = validation.checkParams("getUploadCm", unisCustomerCd);
+    const checkParams = validation.checkParams({
+      unisCustomerCd: unisCustomerCd,
+    });
     if (checkParams) throw checkParams;
 
     const options = {
@@ -56,33 +58,34 @@ exports.createUploadCm = async (unisCustomerCd, cmId, body) => {
 
   try {
     // パラメーターチェック
-    const checkParams = validation.checkParams("createUploadCm", body);
+    const checkParams = validation.checkParams({
+      unisCustomerCd: unisCustomerCd,
+      cmId: cmId,
+      body: body,
+    });
     if (checkParams) throw checkParams;
 
     // CM一覧から該当CMを取得
     const list = await getCm(unisCustomerCd);
     if (!list || !list.length) throw "not found";
-    const index = list.findIndex((item) => item.id === cmId);
+    const index = list.findIndex((item) => item.cmId === cmId);
     if (index < 0) throw "not found";
     const cm = list[index];
 
-    // CMステータス状態によるチェック
-    const checkCmStatus = validation.checkCmStatus("createUploadCm", cm.status);
-    if (checkCmStatus) throw checkCmStatus;
+    // TODO: CMステータス状態によるチェック
 
     // 連携用のデータ追加
     const item = {
       unisCustomerCd: unisCustomerCd,
       dataProcessType: "01",
-      id: cmId,
-      title: cm.title,
-      description: cm.description,
-      seconds: cm.seconds,
-      startDate: cm.startDate,
-      endDate: cm.endDate,
+      cmId: cmId,
+      cmName: cm.title,
+      cmCommentManuscript: cm.description,
+      startDatetime: cm.startDate,
+      endDatetime: cm.endDate,
       productionType: cm.productionType,
-      industry: cm.industry.id,
-      scene: cm.scene.id,
+      contentTime: cm.seconds,
+      sceneCd: cm.scene.sceneCd,
       uploadSystem: body.uploadSystem,
       status: "1",
       timestamp: timestamp(),
@@ -96,11 +99,8 @@ exports.createUploadCm = async (unisCustomerCd, cmId, body) => {
     if (!res) throw "put failed";
 
     // DynamoDBのデータ更新
-    if (body.uploadSystem == constants.cmUploadSystem.CENTER)
-      cm.status = constants.cmStatus.CENTER_UPLOADING;
-    else if (body.uploadSystem == constants.cmUploadSystem.SSENCE)
-      cm.status = constants.cmStatus.SSENCE_UPLOADING;
-
+    cm.uploadSystem = body.uploadSystem;
+    cm.status = constants.cmStatus.EXTERNAL_UPLOADING;
     cm.timestamp = timestamp();
     const key = { unisCustomerCd: unisCustomerCd };
     const options = {
@@ -139,36 +139,29 @@ exports.deleteUploadCm = async (unisCustomerCd, cmId, body) => {
 
   try {
     // パラメーターチェック
-    const checkParams = validation.checkParams("deleteUploadCm", body);
+    const checkParams = validation.checkParams({
+      unisCustomerCd: unisCustomerCd,
+      cmId: cmId,
+      body: body,
+    });
     if (checkParams) throw checkParams;
 
     // CM一覧から該当CMを取得
     const list = await getCm(unisCustomerCd);
     if (!list || !list.length) throw "not found";
-    const index = list.findIndex((item) => item.id === cmId);
+    const index = list.findIndex((item) => item.cmId === cmId);
     if (index < 0) throw "not found";
     const cm = list[index];
 
-    // CMステータス状態によるチェック
-    const checkCmStatus = validation.checkCmStatus("deleteUploadCm", cm.status);
-    if (checkCmStatus) throw checkCmStatus;
-
-    let uploadSystem = "";
-    if (cm.status == constants.cmStatus.CENTER_COMPLETE) {
-      uploadSystem = constants.cmUploadSystem.CENTER;
-      cm.status = constants.cmStatus.CENTER_UPLOADING;
-    } else if (cm.status == constants.cmStatus.SSENCE_COMPLETE) {
-      uploadSystem = constants.cmUploadSystem.SSENCE;
-      cm.status = constants.cmStatus.SSENCE_UPLOADING;
-    }
+    // TODO: CMステータス状態によるチェック
 
     // 連携用のデータ追加
     const item = {
       unisCustomerCd: unisCustomerCd,
       dataProcessType: "03",
-      id: cmId,
-      endDate: body.endDate,
-      uploadSystem: uploadSystem,
+      cmId: cmId,
+      endDateTime: body.endDate,
+      uploadSystem: cm.uploadSystem,
       status: "1",
       timestamp: timestamp(),
     };
@@ -181,6 +174,7 @@ exports.deleteUploadCm = async (unisCustomerCd, cmId, body) => {
     if (!res) throw "put failed";
 
     // DynamoDBのデータ更新
+    cm.status = constants.cmStatus.EXTERNAL_UPLOADING;
     cm.timestamp = timestamp();
     const key = { unisCustomerCd: unisCustomerCd };
     const options = {

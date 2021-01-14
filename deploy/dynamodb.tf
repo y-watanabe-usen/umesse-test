@@ -38,13 +38,7 @@ resource "aws_dynamodb_table" "external" {
   billing_mode   = "PROVISIONED"
   read_capacity  = 10
   write_capacity = 10
-  hash_key       = "cmId"
-  range_key      = "unisCustomerCd"
-
-  attribute {
-    name = "cmId"
-    type = "S"
-  }
+  hash_key       = "unisCustomerCd"
 
   attribute {
     name = "unisCustomerCd"

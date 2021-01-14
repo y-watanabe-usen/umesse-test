@@ -1,12 +1,12 @@
 "use strict";
 
-const { constants } = require("umesse-lib/constants");
 const {
   getUserResource,
   createUserResource,
   updateUserResource,
   deleteUserResource,
 } = require("../../umesse/resources");
+const category = "recording";
 
 /**
  * 新規録音データ
@@ -18,11 +18,7 @@ const {
 exports.createUserRecording = function (body, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     var response = {};
-    const json = await createUserResource(
-      xUnisCustomerCd,
-      constants.userResource.RECORDING,
-      body
-    );
+    const json = await createUserResource(xUnisCustomerCd, category, body);
     response["application/json"] = json;
     if (Object.keys(response).length > 0 && !json.message) {
       resolve(response[Object.keys(response)[0]]);
@@ -45,7 +41,7 @@ exports.deleteUserRecording = function (recordingId, xUnisCustomerCd) {
     var response = {};
     const json = await deleteUserResource(
       xUnisCustomerCd,
-      constants.userResource.RECORDING,
+      category,
       recordingId
     );
     response["application/json"] = json;
@@ -68,11 +64,7 @@ exports.deleteUserRecording = function (recordingId, xUnisCustomerCd) {
 exports.getUserRecording = function (recordingId, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     var response = {};
-    const json = await getUserResource(
-      xUnisCustomerCd,
-      constants.userResource.RECORDING,
-      recordingId
-    );
+    const json = await getUserResource(xUnisCustomerCd, category, recordingId);
     response["application/json"] = json;
     if (Object.keys(response).length > 0 && !json.message) {
       resolve(response[Object.keys(response)[0]]);
@@ -92,10 +84,7 @@ exports.getUserRecording = function (recordingId, xUnisCustomerCd) {
 exports.listUserRecording = function (xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     var response = {};
-    const json = await getUserResource(
-      xUnisCustomerCd,
-      constants.userResource.RECORDING
-    );
+    const json = await getUserResource(xUnisCustomerCd, category);
     response["application/json"] = json;
     if (Object.keys(response).length > 0 && !json.message) {
       resolve(response[Object.keys(response)[0]]);
@@ -119,7 +108,7 @@ exports.updateUserRecording = function (body, recordingId, xUnisCustomerCd) {
     var response = {};
     const json = await updateUserResource(
       xUnisCustomerCd,
-      constants.userResource.RECORDING,
+      category,
       recordingId,
       body
     );

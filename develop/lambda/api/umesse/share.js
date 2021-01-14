@@ -1,9 +1,9 @@
 "use strict";
 
 const { constants, debuglog, timestamp } = require("umesse-lib/constants");
+const { validation } = require("umesse-lib/validation");
 const { dynamodbManager } = require("umesse-lib/utils/dynamodbManager");
 const { s3Manager } = require("umesse-lib/utils/s3Manager");
-const { validation } = require("./validation");
 const { getCm } = require("./cm");
 const { getUser } = require("./user");
 
@@ -18,15 +18,13 @@ exports.getShareCm = async (unisCustomerCd, cmId) => {
 
   try {
     // パラメーターチェック
-    const checkParams = validation.checkParams("getShareCm", unisCustomerCd);
+    const checkParams = validation.checkParams({
+      unisCustomerCd: unisCustomerCd,
+    });
     if (checkParams) throw checkParams;
 
     const key = { unisCustomerCd: unisCustomerCd };
     const options = {
-      KeyConditionExpression: "status = :status",
-      ExpressionAttributeValues: {
-        ":status": constants.cmStatus.SHARING,
-      },
       ProjectionExpression: "cm",
     };
     debuglog(JSON.stringify({ key: key, options: options }));
@@ -41,7 +39,7 @@ exports.getShareCm = async (unisCustomerCd, cmId) => {
     let json = res.Item.cm;
     json = json.filter((item) => item.status === constants.cmStatus.SHARING);
     if (cmId) {
-      json = json.filter((item) => item.id === cmId)[0];
+      json = json.filter((item) => item.cmId === cmId)[0];
     }
     if (!json) throw "not found";
     return json;
@@ -62,10 +60,17 @@ exports.createShareCm = async (unisCustomerCd, cmId) => {
   );
 
   try {
+    // パラメーターチェック
+    const checkParams = validation.checkParams({
+      unisCustomerCd: unisCustomerCd,
+      cmId: cmId,
+    });
+    if (checkParams) throw checkParams;
+
     // CM一覧から該当CMを取得
     const list = await getCm(unisCustomerCd);
     if (!list || !list.length) throw "not found";
-    const index = list.findIndex((item) => item.id === cmId);
+    const index = list.findIndex((item) => item.cmId === cmId);
     if (index < 0) throw "not found";
     const cm = list[index];
 
@@ -81,9 +86,7 @@ exports.createShareCm = async (unisCustomerCd, cmId) => {
     );
     if (!res) throw "copy failed";
 
-    // CMステータス状態によるチェック
-    const checkCmStatus = validation.checkCmStatus("createShareCm", cm.status);
-    if (checkCmStatus) throw checkCmStatus;
+    // TODO: CMステータス状態によるチェック
 
     // DynamoDBのデータ更新
     cm.status = constants.cmStatus.SHARING;
@@ -124,16 +127,21 @@ exports.deleteShareCm = async (unisCustomerCd, cmId) => {
   );
 
   try {
+    // パラメーターチェック
+    const checkParams = validation.checkParams({
+      unisCustomerCd: unisCustomerCd,
+      cmId: cmId,
+    });
+    if (checkParams) throw checkParams;
+
     // CM一覧から該当CMを取得
     const list = await this.getCm(unisCustomerCd);
     if (!list || !list.length) throw "not found";
-    const index = list.findIndex((item) => item.id === cmId);
+    const index = list.findIndex((item) => item.cmId === cmId);
     if (index < 0) throw "not found";
     const cm = list[index];
 
-    // CMステータス状態によるチェック
-    const checkCmStatus = validation.checkCmStatus("deleteShareCm", cm.status);
-    if (checkCmStatus) throw checkCmStatus;
+    // TODO: CMステータス状態によるチェック
 
     // ユーザー情報取得
     const user = await getUser(unisCustomerCd);
