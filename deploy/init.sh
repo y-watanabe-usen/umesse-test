@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -u
 
+export AWS_CLI_FILE_ENCODING=UTF-8
+
 REGION=ap-northeast-1
 STAGE=v1
 AWSCLI="aws --endpoint-url http://localhost:4566 --region $REGION"
