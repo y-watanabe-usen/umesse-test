@@ -151,6 +151,28 @@ exports.constants = Object.freeze({
     }
   },
 
+  // TTS キー
+  ttsConfig: function () {
+    switch (this.environment) {
+      case "local":
+      case "localstack":
+      case "dev":
+        return {
+          host: "api.voicetext.jp",
+          path: "/v1/tts",
+          key: "wprtc1co1d4c9ezd",
+        };
+      case "stg":
+      case "prod":
+      default:
+        return {
+          host: "api.voicetext.jp",
+          path: "/v1/tts",
+          key: "yck1tgf1x2jl3m51",
+        };
+    }
+  },
+
   // CMステータス
   cmStatus: {
     DELETE: "00", // CM削除(ユーザーミスによる復活のための定義)
@@ -174,6 +196,16 @@ exports.constants = Object.freeze({
   cmUploadSystem: {
     CENTER: "01",
     SSENCE: "02",
+  },
+
+  // コンテンツのカテゴリー
+  resourceCategory: {
+    CM: "cm",
+    RECORDING: "recording",
+    TTS: "tts",
+    BGM: "bgm",
+    CHIME: "chime",
+    NARRATION: "narration",
   },
 });
 

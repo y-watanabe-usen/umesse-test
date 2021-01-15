@@ -1,5 +1,7 @@
 "use strict";
 
+const https = require("https");
+const querystring = require("querystring");
 const {
   constants,
   debuglog,
@@ -27,13 +29,13 @@ exports.getResource = async (category, industryCd, sceneCd) => {
     if (checkParams) throw checkParams;
 
     const options = {
-      KeyConditionExpression: "category = :category",
+      FilterExpression: "category = :category",
       ExpressionAttributeValues: {
         ":category": category,
       },
     };
 
-    const res = await dynamodbManager.query(
+    const res = await dynamodbManager.scan(
       constants.dynamoDbTable().contents,
       options
     );
@@ -42,11 +44,13 @@ exports.getResource = async (category, industryCd, sceneCd) => {
     let json = res.Items;
     if (industryCd) {
       json = json.filter((item) =>
-        item.industry.some((el) => el.cd === industryCd)
+        item.industry.some((el) => el.industryCd === industryCd)
       );
     }
     if (sceneCd) {
-      json = json.filter((item) => item.scene.some((el) => el.cd === sceneCd));
+      json = json.filter((item) =>
+        item.scene.some((el) => el.sceneCd === sceneCd)
+      );
     }
     if (!json) throw "not found";
     return json;
@@ -67,28 +71,67 @@ exports.getSignedUrl = async (id, category) => {
   try {
     // パラメーターチェック
     const checkParams = validation.checkParams({
+      id: id,
       category: category,
     });
     if (checkParams) throw checkParams;
 
     let bucket = "";
     let path = "";
-    let match = id.match(`([0-9]{9})-([crt])-[0-9a-z]{8}`);
-    if (match && match.length) {
-      bucket = constants.s3Bucket().users;
-      let div = "";
-      if (match[2] == "c") div = "cm";
-      else if (match[2] == "r") div = "recording";
-      else if (match[2] == "t") div = "tts";
-      path = `users/${match[1]}/${div}/${id}.wav`;
-    } else {
-      bucket = constants.s3Bucket().contents;
-      path = id;
+    let file = "";
+    switch (category) {
+      case constants.resourceCategory.CM:
+        file = `${id}.aac`;
+      case constants.resourceCategory.RECORDING:
+        file = `${id}.wav`;
+      case constants.resourceCategory.TTS:
+        file = `${id}.mp3`;
+        const str = id.split("-");
+        bucket = constants.s3Bucket().users;
+        path = `users/${str[0]}/${category}/${file}`;
+        break;
+      case constants.resourceCategory.BGM:
+      case constants.resourceCategory.CHIME:
+      case constants.resourceCategory.NARRATION:
+        bucket = constants.s3Bucket().contents;
+        path = `${category}/${id}.mp3`;
+        break;
+      default:
+        throw "unknown category";
     }
 
     const res = await s3Manager.getSignedUrl(bucket, path);
     if (!res) throw "getSignedUrl failed";
     return { url: res };
+  } catch (e) {
+    // TODO: error handle
+    console.log(e);
+    return { message: e };
+  }
+};
+
+// TTS作成
+exports.createTts = async (body) => {
+  debuglog(
+    `[createTts] ${JSON.stringify({
+      body: body,
+    })}`
+  );
+
+  try {
+    // パラメーターチェック
+    const checkParams = validation.checkParams({
+      body: body,
+    });
+    if (checkParams) throw checkParams;
+
+    const options = {
+      
+    };
+    const data = {
+
+    };
+    return data;
   } catch (e) {
     // TODO: error handle
     console.log(e);

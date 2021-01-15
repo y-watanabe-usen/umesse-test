@@ -21,20 +21,23 @@ exports.getExternalCm = async (unisCustomerCd, external) => {
     });
     if (checkParams) throw checkParams;
 
+    const options = {
+      FilterExpression: "uploadSystem = :uploadSystem AND #status = :status",
+      ExpressionAttributeNames: {
+        "#status": "status",
+      },
+      ExpressionAttributeValues: {
+        ":uploadSystem": constants.cmUploadSystem[external.toUpperCase()],
+        ":status": "1",
+      },
+    };
     const res = await dynamodbManager.scan(
       constants.dynamoDbTable().external,
-      {}
+      options
     );
     if (!res || !res.Items.length) throw "not found";
 
     let json = res.Items;
-    json = json.filter(
-      (item) =>
-        item.uploadSystem === constants.cmUploadSystem[external.toUpperCase] &&
-        item.status === 1
-    );
-    if (!json.length) throw "not found";
-
     if (unisCustomerCd) {
       json = json.filter((item) => item.unisCustomerCd === unisCustomerCd)[0];
     }
@@ -77,7 +80,7 @@ exports.completeExternalCm = async (unisCustomerCd, external, body) => {
     if (!external) throw "not found";
 
     const key = { unisCustomerCd: unisCustomerCd };
-    let option = "";
+    let options = "";
     let res = "";
 
     if (body.dataProcessType == "01") {
@@ -100,6 +103,10 @@ exports.completeExternalCm = async (unisCustomerCd, external, body) => {
       options = {
         UpdateExpression:
           "SET #status = :status, errorCode = :errorCode, errorMessage = :errorMessage, #timestamp = :timestamp",
+        ExpressionAttributeNames: {
+          "#status": "status",
+          "#timestamp": "timestamp",
+        },
         ExpressionAttributeValues: {
           ":status": "9",
           ":errorCode": body.errorCode,
