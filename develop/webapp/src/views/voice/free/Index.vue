@@ -13,6 +13,7 @@
           data-toggle="modal"
           data-target="#saveModal"
           style="width: 100px"
+          @click="createTtsData(text, speaker)"
         >
           確定
         </button>
@@ -23,9 +24,9 @@
             <div class="row">
               <div class="col-2 m-auto">話者</div>
               <div class="col-10 m-auto">
-                <select class="form-control w-25">
-                  <option v-for="voice in state.voices" :key="voice">
-                    {{ voice }}
+                <select class="form-control w-25" v-model="speaker">
+                  <option v-for="speaker in speakers" :key="speaker">
+                    {{ speaker }}
                   </option>
                 </select>
               </div>
@@ -51,6 +52,7 @@
             class="col-12 p-3 rounded"
             style="height: 500px"
             placeholder="アナウンスの文言を入力してください。"
+            v-model="text"
           ></textarea>
         </div>
       </div>
@@ -83,7 +85,11 @@
               <div class="col-10">
                 <div class="row">
                   <div class="col-4">
-                    <button type="button" class="btn btn-light shadow btn-play">
+                    <button
+                      type="button"
+                      class="btn btn-light shadow btn-play"
+                      @click="play"
+                    >
                       <svg
                         width="1em"
                         height="1em"
@@ -170,7 +176,7 @@
             <div class="row pt-4">
               <div class="col-2">タイトル</div>
               <div class="col-10">
-                <input class="form-control" type="text" />
+                <input class="form-control" type="text" v-model="file.title" />
               </div>
             </div>
             <div class="row pt-4">
@@ -203,16 +209,56 @@
 </template>
 
 <script lang="ts">
-import { computed, reactive } from "vue";
+import { defineComponent, reactive, computed, toRefs, provide } from "vue";
+// import axios from "axios";
+import AudioPlayer from "@/utils/AudioPlayer";
+import {
+  RecordingFile,
+  useUploadTtsService,
+  UPLOAD_TTS_STATE,
+} from "@/services/uploadTtsService";
+import * as UMesseApi from "umesseapi";
+import provideTtsStore from "@/store/tts";
 
 export default {
+  data() {
+    return {
+      text: "おはようございます。",
+      speaker: "risa",
+    }
+  },
   setup() {
+    const ttsStore = provideTtsStore(); //FIXME: provide name.
+    const audioPlayer = AudioPlayer();
+    const speakers = ["risa", "takeru"];
     const state = reactive({
-      voices: ["女性1", "女性2", "女性3", "男性1", "男性2", "男性3"],
+      file: <RecordingFile>{},
+      uploadTtsState: computed(() => ttsStore.getStatus()),
     });
 
+    const play = async () => {
+      console.log("play");
+      const audioBuffer = await ttsStore.getTtsData();
+      audioPlayer.start(audioBuffer!!);
+    };
+
+    const createTtsData = async (text: string, speaker: string) => {
+      console.log("create");
+      await ttsStore.createTtsData(text, speaker);
+    };
+
+    const uploadTtsFile = async () => {
+      /// check state.file.
+      state.file.blob = await ttsStore.getUploadTtsData();
+      ttsStore.uploadTtsData(state.file);
+    };
+
     return {
-      state,
+      speakers,
+      ...toRefs(state),
+      play,
+      createTtsData,
+      UPLOAD_TTS_STATE,
     };
   },
 };
