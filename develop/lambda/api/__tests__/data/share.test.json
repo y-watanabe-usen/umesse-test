@@ -4,22 +4,11 @@
       "PutRequest": {
         "Item": {
           "unisCustomerCd": { "S": "040000000" },
-          "contractCd": { "S": "N0400000000" },
-          "serviceCd": { "S": "U01" },
-          "serviceName": { "S": "U∞MUSNC" },
-          "customerName": { "S": "テスト04" },
-          "customerNameKana": { "S": "テスト04" },
-          "customerGroupCd": { "S": "040000000" },
-          "customerGroupName": { "S": "テスト04グループ" },
-          "contractStatusCd": { "S": "2" },
-          "contractStatusName": { "S": "確定" },
-          "createDate": { "S": "2019-09-01T09:00:00+9:00" },
-          "renewalDate": { "S": "2019-09-01T09:00:00+9:00" },
           "cm": {
             "L": [
               {
                 "M": {
-                  "id": { "S": "040000000-c-00000001" },
+                  "cmId": { "S": "040000000-c-00000001" },
                   "title": { "S": "CMテスト01" },
                   "description": { "S": "CMテスト01" },
                   "seconds": { "N": "60" },
@@ -32,7 +21,7 @@
               },
               {
                 "M": {
-                  "id": { "S": "040000000-c-00000002" },
+                  "cmId": { "S": "040000000-c-00000002" },
                   "title": { "S": "CMテスト02" },
                   "description": { "S": "CMテスト02" },
                   "seconds": { "N": "60" },

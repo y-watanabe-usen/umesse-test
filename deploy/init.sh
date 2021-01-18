@@ -18,7 +18,8 @@ $AWSCLI dynamodb batch-write-item --request-items file://../sample_data/dynamodb
 $AWSCLI dynamodb batch-write-item --request-items file://../sample_data/dynamodb/contents_bgm.json
 $AWSCLI dynamodb batch-write-item --request-items file://../sample_data/dynamodb/contents_chime.json
 $AWSCLI dynamodb batch-write-item --request-items file://../sample_data/dynamodb/contents_narration.json
-$AWSCLI dynamodb batch-write-item --request-items file://../sample_data/dynamodb/contents_tts.json
+$AWSCLI dynamodb batch-write-item --request-items file://../sample_data/dynamodb/contents_free.json
+$AWSCLI dynamodb batch-write-item --request-items file://../sample_data/dynamodb/contents_template.json
 
 # sample scan
 # $AWSCLI dynamodb scan --table-name umesse-contents --filter-expression 'contains(id, :id)' --expression-attribute-values '{":id": {"S":"bgm"}}'

@@ -18,75 +18,15 @@
  */
 export interface ExternalItem {
     /**
-     * データ処理区分
+     * 
      * @type {string}
      * @memberof ExternalItem
      */
-    dataProcessType?: any;
+    unisCustomerCd?: any;
     /**
-     * CM ID
-     * @type {string}
+     * 
+     * @type {Array&lt;ExternalItem&gt;}
      * @memberof ExternalItem
      */
-    cmId?: any;
-    /**
-     * 音源URL
-     * @type {string}
-     * @memberof ExternalItem
-     */
-    url?: any;
-    /**
-     * CM名
-     * @type {string}
-     * @memberof ExternalItem
-     */
-    cmName?: any;
-    /**
-     * CMコメント原稿
-     * @type {string}
-     * @memberof ExternalItem
-     */
-    cmCommentManuscript?: any;
-    /**
-     * 放送開始日時
-     * @type {string}
-     * @memberof ExternalItem
-     */
-    startDatetime?: any;
-    /**
-     * 放送終了日時
-     * @type {string}
-     * @memberof ExternalItem
-     */
-    endDatetime?: any;
-    /**
-     * 制作種別
-     * @type {string}
-     * @memberof ExternalItem
-     */
-    productionType?: any;
-    /**
-     * ファイル名
-     * @type {string}
-     * @memberof ExternalItem
-     */
-    fileName?: any;
-    /**
-     * 尺時間
-     * @type {number}
-     * @memberof ExternalItem
-     */
-    contentTime?: any;
-    /**
-     * ファイルサイズ
-     * @type {number}
-     * @memberof ExternalItem
-     */
-    fileSize?: any;
-    /**
-     * シーンCD
-     * @type {string}
-     * @memberof ExternalItem
-     */
-    sceneCd?: any;
+    cmMetas?: any;
 }

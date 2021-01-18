@@ -16,7 +16,6 @@ import { Configuration } from '../configuration';
 // Some imports not used depending on template conditions
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
-import { Body6 } from '../models';
 import { TtsItem } from '../models';
 /**
  * TtsApi - axios parameter creator
@@ -237,11 +236,11 @@ export const TtsApiAxiosParamCreator = function (configuration?: Configuration) 
          * @summary TTSデータ更新（メタデータのみ）
          * @param {string} xUnisCustomerCd UNIS顧客CD
          * @param {string} ttsId 合成音声ID
-         * @param {Body6} [body] 
+         * @param {any} [body] ユーザー素材データ更新リクエストBody
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateUserTts: async (xUnisCustomerCd: string, ttsId: string, body?: Body6, options: any = {}): Promise<RequestArgs> => {
+        updateUserTts: async (xUnisCustomerCd: string, ttsId: string, body?: any, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'xUnisCustomerCd' is not null or undefined
             if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
                 throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling updateUserTts.');
@@ -362,11 +361,11 @@ export const TtsApiFp = function(configuration?: Configuration) {
          * @summary TTSデータ更新（メタデータのみ）
          * @param {string} xUnisCustomerCd UNIS顧客CD
          * @param {string} ttsId 合成音声ID
-         * @param {Body6} [body] 
+         * @param {any} [body] ユーザー素材データ更新リクエストBody
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateUserTts(xUnisCustomerCd: string, ttsId: string, body?: Body6, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TtsItem>> {
+        async updateUserTts(xUnisCustomerCd: string, ttsId: string, body?: any, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TtsItem>> {
             const localVarAxiosArgs = await TtsApiAxiosParamCreator(configuration).updateUserTts(xUnisCustomerCd, ttsId, body, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
@@ -433,11 +432,11 @@ export const TtsApiFactory = function (configuration?: Configuration, basePath?:
          * @summary TTSデータ更新（メタデータのみ）
          * @param {string} xUnisCustomerCd UNIS顧客CD
          * @param {string} ttsId 合成音声ID
-         * @param {Body6} [body] 
+         * @param {any} [body] ユーザー素材データ更新リクエストBody
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateUserTts(xUnisCustomerCd: string, ttsId: string, body?: Body6, options?: any): AxiosPromise<TtsItem> {
+        updateUserTts(xUnisCustomerCd: string, ttsId: string, body?: any, options?: any): AxiosPromise<TtsItem> {
             return TtsApiFp(configuration).updateUserTts(xUnisCustomerCd, ttsId, body, options).then((request) => request(axios, basePath));
         },
     };
@@ -505,12 +504,12 @@ export class TtsApi extends BaseAPI {
      * @summary TTSデータ更新（メタデータのみ）
      * @param {string} xUnisCustomerCd UNIS顧客CD
      * @param {string} ttsId 合成音声ID
-     * @param {Body6} [body] 
+     * @param {any} [body] ユーザー素材データ更新リクエストBody
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TtsApi
      */
-    public updateUserTts(xUnisCustomerCd: string, ttsId: string, body?: Body6, options?: any) {
+    public updateUserTts(xUnisCustomerCd: string, ttsId: string, body?: any, options?: any) {
         return TtsApiFp(this.configuration).updateUserTts(xUnisCustomerCd, ttsId, body, options).then((request) => request(this.axios, this.basePath));
     }
 }

@@ -1,8 +1,8 @@
 "use strict";
 
 const { constants, debuglog, timestamp } = require("umesse-lib/constants");
+const { validation } = require("umesse-lib/validation");
 const { dynamodbManager } = require("umesse-lib/utils/dynamodbManager");
-const { validation } = require("./validation");
 const { getCm } = require("./cm");
 
 // 外部連携データ取得（一覧・個別）
@@ -16,31 +16,28 @@ exports.getExternalCm = async (unisCustomerCd, external) => {
 
   try {
     // パラメーターチェック
-    const checkParams = validation.checkParams("getExternalCm", external);
+    const checkParams = validation.checkParams({
+      external: external,
+    });
     if (checkParams) throw checkParams;
 
+    const options = {
+      FilterExpression: "uploadSystem = :uploadSystem AND #status = :status",
+      ExpressionAttributeNames: {
+        "#status": "status",
+      },
+      ExpressionAttributeValues: {
+        ":uploadSystem": constants.cmUploadSystem[external.toUpperCase()],
+        ":status": "1",
+      },
+    };
     const res = await dynamodbManager.scan(
       constants.dynamoDbTable().external,
-      {}
+      options
     );
     if (!res || !res.Items.length) throw "not found";
 
     let json = res.Items;
-    if (external == "center") {
-      json = json.filter(
-        (item) =>
-          item.uploadSystem === constants.cmUploadSystem.CENTER &&
-          item.status === "1"
-      );
-    } else if (external == "ssence") {
-      json = json.filter(
-        (item) =>
-          item.uploadSystem === constants.cmUploadSystem.SSENCE &&
-          item.status === "1"
-      );
-    }
-    if (!json.length) throw "not found";
-
     if (unisCustomerCd) {
       json = json.filter((item) => item.unisCustomerCd === unisCustomerCd)[0];
     }
@@ -64,32 +61,27 @@ exports.completeExternalCm = async (unisCustomerCd, external, body) => {
 
   try {
     // パラメーターチェック
-    const checkParams = validation.checkParams("completeExternalCm", body);
+    const checkParams = validation.checkParams({
+      external: external,
+      body: body,
+    });
     if (checkParams) throw checkParams;
 
     // CM一覧から該当CMを取得
     const list = await getCm(unisCustomerCd);
     if (!list || !list.length) throw "not found";
-    const index = list.findIndex((item) => item.id === body.cmId);
+    const index = list.findIndex((item) => item.cmId === body.cmId);
     if (index < 0) throw "not found";
     const cm = list[index];
 
-    // CMステータス状態によるチェック
-    const checkCmStatus = validation.checkCmStatus(
-      "completeExternalCm",
-      cm.status
-    );
-    if (checkCmStatus) throw checkCmStatus;
+    // TODO: CMステータス状態によるチェック
 
-    const external = await this.getExternal(
-      unisCustomerCd,
-      external,
-      body.cmId
-    );
+    const external = await this.getExternalCm(unisCustomerCd, external);
     if (!external) throw "not found";
 
-    let res = "";
     const key = { unisCustomerCd: unisCustomerCd };
+    let options = "";
+    let res = "";
 
     if (body.dataProcessType == "01") {
       // 正常完了の場合
@@ -100,15 +92,21 @@ exports.completeExternalCm = async (unisCustomerCd, external, body) => {
       );
       if (!res) throw "delete failed";
 
-      if (external[0].dataProcessType == "03") {
+      if (external.dataProcessType == "03") {
+        cm.uploadSystem = "";
         cm.status = constants.cmStatus.COMPLETE;
       } else {
-        cm.status = constants.cmStatus[`${external.toUpperCase()}_COMPLETE`];
+        cm.status = constants.cmStatus.EXTERNAL_COMPLETE;
       }
     } else {
       // エラー終了の場合
-      const options = {
-        UpdateExpression: `SET status = :status, errorCode = :errorCode, errorMessage = :errorMessage, timestamp = :timestamp`,
+      options = {
+        UpdateExpression:
+          "SET #status = :status, errorCode = :errorCode, errorMessage = :errorMessage, #timestamp = :timestamp",
+        ExpressionAttributeNames: {
+          "#status": "status",
+          "#timestamp": "timestamp",
+        },
         ExpressionAttributeValues: {
           ":status": "9",
           ":errorCode": body.errorCode,
@@ -124,12 +122,12 @@ exports.completeExternalCm = async (unisCustomerCd, external, body) => {
       );
       if (!res) throw "update failed";
 
-      cm.status = constants.cmStatus[`${external.toUpperCase()}_ERROR`];
+      cm.status = constants.cmStatus.EXTERNAL_ERROR;
     }
 
     // DynamoDBのデータ更新
     cm.timestamp = timestamp();
-    const options = {
+    options = {
       UpdateExpression: `SET cm[${index}] = :cm`,
       ExpressionAttributeValues: {
         ":cm": cm,

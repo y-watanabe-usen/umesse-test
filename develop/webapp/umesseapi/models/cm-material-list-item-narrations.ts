@@ -22,7 +22,7 @@ export interface CmMaterialListItemNarrations {
      * @type {string}
      * @memberof CmMaterialListItemNarrations
      */
-    id?: any;
+    contentsId?: any;
     /**
      * ボリューム値
      * @type {number}

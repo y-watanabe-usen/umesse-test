@@ -22,7 +22,13 @@ export interface BgmItem {
      * @type {string}
      * @memberof BgmItem
      */
-    id?: any;
+    contentsId?: any;
+    /**
+     * カテゴリー
+     * @type {string}
+     * @memberof BgmItem
+     */
+    category?: any;
     /**
      * タイトル
      * @type {string}

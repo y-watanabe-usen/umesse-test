@@ -6,10 +6,10 @@ const { getExternalCm, completeExternalCm } = require("../../umesse/external");
  * CM外部連携完了（外部システム専用）
  * 外部連携したCMの結果を登録する
  *
- * body Body_9  (optional)
+ * body Object 外部連携完了リクエストBody (optional)
  * external String 外部システム区分
  * unisCustomerCd String UNIS顧客CD
- * returns inline_response_200_2
+ * returns ExternalCompleteItem
  **/
 exports.completeExternalCm = function (body, external, unisCustomerCd) {
   return new Promise(async function (resolve, reject) {
@@ -30,7 +30,7 @@ exports.completeExternalCm = function (body, external, unisCustomerCd) {
  *
  * external String 外部システム区分
  * unisCustomerCd String UNIS顧客CD
- * returns inline_response_200_1
+ * returns ExternalItem
  **/
 exports.getExternalCm = function (external, unisCustomerCd) {
   return new Promise(async function (resolve, reject) {

@@ -22,7 +22,7 @@ export interface CmMaterialListItemEndChime {
      * @type {string}
      * @memberof CmMaterialListItemEndChime
      */
-    id?: any;
+    contentsId?: any;
     /**
      * ボリューム値
      * @type {number}

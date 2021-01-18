@@ -20,40 +20,42 @@ const data = aws.DynamoDB.Converter.unmarshall(
   json["umesse-users"][0].PutRequest.Item
 );
 const bgmData = {
-  id: "bgm/サンプル01",
+  contentsId: "サンプル01",
+  category: "bgm",
   title: "サンプル01",
   description: "BGM・サンプル01",
   seconds: 60,
   industry: [
     {
-      cd: "01",
-      name: "業種01",
+      industryCd: "01",
+      industryName: "業種01",
     },
   ],
   scene: [
     {
-      cd: "01",
-      name: "シーン01",
+      sceneCd: "01",
+      sceneName: "シーン01",
     },
   ],
   timestamp: "2019-09-01T09:00:00+9:00",
 };
 const narrationData = {
-  id: "narration/サンプル05",
+  contentsId: "サンプル05",
+  category: "narration",
   title: "サンプル05",
   description: "ナレーション・サンプル05",
   manuscript: "あいうえお",
   seconds: 60,
   industry: [
     {
-      cd: "05",
-      name: "業種05",
+      industryCd: "05",
+      industryName: "業種05",
     },
   ],
   scene: [
     {
-      cd: "05",
-      name: "シーン05",
+      sceneCd: "05",
+      sceneName: "シーン05",
     },
   ],
   timestamp: "2019-09-01T09:00:00+9:00",
@@ -66,8 +68,18 @@ beforeAll(() => {
 // 署名付きデータ取得
 describe("署名付きデータ取得", () => {
   test("[success] 署名付きURLデータ取得", async () => {
-    const response = await getSignedUrl(data.cm[0].id);
+    const response = await getSignedUrl(data.cm[0].cmId, "cm");
     expect(response).toEqual({ url: expect.anything() });
+  });
+
+  test("[error] 署名付きURLデータ取得　データ存在しない", async () => {
+    const response = await getSignedUrl(data.cm[0].cmId, "none");
+    expect(response).toEqual({ message: "unknown category" });
+  });
+
+  test("[error] 署名付きURLデータ取得　データ存在しない", async () => {
+    const response = await getSignedUrl("", "cm");
+    expect(response).toEqual({ message: "params failed" });
   });
 });
 
@@ -76,8 +88,8 @@ describe("USEN素材データ取得", () => {
   test("[success] BGMデータ取得", async () => {
     const response = await getResource(
       "bgm",
-      bgmData.industry[0].cd,
-      bgmData.scene[0].cd
+      bgmData.industry[0].industryCd,
+      bgmData.scene[0].sceneCd
     );
     expect(response).toEqual([bgmData]);
   });
@@ -85,8 +97,8 @@ describe("USEN素材データ取得", () => {
   test("[success] ナレーションデータ取得", async () => {
     const response = await getResource(
       "narration",
-      narrationData.industry[0].cd,
-      narrationData.scene[0].cd
+      narrationData.industry[0].industryCd,
+      narrationData.scene[0].sceneCd
     );
     expect(response).toEqual([narrationData]);
   });
@@ -98,7 +110,7 @@ describe("ユーザー音声データ取得", () => {
     const response = await getUserResource(
       data.unisCustomerCd,
       "recording",
-      data.recording[0].id
+      data.recording[0].recordingId
     );
     expect(response).toEqual(data.recording[0]);
   });
@@ -107,7 +119,7 @@ describe("ユーザー音声データ取得", () => {
     const response = await getUserResource(
       data.unisCustomerCd,
       "tts",
-      data.tts[2].id
+      data.tts[2].ttsId
     );
     expect(response).toEqual(data.tts[2]);
   });
@@ -156,7 +168,7 @@ describe("ユーザー音声作成", () => {
     const response = await deleteUserResource(
       data.unisCustomerCd,
       "recording",
-      data.recording[0].id
+      data.recording[0].recordingId
     );
     expect(response).toEqual([
       data.recording[1],

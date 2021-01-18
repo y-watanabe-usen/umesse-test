@@ -14,49 +14,55 @@
 /**
  * 
  * @export
- * @interface WordItem
+ * @interface TemplateItem
  */
-export interface WordItem {
+export interface TemplateItem {
     /**
      * TTSテンプレートID
      * @type {string}
-     * @memberof WordItem
+     * @memberof TemplateItem
      */
-    id?: any;
+    contentsId?: any;
+    /**
+     * カテゴリー
+     * @type {string}
+     * @memberof TemplateItem
+     */
+    category?: any;
     /**
      * タイトル
      * @type {string}
-     * @memberof WordItem
+     * @memberof TemplateItem
      */
     title?: any;
     /**
      * 説明文
      * @type {string}
-     * @memberof WordItem
+     * @memberof TemplateItem
      */
     description?: any;
     /**
      * 
      * @type {string}
-     * @memberof WordItem
+     * @memberof TemplateItem
      */
     manuscript?: any;
     /**
      * 
      * @type {Array&lt;IndustryItem&gt;}
-     * @memberof WordItem
+     * @memberof TemplateItem
      */
     industry?: any;
     /**
      * 
      * @type {Array&lt;SceneItem&gt;}
-     * @memberof WordItem
+     * @memberof TemplateItem
      */
     scene?: any;
     /**
      * 
      * @type {string}
-     * @memberof WordItem
+     * @memberof TemplateItem
      */
     timestamp?: any;
 }

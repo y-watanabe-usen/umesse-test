@@ -29,7 +29,7 @@ describe("convert", () => {
         {
           body: JSON.stringify({
             unisCustomerCd: cmData.unisCustomerCd,
-            cmId: cmData.cm[0].id,
+            cmId: cmData.cm[0].cmId,
           }),
         },
       ],
@@ -69,7 +69,7 @@ describe("convert", () => {
         {
           body: JSON.stringify({
             unisCustomerCd: "999999999",
-            cmId: cmData.cm[1].id,
+            cmId: cmData.cm[1].cmId,
           }),
         },
       ],
@@ -99,7 +99,7 @@ describe("convert", () => {
         {
           body: JSON.stringify({
             unisCustomerCd: cmData.unisCustomerCd,
-            cmId: cmData.cm[1].id,
+            cmId: cmData.cm[1].cmId,
           }),
         },
       ],
@@ -114,7 +114,7 @@ describe("convert", () => {
         {
           body: JSON.stringify({
             unisCustomerCd: cmData.unisCustomerCd,
-            cmId: cmData.cm[2].id,
+            cmId: cmData.cm[2].cmId,
           }),
         },
       ],

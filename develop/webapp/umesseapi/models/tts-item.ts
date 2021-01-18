@@ -22,7 +22,7 @@ export interface TtsItem {
      * @type {string}
      * @memberof TtsItem
      */
-    id?: any;
+    ttsId?: any;
     /**
      * タイトル名
      * @type {string}

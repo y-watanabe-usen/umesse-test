@@ -14,31 +14,31 @@
 /**
  * 
  * @export
- * @interface Body3
+ * @interface ExternalCompleteItem
  */
-export interface Body3 {
+export interface ExternalCompleteItem {
     /**
      * 
      * @type {string}
-     * @memberof Body3
+     * @memberof ExternalCompleteItem
      */
-    filename?: any;
+    dataProcessType?: any;
     /**
      * 
      * @type {string}
-     * @memberof Body3
+     * @memberof ExternalCompleteItem
      */
-    recordedFile?: any;
+    cmId?: any;
     /**
      * 
      * @type {string}
-     * @memberof Body3
+     * @memberof ExternalCompleteItem
      */
-    title?: any;
+    errorCode?: any;
     /**
      * 
      * @type {string}
-     * @memberof Body3
+     * @memberof ExternalCompleteItem
      */
-    description?: any;
+    errorMessege?: any;
 }

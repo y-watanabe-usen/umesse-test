@@ -8,9 +8,9 @@ const {
   timestamp,
   generateId,
 } = require("umesse-lib/constants");
+const { validation } = require("umesse-lib/validation");
 const { dynamodbManager } = require("umesse-lib/utils/dynamodbManager");
 const { s3Manager } = require("umesse-lib/utils/s3Manager");
-const { validation } = require("./validation");
 
 // CM取得（一覧・個別）
 exports.getCm = async (unisCustomerCd, cmId) => {
@@ -23,7 +23,9 @@ exports.getCm = async (unisCustomerCd, cmId) => {
 
   try {
     // パラメーターチェック
-    const checkParams = validation.checkParams("getCm", unisCustomerCd);
+    const checkParams = validation.checkParams({
+      unisCustomerCd: unisCustomerCd,
+    });
     if (checkParams) throw checkParams;
 
     const key = { unisCustomerCd: unisCustomerCd };
@@ -41,7 +43,7 @@ exports.getCm = async (unisCustomerCd, cmId) => {
 
     let json = res.Item.cm;
     if (cmId) {
-      json = json.filter((item) => item.id === cmId)[0];
+      json = json.filter((item) => item.cmId === cmId)[0];
     }
     if (!json) throw "not found";
     return json;
@@ -63,7 +65,10 @@ exports.createCm = async (unisCustomerCd, body) => {
 
   try {
     // パラメーターチェック
-    const checkParams = validation.checkParams("createCm", body);
+    const checkParams = validation.checkParams({
+      unisCustomerCd: unisCustomerCd,
+      body: body,
+    });
     if (checkParams) throw checkParams;
 
     // ID生成
@@ -82,7 +87,7 @@ exports.createCm = async (unisCustomerCd, body) => {
 
     // DynamoDBのデータ更新
     const data = {
-      id: cmId,
+      cmId: cmId,
       materials: body.materials,
       productionType:
         "bgm" in body.materials
@@ -131,35 +136,32 @@ exports.updateCm = async (unisCustomerCd, cmId, body) => {
 
   try {
     // パラメーターチェック
-    const checkParams = validation.checkParams("updateCm", body);
+    const checkParams = validation.checkParams({
+      unisCustomerCd: unisCustomerCd,
+      cmId: cmId,
+      body: body,
+    });
     if (checkParams) throw checkParams;
 
     // CM一覧から該当CMを取得
     const list = await this.getCm(unisCustomerCd);
     if (!list || !list.length) throw "not found";
-    const index = list.findIndex((item) => item.id === cmId);
+    const index = list.findIndex((item) => item.cmId === cmId);
     if (index < 0) throw "not found";
     const cm = list[index];
 
-    // CMステータス状態によるチェック
-    const checkCmStatus = validation.checkCmStatus("updateCm", cm.status);
-    if (checkCmStatus) throw checkCmStatus;
+    // TODO: CMステータス状態によるチェック
 
     // CM作成中の場合
     if (cm.status == constants.cmStatus.CREATING) {
       // TODO: add sqs
       cm.status = constants.cmStatus.CONVERT;
-    }
-
-    // CMアップロード
-    if (body.uploadSystem == constants.cmUploadSystem.CENTER) {
-      // センターアップロードの場合
-      // TODO:
-      cm.status = constants.cmStatus.CENTER_UPLOADING;
-    } else if (body.uploadSystem == constants.cmUploadSystem.SSENCE) {
-      // S'senceアップロードの場合
-      // TODO:
-      cm.status = constants.cmStatus.SSENCE_UPLOADING;
+    } else {
+      // CMアップロード
+      if (body.uploadSystem) {
+        // TODO:
+        cm.status = constants.cmStatus.EXTERNAL_UPLOADING;
+      }
     }
 
     // DynamoDBのデータ更新
@@ -204,19 +206,20 @@ exports.deleteCm = async (unisCustomerCd, cmId) => {
 
   try {
     // パラメーターチェック
-    const checkParams = validation.checkParams("deleteCm", cmId);
+    const checkParams = validation.checkParams({
+      unisCustomerCd: unisCustomerCd,
+      cmId: cmId,
+    });
     if (checkParams) throw checkParams;
 
     // CM一覧から該当CMを取得
     const list = await this.getCm(unisCustomerCd);
     if (!list || !list.length) throw "not found";
-    const index = list.findIndex((item) => item.id === cmId);
+    const index = list.findIndex((item) => item.cmId === cmId);
     if (index < 0) throw "not found";
     const cm = list[index];
 
-    // CMステータス状態によるチェック
-    const checkCmStatus = validation.checkCmStatus("deleteCm", cm.status);
-    if (checkCmStatus) throw checkCmStatus;
+    // TODO: CMステータス状態によるチェック
 
     // S3上のCMを削除
     await s3Manager.delete(
@@ -254,7 +257,7 @@ exports.deleteCm = async (unisCustomerCd, cmId) => {
 };
 
 // CM結合処理
-function generateCm(unisCustomerCd, id, materials) {
+function generateCm(unisCustomerCd, cmId, materials) {
   return new Promise(async function (resolve, reject) {
     // FIXME: materials 一旦仮
     const list = [
@@ -265,8 +268,8 @@ function generateCm(unisCustomerCd, id, materials) {
       "narration/サンプル02.mp3",
       "narration/サンプル03.mp3",
     ];
-    const workDir = `/tmp/${unisCustomerCd}/mix/${id}`;
-    const ffmpeg = `ffmpeg`;
+    const workDir = `/tmp/${unisCustomerCd}/mix/${cmId}`;
+    const ffmpeg = `ffmpeg -hide_banner`;
 
     try {
       execSync(`mkdir -p ${workDir} && rm -f ${workDir}/*`);
@@ -281,7 +284,7 @@ function generateCm(unisCustomerCd, id, materials) {
       }
 
       // FIXME: 各パラメーターをチューニング
-      const command = `${ffmpeg} -hide_banner ${paths} \
+      const command = `${ffmpeg} ${paths} \
         -filter_complex ' \
           [0:a]volume=0.5[start_chime]; \
           [1:a]volume=0.5,adelay=3s|3s[end_chime]; \
@@ -293,26 +296,26 @@ function generateCm(unisCustomerCd, id, materials) {
           [join][bgm]amix=duration=shortest[mix]; \
           [mix][end_chime]acrossfade=d=3[last]; \
           [start_chime][last]concat=n=2:v=0:a=1 \
-        ' -y ${workDir}/${id}.mp3`;
+        ' -y ${workDir}/${cmId}.mp3`;
       debuglog(command);
       execSync(command);
 
       // FIXME: get seconds... 他に方法があるか
       const seconds = execSync(
-        `${ffmpeg} -hide_banner -i ${workDir}/${id}.mp3 2>&1 | \
+        `${ffmpeg} -hide_banner -i ${workDir}/${cmId}.mp3 2>&1 | \
           grep 'Duration' | cut -d ' ' -f 4 | cut -d '.' -f 1`
       )
         .toString()
         .replace(/\n/g, "");
       debuglog(`seconds: ${seconds}`);
 
-      const fileStream = fs.createReadStream(`${workDir}/${id}.mp3`);
+      const fileStream = fs.createReadStream(`${workDir}/${cmId}.mp3`);
       fileStream.on("error", (e) => {
         throw e;
       });
       await s3Manager.put(
         constants.s3Bucket().users,
-        `users/${unisCustomerCd}/cm/${id}.mp3`,
+        `users/${unisCustomerCd}/cm/${cmId}.mp3`,
         fileStream
       );
       debuglog("generate complete");

@@ -14,49 +14,55 @@
 /**
  * 
  * @export
- * @interface Body2
+ * @interface FreeItem
  */
-export interface Body2 {
+export interface FreeItem {
     /**
-     * 
+     * TTSフリーワードID
      * @type {string}
-     * @memberof Body2
+     * @memberof FreeItem
+     */
+    contentsId?: any;
+    /**
+     * カテゴリー
+     * @type {string}
+     * @memberof FreeItem
+     */
+    category?: any;
+    /**
+     * タイトル
+     * @type {string}
+     * @memberof FreeItem
      */
     title?: any;
     /**
-     * 
+     * 説明文
      * @type {string}
-     * @memberof Body2
+     * @memberof FreeItem
      */
     description?: any;
     /**
      * 
      * @type {string}
-     * @memberof Body2
+     * @memberof FreeItem
      */
-    startDate?: any;
+    manuscript?: any;
     /**
      * 
-     * @type {string}
-     * @memberof Body2
-     */
-    endDate?: any;
-    /**
-     * 
-     * @type {IndustryItem}
-     * @memberof Body2
+     * @type {Array&lt;IndustryItem&gt;}
+     * @memberof FreeItem
      */
     industry?: any;
     /**
      * 
-     * @type {SceneItem}
-     * @memberof Body2
+     * @type {Array&lt;SceneItem&gt;}
+     * @memberof FreeItem
      */
     scene?: any;
     /**
      * 
      * @type {string}
-     * @memberof Body2
+     * @memberof FreeItem
      */
-    uploadSystem?: any;
+    timestamp?: any;
 }

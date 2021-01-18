@@ -3,8 +3,18 @@
 var utils = require('../utils/writer.js');
 var Resources = require('../service/ResourcesService');
 
-module.exports.getSignedUrl = function getSignedUrl (req, res, next, id) {
-  Resources.getSignedUrl(id)
+module.exports.createTts = function createTts (req, res, next, body) {
+  Resources.createTts(body)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
+
+module.exports.getSignedUrl = function getSignedUrl (req, res, next, id, category) {
+  Resources.getSignedUrl(id, category)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -33,6 +43,16 @@ module.exports.listChime = function listChime (req, res, next) {
     });
 };
 
+module.exports.listFree = function listFree (req, res, next, industryCd, sceneCd) {
+  Resources.listFree(industryCd, sceneCd)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
+
 module.exports.listNarration = function listNarration (req, res, next, industryCd, sceneCd) {
   Resources.listNarration(industryCd, sceneCd)
     .then(function (response) {
@@ -43,8 +63,8 @@ module.exports.listNarration = function listNarration (req, res, next, industryC
     });
 };
 
-module.exports.listTts = function listTts (req, res, next, industryCd, sceneCd) {
-  Resources.listTts(industryCd, sceneCd)
+module.exports.listTemplate = function listTemplate (req, res, next, industryCd, sceneCd) {
+  Resources.listTemplate(industryCd, sceneCd)
     .then(function (response) {
       utils.writeJson(res, response);
     })

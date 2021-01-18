@@ -16,7 +16,6 @@ import { Configuration } from '../configuration';
 // Some imports not used depending on template conditions
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
-import { Body4 } from '../models';
 import { RecordingItem } from '../models';
 /**
  * RecordingApi - axios parameter creator
@@ -237,11 +236,11 @@ export const RecordingApiAxiosParamCreator = function (configuration?: Configura
          * @summary 録音データ更新（メタデータのみ）
          * @param {string} xUnisCustomerCd UNIS顧客CD
          * @param {string} recordingId 録音音声ID
-         * @param {Body4} [body] 
+         * @param {any} [body] ユーザー素材データ更新リクエストBody
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateUserRecording: async (xUnisCustomerCd: string, recordingId: string, body?: Body4, options: any = {}): Promise<RequestArgs> => {
+        updateUserRecording: async (xUnisCustomerCd: string, recordingId: string, body?: any, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'xUnisCustomerCd' is not null or undefined
             if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
                 throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling updateUserRecording.');
@@ -362,11 +361,11 @@ export const RecordingApiFp = function(configuration?: Configuration) {
          * @summary 録音データ更新（メタデータのみ）
          * @param {string} xUnisCustomerCd UNIS顧客CD
          * @param {string} recordingId 録音音声ID
-         * @param {Body4} [body] 
+         * @param {any} [body] ユーザー素材データ更新リクエストBody
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateUserRecording(xUnisCustomerCd: string, recordingId: string, body?: Body4, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RecordingItem>> {
+        async updateUserRecording(xUnisCustomerCd: string, recordingId: string, body?: any, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<RecordingItem>> {
             const localVarAxiosArgs = await RecordingApiAxiosParamCreator(configuration).updateUserRecording(xUnisCustomerCd, recordingId, body, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
@@ -433,11 +432,11 @@ export const RecordingApiFactory = function (configuration?: Configuration, base
          * @summary 録音データ更新（メタデータのみ）
          * @param {string} xUnisCustomerCd UNIS顧客CD
          * @param {string} recordingId 録音音声ID
-         * @param {Body4} [body] 
+         * @param {any} [body] ユーザー素材データ更新リクエストBody
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateUserRecording(xUnisCustomerCd: string, recordingId: string, body?: Body4, options?: any): AxiosPromise<RecordingItem> {
+        updateUserRecording(xUnisCustomerCd: string, recordingId: string, body?: any, options?: any): AxiosPromise<RecordingItem> {
             return RecordingApiFp(configuration).updateUserRecording(xUnisCustomerCd, recordingId, body, options).then((request) => request(axios, basePath));
         },
     };
@@ -505,12 +504,12 @@ export class RecordingApi extends BaseAPI {
      * @summary 録音データ更新（メタデータのみ）
      * @param {string} xUnisCustomerCd UNIS顧客CD
      * @param {string} recordingId 録音音声ID
-     * @param {Body4} [body] 
+     * @param {any} [body] ユーザー素材データ更新リクエストBody
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof RecordingApi
      */
-    public updateUserRecording(xUnisCustomerCd: string, recordingId: string, body?: Body4, options?: any) {
+    public updateUserRecording(xUnisCustomerCd: string, recordingId: string, body?: any, options?: any) {
         return RecordingApiFp(this.configuration).updateUserRecording(xUnisCustomerCd, recordingId, body, options).then((request) => request(this.axios, this.basePath));
     }
 }

@@ -16,9 +16,8 @@ import { Configuration } from '../configuration';
 // Some imports not used depending on template conditions
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
-import { Body9 } from '../models';
-import { InlineResponse2001 } from '../models';
-import { InlineResponse2002 } from '../models';
+import { ExternalCompleteItem } from '../models';
+import { ExternalItem } from '../models';
 /**
  * ExternalApi - axios parameter creator
  * @export
@@ -30,11 +29,11 @@ export const ExternalApiAxiosParamCreator = function (configuration?: Configurat
          * @summary CM外部連携完了（外部システム専用）
          * @param {string} external 外部システム区分
          * @param {string} unisCustomerCd UNIS顧客CD
-         * @param {Body9} [body] 
+         * @param {any} [body] 外部連携完了リクエストBody
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        completeExternalCm: async (external: string, unisCustomerCd: string, body?: Body9, options: any = {}): Promise<RequestArgs> => {
+        completeExternalCm: async (external: string, unisCustomerCd: string, body?: any, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'external' is not null or undefined
             if (external === null || external === undefined) {
                 throw new RequiredError('external','Required parameter external was null or undefined when calling completeExternalCm.');
@@ -176,11 +175,11 @@ export const ExternalApiFp = function(configuration?: Configuration) {
          * @summary CM外部連携完了（外部システム専用）
          * @param {string} external 外部システム区分
          * @param {string} unisCustomerCd UNIS顧客CD
-         * @param {Body9} [body] 
+         * @param {any} [body] 外部連携完了リクエストBody
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async completeExternalCm(external: string, unisCustomerCd: string, body?: Body9, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2002>> {
+        async completeExternalCm(external: string, unisCustomerCd: string, body?: any, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalCompleteItem>> {
             const localVarAxiosArgs = await ExternalApiAxiosParamCreator(configuration).completeExternalCm(external, unisCustomerCd, body, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
@@ -195,7 +194,7 @@ export const ExternalApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getExternalCm(external: string, unisCustomerCd: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2001>> {
+        async getExternalCm(external: string, unisCustomerCd: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalItem>> {
             const localVarAxiosArgs = await ExternalApiAxiosParamCreator(configuration).getExternalCm(external, unisCustomerCd, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
@@ -209,7 +208,7 @@ export const ExternalApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listExternalCm(external: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<InlineResponse2001>>> {
+        async listExternalCm(external: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ExternalItem>>> {
             const localVarAxiosArgs = await ExternalApiAxiosParamCreator(configuration).listExternalCm(external, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
@@ -230,11 +229,11 @@ export const ExternalApiFactory = function (configuration?: Configuration, baseP
          * @summary CM外部連携完了（外部システム専用）
          * @param {string} external 外部システム区分
          * @param {string} unisCustomerCd UNIS顧客CD
-         * @param {Body9} [body] 
+         * @param {any} [body] 外部連携完了リクエストBody
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        completeExternalCm(external: string, unisCustomerCd: string, body?: Body9, options?: any): AxiosPromise<InlineResponse2002> {
+        completeExternalCm(external: string, unisCustomerCd: string, body?: any, options?: any): AxiosPromise<ExternalCompleteItem> {
             return ExternalApiFp(configuration).completeExternalCm(external, unisCustomerCd, body, options).then((request) => request(axios, basePath));
         },
         /**
@@ -245,7 +244,7 @@ export const ExternalApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getExternalCm(external: string, unisCustomerCd: string, options?: any): AxiosPromise<InlineResponse2001> {
+        getExternalCm(external: string, unisCustomerCd: string, options?: any): AxiosPromise<ExternalItem> {
             return ExternalApiFp(configuration).getExternalCm(external, unisCustomerCd, options).then((request) => request(axios, basePath));
         },
         /**
@@ -255,7 +254,7 @@ export const ExternalApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listExternalCm(external: string, options?: any): AxiosPromise<Array<InlineResponse2001>> {
+        listExternalCm(external: string, options?: any): AxiosPromise<Array<ExternalItem>> {
             return ExternalApiFp(configuration).listExternalCm(external, options).then((request) => request(axios, basePath));
         },
     };
@@ -273,12 +272,12 @@ export class ExternalApi extends BaseAPI {
      * @summary CM外部連携完了（外部システム専用）
      * @param {string} external 外部システム区分
      * @param {string} unisCustomerCd UNIS顧客CD
-     * @param {Body9} [body] 
+     * @param {any} [body] 外部連携完了リクエストBody
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ExternalApi
      */
-    public completeExternalCm(external: string, unisCustomerCd: string, body?: Body9, options?: any) {
+    public completeExternalCm(external: string, unisCustomerCd: string, body?: any, options?: any) {
         return ExternalApiFp(this.configuration).completeExternalCm(external, unisCustomerCd, body, options).then((request) => request(this.axios, this.basePath));
     }
     /**

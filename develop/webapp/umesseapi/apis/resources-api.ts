@@ -18,9 +18,11 @@ import { Configuration } from '../configuration';
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
 import { BgmItem } from '../models';
 import { ChimeItem } from '../models';
+import { CreateTtsItem } from '../models';
+import { FreeItem } from '../models';
 import { InlineResponse200 } from '../models';
 import { NarrationItem } from '../models';
-import { WordItem } from '../models';
+import { TemplateItem } from '../models';
 /**
  * ResourcesApi - axios parameter creator
  * @export
@@ -28,16 +30,60 @@ import { WordItem } from '../models';
 export const ResourcesApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
-         * 試聴再生、音声素材アップロードのURLを取得する
-         * @summary S3オブジェクトの署名付きURLの取得
-         * @param {string} id 音源ID
+         * TTS音声を作成する
+         * @summary TTS音声作成
+         * @param {any} [body] TTS作成リクエストBody
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSignedUrl: async (id: string, options: any = {}): Promise<RequestArgs> => {
+        createTts: async (body?: any, options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/tts`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            const query = new URLSearchParams(localVarUrlObj.search);
+            for (const key in localVarQueryParameter) {
+                query.set(key, localVarQueryParameter[key]);
+            }
+            for (const key in options.query) {
+                query.set(key, options.query[key]);
+            }
+            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            const needsSerialization = (typeof body !== "string") || localVarRequestOptions.headers['Content-Type'] === 'application/json';
+            localVarRequestOptions.data =  needsSerialization ? JSON.stringify(body !== undefined ? body : {}) : (body || "");
+
+            return {
+                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * 試聴再生、音声素材アップロードのURLを取得する
+         * @summary S3オブジェクトの署名付きURLの取得
+         * @param {string} id 音源ID
+         * @param {string} category カテゴリー
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSignedUrl: async (id: string, category: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             if (id === null || id === undefined) {
                 throw new RequiredError('id','Required parameter id was null or undefined when calling getSignedUrl.');
+            }
+            // verify required parameter 'category' is not null or undefined
+            if (category === null || category === undefined) {
+                throw new RequiredError('category','Required parameter category was null or undefined when calling getSignedUrl.');
             }
             const localVarPath = `/signedUrl`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -52,6 +98,10 @@ export const ResourcesApiAxiosParamCreator = function (configuration?: Configura
 
             if (id !== undefined) {
                 localVarQueryParameter['id'] = id;
+            }
+
+            if (category !== undefined) {
+                localVarQueryParameter['category'] = category;
             }
 
             const query = new URLSearchParams(localVarUrlObj.search);
@@ -144,6 +194,50 @@ export const ResourcesApiAxiosParamCreator = function (configuration?: Configura
             };
         },
         /**
+         * TTSのフリーワード素材を一覧で取得する
+         * @summary TTSフリーワード一覧
+         * @param {string} [industryCd] 業種CD
+         * @param {string} [sceneCd] シーンCD
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listFree: async (industryCd?: string, sceneCd?: string, options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/free`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (industryCd !== undefined) {
+                localVarQueryParameter['industryCd'] = industryCd;
+            }
+
+            if (sceneCd !== undefined) {
+                localVarQueryParameter['sceneCd'] = sceneCd;
+            }
+
+            const query = new URLSearchParams(localVarUrlObj.search);
+            for (const key in localVarQueryParameter) {
+                query.set(key, localVarQueryParameter[key]);
+            }
+            for (const key in options.query) {
+                query.set(key, options.query[key]);
+            }
+            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * ナレーション素材を一覧で取得する
          * @summary ナレーション
          * @param {string} [industryCd] 業種CD
@@ -195,8 +289,8 @@ export const ResourcesApiAxiosParamCreator = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listTts: async (industryCd?: string, sceneCd?: string, options: any = {}): Promise<RequestArgs> => {
-            const localVarPath = `/tts`;
+        listTemplate: async (industryCd?: string, sceneCd?: string, options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/template`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
             let baseOptions;
@@ -241,14 +335,29 @@ export const ResourcesApiAxiosParamCreator = function (configuration?: Configura
 export const ResourcesApiFp = function(configuration?: Configuration) {
     return {
         /**
-         * 試聴再生、音声素材アップロードのURLを取得する
-         * @summary S3オブジェクトの署名付きURLの取得
-         * @param {string} id 音源ID
+         * TTS音声を作成する
+         * @summary TTS音声作成
+         * @param {any} [body] TTS作成リクエストBody
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getSignedUrl(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse200>> {
-            const localVarAxiosArgs = await ResourcesApiAxiosParamCreator(configuration).getSignedUrl(id, options);
+        async createTts(body?: any, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateTtsItem>> {
+            const localVarAxiosArgs = await ResourcesApiAxiosParamCreator(configuration).createTts(body, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
+         * 試聴再生、音声素材アップロードのURLを取得する
+         * @summary S3オブジェクトの署名付きURLの取得
+         * @param {string} id 音源ID
+         * @param {string} category カテゴリー
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getSignedUrl(id: string, category: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse200>> {
+            const localVarAxiosArgs = await ResourcesApiAxiosParamCreator(configuration).getSignedUrl(id, category, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -282,6 +391,21 @@ export const ResourcesApiFp = function(configuration?: Configuration) {
             };
         },
         /**
+         * TTSのフリーワード素材を一覧で取得する
+         * @summary TTSフリーワード一覧
+         * @param {string} [industryCd] 業種CD
+         * @param {string} [sceneCd] シーンCD
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async listFree(industryCd?: string, sceneCd?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<FreeItem>>> {
+            const localVarAxiosArgs = await ResourcesApiAxiosParamCreator(configuration).listFree(industryCd, sceneCd, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
          * ナレーション素材を一覧で取得する
          * @summary ナレーション
          * @param {string} [industryCd] 業種CD
@@ -304,8 +428,8 @@ export const ResourcesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listTts(industryCd?: string, sceneCd?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<WordItem>>> {
-            const localVarAxiosArgs = await ResourcesApiAxiosParamCreator(configuration).listTts(industryCd, sceneCd, options);
+        async listTemplate(industryCd?: string, sceneCd?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<TemplateItem>>> {
+            const localVarAxiosArgs = await ResourcesApiAxiosParamCreator(configuration).listTemplate(industryCd, sceneCd, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -321,14 +445,25 @@ export const ResourcesApiFp = function(configuration?: Configuration) {
 export const ResourcesApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     return {
         /**
-         * 試聴再生、音声素材アップロードのURLを取得する
-         * @summary S3オブジェクトの署名付きURLの取得
-         * @param {string} id 音源ID
+         * TTS音声を作成する
+         * @summary TTS音声作成
+         * @param {any} [body] TTS作成リクエストBody
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSignedUrl(id: string, options?: any): AxiosPromise<InlineResponse200> {
-            return ResourcesApiFp(configuration).getSignedUrl(id, options).then((request) => request(axios, basePath));
+        createTts(body?: any, options?: any): AxiosPromise<CreateTtsItem> {
+            return ResourcesApiFp(configuration).createTts(body, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * 試聴再生、音声素材アップロードのURLを取得する
+         * @summary S3オブジェクトの署名付きURLの取得
+         * @param {string} id 音源ID
+         * @param {string} category カテゴリー
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSignedUrl(id: string, category: string, options?: any): AxiosPromise<InlineResponse200> {
+            return ResourcesApiFp(configuration).getSignedUrl(id, category, options).then((request) => request(axios, basePath));
         },
         /**
          * BGM素材を一覧で取得する
@@ -350,6 +485,17 @@ export const ResourcesApiFactory = function (configuration?: Configuration, base
             return ResourcesApiFp(configuration).listChime(options).then((request) => request(axios, basePath));
         },
         /**
+         * TTSのフリーワード素材を一覧で取得する
+         * @summary TTSフリーワード一覧
+         * @param {string} [industryCd] 業種CD
+         * @param {string} [sceneCd] シーンCD
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        listFree(industryCd?: string, sceneCd?: string, options?: any): AxiosPromise<Array<FreeItem>> {
+            return ResourcesApiFp(configuration).listFree(industryCd, sceneCd, options).then((request) => request(axios, basePath));
+        },
+        /**
          * ナレーション素材を一覧で取得する
          * @summary ナレーション
          * @param {string} [industryCd] 業種CD
@@ -368,8 +514,8 @@ export const ResourcesApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listTts(industryCd?: string, sceneCd?: string, options?: any): AxiosPromise<Array<WordItem>> {
-            return ResourcesApiFp(configuration).listTts(industryCd, sceneCd, options).then((request) => request(axios, basePath));
+        listTemplate(industryCd?: string, sceneCd?: string, options?: any): AxiosPromise<Array<TemplateItem>> {
+            return ResourcesApiFp(configuration).listTemplate(industryCd, sceneCd, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -382,15 +528,27 @@ export const ResourcesApiFactory = function (configuration?: Configuration, base
  */
 export class ResourcesApi extends BaseAPI {
     /**
-     * 試聴再生、音声素材アップロードのURLを取得する
-     * @summary S3オブジェクトの署名付きURLの取得
-     * @param {string} id 音源ID
+     * TTS音声を作成する
+     * @summary TTS音声作成
+     * @param {any} [body] TTS作成リクエストBody
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ResourcesApi
      */
-    public getSignedUrl(id: string, options?: any) {
-        return ResourcesApiFp(this.configuration).getSignedUrl(id, options).then((request) => request(this.axios, this.basePath));
+    public createTts(body?: any, options?: any) {
+        return ResourcesApiFp(this.configuration).createTts(body, options).then((request) => request(this.axios, this.basePath));
+    }
+    /**
+     * 試聴再生、音声素材アップロードのURLを取得する
+     * @summary S3オブジェクトの署名付きURLの取得
+     * @param {string} id 音源ID
+     * @param {string} category カテゴリー
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ResourcesApi
+     */
+    public getSignedUrl(id: string, category: string, options?: any) {
+        return ResourcesApiFp(this.configuration).getSignedUrl(id, category, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * BGM素材を一覧で取得する
@@ -414,6 +572,18 @@ export class ResourcesApi extends BaseAPI {
         return ResourcesApiFp(this.configuration).listChime(options).then((request) => request(this.axios, this.basePath));
     }
     /**
+     * TTSのフリーワード素材を一覧で取得する
+     * @summary TTSフリーワード一覧
+     * @param {string} [industryCd] 業種CD
+     * @param {string} [sceneCd] シーンCD
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ResourcesApi
+     */
+    public listFree(industryCd?: string, sceneCd?: string, options?: any) {
+        return ResourcesApiFp(this.configuration).listFree(industryCd, sceneCd, options).then((request) => request(this.axios, this.basePath));
+    }
+    /**
      * ナレーション素材を一覧で取得する
      * @summary ナレーション
      * @param {string} [industryCd] 業種CD
@@ -434,7 +604,7 @@ export class ResourcesApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof ResourcesApi
      */
-    public listTts(industryCd?: string, sceneCd?: string, options?: any) {
-        return ResourcesApiFp(this.configuration).listTts(industryCd, sceneCd, options).then((request) => request(this.axios, this.basePath));
+    public listTemplate(industryCd?: string, sceneCd?: string, options?: any) {
+        return ResourcesApiFp(this.configuration).listTemplate(industryCd, sceneCd, options).then((request) => request(this.axios, this.basePath));
     }
 }

@@ -137,7 +137,7 @@ exports.constants = Object.freeze({
         };
     }
   },
-  // SQS QUEUE URL 設定
+  // TODO: SQS QUEUE URL 設定
   sqsQueueUrl: function () {
     switch (this.environment) {
       case "local":
@@ -151,6 +151,23 @@ exports.constants = Object.freeze({
     }
   },
 
+  // TODO: TTS 設定
+  ttsConfig: function () {
+    switch (this.environment) {
+      case "local":
+      case "localstack":
+      case "dev":
+      case "stg":
+      case "prod":
+      default:
+        return {
+          host: "api.voicetext.jp",
+          path: "/v1/tts",
+          key: "yck1tgf1x2jl3m51",
+        };
+    }
+  },
+
   // CMステータス
   cmStatus: {
     DELETE: "00", // CM削除(ユーザーミスによる復活のための定義)
@@ -159,12 +176,9 @@ exports.constants = Object.freeze({
     CONVERT: "03", // CMエンコード中
     SHARING: "04", // CM共有中
     ERROR: "09", // CMエラー
-    CENTER_UPLOADING: "11", // センターアップロード中
-    CENTER_COMPLETE: "12", // センターアップロード完了
-    CENTER_ERROR: "19", // センターアップロードエラー
-    SSENCE_UPLOADING: "21", // S'senceアップロード中
-    SSENCE_COMPLETE: "22", // S'senceアップロード完了
-    SSENCE_ERROR: "29", // S'senceアップロードエラー
+    EXTERNAL_UPLOADING: "11", // 外部システムアップロード中
+    EXTERNAL_COMPLETE: "12", // 外部システムアップロード完了
+    EXTERNAL_ERROR: "19", // 外部システムアップロードエラー
   },
 
   // CMタイプ
@@ -179,10 +193,14 @@ exports.constants = Object.freeze({
     SSENCE: "02",
   },
 
-  // ユーザー作成の音声区分
-  userResource: {
+  // コンテンツのカテゴリー
+  resourceCategory: {
+    CM: "cm",
     RECORDING: "recording",
     TTS: "tts",
+    BGM: "bgm",
+    CHIME: "chime",
+    NARRATION: "narration",
   },
 });
 

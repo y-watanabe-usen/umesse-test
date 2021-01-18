@@ -19,7 +19,7 @@ beforeAll(() => {
 // 共有CMデータ取得
 describe("共有CMデータ取得", () => {
   test("[success] 共有CMデータ取得", async () => {
-    const response = await getShareCm(data.unisCustomerCd, data.cm[0].id);
+    const response = await getShareCm(data.unisCustomerCd, data.cm[0].cmId);
     expect(response).toEqual(data.cm[0]);
   });
 

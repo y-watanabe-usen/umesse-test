@@ -32,13 +32,7 @@ paths:
       # security:
       #   - ApiKeyAuth: []
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                unisCustomerCd:
-                  type: string
+        $ref: "#/components/requestBodies/AuthRequest"
       responses:
         200:
           description: successful response
@@ -124,13 +118,7 @@ paths:
         # - $ref: "#/components/parameters/Token"
         - $ref: "#/components/parameters/UnisCustomerCd"
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                materials:
-                  $ref: "#/components/schemas/CmMaterialListItem"
+        $ref: "#/components/requestBodies/CmCreateRequest"
       responses:
         200:
           description: successful response
@@ -188,30 +176,7 @@ paths:
         # - $ref: "#/components/parameters/Token"
         - $ref: "#/components/parameters/UnisCustomerCd"
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                title:
-                  type: string
-                  example: "サンプル"
-                description:
-                  type: string
-                  example: "サンプル"
-                startDate:
-                  type: string
-                  example: "2019-09-01T09:00:00+9:00"
-                endDate:
-                  type: string
-                  example: "9999-12-31T23:59:59+09:00"
-                industry:
-                  $ref: "#/components/schemas/IndustryItem"
-                scene:
-                  $ref: "#/components/schemas/SceneItem"
-                uploadSystem:
-                  type: string
-                  example: "01: センター, 02: S'sence"
+        $ref: "#/components/requestBodies/CmUpdateRequest"
       responses:
         200:
           description: successful response
@@ -295,22 +260,7 @@ paths:
         # - $ref: "#/components/parameters/Token"
         - $ref: "#/components/parameters/UnisCustomerCd"
       requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                filename:
-                  type: string
-                recordedFile:
-                  type: string
-                  format: binary
-                title:
-                  type: string
-                  example: "サンプル"
-                description:
-                  type: string
-                  example: "サンプル"
+        $ref: "#/components/requestBodies/UserResourceCreateRequest"
       responses:
         200:
           description: successful response
@@ -369,17 +319,7 @@ paths:
         # - $ref: "#/components/parameters/Token"
         - $ref: "#/components/parameters/UnisCustomerCd"
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                title:
-                  type: string
-                  example: "サンプル"
-                description:
-                  type: string
-                  example: "サンプル"
+        $ref: "#/components/requestBodies/UserResourceUpdateRequest"
       responses:
         200:
           description: successful response
@@ -463,22 +403,7 @@ paths:
         # - $ref: "#/components/parameters/Token"
         - $ref: "#/components/parameters/UnisCustomerCd"
       requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              properties:
-                filename:
-                  type: string
-                recordedFile:
-                  type: string
-                  format: binary
-                title:
-                  type: string
-                  example: "サンプル"
-                description:
-                  type: string
-                  example: "サンプル"
+        $ref: "#/components/requestBodies/UserResourceCreateRequest"
       responses:
         200:
           description: successful response
@@ -537,17 +462,7 @@ paths:
         # - $ref: "#/components/parameters/Token"
         - $ref: "#/components/parameters/UnisCustomerCd"
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                title:
-                  type: string
-                  example: "サンプル"
-                description:
-                  type: string
-                  example: "サンプル"
+        $ref: "#/components/requestBodies/UserResourceUpdateRequest"
       responses:
         200:
           description: successful response
@@ -662,14 +577,7 @@ paths:
         # - $ref: "#/components/parameters/Token"
         - $ref: "#/components/parameters/UnisCustomerCd"
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                uploadSystem:
-                  type: string
-                  example: "01: センター, 02: S'sence"
+        $ref: "#/components/requestBodies/UploadSystemRequest"
       responses:
         200:
           description: successful response
@@ -697,15 +605,6 @@ paths:
         - $ref: "#/components/parameters/CmId"
         # - $ref: "#/components/parameters/Token"
         - $ref: "#/components/parameters/UnisCustomerCd"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                endDate:
-                  type: string
-                  example: "掲載終了日時（固定）"
       responses:
         200:
           description: successful response
@@ -940,13 +839,13 @@ paths:
         5XX:
           $ref: "#/components/responses/Unexpected"
 
-  /tts:
+  /free:
     get:
       tags:
         - resources
-      summary: TTSテンプレート一覧
-      description: TTSのテンプレート素材を一覧で取得する
-      operationId: listTts
+      summary: TTSフリーワード一覧
+      description: TTSのフリーワード素材を一覧で取得する
+      operationId: listFree
       # security:
       #   - ApiKeyAuth: []
       parameters:
@@ -971,7 +870,48 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/WordItem"
+                  $ref: "#/components/schemas/FreeItem"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        5XX:
+          $ref: "#/components/responses/Unexpected"
+
+  /template:
+    get:
+      tags:
+        - resources
+      summary: TTSテンプレート一覧
+      description: TTSのテンプレート素材を一覧で取得する
+      operationId: listTemplate
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        # - $ref: "#/components/parameters/Token"
+        - name: industryCd
+          in: query
+          description: 業種CD
+          schema:
+            type: string
+            example: "001"
+        - name: sceneCd
+          in: query
+          description: シーンCD
+          schema:
+            type: string
+            example: "001"
+      responses:
+        200:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TemplateItem"
         400:
           $ref: "#/components/responses/BadRequest"
         401:
@@ -999,6 +939,13 @@ paths:
           schema:
             type: string
             example: "123456789-c-12345678"
+        - name: category
+          in: query
+          description: カテゴリー
+          required: true
+          schema:
+            type: string
+            example: "cm"
       responses:
         200:
           description: successful response
@@ -1009,6 +956,33 @@ paths:
                   url:
                     type: string
                     example: "https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        5XX:
+          $ref: "#/components/responses/Unexpected"
+
+  /tts:
+    post:
+      tags:
+        - resources
+      summary: TTS音声作成
+      description: TTS音声を作成する
+      operationId: createTts
+      # security:
+      #   - ApiKeyAuth: []
+      requestBody:
+        $ref: "#/components/requestBodies/TtsRequest"
+      responses:
+        200:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CreateTtsItem"
         400:
           $ref: "#/components/responses/BadRequest"
         401:
@@ -1042,14 +1016,7 @@ paths:
             application/json:
               schema:
                 items:
-                  properties:
-                    unisCustomerCd:
-                      type: string
-                      example: "123456789"
-                    cmMetas:
-                      type: array
-                      items:
-                        $ref: "#/components/schemas/ExternalItem"
+                  $ref: "#/components/schemas/ExternalItem"
         400:
           $ref: "#/components/responses/BadRequest"
         401:
@@ -1089,14 +1056,7 @@ paths:
           content:
             application/json:
               schema:
-                properties:
-                  unisCustomerCd:
-                    type: string
-                    example: "123456789"
-                  cmMetas:
-                    type: array
-                    items:
-                      $ref: "#/components/schemas/ExternalItem"
+                $ref: "#/components/schemas/ExternalItem"
         400:
           $ref: "#/components/responses/BadRequest"
         401:
@@ -1129,42 +1089,14 @@ paths:
             type: string
             example: "123456789"
       requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                dataProcessType:
-                  type: string
-                  example: "01：正常完了、09：取込失敗"
-                cmId:
-                  type: string
-                  example: "123456789-c-12345678"
-                errorCode:
-                  type: string
-                  example: "E0001"
-                errorMessege:
-                  type: string
-                  example: "CM名に規定外の文字が使用されています"
+        $ref: "#/components/requestBodies/ExternalCompleteRequest"
       responses:
         200:
           description: successful response
           content:
             application/json:
               schema:
-                properties:
-                  dataProcessType:
-                    type: string
-                    example: "01：正常完了、09：取込失敗"
-                  cmId:
-                    type: string
-                    example: "123456789-c-12345678"
-                  errorCode:
-                    type: string
-                    example: "E0001"
-                  errorMessege:
-                    type: string
-                    example: "CM名に規定外の文字が使用されています"
+                $ref: "#/components/schemas/ExternalCompleteItem"
         400:
           $ref: "#/components/responses/BadRequest"
         401:
@@ -1275,7 +1207,7 @@ components:
           example: "2019-09-01T09:00:00+9:00"
     CmItem:
       properties:
-        id:
+        cmId:
           type: string
           description: CM ID
           example: "123456789-c-12345678"
@@ -1325,10 +1257,10 @@ components:
           type: array
           items:
             properties:
-              id:
+              contentsId:
                 type: string
                 description: ナレーションID
-                example: "narration/サンプル01"
+                example: "サンプル01"
               volume:
                 type: integer
                 description: ボリューム値
@@ -1336,10 +1268,10 @@ components:
         startChime:
           type: object
           properties:
-            id:
+            contentsId:
               type: string
               description: チャイムID
-              example: "chime/サンプル01"
+              example: "サンプル01"
             volume:
               type: integer
               description: ボリューム値
@@ -1347,10 +1279,10 @@ components:
         endChime:
           type: object
           properties:
-            id:
+            contentsId:
               type: string
               description: チャイムID
-              example: "chime/サンプル02"
+              example: "サンプル02"
             volume:
               type: integer
               description: ボリューム値
@@ -1358,20 +1290,24 @@ components:
         bgm:
           type: object
           properties:
-            id:
+            contentsId:
               type: string
               description: BGM ID
-              example: "bgm/サンプル01"
+              example: "サンプル01"
             volume:
               type: integer
               description: ボリューム値
               example: 50
     BgmItem:
       properties:
-        id:
+        contentsId:
           type: string
           description: BGM ID
-          example: "bgm/サンプル01"
+          example: "サンプル01"
+        category:
+          type: string
+          description: カテゴリー
+          example: "bgm"
         title:
           type: string
           description: タイトル
@@ -1395,10 +1331,14 @@ components:
           example: "2019-09-01T09:00:00+9:00"
     NarrationItem:
       properties:
-        id:
+        contentsId:
           type: string
           description: ナレーションID
-          example: "narration/サンプル01"
+          example: "サンプル01"
+        category:
+          type: string
+          description: カテゴリー
+          example: "narration"
         title:
           type: string
           description: タイトル
@@ -1426,10 +1366,14 @@ components:
           example: "2019-09-01T09:00:00+9:00"
     ChimeItem:
       properties:
-        id:
+        contentsId:
           type: string
           description: チャイムID
-          example: "chime/サンプル01"
+          example: "サンプル01"
+        category:
+          type: string
+          description: カテゴリー
+          example: "chime"
         title:
           type: string
           description: タイトル
@@ -1445,12 +1389,46 @@ components:
         timestamp:
           type: string
           example: "2019-09-01T09:00:00+9:00"
-    WordItem:
+    FreeItem:
       properties:
-        id:
+        contentsId:
+          type: string
+          description: TTSフリーワードID
+          example: "123456789"
+        category:
+          type: string
+          description: カテゴリー
+          example: "free"
+        title:
+          type: string
+          description: タイトル
+          example: "18時30分閉店"
+        description:
+          type: string
+          description: 説明文
+          example: "放送開始日2020年10月15日 有効期限2020年10月20日"
+        manuscript:
+          type: string
+          example: "本日はご来店いただきましてありがとうございます。当店は18時30分閉店です"
+        industry:
+          items:
+            $ref: "#/components/schemas/IndustryItem"
+        scene:
+          items:
+            $ref: "#/components/schemas/SceneItem"
+        timestamp:
+          type: string
+          example: "2019-09-01T09:00:00+9:00"
+    TemplateItem:
+      properties:
+        contentsId:
           type: string
           description: TTSテンプレートID
           example: "123456789"
+        category:
+          type: string
+          description: カテゴリー
+          example: "template"
         title:
           type: string
           description: タイトル
@@ -1473,27 +1451,27 @@ components:
           example: "2019-09-01T09:00:00+9:00"
     IndustryItem:
       properties:
-        cd:
+        industryCd:
           type: string
           description: 業種CD
           example: "01"
-        name:
+        industryName:
           type: string
           description: 業種名
           example: "業種名"
     SceneItem:
       properties:
-        cd:
+        sceneCd:
           type: string
           description: シーンCD
           example: "01"
-        name:
+        sceneName:
           type: string
           description: シーン名
           example: "シーン名"
     RecordingItem:
       properties:
-        id:
+        recordingId:
           type: string
           description: 録音音声ID
           example: "123456789-r-12345678"
@@ -1514,7 +1492,7 @@ components:
           example: "2019-09-01T09:00:00+9:00"
     TtsItem:
       properties:
-        id:
+        ttsId:
           type: string
           description: 合成音声ID
           example: "123456789-t-12345678"
@@ -1533,7 +1511,25 @@ components:
         timestamp:
           type: string
           example: "2019-09-01T09:00:00+9:00"
+    CreateTtsItem:
+      properties:
+        body:
+          type: string
+          format: base64
+          example: "base64 string"
+        isBase64Encoded:
+          type: array
+          example: "true"
     ExternalItem:
+      properties:
+        unisCustomerCd:
+          type: string
+          example: "123456789"
+        cmMetas:
+          type: array
+          items:
+            $ref: "#/components/schemas/ExternalItem"
+    ExternalMetaItem:
       properties:
         dataProcessType:
           type: string
@@ -1585,6 +1581,20 @@ components:
           type: string
           description: シーンCD
           example: "001"
+    ExternalCompleteItem:
+      properties:
+        dataProcessType:
+          type: string
+          example: "01：正常完了、09：取込失敗"
+        cmId:
+          type: string
+          example: "123456789-c-12345678"
+        errorCode:
+          type: string
+          example: "E0001"
+        errorMessege:
+          type: string
+          example: "CM名に規定外の文字が使用されています"
     Error:
       description: Error
       type: object
@@ -1604,6 +1614,131 @@ components:
       type: apiKey
       in: header
       name: x-api-key
+
+  requestBodies:
+    AuthRequest:
+      description: 認証リクエストBody
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              unisCustomerCd:
+                type: string
+    CmCreateRequest:
+      description: CMデータ作成リクエストBody
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              materials:
+                $ref: "#/components/schemas/CmMaterialListItem"
+    CmUpdateRequest:
+      description: CMデータ更新リクエストBody
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+                example: "サンプル"
+              description:
+                type: string
+                example: "サンプル"
+              startDate:
+                type: string
+                example: "2019-09-01T09:00:00+9:00"
+              endDate:
+                type: string
+                example: "9999-12-31T23:59:59+09:00"
+              industry:
+                $ref: "#/components/schemas/IndustryItem"
+              scene:
+                $ref: "#/components/schemas/SceneItem"
+              uploadSystem:
+                type: string
+                example: "01: センター, 02: S'sence"
+    UserResourceCreateRequest:
+      description: ユーザー素材データ作成リクエストBody
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              filename:
+                type: string
+              recordedFile:
+                type: string
+                format: binary
+              title:
+                type: string
+                example: "サンプル"
+              description:
+                type: string
+                example: "サンプル"
+    UserResourceUpdateRequest:
+      description: ユーザー素材データ更新リクエストBody
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+                example: "サンプル"
+              description:
+                type: string
+                example: "サンプル"
+    UploadSystemRequest:
+      description: CM外部連携システムリクエストBody
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              uploadSystem:
+                type: string
+                example: "01: センター, 02: S'sence"
+    TtsRequest:
+      description: TTS作成リクエストBody
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              text:
+                type: string
+                example: "こんにちは。"
+              speaker:
+                type: string
+                example: "risa"
+              pitch:
+                type: string
+                example: "100"
+              speed:
+                type: string
+                example: "100"
+    ExternalCompleteRequest:
+      description: 外部連携完了リクエストBody
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              dataProcessType:
+                type: string
+                example: "01：正常完了、09：取込失敗"
+              cmId:
+                type: string
+                example: "123456789-c-12345678"
+              errorCode:
+                type: string
+                example: "E0001"
+              errorMessege:
+                type: string
+                example: "CM名に規定外の文字が使用されています"
 
   responses:
     BadRequest:

@@ -1,26 +1,40 @@
 "use strict";
 
-const { constants, debuglog, timestamp, generateId } = require("umesse-lib/constants");
+const https = require("https");
+const querystring = require("querystring");
+const {
+  constants,
+  debuglog,
+  timestamp,
+  generateId,
+} = require("umesse-lib/constants");
+const { validation } = require("umesse-lib/validation");
 const { dynamodbManager } = require("umesse-lib/utils/dynamodbManager");
 const { s3Manager } = require("umesse-lib/utils/s3Manager");
-const { validation } = require("./validation");
 
-exports.getResource = async (filter, industryCd, sceneCd) => {
+exports.getResource = async (category, industryCd, sceneCd) => {
   debuglog(
     `[getResource] ${JSON.stringify({
-      filter: filter,
+      category: category,
       industryCd: industryCd,
       sceneCd: sceneCd,
     })}`
   );
 
-  const options = {
-    FilterExpression: "contains(id, :id)",
-    ExpressionAttributeValues: {
-      ":id": filter,
-    },
-  };
   try {
+    // パラメーターチェック
+    const checkParams = validation.checkParams({
+      category: category,
+    });
+    if (checkParams) throw checkParams;
+
+    const options = {
+      FilterExpression: "category = :category",
+      ExpressionAttributeValues: {
+        ":category": category,
+      },
+    };
+
     const res = await dynamodbManager.scan(
       constants.dynamoDbTable().contents,
       options
@@ -30,11 +44,13 @@ exports.getResource = async (filter, industryCd, sceneCd) => {
     let json = res.Items;
     if (industryCd) {
       json = json.filter((item) =>
-        item.industry.some((el) => el.cd === industryCd)
+        item.industry.some((el) => el.industryCd === industryCd)
       );
     }
     if (sceneCd) {
-      json = json.filter((item) => item.scene.some((el) => el.cd === sceneCd));
+      json = json.filter((item) =>
+        item.scene.some((el) => el.sceneCd === sceneCd)
+      );
     }
     if (!json) throw "not found";
     return json;
@@ -45,7 +61,7 @@ exports.getResource = async (filter, industryCd, sceneCd) => {
 };
 
 // 署名付きURL取得
-exports.getSignedUrl = async (id) => {
+exports.getSignedUrl = async (id, category) => {
   debuglog(
     `[getSignedUrl] ${JSON.stringify({
       id: id,
@@ -53,19 +69,35 @@ exports.getSignedUrl = async (id) => {
   );
 
   try {
+    // パラメーターチェック
+    const checkParams = validation.checkParams({
+      id: id,
+      category: category,
+    });
+    if (checkParams) throw checkParams;
+
     let bucket = "";
     let path = "";
-    let match = id.match(`([0-9]{9})-([crt])-[0-9a-z]{8}`);
-    if (match && match.length) {
-      bucket = constants.s3Bucket().users;
-      let div = "";
-      if (match[2] == "c") div = "cm";
-      else if (match[2] == "r") div = "recording";
-      else if (match[2] == "t") div = "tts";
-      path = `users/${match[1]}/${div}/${id}.wav`;
-    } else {
-      bucket = constants.s3Bucket().contents;
-      path = id;
+    let file = "";
+    switch (category) {
+      case constants.resourceCategory.CM:
+        file = `${id}.aac`;
+      case constants.resourceCategory.RECORDING:
+        file = `${id}.wav`;
+      case constants.resourceCategory.TTS:
+        file = `${id}.mp3`;
+        const str = id.split("-");
+        bucket = constants.s3Bucket().users;
+        path = `users/${str[0]}/${category}/${file}`;
+        break;
+      case constants.resourceCategory.BGM:
+      case constants.resourceCategory.CHIME:
+      case constants.resourceCategory.NARRATION:
+        bucket = constants.s3Bucket().contents;
+        path = `${category}/${id}.mp3`;
+        break;
+      default:
+        throw "unknown category";
     }
 
     const res = await s3Manager.getSignedUrl(bucket, path);
@@ -78,27 +110,69 @@ exports.getSignedUrl = async (id) => {
   }
 };
 
+// TTS作成
+exports.createTts = async (body) => {
+  debuglog(
+    `[createTts] ${JSON.stringify({
+      body: body,
+    })}`
+  );
+
+  try {
+    // パラメーターチェック
+    const checkParams = validation.checkParams({
+      body: body,
+    });
+    if (checkParams) throw checkParams;
+
+    const postData = querystring.stringify({
+      ...body,
+      format: "mp3",
+    });
+    const options = {
+      host: constants.ttsConfig().host,
+      path: constants.ttsConfig().path,
+      port: 443,
+      auth: `${constants.ttsConfig().key}:`,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Content-Length": postData.length,
+      },
+    };
+    debuglog(JSON.stringify({ options: options, postData: postData }));
+
+    const data = await requestTts(options, postData);
+    if (data instanceof Error) throw data;
+    return { body: data, isBase64Encoded: true };
+  } catch (e) {
+    // TODO: error handle
+    console.log(e);
+    return { message: e };
+  }
+};
+
 // ユーザー作成の音声取得（一覧・個別）
-exports.getUserResource = async (unisCustomerCd, filter, id) => {
+exports.getUserResource = async (unisCustomerCd, category, id) => {
   debuglog(
     `[getUserResource] ${JSON.stringify({
       unisCustomerCd: unisCustomerCd,
-      filter: filter,
+      category: category,
       id: id,
     })}`
   );
 
   try {
     // パラメーターチェック
-    const checkParams = validation.checkParams(
-      "getUserResource",
-      unisCustomerCd
-    );
+    const checkParams = validation.checkParams({
+      unisCustomerCd: unisCustomerCd,
+      category: category,
+    });
     if (checkParams) throw checkParams;
 
     const key = { unisCustomerCd: unisCustomerCd };
     const options = {
-      ProjectionExpression: filter,
+      ProjectionExpression: category,
     };
     debuglog(JSON.stringify({ key: key, options: options }));
 
@@ -109,9 +183,9 @@ exports.getUserResource = async (unisCustomerCd, filter, id) => {
     );
     if (!res || !res.Item) throw "not found";
 
-    let json = res.Item[filter];
+    let json = res.Item[category];
     if (id) {
-      json = json.filter((item) => item.id === id)[0];
+      json = json.filter((item) => item[`${category}Id`] === id)[0];
     }
     if (!json) throw "not found";
     return json;
@@ -123,30 +197,31 @@ exports.getUserResource = async (unisCustomerCd, filter, id) => {
 };
 
 // ユーザー作成の音声新規作成
-exports.createUserResource = async (unisCustomerCd, filter, body) => {
+exports.createUserResource = async (unisCustomerCd, category, body) => {
   debuglog(
     `[createUserResource] ${JSON.stringify({
       unisCustomerCd: unisCustomerCd,
-      filter: filter,
+      category: category,
     })}`
   );
 
   try {
     // パラメーターチェック
-    const checkParams = validation.checkParams("createUserResource", body);
+    const checkParams = validation.checkParams({
+      unisCustomerCd: unisCustomerCd,
+      category: category,
+      body: body,
+    });
     if (checkParams) throw checkParams;
 
     // ID作成
-    let div = "";
-    if (filter == constants.userResource.RECORDING) div = "r";
-    else if (filter == constants.userResource.TTS) div = "t";
-    const id = generateId(unisCustomerCd, div);
+    const id = generateId(unisCustomerCd, category.slice(0, 1));
 
     const binaryData = Buffer.from(body["recordedFile"], "binary");
     // S3へPUT
     let res = await s3Manager.put(
       constants.s3Bucket().users,
-      `users/${unisCustomerCd}/${filter}/${id}.wav`,
+      `users/${unisCustomerCd}/${category}/${id}.wav`,
       binaryData
     );
     if (!res) throw "put failed";
@@ -161,9 +236,9 @@ exports.createUserResource = async (unisCustomerCd, filter, body) => {
     };
     const key = { unisCustomerCd: unisCustomerCd };
     const options = {
-      UpdateExpression: "SET #filter = list_append(#filter, :data)",
+      UpdateExpression: "SET #category = list_append(#category, :data)",
       ExpressionAttributeNames: {
-        "#filter": filter,
+        "#category": category,
       },
       ExpressionAttributeValues: {
         ":data": [data],
@@ -179,7 +254,7 @@ exports.createUserResource = async (unisCustomerCd, filter, body) => {
     );
     if (!res) throw "update failed";
 
-    let json = res.Attributes[filter].pop();
+    let json = res.Attributes[category].pop();
     return json;
   } catch (e) {
     // TODO: error handle
@@ -189,11 +264,11 @@ exports.createUserResource = async (unisCustomerCd, filter, body) => {
 };
 
 // ユーザー作成の音声更新
-exports.updateUserResource = async (unisCustomerCd, filter, id, body) => {
+exports.updateUserResource = async (unisCustomerCd, category, id, body) => {
   debuglog(
     `[updateUserResource] ${JSON.stringify({
       unisCustomerCd: unisCustomerCd,
-      filter: filter,
+      category: category,
       id: id,
       body: body,
     })}`
@@ -201,13 +276,17 @@ exports.updateUserResource = async (unisCustomerCd, filter, id, body) => {
 
   try {
     // パラメーターチェック
-    const checkParams = validation.checkParams("updateUserResource", body);
+    const checkParams = validation.checkParams({
+      unisCustomerCd: unisCustomerCd,
+      category: category,
+      body: body,
+    });
     if (checkParams) throw checkParams;
 
     // 音声一覧から該当音声を取得
-    const list = await this.getUserResource(unisCustomerCd, filter);
+    const list = await this.getUserResource(unisCustomerCd, category);
     if (!list || !list.length) throw "not found";
-    const index = list.findIndex((item) => item.id === id);
+    const index = list.findIndex((item) => item[`${category}Id`] === id);
     if (index < 0) throw "not found";
     const resource = list[index];
 
@@ -218,9 +297,9 @@ exports.updateUserResource = async (unisCustomerCd, filter, id, body) => {
     resource.timestamp = timestamp();
     const key = { unisCustomerCd: unisCustomerCd };
     const options = {
-      UpdateExpression: `SET #filter[${index}] = :resource`,
+      UpdateExpression: `SET #category[${index}] = :resource`,
       ExpressionAttributeNames: {
-        "#filter": filter,
+        "#category": category,
       },
       ExpressionAttributeValues: {
         ":resource": resource,
@@ -236,7 +315,7 @@ exports.updateUserResource = async (unisCustomerCd, filter, id, body) => {
     );
     if (!res) throw "update failed";
 
-    let json = res.Attributes[filter][index];
+    let json = res.Attributes[category][index];
     return json;
   } catch (e) {
     // TODO: error handle
@@ -246,35 +325,42 @@ exports.updateUserResource = async (unisCustomerCd, filter, id, body) => {
 };
 
 // ユーザー作成の音声削除
-exports.deleteUserResource = async (unisCustomerCd, filter, id) => {
+exports.deleteUserResource = async (unisCustomerCd, category, id) => {
   debuglog(
     `[deleteUserResource] ${JSON.stringify({
       unisCustomerCd: unisCustomerCd,
-      filter: filter,
+      category: category,
       id: id,
     })}`
   );
 
   try {
+    // パラメーターチェック
+    const checkParams = validation.checkParams({
+      unisCustomerCd: unisCustomerCd,
+      category: category,
+    });
+    if (checkParams) throw checkParams;
+
     // 音声一覧から該当音声を取得
-    const list = await this.getUserResource(unisCustomerCd, filter);
+    const list = await this.getUserResource(unisCustomerCd, category);
     if (!list || !list.length) throw "not found";
-    const index = list.findIndex((item) => item.id === id);
+    const index = list.findIndex((item) => item[`${category}Id`] === id);
     if (index < 0) throw "not found";
     const resource = list[index];
 
     // S3上の録音音声を削除
     await s3Manager.delete(
       constants.s3Bucket().users,
-      `users/${unisCustomerCd}/${filter}/${id}.wav`
+      `users/${unisCustomerCd}/${category}/${id}.wav`
     );
 
     // DynamoDBのデータ更新
     const key = { unisCustomerCd: unisCustomerCd };
     const options = {
-      UpdateExpression: `REMOVE #filter[${index}]`,
+      UpdateExpression: `REMOVE #category[${index}]`,
       ExpressionAttributeNames: {
-        "#filter": filter,
+        "#category": category,
       },
       ReturnValues: "UPDATED_NEW",
     };
@@ -287,7 +373,7 @@ exports.deleteUserResource = async (unisCustomerCd, filter, id) => {
     );
     if (!res) throw "update failed";
 
-    let json = res.Attributes[filter];
+    let json = res.Attributes[category];
     return json;
   } catch (e) {
     // TODO: error handle
@@ -295,3 +381,28 @@ exports.deleteUserResource = async (unisCustomerCd, filter, id) => {
     return { message: e };
   }
 };
+
+// TTS作成
+function requestTts(options, postData) {
+  return new Promise(function (resolve, reject) {
+    const request = https.request(options, (response) => {
+      let data = [];
+      response.on("data", (chunk) => {
+        data.push(chunk);
+      });
+      response.on("end", () => {
+        if (response.statusCode == 200) {
+          resolve(Buffer.concat(data).toString("base64"));
+        } else {
+          console.log(`${response.statusMessage}: ${data}`);
+          reject(`${response.statusMessage}: ${data}`);
+        }
+      });
+      response.on("error", (error) => {
+        reject(error);
+      });
+    });
+    request.write(postData);
+    request.end();
+  });
+}

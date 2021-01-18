@@ -22,7 +22,13 @@ export interface ChimeItem {
      * @type {string}
      * @memberof ChimeItem
      */
-    id?: any;
+    contentsId?: any;
+    /**
+     * カテゴリー
+     * @type {string}
+     * @memberof ChimeItem
+     */
+    category?: any;
     /**
      * タイトル
      * @type {string}

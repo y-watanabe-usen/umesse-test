@@ -22,11 +22,11 @@ export interface IndustryItem {
      * @type {string}
      * @memberof IndustryItem
      */
-    cd?: any;
+    industryCd?: any;
     /**
      * 業種名
      * @type {string}
      * @memberof IndustryItem
      */
-    name?: any;
+    industryName?: any;
 }

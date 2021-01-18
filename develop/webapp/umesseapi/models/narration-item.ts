@@ -22,7 +22,13 @@ export interface NarrationItem {
      * @type {string}
      * @memberof NarrationItem
      */
-    id?: any;
+    contentsId?: any;
+    /**
+     * カテゴリー
+     * @type {string}
+     * @memberof NarrationItem
+     */
+    category?: any;
     /**
      * タイトル
      * @type {string}
