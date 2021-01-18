@@ -17,8 +17,8 @@ import { Configuration } from '../configuration';
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
 import { Body10 } from '../models';
-import { InlineResponse2001 } from '../models';
 import { InlineResponse2002 } from '../models';
+import { InlineResponse2003 } from '../models';
 /**
  * ExternalApi - axios parameter creator
  * @export
@@ -180,7 +180,7 @@ export const ExternalApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async completeExternalCm(external: string, unisCustomerCd: string, body?: Body10, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2002>> {
+        async completeExternalCm(external: string, unisCustomerCd: string, body?: Body10, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2003>> {
             const localVarAxiosArgs = await ExternalApiAxiosParamCreator(configuration).completeExternalCm(external, unisCustomerCd, body, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
@@ -195,7 +195,7 @@ export const ExternalApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getExternalCm(external: string, unisCustomerCd: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2001>> {
+        async getExternalCm(external: string, unisCustomerCd: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2002>> {
             const localVarAxiosArgs = await ExternalApiAxiosParamCreator(configuration).getExternalCm(external, unisCustomerCd, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
@@ -209,7 +209,7 @@ export const ExternalApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listExternalCm(external: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<InlineResponse2001>>> {
+        async listExternalCm(external: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<InlineResponse2002>>> {
             const localVarAxiosArgs = await ExternalApiAxiosParamCreator(configuration).listExternalCm(external, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
@@ -234,7 +234,7 @@ export const ExternalApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        completeExternalCm(external: string, unisCustomerCd: string, body?: Body10, options?: any): AxiosPromise<InlineResponse2002> {
+        completeExternalCm(external: string, unisCustomerCd: string, body?: Body10, options?: any): AxiosPromise<InlineResponse2003> {
             return ExternalApiFp(configuration).completeExternalCm(external, unisCustomerCd, body, options).then((request) => request(axios, basePath));
         },
         /**
@@ -245,7 +245,7 @@ export const ExternalApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getExternalCm(external: string, unisCustomerCd: string, options?: any): AxiosPromise<InlineResponse2001> {
+        getExternalCm(external: string, unisCustomerCd: string, options?: any): AxiosPromise<InlineResponse2002> {
             return ExternalApiFp(configuration).getExternalCm(external, unisCustomerCd, options).then((request) => request(axios, basePath));
         },
         /**
@@ -255,7 +255,7 @@ export const ExternalApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listExternalCm(external: string, options?: any): AxiosPromise<Array<InlineResponse2001>> {
+        listExternalCm(external: string, options?: any): AxiosPromise<Array<InlineResponse2002>> {
             return ExternalApiFp(configuration).listExternalCm(external, options).then((request) => request(axios, basePath));
         },
     };

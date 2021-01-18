@@ -21,6 +21,7 @@ import { Body9 } from '../models';
 import { ChimeItem } from '../models';
 import { FreeItem } from '../models';
 import { InlineResponse200 } from '../models';
+import { InlineResponse2001 } from '../models';
 import { NarrationItem } from '../models';
 import { TemplateItem } from '../models';
 /**
@@ -341,7 +342,7 @@ export const ResourcesApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createTts(body?: Body9, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<string>> {
+        async createTts(body?: Body9, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<InlineResponse2001>>> {
             const localVarAxiosArgs = await ResourcesApiAxiosParamCreator(configuration).createTts(body, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
@@ -451,7 +452,7 @@ export const ResourcesApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createTts(body?: Body9, options?: any): AxiosPromise<string> {
+        createTts(body?: Body9, options?: any): AxiosPromise<Array<InlineResponse2001>> {
             return ResourcesApiFp(configuration).createTts(body, options).then((request) => request(axios, basePath));
         },
         /**

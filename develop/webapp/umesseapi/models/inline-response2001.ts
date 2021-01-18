@@ -22,11 +22,11 @@ export interface InlineResponse2001 {
      * @type {string}
      * @memberof InlineResponse2001
      */
-    unisCustomerCd?: any;
+    body?: any;
     /**
      * 
-     * @type {Array&lt;ExternalItem&gt;}
+     * @type {Array}
      * @memberof InlineResponse2001
      */
-    cmMetas?: any;
+    isBase64Encoded?: any;
 }

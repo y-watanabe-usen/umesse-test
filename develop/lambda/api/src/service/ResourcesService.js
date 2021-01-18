@@ -11,13 +11,13 @@ const {
  * TTS音声を作成する
  *
  * body Body_9  (optional)
- * returns byte[]
+ * returns List
  **/
 exports.createTts = function (body) {
   return new Promise(async function (resolve, reject) {
     var response = {};
     const json = await createTts(body);
-    response["audio/mpeg"] = json;
+    response["application/json"] = json;
     if (Object.keys(response).length > 0 && !json.message) {
       resolve(response[Object.keys(response)[0]]);
     } else {

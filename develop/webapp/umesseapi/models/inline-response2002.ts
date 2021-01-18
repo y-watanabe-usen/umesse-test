@@ -22,23 +22,11 @@ export interface InlineResponse2002 {
      * @type {string}
      * @memberof InlineResponse2002
      */
-    dataProcessType?: any;
+    unisCustomerCd?: any;
     /**
      * 
-     * @type {string}
+     * @type {Array&lt;ExternalItem&gt;}
      * @memberof InlineResponse2002
      */
-    cmId?: any;
-    /**
-     * 
-     * @type {string}
-     * @memberof InlineResponse2002
-     */
-    errorCode?: any;
-    /**
-     * 
-     * @type {string}
-     * @memberof InlineResponse2002
-     */
-    errorMessege?: any;
+    cmMetas?: any;
 }
