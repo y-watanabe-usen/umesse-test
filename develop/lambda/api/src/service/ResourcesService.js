@@ -1,9 +1,9 @@
 "use strict";
 
 const {
+  createTts,
   getResource,
   getSignedUrl,
-  createTts,
 } = require("../../umesse/resources");
 
 /**

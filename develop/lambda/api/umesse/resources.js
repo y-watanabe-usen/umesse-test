@@ -125,13 +125,26 @@ exports.createTts = async (body) => {
     });
     if (checkParams) throw checkParams;
 
+    const postData = querystring.stringify({
+      ...body,
+      format: "mp3",
+    });
     const options = {
-      
+      host: constants.ttsConfig().host,
+      path: constants.ttsConfig().path,
+      port: 443,
+      auth: `${constants.ttsConfig().key}:`,
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Content-Length": postData.length,
+      },
     };
-    const data = {
+    debuglog(JSON.stringify({ options: options, postData: postData }));
 
-    };
-    return data;
+    const data = await requestTts(options, postData);
+    if (data instanceof Error) throw data;
+    return { body: data, isBase64Encoded: true };
   } catch (e) {
     // TODO: error handle
     console.log(e);
@@ -368,3 +381,28 @@ exports.deleteUserResource = async (unisCustomerCd, category, id) => {
     return { message: e };
   }
 };
+
+// TTS作成
+function requestTts(options, postData) {
+  return new Promise(function (resolve, reject) {
+    const request = https.request(options, (response) => {
+      let data = [];
+      response.on("data", (chunk) => {
+        data.push(chunk);
+      });
+      response.on("end", () => {
+        if (response.statusCode == 200) {
+          resolve(Buffer.concat(data).toString("base64"));
+        } else {
+          console.log(`${response.statusMessage}: ${data}`);
+          reject(`${response.statusMessage}: ${data}`);
+        }
+      });
+      response.on("error", (error) => {
+        reject(error);
+      });
+    });
+    request.write(postData);
+    request.end();
+  });
+}

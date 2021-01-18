@@ -5,7 +5,6 @@ const { constants } = require("./constants");
 exports.validation = {
   checkParams: (params) => {
     // TODO:
-    console.log(params);
     if (!params) return "params failed";
     for (let [key, value] of Object.entries(params)) {
       if (!value) return "params failed";

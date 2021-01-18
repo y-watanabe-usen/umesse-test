@@ -137,7 +137,7 @@ exports.constants = Object.freeze({
         };
     }
   },
-  // SQS QUEUE URL 設定
+  // TODO: SQS QUEUE URL 設定
   sqsQueueUrl: function () {
     switch (this.environment) {
       case "local":
@@ -151,17 +151,12 @@ exports.constants = Object.freeze({
     }
   },
 
-  // TTS キー
+  // TODO: TTS 設定
   ttsConfig: function () {
     switch (this.environment) {
       case "local":
       case "localstack":
       case "dev":
-        return {
-          host: "api.voicetext.jp",
-          path: "/v1/tts",
-          key: "wprtc1co1d4c9ezd",
-        };
       case "stg":
       case "prod":
       default:
