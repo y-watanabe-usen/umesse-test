@@ -31,7 +31,7 @@ export default function recordingStore() {
   };
 
   const getUserRecording = async (id: string) => {
-    const item = state.recordingItems.find((element) => element.id === id);
+    const item = state.recordingItems.find((element) => element.recordingId === id);
     return item;
     //    const item = await umesseApi.getUserRecording(
     //      state.recordingItems[0].id,
