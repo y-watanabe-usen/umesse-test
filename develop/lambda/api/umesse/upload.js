@@ -129,7 +129,7 @@ exports.createUploadCm = async (unisCustomerCd, cmId, body) => {
 };
 
 // CM外部連携解除
-exports.deleteUploadCm = async (unisCustomerCd, cmId, body) => {
+exports.deleteUploadCm = async (unisCustomerCd, cmId) => {
   debuglog(
     `[deleteUploadCm] ${JSON.stringify({
       unisCustomerCd: unisCustomerCd,
@@ -160,7 +160,7 @@ exports.deleteUploadCm = async (unisCustomerCd, cmId, body) => {
       unisCustomerCd: unisCustomerCd,
       dataProcessType: "03",
       cmId: cmId,
-      endDateTime: body.endDate,
+      endDateTime: timestamp(),
       uploadSystem: cm.uploadSystem,
       status: "1",
       timestamp: timestamp(),

@@ -98,7 +98,7 @@ exports.listUserRecording = function (xUnisCustomerCd) {
  * 録音データ更新（メタデータのみ）
  * 録音音声素材の情報を更新する
  *
- * body Body_4  (optional)
+ * body Object ユーザー素材データ更新リクエストBody (optional)
  * recordingId String 録音音声ID
  * xUnisCustomerCd String UNIS顧客CD
  * returns RecordingItem

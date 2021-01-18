@@ -17,7 +17,6 @@ import { Configuration } from '../configuration';
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
 import { Auth } from '../models';
-import { Body } from '../models';
 /**
  * AuthApi - axios parameter creator
  * @export
@@ -27,11 +26,11 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
         /**
          * 
          * @summary 端末認証
-         * @param {Body} [body] 
+         * @param {any} [body] 認証リクエストBody
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        auth: async (body?: Body, options: any = {}): Promise<RequestArgs> => {
+        auth: async (body?: any, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/auth`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -75,11 +74,11 @@ export const AuthApiFp = function(configuration?: Configuration) {
         /**
          * 
          * @summary 端末認証
-         * @param {Body} [body] 
+         * @param {any} [body] 認証リクエストBody
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async auth(body?: Body, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Auth>> {
+        async auth(body?: any, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Auth>> {
             const localVarAxiosArgs = await AuthApiAxiosParamCreator(configuration).auth(body, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
@@ -98,11 +97,11 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
         /**
          * 
          * @summary 端末認証
-         * @param {Body} [body] 
+         * @param {any} [body] 認証リクエストBody
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        auth(body?: Body, options?: any): AxiosPromise<Auth> {
+        auth(body?: any, options?: any): AxiosPromise<Auth> {
             return AuthApiFp(configuration).auth(body, options).then((request) => request(axios, basePath));
         },
     };
@@ -118,12 +117,12 @@ export class AuthApi extends BaseAPI {
     /**
      * 
      * @summary 端末認証
-     * @param {Body} [body] 
+     * @param {any} [body] 認証リクエストBody
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof AuthApi
      */
-    public auth(body?: Body, options?: any) {
+    public auth(body?: any, options?: any) {
         return AuthApiFp(this.configuration).auth(body, options).then((request) => request(this.axios, this.basePath));
     }
 }

@@ -4,7 +4,7 @@
 /**
  * 端末認証
  *
- * body Body  (optional)
+ * body Object 認証リクエストBody (optional)
  * returns Auth
  **/
 exports.auth = function(body) {

@@ -17,11 +17,10 @@ import { Configuration } from '../configuration';
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
 import { BgmItem } from '../models';
-import { Body9 } from '../models';
 import { ChimeItem } from '../models';
+import { CreateTtsItem } from '../models';
 import { FreeItem } from '../models';
 import { InlineResponse200 } from '../models';
-import { InlineResponse2001 } from '../models';
 import { NarrationItem } from '../models';
 import { TemplateItem } from '../models';
 /**
@@ -33,11 +32,11 @@ export const ResourcesApiAxiosParamCreator = function (configuration?: Configura
         /**
          * TTS音声を作成する
          * @summary TTS音声作成
-         * @param {Body9} [body] 
+         * @param {any} [body] TTS作成リクエストBody
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createTts: async (body?: Body9, options: any = {}): Promise<RequestArgs> => {
+        createTts: async (body?: any, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/tts`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -338,11 +337,11 @@ export const ResourcesApiFp = function(configuration?: Configuration) {
         /**
          * TTS音声を作成する
          * @summary TTS音声作成
-         * @param {Body9} [body] 
+         * @param {any} [body] TTS作成リクエストBody
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createTts(body?: Body9, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<InlineResponse2001>>> {
+        async createTts(body?: any, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CreateTtsItem>> {
             const localVarAxiosArgs = await ResourcesApiAxiosParamCreator(configuration).createTts(body, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
@@ -448,11 +447,11 @@ export const ResourcesApiFactory = function (configuration?: Configuration, base
         /**
          * TTS音声を作成する
          * @summary TTS音声作成
-         * @param {Body9} [body] 
+         * @param {any} [body] TTS作成リクエストBody
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createTts(body?: Body9, options?: any): AxiosPromise<Array<InlineResponse2001>> {
+        createTts(body?: any, options?: any): AxiosPromise<CreateTtsItem> {
             return ResourcesApiFp(configuration).createTts(body, options).then((request) => request(axios, basePath));
         },
         /**
@@ -531,12 +530,12 @@ export class ResourcesApi extends BaseAPI {
     /**
      * TTS音声を作成する
      * @summary TTS音声作成
-     * @param {Body9} [body] 
+     * @param {any} [body] TTS作成リクエストBody
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ResourcesApi
      */
-    public createTts(body?: Body9, options?: any) {
+    public createTts(body?: any, options?: any) {
         return ResourcesApiFp(this.configuration).createTts(body, options).then((request) => request(this.axios, this.basePath));
     }
     /**

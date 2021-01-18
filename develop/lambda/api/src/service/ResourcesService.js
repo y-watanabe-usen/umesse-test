@@ -10,8 +10,8 @@ const {
  * TTS音声作成
  * TTS音声を作成する
  *
- * body Body_9  (optional)
- * returns List
+ * body Object TTS作成リクエストBody (optional)
+ * returns CreateTtsItem
  **/
 exports.createTts = function (body) {
   return new Promise(async function (resolve, reject) {

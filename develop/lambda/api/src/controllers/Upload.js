@@ -13,8 +13,8 @@ module.exports.createUploadCm = function createUploadCm (req, res, next, body, c
     });
 };
 
-module.exports.deleteUploadCm = function deleteUploadCm (req, res, next, body, cmId, xUnisCustomerCd) {
-  Upload.deleteUploadCm(body, cmId, xUnisCustomerCd)
+module.exports.deleteUploadCm = function deleteUploadCm (req, res, next, cmId, xUnisCustomerCd) {
+  Upload.deleteUploadCm(cmId, xUnisCustomerCd)
     .then(function (response) {
       utils.writeJson(res, response);
     })

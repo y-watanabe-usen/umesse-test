@@ -10,7 +10,7 @@ const {
  * CM外部連携追加
  * CMを外部連携する
  *
- * body Body_7  (optional)
+ * body Object CM外部連携システムリクエストBody (optional)
  * cmId String CM ID
  * xUnisCustomerCd String UNIS顧客CD
  * returns ExternalItem
@@ -32,15 +32,14 @@ exports.createUploadCm = function (body, cmId, xUnisCustomerCd) {
  * CM外部連携解除
  * CMの外部連携を解除する
  *
- * body Body_8  (optional)
  * cmId String CM ID
  * xUnisCustomerCd String UNIS顧客CD
  * returns ExternalItem
  **/
-exports.deleteUploadCm = function (body, cmId, xUnisCustomerCd) {
+exports.deleteUploadCm = function (cmId, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     var response = {};
-    const json = await deleteUploadCm(xUnisCustomerCd, cmId, body);
+    const json = await deleteUploadCm(xUnisCustomerCd, cmId);
     response["application/json"] = json;
     if (Object.keys(response).length > 0 && !json.message) {
       resolve(response[Object.keys(response)[0]]);

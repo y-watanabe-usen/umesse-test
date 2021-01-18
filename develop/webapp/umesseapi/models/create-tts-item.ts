@@ -14,13 +14,19 @@
 /**
  * 
  * @export
- * @interface Body1
+ * @interface CreateTtsItem
  */
-export interface Body1 {
+export interface CreateTtsItem {
     /**
      * 
-     * @type {CmMaterialListItem}
-     * @memberof Body1
+     * @type {string}
+     * @memberof CreateTtsItem
      */
-    materials?: any;
+    body?: any;
+    /**
+     * 
+     * @type {Array}
+     * @memberof CreateTtsItem
+     */
+    isBase64Encoded?: any;
 }

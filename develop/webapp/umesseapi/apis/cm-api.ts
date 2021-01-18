@@ -16,8 +16,6 @@ import { Configuration } from '../configuration';
 // Some imports not used depending on template conditions
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
-import { Body1 } from '../models';
-import { Body2 } from '../models';
 import { CmItem } from '../models';
 /**
  * CmApi - axios parameter creator
@@ -29,11 +27,11 @@ export const CmApiAxiosParamCreator = function (configuration?: Configuration) {
          * CMを新規作成する
          * @summary CM新規結合
          * @param {string} xUnisCustomerCd UNIS顧客CD
-         * @param {Body1} [body] 
+         * @param {any} [body] CMデータ作成リクエストBody
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createUserCm: async (xUnisCustomerCd: string, body?: Body1, options: any = {}): Promise<RequestArgs> => {
+        createUserCm: async (xUnisCustomerCd: string, body?: any, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'xUnisCustomerCd' is not null or undefined
             if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
                 throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling createUserCm.');
@@ -219,11 +217,11 @@ export const CmApiAxiosParamCreator = function (configuration?: Configuration) {
          * @summary CM情報更新
          * @param {string} xUnisCustomerCd UNIS顧客CD
          * @param {string} cmId CM ID
-         * @param {Body2} [body] 
+         * @param {any} [body] CMデータ更新リクエストBody
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateUserCm: async (xUnisCustomerCd: string, cmId: string, body?: Body2, options: any = {}): Promise<RequestArgs> => {
+        updateUserCm: async (xUnisCustomerCd: string, cmId: string, body?: any, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'xUnisCustomerCd' is not null or undefined
             if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
                 throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling updateUserCm.');
@@ -281,11 +279,11 @@ export const CmApiFp = function(configuration?: Configuration) {
          * CMを新規作成する
          * @summary CM新規結合
          * @param {string} xUnisCustomerCd UNIS顧客CD
-         * @param {Body1} [body] 
+         * @param {any} [body] CMデータ作成リクエストBody
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createUserCm(xUnisCustomerCd: string, body?: Body1, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CmItem>> {
+        async createUserCm(xUnisCustomerCd: string, body?: any, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CmItem>> {
             const localVarAxiosArgs = await CmApiAxiosParamCreator(configuration).createUserCm(xUnisCustomerCd, body, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
@@ -341,11 +339,11 @@ export const CmApiFp = function(configuration?: Configuration) {
          * @summary CM情報更新
          * @param {string} xUnisCustomerCd UNIS顧客CD
          * @param {string} cmId CM ID
-         * @param {Body2} [body] 
+         * @param {any} [body] CMデータ更新リクエストBody
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateUserCm(xUnisCustomerCd: string, cmId: string, body?: Body2, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CmItem>> {
+        async updateUserCm(xUnisCustomerCd: string, cmId: string, body?: any, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CmItem>> {
             const localVarAxiosArgs = await CmApiAxiosParamCreator(configuration).updateUserCm(xUnisCustomerCd, cmId, body, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
@@ -365,11 +363,11 @@ export const CmApiFactory = function (configuration?: Configuration, basePath?: 
          * CMを新規作成する
          * @summary CM新規結合
          * @param {string} xUnisCustomerCd UNIS顧客CD
-         * @param {Body1} [body] 
+         * @param {any} [body] CMデータ作成リクエストBody
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createUserCm(xUnisCustomerCd: string, body?: Body1, options?: any): AxiosPromise<CmItem> {
+        createUserCm(xUnisCustomerCd: string, body?: any, options?: any): AxiosPromise<CmItem> {
             return CmApiFp(configuration).createUserCm(xUnisCustomerCd, body, options).then((request) => request(axios, basePath));
         },
         /**
@@ -409,11 +407,11 @@ export const CmApiFactory = function (configuration?: Configuration, basePath?: 
          * @summary CM情報更新
          * @param {string} xUnisCustomerCd UNIS顧客CD
          * @param {string} cmId CM ID
-         * @param {Body2} [body] 
+         * @param {any} [body] CMデータ更新リクエストBody
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateUserCm(xUnisCustomerCd: string, cmId: string, body?: Body2, options?: any): AxiosPromise<CmItem> {
+        updateUserCm(xUnisCustomerCd: string, cmId: string, body?: any, options?: any): AxiosPromise<CmItem> {
             return CmApiFp(configuration).updateUserCm(xUnisCustomerCd, cmId, body, options).then((request) => request(axios, basePath));
         },
     };
@@ -430,12 +428,12 @@ export class CmApi extends BaseAPI {
      * CMを新規作成する
      * @summary CM新規結合
      * @param {string} xUnisCustomerCd UNIS顧客CD
-     * @param {Body1} [body] 
+     * @param {any} [body] CMデータ作成リクエストBody
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CmApi
      */
-    public createUserCm(xUnisCustomerCd: string, body?: Body1, options?: any) {
+    public createUserCm(xUnisCustomerCd: string, body?: any, options?: any) {
         return CmApiFp(this.configuration).createUserCm(xUnisCustomerCd, body, options).then((request) => request(this.axios, this.basePath));
     }
     /**
@@ -478,12 +476,12 @@ export class CmApi extends BaseAPI {
      * @summary CM情報更新
      * @param {string} xUnisCustomerCd UNIS顧客CD
      * @param {string} cmId CM ID
-     * @param {Body2} [body] 
+     * @param {any} [body] CMデータ更新リクエストBody
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CmApi
      */
-    public updateUserCm(xUnisCustomerCd: string, cmId: string, body?: Body2, options?: any) {
+    public updateUserCm(xUnisCustomerCd: string, cmId: string, body?: any, options?: any) {
         return CmApiFp(this.configuration).updateUserCm(xUnisCustomerCd, cmId, body, options).then((request) => request(this.axios, this.basePath));
     }
 }

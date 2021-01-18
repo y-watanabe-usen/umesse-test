@@ -6,7 +6,7 @@ const { getCm, createCm, updateCm, deleteCm } = require("../../umesse/cm");
  * CM新規結合
  * CMを新規作成する
  *
- * body Body_1  (optional)
+ * body Object CMデータ作成リクエストBody (optional)
  * xUnisCustomerCd String UNIS顧客CD
  * returns CmItem
  **/
@@ -89,7 +89,7 @@ exports.listUserCm = function (xUnisCustomerCd) {
  * CM情報更新
  * CMの情報を更新する
  *
- * body Body_2  (optional)
+ * body Object CMデータ更新リクエストBody (optional)
  * cmId String CM ID
  * xUnisCustomerCd String UNIS顧客CD
  * returns CmItem

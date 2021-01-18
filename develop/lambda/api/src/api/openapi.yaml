@@ -27,10 +27,7 @@ paths:
       summary: 端末認証
       operationId: auth
       requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/body'
+        $ref: '#/components/requestBodies/AuthRequest'
       responses:
         "200":
           description: successful response
@@ -175,10 +172,7 @@ paths:
           type: string
           example: "123456789"
       requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/body_1'
+        $ref: '#/components/requestBodies/CmCreateRequest'
       responses:
         "200":
           description: successful response
@@ -291,10 +285,7 @@ paths:
           type: string
           example: "123456789"
       requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/body_2'
+        $ref: '#/components/requestBodies/CmUpdateRequest'
       responses:
         "200":
           description: successful response
@@ -447,10 +438,7 @@ paths:
           type: string
           example: "123456789"
       requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/body_3'
+        $ref: '#/components/requestBodies/UserResourceCreateRequest'
       responses:
         "200":
           description: successful response
@@ -566,10 +554,7 @@ paths:
           type: string
           example: "123456789"
       requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/body_4'
+        $ref: '#/components/requestBodies/UserResourceUpdateRequest'
       responses:
         "200":
           description: successful response
@@ -722,10 +707,7 @@ paths:
           type: string
           example: "123456789"
       requestBody:
-        content:
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/body_5'
+        $ref: '#/components/requestBodies/UserResourceCreateRequest'
       responses:
         "200":
           description: successful response
@@ -841,10 +823,7 @@ paths:
           type: string
           example: "123456789"
       requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/body_6'
+        $ref: '#/components/requestBodies/UserResourceUpdateRequest'
       responses:
         "200":
           description: successful response
@@ -1062,10 +1041,7 @@ paths:
           type: string
           example: "123456789"
       requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/body_7'
+        $ref: '#/components/requestBodies/UploadSystemRequest'
       responses:
         "200":
           description: successful response
@@ -1121,11 +1097,6 @@ paths:
         schema:
           type: string
           example: "123456789"
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/body_8'
       responses:
         "200":
           description: successful response
@@ -1703,20 +1674,14 @@ paths:
       description: TTS音声を作成する
       operationId: createTts
       requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/body_9'
+        $ref: '#/components/requestBodies/TtsRequest'
       responses:
         "200":
           description: successful response
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/inline_response_200_1'
-                x-content-type: application/json
+                $ref: '#/components/schemas/CreateTtsItem'
         "400":
           description: Bad request. Response invalid.
           content:
@@ -1765,7 +1730,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/inline_response_200_2'
+                  $ref: '#/components/schemas/ExternalItem'
                 x-content-type: application/json
         "400":
           description: Bad request. Response invalid.
@@ -1822,7 +1787,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_2'
+                $ref: '#/components/schemas/ExternalItem'
         "400":
           description: Bad request. Response invalid.
           content:
@@ -1872,17 +1837,14 @@ paths:
           type: string
           example: "123456789"
       requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/body_10'
+        $ref: '#/components/requestBodies/ExternalCompleteRequest'
       responses:
         "200":
           description: successful response
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/inline_response_200_3'
+                $ref: '#/components/schemas/ExternalCompleteItem'
         "400":
           description: Bad request. Response invalid.
           content:
@@ -2422,7 +2384,33 @@ components:
         title: サンプル
         startDate: 2019-09-01T09:00:00+9:00
         timestamp: 2019-09-01T09:00:00+9:00
+    CreateTtsItem:
+      properties:
+        body:
+          type: string
+          format: base64
+          example: base64 string
+        isBase64Encoded:
+          type: array
+          example: "true"
+      example:
+        isBase64Encoded: "true"
+        body: base64 string
     ExternalItem:
+      properties:
+        unisCustomerCd:
+          type: string
+          example: "123456789"
+        cmMetas:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExternalItem'
+      example:
+        cmMetas:
+        - null
+        - null
+        unisCustomerCd: "123456789"
+    ExternalMetaItem:
       properties:
         dataProcessType:
           type: string
@@ -2474,19 +2462,25 @@ components:
           type: string
           description: シーンCD
           example: "001"
+    ExternalCompleteItem:
+      properties:
+        dataProcessType:
+          type: string
+          example: 01：正常完了、09：取込失敗
+        cmId:
+          type: string
+          example: 123456789-c-12345678
+        errorCode:
+          type: string
+          example: E0001
+        errorMessege:
+          type: string
+          example: CM名に規定外の文字が使用されています
       example:
-        startDatetime: 2020-01-01T12:34:56+09:00
-        cmName: 時報A
-        fileName: 123456789-c-12345678.aac
-        sceneCd: "001"
-        fileSize: 1234567
-        dataProcessType: 01：追加、02：変更、03：削除
-        cmCommentManuscript: テストCMです
-        productionType: 01：音楽系、02：素ナレ
-        contentTime: 30000
+        errorMessege: CM名に規定外の文字が使用されています
+        dataProcessType: 01：正常完了、09：取込失敗
+        errorCode: E0001
         cmId: 123456789-c-12345678
-        url: https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx
-        endDatetime: 9999-12-31T23:59:59+09:00
     Error:
       type: object
       properties:
@@ -2507,96 +2501,6 @@ components:
           example: ok
       example:
         message: ok
-    body:
-      type: object
-      properties:
-        unisCustomerCd:
-          type: string
-    body_1:
-      type: object
-      properties:
-        materials:
-          $ref: '#/components/schemas/CmMaterialListItem'
-    body_2:
-      type: object
-      properties:
-        title:
-          type: string
-          example: サンプル
-        description:
-          type: string
-          example: サンプル
-        startDate:
-          type: string
-          example: 2019-09-01T09:00:00+9:00
-        endDate:
-          type: string
-          example: 9999-12-31T23:59:59+09:00
-        industry:
-          $ref: '#/components/schemas/IndustryItem'
-        scene:
-          $ref: '#/components/schemas/SceneItem'
-        uploadSystem:
-          type: string
-          example: '01: センター, 02: S''sence'
-    body_3:
-      type: object
-      properties:
-        filename:
-          type: string
-        recordedFile:
-          type: string
-          format: binary
-        title:
-          type: string
-          example: サンプル
-        description:
-          type: string
-          example: サンプル
-    body_4:
-      type: object
-      properties:
-        title:
-          type: string
-          example: サンプル
-        description:
-          type: string
-          example: サンプル
-    body_5:
-      type: object
-      properties:
-        filename:
-          type: string
-        recordedFile:
-          type: string
-          format: binary
-        title:
-          type: string
-          example: サンプル
-        description:
-          type: string
-          example: サンプル
-    body_6:
-      type: object
-      properties:
-        title:
-          type: string
-          example: サンプル
-        description:
-          type: string
-          example: サンプル
-    body_7:
-      type: object
-      properties:
-        uploadSystem:
-          type: string
-          example: '01: センター, 02: S''sence'
-    body_8:
-      type: object
-      properties:
-        endDate:
-          type: string
-          example: 掲載終了日時（固定）
     inline_response_200:
       properties:
         url:
@@ -2604,102 +2508,6 @@ components:
           example: https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx
       example:
         url: https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx
-    body_9:
-      type: object
-      properties:
-        text:
-          type: string
-          example: こんにちは。
-        speaker:
-          type: string
-          example: risa
-        pitch:
-          type: string
-          example: "100"
-        speed:
-          type: string
-          example: "100"
-    inline_response_200_1:
-      properties:
-        body:
-          type: string
-          example: "123456789"
-        isBase64Encoded:
-          type: array
-          example: "true"
-      example:
-        isBase64Encoded: "true"
-        body: "123456789"
-    inline_response_200_2:
-      properties:
-        unisCustomerCd:
-          type: string
-          example: "123456789"
-        cmMetas:
-          type: array
-          items:
-            $ref: '#/components/schemas/ExternalItem'
-      example:
-        cmMetas:
-        - startDatetime: 2020-01-01T12:34:56+09:00
-          cmName: 時報A
-          fileName: 123456789-c-12345678.aac
-          sceneCd: "001"
-          fileSize: 1234567
-          dataProcessType: 01：追加、02：変更、03：削除
-          cmCommentManuscript: テストCMです
-          productionType: 01：音楽系、02：素ナレ
-          contentTime: 30000
-          cmId: 123456789-c-12345678
-          url: https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx
-          endDatetime: 9999-12-31T23:59:59+09:00
-        - startDatetime: 2020-01-01T12:34:56+09:00
-          cmName: 時報A
-          fileName: 123456789-c-12345678.aac
-          sceneCd: "001"
-          fileSize: 1234567
-          dataProcessType: 01：追加、02：変更、03：削除
-          cmCommentManuscript: テストCMです
-          productionType: 01：音楽系、02：素ナレ
-          contentTime: 30000
-          cmId: 123456789-c-12345678
-          url: https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx
-          endDatetime: 9999-12-31T23:59:59+09:00
-        unisCustomerCd: "123456789"
-    body_10:
-      type: object
-      properties:
-        dataProcessType:
-          type: string
-          example: 01：正常完了、09：取込失敗
-        cmId:
-          type: string
-          example: 123456789-c-12345678
-        errorCode:
-          type: string
-          example: E0001
-        errorMessege:
-          type: string
-          example: CM名に規定外の文字が使用されています
-    inline_response_200_3:
-      properties:
-        dataProcessType:
-          type: string
-          example: 01：正常完了、09：取込失敗
-        cmId:
-          type: string
-          example: 123456789-c-12345678
-        errorCode:
-          type: string
-          example: E0001
-        errorMessege:
-          type: string
-          example: CM名に規定外の文字が使用されています
-      example:
-        errorMessege: CM名に規定外の文字が使用されています
-        dataProcessType: 01：正常完了、09：取込失敗
-        errorCode: E0001
-        cmId: 123456789-c-12345678
     CmMaterialListItem_narrations:
       properties:
         contentsId:
@@ -2829,6 +2637,130 @@ components:
       schema:
         type: string
         example: 123456789-t-12345678
+  requestBodies:
+    AuthRequest:
+      description: 認証リクエストBody
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              unisCustomerCd:
+                type: string
+    CmCreateRequest:
+      description: CMデータ作成リクエストBody
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              materials:
+                $ref: '#/components/schemas/CmMaterialListItem'
+    CmUpdateRequest:
+      description: CMデータ更新リクエストBody
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+                example: サンプル
+              description:
+                type: string
+                example: サンプル
+              startDate:
+                type: string
+                example: 2019-09-01T09:00:00+9:00
+              endDate:
+                type: string
+                example: 9999-12-31T23:59:59+09:00
+              industry:
+                $ref: '#/components/schemas/IndustryItem'
+              scene:
+                $ref: '#/components/schemas/SceneItem'
+              uploadSystem:
+                type: string
+                example: '01: センター, 02: S''sence'
+    UserResourceCreateRequest:
+      description: ユーザー素材データ作成リクエストBody
+      content:
+        multipart/form-data:
+          schema:
+            type: object
+            properties:
+              filename:
+                type: string
+              recordedFile:
+                type: string
+                format: binary
+              title:
+                type: string
+                example: サンプル
+              description:
+                type: string
+                example: サンプル
+    UserResourceUpdateRequest:
+      description: ユーザー素材データ更新リクエストBody
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              title:
+                type: string
+                example: サンプル
+              description:
+                type: string
+                example: サンプル
+    UploadSystemRequest:
+      description: CM外部連携システムリクエストBody
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              uploadSystem:
+                type: string
+                example: '01: センター, 02: S''sence'
+    TtsRequest:
+      description: TTS作成リクエストBody
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              text:
+                type: string
+                example: こんにちは。
+              speaker:
+                type: string
+                example: risa
+              pitch:
+                type: string
+                example: "100"
+              speed:
+                type: string
+                example: "100"
+    ExternalCompleteRequest:
+      description: 外部連携完了リクエストBody
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              dataProcessType:
+                type: string
+                example: 01：正常完了、09：取込失敗
+              cmId:
+                type: string
+                example: 123456789-c-12345678
+              errorCode:
+                type: string
+                example: E0001
+              errorMessege:
+                type: string
+                example: CM名に規定外の文字が使用されています
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
