@@ -56,7 +56,7 @@ cd ../develop/api
 npm run build
 cd ../develop/converter
 npm run build
-cd ../../deploy
+cd ../../deploy/local
 terraform init
 terraform plan
 terraform apply
