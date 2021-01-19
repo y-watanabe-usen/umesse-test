@@ -41,4 +41,3 @@ provider "aws" {
     # sts            = "http://localhost:4592"
   }
 }
-

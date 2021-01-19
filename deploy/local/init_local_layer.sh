@@ -7,7 +7,7 @@ STAGE=v1
 AWSCLI="aws --endpoint-url http://localhost:4566 --region $REGION"
 API_NAME=umesse
 
-LAMBDA_LAYER_DIR=${HERE}/../develop/lambda/layer
+LAMBDA_LAYER_DIR=${HERE}/../../develop/lambda/layer
 DOCKER_LAMBDA_API=localstack_lambda_arn_aws_lambda_ap-northeast-1_000000000000_function_UMesseApiFunction
 DOCKER_LAMBDA_CONVERTER=localstack_lambda_arn_aws_lambda_ap-northeast-1_000000000000_function_UMesseConverterFunction
 

@@ -1,6 +1,11 @@
+locals {
+  dynamodb_target = lookup(var.env, terraform.workspace)
+  dynamodb_table  = lookup(var.dynamodb_table, local.dynamodb_target)
+}
+
 # Dynamodb Table umesse-users
 resource "aws_dynamodb_table" "users" {
-  name           = "umesse-users"
+  name           = lookup(local.dynamodb_table, "users")
   billing_mode   = "PROVISIONED"
   read_capacity  = 10
   write_capacity = 10
@@ -54,35 +59,27 @@ resource "aws_dynamodb_table" "users" {
 
 # Dynamodb Table umesse-contents
 resource "aws_dynamodb_table" "contents" {
-  name           = "umesse-contents"
+  name           = lookup(local.dynamodb_table, "contents")
   billing_mode   = "PROVISIONED"
   read_capacity  = 10
   write_capacity = 10
   hash_key       = "contentsId"
+  range_key      = "category"
 
   attribute {
     name = "contentsId"
     type = "S"
   }
 
-  # attribute {
-  #   name = "category"
-  #   type = "S"
-  # }
-
-  # global_secondary_index {
-  #   name               = "ContentsCategoryIndex"
-  #   hash_key           = "category"
-  #   range_key          = "contentsId"
-  #   write_capacity     = 10
-  #   read_capacity      = 10
-  #   projection_type    = "KEYS_ONLY"
-  # }
+  attribute {
+    name = "category"
+    type = "S"
+  }
 }
 
 # Dynamodb Table umesse-external
 resource "aws_dynamodb_table" "external" {
-  name           = "umesse-external"
+  name           = lookup(local.dynamodb_table, "external")
   billing_mode   = "PROVISIONED"
   read_capacity  = 10
   write_capacity = 10
