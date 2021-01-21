@@ -1,41 +1,55 @@
-locals {
-  s3_target = lookup(var.env, terraform.workspace)
-  s3_bucket = lookup(var.s3_bucket, local.s3_target)
+resource "aws_s3_bucket" "tfstate" {
+  bucket = "umesse-tfstate"
+  acl    = "private"
+
+  versioning {
+    enabled = true
+  }
+
+  lifecycle_rule {
+    enabled                                = true
+    abort_incomplete_multipart_upload_days = 7
+
+    noncurrent_version_expiration {
+      days = 90
+    }
+  }
 }
 
 resource "aws_s3_bucket" "users" {
-  bucket        = lookup(local.s3_bucket, "users")
-  acl           = "private"
-  force_destroy = true
+  for_each = toset(lookup(var.s3_bucket, "users"))
+  bucket   = each.key
+  acl      = "private"
 }
 
 resource "aws_s3_bucket" "contents" {
-  bucket        = lookup(local.s3_bucket, "contents")
-  acl           = "private"
-  force_destroy = true
+  for_each = toset(lookup(var.s3_bucket, "contents"))
+  bucket   = each.key
+  acl      = "private"
 }
 
-resource "aws_s3_bucket" "webapp" {
-  bucket        = lookup(local.s3_bucket, "webapp")
-  acl           = "private"
-  force_destroy = true
-  policy        = data.aws_iam_policy_document.s3_policy.json
+# resource "aws_s3_bucket" "webapp" {
+#   for_each = toset(lookup(var.s3_bucket, "webapp"))
+#   bucket   = each.key
+#   acl      = "private"
+#   policy   = data.aws_iam_policy_document.s3_policy.json
 
-  website {
-    index_document = "index.html"
-    error_document = "error.html"
-  }
-}
+#   website {
+#     index_document = "index.html"
+#     error_document = "error.html"
+#   }
+# }
 
-data "aws_iam_policy_document" "s3_policy" {
-  statement {
-    actions = ["s3:GetObject"]
-    effect  = "Allow"
-    principals {
-      type        = "AWS"
-      identifiers = ["*"]
-    }
-    resources = ["arn:aws:s3:::${lookup(local.s3_bucket, "webapp")}/*"]
-    sid       = "PublicReadGetObject"
-  }
-}
+# data "aws_iam_policy_document" "s3_policy" {
+#   for_each = toset(lookup(local.s3_bucket, "webapp"))
+#   statement {
+#     actions = ["s3:GetObject"]
+#     effect  = "Allow"
+#     principals {
+#       type        = "AWS"
+#       identifiers = ["*"]
+#     }
+#     resources = ["arn:aws:s3:::${each.key}/*"]
+#     sid       = "PublicReadGetObject"
+#   }
+# }

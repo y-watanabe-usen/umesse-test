@@ -1,11 +1,19 @@
-locals {
-  dynamodb_target = lookup(var.env, terraform.workspace)
-  dynamodb_table  = lookup(var.dynamodb_table, local.dynamodb_target)
+resource "aws_dynamodb_table" "tfstate" {
+  name           = "umesse-tfstate"
+  billing_mode   = "PROVISIONED"
+  read_capacity  = 1
+  write_capacity = 1
+  hash_key       = "LockID"
+
+  attribute {
+    name = "LockID"
+    type = "S"
+  }
 }
 
-# Dynamodb Table umesse-users
 resource "aws_dynamodb_table" "users" {
-  name           = lookup(local.dynamodb_table, "users")
+  for_each       = toset(lookup(var.dynamodb_table, "users"))
+  name           = each.key
   billing_mode   = "PROVISIONED"
   read_capacity  = 10
   write_capacity = 10
@@ -57,9 +65,9 @@ resource "aws_dynamodb_table" "users" {
   # }
 }
 
-# Dynamodb Table umesse-contents
 resource "aws_dynamodb_table" "contents" {
-  name           = lookup(local.dynamodb_table, "contents")
+  for_each       = toset(lookup(var.dynamodb_table, "contents"))
+  name           = each.key
   billing_mode   = "PROVISIONED"
   read_capacity  = 10
   write_capacity = 10
@@ -77,9 +85,9 @@ resource "aws_dynamodb_table" "contents" {
   }
 }
 
-# Dynamodb Table umesse-external
 resource "aws_dynamodb_table" "external" {
-  name           = lookup(local.dynamodb_table, "external")
+  for_each       = toset(lookup(var.dynamodb_table, "external"))
+  name           = each.key
   billing_mode   = "PROVISIONED"
   read_capacity  = 10
   write_capacity = 10
