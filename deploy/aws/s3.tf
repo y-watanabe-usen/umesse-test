@@ -22,26 +22,54 @@ resource "aws_s3_bucket" "users" {
   acl      = "private"
 }
 
+resource "aws_s3_bucket_public_access_block" "users_access" {
+  for_each                = toset(lookup(var.s3_bucket, "users"))
+  bucket                  = each.key
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
 resource "aws_s3_bucket" "contents" {
   for_each = toset(lookup(var.s3_bucket, "contents"))
   bucket   = each.key
   acl      = "private"
 }
 
-# resource "aws_s3_bucket" "webapp" {
+resource "aws_s3_bucket_public_access_block" "contents_access" {
+  for_each                = toset(lookup(var.s3_bucket, "contents"))
+  bucket                  = each.key
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+resource "aws_s3_bucket" "webapp" {
+  for_each = toset(lookup(var.s3_bucket, "webapp"))
+  bucket   = each.key
+  acl      = "private"
+  # policy   = data.aws_iam_policy_document.webapp_policy.json
+
+  website {
+    index_document = "index.html"
+    error_document = "error.html"
+  }
+}
+
+resource "aws_s3_bucket_public_access_block" "webapp_access" {
+  for_each                = toset(lookup(var.s3_bucket, "webapp"))
+  bucket                  = each.key
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
+}
+
+# FIXME:
+# data "aws_iam_policy_document" "webapp_policy" {
 #   for_each = toset(lookup(var.s3_bucket, "webapp"))
-#   bucket   = each.key
-#   acl      = "private"
-#   policy   = data.aws_iam_policy_document.s3_policy.json
-
-#   website {
-#     index_document = "index.html"
-#     error_document = "error.html"
-#   }
-# }
-
-# data "aws_iam_policy_document" "s3_policy" {
-#   for_each = toset(lookup(local.s3_bucket, "webapp"))
 #   statement {
 #     actions = ["s3:GetObject"]
 #     effect  = "Allow"
