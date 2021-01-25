@@ -31,7 +31,8 @@ develop/webapp/umesseapiに生成する
 docker run --rm -it \
 	-v ${PWD}:/local swaggerapi/swagger-codegen-cli-v3 generate \
 	-i /local/openapi.yaml  \
-	-l typescript-axios -o /local/umesseapi
+	-l typescript-axios -o /local/umesseapi \
+	--additional-properties npmName=umesseapi npmVersion=0.0.1
 ```
 
 
