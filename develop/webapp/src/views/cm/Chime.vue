@@ -39,6 +39,7 @@
                       class="btn btn-light shadow btn-try"
                       data-toggle="modal"
                       data-target=".bd-try-modal-lg"
+                      @click="selectChime(chime)"
                     >
                       <svg
                         width="1em"
@@ -121,7 +122,7 @@
                     <button
                       type="button"
                       class="btn btn-light shadow btn-play"
-                      @click="play"
+                      @click="play(state.selectedChime)"
                     >
                       <svg
                         width="1em"
@@ -349,12 +350,15 @@ import { ChimeItem } from "umesseapi/models";
 import ChimeVue from "./Chime.vue";
 import { useGlobalStore } from "@/store";
 import { useRoute, useRouter } from "vue-router";
+import { config } from "@/utils/UMesseApiConfiguration";
 
 export default {
   setup() {
     const router = useRouter();
     const route = useRoute();
-    const api = new UMesseApi.ResourcesApi(new UMesseApi.Configuration({basePath:process.env.VUE_APP_BASE_URL}));
+    const audioStore = AudioStore();
+    const audioPlayer = AudioPlayer();
+    const api = new UMesseApi.ResourcesApi(config);
     const { cm } = useGlobalStore();
 
     const state = reactive({
@@ -368,7 +372,30 @@ export default {
       activeMenuId: 1,
       sorts: ["名前順", "作成日順", "更新日順"],
       chimes: [] as ChimeItem[],
+      selectedChime: null as ChimeItem | null,
+      isPlaying: computed(() => audioPlayer.isPlaying()),
+      isDownloading: computed(() => audioStore.isDownloading),
+      playbackTime: computed(() => {
+        return audioPlayer.getPlaybackTime();
+      }),
+      playbackTimeHms: computed(() => {
+        return sToHms(Math.floor(audioPlayer.getPlaybackTime()));
+      }),
+      duration: computed(() => {
+        return audioPlayer.getDuration();
+      }),
+      durationHms: computed(() => {
+        return sToHms(Math.floor(audioPlayer.getDuration()));
+      }),
     });
+    // 秒を時分秒に変換
+    const sToHms = (second: number) => {
+      const h = "" + ((second / 36000) | 0) + ((second / 3600) % 10 | 0);
+      const m =
+        "" + (((second % 3600) / 600) | 0) + (((second % 3600) / 60) % 10 | 0);
+      const s = "" + (((second % 60) / 10) | 0) + ((second % 60) % 10);
+      return h + ":" + m + ":" + s;
+    };
 
     const setChime = (chime: ChimeItem) => {
       if (route.params.div == "open") {
@@ -379,6 +406,23 @@ export default {
       router.push({ name: "Cm" });
     };
 
+    const selectChime = (chime: ChimeItem) => {
+      state.selectedChime = chime;
+    };
+
+    const play = async (chime: ChimeItem) => {
+      const response = await api.getSignedUrl(
+        chime.contentsId!!,
+        chime.category!!
+      );
+      await audioStore.download(response.data.url);
+      audioPlayer.start(<AudioBuffer>audioStore.audioBuffer);
+    };
+
+    const stop = () => {
+      if (state.isPlaying) audioPlayer.stop();
+    };
+
     onMounted(async () => {
       const response = await api.listChime();
       state.chimes = response.data;
@@ -386,6 +430,9 @@ export default {
     return {
       state,
       setChime,
+      selectChime,
+      play,
+      stop,
     };
   },
 };
