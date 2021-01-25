@@ -85,36 +85,64 @@
               <div class="col-10">
                 <div class="row">
                   <div class="col-4">
-                    <button
-                      type="button"
-                      class="btn btn-light shadow btn-play"
-                      @click="play"
-                    >
-                      <svg
-                        width="1em"
-                        height="1em"
-                        viewBox="0 0 16 16"
-                        class="bi bi-play-fill"
-                        fill="currentColor"
-                        xmlns="http://www.w3.org/2000/svg"
+                    <template v-if="!isPlaying">
+                      <button
+                        type="button"
+                        class="btn btn-light shadow btn-play"
+                        @click="play"
                       >
-                        <path
-                          d="M11.596 8.697l-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"
-                        />
-                      </svg>
-                      再生
-                    </button>
+                        <svg
+                          width="1em"
+                          height="1em"
+                          viewBox="0 0 16 16"
+                          class="bi bi-play-fill"
+                          fill="currentColor"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M11.596 8.697l-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"
+                          />
+                        </svg>
+                        再生
+                      </button>
+                    </template>
+                    <template v-else>
+                      <button
+                        type="button"
+                        class="btn btn-light shadow btn-play"
+                        @click="stop"
+                      >
+                        <svg
+                          width="1em"
+                          height="1em"
+                          viewBox="0 0 16 16"
+                          class="bi bi-stop-fill"
+                          fill="currentColor"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M5 3.5h6A1.5 1.5 0 0 1 12.5 5v6a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 11V5A1.5 1.5 0 0 1 5 3.5z"
+                          />
+                        </svg>
+                        停止
+                      </button>
+                    </template>
                   </div>
                   <div class="col-8">
                     <div class="row">
                       <div class="col text-left" style="font-size: 17px">
-                        00:00
+                        {{ playbackTimeHms }}
                       </div>
                       <div class="col text-right" style="font-size: 17px">
-                        00:00
+                        {{ durationHms }}
                       </div>
                     </div>
-                    <meter min="0" max="100" class="w-100"></meter>
+                    <meter
+                      min="0"
+                      :max="duration"
+                      class="w-100"
+                      :value="playbackTime"
+                    ></meter>
                   </div>
                 </div>
                 <div class="row pt-5">
@@ -225,7 +253,7 @@ export default {
     return {
       text: "おはようございます。",
       speaker: "risa",
-    }
+    };
   },
   setup() {
     const ttsStore = provideTtsStore(); //FIXME: provide name.
@@ -234,12 +262,37 @@ export default {
     const state = reactive({
       file: <RecordingFile>{},
       uploadTtsState: computed(() => ttsStore.getStatus()),
+      isPlaying: computed(() => audioPlayer.isPlaying()),
+      playbackTime: computed(() => {
+        return audioPlayer.getPlaybackTime();
+      }),
+      playbackTimeHms: computed(() => {
+        return sToHms(Math.floor(audioPlayer.getPlaybackTime()));
+      }),
+      duration: computed(() => {
+        return audioPlayer.getDuration();
+      }),
+      durationHms: computed(() => {
+        return sToHms(Math.floor(audioPlayer.getDuration()));
+      }),
     });
+    // 秒を時分秒に変換
+    const sToHms = (second: number) => {
+      const h = "" + ((second / 36000) | 0) + ((second / 3600) % 10 | 0);
+      const m =
+        "" + (((second % 3600) / 600) | 0) + (((second % 3600) / 60) % 10 | 0);
+      const s = "" + (((second % 60) / 10) | 0) + ((second % 60) % 10);
+      return h + ":" + m + ":" + s;
+    };
 
     const play = async () => {
       console.log("play");
       const audioBuffer = await ttsStore.getTtsData();
       audioPlayer.start(audioBuffer!!);
+    };
+
+    const stop = () => {
+      if (state.isPlaying) audioPlayer.stop();
     };
 
     const createTtsData = async (text: string, speaker: string) => {
@@ -257,6 +310,7 @@ export default {
       speakers,
       ...toRefs(state),
       play,
+      stop,
       createTtsData,
       UPLOAD_TTS_STATE,
     };
