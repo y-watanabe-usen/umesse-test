@@ -43,6 +43,7 @@ resource "aws_lambda_function" "umesse_api_function" {
     variables = {
       "debug"       = true
       "environment" = "localstack"
+      "CONVERTER_SQS_QUEUE_URL" = aws_sqs_queue.umesse_converter_queue.id
     }
   }
 
