@@ -53,9 +53,9 @@
 cd localstack
 docker-compose up -d
 cd ../develop/api
-npm run build
+npm run build # windowsだとエラーになるので右記コマンドを実行する npm install --no-save umesse-lib-0.0.1.tgz
 cd ../develop/converter
-npm run build
+npm run build # windowsだとエラーになるので右記コマンドを実行する npm install --no-save umesse-lib-0.0.1.tgz
 cd ../../deploy/local
 terraform init
 terraform plan
