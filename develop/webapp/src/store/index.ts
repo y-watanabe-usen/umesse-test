@@ -2,12 +2,11 @@ import { InjectionKey, inject } from 'vue'
 import authStore from '@/store/modules/auth'
 import baseStore from '@/store/base'
 import cmStore from '@/store/cm'
-import * as UMesseApi from "umesseapi"
+import { config } from "@/utils/UMesseApiConfiguration"
 
 
 // Provide: globalで使うものを定義.
 export default function globalStore() {
-  const config = new UMesseApi.Configuration({ basePath: process.env.VUE_APP_BASE_URL })
   return {
     auth: authStore(config),
     base: baseStore(),
