@@ -15,15 +15,19 @@
             type="button"
             class="btn btn-menu text-left text-white"
             :class="[
-              menu.id == state.activeMenuId ? 'btn-primary' : 'btn-link',
-              menu.id == state.activeMenuId ? 'text-white' : 'text-dark',
-              menu.id == 1 ? 'mt-2' : '',
+              bgmIndustry.cd == state.activeBgmIndustryCd
+                ? 'btn-primary'
+                : 'btn-link',
+              bgmIndustry.cd == state.activeBgmIndustryCd
+                ? 'text-white'
+                : 'text-dark',
+              bgmIndustry.cd == 1 ? 'mt-2' : '',
             ]"
-            v-for="menu in state.menus"
-            :key="menu.id"
-            @click="state.activeMenuId = menu.id"
+            v-for="bgmIndustry in state.bgmIndustries"
+            :key="bgmIndustry.cd"
+            @click="clickBgmIndustry(bgmIndustry.cd)"
           >
-            {{ menu.title }}
+            {{ bgmIndustry.name }}
           </button>
         </div>
         <div class="col-10 bg-white rounded-right">
@@ -55,6 +59,7 @@
                       class="btn btn-light shadow btn-try"
                       data-toggle="modal"
                       data-target=".bd-try-modal-lg"
+                      @click="selectBgm(bgm)"
                     >
                       <svg
                         width="1em"
@@ -137,7 +142,7 @@
                     <button
                       type="button"
                       class="btn btn-light shadow btn-play"
-                      @click="play"
+                      @click="play(state.selectedBgm)"
                     >
                       <svg
                         width="1em"
@@ -358,31 +363,43 @@
 <script lang="ts">
 import { computed, onMounted, reactive } from "vue";
 import AudioPlayer from "@/utils/AudioPlayer";
-import axios from "axios";
 import AudioStore from "@/store/audio";
 import * as UMesseApi from "umesseapi";
-import { BgmItem, ChimeItem } from "umesseapi/models";
-import ChimeVue from "./Chime.vue";
+import { BgmItem } from "umesseapi/models";
 import { useGlobalStore } from "@/store";
 import { useRoute, useRouter } from "vue-router";
+import * as Common from "@/utils/Common";
+import { config } from "@/utils/UMesseApiConfiguration";
 
 export default {
   setup() {
     const router = useRouter();
     const route = useRoute();
-    const api = new UMesseApi.ResourcesApi();
+    const audioStore = AudioStore();
+    const audioPlayer = AudioPlayer();
+    const api = new UMesseApi.ResourcesApi(config);
     const { cm } = useGlobalStore();
 
     const state = reactive({
-      menus: [
-        {
-          id: 1,
-          title: "BGM",
-        },
-      ],
-      activeMenuId: 1,
+      activeBgmIndustryCd: "01",
       sorts: ["名前順", "作成日順", "更新日順"],
       bgms: [] as BgmItem[],
+      bgmIndustries: computed(() => Common.getBgmIndustries()),
+      selectedBgm: null as BgmItem | null,
+      isPlaying: computed(() => audioPlayer.isPlaying()),
+      isDownloading: computed(() => audioStore.isDownloading),
+      playbackTime: computed(() => {
+        return audioPlayer.getPlaybackTime();
+      }),
+      playbackTimeHms: computed(() => {
+        return Common.sToHms(Math.floor(audioPlayer.getPlaybackTime()));
+      }),
+      duration: computed(() => {
+        return audioPlayer.getDuration();
+      }),
+      durationHms: computed(() => {
+        return Common.sToHms(Math.floor(audioPlayer.getDuration()));
+      }),
     });
 
     const setBgm = (bgm: BgmItem) => {
@@ -390,13 +407,43 @@ export default {
       router.push({ name: "Cm" });
     };
 
-    onMounted(async () => {
-      const response = await api.listBgm();
+    const selectBgm = (bgm: BgmItem) => {
+      state.selectedBgm = bgm;
+    };
+
+    const clickBgmIndustry = (bgmIndustryCd: string) => {
+      state.activeBgmIndustryCd = bgmIndustryCd;
+      fetchBgm();
+    };
+
+    const fetchBgm = async () => {
+      const response = await api.listBgm(state.activeBgmIndustryCd);
       state.bgms = response.data;
+    };
+
+    const play = async (bgm: BgmItem) => {
+      const response = await api.getSignedUrl(bgm.contentsId!!, bgm.category!!);
+      console.log(response)
+      await audioStore.download(response.data.url);
+      audioPlayer.start(<AudioBuffer>audioStore.audioBuffer);
+    };
+
+    const stop = () => {
+      if (state.isPlaying) audioPlayer.stop();
+    };
+
+    onMounted(async () => {
+      Common.getBgmIndustries();
+      fetchBgm();
     });
+
     return {
       state,
       setBgm,
+      selectBgm,
+      clickBgmIndustry,
+      play,
+      stop,
     };
   },
 };
