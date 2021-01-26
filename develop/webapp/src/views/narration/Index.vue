@@ -5,9 +5,7 @@
         <router-link class="navbar-brand" :to="{ name: 'Home' }"
           >&lt;戻る</router-link
         >
-        <div
-          class="collapse navbar-collapse justify-content-center h4"
-        >
+        <div class="collapse navbar-collapse justify-content-center h4">
           ナレーション選択
         </div>
       </nav>
@@ -319,6 +317,7 @@ import { defineComponent, computed, ref, onMounted, reactive } from "vue";
 import AudioStore from "@/store/audio";
 import AudioPlayer from "@/utils/AudioPlayer";
 import * as UMesseApi from "umesseapi";
+import * as Common from "@/utils/Common";
 
 export default {
   setup() {
@@ -330,7 +329,9 @@ export default {
     // const narrationStore = NarrationStore();
     const audioStore = AudioStore();
     const audioPlayer = AudioPlayer();
-    const api = new UMesseApi.ResourcesApi(new UMesseApi.Configuration({basePath:process.env.VUE_APP_BASE_URL}));
+    const api = new UMesseApi.ResourcesApi(
+      new UMesseApi.Configuration({ basePath: process.env.VUE_APP_BASE_URL })
+    );
 
     const state = reactive({
       sorts: ["名前順", "作成日順", "更新日順"],
@@ -342,23 +343,16 @@ export default {
         return audioPlayer.getPlaybackTime();
       }),
       playbackTimeHms: computed(() => {
-        return sToHms(Math.floor(audioPlayer.getPlaybackTime()));
+        return Common.sToHms(Math.floor(audioPlayer.getPlaybackTime()));
       }),
       duration: computed(() => {
         return audioPlayer.getDuration();
       }),
       durationHms: computed(() => {
-        return sToHms(Math.floor(audioPlayer.getDuration()));
+        return Common.sToHms(Math.floor(audioPlayer.getDuration()));
       }),
     });
-    // 秒を時分秒に変換
-    const sToHms = (second: number) => {
-      const h = "" + ((second / 36000) | 0) + ((second / 3600) % 10 | 0);
-      const m =
-        "" + (((second % 3600) / 600) | 0) + (((second % 3600) / 60) % 10 | 0);
-      const s = "" + (((second % 60) / 10) | 0) + ((second % 60) % 10);
-      return h + ":" + m + ":" + s;
-    };
+
     const play = async () => {
       if (state.isPlaying) return;
       const response = await api.getSignedUrl("ID", "CATEGORY");
