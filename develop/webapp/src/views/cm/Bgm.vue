@@ -423,7 +423,7 @@ export default {
 
     const play = async (bgm: BgmItem) => {
       const response = await api.getSignedUrl(bgm.contentsId!!, bgm.category!!);
-      console.log(response)
+      console.log(response);
       await audioStore.download(response.data.url);
       audioPlayer.start(<AudioBuffer>audioStore.audioBuffer);
     };
@@ -433,7 +433,6 @@ export default {
     };
 
     onMounted(async () => {
-      Common.getBgmIndustries();
       fetchBgm();
     });
 
