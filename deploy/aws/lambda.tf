@@ -3,12 +3,20 @@ data "archive_file" "umesse_api_file" {
   type        = "zip"
   source_dir  = "${path.module}/../../develop/lambda/api"
   output_path = "${path.module}/umesse_api_lambda.zip"
+  excludes = [
+    "__tests__",
+    "app.local.js",
+  ]
 }
 
 data "archive_file" "umesse_converter_file" {
   type        = "zip"
   source_dir  = "${path.module}/../../develop/lambda/converter"
   output_path = "${path.module}/umesse_converter_lambda.zip"
+  excludes = [
+    "__tests__",
+    "sqsRequest.js",
+  ]
 }
 
 data "archive_file" "umesse_layer_file" {
@@ -50,7 +58,7 @@ resource "aws_lambda_function" "umesse_api_function" {
     variables = {
       "debug"                   = true
       "environment"             = "dev"
-      # "CONVERTER_SQS_QUEUE_URL" = aws_sqs_queue.umesse_converter_queue.id
+      "CONVERTER_SQS_QUEUE_URL" = aws_sqs_queue.umesse_converter_queue.id
     }
   }
 
