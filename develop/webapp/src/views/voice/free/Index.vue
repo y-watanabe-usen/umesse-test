@@ -245,8 +245,8 @@ import {
   useUploadTtsService,
   UPLOAD_TTS_STATE,
 } from "@/services/uploadTtsService";
-import * as UMesseApi from "umesseapi";
 import provideTtsStore from "@/store/tts";
+import * as Common from "@/utils/Common"
 
 export default {
   data() {
@@ -267,23 +267,15 @@ export default {
         return audioPlayer.getPlaybackTime();
       }),
       playbackTimeHms: computed(() => {
-        return sToHms(Math.floor(audioPlayer.getPlaybackTime()));
+        return Common.sToHms(Math.floor(audioPlayer.getPlaybackTime()));
       }),
       duration: computed(() => {
         return audioPlayer.getDuration();
       }),
       durationHms: computed(() => {
-        return sToHms(Math.floor(audioPlayer.getDuration()));
+        return Common.sToHms(Math.floor(audioPlayer.getDuration()));
       }),
     });
-    // 秒を時分秒に変換
-    const sToHms = (second: number) => {
-      const h = "" + ((second / 36000) | 0) + ((second / 3600) % 10 | 0);
-      const m =
-        "" + (((second % 3600) / 600) | 0) + (((second % 3600) / 60) % 10 | 0);
-      const s = "" + (((second % 60) / 10) | 0) + ((second % 60) % 10);
-      return h + ":" + m + ":" + s;
-    };
 
     const play = async () => {
       console.log("play");
