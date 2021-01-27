@@ -325,7 +325,11 @@
           <div class="modal-body">
             <div class="row">
               <div class="col-4">
-                <button type="button" class="btn btn-light shadow btn-play">
+                <button
+                  type="button"
+                  class="btn btn-light shadow btn-play"
+                  @click="play"
+                >
                   <svg
                     width="1em"
                     height="1em"
@@ -549,12 +553,26 @@
 
 <script lang="ts">
 import { defineComponent, computed, reactive, onMounted } from "vue";
+import AudioPlayer from "@/utils/AudioPlayer";
+import AudioStore from "@/store/audio";
 import { useGlobalStore } from "@/store";
 import * as UMesseApi from "umesseapi";
+import { config } from "@/utils/UMesseApiConfiguration";
+import {
+  Bgm,
+  Convert,
+  EndChime,
+  Narration,
+  StartChime,
+  UserCMRequestItem,
+} from "@/models/UserCmRequestItem";
+import { UserCmResponseItem } from "@/models/UserCmResponseItem";
 
 export default defineComponent({
   setup() {
-    const api = new UMesseApi.ResourcesApi(new UMesseApi.Configuration({basePath:process.env.VUE_APP_BASE_URL}));
+    const audioStore = AudioStore();
+    const audioPlayer = AudioPlayer();
+    const api = new UMesseApi.CmApi(config);
     const { cm } = useGlobalStore();
     const state = reactive({
       scenes: ["開店", "閉店", "etc"],
@@ -574,12 +592,78 @@ export default defineComponent({
     const clearBgm = () => {
       cm.clearBgm();
     };
+    const play = async () => {
+      // TODO: このxUnisCustomerCdじゃないとエラーになる
+      const xUnisCustomerCd = "123456789";
+      const requestModel = getRequestModel();
+      // const body = {
+      //   materials: {
+      //     narrations: [
+      //       {
+      //         contentsId: "サンプル01",
+      //         volume: 150,
+      //       },
+      //     ],
+      //     startChime: {
+      //       contentsId: "サンプル01",
+      //       volume: 50,
+      //     },
+      //     endChime: {
+      //       contentsId: "サンプル02",
+      //       volume: 50,
+      //     },
+      //     bgm: {
+      //       contentsId: "サンプル01",
+      //       volume: 50,
+      //     },
+      //   },
+      // };
+      console.log(requestModel)
+      // console.log(body)
+      const response = await api.createUserCm(
+        xUnisCustomerCd,
+        requestModel
+        // body
+      );
+      const data = <UserCmResponseItem>response.data;
+      console.log(response);
+      await audioStore.download(data.url!!);
+      audioPlayer.start(<AudioBuffer>audioStore.audioBuffer);
+    };
 
+    const getRequestModel = () => {
+      const startChime: StartChime | undefined = cm.openChime
+        ? { contentsId: cm.openChime.contentsId, volume: 50 }
+        : undefined;
+      const endChime: EndChime | undefined = cm.endChime
+        ? { contentsId: cm.endChime.contentsId, volume: 50 }
+        : undefined;
+      const bgm: Bgm | undefined = cm.bgm
+        ? { contentsId: cm.bgm.contentsId, volume: 50 }
+        : undefined;
+      let narrations: Narration[] | undefined = undefined;
+      if (cm.narrations) {
+        cm.narrations.forEach((v) => {
+          narrations?.push({ contentsId: v.contentsId, volume: 150 });
+        });
+      }
+      const requestModel: UserCMRequestItem = {
+        materials: {
+          narrations: narrations,
+          startChime: startChime,
+          endChime: endChime,
+          bgm: bgm,
+        },
+      };
+      console.log(Convert.userCMRequestItemToJson(requestModel));
+      return requestModel;
+    };
     return {
       state,
       clearOpenChime,
       clearEndChime,
       clearBgm,
+      play,
     };
   },
 });

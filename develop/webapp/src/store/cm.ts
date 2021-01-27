@@ -39,6 +39,9 @@ export default function cmStore() {
     get endChime() {
       return state.endChimeItem
     },
+    get narrations() {
+      return state.narrationItems
+    },
     get bgm() {
       return state.bgmItem
     },
