@@ -52,11 +52,11 @@
 ```bash
 cd localstack
 docker-compose up -d
-cd ../develop/api
-npm run build # windowsだとエラーになるので右記コマンドを実行する npm install --no-save umesse-lib-0.0.1.tgz
-cd ../develop/converter
-npm run build # windowsだとエラーになるので右記コマンドを実行する npm install --no-save umesse-lib-0.0.1.tgz
-cd ../../deploy/local
+cd ../develop/lambda/api
+npm run build # windowsだとエラーになるので右記コマンドを実行する npm pack ../layer/nodejs/node_modules/umesse-lib/ && npm install --no-save umesse-lib-0.0.1.tgz
+cd ../develop/lambda/converter
+npm run build # windowsだとエラーになるので右記コマンドを実行する npm pack ../layer/nodejs/node_modules/umesse-lib/ && npm install --no-save umesse-lib-0.0.1.tgz
+cd ../../../deploy/local
 terraform init
 terraform plan
 terraform apply
@@ -66,7 +66,7 @@ terraform apply
 #### Lambda
 
 ```bash
-cd develop/api
+cd develop/lambda/api
 npm install
 node ./app.local.js
 ```
@@ -74,7 +74,7 @@ node ./app.local.js
 #### VueJs
 
 ```bash
-cd develop/webapp
+cd develop/lambda/webapp
 yarn install
 
 # local
