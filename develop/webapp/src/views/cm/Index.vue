@@ -604,7 +604,7 @@ import {
   EndChime,
   Narration,
   StartChime,
-  UserCMRequestItem,
+  UserCmRequestItem,
 } from "@/models/UserCmRequestItem";
 import { UserCmResponseItem } from "@/models/UserCmResponseItem";
 import * as Common from "@/utils/Common";
@@ -687,7 +687,7 @@ export default defineComponent({
           narrations?.push({ contentsId: v.contentsId, volume: 150 });
         });
       }
-      const requestModel: UserCMRequestItem = {
+      const requestModel: UserCmRequestItem = {
         materials: {
           narrations: narrations,
           startChime: startChime,
@@ -695,7 +695,7 @@ export default defineComponent({
           bgm: bgm,
         },
       };
-      console.log(Convert.userCMRequestItemToJson(requestModel));
+      console.log(Convert.userCmRequestItemToJson(requestModel));
       return requestModel;
     };
     return {

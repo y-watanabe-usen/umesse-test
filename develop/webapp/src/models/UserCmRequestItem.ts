@@ -4,7 +4,7 @@
 //
 //   const userCMRequestItem = Convert.toUserCMRequestItem(json);
 
-export interface UserCMRequestItem {
+export interface UserCmRequestItem {
   materials?: Materials;
 }
 
@@ -37,11 +37,11 @@ export interface StartChime {
 
 // Converts JSON strings to/from your types
 export class Convert {
-  public static toUserCMRequestItem(json: string): UserCMRequestItem {
+  public static toUserCmRequestItem(json: string): UserCmRequestItem {
     return JSON.parse(json);
   }
 
-  public static userCMRequestItemToJson(value: UserCMRequestItem): string {
+  public static userCmRequestItemToJson(value: UserCmRequestItem): string {
     return JSON.stringify(value);
   }
 }
