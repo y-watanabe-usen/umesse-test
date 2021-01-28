@@ -14,6 +14,7 @@
                   data-toggle="modal"
                   data-target="#playModal"
                   style="width: 140px"
+                  @click="createUserCm"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -325,21 +326,64 @@
           <div class="modal-body">
             <div class="row">
               <div class="col-4">
-                <button type="button" class="btn btn-light shadow btn-play">
-                  <svg
-                    width="1em"
-                    height="1em"
-                    viewBox="0 0 16 16"
-                    class="bi bi-play-fill"
-                    fill="currentColor"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M11.596 8.697l-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"
-                    />
-                  </svg>
-                  再生
-                </button>
+                <template v-if="state.isDownloading || state.isCreating">
+                  <button class="btn btn-play btn-light" type="button" disabled>
+                    <span
+                      class="spinner-border spinner-border-sm"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
+                    <span class="sr-only">Loading...</span>
+                    <template v-if="state.isDownloading">
+                      ダウンロード中
+                    </template>
+                    <template v-else> CM作成中 </template>
+                  </button>
+                </template>
+                <template v-else>
+                  <template v-if="!state.isPlaying">
+                    <button
+                      type="button"
+                      class="btn btn-light shadow btn-play"
+                      @click="play(state.selectedBgm)"
+                    >
+                      <svg
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 16 16"
+                        class="bi bi-play-fill"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M11.596 8.697l-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"
+                        />
+                      </svg>
+                      再生
+                    </button>
+                  </template>
+                  <template v-else>
+                    <button
+                      type="button"
+                      class="btn btn-light shadow btn-play"
+                      @click="stop"
+                    >
+                      <svg
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 16 16"
+                        class="bi bi-stop-fill"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M5 3.5h6A1.5 1.5 0 0 1 12.5 5v6a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 11V5A1.5 1.5 0 0 1 5 3.5z"
+                        />
+                      </svg>
+                      停止
+                    </button>
+                  </template>
+                </template>
               </div>
               <div class="col-8">
                 <div class="row">
@@ -549,12 +593,27 @@
 
 <script lang="ts">
 import { defineComponent, computed, reactive, onMounted } from "vue";
+import AudioPlayer from "@/utils/AudioPlayer";
+import AudioStore from "@/store/audio";
 import { useGlobalStore } from "@/store";
 import * as UMesseApi from "umesseapi";
+import { config } from "@/utils/UMesseApiConfiguration";
+import {
+  Bgm,
+  Convert,
+  EndChime,
+  Narration,
+  StartChime,
+  UserCmRequestItem,
+} from "@/models/UserCmRequestItem";
+import { UserCmResponseItem } from "@/models/UserCmResponseItem";
+import * as Common from "@/utils/Common";
 
 export default defineComponent({
   setup() {
-    const api = new UMesseApi.ResourcesApi(new UMesseApi.Configuration({basePath:process.env.VUE_APP_BASE_URL}));
+    const audioStore = AudioStore();
+    const audioPlayer = AudioPlayer();
+    const api = new UMesseApi.CmApi(config);
     const { cm } = useGlobalStore();
     const state = reactive({
       scenes: ["開店", "閉店", "etc"],
@@ -563,6 +622,18 @@ export default defineComponent({
       narrarions: computed(() => cm.narrationItems),
       bgm: computed(() => cm.bgm),
       endChime: computed(() => cm.endChime),
+      playUrl: "",
+      isPlaying: computed(() => audioPlayer.isPlaying()),
+      isDownloading: computed(() => audioStore.isDownloading),
+      isCreating: false,
+      playbackTime: computed(() => audioPlayer.getPlaybackTime()),
+      playbackTimeHms: computed(() =>
+        Common.sToHms(Math.floor(audioPlayer.getPlaybackTime()))
+      ),
+      duration: computed(() => audioPlayer.getDuration()),
+      durationHms: computed(() =>
+        Common.sToHms(Math.floor(audioPlayer.getDuration()))
+      ),
     });
 
     const clearOpenChime = () => {
@@ -574,12 +645,67 @@ export default defineComponent({
     const clearBgm = () => {
       cm.clearBgm();
     };
+    const createUserCm = async () => {
+      try {
+        state.isCreating = true;
+        // TODO: このxUnisCustomerCdじゃないとエラーになる
+        const xUnisCustomerCd = "123456789";
+        const requestModel = getRequestModel();
+        console.log(requestModel);
+        const response = await api.createUserCm(xUnisCustomerCd, requestModel);
+        const data = <UserCmResponseItem>response.data;
+        console.log(data);
+        state.playUrl = data.url!!;
+      } catch (e) {
+        console.log(e);
+      } finally {
+        state.isCreating = false;
+      }
+    };
+    const play = async () => {
+      if (!state.playUrl) return;
+      await audioStore.download(state.playUrl);
+      audioPlayer.start(<AudioBuffer>audioStore.audioBuffer);
+    };
+    const stop = () => {
+      if (state.isPlaying) audioPlayer.stop();
+    };
 
+    const getRequestModel = () => {
+      const startChime: StartChime | undefined = cm.openChime
+        ? { contentsId: cm.openChime.contentsId, volume: 50 }
+        : undefined;
+      const endChime: EndChime | undefined = cm.endChime
+        ? { contentsId: cm.endChime.contentsId, volume: 50 }
+        : undefined;
+      const bgm: Bgm | undefined = cm.bgm
+        ? { contentsId: cm.bgm.contentsId, volume: 50 }
+        : undefined;
+      let narrations: Narration[] | undefined = undefined;
+      if (cm.narrations) {
+        cm.narrations.forEach((v) => {
+          narrations?.push({ contentsId: v.contentsId, volume: 150 });
+        });
+      }
+      const requestModel: UserCmRequestItem = {
+        materials: {
+          narrations: narrations,
+          startChime: startChime,
+          endChime: endChime,
+          bgm: bgm,
+        },
+      };
+      console.log(Convert.userCmRequestItemToJson(requestModel));
+      return requestModel;
+    };
     return {
       state,
       clearOpenChime,
       clearEndChime,
       clearBgm,
+      createUserCm,
+      play,
+      stop,
     };
   },
 });
