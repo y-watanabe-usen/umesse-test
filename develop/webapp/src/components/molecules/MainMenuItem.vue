@@ -1,5 +1,5 @@
 <template>
-  <li class="navigation-item" :class="{ 'is-wide': isWide }">
+  <li class="main-menu-item" :class="{ 'is-wide': isWide }">
     <div class="base" @click="onClick">
       <h2>
         <span class="icon"><slot name="icon" /></span>
@@ -15,7 +15,7 @@ import { reactive } from "vue";
 import { useRouter } from "vue-router";
 
 export default {
-  name: "NavigationItem",
+  name: "MainMenuItem",
   props: {
     to: {
       type: String,
@@ -43,8 +43,8 @@ export default {
 <style lang="scss" scoped>
 @import '@/scss/_variables.scss';
 
-.navigation-item {
-  margin-bottom: 40px;
+.main-menu-item {
+  margin-bottom: 56px;
   .base {
     border-radius: 10px;
     background-color: white;
@@ -89,6 +89,7 @@ export default {
     margin-top: 16px;
   }
   &.is-wide {
+    margin-bottom: 20px;
     .base {
       h2 {
         @include flex_center;
