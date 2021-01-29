@@ -1,0 +1,42 @@
+
+$box_shadow: 0 3px 20px rgba(0, 0, 0, 0.25);
+
+$font_weight_bold: 700;
+
+@mixin flex_center {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin flex_between {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+}
+
+@mixin flex_start {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+}
+
+@mixin flex_end {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-end;
+}
+
+@mixin flex_col_start {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+@mixin ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
