@@ -14,7 +14,7 @@
                   data-toggle="modal"
                   data-target="#playModal"
                   style="width: 140px"
-                  @click="createUserCm"
+                  @click="create"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -46,7 +46,7 @@
           data-toggle="modal"
           data-target="#saveModal"
           style="width: 100px"
-          :disabled="!state.createUserCmData"
+          :disabled="!(state.status >= UPLOAD_CM_STATE.CREATED)"
         >
           確定
         </button>
@@ -553,7 +553,7 @@
               data-toggle="modal"
               data-target="#savedModal"
               :disabled="!state.title"
-              @click="updateUserCm"
+              @click="update"
             >
               保存する
             </button>
@@ -610,30 +610,15 @@ import { defineComponent, computed, reactive, onMounted } from "vue";
 import AudioPlayer from "@/utils/AudioPlayer";
 import AudioStore from "@/store/audio";
 import { useGlobalStore } from "@/store";
-import * as UMesseApi from "umesseapi";
-import { config } from "@/utils/UMesseApiConfiguration";
-import {
-  Bgm,
-  Convert,
-  EndChime,
-  Narration,
-  StartChime,
-  CreateUserCmRequestItem,
-} from "@/models/CreateUserCmRequestItem";
-import { UpdateUserCmRequestItem } from "@/models/UpdateUserCmRequestItem";
-import { CreateUserCmResponseItem } from "@/models/CreateUserCmResponseItem";
 import * as Common from "@/utils/Common";
 import Constants from "@/utils/Constants";
-import { CmItem } from "umesseapi/models/cm-item";
+import { UPLOAD_CM_STATE } from "@/services/uploadCmService";
 
 export default defineComponent({
   setup() {
     const audioStore = AudioStore();
     const audioPlayer = AudioPlayer();
-    const api = new UMesseApi.CmApi(config);
     const { cm } = useGlobalStore();
-    let createUserCmResponseItem: CreateUserCmResponseItem;
-    let updateUserCmResponseItem: CmItem;
     const state = reactive({
       openChime: computed(() => cm.openChime),
       narrarions: computed(() => cm.narrationItems),
@@ -641,8 +626,9 @@ export default defineComponent({
       endChime: computed(() => cm.endChime),
       isPlaying: computed(() => audioPlayer.isPlaying()),
       isDownloading: computed(() => audioStore.isDownloading),
-      isCreating: false,
-      isUpdating: false,
+      isCreating: computed(() => cm.status() == UPLOAD_CM_STATE.CREATING),
+      isUpdating: computed(() => cm.status() == UPLOAD_CM_STATE.UPDATING),
+      status: computed(() => cm.status()),
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       playbackTimeHms: computed(() =>
         Common.sToHms(Math.floor(audioPlayer.getPlaybackTime()))
@@ -666,102 +652,47 @@ export default defineComponent({
     const clearBgm = () => {
       cm.clearBgm();
     };
-    const createUserCm = async () => {
+    const create = async () => {
       try {
-        state.isCreating = true;
-        // TODO: このxUnisCustomerCdじゃないとエラーになる
-        const xUnisCustomerCd = "123456789";
-        const requestModel = getCreateUserCmRequestModel();
-        console.log(requestModel);
-        const response = await api.createUserCm(xUnisCustomerCd, requestModel);
-        createUserCmResponseItem = <CreateUserCmResponseItem>response.data;
+        cm.create();
       } catch (e) {
         console.log(e);
-      } finally {
-        state.isCreating = false;
       }
     };
-    const updateUserCm = async () => {
+    const update = async () => {
       try {
-        state.isUpdating = true;
-        const xUnisCustomerCd = "123456789";
-        const requestModel = getUpdateUserCmRequestModel();
-        console.log(requestModel);
-        const response = await api.updateUserCm(
-          xUnisCustomerCd,
-          createUserCmResponseItem.cmId!!,
-          requestModel
+        cm.update(
+          state.title,
+          state.description,
+          state.scene,
+          state.uploadSystem
         );
-        updateUserCmResponseItem = response.data;
       } catch (e) {
         console.log(e);
-      } finally {
-        state.isUpdating = false;
       }
     };
 
     const play = async () => {
-      if (!createUserCmResponseItem) return;
-      await audioStore.download(createUserCmResponseItem.url!!);
+      console.log(cm.createCmData);
+      if (!cm.createCmData) return;
+      await audioStore.download(cm.createCmData.url!!);
       audioPlayer.start(<AudioBuffer>audioStore.audioBuffer);
     };
     const stop = () => {
       if (state.isPlaying) audioPlayer.stop();
     };
 
-    const getCreateUserCmRequestModel = () => {
-      const startChime: StartChime | undefined = cm.openChime
-        ? { contentsId: cm.openChime.contentsId, volume: 50 }
-        : undefined;
-      const endChime: EndChime | undefined = cm.endChime
-        ? { contentsId: cm.endChime.contentsId, volume: 50 }
-        : undefined;
-      const bgm: Bgm | undefined = cm.bgm
-        ? { contentsId: cm.bgm.contentsId, volume: 50 }
-        : undefined;
-      let narrations: Narration[] | undefined = undefined;
-      if (cm.narrations) {
-        cm.narrations.forEach((v) => {
-          narrations?.push({ contentsId: v.contentsId, volume: 150 });
-        });
-      }
-      const requestModel: CreateUserCmRequestItem = {
-        materials: {
-          narrations: narrations,
-          startChime: startChime,
-          endChime: endChime,
-          bgm: bgm,
-        },
-      };
-      console.log(Convert.createUserCmRequestItemToJson(requestModel));
-      return requestModel;
-    };
-    const getUpdateUserCmRequestModel = () => {
-      // TODO: startDate, endDate, Industryは何の値を入れる？
-      const requestModel: UpdateUserCmRequestItem = {
-        title: state.title,
-        description: state.description,
-        startDate: new Date(2019, 9 - 1, 1, 9, 0, 0).toISOString(),
-        endDate: new Date(9999, 12 - 1, 31, 23, 59, 59).toISOString(),
-        industry: undefined,
-        scene: {
-          sceneCd: state.scene,
-          sceneName: Constants.SCENES.find((v) => v.cd == state.scene)?.name,
-        },
-        uploadSystem: state.uploadSystem,
-      };
-      return requestModel;
-    };
     return {
       state,
       clearOpenChime,
       clearEndChime,
       clearBgm,
-      createUserCm,
-      updateUserCm,
+      create,
+      update,
       play,
       stop,
       Constants,
+      UPLOAD_CM_STATE,
     };
   },
 });
