@@ -46,6 +46,7 @@
           data-toggle="modal"
           data-target="#saveModal"
           style="width: 100px"
+          :disabled="!state.createUserCmData"
         >
           確定
         </button>
@@ -495,21 +496,28 @@
             <div class="row">
               <div class="col-2">タイトル</div>
               <div class="col-10">
-                <input class="form-control" type="text" />
+                <input class="form-control" type="text" v-model="state.title" />
               </div>
             </div>
             <div class="row pt-4">
               <div class="col-2">説明</div>
               <div class="col-10">
-                <textarea class="form-control"></textarea>
+                <textarea
+                  class="form-control"
+                  v-model="state.description"
+                ></textarea>
               </div>
             </div>
             <div class="row pt-4">
               <div class="col-2">シーン</div>
               <div class="col-10">
-                <select class="form-control w-100">
-                  <option v-for="scene in state.scenes" :key="scene">
-                    {{ scene }}
+                <select class="form-control w-100" v-model="state.scene">
+                  <option
+                    v-for="scene in Constants.SCENES"
+                    :key="scene.cd"
+                    :value="scene.cd"
+                  >
+                    {{ scene.name }}
                   </option>
                 </select>
               </div>
@@ -517,9 +525,13 @@
             <div class="row pt-4">
               <div class="col-2">アップロード先</div>
               <div class="col-10">
-                <select class="form-control w-100">
-                  <option v-for="upload in state.uploads" :key="upload">
-                    {{ upload }}
+                <select class="form-control w-100" v-model="state.uploadSystem">
+                  <option
+                    v-for="uploadSystem in Constants.UPLOAD_SYSTEMS"
+                    :key="uploadSystem.cd"
+                    :value="uploadSystem.cd"
+                  >
+                    {{ uploadSystem.name }}
                   </option>
                 </select>
                 あとで、管理画面からアップロード先を変更することが出来ます。
@@ -540,6 +552,8 @@
               data-dismiss="modal"
               data-toggle="modal"
               data-target="#savedModal"
+              :disabled="!state.title"
+              @click="updateUserCm"
             >
               保存する
             </button>
@@ -604,10 +618,13 @@ import {
   EndChime,
   Narration,
   StartChime,
-  UserCmRequestItem,
-} from "@/models/UserCmRequestItem";
-import { UserCmResponseItem } from "@/models/UserCmResponseItem";
+  CreateUserCmRequestItem,
+} from "@/models/CreateUserCmRequestItem";
+import { UpdateUserCmRequestItem } from "@/models/UpdateUserCmRequestItem";
+import { CreateUserCmResponseItem } from "@/models/CreateUserCmResponseItem";
 import * as Common from "@/utils/Common";
+import Constants from "@/utils/Constants";
+import { CmItem } from "umesseapi/models/cm-item";
 
 export default defineComponent({
   setup() {
@@ -615,17 +632,17 @@ export default defineComponent({
     const audioPlayer = AudioPlayer();
     const api = new UMesseApi.CmApi(config);
     const { cm } = useGlobalStore();
+    let createUserCmResponseItem: CreateUserCmResponseItem;
+    let updateUserCmResponseItem: CmItem;
     const state = reactive({
-      scenes: ["開店", "閉店", "etc"],
-      uploads: ["U MUSIC", "etc"],
       openChime: computed(() => cm.openChime),
       narrarions: computed(() => cm.narrationItems),
       bgm: computed(() => cm.bgm),
       endChime: computed(() => cm.endChime),
-      playUrl: "",
       isPlaying: computed(() => audioPlayer.isPlaying()),
       isDownloading: computed(() => audioStore.isDownloading),
       isCreating: false,
+      isUpdating: false,
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       playbackTimeHms: computed(() =>
         Common.sToHms(Math.floor(audioPlayer.getPlaybackTime()))
@@ -634,6 +651,10 @@ export default defineComponent({
       durationHms: computed(() =>
         Common.sToHms(Math.floor(audioPlayer.getDuration()))
       ),
+      title: "",
+      description: "",
+      scene: "001",
+      uploadSystem: "01",
     });
 
     const clearOpenChime = () => {
@@ -650,28 +671,45 @@ export default defineComponent({
         state.isCreating = true;
         // TODO: このxUnisCustomerCdじゃないとエラーになる
         const xUnisCustomerCd = "123456789";
-        const requestModel = getRequestModel();
+        const requestModel = getCreateUserCmRequestModel();
         console.log(requestModel);
         const response = await api.createUserCm(xUnisCustomerCd, requestModel);
-        const data = <UserCmResponseItem>response.data;
-        console.log(data);
-        state.playUrl = data.url!!;
+        createUserCmResponseItem = <CreateUserCmResponseItem>response.data;
       } catch (e) {
         console.log(e);
       } finally {
         state.isCreating = false;
       }
     };
+    const updateUserCm = async () => {
+      try {
+        state.isUpdating = true;
+        const xUnisCustomerCd = "123456789";
+        const requestModel = getUpdateUserCmRequestModel();
+        console.log(requestModel);
+        const response = await api.updateUserCm(
+          xUnisCustomerCd,
+          createUserCmResponseItem.cmId!!,
+          requestModel
+        );
+        updateUserCmResponseItem = response.data;
+      } catch (e) {
+        console.log(e);
+      } finally {
+        state.isUpdating = false;
+      }
+    };
+
     const play = async () => {
-      if (!state.playUrl) return;
-      await audioStore.download(state.playUrl);
+      if (!createUserCmResponseItem) return;
+      await audioStore.download(createUserCmResponseItem.url!!);
       audioPlayer.start(<AudioBuffer>audioStore.audioBuffer);
     };
     const stop = () => {
       if (state.isPlaying) audioPlayer.stop();
     };
 
-    const getRequestModel = () => {
+    const getCreateUserCmRequestModel = () => {
       const startChime: StartChime | undefined = cm.openChime
         ? { contentsId: cm.openChime.contentsId, volume: 50 }
         : undefined;
@@ -687,7 +725,7 @@ export default defineComponent({
           narrations?.push({ contentsId: v.contentsId, volume: 150 });
         });
       }
-      const requestModel: UserCmRequestItem = {
+      const requestModel: CreateUserCmRequestItem = {
         materials: {
           narrations: narrations,
           startChime: startChime,
@@ -695,7 +733,23 @@ export default defineComponent({
           bgm: bgm,
         },
       };
-      console.log(Convert.userCmRequestItemToJson(requestModel));
+      console.log(Convert.createUserCmRequestItemToJson(requestModel));
+      return requestModel;
+    };
+    const getUpdateUserCmRequestModel = () => {
+      // TODO: startDate, endDate, Industryは何の値を入れる？
+      const requestModel: UpdateUserCmRequestItem = {
+        title: state.title,
+        description: state.description,
+        startDate: new Date(2019, 9 - 1, 1, 9, 0, 0).toISOString(),
+        endDate: new Date(9999, 12 - 1, 31, 23, 59, 59).toISOString(),
+        industry: undefined,
+        scene: {
+          sceneCd: state.scene,
+          sceneName: Constants.SCENES.find((v) => v.cd == state.scene)?.name,
+        },
+        uploadSystem: state.uploadSystem,
+      };
       return requestModel;
     };
     return {
@@ -704,8 +758,10 @@ export default defineComponent({
       clearEndChime,
       clearBgm,
       createUserCm,
+      updateUserCm,
       play,
       stop,
+      Constants,
     };
   },
 });

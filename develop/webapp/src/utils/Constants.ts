@@ -9,6 +9,11 @@ export type Scene = {
   name: string,
 }
 
+export type UploadSystem = {
+  cd: string, // id
+  name: string,
+}
+
 export default class Constants {
   public static readonly APP_NAME = "U MESSE"
 
@@ -83,6 +88,11 @@ export default class Constants {
     { cd: '053', name: '誕生日演出' },
     { cd: '901', name: '録音' },
     { cd: '902', name: '音声合成' },
+  ]
+
+  public static readonly UPLOAD_SYSTEMS: UploadSystem[] = [
+    { cd: '01', name: 'U MUSIC' },
+    { cd: '02', name: "S'sence" },
   ]
 }
 
