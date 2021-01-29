@@ -1,10 +1,10 @@
 // To parse this data:
 //
-//   import { Convert, UserCMRequestItem } from "./file";
+//   import { Convert, CreateUserCmRequestItem } from "./file";
 //
-//   const userCMRequestItem = Convert.toUserCMRequestItem(json);
+//   const CreateUserCmRequestItem = Convert.toCreateUserCmRequestItem(json);
 
-export interface UserCmRequestItem {
+export interface CreateUserCmRequestItem {
   materials?: Materials;
 }
 
@@ -37,11 +37,11 @@ export interface StartChime {
 
 // Converts JSON strings to/from your types
 export class Convert {
-  public static toUserCmRequestItem(json: string): UserCmRequestItem {
+  public static toCreateUserCmRequestItem(json: string): CreateUserCmRequestItem {
     return JSON.parse(json);
   }
 
-  public static userCmRequestItemToJson(value: UserCmRequestItem): string {
+  public static createUserCmRequestItemToJson(value: CreateUserCmRequestItem): string {
     return JSON.stringify(value);
   }
 }
