@@ -8,7 +8,7 @@
     <p class="title"><router-link :to="{ name: 'Cm' }">店内アナウンスを作成する</router-link></p>
     <ul class="nav">
       <li>
-        <router-link to="#" data-toggle="modal" data-target="#modalSetting">
+        <router-link to="#" @click="openModal">
           <img src="@/assets/icon_setting.svg" />
         </router-link>
       </li>
@@ -16,67 +16,64 @@
   </header>
   <MainMenu />
   <!-- modal -->
-  <div
-    class="modal fade"
-    id="modalSetting"
-    tabindex="-1"
-    role="dialog"
-    aria-labelledby="modalSetting"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalCenterTitle">setting</h5>
-          <button
-            type="button"
-            class="close"
-            data-dismiss="modal"
-            aria-label="Close"
-          >
-            <span aria-hidden="true">&times;</span>
-          </button>
+  <transition>
+    <ModalDialog v-if="state.isModalAppear" @close="closeModal">
+      <template #header>
+        <ModalHeader title="setting" @close="closeModal" />
+      </template>
+      <template #contents>
+        <div class="modal-contents custom-control custom-switch">
+          <input
+            type="checkbox"
+            class="custom-control-input"
+            id="customSwitch1"
+            v-model="isDarkTheme"
+            @change="toggleDarkTheme()"
+          />
+          <label class="custom-control-label" for="customSwitch1">switch dark mode</label>
         </div>
-        <div class="modal-body text-center">
-          <div class="custom-control custom-switch">
-            <input
-              type="checkbox"
-              class="custom-control-input"
-              id="customSwitch1"
-              v-model="isDarkTheme"
-              @change="toggleDarkTheme()"
-            />
-            <label class="custom-control-label" for="customSwitch1"
-              >switch dark mode</label
-            >
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+      </template>
+    </ModalDialog>
+  </transition>
 </template>
 
 <script lang="ts">
 import { useGlobalStore } from "@/store";
-import { computed, defineComponent, onMounted, reactive, toRefs } from "vue";
-import MainMenu from "@/components/organisms/MainMenu.vue"
+import { onMounted, reactive } from "vue";
+import MainMenu from "@/components/organisms/MainMenu.vue";
+import ModalDialog from "@/components/molecules/ModalDialog.vue";
+import ModalHeader from "@/components/molecules/ModalHeader.vue";
 
-export default defineComponent({
+export default {
   components: {
     MainMenu,
+    ModalDialog,
+    ModalHeader,
   },
   name: "Home",
   setup() {
     const { auth, base } = useGlobalStore();
+    const state = reactive({
+      isModalAppear: false,
+    });
+    const openModal = () => {
+      state.isModalAppear = true;
+    };
+    const closeModal = () => {
+      state.isModalAppear = false;
+    };
     onMounted(() => {
       auth.requestAuth();
     });
     return {
+      state,
+      openModal,
+      closeModal,
       ...auth,
       ...base,
     };
   },
-});
+};
 </script>
 
 <style lang="scss" scoped>
@@ -120,4 +117,8 @@ header {
     }
   }
 }
+.modal-contents {
+  padding: 30px;
+}
+@include fade_animation;
 </style>

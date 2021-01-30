@@ -41,3 +41,21 @@ $font_weight_bold: 700;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+@mixin fade_animation {
+  .v-enter-active, .v-leave-active {
+    transition: opacity 0.5s ease;
+  }
+  .v-enter {
+    opacity: 0;
+  }
+  .v-enter-to {
+    opacity: 1;
+  }
+  .v-leave {
+    opacity: 1;
+  }
+  .v-leave-to {
+    opacity: 0;
+  }
+}
