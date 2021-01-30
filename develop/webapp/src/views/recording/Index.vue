@@ -1,6 +1,6 @@
 <template>
-  <div class="bg-umesse pb-5">
-    <div class="container">
+  <BasicLayout>
+    <template #header>
       <nav class="navbar navbar-expand-lg navbar-light">
         <router-link class="navbar-brand" :to="{ name: 'Home' }"
           >&lt;戻る</router-link
@@ -19,6 +19,8 @@
           </button>
         </span>
       </nav>
+    </template>
+    <template #contents>
       <div class="row">
         <div class="m-5">
           <p class="recording" @click="toggleVoiceRecorder">
@@ -276,113 +278,113 @@
           </div>
         </div>
       </div>
-    </div>
-    <!-- modal -->
-    <div
-      class="modal fade"
-      id="saveModal"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="saveModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="saveModalLabel">保存しますか？</h5>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-              v-bind:disabled="
-                uploadRecoridngState === UPLOAD_RECORDING_STATE.UPLOADING
-              "
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <form>
-              <div class="form-group">
-                <label for="title" class="col-form-label">タイトル(必須)</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  id="title"
-                  v-model="file.title"
-                  v-bind:disabled="
-                    uploadRecoridngState !== UPLOAD_RECORDING_STATE.NONE &&
-                    uploadRecoridngState !== UPLOAD_RECORDING_STATE.ERROR
-                  "
-                />
-              </div>
-              <div class="form-group">
-                <label for="description" class="col-form-label">説明</label>
-                <textarea
-                  class="form-control"
-                  id="description"
-                  v-bind:disabled="
-                    uploadRecoridngState !== UPLOAD_RECORDING_STATE.NONE &&
-                    uploadRecoridngState !== UPLOAD_RECORDING_STATE.ERROR
-                  "
-                ></textarea>
-              </div>
-            </form>
-            <!-- 保存中 -->
-            <span
-              v-if="uploadRecoridngState === UPLOAD_RECORDING_STATE.UPLOADING"
-            >
-              <div class="col-form-label">クルクルインジケーターとか</div>
-            </span>
-            <!-- 保存完了 -->
-            <span
-              v-if="uploadRecoridngState === UPLOAD_RECORDING_STATE.UPLOADED"
-            >
-              <div class="col-form-label">保存が完了しました。</div>
-            </span>
-            <!-- 保存失敗 -->
-            <span v-if="uploadRecoridngState === UPLOAD_RECORDING_STATE.ERROR">
-              <div class="failed">保存に失敗しました。再度お試しください。</div>
-            </span>
-          </div>
-          <span
-            v-if="
-              uploadRecoridngState === UPLOAD_RECORDING_STATE.ERROR ||
-              uploadRecoridngState === UPLOAD_RECORDING_STATE.NONE
+    </template>
+  </BasicLayout>
+  <!-- modal -->
+  <div
+    class="modal fade"
+    id="saveModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="saveModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-xl" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="saveModalLabel">保存しますか？</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+            v-bind:disabled="
+              uploadRecoridngState === UPLOAD_RECORDING_STATE.UPLOADING
             "
           >
-            <div class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-secondary"
-                data-dismiss="modal"
-              >
-                キャンセル
-              </button>
-              <button
-                type="button"
-                class="btn btn-primary"
-                v-bind:disabled="file.title === undefined || file.title === ''"
-                @click="uploadRecordingFile"
-              >
-                保存する
-              </button>
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="title" class="col-form-label">タイトル(必須)</label>
+              <input
+                type="text"
+                class="form-control"
+                id="title"
+                v-model="file.title"
+                v-bind:disabled="
+                  uploadRecoridngState !== UPLOAD_RECORDING_STATE.NONE &&
+                  uploadRecoridngState !== UPLOAD_RECORDING_STATE.ERROR
+                "
+              />
             </div>
+            <div class="form-group">
+              <label for="description" class="col-form-label">説明</label>
+              <textarea
+                class="form-control"
+                id="description"
+                v-bind:disabled="
+                  uploadRecoridngState !== UPLOAD_RECORDING_STATE.NONE &&
+                  uploadRecoridngState !== UPLOAD_RECORDING_STATE.ERROR
+                "
+              ></textarea>
+            </div>
+          </form>
+          <!-- 保存中 -->
+          <span
+            v-if="uploadRecoridngState === UPLOAD_RECORDING_STATE.UPLOADING"
+          >
+            <div class="col-form-label">クルクルインジケーターとか</div>
           </span>
           <!-- 保存完了 -->
-          <span v-if="uploadRecoridngState === UPLOAD_RECORDING_STATE.UPLOADED">
-            <div class="modal-footer">
-              <button
-                type="button"
-                class="btn btn-primary"
-                data-dismiss="modal"
-              >
-                OK
-              </button>
-            </div>
+          <span
+            v-if="uploadRecoridngState === UPLOAD_RECORDING_STATE.UPLOADED"
+          >
+            <div class="col-form-label">保存が完了しました。</div>
+          </span>
+          <!-- 保存失敗 -->
+          <span v-if="uploadRecoridngState === UPLOAD_RECORDING_STATE.ERROR">
+            <div class="failed">保存に失敗しました。再度お試しください。</div>
           </span>
         </div>
+        <span
+          v-if="
+            uploadRecoridngState === UPLOAD_RECORDING_STATE.ERROR ||
+            uploadRecoridngState === UPLOAD_RECORDING_STATE.NONE
+          "
+        >
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              キャンセル
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              v-bind:disabled="file.title === undefined || file.title === ''"
+              @click="uploadRecordingFile"
+            >
+              保存する
+            </button>
+          </div>
+        </span>
+        <!-- 保存完了 -->
+        <span v-if="uploadRecoridngState === UPLOAD_RECORDING_STATE.UPLOADED">
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-dismiss="modal"
+            >
+              OK
+            </button>
+          </div>
+        </span>
       </div>
     </div>
   </div>
@@ -399,9 +401,13 @@ import {
 } from "@/services/uploadRecordingService";
 import * as UMesseApi from "umesseapi";
 import provideRecordingStore from "@/store/recording";
-import * as Common from "@/utils/Common"
+import * as Common from "@/utils/Common";
+import BasicLayout from "@/components/templates/BasicLayout.vue";
 
 export default defineComponent({
+  components: {
+    BasicLayout,
+  },
   name: "RecordingStart",
   setup() {
     const recordingStore = provideRecordingStore(); //FIXME: provide name.

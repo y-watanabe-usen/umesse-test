@@ -1,6 +1,6 @@
 <template>
-  <div class="bg-umesse pb-5">
-    <div class="container">
+  <BasicLayout>
+    <template #header>
       <nav class="navbar navbar-expand-lg navbar-light">
         <router-link class="navbar-brand" :to="{ name: 'Home' }"
           >&lt;戻る</router-link
@@ -9,6 +9,8 @@
           テンプレート選択
         </div>
       </nav>
+    </template>
+    <template #contents>
       <div class="row">
         <div class="col-2 bg-menu pl-1 pr-1 rounded-left">
           <button
@@ -26,7 +28,7 @@
             {{ menu.title }}
           </button>
         </div>
-        <div class="col-10 bg-white rounded-right">
+        <div class="col-9 bg-white rounded-right">
           <div class="my-3">
             <h6 class="border-bottom border-gray pb-2 mb-0">
               <select class="form-control w-25">
@@ -87,14 +89,18 @@
           </div>
         </div>
       </div>
-    </div>
-  </div>
+    </template>
+  </BasicLayout>
 </template>
 
 <script lang="ts">
 import { computed, reactive } from "vue";
+import BasicLayout from "@/components/templates/BasicLayout.vue";
 
 export default {
+  components: {
+    BasicLayout,
+  },
   setup() {
     const state = reactive({
       menus: [
