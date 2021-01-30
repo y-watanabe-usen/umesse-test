@@ -20,44 +20,46 @@
       </nav>
     </template>
     <template #contents>
-      <div class="rounded bg-white">
-        <div class="row p-4">
-          <div class="col">
-            <div class="row">
-              <div class="col-2 m-auto">話者</div>
-              <div class="col-10 m-auto">
-                <select class="form-control w-25" v-model="speaker">
-                  <option v-for="speaker in speakers" :key="speaker">
-                    {{ speaker }}
-                  </option>
-                </select>
+      <ContentsBase>
+        <div class="rounded bg-white">
+          <div class="row p-4">
+            <div class="col">
+              <div class="row">
+                <div class="col-2 m-auto">話者</div>
+                <div class="col-10 m-auto">
+                  <select class="form-control w-25" v-model="speaker">
+                    <option v-for="speaker in speakers" :key="speaker">
+                      {{ speaker }}
+                    </option>
+                  </select>
+                </div>
               </div>
             </div>
+            <div class="col text-right">
+              <router-link
+                class="btn btn-light shadow my-auto"
+                :to="{ name: 'VoiceFreeSelectTemplate' }"
+              >
+                原稿をコピーする
+              </router-link>
+            </div>
           </div>
-          <div class="col text-right">
-            <router-link
-              class="btn btn-light shadow my-auto"
-              :to="{ name: 'VoiceFreeSelectTemplate' }"
+          <div class="row p-4">
+            <div
+              class="alert alert-dark alert-maniscript mx-auto my-3"
+              role="alert"
             >
-              原稿をコピーする
-            </router-link>
+              原稿
+            </div>
+            <textarea
+              class="col-12 p-3 rounded"
+              style="height: 500px"
+              placeholder="アナウンスの文言を入力してください。"
+              v-model="text"
+            ></textarea>
           </div>
         </div>
-        <div class="row p-4">
-          <div
-            class="alert alert-dark alert-maniscript mx-auto my-3"
-            role="alert"
-          >
-            原稿
-          </div>
-          <textarea
-            class="col-12 p-3 rounded"
-            style="height: 500px"
-            placeholder="アナウンスの文言を入力してください。"
-            v-model="text"
-          ></textarea>
-        </div>
-      </div>
+      </ContentsBase>
     </template>
   </BasicLayout>
   <!-- modal -->
@@ -250,10 +252,12 @@ import {
 import provideTtsStore from "@/store/tts";
 import * as Common from "@/utils/Common"
 import BasicLayout from "@/components/templates/BasicLayout.vue";
+import ContentsBase from "@/components/templates/ContentsBase.vue"
 
 export default {
   components: {
     BasicLayout,
+    ContentsBase,
   },
   data() {
     return {

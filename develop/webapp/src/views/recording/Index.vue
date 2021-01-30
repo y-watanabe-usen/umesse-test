@@ -21,263 +21,265 @@
       </nav>
     </template>
     <template #contents>
-      <div class="row">
-        <div class="m-5">
-          <p class="recording" @click="toggleVoiceRecorder">
-            <span v-if="isRecording === false">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                xmlns:xlink="http://www.w3.org/1999/xlink"
-                width="390"
-                height="390"
-                viewBox="0 0 390 390"
-              >
-                <defs>
-                  <linearGradient
-                    id="linear-gradient"
-                    x1="0.5"
-                    x2="0.5"
-                    y2="1"
-                    gradientUnits="objectBoundingBox"
-                  >
-                    <stop offset="0" stop-color="#0090ea" />
-                    <stop offset="1" stop-color="#00baff" />
-                    <stop offset="1" stop-color="#3f3f3f" />
-                  </linearGradient>
-                </defs>
-                <g
-                  id="グループ_71"
-                  data-name="グループ 71"
-                  transform="translate(-154 -193)"
+      <ContentsBase>
+        <div class="row">
+          <div class="m-5">
+            <p class="recording" @click="toggleVoiceRecorder">
+              <span v-if="isRecording === false">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  xmlns:xlink="http://www.w3.org/1999/xlink"
+                  width="390"
+                  height="390"
+                  viewBox="0 0 390 390"
                 >
-                  <circle
-                    id="楕円形_6"
-                    data-name="楕円形 6"
-                    cx="195"
-                    cy="195"
-                    r="195"
-                    transform="translate(154 193)"
-                    fill="url(#linear-gradient)"
-                  />
-                  <circle
-                    id="楕円形_7"
-                    data-name="楕円形 7"
-                    cx="181"
-                    cy="181"
-                    r="181"
-                    transform="translate(168 207)"
-                    fill="#fff"
-                  />
+                  <defs>
+                    <linearGradient
+                      id="linear-gradient"
+                      x1="0.5"
+                      x2="0.5"
+                      y2="1"
+                      gradientUnits="objectBoundingBox"
+                    >
+                      <stop offset="0" stop-color="#0090ea" />
+                      <stop offset="1" stop-color="#00baff" />
+                      <stop offset="1" stop-color="#3f3f3f" />
+                    </linearGradient>
+                  </defs>
                   <g
-                    id="グループ_70"
-                    data-name="グループ 70"
-                    transform="translate(127.721 27.37)"
+                    id="グループ_71"
+                    data-name="グループ 71"
+                    transform="translate(-154 -193)"
                   >
-                    <path
-                      id="パス_45"
-                      data-name="パス 45"
-                      d="M199.961,349.812a26.263,26.263,0,0,0,26.182-26.182V253.812a26.182,26.182,0,0,0-52.364,0V323.63A26.263,26.263,0,0,0,199.961,349.812Z"
-                      transform="translate(21.682)"
+                    <circle
+                      id="楕円形_6"
+                      data-name="楕円形 6"
+                      cx="195"
+                      cy="195"
+                      r="195"
+                      transform="translate(154 193)"
                       fill="url(#linear-gradient)"
                     />
-                    <path
-                      id="パス_46"
-                      data-name="パス 46"
-                      d="M274.006,269.874V247.514a8.727,8.727,0,1,0-17.454,0v22.359a34.909,34.909,0,1,1-69.818,0V247.514a8.727,8.727,0,0,0-17.455,0v22.359a52.4,52.4,0,0,0,43.794,51.6c-.023.268-.157.495-.157.768v26.182h-21.76a8.727,8.727,0,1,0,0,17.455H252.13a8.727,8.727,0,0,0,0-17.455H230.37V322.237c0-.274-.128-.5-.151-.768A52.4,52.4,0,0,0,274.006,269.874Z"
-                      transform="translate(0 53.757)"
-                      fill="url(#linear-gradient)"
+                    <circle
+                      id="楕円形_7"
+                      data-name="楕円形 7"
+                      cx="181"
+                      cy="181"
+                      r="181"
+                      transform="translate(168 207)"
+                      fill="#fff"
                     />
-                  </g>
-                  <text
-                    id="録音開始"
-                    transform="translate(349 504)"
-                    fill="#555"
-                    font-size="30"
-                    font-family="YuGothicUI-Regular, Yu Gothic UI"
-                  >
-                    <tspan x="-60" y="0">録音開始</tspan>
-                  </text>
-                </g>
-              </svg>
-            </span>
-            <span v-else>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                xmlns:xlink="http://www.w3.org/1999/xlink"
-                width="390"
-                height="390"
-                viewBox="0 0 390 390"
-              >
-                <defs>
-                  <linearGradient
-                    id="linear-gradient"
-                    x1="0.5"
-                    x2="0.5"
-                    y2="1"
-                    gradientUnits="objectBoundingBox"
-                  >
-                    <stop offset="0" stop-color="#e04242" />
-                    <stop offset="1" stop-color="#ff7157" />
-                    <stop offset="1" stop-color="#3f3f3f" />
-                  </linearGradient>
-                  <linearGradient
-                    id="linear-gradient-2"
-                    x1="0.5"
-                    x2="0.5"
-                    y2="1"
-                    gradientUnits="objectBoundingBox"
-                  >
-                    <stop offset="0" stop-color="#e04242" />
-                    <stop offset="1" stop-color="#e26548" />
-                    <stop offset="1" stop-color="#3f3f3f" />
-                  </linearGradient>
-                </defs>
-                <g
-                  id="グループ_71"
-                  data-name="グループ 71"
-                  transform="translate(-154 -193)"
-                >
-                  <circle
-                    id="楕円形_6"
-                    data-name="楕円形 6"
-                    cx="195"
-                    cy="195"
-                    r="195"
-                    transform="translate(154 193)"
-                    fill="url(#linear-gradient)"
-                  />
-                  <circle
-                    id="楕円形_7"
-                    data-name="楕円形 7"
-                    cx="181"
-                    cy="181"
-                    r="181"
-                    transform="translate(168 207)"
-                    fill="#fff"
-                  />
-                  <text
-                    id="録音停止"
-                    transform="translate(349 504)"
-                    fill="#555"
-                    font-size="30"
-                    font-family="YuGothicUI-Regular, Yu Gothic UI"
-                  >
-                    <tspan x="-60" y="0">録音停止</tspan>
-                  </text>
-                  <rect
-                    id="長方形_270"
-                    data-name="長方形 270"
-                    width="98"
-                    height="98"
-                    rx="4"
-                    transform="translate(300 323)"
-                    fill="url(#linear-gradient-2)"
-                  />
-                </g>
-              </svg>
-            </span>
-          </p>
-        </div>
-        <div class="d-flex align-items-center">
-          <div class="lead" style="padding: 20px; width: 600px">
-            <div v-if="hasRecordedData">
-              <h5 class="m-0 text-right">db</h5>
-              <div class="d-flex">
-                <h5>-60</h5>
-                <h5>-50</h5>
-                <h5>-40</h5>
-                <h5>-30</h5>
-                <h5>-25</h5>
-                <h5>-20</h5>
-                <h5 class="ml-4">-15</h5>
-                <h5 class="ml-4">-10</h5>
-                <h5 class="ml-4">-5</h5>
-                <h5 class="ml-4">0</h5>
-              </div>
-              <div class="d-flex" style="width: 800px">
-                <div class="scale"></div>
-                <div class="scale"></div>
-                <div class="scale"></div>
-                <div class="scale"></div>
-                <div class="scale"></div>
-                <div class="scale"></div>
-                <div class="scale"></div>
-                <div class="scale"></div>
-                <div class="scale"></div>
-                <div class="scale"></div>
-              </div>
-              <meter
-                min="-100"
-                max="0"
-                class="w-100"
-                :value="decibel"
-                style="height: 40px"
-              ></meter>
-              <span id="avg-level-text"> {{ decibel }} </span> dB
-              <h5 class="mt-4">録音したデータ１</h5>
-              <div class="row">
-                <div class="col text-left" style="font-size: 17px">
-                  {{ playbackTimeHms }}
-                </div>
-                <div class="col text-right" style="font-size: 17px">
-                  {{ durationHms }}
-                </div>
-              </div>
-              <meter
-                min="0"
-                :max="duration"
-                class="w-100"
-                :value="playbackTime"
-              ></meter>
-              <div class="d-flex justify-content-center mt-4 mb-4">
-                <button class="btn btn-light mr-3 btn-play" @click="play">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="30"
-                    height="23"
-                    viewBox="0 0 30 23"
-                  >
-                    <path
-                      d="M10.1,3.654a1.5,1.5,0,0,1,2.8,0l9.319,24.309A1.5,1.5,0,0,1,20.819,30H2.181a1.5,1.5,0,0,1-1.4-2.037Z"
-                      transform="translate(30) rotate(90)"
-                      fill="#578ed9"
-                    /></svg
-                  >再生
-                </button>
-                <button
-                  class="btn btn-light btn-delete"
-                  @click="deleteRecordedData"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="22"
-                    height="22"
-                    viewBox="0 0 22 22"
-                  >
-                    <g transform="translate(-860 -178)">
-                      <circle
-                        cx="11"
-                        cy="11"
-                        r="11"
-                        transform="translate(860 178)"
-                        fill="#982e2e"
+                    <g
+                      id="グループ_70"
+                      data-name="グループ 70"
+                      transform="translate(127.721 27.37)"
+                    >
+                      <path
+                        id="パス_45"
+                        data-name="パス 45"
+                        d="M199.961,349.812a26.263,26.263,0,0,0,26.182-26.182V253.812a26.182,26.182,0,0,0-52.364,0V323.63A26.263,26.263,0,0,0,199.961,349.812Z"
+                        transform="translate(21.682)"
+                        fill="url(#linear-gradient)"
                       />
                       <path
-                        d="M1,0H11a1,1,0,0,1,0,2H1C.448,2,0,1,0,1S.448,0,1,0Z"
-                        transform="translate(865 188)"
-                        fill="#fff"
+                        id="パス_46"
+                        data-name="パス 46"
+                        d="M274.006,269.874V247.514a8.727,8.727,0,1,0-17.454,0v22.359a34.909,34.909,0,1,1-69.818,0V247.514a8.727,8.727,0,0,0-17.455,0v22.359a52.4,52.4,0,0,0,43.794,51.6c-.023.268-.157.495-.157.768v26.182h-21.76a8.727,8.727,0,1,0,0,17.455H252.13a8.727,8.727,0,0,0,0-17.455H230.37V322.237c0-.274-.128-.5-.151-.768A52.4,52.4,0,0,0,274.006,269.874Z"
+                        transform="translate(0 53.757)"
+                        fill="url(#linear-gradient)"
                       />
-                    </g></svg
-                  >削除
-                </button>
+                    </g>
+                    <text
+                      id="録音開始"
+                      transform="translate(349 504)"
+                      fill="#555"
+                      font-size="30"
+                      font-family="YuGothicUI-Regular, Yu Gothic UI"
+                    >
+                      <tspan x="-60" y="0">録音開始</tspan>
+                    </text>
+                  </g>
+                </svg>
+              </span>
+              <span v-else>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  xmlns:xlink="http://www.w3.org/1999/xlink"
+                  width="390"
+                  height="390"
+                  viewBox="0 0 390 390"
+                >
+                  <defs>
+                    <linearGradient
+                      id="linear-gradient"
+                      x1="0.5"
+                      x2="0.5"
+                      y2="1"
+                      gradientUnits="objectBoundingBox"
+                    >
+                      <stop offset="0" stop-color="#e04242" />
+                      <stop offset="1" stop-color="#ff7157" />
+                      <stop offset="1" stop-color="#3f3f3f" />
+                    </linearGradient>
+                    <linearGradient
+                      id="linear-gradient-2"
+                      x1="0.5"
+                      x2="0.5"
+                      y2="1"
+                      gradientUnits="objectBoundingBox"
+                    >
+                      <stop offset="0" stop-color="#e04242" />
+                      <stop offset="1" stop-color="#e26548" />
+                      <stop offset="1" stop-color="#3f3f3f" />
+                    </linearGradient>
+                  </defs>
+                  <g
+                    id="グループ_71"
+                    data-name="グループ 71"
+                    transform="translate(-154 -193)"
+                  >
+                    <circle
+                      id="楕円形_6"
+                      data-name="楕円形 6"
+                      cx="195"
+                      cy="195"
+                      r="195"
+                      transform="translate(154 193)"
+                      fill="url(#linear-gradient)"
+                    />
+                    <circle
+                      id="楕円形_7"
+                      data-name="楕円形 7"
+                      cx="181"
+                      cy="181"
+                      r="181"
+                      transform="translate(168 207)"
+                      fill="#fff"
+                    />
+                    <text
+                      id="録音停止"
+                      transform="translate(349 504)"
+                      fill="#555"
+                      font-size="30"
+                      font-family="YuGothicUI-Regular, Yu Gothic UI"
+                    >
+                      <tspan x="-60" y="0">録音停止</tspan>
+                    </text>
+                    <rect
+                      id="長方形_270"
+                      data-name="長方形 270"
+                      width="98"
+                      height="98"
+                      rx="4"
+                      transform="translate(300 323)"
+                      fill="url(#linear-gradient-2)"
+                    />
+                  </g>
+                </svg>
+              </span>
+            </p>
+          </div>
+          <div class="d-flex align-items-center">
+            <div class="lead" style="padding: 20px; width: 600px">
+              <div v-if="hasRecordedData">
+                <h5 class="m-0 text-right">db</h5>
+                <div class="d-flex">
+                  <h5>-60</h5>
+                  <h5>-50</h5>
+                  <h5>-40</h5>
+                  <h5>-30</h5>
+                  <h5>-25</h5>
+                  <h5>-20</h5>
+                  <h5 class="ml-4">-15</h5>
+                  <h5 class="ml-4">-10</h5>
+                  <h5 class="ml-4">-5</h5>
+                  <h5 class="ml-4">0</h5>
+                </div>
+                <div class="d-flex" style="width: 800px">
+                  <div class="scale"></div>
+                  <div class="scale"></div>
+                  <div class="scale"></div>
+                  <div class="scale"></div>
+                  <div class="scale"></div>
+                  <div class="scale"></div>
+                  <div class="scale"></div>
+                  <div class="scale"></div>
+                  <div class="scale"></div>
+                  <div class="scale"></div>
+                </div>
+                <meter
+                  min="-100"
+                  max="0"
+                  class="w-100"
+                  :value="decibel"
+                  style="height: 40px"
+                ></meter>
+                <span id="avg-level-text"> {{ decibel }} </span> dB
+                <h5 class="mt-4">録音したデータ１</h5>
+                <div class="row">
+                  <div class="col text-left" style="font-size: 17px">
+                    {{ playbackTimeHms }}
+                  </div>
+                  <div class="col text-right" style="font-size: 17px">
+                    {{ durationHms }}
+                  </div>
+                </div>
+                <meter
+                  min="0"
+                  :max="duration"
+                  class="w-100"
+                  :value="playbackTime"
+                ></meter>
+                <div class="d-flex justify-content-center mt-4 mb-4">
+                  <button class="btn btn-light mr-3 btn-play" @click="play">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="30"
+                      height="23"
+                      viewBox="0 0 30 23"
+                    >
+                      <path
+                        d="M10.1,3.654a1.5,1.5,0,0,1,2.8,0l9.319,24.309A1.5,1.5,0,0,1,20.819,30H2.181a1.5,1.5,0,0,1-1.4-2.037Z"
+                        transform="translate(30) rotate(90)"
+                        fill="#578ed9"
+                      /></svg
+                    >再生
+                  </button>
+                  <button
+                    class="btn btn-light btn-delete"
+                    @click="deleteRecordedData"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="22"
+                      height="22"
+                      viewBox="0 0 22 22"
+                    >
+                      <g transform="translate(-860 -178)">
+                        <circle
+                          cx="11"
+                          cy="11"
+                          r="11"
+                          transform="translate(860 178)"
+                          fill="#982e2e"
+                        />
+                        <path
+                          d="M1,0H11a1,1,0,0,1,0,2H1C.448,2,0,1,0,1S.448,0,1,0Z"
+                          transform="translate(865 188)"
+                          fill="#fff"
+                        />
+                      </g></svg
+                    >削除
+                  </button>
+                </div>
+                <p style="font-size: 14px; font-weight: bold; text-align: center">
+                  録音し直したい場合は、録音開始ボタンを押して再収録してください。
+                </p>
               </div>
-              <p style="font-size: 14px; font-weight: bold; text-align: center">
-                録音し直したい場合は、録音開始ボタンを押して再収録してください。
-              </p>
             </div>
           </div>
         </div>
-      </div>
+      </ContentsBase>
     </template>
   </BasicLayout>
   <!-- modal -->
@@ -403,10 +405,12 @@ import * as UMesseApi from "umesseapi";
 import provideRecordingStore from "@/store/recording";
 import * as Common from "@/utils/Common";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
+import ContentsBase from "@/components/templates/ContentsBase.vue"
 
 export default defineComponent({
   components: {
     BasicLayout,
+    ContentsBase,
   },
   name: "RecordingStart",
   setup() {
