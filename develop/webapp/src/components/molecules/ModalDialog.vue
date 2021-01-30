@@ -44,6 +44,10 @@ export default {
   width: 100%;
   height: 100vh;
   background-color: rgba(0, 0, 0, 0.3);
+  max-width: initial;
+  pointer-events: auto;
+  margin: 0;
+  z-index: 1;
   .base {
     background-color: white;
     border-radius: 10px;

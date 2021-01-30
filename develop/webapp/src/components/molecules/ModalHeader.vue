@@ -32,6 +32,8 @@ export default {
   position: relative;
   height: 80px;
   border-bottom: 1px solid rgb(229, 229, 229);
+  display: block;
+  padding: 0;
   .title {
     color: black;
     font-size: 16px;
