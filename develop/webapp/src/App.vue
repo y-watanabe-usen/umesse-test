@@ -44,6 +44,11 @@ export default {
   background: linear-gradient(to bottom, #177dd1, #489fdf);
 }
 
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
 p, h1, h2, h3 {
   margin: 0;
 }

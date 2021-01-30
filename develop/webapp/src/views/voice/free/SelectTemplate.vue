@@ -1,6 +1,6 @@
 <template>
-  <div class="bg-umesse pb-5">
-    <div class="container">
+  <BasicLayout>
+    <template #header>
       <nav class="navbar navbar-expand-lg navbar-light">
         <router-link class="navbar-brand" :to="{ name: 'VoiceFree' }"
           >&lt;戻る</router-link
@@ -9,6 +9,8 @@
           テンプレート選択
         </div>
       </nav>
+    </template>
+    <template #contents>
       <div class="row">
         <div class="col-2 bg-menu pl-1 pr-1 rounded-left">
           <button
@@ -26,7 +28,7 @@
             {{ menu.title }}
           </button>
         </div>
-        <div class="col-10 bg-white rounded-right">
+        <div class="col-9 bg-white rounded-right">
           <div class="my-3">
             <h6 class="border-bottom border-gray pb-2 mb-0">
               <select class="form-control w-25">
@@ -147,40 +149,40 @@
           </div>
         </div>
       </div>
-    </div>
-    <!-- modal -->
-    <div
-      class="modal fade bd-try-modal-lg"
-      tabindex="-1"
-      role="dialog"
-      aria-labelledby="myLargeModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">原稿</h5>
-            <button
-              type="button"
-              class="close"
-              data-dismiss="modal"
-              aria-label="Close"
-            >
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            本⽇は、ご来店いただきまして、誠にありがとうございます。本⽇は、ご来店いただきまして、誠にありがとうございます。本⽇は、ご来店いただきまして、誠にありがとうございます。本⽇は、ご来店いただきまして、誠にありがとうございます。本⽇は、ご来店いただきまして、誠にありがとうございます。本⽇は、ご来店いただきまして、誠にありがとうございます。
-          </div>
-          <div class="modal-footer text-center">
-            <button
-              type="button"
-              class="btn btn-light btn-close"
-              data-dismiss="modal"
-            >
-              閉じる
-            </button>
-          </div>
+    </template>
+  </BasicLayout>
+  <!-- modal -->
+  <div
+    class="modal fade bd-try-modal-lg"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="myLargeModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">原稿</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          本⽇は、ご来店いただきまして、誠にありがとうございます。本⽇は、ご来店いただきまして、誠にありがとうございます。本⽇は、ご来店いただきまして、誠にありがとうございます。本⽇は、ご来店いただきまして、誠にありがとうございます。本⽇は、ご来店いただきまして、誠にありがとうございます。本⽇は、ご来店いただきまして、誠にありがとうございます。
+        </div>
+        <div class="modal-footer text-center">
+          <button
+            type="button"
+            class="btn btn-light btn-close"
+            data-dismiss="modal"
+          >
+            閉じる
+          </button>
         </div>
       </div>
     </div>
@@ -193,8 +195,12 @@ import AudioPlayer from "@/utils/AudioPlayer";
 import axios from "axios";
 import AudioStore from "@/store/audio";
 import * as UMesseApi from "umesseapi";
+import BasicLayout from "@/components/templates/BasicLayout.vue";
 
 export default {
+  components: {
+    BasicLayout,
+  },
   setup() {
     const state = reactive({
       menus: [
