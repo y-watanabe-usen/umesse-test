@@ -11,118 +11,120 @@
       </nav>
     </template>
     <template #contents>
-      <div class="row">
-        <div class="col-2 bg-menu pl-1 pr-1 rounded-left">
-          <button
-            type="button"
-            class="btn btn-menu text-left text-white"
-            :class="[
-              menu.id == state.activeMenuId ? 'btn-primary' : 'btn-link',
-              menu.id == state.activeMenuId ? 'text-white' : 'text-dark',
-              menu.id == 1 ? 'mt-2' : '',
-            ]"
-            v-for="menu in state.menus"
-            :key="menu.id"
-            @click="state.activeMenuId = menu.id"
-          >
-            {{ menu.title }}
-          </button>
-        </div>
-        <div class="col-9 bg-white rounded-right">
-          <div class="my-3">
-            <h6 class="border-bottom border-gray pb-2 mb-0">
-              <select class="form-control w-25">
-                <option v-for="sort in state.sorts" :key="sort">
-                  {{ sort }}
-                </option>
-              </select>
-            </h6>
-            <div
-              class="media text-muted pt-3"
-              v-for="narrationData in state.narrationDatas"
-              :key="narrationData.title"
+      <ContentsBase>
+        <div class="row">
+          <div class="col-2 bg-menu pl-1 pr-1 rounded-left">
+            <button
+              type="button"
+              class="btn btn-menu text-left text-white"
+              :class="[
+                menu.id == state.activeMenuId ? 'btn-primary' : 'btn-link',
+                menu.id == state.activeMenuId ? 'text-white' : 'text-dark',
+                menu.id == 1 ? 'mt-2' : '',
+              ]"
+              v-for="menu in state.menus"
+              :key="menu.id"
+              @click="state.activeMenuId = menu.id"
             >
+              {{ menu.title }}
+            </button>
+          </div>
+          <div class="col-9 bg-white rounded-right">
+            <div class="my-3">
+              <h6 class="border-bottom border-gray pb-2 mb-0">
+                <select class="form-control w-25">
+                  <option v-for="sort in state.sorts" :key="sort">
+                    {{ sort }}
+                  </option>
+                </select>
+              </h6>
               <div
-                class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray pl-3"
+                class="media text-muted pt-3"
+                v-for="narrationData in state.narrationDatas"
+                :key="narrationData.title"
               >
                 <div
-                  class="d-flex justify-content-between align-items-center w-100"
+                  class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray pl-3"
                 >
-                  <strong class="text-dark h5 pt-2 pb-2">{{
-                    narrationData.title
-                  }}</strong>
-                  <div>
-                    <button
-                      type="button"
-                      class="btn btn-light shadow btn-try"
-                      data-toggle="modal"
-                      data-target=".bd-try-modal-lg"
-                    >
-                      <svg
-                        width="1em"
-                        height="1em"
-                        viewBox="0 0 16 16"
-                        class="bi bi-play-fill"
-                        fill="currentColor"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M11.596 8.697l-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"
-                        />
-                      </svg>
-                      試聴
-                    </button>
-                    <button
-                      class="btn btn-link dropdown-toggle btn-lg"
-                      type="button"
-                      id="dropdownMenuButton"
-                      data-toggle="dropdown"
-                      aria-haspopup="true"
-                      aria-expanded="false"
-                    >
-                      <svg
-                        width="2.5em"
-                        height="2.5em"
-                        viewBox="0 0 16 16"
-                        class="bi bi-three-dots"
-                        fill="currentColor"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          fill-rule="evenodd"
-                          d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"
-                        />
-                      </svg>
-                    </button>
-                    <div
-                      class="dropdown-menu"
-                      aria-labelledby="dropdownMenuButton"
-                    >
-                      <a
-                        class="dropdown-item"
-                        href="#"
+                  <div
+                    class="d-flex justify-content-between align-items-center w-100"
+                  >
+                    <strong class="text-dark h5 pt-2 pb-2">{{
+                      narrationData.title
+                    }}</strong>
+                    <div>
+                      <button
+                        type="button"
+                        class="btn btn-light shadow btn-try"
                         data-toggle="modal"
-                        data-target="#saveModal"
-                        >タイトル/説明 編集</a
+                        data-target=".bd-try-modal-lg"
                       >
-                      <a class="dropdown-item" href="#">コンテンツ編集</a>
-                      <a class="dropdown-item" href="#"
-                        >U MUSICにアップロード</a
+                        <svg
+                          width="1em"
+                          height="1em"
+                          viewBox="0 0 16 16"
+                          class="bi bi-play-fill"
+                          fill="currentColor"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M11.596 8.697l-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"
+                          />
+                        </svg>
+                        試聴
+                      </button>
+                      <button
+                        class="btn btn-link dropdown-toggle btn-lg"
+                        type="button"
+                        id="dropdownMenuButton"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false"
                       >
-                      <a class="dropdown-item" href="#">削除</a>
+                        <svg
+                          width="2.5em"
+                          height="2.5em"
+                          viewBox="0 0 16 16"
+                          class="bi bi-three-dots"
+                          fill="currentColor"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"
+                          />
+                        </svg>
+                      </button>
+                      <div
+                        class="dropdown-menu"
+                        aria-labelledby="dropdownMenuButton"
+                      >
+                        <a
+                          class="dropdown-item"
+                          href="#"
+                          data-toggle="modal"
+                          data-target="#saveModal"
+                          >タイトル/説明 編集</a
+                        >
+                        <a class="dropdown-item" href="#">コンテンツ編集</a>
+                        <a class="dropdown-item" href="#"
+                          >U MUSICにアップロード</a
+                        >
+                        <a class="dropdown-item" href="#">削除</a>
+                      </div>
                     </div>
                   </div>
+                  <span class="d-block pb-2"
+                    >{{ narrationData.description1 }}<br />{{
+                      narrationData.description2
+                    }}</span
+                  >
                 </div>
-                <span class="d-block pb-2"
-                  >{{ narrationData.description1 }}<br />{{
-                    narrationData.description2
-                  }}</span
-                >
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </ContentsBase>
     </template>
   </BasicLayout>
   <!-- modal -->
@@ -389,10 +391,12 @@ import AudioStore from "@/store/audio";
 import * as UMesseApi from "umesseapi";
 import * as Common from "@/utils/Common";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
+import ContentsBase from "@/components/templates/ContentsBase.vue"
 
 export default {
   components: {
     BasicLayout,
+    ContentsBase,
   },
   setup() {
     const audioPlayer = AudioPlayer();

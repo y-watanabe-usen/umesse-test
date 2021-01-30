@@ -20,122 +20,124 @@
       </nav>
     </template>
     <template #contents>
-      <div class="rounded bg-white">
-        <div class="row" style="padding: 0 20px">
-          <div class="col-5">
-            <div class="row" style="height: 100px">
-              <div class="col-2 m-auto">話者</div>
-              <div class="col-10 m-auto">
-                <select class="form-control w-25">
-                  <option v-for="voice in state.voices" :key="voice">
-                    {{ voice }}
-                  </option>
-                </select>
+      <ContentsBase>
+        <div class="rounded bg-white">
+          <div class="row" style="padding: 0 20px">
+            <div class="col-5">
+              <div class="row" style="height: 100px">
+                <div class="col-2 m-auto">話者</div>
+                <div class="col-10 m-auto">
+                  <select class="form-control w-25">
+                    <option v-for="voice in state.voices" :key="voice">
+                      {{ voice }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="col-7">
+              <div class="row" style="height: 100px">
+                <div class="col-2 m-auto">言語設定</div>
+                <div class="col-10 m-auto">
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="inlineCheckbox1"
+                      value="option1"
+                      style="position: fixed"
+                    />
+                    <label class="form-check-label" for="inlineCheckbox1"
+                      ><img class="country m-1" src="../../../assets/japan.svg"
+                    /></label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="inlineCheckbox2"
+                      value="option2"
+                      style="position: fixed"
+                    />
+                    <label class="form-check-label" for="inlineCheckbox2"
+                      ><img class="country m-1" src="../../../assets/america.svg"
+                    /></label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="inlineCheckbox3"
+                      value="option3"
+                      style="position: fixed"
+                    />
+                    <label class="form-check-label" for="inlineCheckbox3"
+                      ><img class="country m-1" src="../../../assets/china.svg"
+                    /></label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="inlineCheckbox4"
+                      value="option4"
+                      style="position: fixed"
+                    />
+                    <label class="form-check-label" for="inlineCheckbox4"
+                      ><img class="country m-1" src="../../../assets/korea.svg"
+                    /></label>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-          <div class="col-7">
-            <div class="row" style="height: 100px">
-              <div class="col-2 m-auto">言語設定</div>
-              <div class="col-10 m-auto">
-                <div class="form-check form-check-inline">
+          <div class="row" style="padding: 0 20px">
+            <div class="col-5">
+              <div class="row" style="height: 100px">
+                <div class="col-2 m-auto">1:店名</div>
+                <div class="col-10 m-auto">
                   <input
-                    class="form-check-input"
-                    type="checkbox"
-                    id="inlineCheckbox1"
-                    value="option1"
-                    style="position: fixed"
+                    class="form-control"
+                    type="text"
+                    placeholder="カタカナで入力"
+                    v-model="state.storeName"
                   />
-                  <label class="form-check-label" for="inlineCheckbox1"
-                    ><img class="country m-1" src="../../../assets/japan.svg"
-                  /></label>
-                </div>
-                <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    id="inlineCheckbox2"
-                    value="option2"
-                    style="position: fixed"
-                  />
-                  <label class="form-check-label" for="inlineCheckbox2"
-                    ><img class="country m-1" src="../../../assets/america.svg"
-                  /></label>
-                </div>
-                <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    id="inlineCheckbox3"
-                    value="option3"
-                    style="position: fixed"
-                  />
-                  <label class="form-check-label" for="inlineCheckbox3"
-                    ><img class="country m-1" src="../../../assets/china.svg"
-                  /></label>
-                </div>
-                <div class="form-check form-check-inline">
-                  <input
-                    class="form-check-input"
-                    type="checkbox"
-                    id="inlineCheckbox4"
-                    value="option4"
-                    style="position: fixed"
-                  />
-                  <label class="form-check-label" for="inlineCheckbox4"
-                    ><img class="country m-1" src="../../../assets/korea.svg"
-                  /></label>
                 </div>
               </div>
+            </div>
+            <div class="col-7">
+              <div class="row" style="height: 100px">
+                <div class="col-2 m-auto">2:閉店時間</div>
+                <div class="col-10 m-auto">
+                  <input
+                    class="form-control"
+                    type="time"
+                    v-model="state.endTime"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="rounded maniscript">
+            <div
+              class="alert alert-dark alert-maniscript mx-auto my-3"
+              role="alert"
+            >
+              原稿
+            </div>
+            <div class="maniscript-body">
+              本日は
+              <span class="font-weight-bold">{{ state.storeName }}</span>
+              へご来店いただきまして、誠にありがとうございます。<br />
+              お客様にご連絡申し上げます。<br />
+              当店の営業時間は、
+              <span class="font-weight-bold">{{ state.endTime }}</span>
+              までとなっております。<br />
+              本日はご利用、ありがとうございます。どうぞ、ごゆっくりお過ごしくださいませ。<br />
             </div>
           </div>
         </div>
-        <div class="row" style="padding: 0 20px">
-          <div class="col-5">
-            <div class="row" style="height: 100px">
-              <div class="col-2 m-auto">1:店名</div>
-              <div class="col-10 m-auto">
-                <input
-                  class="form-control"
-                  type="text"
-                  placeholder="カタカナで入力"
-                  v-model="state.storeName"
-                />
-              </div>
-            </div>
-          </div>
-          <div class="col-7">
-            <div class="row" style="height: 100px">
-              <div class="col-2 m-auto">2:閉店時間</div>
-              <div class="col-10 m-auto">
-                <input
-                  class="form-control"
-                  type="time"
-                  v-model="state.endTime"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="rounded maniscript">
-          <div
-            class="alert alert-dark alert-maniscript mx-auto my-3"
-            role="alert"
-          >
-            原稿
-          </div>
-          <div class="maniscript-body">
-            本日は
-            <span class="font-weight-bold">{{ state.storeName }}</span>
-            へご来店いただきまして、誠にありがとうございます。<br />
-            お客様にご連絡申し上げます。<br />
-            当店の営業時間は、
-            <span class="font-weight-bold">{{ state.endTime }}</span>
-            までとなっております。<br />
-            本日はご利用、ありがとうございます。どうぞ、ごゆっくりお過ごしくださいませ。<br />
-          </div>
-        </div>
-      </div>
+      </ContentsBase>
     </template>
   </BasicLayout>
   <!-- modal -->
@@ -287,10 +289,12 @@
 <script lang="ts">
 import { computed, reactive } from "vue";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
+import ContentsBase from "@/components/templates/ContentsBase.vue"
 
 export default {
   components: {
     BasicLayout,
+    ContentsBase,
   },
   setup() {
     const state = reactive({

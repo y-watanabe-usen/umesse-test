@@ -33,16 +33,8 @@ export default {
     height: 90px;
   }
   .contents {
-    background-color: white;
-    margin-left: 20px;
-    margin-right: 20px;
-    width: calc(100% - 40px);
+    width: 100%;
     height: calc(100vh - 90px);
-    border-top-left-radius: 14px;
-    border-top-right-radius: 14px;
-    box-shadow: $box_shadow;
-    overflow: hidden;
-    overflow-y: scroll;
   }
 }
 </style>

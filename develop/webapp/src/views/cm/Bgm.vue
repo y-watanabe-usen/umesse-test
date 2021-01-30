@@ -11,99 +11,101 @@
       </nav>
     </template>
     <template #contents>
-      <div class="row">
-        <div class="col-2 bg-menu pl-1 pr-1 rounded-left">
-          <button
-            type="button"
-            class="btn btn-menu text-left text-white"
-            :class="[
-              bgmIndustry.cd == state.activeBgmIndustryCd
-                ? 'btn-primary'
-                : 'btn-link',
-              bgmIndustry.cd == state.activeBgmIndustryCd
-                ? 'text-white'
-                : 'text-dark',
-              bgmIndustry.cd == 1 ? 'mt-2' : '',
-            ]"
-            v-for="bgmIndustry in state.bgmIndustries"
-            :key="bgmIndustry.cd"
-            @click="clickBgmIndustry(bgmIndustry.cd)"
-          >
-            {{ bgmIndustry.name }}
-          </button>
-        </div>
-        <div class="col-9 bg-white rounded-right">
-          <div class="my-3">
-            <h6 class="border-bottom border-gray pb-2 mb-0">
-              <select class="form-control w-25">
-                <option v-for="sort in state.sorts" :key="sort">
-                  {{ sort }}
-                </option>
-              </select>
-            </h6>
-            <div
-              class="media text-muted pt-3"
-              v-for="bgm in state.bgms"
-              :key="bgm.id"
+      <ContentsBase>
+        <div class="row">
+          <div class="col-2 bg-menu pl-1 pr-1 rounded-left">
+            <button
+              type="button"
+              class="btn btn-menu text-left text-white"
+              :class="[
+                bgmIndustry.cd == state.activeBgmIndustryCd
+                  ? 'btn-primary'
+                  : 'btn-link',
+                bgmIndustry.cd == state.activeBgmIndustryCd
+                  ? 'text-white'
+                  : 'text-dark',
+                bgmIndustry.cd == 1 ? 'mt-2' : '',
+              ]"
+              v-for="bgmIndustry in state.bgmIndustries"
+              :key="bgmIndustry.cd"
+              @click="clickBgmIndustry(bgmIndustry.cd)"
             >
+              {{ bgmIndustry.name }}
+            </button>
+          </div>
+          <div class="col-9 bg-white rounded-right">
+            <div class="my-3">
+              <h6 class="border-bottom border-gray pb-2 mb-0">
+                <select class="form-control w-25">
+                  <option v-for="sort in state.sorts" :key="sort">
+                    {{ sort }}
+                  </option>
+                </select>
+              </h6>
               <div
-                class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray pl-3"
+                class="media text-muted pt-3"
+                v-for="bgm in state.bgms"
+                :key="bgm.id"
               >
                 <div
-                  class="d-flex justify-content-between align-items-center w-100"
+                  class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray pl-3"
                 >
-                  <strong class="text-dark h5 pt-2 pb-2">{{
-                    bgm.title
-                  }}</strong>
-                  <div>
-                    <button
-                      type="button"
-                      class="btn btn-light shadow btn-try"
-                      data-toggle="modal"
-                      data-target=".bd-try-modal-lg"
-                      @click="selectBgm(bgm)"
-                    >
-                      <svg
-                        width="1em"
-                        height="1em"
-                        viewBox="0 0 16 16"
-                        class="bi bi-play-fill"
-                        fill="currentColor"
-                        xmlns="http://www.w3.org/2000/svg"
+                  <div
+                    class="d-flex justify-content-between align-items-center w-100"
+                  >
+                    <strong class="text-dark h5 pt-2 pb-2">{{
+                      bgm.title
+                    }}</strong>
+                    <div>
+                      <button
+                        type="button"
+                        class="btn btn-light shadow btn-try"
+                        data-toggle="modal"
+                        data-target=".bd-try-modal-lg"
+                        @click="selectBgm(bgm)"
                       >
-                        <path
-                          d="M11.596 8.697l-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"
-                        />
-                      </svg>
-                      試聴
-                    </button>
-                    <button
-                      type="button"
-                      class="btn btn-light shadow btn-try ml-2"
-                      @click="setBgm(bgm)"
-                    >
-                      <svg
-                        width="1em"
-                        height="1em"
-                        viewBox="0 0 16 16"
-                        class="bi bi-play-fill"
-                        fill="currentColor"
-                        xmlns="http://www.w3.org/2000/svg"
+                        <svg
+                          width="1em"
+                          height="1em"
+                          viewBox="0 0 16 16"
+                          class="bi bi-play-fill"
+                          fill="currentColor"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M11.596 8.697l-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"
+                          />
+                        </svg>
+                        試聴
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-light shadow btn-try ml-2"
+                        @click="setBgm(bgm)"
                       >
-                        <path
-                          d="M11.596 8.697l-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"
-                        />
-                      </svg>
-                      選択
-                    </button>
+                        <svg
+                          width="1em"
+                          height="1em"
+                          viewBox="0 0 16 16"
+                          class="bi bi-play-fill"
+                          fill="currentColor"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M11.596 8.697l-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"
+                          />
+                        </svg>
+                        選択
+                      </button>
+                    </div>
                   </div>
+                  <span class="d-block pb-2">{{ bgm.description }}</span>
                 </div>
-                <span class="d-block pb-2">{{ bgm.description }}</span>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </ContentsBase>
     </template>
   </BasicLayout>
   <!-- modal -->
@@ -373,10 +375,12 @@ import { useRoute, useRouter } from "vue-router";
 import * as Common from "@/utils/Common";
 import { config } from "@/utils/UMesseApiConfiguration";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
+import ContentsBase from "@/components/templates/ContentsBase.vue"
 
 export default {
   components: {
     BasicLayout,
+    ContentsBase,
   },
   setup() {
     const router = useRouter();
