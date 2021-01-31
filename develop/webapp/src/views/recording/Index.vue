@@ -1,24 +1,12 @@
 <template>
   <BasicLayout>
     <template #header>
-      <nav class="navbar navbar-expand-lg navbar-light">
-        <router-link class="navbar-brand" :to="{ name: 'Home' }"
-          >&lt;戻る</router-link
-        >
-        <div class="collapse navbar-collapse justify-content-center h4">
-          録音する
-        </div>
-        <span v-if="hasRecordedData === true">
-          <button
-            type="button"
-            class="btn btn-link navbar-brand"
-            data-toggle="modal"
-            data-target="#saveModal"
-          >
-            確定
-          </button>
-        </span>
-      </nav>
+      <Header>
+        <template #title>録音する</template>
+        <template #buttons v-if="hasRecordedData === true">
+          <Button @click="openModal">確定</Button>
+        </template>
+      </Header>
     </template>
     <template #contents>
       <ContentsBase>
@@ -283,113 +271,87 @@
     </template>
   </BasicLayout>
   <!-- modal -->
-  <div
-    class="modal fade"
-    id="saveModal"
-    tabindex="-1"
-    role="dialog"
-    aria-labelledby="saveModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-xl" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="saveModalLabel">保存しますか？</h5>
-          <button
-            type="button"
-            class="close"
-            data-dismiss="modal"
-            aria-label="Close"
-            v-bind:disabled="
-              uploadRecoridngState === UPLOAD_RECORDING_STATE.UPLOADING
-            "
-          >
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form>
-            <div class="form-group">
-              <label for="title" class="col-form-label">タイトル(必須)</label>
-              <input
-                type="text"
-                class="form-control"
-                id="title"
-                v-model="file.title"
-                v-bind:disabled="
-                  uploadRecoridngState !== UPLOAD_RECORDING_STATE.NONE &&
-                  uploadRecoridngState !== UPLOAD_RECORDING_STATE.ERROR
-                "
-              />
-            </div>
-            <div class="form-group">
-              <label for="description" class="col-form-label">説明</label>
-              <textarea
-                class="form-control"
-                id="description"
-                v-bind:disabled="
-                  uploadRecoridngState !== UPLOAD_RECORDING_STATE.NONE &&
-                  uploadRecoridngState !== UPLOAD_RECORDING_STATE.ERROR
-                "
-              ></textarea>
-            </div>
-          </form>
-          <!-- 保存中 -->
-          <span
-            v-if="uploadRecoridngState === UPLOAD_RECORDING_STATE.UPLOADING"
-          >
-            <div class="col-form-label">クルクルインジケーターとか</div>
-          </span>
-          <!-- 保存完了 -->
-          <span
-            v-if="uploadRecoridngState === UPLOAD_RECORDING_STATE.UPLOADED"
-          >
-            <div class="col-form-label">保存が完了しました。</div>
-          </span>
-          <!-- 保存失敗 -->
-          <span v-if="uploadRecoridngState === UPLOAD_RECORDING_STATE.ERROR">
-            <div class="failed">保存に失敗しました。再度お試しください。</div>
-          </span>
-        </div>
-        <span
-          v-if="
-            uploadRecoridngState === UPLOAD_RECORDING_STATE.ERROR ||
-            uploadRecoridngState === UPLOAD_RECORDING_STATE.NONE
-          "
-        >
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-dismiss="modal"
-            >
-              キャンセル
-            </button>
-            <button
-              type="button"
-              class="btn btn-primary"
-              v-bind:disabled="file.title === undefined || file.title === ''"
-              @click="uploadRecordingFile"
-            >
-              保存する
-            </button>
+  <transition>
+    <ModalDialog
+      v-if="isModalAppear"
+      :closeDisabled="uploadRecoridngState === UPLOAD_RECORDING_STATE.UPLOADING"
+      @close="closeModal"
+    >
+      <template #header>
+        <ModalHeader
+          title="保存しますか？"
+          :closeDisabled="uploadRecoridngState === UPLOAD_RECORDING_STATE.UPLOADING"
+          @close="closeModal"
+        />
+      </template>
+      <template #contents>
+        <form>
+          <div class="form-group">
+            <label for="title" class="col-form-label">タイトル(必須)</label>
+            <input
+              type="text"
+              class="form-control"
+              id="title"
+              v-model="file.title"
+              v-bind:disabled="
+                uploadRecoridngState !== UPLOAD_RECORDING_STATE.NONE &&
+                uploadRecoridngState !== UPLOAD_RECORDING_STATE.ERROR
+              "
+            />
           </div>
+          <div class="form-group">
+            <label for="description" class="col-form-label">説明</label>
+            <textarea
+              class="form-control"
+              id="description"
+              v-bind:disabled="
+                uploadRecoridngState !== UPLOAD_RECORDING_STATE.NONE &&
+                uploadRecoridngState !== UPLOAD_RECORDING_STATE.ERROR
+              "
+            ></textarea>
+          </div>
+        </form>
+        <!-- 保存中 -->
+        <span
+          v-if="uploadRecoridngState === UPLOAD_RECORDING_STATE.UPLOADING"
+        >
+          <div class="col-form-label">クルクルインジケーターとか</div>
         </span>
         <!-- 保存完了 -->
-        <span v-if="uploadRecoridngState === UPLOAD_RECORDING_STATE.UPLOADED">
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-primary"
-              data-dismiss="modal"
-            >
-              OK
-            </button>
-          </div>
+        <span
+          v-if="uploadRecoridngState === UPLOAD_RECORDING_STATE.UPLOADED"
+        >
+          <div class="col-form-label">保存が完了しました。</div>
         </span>
-      </div>
-    </div>
-  </div>
+        <!-- 保存失敗 -->
+        <span v-if="uploadRecoridngState === UPLOAD_RECORDING_STATE.ERROR">
+          <div class="failed">保存に失敗しました。再度お試しください。</div>
+        </span>
+      </template>
+      <template #footer>
+        <ModalFooter>
+          <div class="button-wrapper"
+            v-if="
+              uploadRecoridngState === UPLOAD_RECORDING_STATE.ERROR ||
+              uploadRecoridngState === UPLOAD_RECORDING_STATE.NONE
+            "
+          >
+            <Button type="secondary" @click="closeModal">キャンセル</Button>
+            <Button
+              type="primary"
+              :isDisabled="file.title === undefined || file.title === ''"
+              @click="uploadRecordingFile"
+            >
+              保存して作成を続ける
+            </Button>
+          </div>
+          <div class="button-wrapper" v-if="uploadRecoridngState === UPLOAD_RECORDING_STATE.UPLOADED">
+            <Button type="primary" @click="closeModal">OK</Button>
+          </div>
+        </ModalFooter>
+      </template>
+    </ModalDialog>
+  </transition>
 </template>
 
 <script lang="ts">
@@ -406,11 +368,21 @@ import provideRecordingStore from "@/store/recording";
 import * as Common from "@/utils/Common";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue"
+import Header from "@/components/organisms/Header.vue";
+import Button from "@/components/atoms/Button.vue";
+import ModalDialog from "@/components/molecules/ModalDialog.vue";
+import ModalHeader from "@/components/molecules/ModalHeader.vue";
+import ModalFooter from "@/components/molecules/ModalFooter.vue";
 
 export default defineComponent({
   components: {
     BasicLayout,
     ContentsBase,
+    Header,
+    Button,
+    ModalDialog,
+    ModalHeader,
+    ModalFooter,
   },
   name: "RecordingStart",
   setup() {
@@ -438,6 +410,7 @@ export default defineComponent({
       durationHms: computed(() => {
         return Common.sToHms(Math.floor(audioPlayer.getDuration()));
       }),
+      isModalAppear: false,
     });
 
     // toggle voice recorder.
@@ -460,6 +433,14 @@ export default defineComponent({
       /// check state.file.
       state.file.blob = await audioRecorder.getWaveBlob();
       recordingStore.uploadRecordingData(state.file);
+      closeModal();
+    };
+
+    const openModal = () => {
+      state.isModalAppear = true;
+    };
+    const closeModal = () => {
+      state.isModalAppear = false;
     };
 
     return {
@@ -469,11 +450,17 @@ export default defineComponent({
       deleteRecordedData,
       uploadRecordingFile,
       UPLOAD_RECORDING_STATE,
+      openModal,
+      closeModal,
     };
   },
 });
 </script>
-<style scoped>
+
+<style lang="scss" scoped>
+@import '@/scss/_variables.scss';
+@include fade_animation;
+
 .recording {
   cursor: pointer;
   width: 350px;
