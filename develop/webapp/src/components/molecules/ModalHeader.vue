@@ -1,7 +1,9 @@
 <template>
   <div class="modal-header">
     <p class="title">{{ title }}</p>
-    <button class="btn-close" @click="$emit('close')"><img src="@/assets/icon_close.svg" /></button>
+    <button :disabled="closeDisabled" class="btn-close" @click="$emit('close')">
+      <img src="@/assets/icon_close.svg" />
+    </button>
   </div>
 </template>
 
@@ -14,6 +16,10 @@ export default {
     title: {
       type: String,
       required: true,
+    },
+    closeDisabled: {
+      type: Boolean,
+      default: false,
     }
   },
   setup() {
@@ -49,6 +55,9 @@ export default {
     img {
       width: 30px;
       height: 30px;
+    }
+    &:disabled {
+      opacity: 0.3;
     }
   }
 }

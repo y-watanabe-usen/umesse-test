@@ -17,12 +17,16 @@ export default {
     size: {
       type: String,
       default: "medium",
+    },
+    closeDisabled: {
+      type: Boolean,
+      default: false,
     }
   },
   setup(props: any, context: SetupContext) {
     const state = reactive({});
     const onClick = (event: Event) => {
-      if (event.target === document.querySelector(".modal-dialog")) {
+      if (event.target === document.querySelector(".modal-dialog") && !props.closeDisabled) {
         context.emit('close');
       }
     }

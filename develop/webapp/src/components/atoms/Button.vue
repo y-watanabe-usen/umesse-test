@@ -1,5 +1,5 @@
 <template>
-  <button @click="$emit('click')" :class="[ type, isDisabled ? 'disabled' : '' ]"><slot /></button>
+  <button :disabled="isDisabled" @click="$emit('click')" :class="[type]"><slot /></button>
 </template>
 
 <script lang="ts">
@@ -52,7 +52,7 @@ button {
     color: black;
     background-color: white;
   }
-  &.disabled {
+  &:disabled {
     color: white;
     background-color: rgb(173, 173, 173);
   }
