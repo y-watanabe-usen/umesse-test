@@ -1,14 +1,9 @@
 <template>
   <BasicLayout>
     <template #header>
-      <nav class="navbar navbar-expand-lg navbar-light">
-        <router-link class="navbar-brand" :to="{ name: 'Home' }"
-          >&lt;戻る</router-link
-        >
-        <div class="collapse navbar-collapse justify-content-center h4">
-          テンプレート選択
-        </div>
-      </nav>
+      <Header>
+        <template #title>テンプレート選択</template>
+      </Header>
     </template>
     <template #contents>
       <ContentsBase>
@@ -99,11 +94,13 @@
 import { computed, reactive } from "vue";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue"
+import Header from "@/components/organisms/Header.vue";
 
 export default {
   components: {
     BasicLayout,
     ContentsBase,
+    Header,
   },
   setup() {
     const state = reactive({

@@ -1,14 +1,9 @@
 <template>
   <BasicLayout>
     <template #header>
-      <nav class="navbar navbar-expand-lg navbar-light">
-        <router-link class="navbar-brand" :to="{ name: 'Home' }"
-          >&lt;戻る</router-link
-        >
-        <div class="collapse navbar-collapse justify-content-center h4">
-          ナレーション選択
-        </div>
-      </nav>
+      <Header>
+        <template #title>ナレーション選択</template>
+      </Header>
     </template>
     <template #contents>
       <ContentsBase>
@@ -324,11 +319,13 @@ import * as UMesseApi from "umesseapi";
 import * as Common from "@/utils/Common";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue"
+import Header from "@/components/organisms/Header.vue";
 
 export default {
   components: {
     BasicLayout,
     ContentsBase,
+    Header,
   },
   setup() {
     enum DisplayMode {
