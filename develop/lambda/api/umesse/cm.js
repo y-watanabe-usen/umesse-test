@@ -11,6 +11,7 @@ const {
 const { validation } = require("umesse-lib/validation");
 const { dynamodbManager } = require("umesse-lib/utils/dynamodbManager");
 const { s3Manager } = require("umesse-lib/utils/s3Manager");
+const { SSL_OP_EPHEMERAL_RSA } = require("constants");
 
 // CM取得（一覧・個別）
 exports.getCm = async (unisCustomerCd, cmId) => {
@@ -259,6 +260,8 @@ exports.deleteCm = async (unisCustomerCd, cmId) => {
 // CM結合処理
 function generateCm(unisCustomerCd, cmId, materials) {
   return new Promise(async function (resolve, reject) {
+    const isWindows = process.platform === 'win32'
+
     // FIXME: materials 一旦仮
     const list = [
       "chime/サンプル01.mp3",
@@ -268,19 +271,24 @@ function generateCm(unisCustomerCd, cmId, materials) {
       "narration/サンプル02.mp3",
       "narration/サンプル03.mp3",
     ];
-    const workDir = `/tmp/${unisCustomerCd}/mix/${cmId}`;
-    const ffmpeg = `ffmpeg -hide_banner`;
+    const hostWorkDir = `${process.cwd()}\\tmp\\${unisCustomerCd}\\mix\\${cmId}`;
+    const containerWorkDir = `/tmp/${unisCustomerCd}/mix/${cmId}`;
+    const ffmpeg = `/root/bin/ffmpeg -hide_banner`;
 
     try {
-      execSync(`mkdir -p ${workDir} && rm -f ${workDir}/*`);
+      // execSync(`mkdir -p ${workDir} && rm -f ${workDir}/*`);
+      execSync(`mkdir ${hostWorkDir} > NUL 2>&1 && \
+        if ERRORLEVEL 1 cmd /c exit 0 && \
+        rd /q ${hostWorkDir}\\*`
+      );
 
       let paths = "";
       for (const [key, value] of list.entries()) {
         debuglog(`key: ${key}, value: ${value}`);
         const res = await s3Manager.get(constants.s3Bucket().contents, value);
         if (!res || !res.Body) throw "getObject failed";
-        fs.writeFileSync(`${workDir}/${key}.mp3`, res.Body);
-        paths += `-i ${workDir}/${key}.mp3 `;
+        fs.writeFileSync(`${hostWorkDir}/${key}.mp3`, res.Body);
+        paths += `-i ${containerWorkDir}/${key}.mp3 `;
       }
 
       // FIXME: 各パラメーターをチューニング
@@ -296,20 +304,41 @@ function generateCm(unisCustomerCd, cmId, materials) {
           [join][bgm]amix=duration=shortest[mix]; \
           [mix][end_chime]acrossfade=d=3[last]; \
           [start_chime][last]concat=n=2:v=0:a=1 \
-        ' -y ${workDir}/${cmId}.mp3`;
-      debuglog(command);
-      execSync(command);
+        ' -y ${containerWorkDir}/${cmId}.mp3`;
+      fs.writeFileSync(`${hostWorkDir}/cmd`, `#!/bin/bash\n${command}`);
+      const dockerCommand = `docker run --name ffmpeg-runner --rm \
+        -v ${process.cwd()}\\..\\layer\\bin:/root/bin \
+        -v ${hostWorkDir}:${containerWorkDir} \
+        centos:latest sh \
+        ${containerWorkDir}/cmd`;
+      debuglog(dockerCommand);
+      execSync(dockerCommand);
+
+      // TODO: 出来るまで待つ
 
       // FIXME: get seconds... 他に方法があるか
+      const secondCommand = `${ffmpeg} -hide_banner -i ${containerWorkDir}/${cmId}.mp3 2>&1 | \
+           grep 'Duration' | cut -d ' ' -f 4 | cut -d '.' -f 1`;
+      fs.writeFileSync(`${hostWorkDir}/secondCommand`, `#!/bin/bash\n${secondCommand}`);
+      const dockerSecondCommand = `docker run --name ffmpeg-runner --rm \
+        -v ${process.cwd()}\\..\\layer\\bin:/root/bin \
+        -v ${hostWorkDir}:${containerWorkDir} \
+        centos:latest \
+        sh ${containerWorkDir}/secondCommand`;
+      // const seconds = execSync(
+      //   `${ffmpeg} -hide_banner -i ${workDir}/${cmId}.mp3 2>&1 | \
+      //     grep 'Duration' | cut -d ' ' -f 4 | cut -d '.' -f 1`
+      // )
+      //   .toString()
+      //   .replace(/\n/g, "");
+      // debuglog(`seconds: ${seconds}`);
       const seconds = execSync(
-        `${ffmpeg} -hide_banner -i ${workDir}/${cmId}.mp3 2>&1 | \
-          grep 'Duration' | cut -d ' ' -f 4 | cut -d '.' -f 1`
-      )
+        dockerSecondCommand)
         .toString()
         .replace(/\n/g, "");
       debuglog(`seconds: ${seconds}`);
 
-      const fileStream = fs.createReadStream(`${workDir}/${cmId}.mp3`);
+      const fileStream = fs.createReadStream(`${hostWorkDir}/${cmId}.mp3`);
       fileStream.on("error", (e) => {
         throw e;
       });
