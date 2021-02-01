@@ -58,7 +58,7 @@ resource "aws_lambda_function" "umesse_converter_function" {
   filename         = data.archive_file.umesse_converter_file.output_path
   source_code_hash = data.archive_file.umesse_converter_file.output_base64sha256
   memory_size      = "128"
-  timeout          = "30"
+  timeout          = "180"
   layers           = [aws_lambda_layer_version.umesse_layer.arn]
 
   environment {
