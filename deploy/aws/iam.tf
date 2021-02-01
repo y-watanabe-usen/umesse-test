@@ -1,51 +1,32 @@
-resource "aws_iam_role" "umesse_converter_lambda" {
+## iam umesse api lambda
+resource "aws_iam_role" "umesse_api_lambda_role" {
+  name               = "umesse_api_lambda_role"
   assume_role_policy = file("iam_role_policy.json")
 }
 
+resource "aws_iam_policy" "umesse_api_lambda_policy" {
+  name   = "umesse_api_lambda_policy"
+  policy = file("umesse_api_policy.json")
+}
+
+resource "aws_iam_role_policy_attachment" "umesse_api_lambda" {
+  role       = aws_iam_role.umesse_api_lambda_role.name
+  policy_arn = aws_iam_policy.umesse_api_lambda_policy.arn
+}
+
+## iam umesse converter lambda
+resource "aws_iam_role" "umesse_converter_lambda_role" {
+  name               = "umesse_converter_lambda_role"
+  assume_role_policy = file("iam_role_policy.json")
+}
+
+resource "aws_iam_policy" "umesse_converter_lambda_policy" {
+  name   = "umesse_converter_lambda_policy"
+  policy = file("umesse_converter_policy.json")
+}
+
 resource "aws_iam_role_policy_attachment" "umesse_converter_lambda" {
-  policy_arn = aws_iam_policy.umesse_converter_lambda.arn
-  role       = aws_iam_role.umesse_converter_lambda.name
+  role       = aws_iam_role.umesse_converter_lambda_role.name
+  policy_arn = aws_iam_policy.umesse_converter_lambda_policy.arn
 }
 
-resource "aws_iam_policy" "umesse_converter_lambda" {
-  policy = data.aws_iam_policy_document.umesse_converter_lambda.json
-}
-
-data "aws_iam_policy_document" "umesse_converter_lambda" {
-  statement {
-    sid       = "AllowSQSPermissions"
-    effect    = "Allow"
-    resources = ["arn:aws:sqs:*"]
-
-    actions = [
-      "sqs:ChangeMessageVisibility",
-      "sqs:DeleteMessage",
-      "sqs:GetQueueAttributes",
-      "sqs:ReceiveMessage",
-    ]
-  }
-
-  statement {
-    sid       = "AllowInvokingLambdas"
-    effect    = "Allow"
-    resources = ["arn:aws:lambda:ap-southeast-1:*:function:*"]
-    actions   = ["lambda:InvokeFunction"]
-  }
-
-  statement {
-    sid       = "AllowCreatingLogGroups"
-    effect    = "Allow"
-    resources = ["arn:aws:logs:ap-southeast-1:*:*"]
-    actions   = ["logs:CreateLogGroup"]
-  }
-  statement {
-    sid       = "AllowWritingLogs"
-    effect    = "Allow"
-    resources = ["arn:aws:logs:ap-southeast-1:*:log-group:/aws/lambda/*:*"]
-
-    actions = [
-      "logs:CreateLogStream",
-      "logs:PutLogEvents",
-    ]
-  }
-}
