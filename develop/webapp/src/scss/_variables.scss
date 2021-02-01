@@ -1,0 +1,61 @@
+
+$box_shadow: 0 3px 20px rgba(0, 0, 0, 0.25);
+$box_shadow_strong: 0 6px 20px rgba(0, 0, 0, 0.5);
+
+$font_weight_bold: 700;
+
+@mixin flex_center {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin flex_between {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-between;
+}
+
+@mixin flex_start {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-start;
+}
+
+@mixin flex_end {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-end;
+}
+
+@mixin flex_col_start {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: flex-start;
+  align-items: flex-start;
+}
+
+@mixin ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin fade_animation {
+  .v-enter-active, .v-leave-active {
+    transition: opacity 0.5s ease;
+  }
+  .v-enter {
+    opacity: 0;
+  }
+  .v-enter-to {
+    opacity: 1;
+  }
+  .v-leave {
+    opacity: 1;
+  }
+  .v-leave-to {
+    opacity: 0;
+  }
+}
