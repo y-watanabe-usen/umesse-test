@@ -11,7 +11,6 @@ const {
 const { validation } = require("umesse-lib/validation");
 const { dynamodbManager } = require("umesse-lib/utils/dynamodbManager");
 const { s3Manager } = require("umesse-lib/utils/s3Manager");
-const { SSL_OP_EPHEMERAL_RSA } = require("constants");
 
 // CM取得（一覧・個別）
 exports.getCm = async (unisCustomerCd, cmId) => {
