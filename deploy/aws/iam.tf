@@ -29,4 +29,3 @@ resource "aws_iam_role_policy_attachment" "umesse_converter_lambda" {
   role       = aws_iam_role.umesse_converter_lambda_role.name
   policy_arn = aws_iam_policy.umesse_converter_lambda_policy.arn
 }
-

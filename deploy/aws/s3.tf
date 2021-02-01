@@ -50,12 +50,6 @@ resource "aws_s3_bucket" "webapp" {
   for_each = toset(lookup(var.s3_bucket, "webapp"))
   bucket   = each.key
   acl      = "private"
-  # policy   = data.aws_iam_policy_document.webapp_policy.json
-
-  website {
-    index_document = "index.html"
-    error_document = "error.html"
-  }
 }
 
 resource "aws_s3_bucket_public_access_block" "webapp_access" {
@@ -67,17 +61,8 @@ resource "aws_s3_bucket_public_access_block" "webapp_access" {
   restrict_public_buckets = true
 }
 
-# FIXME:
-# data "aws_iam_policy_document" "webapp_policy" {
-#   for_each = toset(lookup(var.s3_bucket, "webapp"))
-#   statement {
-#     actions = ["s3:GetObject"]
-#     effect  = "Allow"
-#     principals {
-#       type        = "AWS"
-#       identifiers = ["*"]
-#     }
-#     resources = ["arn:aws:s3:::${each.key}/*"]
-#     sid       = "PublicReadGetObject"
-#   }
-# }
+resource "aws_s3_bucket_policy" "webapp_policy" {
+  for_each = toset(lookup(var.s3_bucket, "webapp"))
+  bucket   = aws_s3_bucket.webapp[each.key].id
+  policy   = file("umesse_webapp_policy.json")
+}
