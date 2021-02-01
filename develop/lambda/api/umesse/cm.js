@@ -258,6 +258,10 @@ exports.deleteCm = async (unisCustomerCd, cmId) => {
 
 // CM結合処理
 function generateCm(unisCustomerCd, cmId, materials) {
+  const isWindows = process.platform === 'win32';
+  const isLocal = process.env.environment === 'local';
+  const isLocalWindows = isLocal && isWindows;
+
   return new Promise(async function (resolve, reject) {
     // FIXME: materials 一旦仮
     const list = [
@@ -269,22 +273,32 @@ function generateCm(unisCustomerCd, cmId, materials) {
       "narration/サンプル03.mp3",
     ];
     const workDir = `/tmp/${unisCustomerCd}/mix/${cmId}`;
+    const windowsWorkDir = `${process.cwd()}\\tmp\\${unisCustomerCd}\\mix\\${cmId}`; // windows only
     const ffmpeg = `ffmpeg -hide_banner`;
 
     try {
-      execSync(`mkdir -p ${workDir} && rm -f ${workDir}/*`);
+      let initDirCommand = ``;
+      if (!isLocalWindows) {
+        initDirCommand = `mkdir -p ${workDir} && rm -f ${workDir}/*`;
+      } else {
+        initDirCommand = `mkdir ${windowsWorkDir} > NUL 2>&1 && \
+          if ERRORLEVEL 1 cmd /c exit 0 && \
+          rd /q ${windowsWorkDir}\\*`;
+      }
+      execSync(initDirCommand);
 
       let paths = "";
       for (const [key, value] of list.entries()) {
         debuglog(`key: ${key}, value: ${value}`);
         const res = await s3Manager.get(constants.s3Bucket().contents, value);
         if (!res || !res.Body) throw "getObject failed";
-        fs.writeFileSync(`${workDir}/${key}.mp3`, res.Body);
+        const filePath = !isLocalWindows ? workDir : windowsWorkDir;
+        fs.writeFileSync(`${filePath}/${key}.mp3`, res.Body);
         paths += `-i ${workDir}/${key}.mp3 `;
       }
 
       // FIXME: 各パラメーターをチューニング
-      const command = `${ffmpeg} ${paths} \
+      let command = `${ffmpeg} ${paths} \
         -filter_complex ' \
           [0:a]volume=0.5[start_chime]; \
           [1:a]volume=0.5,adelay=3s|3s[end_chime]; \
@@ -297,19 +311,35 @@ function generateCm(unisCustomerCd, cmId, materials) {
           [mix][end_chime]acrossfade=d=3[last]; \
           [start_chime][last]concat=n=2:v=0:a=1 \
         ' -y ${workDir}/${cmId}.mp3`;
+      if (isLocalWindows) {
+        fs.writeFileSync(`${windowsWorkDir}/ffmped-command`, `#!/bin/bash\n${command}`);
+        command = `docker run --name ffmpeg-runner --rm \
+          -v ${process.cwd()}\\..\\layer\\bin:/usr/local/bin \
+          -v ${windowsWorkDir}:${workDir} \
+          centos:latest \
+          sh ${workDir}/ffmped-command`;
+      }
       debuglog(command);
       execSync(command);
 
       // FIXME: get seconds... 他に方法があるか
-      const seconds = execSync(
-        `${ffmpeg} -hide_banner -i ${workDir}/${cmId}.mp3 2>&1 | \
-          grep 'Duration' | cut -d ' ' -f 4 | cut -d '.' -f 1`
-      )
+      let secondsCommand = `${ffmpeg} -hide_banner -i ${workDir}/${cmId}.mp3 2>&1 | \
+        grep 'Duration' | cut -d ' ' -f 4 | cut -d '.' -f 1`
+      if (isLocalWindows) {
+        fs.writeFileSync(`${windowsWorkDir}/ffmpeg-seconds-command`, `#!/bin/bash\n${secondsCommand}`);
+        secondsCommand = `docker run --name ffmpeg-runner --rm \
+          -v ${process.cwd()}\\..\\layer\\bin:/usr/local/bin \
+          -v ${windowsWorkDir}:${workDir} \
+          centos:latest \
+          sh ${workDir}/ffmpeg-seconds-command`;
+      }
+      const seconds = execSync(secondsCommand)
         .toString()
         .replace(/\n/g, "");
       debuglog(`seconds: ${seconds}`);
 
-      const fileStream = fs.createReadStream(`${workDir}/${cmId}.mp3`);
+      const cmFilePath = !isLocalWindows ? workDir : windowsWorkDir;
+      const fileStream = fs.createReadStream(`${cmFilePath}/${cmId}.mp3`);
       fileStream.on("error", (e) => {
         throw e;
       });
