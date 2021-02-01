@@ -88,7 +88,7 @@ table {
 }
 
 #app {
-  font-family: 'noto-sans-cjk-jp', Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Noto Sans CJK JP', 'Noto Sans JP', Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: 16px;
