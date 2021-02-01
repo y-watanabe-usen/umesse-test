@@ -15,13 +15,15 @@
   "devDependencies": {
     "aws-sdk": "^2.442.0",
     "jest": "^26.6.3",
+    "nodemon": "^2.0.7",
     "umesse-lib": "file:../layer/nodejs/node_modules/umesse-lib"
   },
   "scripts": {
     "build": "npm install --no-save $(npm pack ../layer/nodejs/node_modules/umesse-lib/ | tail -1)",
     "build:prod": "npm install --production",
     "pretest": "sh ./__tests__/init.sh",
-    "test": "PATH=$PATH:../layer/bin jest -i --coverage"
+    "test": "PATH=$PATH:../layer/bin jest -i --coverage",
+    "start:local": "nodemon ./app.local.js"
   },
   "jest": {
     "verbose": false,
