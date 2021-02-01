@@ -10,12 +10,12 @@
       "Effect": "Allow",
       "Action": ["s3:ListBucket", "s3:GetObject", "s3:PutObject"],
       "Resource": [
-        "arn:aws:s3:::dev-umesse-users",
-        "arn:aws:s3:::dev-umesse-contents",
-        "arn:aws:s3:::stg-umesse-users",
-        "arn:aws:s3:::stg-umesse-contents",
-        "arn:aws:s3:::umesse-users",
-        "arn:aws:s3:::umesse-contents"
+        "arn:aws:s3:::dev-umesse-users/*",
+        "arn:aws:s3:::dev-umesse-contents/*",
+        "arn:aws:s3:::stg-umesse-users/*",
+        "arn:aws:s3:::stg-umesse-contents/*",
+        "arn:aws:s3:::umesse-users/*",
+        "arn:aws:s3:::umesse-contents/*"
       ]
     },
     {
@@ -30,16 +30,23 @@
         "dynamodb:UpdateItem"
       ],
       "Resource": [
-        "arn:aws:dynamodb:::table/dev-umesse-users",
-        "arn:aws:dynamodb:::table/dev-umesse-contents",
-        "arn:aws:dynamodb:::table/dev-umesse-external",
-        "arn:aws:dynamodb:::table/stg-umesse-users",
-        "arn:aws:dynamodb:::table/stg-umesse-contents",
-        "arn:aws:dynamodb:::table/stg-umesse-external",
-        "arn:aws:dynamodb:::table/umesse-users",
-        "arn:aws:dynamodb:::table/umesse-contents",
-        "arn:aws:dynamodb:::table/umesse-external"
+        "arn:aws:dynamodb:*:*:table/dev-umesse-users",
+        "arn:aws:dynamodb:*:*:table/dev-umesse-contents",
+        "arn:aws:dynamodb:*:*:table/dev-umesse-external",
+        "arn:aws:dynamodb:*:*:table/stg-umesse-users",
+        "arn:aws:dynamodb:*:*:table/stg-umesse-contents",
+        "arn:aws:dynamodb:*:*:table/stg-umesse-external",
+        "arn:aws:dynamodb:*:*:table/umesse-users",
+        "arn:aws:dynamodb:*:*:table/umesse-contents",
+        "arn:aws:dynamodb:*:*:table/umesse-external"
       ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "sqs:SendMessage"
+      ],
+      "Resource": ["arn:aws:sqs:*:*:UMesseConverterQueue"]
     }
   ]
 }
