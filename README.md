@@ -68,7 +68,7 @@ terraform apply
 ```bash
 cd develop/lambda/api
 npm install
-node ./app.local.js
+npm run start:local
 ```
 
 #### VueJs
