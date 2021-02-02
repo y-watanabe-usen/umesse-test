@@ -39,3 +39,21 @@ variable "s3_bucket" {
     ]
   }
 }
+
+variable "api_domain" {
+  type = list(string)
+  default = [
+    "dev-api-umesse.usen.com",
+    "stg-api-umesse.usen.com",
+    "api-umesse.usen.com",
+  ]
+}
+
+variable "site_domain" {
+  type = list(string)
+  default = [
+    "dev-app-umesse.usen.com",
+    "stg-app-umesse.usen.com",
+    "app-umesse.usen.com",
+  ]
+}

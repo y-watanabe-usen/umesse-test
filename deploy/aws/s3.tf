@@ -61,8 +61,20 @@ resource "aws_s3_bucket_public_access_block" "webapp_access" {
   restrict_public_buckets = true
 }
 
+# TODO: とりあえずdev環境のみ
 resource "aws_s3_bucket_policy" "webapp_policy" {
-  for_each = toset(lookup(var.s3_bucket, "webapp"))
-  bucket   = aws_s3_bucket.webapp[each.key].id
-  policy   = file("umesse_webapp_policy.json")
+  bucket = aws_s3_bucket.webapp["dev-umesse-webapp"].id
+  policy = data.aws_iam_policy_document.umesse_webapp_policy.json
+}
+
+data "aws_iam_policy_document" "umesse_webapp_policy" {
+  statement {
+    actions   = ["s3:GetObject"]
+    resources = ["${aws_s3_bucket.webapp["dev-umesse-webapp"].arn}/*"]
+
+    principals {
+      type        = "AWS"
+      identifiers = [aws_cloudfront_origin_access_identity.umesse_webapp.iam_arn]
+    }
+  }
 }
