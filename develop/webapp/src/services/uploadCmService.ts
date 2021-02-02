@@ -79,6 +79,21 @@ export function useUploadCmService(api: UMesseApi.CmApi) {
           reject((state.status = UPLOAD_CM_STATE.ERROR))
         );
     });
+  }
+
+  // deleteは予約語なのでremove
+  const remove = async (authToken: string, cmId: string) => {
+    return new Promise(function (resolve, reject) {
+      api
+        .deleteUserCm(cmId, authToken)
+        .then((value) => {
+          console.log(value.data)
+          resolve(state.status = UPLOAD_CM_STATE.NONE)
+        })
+        .catch((error) =>
+          reject((state.status = UPLOAD_CM_STATE.ERROR))
+        );
+    });
 
   }
 
@@ -138,6 +153,6 @@ export function useUploadCmService(api: UMesseApi.CmApi) {
   };
 
   return {
-    create, update, getStatus,
+    create, update, remove, getStatus,
   };
 }

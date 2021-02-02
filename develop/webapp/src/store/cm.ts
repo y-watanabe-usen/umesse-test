@@ -9,7 +9,6 @@ import { CreateUserCmResponseItem } from "@/models/CreateUserCmResponseItem";
 
 export default function cmStore() {
   const cmApi = new UMesseApi.CmApi(config);
-  cmApi.createUserCm
   const uploadCmService = useUploadCmService(cmApi);
   const state = reactive({
     // TODO: ここにあるべきじゃない気がするので、あとで移動

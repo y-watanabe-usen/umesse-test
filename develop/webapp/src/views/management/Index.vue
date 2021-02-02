@@ -105,7 +105,13 @@
                         <a class="dropdown-item" href="#"
                           >U MUSICにアップロード</a
                         >
-                        <a class="dropdown-item" href="#">削除</a>
+                        <a
+                          class="dropdown-item"
+                          data-toggle="modal"
+                          data-target="#removeModal"
+                          href="#"
+                          >削除</a
+                        >
                       </div>
                     </div>
                   </div>
@@ -297,9 +303,7 @@
     <div class="modal-dialog modal-xl" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="saveModalLabel">
-            タイトルと説明の編集
-          </h5>
+          <h5 class="modal-title" id="saveModalLabel">タイトルと説明の編集</h5>
           <button
             type="button"
             class="close"
@@ -322,11 +326,7 @@
           </form>
         </div>
         <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-dismiss="modal"
-          >
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
             キャンセル
           </button>
           <button
@@ -365,11 +365,77 @@
         </div>
         <div class="modal-body">保存が完了しました。</div>
         <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            閉じる
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="modal fade"
+    id="removeModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="removeModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="removedModalLabel">確認</h5>
           <button
             type="button"
-            class="btn btn-secondary"
+            class="close"
             data-dismiss="modal"
+            aria-label="Close"
           >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">削除してよろしいですか</div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            キャンセル
+          </button>
+          <button
+            type="button"
+            class="btn btn-primary"
+            data-dismiss="modal"
+            data-toggle="modal"
+            data-target="#removedModal"
+            @click="remove(1)"
+          >
+            はい
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="modal fade"
+    id="removedModal"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="removedModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="removedModalLabel">削除完了</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">削除が完了しました。</div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
             閉じる
           </button>
         </div>
@@ -381,13 +447,14 @@
 <script lang="ts">
 import { computed, reactive } from "vue";
 import AudioPlayer from "@/utils/AudioPlayer";
-import axios from "axios";
 import AudioStore from "@/store/audio";
-import * as UMesseApi from "umesseapi";
 import * as Common from "@/utils/Common";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
-import ContentsBase from "@/components/templates/ContentsBase.vue"
+import ContentsBase from "@/components/templates/ContentsBase.vue";
 import Header from "@/components/organisms/Header.vue";
+import * as UMesseApi from "umesseapi";
+import { useUploadCmService } from "@/services/uploadCmService";
+import { config } from "@/utils/UMesseApiConfiguration";
 
 export default {
   components: {
@@ -398,9 +465,9 @@ export default {
   setup() {
     const audioPlayer = AudioPlayer();
     const audioStore = AudioStore();
-    const api = new UMesseApi.ResourcesApi(
-      new UMesseApi.Configuration({ basePath: process.env.VUE_APP_BASE_URL })
-    );
+    const cmApi = new UMesseApi.CmApi(config);
+    const uploadCmService = useUploadCmService(cmApi);
+    const resourcesapi = new UMesseApi.ResourcesApi(config);
 
     const state = reactive({
       menus: [
@@ -463,23 +530,19 @@ export default {
       ],
       isPlaying: computed(() => audioPlayer.isPlaying()),
       isDownloading: computed(() => audioStore.isDownloading),
-      playbackTime: computed(() => {
-        return audioPlayer.getPlaybackTime();
-      }),
-      playbackTimeHms: computed(() => {
-        return Common.sToHms(Math.floor(audioPlayer.getPlaybackTime()));
-      }),
-      duration: computed(() => {
-        return audioPlayer.getDuration();
-      }),
-      durationHms: computed(() => {
-        return Common.sToHms(Math.floor(audioPlayer.getDuration()));
-      }),
+      playbackTime: computed(() => audioPlayer.getPlaybackTime()),
+      playbackTimeHms: computed(() =>
+        Common.sToHms(Math.floor(audioPlayer.getPlaybackTime()))
+      ),
+      duration: computed(() => audioPlayer.getDuration()),
+      durationHms: computed(() =>
+        Common.sToHms(Math.floor(audioPlayer.getDuration()))
+      ),
     });
 
     const play = async () => {
       if (state.isPlaying) return;
-      const response = await api.getSignedUrl("ID", "CATEGORY");
+      const response = await resourcesapi.getSignedUrl("ID", "CATEGORY");
       console.log(response.data.url);
       await audioStore.download(response.data.url);
       audioPlayer.start(<AudioBuffer>audioStore.audioBuffer);
@@ -489,17 +552,21 @@ export default {
       if (state.isPlaying) audioPlayer.stop();
     };
 
+    const remove = async (cmId: string) => {
+      const response = await uploadCmService.remove("123456789", cmId);
+    };
+
     return {
       state,
       play,
       stop,
+      remove,
     };
   },
 };
 </script>
 
 <style scoped>
-
 .bg-menu {
   background: #d9d9d9;
 }
