@@ -31,6 +31,7 @@ resource "aws_api_gateway_integration" "umesse" {
 }
 
 # deploy
+# TODO: とりあえずdev環境のみ
 ## v1
 resource "aws_api_gateway_deployment" "umesse_v1" {
   depends_on = [

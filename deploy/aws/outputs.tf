@@ -26,3 +26,8 @@ output "deployment_execution_arn" {
   description = "Deployment execution ARN"
   value       = aws_api_gateway_deployment.umesse_v1.execution_arn
 }
+
+output "cloud_front_destribution_domain_name" {
+  description = "Cloud Front domain"
+  value       = aws_cloudfront_distribution.umesse_webapp.domain_name
+}

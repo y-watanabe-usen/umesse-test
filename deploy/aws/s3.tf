@@ -50,12 +50,6 @@ resource "aws_s3_bucket" "webapp" {
   for_each = toset(lookup(var.s3_bucket, "webapp"))
   bucket   = each.key
   acl      = "private"
-  # policy   = data.aws_iam_policy_document.webapp_policy.json
-
-  website {
-    index_document = "index.html"
-    error_document = "error.html"
-  }
 }
 
 resource "aws_s3_bucket_public_access_block" "webapp_access" {
@@ -67,17 +61,20 @@ resource "aws_s3_bucket_public_access_block" "webapp_access" {
   restrict_public_buckets = true
 }
 
-# FIXME:
-# data "aws_iam_policy_document" "webapp_policy" {
-#   for_each = toset(lookup(var.s3_bucket, "webapp"))
-#   statement {
-#     actions = ["s3:GetObject"]
-#     effect  = "Allow"
-#     principals {
-#       type        = "AWS"
-#       identifiers = ["*"]
-#     }
-#     resources = ["arn:aws:s3:::${each.key}/*"]
-#     sid       = "PublicReadGetObject"
-#   }
-# }
+# TODO: とりあえずdev環境のみ
+resource "aws_s3_bucket_policy" "webapp_policy" {
+  bucket = aws_s3_bucket.webapp["dev-umesse-webapp"].id
+  policy = data.aws_iam_policy_document.umesse_webapp_policy.json
+}
+
+data "aws_iam_policy_document" "umesse_webapp_policy" {
+  statement {
+    actions   = ["s3:GetObject"]
+    resources = ["${aws_s3_bucket.webapp["dev-umesse-webapp"].arn}/*"]
+
+    principals {
+      type        = "AWS"
+      identifiers = [aws_cloudfront_origin_access_identity.umesse_webapp.iam_arn]
+    }
+  }
+}
