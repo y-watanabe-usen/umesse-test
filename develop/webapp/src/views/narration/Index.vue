@@ -13,12 +13,8 @@
               type="button"
               class="btn btn-menu text-left text-white"
               :class="[
-                industry.id == activeIndustryId
-                  ? 'btn-light'
-                  : 'btn-link',
-                industry.id == activeIndustryId
-                  ? 'text-dark'
-                  : 'text-white',
+                industry.id == activeIndustryId ? 'btn-light' : 'btn-link',
+                industry.id == activeIndustryId ? 'text-dark' : 'text-white',
                 industry.id == 1 ? 'mt-2' : '',
               ]"
               v-for="industry in industries"
@@ -313,7 +309,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref, onMounted, reactive, toRefs } from "vue";
+import {
+  defineComponent,
+  computed,
+  ref,
+  onMounted,
+  reactive,
+  toRefs,
+} from "vue";
 // import NarrationStore from "@/store/narration";
 import AudioStore from "@/store/audio";
 import AudioPlayer from "@/utils/AudioPlayer";
@@ -348,18 +351,14 @@ export default defineComponent({
       displayMode: DisplayMode.Scene,
       isPlaying: computed(() => audioPlayer.isPlaying()),
       isDownloading: computed(() => audioStore.isDownloading),
-      playbackTime: computed(() => {
-        return audioPlayer.getPlaybackTime();
-      }),
-      playbackTimeHms: computed(() => {
-        return Common.sToHms(Math.floor(audioPlayer.getPlaybackTime()));
-      }),
-      duration: computed(() => {
-        return audioPlayer.getDuration();
-      }),
-      durationHms: computed(() => {
-        return Common.sToHms(Math.floor(audioPlayer.getDuration()));
-      }),
+      playbackTime: computed(() => audioPlayer.getPlaybackTime()),
+      playbackTimeHms: computed(() =>
+        Common.sToHms(Math.floor(audioPlayer.getPlaybackTime()))
+      ),
+      duration: computed(() => audioPlayer.getDuration()),
+      durationHms: computed(() =>
+        Common.sToHms(Math.floor(audioPlayer.getDuration()))
+      ),
     });
 
     const play = async () => {
