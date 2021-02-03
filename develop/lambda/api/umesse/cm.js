@@ -11,6 +11,7 @@ const {
 const { validation } = require("umesse-lib/validation");
 const { dynamodbManager } = require("umesse-lib/utils/dynamodbManager");
 const { s3Manager } = require("umesse-lib/utils/s3Manager");
+const { sqsManager } = require("umesse-lib/utils/sqsManager");
 
 // CM取得（一覧・個別）
 exports.getCm = async (unisCustomerCd, cmId) => {
@@ -152,16 +153,60 @@ exports.updateCm = async (unisCustomerCd, cmId, body) => {
 
     // TODO: CMステータス状態によるチェック
 
+    let res = "";
+    let dataProcessType = "";
+    let status = "";
     // CM作成中の場合
     if (cm.status == constants.cmStatus.CREATING) {
-      // TODO: add sqs
+      // sqs send
+      const params = {
+        MessageBody: JSON.stringify({
+          unisCustomerCd: unisCustomerCd,
+          cmId: cmId,
+        }),
+        QueueUrl: CONVERTER_SQS_QUEUE_URL,
+        DelaySeconds: 0,
+      };
+
+      res = await SQS.sqsManager(params);
+      if (!res) throw "update failed";
+
       cm.status = constants.cmStatus.CONVERT;
+      dataProcessType = "01";
+      status = "0";
     } else {
       // CMアップロード
       if (body.uploadSystem) {
-        // TODO:
         cm.status = constants.cmStatus.EXTERNAL_UPLOADING;
+        dataProcessType = "02";
+        status = "1";
       }
+    }
+
+    // CMアップロード
+    if (body.uploadSystem) {
+      const item = {
+        unisCustomerCd: unisCustomerCd,
+        dataProcessType: dataProcessType,
+        cmId: cmId,
+        cmName: cm.title,
+        cmCommentManuscript: cm.description,
+        startDatetime: cm.startDate,
+        endDatetime: cm.endDate,
+        productionType: cm.productionType,
+        contentTime: cm.seconds,
+        sceneCd: cm.scene.sceneCd,
+        uploadSystem: body.uploadSystem,
+        status: status,
+        timestamp: timestamp(),
+      };
+
+      res = await dynamodbManager.put(
+        constants.dynamoDbTable().external,
+        item,
+        {}
+      );
+      if (!res) throw "put failed";
     }
 
     // DynamoDBのデータ更新
@@ -179,7 +224,7 @@ exports.updateCm = async (unisCustomerCd, cmId, body) => {
     };
     debuglog(JSON.stringify({ key: key, options: options }));
 
-    const res = await dynamodbManager.update(
+    res = await dynamodbManager.update(
       constants.dynamoDbTable().users,
       key,
       options
@@ -258,8 +303,8 @@ exports.deleteCm = async (unisCustomerCd, cmId) => {
 
 // CM結合処理
 function generateCm(unisCustomerCd, cmId, materials) {
-  const isWindows = process.platform === 'win32';
-  const isLocal = process.env.environment === 'local';
+  const isWindows = process.platform === "win32";
+  const isLocal = process.env.environment === "local";
   const isLocalWindows = isLocal && isWindows;
 
   return new Promise(async function (resolve, reject) {
@@ -312,7 +357,10 @@ function generateCm(unisCustomerCd, cmId, materials) {
           [start_chime][last]concat=n=2:v=0:a=1 \
         ' -y ${workDir}/${cmId}.mp3`;
       if (isLocalWindows) {
-        fs.writeFileSync(`${windowsWorkDir}/ffmped-command`, `#!/bin/bash\n${command}`);
+        fs.writeFileSync(
+          `${windowsWorkDir}/ffmped-command`,
+          `#!/bin/bash\n${command}`
+        );
         command = `docker run --name ffmpeg-runner --rm \
           -v ${process.cwd()}\\..\\layer\\bin:/usr/local/bin \
           -v ${windowsWorkDir}:${workDir} \
@@ -324,18 +372,19 @@ function generateCm(unisCustomerCd, cmId, materials) {
 
       // FIXME: get seconds... 他に方法があるか
       let secondsCommand = `${ffmpeg} -hide_banner -i ${workDir}/${cmId}.mp3 2>&1 | \
-        grep 'Duration' | cut -d ' ' -f 4 | cut -d '.' -f 1`
+        grep 'Duration' | cut -d ' ' -f 4 | cut -d '.' -f 1`;
       if (isLocalWindows) {
-        fs.writeFileSync(`${windowsWorkDir}/ffmpeg-seconds-command`, `#!/bin/bash\n${secondsCommand}`);
+        fs.writeFileSync(
+          `${windowsWorkDir}/ffmpeg-seconds-command`,
+          `#!/bin/bash\n${secondsCommand}`
+        );
         secondsCommand = `docker run --name ffmpeg-runner --rm \
           -v ${process.cwd()}\\..\\layer\\bin:/usr/local/bin \
           -v ${windowsWorkDir}:${workDir} \
           centos:latest \
           sh ${workDir}/ffmpeg-seconds-command`;
       }
-      const seconds = execSync(secondsCommand)
-        .toString()
-        .replace(/\n/g, "");
+      const seconds = execSync(secondsCommand).toString().replace(/\n/g, "");
       debuglog(`seconds: ${seconds}`);
 
       const cmFilePath = !isLocalWindows ? workDir : windowsWorkDir;
