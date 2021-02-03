@@ -194,8 +194,10 @@
       </template>
       <template #footer>
         <ModalFooter>
-            <Button type="secondary" @click="closeModal">キャンセル</Button>
-            <Button type="primary" @click="toCreateCm">保存して作成を続ける</Button>
+          <Button type="secondary" @click="closeModal">キャンセル</Button>
+          <Button type="primary" @click="toCreateCm"
+            >保存して作成を続ける</Button
+          >
         </ModalFooter>
       </template>
     </ModalDialog>
@@ -205,7 +207,6 @@
 <script lang="ts">
 import { defineComponent, reactive, computed, toRefs, provide } from "vue";
 import { useRouter } from "vue-router";
-// import axios from "axios";
 import AudioPlayer from "@/utils/AudioPlayer";
 import {
   RecordingFile,
@@ -213,9 +214,9 @@ import {
   UPLOAD_TTS_STATE,
 } from "@/services/uploadTtsService";
 import provideTtsStore from "@/store/tts";
-import * as Common from "@/utils/Common"
+import * as Common from "@/utils/Common";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
-import ContentsBase from "@/components/templates/ContentsBase.vue"
+import ContentsBase from "@/components/templates/ContentsBase.vue";
 import Header from "@/components/organisms/Header.vue";
 import Button from "@/components/atoms/Button.vue";
 import ModalDialog from "@/components/molecules/ModalDialog.vue";
@@ -232,12 +233,6 @@ export default {
     ModalHeader,
     ModalFooter,
   },
-  data() {
-    return {
-      text: "おはようございます。",
-      speaker: "risa",
-    };
-  },
   setup() {
     const router = useRouter();
     const ttsStore = provideTtsStore(); //FIXME: provide name.
@@ -247,18 +242,16 @@ export default {
       file: <RecordingFile>{},
       uploadTtsState: computed(() => ttsStore.getStatus()),
       isPlaying: computed(() => audioPlayer.isPlaying()),
-      playbackTime: computed(() => {
-        return audioPlayer.getPlaybackTime();
-      }),
-      playbackTimeHms: computed(() => {
-        return Common.sToHms(Math.floor(audioPlayer.getPlaybackTime()));
-      }),
-      duration: computed(() => {
-        return audioPlayer.getDuration();
-      }),
-      durationHms: computed(() => {
-        return Common.sToHms(Math.floor(audioPlayer.getDuration()));
-      }),
+      playbackTime: computed(() => audioPlayer.getPlaybackTime()),
+      playbackTimeHms: computed(() =>
+        Common.sToHms(Math.floor(audioPlayer.getPlaybackTime()))
+      ),
+      duration: computed(() => audioPlayer.getDuration()),
+      durationHms: computed(() =>
+        Common.sToHms(Math.floor(audioPlayer.getDuration()))
+      ),
+      text: "おはようございます。",
+      speaker: "risa",
       isModalAppear: false,
     });
 
@@ -284,11 +277,12 @@ export default {
     };
 
     const toCreateCm = () => {
-      router.push({ name: 'Cm' });
+      router.push({ name: "Cm" });
     };
 
     const openModal = () => {
       state.isModalAppear = true;
+      createTtsData(state.text, state.speaker);
     };
 
     const closeModal = () => {
@@ -311,7 +305,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/_variables.scss';
+@import "@/scss/_variables.scss";
 @include fade_animation;
 
 .btn-play,

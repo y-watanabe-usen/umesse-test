@@ -35,8 +35,8 @@
               </h6>
               <div
                 class="media text-muted pt-3"
-                v-for="narrationData in state.narrationDatas"
-                :key="narrationData.title"
+                v-for="template in state.templates"
+                :key="template.contentsId"
               >
                 <div
                   class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray pl-3"
@@ -45,7 +45,7 @@
                     class="d-flex justify-content-between align-items-center w-100"
                   >
                     <strong class="text-dark h5 pt-2 pb-2">{{
-                      narrationData.title
+                      template.title
                     }}</strong>
                     <div>
                       <router-link :to="{ name: 'VoiceTemplateDetail' }">
@@ -75,11 +75,7 @@
                       </router-link>
                     </div>
                   </div>
-                  <span class="d-block pb-2"
-                    >{{ narrationData.description1 }}<br />{{
-                      narrationData.description2
-                    }}</span
-                  >
+                  <span class="d-block pb-2">{{ template.manuscript }} </span>
                 </div>
               </div>
             </div>
@@ -91,10 +87,13 @@
 </template>
 
 <script lang="ts">
-import { computed, reactive } from "vue";
+import { computed, onMounted, reactive } from "vue";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
-import ContentsBase from "@/components/templates/ContentsBase.vue"
+import ContentsBase from "@/components/templates/ContentsBase.vue";
 import Header from "@/components/organisms/Header.vue";
+import { config } from "@/utils/UMesseApiConfiguration";
+import * as UMesseApi from "umesseapi";
+import { TemplateItem } from "umesseapi/models";
 
 export default {
   components: {
@@ -103,6 +102,7 @@ export default {
     Header,
   },
   setup() {
+    const api = new UMesseApi.ResourcesApi(config);
     const state = reactive({
       menus: [
         {
@@ -132,32 +132,11 @@ export default {
       ],
       activeMenuId: 1,
       sorts: ["名前順", "作成日順", "更新日順"],
-      narrationDatas: [
-        {
-          title: "XXXXXXの案内1",
-          description1:
-            "本日はご来店いただきまして、誠にありがとうございます。お客様に…",
-          description2: "00:24 放送開始日2020年10月15日 有効期限2020年10月20日",
-        },
-        {
-          title: "XXXXXXの案内1",
-          description1:
-            "お客様にご案内申し上げます。当店ではアルバイトを募集いたしており…",
-          description2: "00:15 放送開始日2020年10月15日 有効期限2020年10月20日",
-        },
-        {
-          title: "XXXXXXの案内1",
-          description1:
-            "本日はご来店いただきまして、誠にありがとうございます。お客様に…",
-          description2: "00:24 放送開始日2020年10月15日 有効期限2020年10月20日",
-        },
-        {
-          title: "XXXXXXの案内1",
-          description1:
-            "本日はご来店いただきまして、誠にありがとうございます。お客様に…",
-          description2: "00:24 放送開始日2020年10月15日 有効期限2020年10月20日",
-        },
-      ],
+      templates: [] as TemplateItem[],
+    });
+    onMounted(async () => {
+      const response = await api.listTemplate();
+      state.templates = response.data;
     });
 
     return {

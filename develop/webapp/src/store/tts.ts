@@ -81,7 +81,7 @@ export default function ttsStore() {
   };
 
   const createTtsData = async (text: String, speaker: String) => {
-    if (!hasTtsData()) {
+    if (hasTtsData()) {
       resetTtsData();
     }
     try {

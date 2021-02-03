@@ -16,9 +16,9 @@
               <div class="row" style="height: 100px">
                 <div class="col-2 m-auto">話者</div>
                 <div class="col-10 m-auto">
-                  <select class="form-control w-25">
-                    <option v-for="voice in state.voices" :key="voice">
-                      {{ voice }}
+                  <select class="form-control w-25" v-model="state.speaker">
+                    <option v-for="speaker in speakers" :key="speaker">
+                      {{ speaker }}
                     </option>
                   </select>
                 </div>
@@ -49,7 +49,9 @@
                       style="position: fixed"
                     />
                     <label class="form-check-label" for="inlineCheckbox2"
-                      ><img class="country m-1" src="../../../assets/america.svg"
+                      ><img
+                        class="country m-1"
+                        src="../../../assets/america.svg"
                     /></label>
                   </div>
                   <div class="form-check form-check-inline">
@@ -115,14 +117,7 @@
               原稿
             </div>
             <div class="maniscript-body">
-              本日は
-              <span class="font-weight-bold">{{ state.storeName }}</span>
-              へご来店いただきまして、誠にありがとうございます。<br />
-              お客様にご連絡申し上げます。<br />
-              当店の営業時間は、
-              <span class="font-weight-bold">{{ state.endTime }}</span>
-              までとなっております。<br />
-              本日はご利用、ありがとうございます。どうぞ、ごゆっくりお過ごしくださいませ。<br />
+              {{ state.text }}
             </div>
           </div>
         </div>
@@ -141,32 +136,77 @@
           <div class="col-10">
             <div class="row">
               <div class="col-4">
-                <button type="button" class="btn btn-light shadow btn-play">
-                  <svg
-                    width="1em"
-                    height="1em"
-                    viewBox="0 0 16 16"
-                    class="bi bi-play-fill"
-                    fill="currentColor"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M11.596 8.697l-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"
-                    />
-                  </svg>
-                  再生
-                </button>
+                <template v-if="state.isCreating">
+                  <button class="btn btn-play btn-light" type="button" disabled>
+                    <span
+                      class="spinner-border spinner-border-sm"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
+                    <span class="sr-only">Loading...</span>
+                    CM作成中
+                  </button>
+                </template>
+                <template v-else>
+                  <template v-if="!state.isPlaying">
+                    <button
+                      type="button"
+                      class="btn btn-light shadow btn-play"
+                      @click="play(state.selectedBgm)"
+                    >
+                      <svg
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 16 16"
+                        class="bi bi-play-fill"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M11.596 8.697l-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"
+                        />
+                      </svg>
+                      再生
+                    </button>
+                  </template>
+                  <template v-else>
+                    <button
+                      type="button"
+                      class="btn btn-light shadow btn-play"
+                      @click="stop"
+                    >
+                      <svg
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 16 16"
+                        class="bi bi-stop-fill"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M5 3.5h6A1.5 1.5 0 0 1 12.5 5v6a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 11V5A1.5 1.5 0 0 1 5 3.5z"
+                        />
+                      </svg>
+                      停止
+                    </button>
+                  </template>
+                </template>
               </div>
               <div class="col-8">
                 <div class="row">
                   <div class="col text-left" style="font-size: 17px">
-                    00:00
+                    {{ state.playbackTimeHms }}
                   </div>
                   <div class="col text-right" style="font-size: 17px">
-                    00:00
+                    {{ state.durationHms }}
                   </div>
                 </div>
-                <meter min="0" max="100" class="w-100"></meter>
+                <meter
+                  min="0"
+                  :max="state.duration"
+                  class="w-100"
+                  :value="state.playbackTime"
+                ></meter>
               </div>
             </div>
             <div class="row pt-5">
@@ -240,8 +280,10 @@
       </template>
       <template #footer>
         <ModalFooter>
-            <Button type="secondary" @click="closeModal">キャンセル</Button>
-            <Button type="primary" @click="toCreateCm">保存して作成を続ける</Button>
+          <Button type="secondary" @click="closeModal">キャンセル</Button>
+          <Button type="primary" @click="toCreateCm"
+            >保存して作成を続ける</Button
+          >
         </ModalFooter>
       </template>
     </ModalDialog>
@@ -251,8 +293,12 @@
 <script lang="ts">
 import { computed, reactive } from "vue";
 import { useRouter } from "vue-router";
+import AudioPlayer from "@/utils/AudioPlayer";
+import { RecordingFile, UPLOAD_TTS_STATE } from "@/services/uploadTtsService";
+import provideTtsStore from "@/store/tts";
+import * as Common from "@/utils/Common";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
-import ContentsBase from "@/components/templates/ContentsBase.vue"
+import ContentsBase from "@/components/templates/ContentsBase.vue";
 import Header from "@/components/organisms/Header.vue";
 import Button from "@/components/atoms/Button.vue";
 import ModalDialog from "@/components/molecules/ModalDialog.vue";
@@ -271,23 +317,74 @@ export default {
   },
   setup() {
     const router = useRouter();
+    const ttsStore = provideTtsStore(); //FIXME: provide name.
+    const audioPlayer = AudioPlayer();
+    const speakers = ["risa", "takeru"];
     const state = reactive({
-      voices: ["女性1", "女性2", "女性3", "男性1", "男性2", "男性3"],
+      file: <RecordingFile>{},
+      isPlaying: computed(() => audioPlayer.isPlaying()),
+      isCreating: computed(
+        () => ttsStore.getStatus() === UPLOAD_TTS_STATE.UPLOADING
+      ),
+      playbackTime: computed(() => audioPlayer.getPlaybackTime()),
+      playbackTimeHms: computed(() =>
+        Common.sToHms(Math.floor(audioPlayer.getPlaybackTime()))
+      ),
+      duration: computed(() => audioPlayer.getDuration()),
+      durationHms: computed(() =>
+        Common.sToHms(Math.floor(audioPlayer.getDuration()))
+      ),
       storeName: "",
       endTime: "21:00",
       isModalAppear: false,
+      text: computed(() => {
+        const source =
+          "本日は{storeName}へご来店いただきまして、誠にありがとうございます。お客様にご連絡申し上げます。当店の営業時間は、{endTime}までとなっております。本日はご利用、ありがとうございます。どうぞ、ごゆっくりお過ごしくださいませ。";
+        const text: string = source
+          .replace("{storeName}", state.storeName)
+          .replace("{endTime}", state.endTime);
+        return text;
+      }),
+      speaker: "risa",
     });
+
+    const play = async () => {
+      console.log("play");
+      const audioBuffer = await ttsStore.getTtsData();
+      audioPlayer.start(audioBuffer!!);
+    };
+
+    const stop = () => {
+      if (state.isPlaying) audioPlayer.stop();
+    };
+
+    const createTtsData = async (text: string, speaker: string) => {
+      console.log("create");
+      await ttsStore.createTtsData(text, speaker);
+    };
+
+    const uploadTtsFile = async () => {
+      /// check state.file.
+      state.file.blob = await ttsStore.getUploadTtsData();
+      ttsStore.uploadTtsData(state.file);
+    };
+
     const toCreateCm = () => {
-      router.push({ name: 'Cm' });
+      router.push({ name: "Cm" });
     };
     const openModal = () => {
       state.isModalAppear = true;
+      createTtsData(state.text, state.speaker);
     };
     const closeModal = () => {
       state.isModalAppear = false;
     };
     return {
       state,
+      speakers,
+      play,
+      stop,
+      createTtsData,
       toCreateCm,
       openModal,
       closeModal,
@@ -297,7 +394,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/_variables.scss';
+@import "@/scss/_variables.scss";
 @include fade_animation;
 
 .info1 {
