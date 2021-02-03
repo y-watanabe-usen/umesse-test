@@ -7,9 +7,9 @@
 
 <script lang="ts">
 import { useGlobalStore } from "@/store";
-import { computed } from "vue";
+import { computed, defineComponent } from "vue";
 
-export default {
+export default defineComponent({
   setup() {
     const { base } = useGlobalStore();
     const isDarkTheme = computed(() => base.isDarkTheme);
@@ -17,7 +17,7 @@ export default {
       isDarkTheme,
     };
   },
-};
+});
 </script>
 
 <style>
@@ -44,12 +44,16 @@ export default {
   background: linear-gradient(to bottom, #177dd1, #489fdf);
 }
 
-html, body {
+html,
+body {
   height: 100%;
   overflow: hidden;
 }
 
-p, h1, h2, h3 {
+p,
+h1,
+h2,
+h3 {
   margin: 0;
 }
 
@@ -93,7 +97,8 @@ table {
 }
 
 #app {
-  font-family: 'Noto Sans CJK JP', 'Noto Sans JP', Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Noto Sans CJK JP", "Noto Sans JP", Avenir, Helvetica, Arial,
+    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   font-size: 16px;

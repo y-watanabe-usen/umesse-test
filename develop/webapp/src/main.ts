@@ -5,6 +5,6 @@ import router from './router'
 import globalStore, { GlobalStoreKey } from '@/store';
 
 createApp(App)
-    .provide(GlobalStoreKey, globalStore())
-    .use(router)
-    .mount('#app')
+  .provide(GlobalStoreKey, globalStore())
+  .use(router)
+  .mount('#app')

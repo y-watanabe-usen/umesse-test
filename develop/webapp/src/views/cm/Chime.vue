@@ -6,7 +6,7 @@
           >&lt;戻る</router-link
         >
         <div class="collapse navbar-collapse justify-content-center h4">
-          {{ state.title }}
+          {{ title }}
         </div>
       </nav>
     </template>
@@ -17,14 +17,14 @@
             <div class="my-3">
               <h6 class="border-bottom border-gray pb-2 mb-0">
                 <select class="form-control w-25">
-                  <option v-for="sort in state.sorts" :key="sort">
+                  <option v-for="sort in sorts" :key="sort">
                     {{ sort }}
                   </option>
                 </select>
               </h6>
               <div
                 class="media text-muted pt-3"
-                v-for="chime in state.chimes"
+                v-for="chime in chimes"
                 :key="chime.id"
               >
                 <div
@@ -112,7 +112,7 @@
         <div class="modal-body">
           <div class="row">
             <div class="col-4">
-              <template v-if="state.isDownloading">
+              <template v-if="isDownloading">
                 <button class="btn btn-play btn-light" type="button" disabled>
                   <span
                     class="spinner-border spinner-border-sm"
@@ -123,11 +123,11 @@
                 </button>
               </template>
               <template v-else>
-                <template v-if="!state.isPlaying">
+                <template v-if="!isPlaying">
                   <button
                     type="button"
                     class="btn btn-light shadow btn-play"
-                    @click="play(state.selectedChime)"
+                    @click="play(selectedChime)"
                   >
                     <svg
                       width="1em"
@@ -170,17 +170,17 @@
             <div class="col-8">
               <div class="row">
                 <div class="col text-left" style="font-size: 17px">
-                  {{ state.playbackTimeHms }}
+                  {{ playbackTimeHms }}
                 </div>
                 <div class="col text-right" style="font-size: 17px">
-                  {{ state.durationHms }}
+                  {{ durationHms }}
                 </div>
               </div>
               <meter
                 min="0"
-                :max="state.duration"
+                :max="duration"
                 class="w-100"
-                :value="state.playbackTime"
+                :value="playbackTime"
               ></meter>
             </div>
           </div>
@@ -263,9 +263,7 @@
     <div class="modal-dialog modal-xl" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="saveModalLabel">
-            タイトルと説明の編集
-          </h5>
+          <h5 class="modal-title" id="saveModalLabel">タイトルと説明の編集</h5>
           <button
             type="button"
             class="close"
@@ -288,11 +286,7 @@
           </form>
         </div>
         <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-dismiss="modal"
-          >
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
             キャンセル
           </button>
           <button
@@ -331,11 +325,7 @@
         </div>
         <div class="modal-body">保存が完了しました。</div>
         <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-dismiss="modal"
-          >
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
             閉じる
           </button>
         </div>
@@ -345,7 +335,7 @@
 </template>
 
 <script lang="ts">
-import { computed, onMounted, reactive } from "vue";
+import { computed, defineComponent, onMounted, reactive, toRefs } from "vue";
 import AudioPlayer from "@/utils/AudioPlayer";
 import axios from "axios";
 import AudioStore from "@/store/audio";
@@ -357,9 +347,9 @@ import { useRoute, useRouter } from "vue-router";
 import { config } from "@/utils/UMesseApiConfiguration";
 import * as Common from "@/utils/Common";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
-import ContentsBase from "@/components/templates/ContentsBase.vue"
+import ContentsBase from "@/components/templates/ContentsBase.vue";
 
-export default {
+export default defineComponent({
   components: {
     BasicLayout,
     ContentsBase,
@@ -386,18 +376,14 @@ export default {
       selectedChime: null as ChimeItem | null,
       isPlaying: computed(() => audioPlayer.isPlaying()),
       isDownloading: computed(() => audioStore.isDownloading),
-      playbackTime: computed(() => {
-        return audioPlayer.getPlaybackTime();
-      }),
-      playbackTimeHms: computed(() => {
-        return Common.sToHms(Math.floor(audioPlayer.getPlaybackTime()));
-      }),
-      duration: computed(() => {
-        return audioPlayer.getDuration();
-      }),
-      durationHms: computed(() => {
-        return Common.sToHms(Math.floor(audioPlayer.getDuration()));
-      }),
+      playbackTime: computed(() => audioPlayer.getPlaybackTime()),
+      playbackTimeHms: computed(() =>
+        Common.sToHms(Math.floor(audioPlayer.getPlaybackTime()))
+      ),
+      duration: computed(() => audioPlayer.getDuration()),
+      durationHms: computed(() =>
+        Common.sToHms(Math.floor(audioPlayer.getDuration()))
+      ),
     });
 
     const setChime = (chime: ChimeItem) => {
@@ -431,14 +417,14 @@ export default {
       state.chimes = response.data;
     });
     return {
-      state,
+      ...toRefs(state),
       setChime,
       selectChime,
       play,
       stop,
     };
   },
-};
+});
 </script>
 
 <style scoped>

@@ -260,7 +260,9 @@
                     >削除
                   </button>
                 </div>
-                <p style="font-size: 14px; font-weight: bold; text-align: center">
+                <p
+                  style="font-size: 14px; font-weight: bold; text-align: center"
+                >
                   録音し直したい場合は、録音開始ボタンを押して再収録してください。
                 </p>
               </div>
@@ -280,7 +282,9 @@
       <template #header>
         <ModalHeader
           title="保存しますか？"
-          :closeDisabled="uploadRecoridngState === UPLOAD_RECORDING_STATE.UPLOADING"
+          :closeDisabled="
+            uploadRecoridngState === UPLOAD_RECORDING_STATE.UPLOADING
+          "
           @close="closeModal"
         />
       </template>
@@ -312,15 +316,11 @@
           </div>
         </form>
         <!-- 保存中 -->
-        <span
-          v-if="uploadRecoridngState === UPLOAD_RECORDING_STATE.UPLOADING"
-        >
+        <span v-if="uploadRecoridngState === UPLOAD_RECORDING_STATE.UPLOADING">
           <div class="col-form-label">クルクルインジケーターとか</div>
         </span>
         <!-- 保存完了 -->
-        <span
-          v-if="uploadRecoridngState === UPLOAD_RECORDING_STATE.UPLOADED"
-        >
+        <span v-if="uploadRecoridngState === UPLOAD_RECORDING_STATE.UPLOADED">
           <div class="col-form-label">保存が完了しました。</div>
         </span>
         <!-- 保存失敗 -->
@@ -330,7 +330,8 @@
       </template>
       <template #footer>
         <ModalFooter>
-          <div class="button-wrapper"
+          <div
+            class="button-wrapper"
             v-if="
               uploadRecoridngState === UPLOAD_RECORDING_STATE.ERROR ||
               uploadRecoridngState === UPLOAD_RECORDING_STATE.NONE
@@ -345,7 +346,10 @@
               保存して作成を続ける
             </Button>
           </div>
-          <div class="button-wrapper" v-if="uploadRecoridngState === UPLOAD_RECORDING_STATE.UPLOADED">
+          <div
+            class="button-wrapper"
+            v-if="uploadRecoridngState === UPLOAD_RECORDING_STATE.UPLOADED"
+          >
             <Button type="primary" @click="closeModal">OK</Button>
           </div>
         </ModalFooter>
@@ -367,7 +371,7 @@ import * as UMesseApi from "umesseapi";
 import provideRecordingStore from "@/store/recording";
 import * as Common from "@/utils/Common";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
-import ContentsBase from "@/components/templates/ContentsBase.vue"
+import ContentsBase from "@/components/templates/ContentsBase.vue";
 import Header from "@/components/organisms/Header.vue";
 import Button from "@/components/atoms/Button.vue";
 import ModalDialog from "@/components/molecules/ModalDialog.vue";
@@ -398,18 +402,14 @@ export default defineComponent({
         if (audioPlayer.getPowerDecibels() === -Infinity) return -100;
         return audioPlayer.getPowerDecibels();
       }),
-      playbackTime: computed(() => {
-        return audioPlayer.getPlaybackTime();
-      }),
-      playbackTimeHms: computed(() => {
-        return Common.sToHms(Math.floor(audioPlayer.getPlaybackTime()));
-      }),
-      duration: computed(() => {
-        return audioPlayer.getDuration();
-      }),
-      durationHms: computed(() => {
-        return Common.sToHms(Math.floor(audioPlayer.getDuration()));
-      }),
+      playbackTime: computed(() => audioPlayer.getPlaybackTime()),
+      playbackTimeHms: computed(() =>
+        Common.sToHms(Math.floor(audioPlayer.getPlaybackTime()))
+      ),
+      duration: computed(() => audioPlayer.getDuration()),
+      durationHms: computed(() =>
+        Common.sToHms(Math.floor(audioPlayer.getDuration()))
+      ),
       isModalAppear: false,
     });
 
@@ -458,7 +458,7 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/_variables.scss';
+@import "@/scss/_variables.scss";
 @include fade_animation;
 
 .recording {

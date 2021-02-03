@@ -5,9 +5,7 @@
         <router-link class="navbar-brand" :to="{ name: 'OrderHistory' }"
           >&lt;戻る</router-link
         >
-        <div
-          class="collapse navbar-collapse justify-content-center h4"
-        >
+        <div class="collapse navbar-collapse justify-content-center h4">
           発注履歴
         </div>
       </nav>
@@ -15,8 +13,8 @@
       <div class="bg-white order rounded">
         <div class="item py-3">
           <div class="row w-100">
-            <div class="col left ml-3" style="margin: auto;">
-              {{ state.data.date }}
+            <div class="col left ml-3" style="margin: auto">
+              {{ data.date }}
             </div>
             <div class="col-9">
               <div class="alert alert-info status" role="alert">納品済み</div>
@@ -27,7 +25,7 @@
           <div class="row w-100">
             <div class="col left ml-3">アナウンス</div>
             <div class="col-9">
-              {{ state.data.description }}
+              {{ data.description }}
             </div>
           </div>
         </div>
@@ -35,7 +33,7 @@
           <div class="row w-100">
             <div class="col left ml-3">BGM</div>
             <div class="col-9">
-              {{ state.data.bgm }}
+              {{ data.bgm }}
             </div>
           </div>
         </div>
@@ -43,7 +41,7 @@
           <div class="row w-100">
             <div class="col left ml-3">オープニングチャイム</div>
             <div class="col-9">
-              {{ state.data.openChaim }}
+              {{ data.openChaim }}
             </div>
           </div>
         </div>
@@ -51,7 +49,7 @@
           <div class="row w-100">
             <div class="col left ml-3">エンディングチャイム</div>
             <div class="col-9">
-              {{ state.data.endChaim }}
+              {{ data.endChaim }}
             </div>
           </div>
         </div>
@@ -61,12 +59,12 @@
 </template>
 
 <script lang="ts">
-import { computed, reactive } from "vue";
+import { computed, defineComponent, reactive, toRefs } from "vue";
 import AudioPlayer from "@/utils/AudioPlayer";
 import axios from "axios";
 import AudioStore from "@/store/audio";
 
-export default {
+export default defineComponent({
   setup() {
     const state = reactive({
       data: {
@@ -82,10 +80,10 @@ export default {
     });
 
     return {
-      state,
+      ...toRefs(state),
     };
   },
-};
+});
 </script>
 
 <style scoped>
