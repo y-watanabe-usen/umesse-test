@@ -6,7 +6,7 @@
           >&lt;戻る</router-link
         >
         <div class="collapse navbar-collapse justify-content-center h4">
-          {{ state.title }}
+          {{ title }}
         </div>
       </nav>
     </template>
@@ -17,14 +17,14 @@
             <div class="my-3">
               <h6 class="border-bottom border-gray pb-2 mb-0">
                 <select class="form-control w-25">
-                  <option v-for="sort in state.sorts" :key="sort">
+                  <option v-for="sort in sorts" :key="sort">
                     {{ sort }}
                   </option>
                 </select>
               </h6>
               <div
                 class="media text-muted pt-3"
-                v-for="chime in state.chimes"
+                v-for="chime in chimes"
                 :key="chime.id"
               >
                 <div
@@ -112,7 +112,7 @@
         <div class="modal-body">
           <div class="row">
             <div class="col-4">
-              <template v-if="state.isDownloading">
+              <template v-if="isDownloading">
                 <button class="btn btn-play btn-light" type="button" disabled>
                   <span
                     class="spinner-border spinner-border-sm"
@@ -123,11 +123,11 @@
                 </button>
               </template>
               <template v-else>
-                <template v-if="!state.isPlaying">
+                <template v-if="!isPlaying">
                   <button
                     type="button"
                     class="btn btn-light shadow btn-play"
-                    @click="play(state.selectedChime)"
+                    @click="play(selectedChime)"
                   >
                     <svg
                       width="1em"
@@ -170,17 +170,17 @@
             <div class="col-8">
               <div class="row">
                 <div class="col text-left" style="font-size: 17px">
-                  {{ state.playbackTimeHms }}
+                  {{ playbackTimeHms }}
                 </div>
                 <div class="col text-right" style="font-size: 17px">
-                  {{ state.durationHms }}
+                  {{ durationHms }}
                 </div>
               </div>
               <meter
                 min="0"
-                :max="state.duration"
+                :max="duration"
                 class="w-100"
-                :value="state.playbackTime"
+                :value="playbackTime"
               ></meter>
             </div>
           </div>
@@ -335,7 +335,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, reactive } from "vue";
+import { computed, defineComponent, onMounted, reactive, toRefs } from "vue";
 import AudioPlayer from "@/utils/AudioPlayer";
 import axios from "axios";
 import AudioStore from "@/store/audio";
@@ -421,7 +421,7 @@ export default defineComponent({
       state.chimes = response.data;
     });
     return {
-      state,
+      ...toRefs(state),
       setChime,
       selectChime,
       play,

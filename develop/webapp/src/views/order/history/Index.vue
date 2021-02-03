@@ -5,15 +5,13 @@
         <router-link class="navbar-brand" :to="{ name: 'Home' }"
           >&lt;戻る</router-link
         >
-        <div
-          class="collapse navbar-collapse justify-content-center h4"
-        >
+        <div class="collapse navbar-collapse justify-content-center h4">
           発注履歴
         </div>
       </nav>
 
       <div class="bg-white order rounded">
-        <div class="item py-3" v-for="data in state.datas" :key="data.id">
+        <div class="item py-3" v-for="data in datas" :key="data.id">
           <div class="row w-100">
             <div class="col left">
               {{ data.date }}
@@ -54,12 +52,12 @@
 </template>
 
 <script lang="ts">
-import { computed, reactive } from "vue";
+import { computed, defineComponent, reactive, toRefs } from "vue";
 import AudioPlayer from "@/utils/AudioPlayer";
 import axios from "axios";
 import AudioStore from "@/store/audio";
 
-export default {
+export default defineComponent({
   setup() {
     const state = reactive({
       datas: [
@@ -109,10 +107,10 @@ export default {
     });
 
     return {
-      state,
+      ...toRefs(state),
     };
   },
-};
+});
 </script>
 
 <style scoped>

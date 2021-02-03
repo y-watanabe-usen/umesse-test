@@ -13,13 +13,13 @@
               type="button"
               class="btn btn-menu text-left text-white"
               :class="[
-                menu.id == state.activeMenuId ? 'btn-primary' : 'btn-link',
-                menu.id == state.activeMenuId ? 'text-white' : 'text-dark',
+                menu.id == activeMenuId ? 'btn-primary' : 'btn-link',
+                menu.id == activeMenuId ? 'text-white' : 'text-dark',
                 menu.id == 1 ? 'mt-2' : '',
               ]"
-              v-for="menu in state.menus"
+              v-for="menu in menus"
               :key="menu.id"
-              @click="state.activeMenuId = menu.id"
+              @click="activeMenuId = menu.id"
             >
               {{ menu.title }}
             </button>
@@ -28,14 +28,14 @@
             <div class="my-3">
               <h6 class="border-bottom border-gray pb-2 mb-0">
                 <select class="form-control w-25">
-                  <option v-for="sort in state.sorts" :key="sort">
+                  <option v-for="sort in sorts" :key="sort">
                     {{ sort }}
                   </option>
                 </select>
               </h6>
               <div
                 class="media text-muted pt-3"
-                v-for="template in state.templates"
+                v-for="template in templates"
                 :key="template.contentsId"
               >
                 <div
@@ -87,7 +87,7 @@
 </template>
 
 <script lang="ts">
-import { computed, onMounted, reactive } from "vue";
+import { computed, defineComponent, onMounted, reactive, toRefs } from "vue";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
 import Header from "@/components/organisms/Header.vue";
@@ -95,7 +95,7 @@ import { config } from "@/utils/UMesseApiConfiguration";
 import * as UMesseApi from "umesseapi";
 import { TemplateItem } from "umesseapi/models";
 
-export default {
+export default defineComponent({
   components: {
     BasicLayout,
     ContentsBase,
@@ -140,10 +140,10 @@ export default {
     });
 
     return {
-      state,
+      ...toRefs(state),
     };
   },
-};
+});
 </script>
 
 <style scoped>

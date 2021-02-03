@@ -16,7 +16,7 @@
               <div class="row" style="height: 100px">
                 <div class="col-2 m-auto">話者</div>
                 <div class="col-10 m-auto">
-                  <select class="form-control w-25" v-model="state.speaker">
+                  <select class="form-control w-25" v-model="speaker">
                     <option v-for="speaker in speakers" :key="speaker">
                       {{ speaker }}
                     </option>
@@ -91,7 +91,7 @@
                     class="form-control"
                     type="text"
                     placeholder="カタカナで入力"
-                    v-model="state.storeName"
+                    v-model="storeName"
                   />
                 </div>
               </div>
@@ -100,11 +100,7 @@
               <div class="row" style="height: 100px">
                 <div class="col-2 m-auto">2:閉店時間</div>
                 <div class="col-10 m-auto">
-                  <input
-                    class="form-control"
-                    type="time"
-                    v-model="state.endTime"
-                  />
+                  <input class="form-control" type="time" v-model="endTime" />
                 </div>
               </div>
             </div>
@@ -117,7 +113,7 @@
               原稿
             </div>
             <div class="maniscript-body">
-              {{ state.text }}
+              {{ text }}
             </div>
           </div>
         </div>
@@ -126,7 +122,7 @@
   </BasicLayout>
   <!-- modal -->
   <transition>
-    <ModalDialog v-if="state.isModalAppear" @close="closeModal">
+    <ModalDialog v-if="isModalAppear" @close="closeModal">
       <template #header>
         <ModalHeader title="保存しますか？" @close="closeModal" />
       </template>
@@ -136,7 +132,7 @@
           <div class="col-10">
             <div class="row">
               <div class="col-4">
-                <template v-if="state.isCreating">
+                <template v-if="isCreating">
                   <button class="btn btn-play btn-light" type="button" disabled>
                     <span
                       class="spinner-border spinner-border-sm"
@@ -148,11 +144,11 @@
                   </button>
                 </template>
                 <template v-else>
-                  <template v-if="!state.isPlaying">
+                  <template v-if="!isPlaying">
                     <button
                       type="button"
                       class="btn btn-light shadow btn-play"
-                      @click="play(state.selectedBgm)"
+                      @click="play(selectedBgm)"
                     >
                       <svg
                         width="1em"
@@ -195,17 +191,17 @@
               <div class="col-8">
                 <div class="row">
                   <div class="col text-left" style="font-size: 17px">
-                    {{ state.playbackTimeHms }}
+                    {{ playbackTimeHms }}
                   </div>
                   <div class="col text-right" style="font-size: 17px">
-                    {{ state.durationHms }}
+                    {{ durationHms }}
                   </div>
                 </div>
                 <meter
                   min="0"
-                  :max="state.duration"
+                  :max="duration"
                   class="w-100"
-                  :value="state.playbackTime"
+                  :value="playbackTime"
                 ></meter>
               </div>
             </div>
@@ -291,7 +287,7 @@
 </template>
 
 <script lang="ts">
-import { computed, reactive } from "vue";
+import { computed, defineComponent, reactive, toRefs } from "vue";
 import { useRouter } from "vue-router";
 import AudioPlayer from "@/utils/AudioPlayer";
 import { RecordingFile, UPLOAD_TTS_STATE } from "@/services/uploadTtsService";
@@ -305,7 +301,7 @@ import ModalDialog from "@/components/molecules/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
 
-export default {
+export default defineComponent({
   components: {
     BasicLayout,
     ContentsBase,
@@ -380,7 +376,7 @@ export default {
       state.isModalAppear = false;
     };
     return {
-      state,
+      ...toRefs(state),
       speakers,
       play,
       stop,
@@ -390,7 +386,7 @@ export default {
       closeModal,
     };
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

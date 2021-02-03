@@ -13,8 +13,10 @@
               type="button"
               class="btn btn-menu text-left text-white"
               :class="[
-                industry.id == state.activeIndustryId ? 'btn-light' : 'btn-link',
-                industry.id == state.activeIndustryId
+                industry.id == activeIndustryId
+                  ? 'btn-light'
+                  : 'btn-link',
+                industry.id == activeIndustryId
                   ? 'text-dark'
                   : 'text-white',
                 industry.id == 1 ? 'mt-2' : '',
@@ -30,12 +32,12 @@
             <div class="my-3">
               <h6 class="border-bottom border-gray pb-2 mb-0">
                 <select class="form-control w-25">
-                  <option v-for="sort in state.sorts" :key="sort">
+                  <option v-for="sort in sorts" :key="sort">
                     {{ sort }}
                   </option>
                 </select>
               </h6>
-              <template v-if="state.displayMode == DisplayMode.Scene">
+              <template v-if="displayMode == DisplayMode.Scene">
                 <div
                   class="media text-muted pt-3"
                   v-for="scene in scenes"
@@ -55,7 +57,7 @@
                   </div>
                 </div>
               </template>
-              <template v-if="state.displayMode == DisplayMode.Narration">
+              <template v-if="displayMode == DisplayMode.Narration">
                 <div
                   class="media text-muted pt-3"
                   v-for="narration in narrations"
@@ -169,7 +171,7 @@
         <div class="modal-body">
           <div class="row">
             <div class="col-4">
-              <template v-if="state.isDownloading">
+              <template v-if="isDownloading">
                 <button class="btn btn-play btn-light" type="button" disabled>
                   <span
                     class="spinner-border spinner-border-sm"
@@ -180,7 +182,7 @@
                 </button>
               </template>
               <template v-else>
-                <template v-if="!state.isPlaying">
+                <template v-if="!isPlaying">
                   <button
                     type="button"
                     class="btn btn-light shadow btn-play"
@@ -227,17 +229,17 @@
             <div class="col-8">
               <div class="row">
                 <div class="col text-left" style="font-size: 17px">
-                  {{ state.playbackTimeHms }}
+                  {{ playbackTimeHms }}
                 </div>
                 <div class="col text-right" style="font-size: 17px">
-                  {{ state.durationHms }}
+                  {{ durationHms }}
                 </div>
               </div>
               <meter
                 min="0"
-                :max="state.duration"
+                :max="duration"
                 class="w-100"
-                :value="state.playbackTime"
+                :value="playbackTime"
               ></meter>
             </div>
           </div>
@@ -311,17 +313,17 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ref, onMounted, reactive } from "vue";
+import { defineComponent, computed, ref, onMounted, reactive, toRefs } from "vue";
 // import NarrationStore from "@/store/narration";
 import AudioStore from "@/store/audio";
 import AudioPlayer from "@/utils/AudioPlayer";
 import * as UMesseApi from "umesseapi";
 import * as Common from "@/utils/Common";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
-import ContentsBase from "@/components/templates/ContentsBase.vue"
+import ContentsBase from "@/components/templates/ContentsBase.vue";
 import Header from "@/components/organisms/Header.vue";
 
-export default {
+export default defineComponent({
   components: {
     BasicLayout,
     ContentsBase,
@@ -399,7 +401,7 @@ export default {
 
     return {
       DisplayMode,
-      state,
+      ...toRefs(state),
       // industries,
       // scenes,
       // narrations,
@@ -409,7 +411,7 @@ export default {
       stop,
     };
   },
-};
+});
 </script>
 
 <style scoped>

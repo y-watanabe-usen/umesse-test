@@ -18,15 +18,15 @@
               type="button"
               class="btn btn-menu text-left text-white"
               :class="[
-                bgmIndustry.cd == state.activeBgmIndustryCd
+                bgmIndustry.cd == activeBgmIndustryCd
                   ? 'btn-primary'
                   : 'btn-link',
-                bgmIndustry.cd == state.activeBgmIndustryCd
+                bgmIndustry.cd == activeBgmIndustryCd
                   ? 'text-white'
                   : 'text-dark',
                 bgmIndustry.cd == 1 ? 'mt-2' : '',
               ]"
-              v-for="bgmIndustry in state.bgmIndustries"
+              v-for="bgmIndustry in bgmIndustries"
               :key="bgmIndustry.cd"
               @click="clickBgmIndustry(bgmIndustry.cd)"
             >
@@ -37,14 +37,14 @@
             <div class="my-3">
               <h6 class="border-bottom border-gray pb-2 mb-0">
                 <select class="form-control w-25">
-                  <option v-for="sort in state.sorts" :key="sort">
+                  <option v-for="sort in sorts" :key="sort">
                     {{ sort }}
                   </option>
                 </select>
               </h6>
               <div
                 class="media text-muted pt-3"
-                v-for="bgm in state.bgms"
+                v-for="bgm in bgms"
                 :key="bgm.id"
               >
                 <div
@@ -132,7 +132,7 @@
         <div class="modal-body">
           <div class="row">
             <div class="col-4">
-              <template v-if="state.isDownloading">
+              <template v-if="isDownloading">
                 <button class="btn btn-play btn-light" type="button" disabled>
                   <span
                     class="spinner-border spinner-border-sm"
@@ -143,11 +143,11 @@
                 </button>
               </template>
               <template v-else>
-                <template v-if="!state.isPlaying">
+                <template v-if="!isPlaying">
                   <button
                     type="button"
                     class="btn btn-light shadow btn-play"
-                    @click="play(state.selectedBgm)"
+                    @click="play(selectedBgm)"
                   >
                     <svg
                       width="1em"
@@ -190,17 +190,17 @@
             <div class="col-8">
               <div class="row">
                 <div class="col text-left" style="font-size: 17px">
-                  {{ state.playbackTimeHms }}
+                  {{ playbackTimeHms }}
                 </div>
                 <div class="col text-right" style="font-size: 17px">
-                  {{ state.durationHms }}
+                  {{ durationHms }}
                 </div>
               </div>
               <meter
                 min="0"
-                :max="state.duration"
+                :max="duration"
                 class="w-100"
-                :value="state.playbackTime"
+                :value="playbackTime"
               ></meter>
             </div>
           </div>
@@ -355,7 +355,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, reactive } from "vue";
+import { computed, defineComponent, onMounted, reactive, toRefs } from "vue";
 import AudioPlayer from "@/utils/AudioPlayer";
 import AudioStore from "@/store/audio";
 import * as UMesseApi from "umesseapi";
@@ -374,7 +374,6 @@ export default defineComponent({
   },
   setup() {
     const router = useRouter();
-    const route = useRoute();
     const audioStore = AudioStore();
     const audioPlayer = AudioPlayer();
     const api = new UMesseApi.ResourcesApi(config);
@@ -388,18 +387,14 @@ export default defineComponent({
       selectedBgm: null as BgmItem | null,
       isPlaying: computed(() => audioPlayer.isPlaying()),
       isDownloading: computed(() => audioStore.isDownloading),
-      playbackTime: computed(() => {
-        return audioPlayer.getPlaybackTime();
-      }),
-      playbackTimeHms: computed(() => {
-        return Common.sToHms(Math.floor(audioPlayer.getPlaybackTime()));
-      }),
-      duration: computed(() => {
-        return audioPlayer.getDuration();
-      }),
-      durationHms: computed(() => {
-        return Common.sToHms(Math.floor(audioPlayer.getDuration()));
-      }),
+      playbackTime: computed(() => audioPlayer.getPlaybackTime()),
+      playbackTimeHms: computed(() =>
+        Common.sToHms(Math.floor(audioPlayer.getPlaybackTime()))
+      ),
+      duration: computed(() => audioPlayer.getDuration()),
+      durationHms: computed(() =>
+        Common.sToHms(Math.floor(audioPlayer.getDuration()))
+      ),
     });
 
     const setBgm = (bgm: BgmItem) => {
@@ -437,7 +432,7 @@ export default defineComponent({
     });
 
     return {
-      state,
+      ...toRefs(state),
       setBgm,
       selectBgm,
       clickBgmIndustry,

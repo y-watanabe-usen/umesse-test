@@ -223,7 +223,7 @@ import ModalDialog from "@/components/molecules/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
 
-export default {
+export default defineComponent({
   components: {
     BasicLayout,
     ContentsBase,
@@ -301,7 +301,7 @@ export default {
       UPLOAD_TTS_STATE,
     };
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

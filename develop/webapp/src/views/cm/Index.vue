@@ -46,7 +46,7 @@
           data-toggle="modal"
           data-target="#saveModal"
           style="width: 100px"
-          :disabled="!(state.status >= UPLOAD_CM_STATE.CREATED)"
+          :disabled="!(status >= UPLOAD_CM_STATE.CREATED)"
         >
           確定
         </button>
@@ -55,14 +55,14 @@
     <template #contents>
       <div class="row mt-3">
         <div class="col-2 my-auto">
-          <template v-if="state.openChime">
+          <template v-if="openChime">
             <div class="bg-white rounded open-chime py-3">
               <div class="alert alert-dark small mx-auto mb-4" role="alert">
                 Openチャイム
               </div>
               <div class="text-center mb-4">
-                <div class="small">{{ state.openChime.title }}</div>
-                <div class="small">{{ state.openChime.description }}</div>
+                <div class="small">{{ openChime.title }}</div>
+                <div class="small">{{ openChime.description }}</div>
                 <div class="my-3">
                   <img src="@/assets/try-play.svg" />
                 </div>
@@ -228,14 +228,14 @@
           </div>
           <div class="row">
             <div class="col mb-3">
-              <template v-if="state.bgm">
+              <template v-if="bgm">
                 <div class="bg-white rounded bgm py-3">
                   <div class="alert alert-dark small mx-auto mb-4" role="alert">
                     BGM
                   </div>
                   <div class="text-center mb-4">
-                    <div class="small">{{ state.bgm.title }}</div>
-                    <div class="small">{{ state.bgm.description }}</div>
+                    <div class="small">{{ bgm.title }}</div>
+                    <div class="small">{{ bgm.description }}</div>
                     <div class="my-3">
                       <img src="@/assets/try-play.svg" />
                     </div>
@@ -265,14 +265,14 @@
           </div>
         </div>
         <div class="col-2 my-auto">
-          <template v-if="state.endChime">
+          <template v-if="endChime">
             <div class="bg-white rounded open-chime py-3">
               <div class="alert alert-dark small mx-auto mb-4" role="alert">
                 Endチャイム
               </div>
               <div class="text-center mb-4">
-                <div class="small">{{ state.endChime.title }}</div>
-                <div class="small">{{ state.endChime.description }}</div>
+                <div class="small">{{ endChime.title }}</div>
+                <div class="small">{{ endChime.description }}</div>
                 <div class="my-3">
                   <img src="@/assets/try-play.svg" />
                 </div>
@@ -329,7 +329,7 @@
         <div class="modal-body">
           <div class="row">
             <div class="col-4">
-              <template v-if="state.isDownloading || state.isCreating">
+              <template v-if="isDownloading || isCreating">
                 <button class="btn btn-play btn-light" type="button" disabled>
                   <span
                     class="spinner-border spinner-border-sm"
@@ -337,18 +337,16 @@
                     aria-hidden="true"
                   ></span>
                   <span class="sr-only">Loading...</span>
-                  <template v-if="state.isDownloading">
-                    ダウンロード中
-                  </template>
+                  <template v-if="isDownloading"> ダウンロード中 </template>
                   <template v-else> CM作成中 </template>
                 </button>
               </template>
               <template v-else>
-                <template v-if="!state.isPlaying">
+                <template v-if="!isPlaying">
                   <button
                     type="button"
                     class="btn btn-light shadow btn-play"
-                    @click="play(state.selectedBgm)"
+                    @click="play(selectedBgm)"
                   >
                     <svg
                       width="1em"
@@ -391,17 +389,17 @@
             <div class="col-8">
               <div class="row">
                 <div class="col text-left" style="font-size: 17px">
-                  {{ state.playbackTimeHms }}
+                  {{ playbackTimeHms }}
                 </div>
                 <div class="col text-right" style="font-size: 17px">
-                  {{ state.durationHms }}
+                  {{ durationHms }}
                 </div>
               </div>
               <meter
                 min="0"
-                :max="state.duration"
+                :max="duration"
                 class="w-100"
-                :value="state.playbackTime"
+                :value="playbackTime"
               ></meter>
             </div>
           </div>
@@ -498,22 +496,19 @@
           <div class="row">
             <div class="col-2">タイトル</div>
             <div class="col-10">
-              <input class="form-control" type="text" v-model="state.title" />
+              <input class="form-control" type="text" v-model="title" />
             </div>
           </div>
           <div class="row pt-4">
             <div class="col-2">説明</div>
             <div class="col-10">
-              <textarea
-                class="form-control"
-                v-model="state.description"
-              ></textarea>
+              <textarea class="form-control" v-model="description"></textarea>
             </div>
           </div>
           <div class="row pt-4">
             <div class="col-2">シーン</div>
             <div class="col-10">
-              <select class="form-control w-100" v-model="state.scene">
+              <select class="form-control w-100" v-model="scene">
                 <option
                   v-for="scene in Constants.SCENES"
                   :key="scene.cd"
@@ -527,7 +522,7 @@
           <div class="row pt-4">
             <div class="col-2">アップロード先</div>
             <div class="col-10">
-              <select class="form-control w-100" v-model="state.uploadSystem">
+              <select class="form-control w-100" v-model="uploadSystem">
                 <option
                   v-for="uploadSystem in Constants.UPLOAD_SYSTEMS"
                   :key="uploadSystem.cd"
@@ -554,7 +549,7 @@
             data-dismiss="modal"
             data-toggle="modal"
             data-target="#savedModal"
-            :disabled="!state.title"
+            :disabled="!title"
             @click="update"
           >
             保存する
@@ -586,11 +581,7 @@
         </div>
         <div class="modal-body">作成が完了いたしました。</div>
         <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-dismiss="modal"
-          >
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
             編集の続きをする
           </button>
           <router-link
@@ -607,7 +598,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, reactive, onMounted } from "vue";
+import { defineComponent, computed, reactive, onMounted, toRefs } from "vue";
 import AudioPlayer from "@/utils/AudioPlayer";
 import AudioStore from "@/store/audio";
 import { useGlobalStore } from "@/store";
@@ -688,7 +679,7 @@ export default defineComponent({
     };
 
     return {
-      state,
+      ...toRefs(state),
       clearOpenChime,
       clearEndChime,
       clearBgm,

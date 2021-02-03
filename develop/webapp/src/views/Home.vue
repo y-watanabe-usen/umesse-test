@@ -5,7 +5,9 @@
       <span v-if="authenticating">Loading...</span>
       <span v-else> {{ token }} {{ error }} </span>
     </h2>
-    <p class="title"><router-link :to="{ name: 'Cm' }">店内アナウンスを作成する</router-link></p>
+    <p class="title">
+      <router-link :to="{ name: 'Cm' }">店内アナウンスを作成する</router-link>
+    </p>
     <ul class="nav">
       <li>
         <router-link to="#" @click="openModal">
@@ -17,7 +19,7 @@
   <MainMenu />
   <!-- modal -->
   <transition>
-    <ModalDialog v-if="state.isModalAppear" @close="closeModal">
+    <ModalDialog v-if="isModalAppear" @close="closeModal">
       <template #header>
         <ModalHeader title="setting" @close="closeModal" />
       </template>
@@ -30,7 +32,9 @@
             v-model="isDarkTheme"
             @change="toggleDarkTheme()"
           />
-          <label class="custom-control-label" for="customSwitch1">switch dark mode</label>
+          <label class="custom-control-label" for="customSwitch1"
+            >switch dark mode</label
+          >
         </div>
       </template>
     </ModalDialog>
@@ -39,12 +43,12 @@
 
 <script lang="ts">
 import { useGlobalStore } from "@/store";
-import { onMounted, reactive } from "vue";
+import { defineComponent, onMounted, reactive, toRefs } from "vue";
 import MainMenu from "@/components/organisms/MainMenu.vue";
 import ModalDialog from "@/components/molecules/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 
-export default {
+export default defineComponent({
   components: {
     MainMenu,
     ModalDialog,
@@ -66,18 +70,18 @@ export default {
       auth.requestAuth();
     });
     return {
-      state,
+      ...toRefs(state),
       openModal,
       closeModal,
       ...auth,
       ...base,
     };
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/_variables.scss';
+@import "@/scss/_variables.scss";
 
 header {
   @include flex_between;
@@ -109,7 +113,8 @@ header {
     li {
       width: 40px;
       height: 40px;
-      a, img {
+      a,
+      img {
         display: block;
         width: 100%;
         height: 100%;
