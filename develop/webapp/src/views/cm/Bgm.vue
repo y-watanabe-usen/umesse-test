@@ -283,9 +283,7 @@
     <div class="modal-dialog modal-xl" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="saveModalLabel">
-            タイトルと説明の編集
-          </h5>
+          <h5 class="modal-title" id="saveModalLabel">タイトルと説明の編集</h5>
           <button
             type="button"
             class="close"
@@ -308,11 +306,7 @@
           </form>
         </div>
         <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-dismiss="modal"
-          >
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
             キャンセル
           </button>
           <button
@@ -351,11 +345,7 @@
         </div>
         <div class="modal-body">保存が完了しました。</div>
         <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-dismiss="modal"
-          >
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
             閉じる
           </button>
         </div>
@@ -365,7 +355,7 @@
 </template>
 
 <script lang="ts">
-import { computed, onMounted, reactive } from "vue";
+import { computed, defineComponent, onMounted, reactive } from "vue";
 import AudioPlayer from "@/utils/AudioPlayer";
 import AudioStore from "@/store/audio";
 import * as UMesseApi from "umesseapi";
@@ -375,9 +365,9 @@ import { useRoute, useRouter } from "vue-router";
 import * as Common from "@/utils/Common";
 import { config } from "@/utils/UMesseApiConfiguration";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
-import ContentsBase from "@/components/templates/ContentsBase.vue"
+import ContentsBase from "@/components/templates/ContentsBase.vue";
 
-export default {
+export default defineComponent({
   components: {
     BasicLayout,
     ContentsBase,
@@ -455,7 +445,7 @@ export default {
       stop,
     };
   },
-};
+});
 </script>
 
 <style scoped>
