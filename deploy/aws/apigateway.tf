@@ -70,3 +70,29 @@ resource "aws_api_gateway_usage_plan_key" "umesse_plan_key" {
   key_type      = "API_KEY"
   usage_plan_id = aws_api_gateway_usage_plan.umesse_plan.id
 }
+
+resource "aws_api_gateway_method_response" "umesse_responce" {
+  rest_api_id = aws_api_gateway_rest_api.umesse.id
+  resource_id = aws_api_gateway_resource.umesse.id
+  http_method = aws_api_gateway_method.umesse.http_method
+  status_code = "200"
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = true,
+    "method.response.header.Access-Control-Allow-Methods" = true,
+    "method.response.header.Access-Control-Allow-Origin"  = true
+  }
+}
+
+resource "aws_api_gateway_integration_response" "umesse_integration" {
+  rest_api_id = aws_api_gateway_rest_api.umesse.id
+  resource_id = aws_api_gateway_resource.umesse.id
+  http_method = aws_api_gateway_method.umesse.http_method
+  status_code = aws_api_gateway_method_response.umesse_responce.status_code
+
+  response_parameters = {
+    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+    "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS,POST,PUT,DELETE'",
+    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+  }
+}
