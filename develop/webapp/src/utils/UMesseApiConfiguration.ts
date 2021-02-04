@@ -1,3 +1,11 @@
 import { Configuration } from "umesseapi"
 
-export const config = new Configuration({ basePath: process.env.VUE_APP_BASE_URL })
+const headerOptions = process.env.VUE_APP_API_KEY ? {
+  "x-api-key": process.env.VUE_APP_API_KEY
+} : undefined;
+export const config = new Configuration({
+  basePath: process.env.VUE_APP_BASE_URL,
+  baseOptions: {
+    headers: headerOptions
+  }
+})
