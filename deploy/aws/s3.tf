@@ -20,6 +20,12 @@ resource "aws_s3_bucket" "users" {
   for_each = toset(lookup(var.s3_bucket, "users"))
   bucket   = each.key
   acl      = "private"
+
+  cors_rule {
+    allowed_headers = ["*"]
+    allowed_methods = ["GET", "HEAD"]
+    allowed_origins = ["*"]
+  }
 }
 
 resource "aws_s3_bucket_public_access_block" "users_access" {
@@ -35,6 +41,12 @@ resource "aws_s3_bucket" "contents" {
   for_each = toset(lookup(var.s3_bucket, "contents"))
   bucket   = each.key
   acl      = "private"
+
+  cors_rule {
+    allowed_headers = ["*"]
+    allowed_methods = ["GET", "HEAD"]
+    allowed_origins = ["*"]
+  }
 }
 
 resource "aws_s3_bucket_public_access_block" "contents_access" {
