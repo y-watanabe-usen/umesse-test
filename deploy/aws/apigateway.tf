@@ -20,6 +20,13 @@ resource "aws_api_gateway_method" "umesse" {
   api_key_required = true
 }
 
+resource "aws_api_gateway_method" "umesse_options" {
+  rest_api_id      = aws_api_gateway_rest_api.umesse.id
+  resource_id      = aws_api_gateway_resource.umesse.id
+  http_method      = "OPTIONS"
+  authorization    = "NONE"
+}
+
 # API Gateway ------> Lambda
 resource "aws_api_gateway_integration" "umesse" {
   rest_api_id             = aws_api_gateway_rest_api.umesse.id
@@ -28,6 +35,22 @@ resource "aws_api_gateway_integration" "umesse" {
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
   uri                     = aws_lambda_function.umesse_api_function.invoke_arn
+}
+
+resource "aws_api_gateway_integration" "umesse_options" {
+  rest_api_id             = aws_api_gateway_rest_api.umesse.id
+  resource_id             = aws_api_gateway_resource.umesse.id
+  http_method             = aws_api_gateway_method.umesse_options.http_method
+  integration_http_method = "OPTIONS"
+  type                    = "MOCK"
+
+  request_templates = {
+    "application/json" = <<EOF
+{
+  "statusCode": 200
+}
+EOF
+  }
 }
 
 # deploy
@@ -72,29 +95,6 @@ resource "aws_api_gateway_usage_plan_key" "umesse_plan_key" {
 }
 
 # CROS
-resource "aws_api_gateway_method" "umesse_options" {
-  rest_api_id      = aws_api_gateway_rest_api.umesse.id
-  resource_id      = aws_api_gateway_resource.umesse.id
-  http_method      = "OPTIONS"
-  authorization    = "NONE"
-}
-
-resource "aws_api_gateway_integration" "umesse_options" {
-  rest_api_id             = aws_api_gateway_rest_api.umesse.id
-  resource_id             = aws_api_gateway_resource.umesse.id
-  http_method             = aws_api_gateway_method.umesse_options.http_method
-  integration_http_method = "OPTIONS"
-  type                    = "MOCK"
-
-  request_templates = {
-    "application/json" = <<EOF
-{
-  "statusCode": 200
-}
-EOF
-  }
-}
-
 resource "aws_api_gateway_method_response" "umesse_options" {
   rest_api_id = aws_api_gateway_rest_api.umesse.id
   resource_id = aws_api_gateway_resource.umesse.id
@@ -119,7 +119,7 @@ resource "aws_api_gateway_integration_response" "umesse_options" {
   status_code = aws_api_gateway_method_response.umesse_options.status_code
 
   response_parameters = {
-    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
+    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Unis-Custmer-Cd'",
     "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS,POST,PUT,DELETE'",
     "method.response.header.Access-Control-Allow-Origin"  = "'*'"
   }
