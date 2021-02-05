@@ -423,17 +423,15 @@ export default defineComponent({
 
     const getAudioBuffer = async (contentsId: string, category: string) => {
       const cacheKey = `${category}/${contentsId}`;
-      let audioBuffer: AudioBuffer;
       if (base.cache.has(cacheKey)) {
-        audioBuffer = <AudioBuffer>base.cache.get(cacheKey);
-      } else {
-        const response = await api.getSignedUrl(contentsId, category);
-        await audioStore.download(response.data.url);
-        audioBuffer = <AudioBuffer>audioStore.audioBuffer;
-        base.cache.set(cacheKey, <AudioBuffer>audioStore.audioBuffer);
+        return <AudioBuffer>base.cache.get(cacheKey);
       }
-      return audioBuffer;
+      const response = await api.getSignedUrl(contentsId, category);
+      await audioStore.download(response.data.url);
+      base.cache.set(cacheKey, <AudioBuffer>audioStore.audioBuffer);
+      return <AudioBuffer>audioStore.audioBuffer;
     };
+
     const stop = () => {
       if (state.isPlaying) audioPlayer.stop();
     };
