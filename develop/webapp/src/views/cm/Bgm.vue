@@ -377,7 +377,7 @@ export default defineComponent({
     const audioStore = AudioStore();
     const audioPlayer = AudioPlayer();
     const api = new UMesseApi.ResourcesApi(config);
-    const { cm } = useGlobalStore();
+    const { cm, base } = useGlobalStore();
 
     const state = reactive({
       activeBgmIndustryCd: "01",
@@ -417,10 +417,19 @@ export default defineComponent({
     };
 
     const play = async (bgm: BgmItem) => {
-      const response = await api.getSignedUrl(bgm.contentsId!!, bgm.category!!);
-      console.log(response);
+      const audioBuffer = await getAudioBuffer(bgm.contentsId, bgm.category);
+      audioPlayer.start(audioBuffer);
+    };
+
+    const getAudioBuffer = async (contentsId: string, category: string) => {
+      const cacheKey = `${category}/${contentsId}`;
+      if (base.cache.has(cacheKey)) {
+        return <AudioBuffer>base.cache.get(cacheKey);
+      }
+      const response = await api.getSignedUrl(contentsId, category);
       await audioStore.download(response.data.url);
-      audioPlayer.start(<AudioBuffer>audioStore.audioBuffer);
+      base.cache.set(cacheKey, <AudioBuffer>audioStore.audioBuffer);
+      return <AudioBuffer>audioStore.audioBuffer;
     };
 
     const stop = () => {
