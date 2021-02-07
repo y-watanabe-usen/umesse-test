@@ -10,180 +10,34 @@
     </template>
     <template #contents>
       <ContentsBase>
-        <div class="row">
-          <div class="m-5">
+        <div class="center">
+          <div class="contents">
             <p class="recording" @click="toggleVoiceRecorder">
               <span v-if="isRecording === false">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  xmlns:xlink="http://www.w3.org/1999/xlink"
-                  width="390"
-                  height="390"
-                  viewBox="0 0 390 390"
-                >
-                  <defs>
-                    <linearGradient
-                      id="linear-gradient"
-                      x1="0.5"
-                      x2="0.5"
-                      y2="1"
-                      gradientUnits="objectBoundingBox"
-                    >
-                      <stop offset="0" stop-color="#0090ea" />
-                      <stop offset="1" stop-color="#00baff" />
-                      <stop offset="1" stop-color="#3f3f3f" />
-                    </linearGradient>
-                  </defs>
-                  <g
-                    id="グループ_71"
-                    data-name="グループ 71"
-                    transform="translate(-154 -193)"
-                  >
-                    <circle
-                      id="楕円形_6"
-                      data-name="楕円形 6"
-                      cx="195"
-                      cy="195"
-                      r="195"
-                      transform="translate(154 193)"
-                      fill="url(#linear-gradient)"
-                    />
-                    <circle
-                      id="楕円形_7"
-                      data-name="楕円形 7"
-                      cx="181"
-                      cy="181"
-                      r="181"
-                      transform="translate(168 207)"
-                      fill="#fff"
-                    />
-                    <g
-                      id="グループ_70"
-                      data-name="グループ 70"
-                      transform="translate(127.721 27.37)"
-                    >
-                      <path
-                        id="パス_45"
-                        data-name="パス 45"
-                        d="M199.961,349.812a26.263,26.263,0,0,0,26.182-26.182V253.812a26.182,26.182,0,0,0-52.364,0V323.63A26.263,26.263,0,0,0,199.961,349.812Z"
-                        transform="translate(21.682)"
-                        fill="url(#linear-gradient)"
-                      />
-                      <path
-                        id="パス_46"
-                        data-name="パス 46"
-                        d="M274.006,269.874V247.514a8.727,8.727,0,1,0-17.454,0v22.359a34.909,34.909,0,1,1-69.818,0V247.514a8.727,8.727,0,0,0-17.455,0v22.359a52.4,52.4,0,0,0,43.794,51.6c-.023.268-.157.495-.157.768v26.182h-21.76a8.727,8.727,0,1,0,0,17.455H252.13a8.727,8.727,0,0,0,0-17.455H230.37V322.237c0-.274-.128-.5-.151-.768A52.4,52.4,0,0,0,274.006,269.874Z"
-                        transform="translate(0 53.757)"
-                        fill="url(#linear-gradient)"
-                      />
-                    </g>
-                    <text
-                      id="録音開始"
-                      transform="translate(349 504)"
-                      fill="#555"
-                      font-size="30"
-                      font-family="YuGothicUI-Regular, Yu Gothic UI"
-                    >
-                      <tspan x="-60" y="0">録音開始</tspan>
-                    </text>
-                  </g>
-                </svg>
+                <img src="@/assets/recording_start.svg">
               </span>
               <span v-else>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  xmlns:xlink="http://www.w3.org/1999/xlink"
-                  width="390"
-                  height="390"
-                  viewBox="0 0 390 390"
-                >
-                  <defs>
-                    <linearGradient
-                      id="linear-gradient"
-                      x1="0.5"
-                      x2="0.5"
-                      y2="1"
-                      gradientUnits="objectBoundingBox"
-                    >
-                      <stop offset="0" stop-color="#e04242" />
-                      <stop offset="1" stop-color="#ff7157" />
-                      <stop offset="1" stop-color="#3f3f3f" />
-                    </linearGradient>
-                    <linearGradient
-                      id="linear-gradient-2"
-                      x1="0.5"
-                      x2="0.5"
-                      y2="1"
-                      gradientUnits="objectBoundingBox"
-                    >
-                      <stop offset="0" stop-color="#e04242" />
-                      <stop offset="1" stop-color="#e26548" />
-                      <stop offset="1" stop-color="#3f3f3f" />
-                    </linearGradient>
-                  </defs>
-                  <g
-                    id="グループ_71"
-                    data-name="グループ 71"
-                    transform="translate(-154 -193)"
-                  >
-                    <circle
-                      id="楕円形_6"
-                      data-name="楕円形 6"
-                      cx="195"
-                      cy="195"
-                      r="195"
-                      transform="translate(154 193)"
-                      fill="url(#linear-gradient)"
-                    />
-                    <circle
-                      id="楕円形_7"
-                      data-name="楕円形 7"
-                      cx="181"
-                      cy="181"
-                      r="181"
-                      transform="translate(168 207)"
-                      fill="#fff"
-                    />
-                    <text
-                      id="録音停止"
-                      transform="translate(349 504)"
-                      fill="#555"
-                      font-size="30"
-                      font-family="YuGothicUI-Regular, Yu Gothic UI"
-                    >
-                      <tspan x="-60" y="0">録音停止</tspan>
-                    </text>
-                    <rect
-                      id="長方形_270"
-                      data-name="長方形 270"
-                      width="98"
-                      height="98"
-                      rx="4"
-                      transform="translate(300 323)"
-                      fill="url(#linear-gradient-2)"
-                    />
-                  </g>
-                </svg>
+                <img src="@/assets/recording_stop.svg">
               </span>
             </p>
-          </div>
-          <div class="d-flex align-items-center">
-            <div class="lead" style="padding: 20px; width: 600px">
-              <div v-if="hasRecordedData">
-                <h5 class="m-0 text-right">db</h5>
-                <div class="d-flex">
+            <div class="right">
+              <div class="indicator-area">
+                <h5 class="volume-unit">db</h5>
+                <div class="volume">
                   <h5>-60</h5>
                   <h5>-50</h5>
                   <h5>-40</h5>
+                  <h5>-35</h5>
                   <h5>-30</h5>
                   <h5>-25</h5>
                   <h5>-20</h5>
-                  <h5 class="ml-4">-15</h5>
-                  <h5 class="ml-4">-10</h5>
-                  <h5 class="ml-4">-5</h5>
-                  <h5 class="ml-4">0</h5>
+                  <h5>-15</h5>
+                  <h5>-10</h5>
+                  <h5>-5</h5>
+                  <h5>0</h5>
                 </div>
-                <div class="d-flex" style="width: 800px">
+                <div class="scales">
+                  <div class="scale"></div>
                   <div class="scale"></div>
                   <div class="scale"></div>
                   <div class="scale"></div>
@@ -198,71 +52,37 @@
                 <meter
                   min="-100"
                   max="0"
-                  class="w-100"
+                  low="-10"
+                  high="-5"
+                  class="volume-meter"
                   :value="decibel"
-                  style="height: 40px"
+                  optimum="-30"
                 ></meter>
                 <span id="avg-level-text"> {{ decibel }} </span> dB
-                <h5 class="mt-4">録音したデータ１</h5>
-                <div class="row">
-                  <div class="col text-left" style="font-size: 17px">
-                    {{ playbackTimeHms }}
-                  </div>
-                  <div class="col text-right" style="font-size: 17px">
-                    {{ durationHms }}
-                  </div>
+                <h5 class="title">録音したデータ１</h5>
+                <div class="time" v-if="hasRecordedData">
+                  <p>{{ playbackTimeHms }}</p>
+                  <p>{{ durationHms }}</p>
+                </div>
+                <div class="time" v-else>
+                  <p>— : — : —</p>
+                  <p>— : — : —</p>
                 </div>
                 <meter
                   min="0"
                   :max="duration"
-                  class="w-100"
+                  class="progress-meter"
                   :value="playbackTime"
                 ></meter>
-                <div class="d-flex justify-content-center mt-4 mb-4">
-                  <button class="btn btn-light mr-3 btn-play" @click="play">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="30"
-                      height="23"
-                      viewBox="0 0 30 23"
-                    >
-                      <path
-                        d="M10.1,3.654a1.5,1.5,0,0,1,2.8,0l9.319,24.309A1.5,1.5,0,0,1,20.819,30H2.181a1.5,1.5,0,0,1-1.4-2.037Z"
-                        transform="translate(30) rotate(90)"
-                        fill="#578ed9"
-                      /></svg
-                    >再生
+                <div class="buttons">
+                  <button class="btn-play" :disabled="!hasRecordedData" @click="play">
+                    <img src="@/assets/recording_play.svg">再生
                   </button>
-                  <button
-                    class="btn btn-light btn-delete"
-                    @click="deleteRecordedData"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="22"
-                      height="22"
-                      viewBox="0 0 22 22"
-                    >
-                      <g transform="translate(-860 -178)">
-                        <circle
-                          cx="11"
-                          cy="11"
-                          r="11"
-                          transform="translate(860 178)"
-                          fill="#982e2e"
-                        />
-                        <path
-                          d="M1,0H11a1,1,0,0,1,0,2H1C.448,2,0,1,0,1S.448,0,1,0Z"
-                          transform="translate(865 188)"
-                          fill="#fff"
-                        />
-                      </g></svg
-                    >削除
+                  <button class="btn-delete" :disabled="!hasRecordedData" @click="deleteRecordedData">
+                    <img src="@/assets/recording_delete.svg">削除
                   </button>
                 </div>
-                <p
-                  style="font-size: 14px; font-weight: bold; text-align: center"
-                >
+                <p class="description">
                   録音し直したい場合は、録音開始ボタンを押して再収録してください。
                 </p>
               </div>
@@ -461,65 +281,163 @@ export default defineComponent({
 @import "@/scss/_variables.scss";
 @include fade_animation;
 
-.recording {
-  cursor: pointer;
-  width: 350px;
-  height: 429px;
+.center {
+  @include flex_center;
+  height: 100%;
+  .contents {
+    @include flex_center;
+  }
+  .recording {
+    cursor: pointer;
+    width: 390px;
+    height: 390px;
+    box-shadow: $box_shadow;
+    border-radius: 195px;
+    margin-right: 100px;
+    flex-grow: 0;
+    flex-shrink: 0;
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+  .right {
+    width: 100%;
+    height: 100%;
+    flex-grow: 1;
+    flex-shrink: 1;
+    .indicator-area {
+      width: 600px;
+      h5 {
+        font-size: 16px;
+        font-weight: 500;
+      }
+      .volume-unit {
+        text-align: right;
+      }
+      .volume {
+        @include flex_start;
+        h5 {
+          width: 50px;
+          font-size: 17px;
+          margin-bottom: 10px;
+          flex-grow: 0;
+          flex-shrink: 0;
+          position: relative;
+          left: -3px;
+          &:nth-child(n + 7) {
+            width: 74px;
+          }
+        }
+      }
+      .scales {
+        @include flex_start;
+        width: 600px;
+        .scale {
+          width: 2px;
+          height: 8px;
+          background-color: black;
+          margin-right: 48px;
+          flex-grow: 0;
+          flex-shrink: 0;
+          &:nth-child(n + 7) {
+            margin-right: 72px;
+          }
+          &:last-child {
+            margin-right: 0;
+          }
+        }
+      }
+      meter {
+        width: 600px;
+        margin-top: 8px;
+        margin-bottom: 8px;
+        &::-webkit-meter-bar {
+          background-color: rgba(0, 0, 0, 0.15);
+          border: none;
+          border-radius: 0;
+        }
+        &.volume-meter {
+          height: 18px;
+          &::-webkit-meter-bar {
+            height: 18px;
+          }
+          &::-webkit-meter-optimum-value {
+            background-color: rgb(78, 203, 136);
+          }
+          &::-webkit-meter-suboptimum-value {
+            background-color: rgb(204, 209, 79);
+          }
+          &::-webkit-meter-even-less-good-value {
+            background-color: rgb(209, 79, 79);
+          }
+        }
+        &.progress-meter {
+          height: 6px;
+          &::-webkit-meter-bar {
+            height: 6px;
+            border-radius: 3px;
+          }
+          &::-webkit-meter-optimum-value {
+            background-color: rgb(0, 206, 255);
+          }
+        }
+      }
+      #avg-level-text {
+        font-size: 16px;
+      }
+      .title {
+        font-size: 20px;
+        font-weight: $font_weight_bold;
+        margin-top: 54px;
+        margin-bottom: 20px;
+      }
+      .time {
+        @include flex_between;
+        p {
+          font-size: 16px;
+        }
+      }
+      .buttons {
+        @include flex_center;
+        margin-top: 32px;
+        margin-bottom: 24px;
+        button {
+          @include flex_center;
+          display: block;
+          width: 194px;
+          height: 54px;
+          border-radius: 4px;
+          box-shadow: $box_shadow_weak;
+          margin-left: 9px;
+          margin-right: 9px;
+          font-size: 16px;
+          font-weight: $font_weight_bold;
+          &.btn-play {
+            border: 3px solid rgb(87, 142, 217);
+          }
+          &.btn-delete {
+            border: 3px solid rgb(152, 46, 46);
+          }
+          &:disabled {
+            opacity: 0.3;
+          }
+          img {
+            margin-right: 16px;
+          }
+        }
+      }
+      .description {
+        font-size: 16px;
+        text-align: center;
+      }
+    }
+  }
 }
-img.card-img-top {
-  margin-top: 30px;
-}
-svg {
-  vertical-align: text-top;
-  margin-right: 10px;
-}
-.btn-primary:disabled {
-  background-color: #264b7380;
-  border-color: #264b7380;
-  /* color: #fff; */
-}
-.btn-play,
-.btn-delete {
-  width: 170px;
-  height: 50px;
-}
-.btn-play {
-  border: solid 4px #578ed9;
-}
-.btn-delete {
-  border: solid 4px #982e2e;
-}
-h5 {
-  margin-bottom: 0;
-  margin-right: 26px;
-  /* color: #ffffff; */
-  font-weight: 400;
-  font-size: 17px;
-}
+
 .failed {
   color: #ed6267;
   font-weight: 400;
   font-size: 17px;
-}
-.scale {
-  width: 2px;
-  height: 8px;
-  background-color: #aaa;
-  margin-right: 49px;
-}
-.scale:first-child {
-  margin-right: 65px;
-}
-.scale:nth-child(n + 6) {
-  margin-right: 73px;
-}
-.scale:nth-child(8) {
-  margin-right: 68px;
-}
-.scale:nth-child(9) {
-  margin-right: 64px;
-}
-.scale:last-child {
-  margin-right: 0;
 }
 </style>
