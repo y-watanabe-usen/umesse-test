@@ -110,30 +110,24 @@
       </template>
       <template #contents>
         <form>
-          <div class="form-group">
-            <label for="title" class="col-form-label">タイトル(必須)</label>
-            <input
-              type="text"
-              class="form-control"
-              id="title"
-              v-model="file.title"
-              v-bind:disabled="
+          <FormGroup title="タイトル" :required="true">
+            <TextBox
+              v-model:value="file.title"
+              :isDisabled="
                 uploadRecoridngState !== UPLOAD_RECORDING_STATE.NONE &&
                 uploadRecoridngState !== UPLOAD_RECORDING_STATE.ERROR
               "
             />
-          </div>
-          <div class="form-group">
-            <label for="description" class="col-form-label">説明</label>
-            <textarea
-              class="form-control"
-              id="description"
-              v-bind:disabled="
+          </FormGroup>
+          <FormGroup title="説明">
+            <TextArea
+              v-model:value="file.description"
+              :isDisabled="
                 uploadRecoridngState !== UPLOAD_RECORDING_STATE.NONE &&
                 uploadRecoridngState !== UPLOAD_RECORDING_STATE.ERROR
               "
-            ></textarea>
-          </div>
+            />
+          </FormGroup>
         </form>
         <!-- 保存中 -->
         <span v-if="uploadRecoridngState === UPLOAD_RECORDING_STATE.UPLOADING">
@@ -197,6 +191,9 @@ import Button from "@/components/atoms/Button.vue";
 import ModalDialog from "@/components/molecules/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
+import FormGroup from "@/components/molecules/FormGroup.vue";
+import TextBox from "@/components/atoms/TextBox.vue";
+import TextArea from "@/components/atoms/TextArea.vue";
 
 export default defineComponent({
   components: {
@@ -207,6 +204,9 @@ export default defineComponent({
     ModalDialog,
     ModalHeader,
     ModalFooter,
+    FormGroup,
+    TextBox,
+    TextArea,
   },
   name: "RecordingStart",
   setup() {
@@ -434,10 +434,10 @@ export default defineComponent({
     }
   }
 }
-
 .failed {
   color: #ed6267;
   font-weight: 400;
   font-size: 17px;
+  text-align: center;
 }
 </style>

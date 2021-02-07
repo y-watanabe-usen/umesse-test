@@ -26,7 +26,7 @@ export default {
     const state = reactive({});
     const onUpdate = (event: Event) => {
       if (event.target instanceof HTMLTextAreaElement) {
-          context.emit('update', event.target.value);
+          context.emit('update:value', event.target.value);
       }
     }
     return {
