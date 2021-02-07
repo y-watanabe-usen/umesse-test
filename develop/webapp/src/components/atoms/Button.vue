@@ -6,7 +6,7 @@
 import { reactive } from "vue";
 
 export default {
-  name: "Header",
+  name: "Button",
   props: {
     type: {
       type: String,

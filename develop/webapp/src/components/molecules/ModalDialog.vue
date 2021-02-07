@@ -2,7 +2,9 @@
   <div class="modal-dialog" @click="onClick">
     <div class="base" :class="[size]">
       <slot name="header" />
-      <slot name="contents" />
+      <div class="contents">
+        <slot name="contents" />
+      </div>
       <slot name="footer" />
     </div>
   </div>
@@ -64,6 +66,10 @@ export default {
     }
     &.large {
       width: 1040px;
+    }
+    .contents {
+      padding-top: 40px;
+      padding-bottom: 40px;
     }
   }
 }
