@@ -44,9 +44,9 @@ describe("CM新規作成", () => {
   test("[success] CM新規作成", async () => {
     const body = {
       materials: {
-        narrations: [{ contentsId: "narration/サンプル01", volume: 150 }],
-        startChime: { contentsId: "chime/サンプル01", volume: 50 },
-        endChime: { contentsId: "chime/サンプル02", volume: 50 },
+        narrations: [{ contentsId: "サンプル03", volume: 300 }],
+        startChime: { contentsId: "サンプル01", volume: 50 },
+        endChime: { contentsId: "サンプル02", volume: 50 },
       },
     };
     const response = await createCm(data.unisCustomerCd, body);
