@@ -6,6 +6,7 @@ data "archive_file" "umesse_api_file" {
   excludes = [
     "__tests__",
     "app.local.js",
+    "node_modules/umesse-lib",
   ]
 }
 
@@ -16,6 +17,7 @@ data "archive_file" "umesse_converter_file" {
   excludes = [
     "__tests__",
     "sqsRequest.js",
+    "node_modules/umesse-lib",
   ]
 }
 

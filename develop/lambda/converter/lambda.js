@@ -112,7 +112,7 @@ exports.handler = async (event, context) => {
 // CM音圧調整処理
 function convertCm(unisCustomerCd, cmId) {
   return new Promise(async function (resolve, reject) {
-    const workDir = `/tmp/${unisCustomerCd}/convert`;
+    const workDir = `/tmp/umesse/${unisCustomerCd}/convert`;
     const ffmpeg = `ffmpeg -hide_banner`;
 
     try {
