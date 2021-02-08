@@ -305,12 +305,6 @@ exports.deleteCm = async (unisCustomerCd, cmId) => {
 
 // CM結合処理
 function generateCm(unisCustomerCd, cmId, materials) {
-  materials = {
-    narrations: [{ contentsId: "サンプル03", volume: 300 }],
-    bgm: { contentsId: "サンプル01", volume: 50 },
-    startChime: { contentsId: "サンプル01", volume: 50 },
-    endChime: { contentsId: "サンプル02", volume: 50 },
-  };
 
   return new Promise(async function (resolve, reject) {
 
