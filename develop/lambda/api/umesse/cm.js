@@ -2,12 +2,14 @@
 
 const { execSync } = require("child_process");
 const fs = require("fs");
+const path = require('path');
 const {
   constants,
   debuglog,
   timestamp,
   generateId,
 } = require("umesse-lib/constants");
+const UMesseConverter = require("umesse-lib/converter");
 const { validation } = require("umesse-lib/validation");
 const { dynamodbManager } = require("umesse-lib/utils/dynamodbManager");
 const { s3Manager } = require("umesse-lib/utils/s3Manager");
@@ -303,171 +305,38 @@ exports.deleteCm = async (unisCustomerCd, cmId) => {
 
 // CM結合処理
 function generateCm(unisCustomerCd, cmId, materials) {
-  const isWindows = process.platform === "win32";
-  const isLocal = process.env.environment === "local";
-  const isLocalWindows = isLocal && isWindows;
+  materials = {
+    narrations: [{ contentsId: "サンプル03", volume: 300 }],
+    bgm: { contentsId: "サンプル01", volume: 50 },
+    startChime: { contentsId: "サンプル01", volume: 50 },
+    endChime: { contentsId: "サンプル02", volume: 50 },
+  };
 
   return new Promise(async function (resolve, reject) {
-    const workDir = `/tmp/umesse/${unisCustomerCd}/mix/${cmId}`;
-    const windowsWorkDir = `${process.cwd()}\\tmp\\umesse\\${unisCustomerCd}\\mix\\${cmId}`; // windows only
-    const ffmpeg = `ffmpeg -hide_banner`;
-    const has = {
-      startChime: "startChime" in materials,
-      endChime: "endChime" in materials,
-      bgm: "bgm" in materials,
-    };
 
     try {
       // ナレーションチェック
       if (!materials.narrations || materials.narrations.length < 1)
         throw "not narration";
 
-      // workディレクトリ作成
-      let initDirCommand = ``;
-      if (!isLocalWindows) {
-        initDirCommand = `mkdir -p ${workDir} && rm -f ${workDir}/*`;
-      } else {
-        initDirCommand = `mkdir ${windowsWorkDir} > NUL 2>&1 && \
-          if ERRORLEVEL 1 cmd /c exit 0 && \
-          rd /q ${windowsWorkDir}\\*`;
-      }
-      execSync(initDirCommand);
+      // UMesseConverter.
+      const converter = new UMesseConverter(s3Manager);
 
-      // S3から無音ファイルを取得
-      let filePath = !isLocalWindows
-        ? `/tmp/umesse`
-        : `${process.cwd()}\\tmp\\umesse`;
-      if (!(await getContents(constants.s3Bucket().contents, "silent.mp3", filePath, "silent.mp3")))
-        throw "getObject failed";
+      // 出力ファイルパス解決.
+      const workDir = converter.getWorkDir(unisCustomerCd, cmId);
+      const output = path.join(workDir, `${cmId}.mp3`);
 
-      let paths = "-i /tmp/umesse/silent.mp3 ";
-      let options = "";
-      let extra = "";
-      let index = 0;
+      // CM作成.
+      await converter.generateCm(unisCustomerCd, cmId, materials, output);
 
-      // S3からファイル取得、コマンド作成
-      for (let [key, value] of Object.entries(materials).sort()) {
-        debuglog(JSON.stringify({ key: key, value: value }));
-        let fileName = "";
+      // CMのduration取得.
+      const seconds = await converter.getDuration(output);
+      debuglog(`seconds = ${seconds}`);
 
-        switch (key) {
-          case "narrations":
-            let count = 0;
-            let narrations = "";
-
-            for (let v of value) {
-              let target = `narration/${v.contentsId}.mp3`;
-              let bucket = constants.s3Bucket().contents;
-
-              if (v.contentsId.match(`^${unisCustomerCd}-r-[0-9a-z]{8}$`)) {
-                // レコーディング音源の場合
-                target = `${unisCustomerCd}/${constants.resourceCategory.RECORDING}/${v.contentsId}.mp3`;
-                bucket = constants.s3Bucket().users;
-              } else if (v.contentsId.match(`^${unisCustomerCd}-t-[0-9a-z]{8}$`)) {
-                // TTS音源の場合
-                target = `${unisCustomerCd}/${constants.resourceCategory.TTS}/${v.contentsId}.mp3`;
-                bucket = constants.s3Bucket().users;
-              }
-
-              fileName = `narration_${++count}`;
-              if (!(await getContents(bucket, target, workDir, `${fileName}.mp3`)))
-                throw "getObject failed";
-              paths += `-i ${workDir}/${fileName}.mp3 `;
-              narrations += `[${fileName}]`;
-              // 無音カット ボリューム調整　末尾に3秒無音追加
-              options += createCommand(["silent", "volume", "apad"], `[${++index}:a]`, v.volume, 3, fileName);
-            }
-            // ナレーションを結合
-            extra += createCommand(["concat"], narrations, null, count, "mix");
-            if (has.bgm) {
-              // BGMがある場合は、前後に3秒無音追加
-              extra += createCommand(["adelay", "apad"], "[mix]", null, 3, "mix");
-            }
-            break;
-
-          case "startChime":
-            fileName = "start_chime";
-            if (!(await getContents(constants.s3Bucket().contents, `chime/${value.contentsId}.mp3`, workDir, `${fileName}.mp3`)))
-              throw "getObject failed";
-            paths += `-i ${workDir}/${fileName}.mp3 `;
-            // 無音カット ボリューム調整　末尾に1秒無音追加
-            options += createCommand(["silent", "volume", "apad"], `[${++index}:a]`, value.volume, 1, fileName);
-            break;
-
-          case "endChime":
-            fileName = "end_chime";
-            if (!(await getContents(constants.s3Bucket().contents, `chime/${value.contentsId}.mp3`, workDir, `${fileName}.mp3`)))
-              throw "getObject failed";
-            paths += `-i ${workDir}/${fileName}.mp3 `;
-            // 無音カット ボリューム調整　頭にBGMあり3秒、BGMなし1秒無音追加
-            options += createCommand(["silent", "volume", "adelay"], `[${++index}:a]`, value.volume, has.bgm ? 3 : 1, fileName);
-            break;
-
-          case "bgm":
-            fileName = "bgm";
-            if (!(await getContents(constants.s3Bucket().contents, `bgm/${value.contentsId}.mp3`, workDir, `${fileName}.mp3`)))
-              throw "getObject failed";
-            paths += `-i ${workDir}/${fileName}.mp3 `;
-            // 無音カット ボリューム調整　BGMを無限ループ
-            options += createCommand(["silent", "volume", "aloop"], `[${++index}:a]`, value.volume, -1, fileName);
-            break;
-        }
-      }
-
-      if (has.bgm) {
-        // 結合したナレーションとBGMをMIX
-        extra += createCommand(["amix"], "[mix][bgm]", null, null, "mix");
-      }
-      if (has.startChime) {
-        // 結合したナレーションと開始チャイムを結合
-        extra += createCommand(["concat"], "[start_chime][mix]", null, 2, "mix");
-      }
-      if (has.endChime) {
-        // 結合したナレーションと終了チャイムを結合、フェードアウト3秒
-        extra += createCommand(["acrossfade"], "[mix][end_chime]", null, 3, "mix");
-      } else if (!has.endChime && has.bgm) {
-        // 無音を3秒に伸ばす
-        extra += createCommand(["adelay"], "[0:a]", null, 3, "silent");
-        // 結合したナレーションと無音を結合、フェードアウト3秒
-        extra += createCommand(["acrossfade"], "[mix][silent]", null, 3, "mix");
-      }
-      // 前後に無音を追加
-      extra += createCommand(["concat"], "[0:a][mix][0:a]", null, 3, null);
-
-      // MIX処理実施
-      let command = `${ffmpeg} ${paths} -filter_complex '${options}${extra}' -y ${workDir}/${cmId}.mp3`;
-      if (isLocalWindows) {
-        fs.writeFileSync(
-          `${windowsWorkDir}/ffmped-command`,
-          `#!/bin/bash\n${command}`
-        );
-        command = `docker run --name ffmpeg-runner --rm \
-          -v ${process.cwd()}\\..\\layer\\bin:/usr/local/bin \
-          -v ${windowsWorkDir}:${workDir} \
-          centos:latest \
-          sh ${workDir}/ffmped-command`;
-      }
-      debuglog(command);
-      execSync(command);
-
-      // CMの秒数を取得
-      let secondsCommand = `${ffmpeg} -hide_banner -i ${workDir}/${cmId}.mp3 2>&1 | \
-        grep 'Duration' | cut -d ' ' -f 4 | cut -d '.' -f 1`;
-      if (isLocalWindows) {
-        fs.writeFileSync(
-          `${windowsWorkDir}/ffmpeg-seconds-command`,
-          `#!/bin/bash\n${secondsCommand}`
-        );
-        secondsCommand = `docker run --name ffmpeg-runner --rm \
-          -v ${process.cwd()}\\..\\layer\\bin:/usr/local/bin \
-          -v ${windowsWorkDir}:${workDir} \
-          centos:latest \
-          sh ${workDir}/ffmpeg-seconds-command`;
-      }
-      const seconds = execSync(secondsCommand).toString().replace(/\n/g, "");
-
-      const cmFilePath = !isLocalWindows ? workDir : windowsWorkDir;
-      const fileStream = fs.createReadStream(`${cmFilePath}/${cmId}.mp3`);
+      // CM Fileをs3へ.
+      // TODO: Windowsのpath解決のため converter.createReadStreamをコールしている
+      // converterに依存しないでfs.createReadStream(output);にしたい
+      const fileStream = await converter.createReadStream(output);
       fileStream.on("error", (e) => {
         throw e;
       });
@@ -486,40 +355,3 @@ function generateCm(unisCustomerCd, cmId, materials) {
   });
 }
 
-async function getContents(bucket, target, outputPath, outputFileName) {
-  try {
-    const res = await s3Manager.get(bucket, target);
-    if (!res || !res.Body) throw "getObject failed";
-    fs.writeFileSync(`${outputPath}/${outputFileName}`, res.Body);
-    return true;
-  } catch (e) {
-    console.log(e);
-    return false;
-  }
-}
-
-function createCommand(process, index, volume, num, div) {
-  const command = {
-    silent: `silenceremove=start_periods=1:stop_periods=1:detection=peak`,
-    volume: `volume=${volume / 100}`,
-    adelay: `adelay=${num}s|${num}s`,
-    apad: `apad=pad_dur=${num}`,
-    aloop: `aloop=${num}:2.14748e+009`,
-    concat: `concat=n=${num}:v=0:a=1`,
-    amix: `amix=duration=shortest`,
-    acrossfade: `acrossfade=d=${num}`,
-  };
-
-  let res = `${index}`;
-  let options = [];
-  for (const key of process) {
-    if (key in command) {
-      options.push(command[key]);
-    }
-  }
-  res += options.join();
-  if (div) {
-    res += `[${div}];`;
-  }
-  return res;
-}
