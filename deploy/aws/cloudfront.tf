@@ -1,27 +1,29 @@
-# TODO: とりあえずdev環境のみ
-resource "aws_cloudfront_origin_access_identity" "umesse_webapp" {
-  comment = "dev-app-umesse.usen.com"
+#### Cloud Front ####
+
+resource "aws_cloudfront_origin_access_identity" "umesse" {
+  for_each = toset(var.name)
+  comment  = format("%s-app", each.key)
 }
 
-resource "aws_cloudfront_distribution" "umesse_webapp" {
+resource "aws_cloudfront_distribution" "umesse" {
+  for_each            = toset(var.name)
   enabled             = true
-  # is_ipv6_enabled     = true
   default_root_object = "index.html"
   price_class         = "PriceClass_200"
 
   origin {
-    domain_name = aws_s3_bucket.webapp["dev-umesse-webapp"].bucket_regional_domain_name
-    origin_id   = aws_s3_bucket.webapp["dev-umesse-webapp"].id
+    domain_name = aws_s3_bucket.webapp[each.key].bucket_regional_domain_name
+    origin_id   = aws_s3_bucket.webapp[each.key].id
 
     s3_origin_config {
-      origin_access_identity = aws_cloudfront_origin_access_identity.umesse_webapp.cloudfront_access_identity_path
+      origin_access_identity = aws_cloudfront_origin_access_identity.umesse[each.key].cloudfront_access_identity_path
     }
   }
 
   default_cache_behavior {
     allowed_methods  = ["GET", "HEAD"]
     cached_methods   = ["GET", "HEAD"]
-    target_origin_id = aws_s3_bucket.webapp["dev-umesse-webapp"].id
+    target_origin_id = aws_s3_bucket.webapp[each.key].id
     compress         = true
 
     forwarded_values {

@@ -12,8 +12,8 @@ resource "aws_dynamodb_table" "tfstate" {
 }
 
 resource "aws_dynamodb_table" "users" {
-  for_each       = toset(lookup(var.dynamodb_table, "users"))
-  name           = each.key
+  for_each       = toset(var.name)
+  name           = format("%s-users", each.key)
   billing_mode   = "PROVISIONED"
   read_capacity  = 10
   write_capacity = 10
@@ -66,8 +66,8 @@ resource "aws_dynamodb_table" "users" {
 }
 
 resource "aws_dynamodb_table" "contents" {
-  for_each       = toset(lookup(var.dynamodb_table, "contents"))
-  name           = each.key
+  for_each       = toset(var.name)
+  name           = format("%s-contents", each.key)
   billing_mode   = "PROVISIONED"
   read_capacity  = 10
   write_capacity = 10
@@ -86,8 +86,8 @@ resource "aws_dynamodb_table" "contents" {
 }
 
 resource "aws_dynamodb_table" "external" {
-  for_each       = toset(lookup(var.dynamodb_table, "external"))
-  name           = each.key
+  for_each       = toset(var.name)
+  name           = format("%s-external", each.key)
   billing_mode   = "PROVISIONED"
   read_capacity  = 10
   write_capacity = 10
