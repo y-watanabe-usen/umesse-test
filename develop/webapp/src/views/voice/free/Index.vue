@@ -222,6 +222,7 @@ import Button from "@/components/atoms/Button.vue";
 import ModalDialog from "@/components/molecules/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
+import { useGlobalStore } from "@/store";
 
 export default defineComponent({
   components: {
@@ -238,6 +239,7 @@ export default defineComponent({
     const ttsStore = provideTtsStore(); //FIXME: provide name.
     const audioPlayer = AudioPlayer();
     const speakers = ["risa", "takeru"];
+    const { base } = useGlobalStore();
     const state = reactive({
       file: <RecordingFile>{},
       uploadTtsState: computed(() => ttsStore.getStatus()),
@@ -250,10 +252,19 @@ export default defineComponent({
       durationHms: computed(() =>
         Common.sToHms(Math.floor(audioPlayer.getDuration()))
       ),
-      text: "おはようございます。",
+      text: "",
       speaker: "risa",
       isModalAppear: false,
     });
+
+    // TODO: キャッシュでいいのか
+    const cacheKey = "voice/free/selectTemplate";
+    if (base.cache.has(cacheKey)) {
+      state.text = <string>base.cache.get(cacheKey);
+      base.cache.del(cacheKey);
+    } else {
+      state.text = "おはよう";
+    }
 
     const play = async () => {
       console.log("play");

@@ -109,6 +109,7 @@ export function useUploadCmService(api: UMesseApi.CmApi) {
         narrations?.push({ contentsId: v, volume: 150 });
       });
     }
+    narrations!.push({ contentsId: "01", volume: 150 });
     const startChime: StartChime | undefined = startChimeContentsId
       ? { contentsId: startChimeContentsId, volume: 50 }
       : undefined;
