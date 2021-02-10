@@ -52,6 +52,15 @@ exports.getResource = async (category, industryCd, sceneCd) => {
         item.scene.some((el) => el.sceneCd === sceneCd)
       );
     }
+
+    // titleの昇順でソート
+    json.sort((a, b) => {
+      var r = 0;
+      if (a.title < b.title) { r = -1; }
+      else if (a.title > b.title) { r = 1; }
+      return r;
+    })
+
     if (!json) throw "not found";
     return json;
   } catch (e) {
