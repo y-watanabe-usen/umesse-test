@@ -13,15 +13,19 @@
               type="button"
               class="btn btn-menu text-left text-white"
               :class="[
-                menu.id == activeMenuId ? 'btn-primary' : 'btn-link',
-                menu.id == activeMenuId ? 'text-white' : 'text-dark',
-                menu.id == 1 ? 'mt-2' : '',
+                freeTemplateIndustry.cd == activeFreeTemplateIndustryCd
+                  ? 'btn-primary'
+                  : 'btn-link',
+                freeTemplateIndustry.cd == activeFreeTemplateIndustryCd
+                  ? 'text-white'
+                  : 'text-dark',
+                freeTemplateIndustry.cd == 1 ? 'mt-2' : '',
               ]"
-              v-for="menu in menus"
-              :key="menu.id"
-              @click="activeMenuId = menu.id"
+              v-for="freeTemplateIndustry in freeTemplateIndustries"
+              :key="freeTemplateIndustry.cd"
+              @click="clickFreeTemplateIndustry(freeTemplateIndustry.cd)"
             >
-              {{ menu.title }}
+              {{ freeTemplateIndustry.name }}
             </button>
           </div>
           <div class="col-9 bg-white rounded-right">
@@ -35,8 +39,8 @@
               </h6>
               <div
                 class="media text-muted pt-3"
-                v-for="narrationData in narrationDatas"
-                :key="narrationData.title"
+                v-for="freeItem in freeItems"
+                :key="freeItem.contentsId"
               >
                 <div
                   class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray pl-3"
@@ -45,7 +49,7 @@
                     class="d-flex justify-content-between align-items-center w-100"
                   >
                     <strong class="text-dark h5 pt-2 pb-2">{{
-                      narrationData.title
+                      freeItem.title
                     }}</strong>
                     <div>
                       <button
@@ -53,6 +57,7 @@
                         class="btn btn-light shadow btn-try"
                         data-toggle="modal"
                         data-target=".bd-try-modal-lg"
+                        @click="setManuscript(freeItem.manuscript)"
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -112,6 +117,7 @@
                         <button
                           type="button"
                           class="btn btn-light shadow btn-try"
+                          @click="selectFreeTemplate(freeItem.manuscript)"
                         >
                           選択
                           <svg
@@ -136,8 +142,8 @@
                     </div>
                   </div>
                   <span class="d-block pb-2"
-                    >{{ narrationData.description1 }}<br />{{
-                      narrationData.description2
+                    >{{ freeItem.manuscript }}<br />{{
+                      freeItem.description
                     }}</span
                   >
                 </div>
@@ -170,7 +176,7 @@
           </button>
         </div>
         <div class="modal-body">
-          本⽇は、ご来店いただきまして、誠にありがとうございます。本⽇は、ご来店いただきまして、誠にありがとうございます。本⽇は、ご来店いただきまして、誠にありがとうございます。本⽇は、ご来店いただきまして、誠にありがとうございます。本⽇は、ご来店いただきまして、誠にありがとうございます。本⽇は、ご来店いただきまして、誠にありがとうございます。
+          {{ manuscript }}
         </div>
         <div class="modal-footer text-center">
           <button
@@ -187,14 +193,15 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, reactive, toRefs } from "vue";
-import AudioPlayer from "@/utils/AudioPlayer";
-import axios from "axios";
-import AudioStore from "@/store/audio";
+import { computed, defineComponent, onMounted, reactive, toRefs } from "vue";
 import * as UMesseApi from "umesseapi";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
 import Header from "@/components/organisms/Header.vue";
+import { config } from "@/utils/UMesseApiConfiguration";
+import { FreeItem } from "umesseapi/models/free-item";
+import * as Common from "@/utils/Common";
+import { useGlobalStore } from "@/store";
 
 export default defineComponent({
   components: {
@@ -203,68 +210,45 @@ export default defineComponent({
     Header,
   },
   setup() {
+    const api = new UMesseApi.ResourcesApi(config);
+    const { base } = useGlobalStore();
     const state = reactive({
-      menus: [
-        {
-          id: 1,
-          title: "新着＆おすすめ",
-        },
-        {
-          id: 2,
-          title: "ユーザー作成音声",
-        },
-        {
-          id: 3,
-          title: "飲食店向け",
-        },
-        {
-          id: 4,
-          title: "サービス業向け",
-        },
-        {
-          id: 5,
-          title: "小売店向け",
-        },
-        {
-          id: 6,
-          title: "スーパー/ドラッグ量販店向け",
-        },
-        {
-          id: 7,
-          title: "医療/福祉向け",
-        },
-      ],
-      activeMenuId: 1,
+      freeTemplateIndustries: computed(() => Common.getBgmIndustries()),
+      activeFreeTemplateIndustryCd: "01",
       sorts: ["名前順", "作成日順", "更新日順"],
-      narrationDatas: [
-        {
-          title: "18時30分閉店",
-          description1:
-            "本日はご来店いただきまして、誠にありがとうございます。お客様に…",
-          description2: "00:24 放送開始日2020年10月15日 有効期限2020年10月20日",
-        },
-        {
-          title: "アルバイト募集",
-          description1:
-            "お客様にご案内申し上げます。当店ではアルバイトを募集いたしており…",
-          description2: "00:15 放送開始日2020年10月15日 有効期限2020年10月20日",
-        },
-        {
-          title: "チャイルドチェア",
-          description1:
-            "本日はご来店いただきまして、誠にありがとうございます。お客様に…",
-          description2: "00:24 放送開始日2020年10月15日 有効期限2020年10月20日",
-        },
-        {
-          title: "デリバリー",
-          description1:
-            "本日はご来店いただきまして、誠にありがとうございます。お客様に…",
-          description2: "00:24 放送開始日2020年10月15日 有効期限2020年10月20日",
-        },
-      ],
+      freeItems: [] as FreeItem[],
+      manuscript: "",
     });
+
+    const clickFreeTemplateIndustry = (freeTemplateIndustryCd: string) => {
+      state.activeFreeTemplateIndustryCd = freeTemplateIndustryCd;
+      fetchFreeTemplate();
+    };
+
+    const fetchFreeTemplate = async () => {
+      const response = await api.listFree(state.activeFreeTemplateIndustryCd);
+      state.freeItems = response.data;
+    };
+
+    const setManuscript = (manuscript: string) => {
+      state.manuscript = manuscript;
+    };
+
+    const selectFreeTemplate = (manuscript: string) => {
+      // TODO: キャッシュに入れるでいいのか
+      const cacheKey = "voice/free/selectTemplate";
+      base.cache.set(cacheKey, manuscript);
+    };
+
+    onMounted(async () => {
+      await fetchFreeTemplate();
+    });
+
     return {
       ...toRefs(state),
+      clickFreeTemplateIndustry,
+      setManuscript,
+      selectFreeTemplate,
     };
   },
 });

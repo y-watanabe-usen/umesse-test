@@ -13,15 +13,19 @@
               type="button"
               class="btn btn-menu text-left text-white"
               :class="[
-                menu.id == activeMenuId ? 'btn-primary' : 'btn-link',
-                menu.id == activeMenuId ? 'text-white' : 'text-dark',
-                menu.id == 1 ? 'mt-2' : '',
+                templateIndustry.cd == activeTemplateIndustryCd
+                  ? 'btn-primary'
+                  : 'btn-link',
+                templateIndustry.cd == activeTemplateIndustryCd
+                  ? 'text-white'
+                  : 'text-dark',
+                templateIndustry.cd == 1 ? 'mt-2' : '',
               ]"
-              v-for="menu in menus"
-              :key="menu.id"
-              @click="activeMenuId = menu.id"
+              v-for="templateIndustry in templateIndustries"
+              :key="templateIndustry.cd"
+              @click="clickTemplateIndustry(templateIndustry.cd)"
             >
-              {{ menu.title }}
+              {{ templateIndustry.name }}
             </button>
           </div>
           <div class="col-9 bg-white rounded-right">
@@ -94,6 +98,7 @@ import Header from "@/components/organisms/Header.vue";
 import { config } from "@/utils/UMesseApiConfiguration";
 import * as UMesseApi from "umesseapi";
 import { TemplateItem } from "umesseapi/models";
+import * as Common from "@/utils/Common";
 
 export default defineComponent({
   components: {
@@ -104,43 +109,29 @@ export default defineComponent({
   setup() {
     const api = new UMesseApi.ResourcesApi(config);
     const state = reactive({
-      menus: [
-        {
-          id: 1,
-          title: "テンプレート1",
-        },
-        {
-          id: 2,
-          title: "テンプレート2",
-        },
-        {
-          id: 3,
-          title: "テンプレート3",
-        },
-        {
-          id: 4,
-          title: "テンプレート4",
-        },
-        {
-          id: 5,
-          title: "テンプレート5",
-        },
-        {
-          id: 6,
-          title: "テンプレート6",
-        },
-      ],
-      activeMenuId: 1,
+      templateIndustries: computed(() => Common.getBgmIndustries()),
+      activeTemplateIndustryCd: "01",
       sorts: ["名前順", "作成日順", "更新日順"],
       templates: [] as TemplateItem[],
     });
-    onMounted(async () => {
-      const response = await api.listTemplate();
+
+    const clickTemplateIndustry = (templateIndustryCd: string) => {
+      state.activeTemplateIndustryCd = templateIndustryCd;
+      fetchTemplate();
+    };
+
+    const fetchTemplate = async () => {
+      const response = await api.listTemplate(state.activeTemplateIndustryCd);
       state.templates = response.data;
+    };
+
+    onMounted(async () => {
+      await fetchTemplate();
     });
 
     return {
       ...toRefs(state),
+      clickTemplateIndustry,
     };
   },
 });
