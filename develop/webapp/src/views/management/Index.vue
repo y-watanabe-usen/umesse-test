@@ -13,15 +13,15 @@
               type="button"
               class="btn btn-menu text-left text-white"
               :class="[
-                menu.id == activeMenuId ? 'btn-primary' : 'btn-link',
-                menu.id == activeMenuId ? 'text-white' : 'text-dark',
-                menu.id == 1 ? 'mt-2' : '',
+                scene.cd == activeSceneCd ? 'btn-primary' : 'btn-link',
+                scene.cd == activeSceneCd ? 'text-white' : 'text-dark',
+                scene.cd == 1 ? 'mt-2' : '',
               ]"
-              v-for="menu in menus"
-              :key="menu.id"
-              @click="activeMenuId = menu.id"
+              v-for="scene in scenes"
+              :key="scene.cd"
+              @click="clickScene(scene.cd)"
             >
-              {{ menu.title }}
+              {{ scene.name }}
             </button>
           </div>
           <div class="col-9 bg-white rounded-right">
@@ -35,8 +35,8 @@
               </h6>
               <div
                 class="media text-muted pt-3"
-                v-for="narrationData in narrationDatas"
-                :key="narrationData.title"
+                v-for="cm in cms"
+                :key="cm.cmId"
               >
                 <div
                   class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray pl-3"
@@ -45,7 +45,7 @@
                     class="d-flex justify-content-between align-items-center w-100"
                   >
                     <strong class="text-dark h5 pt-2 pb-2">{{
-                      narrationData.title
+                      cm.title
                     }}</strong>
                     <div>
                       <button
@@ -53,6 +53,7 @@
                         class="btn btn-light shadow btn-try"
                         data-toggle="modal"
                         data-target=".bd-try-modal-lg"
+                        @click="selectCm(cm)"
                       >
                         <svg
                           width="1em"
@@ -116,8 +117,9 @@
                     </div>
                   </div>
                   <span class="d-block pb-2"
-                    >{{ narrationData.description1 }}<br />{{
-                      narrationData.description2
+                    >{{ cm.description }}<br />{{ cm.seconds }}秒
+                    {{ cm.startDate }} {{ cm.endDate }} ステータス：{{
+                      cm.status
                     }}</span
                   >
                 </div>
@@ -167,7 +169,7 @@
                   <button
                     type="button"
                     class="btn btn-light shadow btn-play"
-                    @click="play"
+                    @click="play(selectCm)"
                   >
                     <svg
                       width="1em"
@@ -445,7 +447,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, reactive, toRefs } from "vue";
+import { computed, defineComponent, onMounted, reactive, toRefs } from "vue";
 import AudioPlayer from "@/utils/AudioPlayer";
 import AudioStore from "@/store/audio";
 import * as Common from "@/utils/Common";
@@ -455,6 +457,8 @@ import Header from "@/components/organisms/Header.vue";
 import * as UMesseApi from "umesseapi";
 import { useUploadCmService } from "@/services/uploadCmService";
 import { config } from "@/utils/UMesseApiConfiguration";
+import { CmItem } from "umesseapi/models/cm-item";
+import { useGlobalStore } from "@/store";
 
 export default defineComponent({
   components: {
@@ -468,66 +472,13 @@ export default defineComponent({
     const cmApi = new UMesseApi.CmApi(config);
     const uploadCmService = useUploadCmService(cmApi);
     const resourcesapi = new UMesseApi.ResourcesApi(config);
+    const { auth } = useGlobalStore();
 
     const state = reactive({
-      menus: [
-        {
-          id: 1,
-          title: "開店",
-        },
-        {
-          id: 2,
-          title: "閉店",
-        },
-        {
-          id: 3,
-          title: "エスカレーター",
-        },
-        {
-          id: 4,
-          title: "案内",
-        },
-        {
-          id: 5,
-          title: "年末年始告知",
-        },
-        {
-          id: 6,
-          title: "年末営業告知",
-        },
-        {
-          id: 7,
-          title: "年中行事販促",
-        },
-      ],
-      activeMenuId: 1,
+      activeSceneCd: "004",
+      scenes: computed(() => Common.getManagementScenes()),
       sorts: ["名前順", "作成日順", "更新日順"],
-      narrationDatas: [
-        {
-          title: "18時30分閉店",
-          description1:
-            "本日はご来店いただきまして、誠にありがとうございます。お客様に…",
-          description2: "00:24 放送開始日2020年10月15日 有効期限2020年10月20日",
-        },
-        {
-          title: "アルバイト募集",
-          description1:
-            "お客様にご案内申し上げます。当店ではアルバイトを募集いたしており…",
-          description2: "00:15 放送開始日2020年10月15日 有効期限2020年10月20日",
-        },
-        {
-          title: "チャイルドチェア",
-          description1:
-            "本日はご来店いただきまして、誠にありがとうございます。お客様に…",
-          description2: "00:24 放送開始日2020年10月15日 有効期限2020年10月20日",
-        },
-        {
-          title: "デリバリー",
-          description1:
-            "本日はご来店いただきまして、誠にありがとうございます。お客様に…",
-          description2: "00:24 放送開始日2020年10月15日 有効期限2020年10月20日",
-        },
-      ],
+      cms: [] as CmItem[],
       isPlaying: computed(() => audioPlayer.isPlaying()),
       isDownloading: computed(() => audioStore.isDownloading),
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
@@ -538,11 +489,30 @@ export default defineComponent({
       durationHms: computed(() =>
         Common.sToHms(Math.floor(audioPlayer.getDuration()))
       ),
+      selectedCm: null as CmItem | null,
     });
 
-    const play = async () => {
+    const clickScene = (sceneCd: string) => {
+      state.activeSceneCd = sceneCd;
+      fetchCm();
+    };
+
+    const fetchCm = async () => {
+      // TODO: auth.getToken()のトークンだとデータが空なので固定値をセットする
+      // const xUnisCustomerCd = auth.getToken()!!;
+      const xUnisCustomerCd = "123456789";
+      // TODO: sceneを指定する必要がある？
+      const response = await cmApi.listUserCm(xUnisCustomerCd);
+      state.cms = response.data;
+    };
+
+    const selectCm = (cm: CmItem) => {
+      state.selectedCm = cm;
+    };
+
+    const play = async (cm : CmItem) => {
       if (state.isPlaying) return;
-      const response = await resourcesapi.getSignedUrl("ID", "CATEGORY");
+      const response = await resourcesapi.getSignedUrl(cm.cmId, "cm");
       console.log(response.data.url);
       await audioStore.download(response.data.url);
       audioPlayer.start(<AudioBuffer>audioStore.audioBuffer);
@@ -553,14 +523,23 @@ export default defineComponent({
     };
 
     const remove = async (cmId: string) => {
-      const response = await uploadCmService.remove("123456789", cmId);
+      // TODO: auth.getToken()のトークンだとデータが空なので固定値をセットする
+      // const xUnisCustomerCd = auth.getToken()!!;
+      const xUnisCustomerCd = "123456789";
+      const response = await uploadCmService.remove(xUnisCustomerCd, cmId);
     };
+
+    onMounted(async () => {
+      fetchCm();
+    });
 
     return {
       ...toRefs(state),
       play,
       stop,
       remove,
+      clickScene,
+      selectCm,
     };
   },
 });
