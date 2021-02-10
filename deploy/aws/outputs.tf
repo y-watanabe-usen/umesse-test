@@ -4,7 +4,7 @@ output "sqs_url" {
 
 output "rest_api_id" {
   description = "REST API id"
-  value       = aws_api_gateway_rest_api.umesse.id
+  value       = aws_api_gateway_rest_api.umesse["dev-umesse"].id
 }
 
 output "rest_api_key" {
@@ -29,5 +29,5 @@ output "deployment_execution_arn" {
 
 output "cloud_front_destribution_domain_name" {
   description = "Cloud Front domain"
-  value       = aws_cloudfront_distribution.umesse_webapp.domain_name
+  value       = aws_cloudfront_distribution.umesse["dev-umesse"].domain_name
 }

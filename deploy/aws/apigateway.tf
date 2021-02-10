@@ -1,19 +1,23 @@
 #### API Gateway ####
 
 resource "aws_api_gateway_rest_api" "umesse" {
-  name = "umesse"
+  for_each = toset(var.name)
+  name     = format("%s-api", each.key)
 }
 
+# TODO: 一旦dev環境のみ
 ### Set Path
 resource "aws_api_gateway_resource" "umesse" {
-  rest_api_id = aws_api_gateway_rest_api.umesse.id
-  parent_id   = aws_api_gateway_rest_api.umesse.root_resource_id
+  # for_each    = toset(var.name)
+  rest_api_id = aws_api_gateway_rest_api.umesse["dev-umesse"].id
+  parent_id   = aws_api_gateway_rest_api.umesse["dev-umesse"].root_resource_id
   path_part   = "{proxy+}"
 }
 
 # Internet -----> API Gateway
 resource "aws_api_gateway_method" "umesse" {
-  rest_api_id      = aws_api_gateway_rest_api.umesse.id
+  # for_each         = toset(var.name)
+  rest_api_id      = aws_api_gateway_rest_api.umesse["dev-umesse"].id
   resource_id      = aws_api_gateway_resource.umesse.id
   http_method      = "ANY"
   authorization    = "NONE"
@@ -21,15 +25,17 @@ resource "aws_api_gateway_method" "umesse" {
 }
 
 resource "aws_api_gateway_method" "umesse_options" {
-  rest_api_id      = aws_api_gateway_rest_api.umesse.id
-  resource_id      = aws_api_gateway_resource.umesse.id
-  http_method      = "OPTIONS"
-  authorization    = "NONE"
+  # for_each      = toset(var.name)
+  rest_api_id   = aws_api_gateway_rest_api.umesse["dev-umesse"].id
+  resource_id   = aws_api_gateway_resource.umesse.id
+  http_method   = "OPTIONS"
+  authorization = "NONE"
 }
 
 # API Gateway ------> Lambda
 resource "aws_api_gateway_integration" "umesse" {
-  rest_api_id             = aws_api_gateway_rest_api.umesse.id
+  # for_each                = toset(var.name)
+  rest_api_id             = aws_api_gateway_rest_api.umesse["dev-umesse"].id
   resource_id             = aws_api_gateway_resource.umesse.id
   http_method             = aws_api_gateway_method.umesse.http_method
   integration_http_method = "POST"
@@ -38,7 +44,8 @@ resource "aws_api_gateway_integration" "umesse" {
 }
 
 resource "aws_api_gateway_integration" "umesse_options" {
-  rest_api_id             = aws_api_gateway_rest_api.umesse.id
+  # for_each                = toset(var.name)
+  rest_api_id             = aws_api_gateway_rest_api.umesse["dev-umesse"].id
   resource_id             = aws_api_gateway_resource.umesse.id
   http_method             = aws_api_gateway_method.umesse_options.http_method
   integration_http_method = "OPTIONS"
@@ -54,14 +61,13 @@ EOF
 }
 
 # deploy
-# TODO: とりあえずdev環境のみ
 ## v1
 resource "aws_api_gateway_deployment" "umesse_v1" {
   depends_on = [
     aws_api_gateway_integration.umesse,
     aws_api_gateway_integration.umesse_options,
   ]
-  rest_api_id = aws_api_gateway_rest_api.umesse.id
+  rest_api_id = aws_api_gateway_rest_api.umesse["dev-umesse"].id
   stage_name  = "v1"
 }
 
@@ -83,7 +89,7 @@ resource "aws_api_gateway_usage_plan" "umesse_plan" {
   name = "umesse_plan"
 
   api_stages {
-    api_id = aws_api_gateway_rest_api.umesse.id
+    api_id = aws_api_gateway_rest_api.umesse["dev-umesse"].id
     stage  = aws_api_gateway_deployment.umesse_v1.stage_name
   }
 }
@@ -96,7 +102,7 @@ resource "aws_api_gateway_usage_plan_key" "umesse_plan_key" {
 
 # CROS
 resource "aws_api_gateway_method_response" "umesse_options" {
-  rest_api_id = aws_api_gateway_rest_api.umesse.id
+  rest_api_id = aws_api_gateway_rest_api.umesse["dev-umesse"].id
   resource_id = aws_api_gateway_resource.umesse.id
   http_method = aws_api_gateway_method.umesse_options.http_method
   status_code = "200"
@@ -113,7 +119,7 @@ resource "aws_api_gateway_method_response" "umesse_options" {
 }
 
 resource "aws_api_gateway_integration_response" "umesse_options" {
-  rest_api_id = aws_api_gateway_rest_api.umesse.id
+  rest_api_id = aws_api_gateway_rest_api.umesse["dev-umesse"].id
   resource_id = aws_api_gateway_resource.umesse.id
   http_method = aws_api_gateway_method.umesse_options.http_method
   status_code = aws_api_gateway_method_response.umesse_options.status_code
@@ -122,5 +128,65 @@ resource "aws_api_gateway_integration_response" "umesse_options" {
     "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Unis-Customer-Cd'",
     "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS,POST,PUT,DELETE'",
     "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+  }
+}
+
+# TODO: 枠だけ作成するためstg、prodの一時用
+# MOCK
+resource "aws_api_gateway_resource" "umesse_mock" {
+  for_each    = toset(var.mock)
+  rest_api_id = aws_api_gateway_rest_api.umesse[each.key].id
+  parent_id   = aws_api_gateway_rest_api.umesse[each.key].root_resource_id
+  path_part   = "api"
+}
+
+resource "aws_api_gateway_method" "umesse_mock" {
+  for_each      = toset(var.mock)
+  rest_api_id   = aws_api_gateway_rest_api.umesse[each.key].id
+  resource_id   = aws_api_gateway_resource.umesse_mock[each.key].id
+  http_method   = "GET"
+  authorization = "NONE"
+}
+
+resource "aws_api_gateway_integration" "umesse_mock" {
+  for_each                = toset(var.mock)
+  rest_api_id             = aws_api_gateway_rest_api.umesse[each.key].id
+  resource_id             = aws_api_gateway_resource.umesse_mock[each.key].id
+  http_method             = aws_api_gateway_method.umesse_mock[each.key].http_method
+  integration_http_method = "GET"
+  type                    = "MOCK"
+
+  request_templates = {
+    "application/json" = <<EOF
+{
+  "statusCode": 200
+}
+EOF
+  }
+}
+
+resource "aws_api_gateway_method_response" "umesse_mock" {
+  for_each    = toset(var.mock)
+  rest_api_id = aws_api_gateway_rest_api.umesse[each.key].id
+  resource_id = aws_api_gateway_resource.umesse_mock[each.key].id
+  http_method = aws_api_gateway_method.umesse_mock[each.key].http_method
+  status_code = "200"
+
+  response_models = {
+    "application/json" = "Empty"
+  }
+}
+
+resource "aws_api_gateway_integration_response" "umesse_mock" {
+  for_each    = toset(var.mock)
+  rest_api_id = aws_api_gateway_rest_api.umesse[each.key].id
+  resource_id = aws_api_gateway_resource.umesse_mock[each.key].id
+  http_method = aws_api_gateway_method.umesse_mock[each.key].http_method
+  status_code = aws_api_gateway_method_response.umesse_mock[each.key].status_code
+
+  response_templates = {
+    "application/json" = <<EOF
+{ message: ${each.key} }
+EOF
   }
 }
