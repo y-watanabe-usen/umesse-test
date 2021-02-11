@@ -20,7 +20,7 @@ export default {
     closeDisabled: {
       type: Boolean,
       default: false,
-    }
+    },
   },
   setup() {
     const state = reactive({});

@@ -96,6 +96,7 @@
   <transition>
     <ModalDialog
       v-if="isModalAppear"
+      size="large"
       :closeDisabled="uploadRecoridngState === UPLOAD_RECORDING_STATE.UPLOADING"
       @close="closeModal"
     >
