@@ -440,52 +440,33 @@
     </ModalDialog>
   </transition>
   <transition>
-    <ModalDialog v-if="isSaveModalAppear" @close="closeSaveModal">
+    <ModalDialog v-if="isSaveModalAppear" size="large" @close="closeSaveModal">
       <template #header>
         <ModalHeader title="保存しますか?" @close="closeSaveModal" />
       </template>
       <template #contents>
-        <div class="row">
-          <div class="col-2">タイトル</div>
-          <div class="col-10">
-            <input class="form-control" type="text" v-model="title" />
-          </div>
-        </div>
-        <div class="row pt-4">
-          <div class="col-2">説明</div>
-          <div class="col-10">
-            <textarea class="form-control" v-model="description"></textarea>
-          </div>
-        </div>
-        <div class="row pt-4">
-          <div class="col-2">シーン</div>
-          <div class="col-10">
-            <select class="form-control w-100" v-model="scene">
-              <option
-                v-for="scene in Constants.SCENES"
-                :key="scene.cd"
-                :value="scene.cd"
-              >
-                {{ scene.name }}
-              </option>
-            </select>
-          </div>
-        </div>
-        <div class="row pt-4">
-          <div class="col-2">アップロード先</div>
-          <div class="col-10">
-            <select class="form-control w-100" v-model="uploadSystem">
-              <option
-                v-for="uploadSystem in Constants.UPLOAD_SYSTEMS"
-                :key="uploadSystem.cd"
-                :value="uploadSystem.cd"
-              >
-                {{ uploadSystem.name }}
-              </option>
-            </select>
-            あとで、管理画面からアップロード先を変更することが出来ます。
-          </div>
-        </div>
+        <FormGroup title="タイトル" :required="true">
+          <TextBox v-model:value="title" />
+        </FormGroup>
+        <FormGroup title="説明">
+          <TextArea v-model:value="description" />
+        </FormGroup>
+        <FormGroup title="シーン">
+          <SelectBox
+            v-model:value="scene"
+            :options="Constants.SCENES.map((scene) => {
+              return { title: scene.name, value: scene.cd };
+            })"
+          />
+        </FormGroup>
+        <FormGroup title="アップロード先" description="あとで、管理画面からアップロード先を変更することが出来ます。">
+          <SelectBox
+            v-model:value="uploadSystem"
+            :options="Constants.UPLOAD_SYSTEMS.map((uploadSystem) => {
+              return { title: uploadSystem.name, value: uploadSystem.cd };
+            })"
+          />
+        </FormGroup>
       </template>
       <template #footer>
         <ModalFooter>
@@ -524,6 +505,10 @@ import Button from "@/components/atoms/Button.vue";
 import ModalDialog from "@/components/molecules/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
+import FormGroup from "@/components/molecules/FormGroup.vue";
+import TextBox from "@/components/atoms/TextBox.vue";
+import TextArea from "@/components/atoms/TextArea.vue";
+import SelectBox from "@/components/atoms/SelectBox.vue";
 
 export default defineComponent({
   components: {
@@ -533,6 +518,10 @@ export default defineComponent({
     ModalDialog,
     ModalHeader,
     ModalFooter,
+    FormGroup,
+    TextBox,
+    TextArea,
+    SelectBox,
   },
   setup() {
     const audioStore = AudioStore();
@@ -669,6 +658,10 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import "@/scss/_variables.scss";
 @include fade_animation;
+
+::v-deep .form-group .title {
+  width: 162px;
+}
 
 .bg-menu {
   background: #d9d9d9;

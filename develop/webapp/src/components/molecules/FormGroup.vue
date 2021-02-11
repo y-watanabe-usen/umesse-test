@@ -6,6 +6,7 @@
     </p>
     <div class="input-wrapper">
       <slot />
+      <p class="description" v-if="description != ''">{{ description }}</p>
     </div>
   </div>
 </template>
@@ -24,7 +25,11 @@ export default {
     required: {
       type: Boolean,
       default: false,
-    }
+    },
+    description: {
+      type: String,
+      default: '',
+    },
   },
   setup(props: any) {
     const router = useRouter();
@@ -68,6 +73,14 @@ export default {
     width: 100%;
     flex-grow: 1;
     flex-shrink: 1;
+    position: relative;
+    .description {
+      color: rgb(123, 123, 123);
+      font-size: 16px;
+      position: absolute;
+      left: 0;
+      bottom: -24px;
+    }
   }
 }
 </style>
