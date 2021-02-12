@@ -13,14 +13,17 @@ export default function ttsStore() {
   const umesseApi = new UMesseApi.TtsApi(config);
   const resourcesApi = new UMesseApi.ResourcesApi(config)
   const uploadTtsService = useUploadTtsService(umesseApi);
-  const { auth } = useGlobalStore();
+  const { auth, base } = useGlobalStore();
   const state = reactive({
     ttsItems: [] as TtsItem[],
     ttsData: new Uint8Array(),
+    creating: false,
     error: undefined as string | undefined,
   });
 
   const token = () => auth.getToken() || "123456789";
+
+  const isCreating = () => state.creating
 
   const fetchTtsData = async () => {
     try {
@@ -81,10 +84,15 @@ export default function ttsStore() {
   };
 
   const createTtsData = async (text: String, speaker: String) => {
+    const cacheKEy = `tts/${text}/${speaker}`
+    if (base.cache.has(cacheKEy)) {
+      return
+    }
     if (hasTtsData()) {
       resetTtsData();
     }
     try {
+      state.creating = true
       const response = await resourcesApi.createTts({
         text: text,
         speaker: speaker,
@@ -93,9 +101,12 @@ export default function ttsStore() {
       });
       const binary = atob(response.data.body);
       state.ttsData = Uint8Array.from(binary, c => c.charCodeAt(0));
+      base.cache.set(cacheKEy, state.ttsData)
     } catch (err) {
       console.log(err);
       state.error = err.message;
+    } finally {
+      state.creating = false
     }
   };
 
@@ -117,6 +128,7 @@ export default function ttsStore() {
     getUploadTtsData,
     createTtsData,
     resetTtsData,
+    isCreating,
     ...uploadTtsService,
   };
 }

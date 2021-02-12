@@ -63,47 +63,60 @@
           <div class="col-10">
             <div class="row">
               <div class="col-4">
-                <template v-if="!isPlaying">
-                  <button
-                    type="button"
-                    class="btn btn-light shadow btn-play"
-                    @click="play"
-                  >
-                    <svg
-                      width="1em"
-                      height="1em"
-                      viewBox="0 0 16 16"
-                      class="bi bi-play-fill"
-                      fill="currentColor"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M11.596 8.697l-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"
-                      />
-                    </svg>
-                    再生
+                <template v-if="isCreating">
+                  <button class="btn btn-play btn-light" type="button" disabled>
+                    <span
+                      class="spinner-border spinner-border-sm"
+                      role="status"
+                      aria-hidden="true"
+                    ></span>
+                    <span class="sr-only">Loading...</span>
+                    作成中
                   </button>
                 </template>
                 <template v-else>
-                  <button
-                    type="button"
-                    class="btn btn-light shadow btn-play"
-                    @click="stop"
-                  >
-                    <svg
-                      width="1em"
-                      height="1em"
-                      viewBox="0 0 16 16"
-                      class="bi bi-stop-fill"
-                      fill="currentColor"
-                      xmlns="http://www.w3.org/2000/svg"
+                  <template v-if="!isPlaying">
+                    <button
+                      type="button"
+                      class="btn btn-light shadow btn-play"
+                      @click="play(selectedBgm)"
                     >
-                      <path
-                        d="M5 3.5h6A1.5 1.5 0 0 1 12.5 5v6a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 11V5A1.5 1.5 0 0 1 5 3.5z"
-                      />
-                    </svg>
-                    停止
-                  </button>
+                      <svg
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 16 16"
+                        class="bi bi-play-fill"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M11.596 8.697l-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"
+                        />
+                      </svg>
+                      再生
+                    </button>
+                  </template>
+                  <template v-else>
+                    <button
+                      type="button"
+                      class="btn btn-light shadow btn-play"
+                      @click="stop"
+                    >
+                      <svg
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 16 16"
+                        class="bi bi-stop-fill"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M5 3.5h6A1.5 1.5 0 0 1 12.5 5v6a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 11V5A1.5 1.5 0 0 1 5 3.5z"
+                        />
+                      </svg>
+                      停止
+                    </button>
+                  </template>
                 </template>
               </div>
               <div class="col-8">
@@ -243,6 +256,7 @@ export default defineComponent({
     const state = reactive({
       file: <RecordingFile>{},
       uploadTtsState: computed(() => ttsStore.getStatus()),
+      isCreating: computed(() => ttsStore.isCreating()),
       isPlaying: computed(() => audioPlayer.isPlaying()),
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       playbackTimeHms: computed(() =>
