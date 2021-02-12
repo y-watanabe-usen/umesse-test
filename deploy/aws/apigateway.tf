@@ -24,14 +24,6 @@ resource "aws_api_gateway_method" "umesse" {
   api_key_required = true
 }
 
-resource "aws_api_gateway_method" "umesse_options" {
-  # for_each      = toset(var.name)
-  rest_api_id   = aws_api_gateway_rest_api.umesse["dev-umesse"].id
-  resource_id   = aws_api_gateway_resource.umesse.id
-  http_method   = "OPTIONS"
-  authorization = "NONE"
-}
-
 # API Gateway ------> Lambda
 resource "aws_api_gateway_integration" "umesse" {
   # for_each                = toset(var.name)
@@ -43,29 +35,12 @@ resource "aws_api_gateway_integration" "umesse" {
   uri                     = aws_lambda_function.umesse_api_function.invoke_arn
 }
 
-resource "aws_api_gateway_integration" "umesse_options" {
-  # for_each                = toset(var.name)
-  rest_api_id             = aws_api_gateway_rest_api.umesse["dev-umesse"].id
-  resource_id             = aws_api_gateway_resource.umesse.id
-  http_method             = aws_api_gateway_method.umesse_options.http_method
-  integration_http_method = "OPTIONS"
-  type                    = "MOCK"
-
-  request_templates = {
-    "application/json" = <<EOF
-{
-  "statusCode": 200
-}
-EOF
-  }
-}
-
 # deploy
 ## v1
 resource "aws_api_gateway_deployment" "umesse_v1" {
   depends_on = [
     aws_api_gateway_integration.umesse,
-    aws_api_gateway_integration.umesse_options,
+    # aws_api_gateway_integration.umesse_options,
   ]
   rest_api_id = aws_api_gateway_rest_api.umesse["dev-umesse"].id
   stage_name  = "v1"
@@ -100,36 +75,62 @@ resource "aws_api_gateway_usage_plan_key" "umesse_plan_key" {
   usage_plan_id = aws_api_gateway_usage_plan.umesse_plan.id
 }
 
-# CROS
-resource "aws_api_gateway_method_response" "umesse_options" {
-  rest_api_id = aws_api_gateway_rest_api.umesse["dev-umesse"].id
-  resource_id = aws_api_gateway_resource.umesse.id
-  http_method = aws_api_gateway_method.umesse_options.http_method
-  status_code = "200"
+# TODO: CROS
+# どうもdeployする時に上手くいかないことがあるため、一旦AWSコンソール上で設定する
+# resource "aws_api_gateway_method" "umesse_options" {
+#   # for_each      = toset(var.name)
+#   rest_api_id   = aws_api_gateway_rest_api.umesse["dev-umesse"].id
+#   resource_id   = aws_api_gateway_resource.umesse.id
+#   http_method   = "OPTIONS"
+#   authorization = "NONE"
+# }
 
-  response_models = {
-    "application/json" = "Empty"
-  }
+# resource "aws_api_gateway_integration" "umesse_options" {
+#   # for_each                = toset(var.name)
+#   rest_api_id             = aws_api_gateway_rest_api.umesse["dev-umesse"].id
+#   resource_id             = aws_api_gateway_resource.umesse.id
+#   http_method             = aws_api_gateway_method.umesse_options.http_method
+#   integration_http_method = "OPTIONS"
+#   type                    = "MOCK"
 
-  response_parameters = {
-    "method.response.header.Access-Control-Allow-Headers" = true,
-    "method.response.header.Access-Control-Allow-Methods" = true,
-    "method.response.header.Access-Control-Allow-Origin"  = true
-  }
-}
+#   request_templates = {
+#     "application/json" = <<EOF
+# {
+#   "statusCode": 200
+# }
+# EOF
+#   }
+# }
 
-resource "aws_api_gateway_integration_response" "umesse_options" {
-  rest_api_id = aws_api_gateway_rest_api.umesse["dev-umesse"].id
-  resource_id = aws_api_gateway_resource.umesse.id
-  http_method = aws_api_gateway_method.umesse_options.http_method
-  status_code = aws_api_gateway_method_response.umesse_options.status_code
+# resource "aws_api_gateway_method_response" "umesse_options" {
+#   rest_api_id = aws_api_gateway_rest_api.umesse["dev-umesse"].id
+#   resource_id = aws_api_gateway_resource.umesse.id
+#   http_method = aws_api_gateway_method.umesse_options.http_method
+#   status_code = "200"
 
-  response_parameters = {
-    "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Unis-Customer-Cd'",
-    "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS,POST,PUT,DELETE'",
-    "method.response.header.Access-Control-Allow-Origin"  = "'*'"
-  }
-}
+#   response_models = {
+#     "application/json" = "Empty"
+#   }
+
+#   response_parameters = {
+#     "method.response.header.Access-Control-Allow-Headers" = true,
+#     "method.response.header.Access-Control-Allow-Methods" = true,
+#     "method.response.header.Access-Control-Allow-Origin"  = true
+#   }
+# }
+
+# resource "aws_api_gateway_integration_response" "umesse_options" {
+#   rest_api_id = aws_api_gateway_rest_api.umesse["dev-umesse"].id
+#   resource_id = aws_api_gateway_resource.umesse.id
+#   http_method = aws_api_gateway_method.umesse_options.http_method
+#   status_code = aws_api_gateway_method_response.umesse_options.status_code
+
+#   response_parameters = {
+#     "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Unis-Customer-Cd'",
+#     "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS,POST,PUT,DELETE'",
+#     "method.response.header.Access-Control-Allow-Origin"  = "'*'"
+#   }
+# }
 
 # TODO: 枠だけ作成するためstg、prodの一時用
 # MOCK
