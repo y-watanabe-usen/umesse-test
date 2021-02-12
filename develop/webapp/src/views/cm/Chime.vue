@@ -360,7 +360,7 @@ export default defineComponent({
     const audioStore = AudioStore();
     const audioPlayer = AudioPlayer();
     const api = new UMesseApi.ResourcesApi(config);
-    const { cm } = useGlobalStore();
+    const { cm, base } = useGlobalStore();
 
     const state = reactive({
       title: route.params.div == "open" ? "Openチャイム" : "Endチャイム",
@@ -400,12 +400,19 @@ export default defineComponent({
     };
 
     const play = async (chime: ChimeItem) => {
-      const response = await api.getSignedUrl(
-        chime.contentsId!!,
-        chime.category!!
-      );
+      const audioBuffer = await getAudioBuffer(chime.contentsId, chime.category);
+      audioPlayer.start(audioBuffer);
+    };
+
+    const getAudioBuffer = async (contentsId: string, category: string) => {
+      const cacheKey = `${category}/${contentsId}`;
+      if (base.cache.has(cacheKey)) {
+        return <AudioBuffer>base.cache.get(cacheKey);
+      }
+      const response = await api.getSignedUrl(contentsId, category);
       await audioStore.download(response.data.url);
-      audioPlayer.start(<AudioBuffer>audioStore.audioBuffer);
+      base.cache.set(cacheKey, <AudioBuffer>audioStore.audioBuffer);
+      return <AudioBuffer>audioStore.audioBuffer;
     };
 
     const stop = () => {
