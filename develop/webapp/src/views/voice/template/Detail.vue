@@ -140,7 +140,7 @@
                       aria-hidden="true"
                     ></span>
                     <span class="sr-only">Loading...</span>
-                    CM作成中
+                    作成中
                   </button>
                 </template>
                 <template v-else>
@@ -319,9 +319,7 @@ export default defineComponent({
     const state = reactive({
       file: <RecordingFile>{},
       isPlaying: computed(() => audioPlayer.isPlaying()),
-      isCreating: computed(
-        () => ttsStore.getStatus() === UPLOAD_TTS_STATE.UPLOADING
-      ),
+      isCreating: computed(() => ttsStore.isCreating()),
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       playbackTimeHms: computed(() =>
         Common.sToHms(Math.floor(audioPlayer.getPlaybackTime()))
@@ -370,6 +368,7 @@ export default defineComponent({
     };
     const openModal = () => {
       state.isModalAppear = true;
+      console.log("openModal");
       createTtsData(state.text, state.speaker);
     };
     const closeModal = () => {

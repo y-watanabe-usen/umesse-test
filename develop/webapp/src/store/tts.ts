@@ -17,10 +17,13 @@ export default function ttsStore() {
   const state = reactive({
     ttsItems: [] as TtsItem[],
     ttsData: new Uint8Array(),
+    creating: false,
     error: undefined as string | undefined,
   });
 
   const token = () => auth.getToken() || "123456789";
+
+  const isCreating = () => state.creating
 
   const fetchTtsData = async () => {
     try {
@@ -85,6 +88,7 @@ export default function ttsStore() {
       resetTtsData();
     }
     try {
+      state.creating = true
       const response = await resourcesApi.createTts({
         text: text,
         speaker: speaker,
@@ -96,6 +100,8 @@ export default function ttsStore() {
     } catch (err) {
       console.log(err);
       state.error = err.message;
+    } finally {
+      state.creating = false
     }
   };
 
@@ -117,6 +123,7 @@ export default function ttsStore() {
     getUploadTtsData,
     createTtsData,
     resetTtsData,
+    isCreating,
     ...uploadTtsService,
   };
 }
