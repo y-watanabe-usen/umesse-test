@@ -16,255 +16,382 @@
       </Header>
     </template>
     <template #contents>
-      <div class="row mt-3">
-        <div class="col-2 my-auto">
-          <template v-if="openChime">
-            <div class="bg-white rounded open-chime py-3">
-              <div class="alert alert-dark small mx-auto mb-4" role="alert">
-                Openチャイム
-              </div>
-              <div class="text-center mb-4">
-                <div class="small">{{ openChime.title }}</div>
-                <div class="small">{{ openChime.description }}</div>
-                <div class="my-3">
-                  <img src="@/assets/try-play.svg" />
-                </div>
-                <div class="small">
-                  <router-link
-                    :to="{ name: 'CmChime', params: { div: 'open' } }"
-                    >変更</router-link
-                  >
-                </div>
-                <div class="small">
-                  <a href="#" @click="clearOpenChime">削除</a>
-                </div>
-              </div>
-            </div>
-          </template>
-          <template v-else>
-            <div class="bg-white rounded open-chime py-3">
-              <div class="alert alert-dark small mx-auto mb-4" role="alert">
-                Openチャイム
-              </div>
-              <div class="text-center mb-4">
-                <router-link :to="{ name: 'CmChime', params: { div: 'open' } }">
-                  <img src="@/assets/plus.svg" />
+      <CmLayout>
+        <template #left>
+          <CmItem
+            v-if="openChime"
+            title="Openチャイム"
+            size="fixed"
+            :contentTitle="openChime.title"
+            duration="00:24"
+            :volume="100"
+          >
+            <template #operaions>
+              <button
+                class="btn btn-link dropdown-toggle p-0"
+                type="button"
+                id="dropdownMenuButton"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <svg
+                  id="メニュー"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="30"
+                  height="6"
+                  viewBox="0 0 30 6"
+                >
+                  <circle
+                    id="楕円形_2"
+                    data-name="楕円形 2"
+                    cx="3"
+                    cy="3"
+                    r="3"
+                    fill="#578ed9"
+                  />
+                  <circle
+                    id="楕円形_3"
+                    data-name="楕円形 3"
+                    cx="3"
+                    cy="3"
+                    r="3"
+                    transform="translate(12)"
+                    fill="#578ed9"
+                  />
+                  <circle
+                    id="楕円形_4"
+                    data-name="楕円形 4"
+                    cx="3"
+                    cy="3"
+                    r="3"
+                    transform="translate(24)"
+                    fill="#578ed9"
+                  />
+                </svg>
+              </button>
+              <div
+                class="dropdown-menu"
+                aria-labelledby="dropdownMenuButton"
+              >
+                <router-link
+                  class="dropdown-item"
+                  :to="{ name: 'CmChime', params: { div: 'open' } }"
+                >
+                  変更
                 </router-link>
+                <a class="dropdown-item" href="#" @click.prevent="clearOpenChime">削除</a>
               </div>
-              <div class="text-center small">素材追加</div>
-            </div>
-          </template>
-        </div>
-        <div class="col-8">
-          <div class="row">
-            <div class="col mb-3">
-              <div class="bg-white rounded bgm py-3">
-                <div class="alert alert-dark small mx-auto mb-4" role="alert">
-                  ナレーション 1/4
-                </div>
-                <div class="text-center mb-4">
-                  <div class="text-center small mb-3">
-                    祝日用 閉店アナウンス
-                  </div>
-                  <img src="@/assets/try-play.svg" />
-                </div>
-                <div class="text-center small">00:24</div>
+            </template>
+          </CmItem>
+          <CmItem
+            v-else
+            title="Openチャイム"
+            :isEmpty="true"
+            size="fixed"
+            @add="$router.push({ name: 'CmChime', params: { div: 'open' } })"
+          />
+        </template>
+        <template #top>
+          <CmItem
+            title="ナレーション 1/4"
+            size="full"
+            contentTitle="祝日用 閉店アナウンス"
+            duration="00:24"
+            :volume="100"
+          >
+            <template #operations>
+              <button
+                class="btn btn-link dropdown-toggle p-0"
+                type="button"
+                id="dropdownMenuButton"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <svg
+                  id="メニュー"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="30"
+                  height="6"
+                  viewBox="0 0 30 6"
+                >
+                  <circle
+                    id="楕円形_2"
+                    data-name="楕円形 2"
+                    cx="3"
+                    cy="3"
+                    r="3"
+                    fill="#578ed9"
+                  />
+                  <circle
+                    id="楕円形_3"
+                    data-name="楕円形 3"
+                    cx="3"
+                    cy="3"
+                    r="3"
+                    transform="translate(12)"
+                    fill="#578ed9"
+                  />
+                  <circle
+                    id="楕円形_4"
+                    data-name="楕円形 4"
+                    cx="3"
+                    cy="3"
+                    r="3"
+                    transform="translate(24)"
+                    fill="#578ed9"
+                  />
+                </svg>
+              </button>
+              <div
+                class="dropdown-menu"
+                aria-labelledby="dropdownMenuButton"
+              >
+                <a class="dropdown-item" href="#"
+                  >自分で録音して音声と入れ替える</a
+                >
+                <a class="dropdown-item" href="#"
+                  >他のナレーションと入れ替える</a
+                >
+                <a class="dropdown-item" href="#"
+                  >合成音声(テンプレートから)入れ替える</a
+                >
+                <a class="dropdown-item" href="#"
+                  >合成音声(フリー入力から)入れ替える</a
+                >
+                <a class="dropdown-item" href="#">削除</a>
               </div>
-              <div class="narration-footer p-1 rounded">
-                <div class="row">
-                  <div class="col ml-2">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      width="28.165"
-                      height="23.439"
-                      viewBox="0 0 28.165 23.439"
-                    >
-                      <path
-                        id="パス_1214"
-                        data-name="パス 1214"
-                        d="M12.826.884,6.815,6.9H1.136A1.139,1.139,0,0,0,0,8.03v6.815A1.138,1.138,0,0,0,1.136,15.98H6.815l6.011,6.012c.442.441.8.292.8-.332V1.215c0-.623-.361-.773-.8-.331"
-                        transform="translate(0 0.28)"
-                        fill="#588fd9"
-                      />
-                      <path
-                        id="パス_1215"
-                        data-name="パス 1215"
-                        d="M14.811,23.439a.909.909,0,0,1-.455-1.7,11.565,11.565,0,0,0,0-20.048A.908.908,0,0,1,15.265.123a13.382,13.382,0,0,1,0,23.194.9.9,0,0,1-.454.123"
-                        transform="translate(6.195 0)"
-                        fill="#588fd9"
-                      />
-                      <path
-                        id="パス_1216"
-                        data-name="パス 1216"
-                        d="M13.241,18.3a.908.908,0,0,1-.455-1.694,7.03,7.03,0,0,0,0-12.187A.908.908,0,0,1,13.7,2.842a8.846,8.846,0,0,1,0,15.332.906.906,0,0,1-.454.121"
-                        transform="translate(5.496 1.211)"
-                        fill="#588fd9"
-                      />
-                      <path
-                        id="パス_1217"
-                        data-name="パス 1217"
-                        d="M11.667,13.14a.909.909,0,0,1-.457-1.7,2.47,2.47,0,0,0,0-4.3.909.909,0,0,1,.911-1.573,4.287,4.287,0,0,1,0,7.449.9.9,0,0,1-.454.123"
-                        transform="translate(4.794 2.426)"
-                        fill="#588fd9"
-                      />
-                    </svg>
-
-                    100%
-                  </div>
-                  <div class="col text-right mr-2">
-                    <button
-                      class="btn btn-link dropdown-toggle p-0"
-                      type="button"
-                      id="dropdownMenuButton"
-                      data-toggle="dropdown"
-                      aria-haspopup="true"
-                      aria-expanded="false"
-                    >
-                      <svg
-                        id="メニュー"
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="30"
-                        height="6"
-                        viewBox="0 0 30 6"
-                      >
-                        <circle
-                          id="楕円形_2"
-                          data-name="楕円形 2"
-                          cx="3"
-                          cy="3"
-                          r="3"
-                          fill="#578ed9"
-                        />
-                        <circle
-                          id="楕円形_3"
-                          data-name="楕円形 3"
-                          cx="3"
-                          cy="3"
-                          r="3"
-                          transform="translate(12)"
-                          fill="#578ed9"
-                        />
-                        <circle
-                          id="楕円形_4"
-                          data-name="楕円形 4"
-                          cx="3"
-                          cy="3"
-                          r="3"
-                          transform="translate(24)"
-                          fill="#578ed9"
-                        />
-                      </svg>
-                    </button>
-                    <div
-                      class="dropdown-menu"
-                      aria-labelledby="dropdownMenuButton"
-                    >
-                      <a class="dropdown-item" href="#"
-                        >自分で録音して音声と入れ替える</a
-                      >
-                      <a class="dropdown-item" href="#"
-                        >他のナレーションと入れ替える</a
-                      >
-                      <a class="dropdown-item" href="#"
-                        >合成音声(テンプレートから)入れ替える</a
-                      >
-                      <a class="dropdown-item" href="#"
-                        >合成音声(フリー入力から)入れ替える</a
-                      >
-                      <a class="dropdown-item" href="#">削除</a>
-                    </div>
-                  </div>
-                </div>
+            </template>
+          </CmItem>
+          <CmItem
+            title="ナレーション 2/4"
+            size="full"
+            contentTitle="１８時３０分閉店"
+            duration="00:24"
+            :volume="100"
+          >
+            <template #operations>
+              <button
+                class="btn btn-link dropdown-toggle p-0"
+                type="button"
+                id="dropdownMenuButton"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <svg
+                  id="メニュー"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="30"
+                  height="6"
+                  viewBox="0 0 30 6"
+                >
+                  <circle
+                    id="楕円形_2"
+                    data-name="楕円形 2"
+                    cx="3"
+                    cy="3"
+                    r="3"
+                    fill="#578ed9"
+                  />
+                  <circle
+                    id="楕円形_3"
+                    data-name="楕円形 3"
+                    cx="3"
+                    cy="3"
+                    r="3"
+                    transform="translate(12)"
+                    fill="#578ed9"
+                  />
+                  <circle
+                    id="楕円形_4"
+                    data-name="楕円形 4"
+                    cx="3"
+                    cy="3"
+                    r="3"
+                    transform="translate(24)"
+                    fill="#578ed9"
+                  />
+                </svg>
+              </button>
+              <div
+                class="dropdown-menu"
+                aria-labelledby="dropdownMenuButton"
+              >
+                <a class="dropdown-item" href="#"
+                  >自分で録音して音声と入れ替える</a
+                >
+                <a class="dropdown-item" href="#"
+                  >他のナレーションと入れ替える</a
+                >
+                <a class="dropdown-item" href="#"
+                  >合成音声(テンプレートから)入れ替える</a
+                >
+                <a class="dropdown-item" href="#"
+                  >合成音声(フリー入力から)入れ替える</a
+                >
+                <a class="dropdown-item" href="#">削除</a>
               </div>
-            </div>
-            <div class="col mb-3">
-              <div class="bg-white rounded bgm py-3" style="height: 269px">
-                <div class="alert alert-dark small mx-auto mb-4" role="alert">
-                  ナレーション 2/4
-                </div>
-                <div class="text-center mb-4">
-                  <img src="@/assets/plus.svg" />
-                </div>
-                <div class="text-center small">素材追加</div>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col mb-3">
-              <template v-if="bgm">
-                <div class="bg-white rounded bgm py-3">
-                  <div class="alert alert-dark small mx-auto mb-4" role="alert">
-                    BGM
-                  </div>
-                  <div class="text-center mb-4">
-                    <div class="small">{{ bgm.title }}</div>
-                    <div class="small">{{ bgm.description }}</div>
-                    <div class="my-3">
-                      <img src="@/assets/try-play.svg" />
-                    </div>
-                    <div class="small">
-                      <router-link :to="{ name: 'CmBgm' }">変更</router-link>
-                    </div>
-                    <div class="small">
-                      <a href="#" @click="clearBgm">削除</a>
-                    </div>
-                  </div>
-                </div>
-              </template>
-              <template v-else>
-                <div class="bg-white rounded bgm py-3">
-                  <div class="alert alert-dark small mx-auto mb-4" role="alert">
-                    BGM
-                  </div>
-                  <div class="text-center mb-4">
-                    <router-link :to="{ name: 'CmBgm' }">
-                      <img src="@/assets/plus.svg" />
-                    </router-link>
-                  </div>
-                  <div class="text-center small">素材追加</div>
-                </div>
-              </template>
-            </div>
-          </div>
-        </div>
-        <div class="col-2 my-auto">
-          <template v-if="endChime">
-            <div class="bg-white rounded open-chime py-3">
-              <div class="alert alert-dark small mx-auto mb-4" role="alert">
-                Endチャイム
-              </div>
-              <div class="text-center mb-4">
-                <div class="small">{{ endChime.title }}</div>
-                <div class="small">{{ endChime.description }}</div>
-                <div class="my-3">
-                  <img src="@/assets/try-play.svg" />
-                </div>
-                <div class="small">
-                  <router-link :to="{ name: 'CmChime', params: { div: 'end' } }"
-                    >変更
-                  </router-link>
-                </div>
-                <div class="small">
-                  <a href="#" @click="clearEndChime">削除</a>
-                </div>
-              </div>
-            </div>
-          </template>
-          <template v-else>
-            <div class="bg-white rounded open-chime py-3">
-              <div class="alert alert-dark small mx-auto mb-4" role="alert">
-                Endチャイム
-              </div>
-              <div class="text-center mb-4">
-                <router-link :to="{ name: 'CmChime', params: { div: 'end' } }">
-                  <img src="@/assets/plus.svg" />
+            </template>
+          </CmItem>
+          <CmItem
+            title="ナレーション 3/4"
+            :isEmpty="true"
+            size="fixed"
+          />
+        </template>
+        <template #bottom>
+          <CmItem
+            v-if="bgm"
+            title="BGM"
+            size="full"
+            :contentTitle="bgm.title"
+            duration="00:24"
+            :volume="50"
+          >
+            <template #operaions>
+              <button
+                class="btn btn-link dropdown-toggle p-0"
+                type="button"
+                id="dropdownMenuButton"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <svg
+                  id="メニュー"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="30"
+                  height="6"
+                  viewBox="0 0 30 6"
+                >
+                  <circle
+                    id="楕円形_2"
+                    data-name="楕円形 2"
+                    cx="3"
+                    cy="3"
+                    r="3"
+                    fill="#578ed9"
+                  />
+                  <circle
+                    id="楕円形_3"
+                    data-name="楕円形 3"
+                    cx="3"
+                    cy="3"
+                    r="3"
+                    transform="translate(12)"
+                    fill="#578ed9"
+                  />
+                  <circle
+                    id="楕円形_4"
+                    data-name="楕円形 4"
+                    cx="3"
+                    cy="3"
+                    r="3"
+                    transform="translate(24)"
+                    fill="#578ed9"
+                  />
+                </svg>
+              </button>
+              <div
+                class="dropdown-menu"
+                aria-labelledby="dropdownMenuButton"
+              >
+                <router-link
+                  class="dropdown-item"
+                  :to="{ name: 'CmBgm' }"
+                >
+                  変更
                 </router-link>
+                <a class="dropdown-item" href="#" @click.prevent="clearBgm">削除</a>
               </div>
-              <div class="text-center small">素材追加</div>
-            </div>
-          </template>
-        </div>
-      </div>
+            </template>
+          </CmItem>
+          <CmItem
+            v-else
+            title="BGM"
+            :isEmpty="true"
+            size="full"
+            @add="$router.push({ name: 'CmBgm' })"
+          />
+        </template>
+        <template #right>
+          <CmItem
+            v-if="endChime"
+            title="Endチャイム"
+            size="fixed"
+            :contentTitle="endChime.title"
+            duration="00:24"
+            :volume="100"
+          >
+            <template #operaions>
+              <button
+                class="btn btn-link dropdown-toggle p-0"
+                type="button"
+                id="dropdownMenuButton"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <svg
+                  id="メニュー"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="30"
+                  height="6"
+                  viewBox="0 0 30 6"
+                >
+                  <circle
+                    id="楕円形_2"
+                    data-name="楕円形 2"
+                    cx="3"
+                    cy="3"
+                    r="3"
+                    fill="#578ed9"
+                  />
+                  <circle
+                    id="楕円形_3"
+                    data-name="楕円形 3"
+                    cx="3"
+                    cy="3"
+                    r="3"
+                    transform="translate(12)"
+                    fill="#578ed9"
+                  />
+                  <circle
+                    id="楕円形_4"
+                    data-name="楕円形 4"
+                    cx="3"
+                    cy="3"
+                    r="3"
+                    transform="translate(24)"
+                    fill="#578ed9"
+                  />
+                </svg>
+              </button>
+              <div
+                class="dropdown-menu"
+                aria-labelledby="dropdownMenuButton"
+              >
+                <router-link
+                  class="dropdown-item"
+                  :to="{ name: 'CmChime', params: { div: 'end' } }"
+                >
+                  変更
+                </router-link>
+                <a class="dropdown-item" href="#" @click.prevent="clearEndChime">削除</a>
+              </div>
+            </template>
+          </CmItem>
+          <CmItem
+            v-else
+            title="Endチャイム"
+            :isEmpty="true"
+            size="fixed"
+            @add="$router.push({ name: 'CmChime', params: { div: 'end' } })"
+          />
+        </template>
+      </CmLayout>
     </template>
   </BasicLayout>
   <!-- modal -->
@@ -482,6 +609,8 @@ import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
 import SelectBox from "@/components/atoms/SelectBox.vue";
+import CmLayout from "@/components/templates/CmLayout.vue";
+import CmItem from "@/components/molecules/CmItem.vue";
 
 export default defineComponent({
   components: {
@@ -495,6 +624,8 @@ export default defineComponent({
     TextBox,
     TextArea,
     SelectBox,
+    CmLayout,
+    CmItem,
   },
   setup() {
     const audioStore = AudioStore();
@@ -666,23 +797,6 @@ export default defineComponent({
   }
 }
 
-.bg-menu {
-  background: #d9d9d9;
-}
-.btn-menu {
-  width: 100%;
-  height: 80px;
-  margin-bottom: 10px;
-  text-decoration: none;
-}
-.btn-try,
-.btn-edit {
-  width: 100px;
-  height: 40px;
-}
-.btn-edit {
-  margin-left: 20px;
-}
 .btn:focus {
   box-shadow: none;
 }
@@ -695,17 +809,5 @@ export default defineComponent({
 }
 .dropdown-toggle::after {
   content: none;
-}
-.narration-footer {
-  background: #ecf2fa;
-}
-.open-chime .alert,
-.narration .alert,
-.bgm .alert,
-.end-chime .alert {
-  border-radius: 2em;
-  padding: 5px;
-  text-align: center;
-  width: 120px;
 }
 </style>

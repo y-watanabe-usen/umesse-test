@@ -13,7 +13,6 @@
 
 <script lang="ts">
 import { reactive } from "vue";
-import { useRouter } from "vue-router";
 
 export default {
   name: "FromGroup",
@@ -32,7 +31,6 @@ export default {
     },
   },
   setup(props: any) {
-    const router = useRouter();
     const state = reactive({});
     return {
       state,
@@ -45,7 +43,7 @@ export default {
 @import '@/scss/_variables.scss';
 
 .form-group {
-  @include flex-between;
+  @include flex_between;
   margin-left: 75px;
   margin-right: 75px;
   margin-bottom: 26px;
