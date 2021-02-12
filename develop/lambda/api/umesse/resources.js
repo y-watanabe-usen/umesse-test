@@ -87,20 +87,15 @@ exports.getSignedUrl = async (id, category) => {
 
     let bucket = "";
     let path = "";
-    let file = "";
     switch (category) {
       case constants.resourceCategory.CM:
-        file = `${id}.aac`;
-        const str = id.split("-");
         bucket = constants.s3Bucket().users;
-        path = `users/${str[0]}/${category}/${file}`;
+        path = `users/${id.split("-")[0]}/${category}/${id}.aac`;
         break;
       case constants.resourceCategory.RECORDING:
       case constants.resourceCategory.TTS:
-        file = `${id}.mp3`;
-        const str = id.split("-");
         bucket = constants.s3Bucket().users;
-        path = `users/${str[0]}/${category}/${file}`;
+        path = `users/${id.split("-")[0]}/${category}/${id}.mp3`;
         break;
       case constants.resourceCategory.BGM:
       case constants.resourceCategory.CHIME:
