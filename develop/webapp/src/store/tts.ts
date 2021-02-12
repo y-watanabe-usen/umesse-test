@@ -13,7 +13,7 @@ export default function ttsStore() {
   const umesseApi = new UMesseApi.TtsApi(config);
   const resourcesApi = new UMesseApi.ResourcesApi(config)
   const uploadTtsService = useUploadTtsService(umesseApi);
-  const { auth, base } = useGlobalStore();
+  const { auth } = useGlobalStore();
   const state = reactive({
     ttsItems: [] as TtsItem[],
     ttsData: new Uint8Array(),
@@ -84,10 +84,6 @@ export default function ttsStore() {
   };
 
   const createTtsData = async (text: String, speaker: String) => {
-    const cacheKEy = `tts/${text}/${speaker}`
-    if (base.cache.has(cacheKEy)) {
-      return
-    }
     if (hasTtsData()) {
       resetTtsData();
     }
@@ -101,7 +97,6 @@ export default function ttsStore() {
       });
       const binary = atob(response.data.body);
       state.ttsData = Uint8Array.from(binary, c => c.charCodeAt(0));
-      base.cache.set(cacheKEy, state.ttsData)
     } catch (err) {
       console.log(err);
       state.error = err.message;
