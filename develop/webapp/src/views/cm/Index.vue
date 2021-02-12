@@ -3,38 +3,11 @@
     <template #header>
       <Header>
         <template #title>
-          <div class="header-info bg-dark rounded">
-            <div class="row">
-              <div class="col">
-                <button
-                  class="btn btn-light m-1"
-                  data-toggle="modal"
-                  data-target="#playModal"
-                  style="width: 140px"
-                  @click="createAndOpenPlayModal"
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="30"
-                    height="23"
-                    viewBox="0 0 30 23"
-                  >
-                    <path
-                      id="多角形_10"
-                      data-name="多角形 10"
-                      d="M10.1,3.654a1.5,1.5,0,0,1,2.8,0l9.319,24.309A1.5,1.5,0,0,1,20.819,30H2.181a1.5,1.5,0,0,1-1.4-2.037Z"
-                      transform="translate(30) rotate(90)"
-                      fill="#578ed9"
-                    />
-                  </svg>
-
-                  試聴する
-                </button>
-              </div>
-              <div class="col text-right text-white my-auto mr-3">
-                約2分15秒
-              </div>
-            </div>
+          <div class="header-info">
+            <button @click="createAndOpenPlayModal">
+              <img src="@/assets/icon_play.svg">試聴する
+            </button>
+            <p>約2分15秒</p>
           </div>
         </template>
         <template #buttons>
@@ -663,6 +636,36 @@ export default defineComponent({
   width: 162px;
 }
 
+.header-info {
+  @include flex_between;
+  align-items: center;
+  height: 60px;
+  width: 440px;
+  border-radius: 30px;
+  background-color: rgba(0, 0, 0, 0.4);
+  button {
+    width: 180px;
+    height: 50px;
+    border-radius: 25px;
+    background-color: white;
+    color: $color_blue;
+    font-size: 16px;
+    font-weight: $font_weight_bold;
+    margin-left: 5px;
+    img {
+      width: 30px;
+      height: 23px;
+      margin-right: 16px;
+    }
+  }
+  p {
+    color: white;
+    font-size: 16px;
+    font-weight: $font_weight_bold;
+    margin-right: 28px;
+  }
+}
+
 .bg-menu {
   background: #d9d9d9;
 }
@@ -692,10 +695,6 @@ export default defineComponent({
 }
 .dropdown-toggle::after {
   content: none;
-}
-
-.header-info {
-  width: 300px;
 }
 .narration-footer {
   background: #ecf2fa;
