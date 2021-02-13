@@ -95,7 +95,7 @@
         <template #top>
           <CmItem
             title="ナレーション 1/4"
-            size="full"
+            size="flexible"
             contentTitle="祝日用 閉店アナウンス"
             duration="00:24"
             :volume="100"
@@ -166,7 +166,7 @@
           </CmItem>
           <CmItem
             title="ナレーション 2/4"
-            size="full"
+            size="flexible"
             contentTitle="１８時３０分閉店"
             duration="00:24"
             :volume="100"
@@ -245,7 +245,7 @@
           <CmItem
             v-if="bgm"
             title="BGM"
-            size="full"
+            size="flexible"
             :contentTitle="bgm.title"
             duration="00:24"
             :volume="50"
@@ -312,7 +312,7 @@
             v-else
             title="BGM"
             :isEmpty="true"
-            size="full"
+            size="flexible"
             @add="$router.push({ name: 'CmBgm' })"
           />
         </template>
@@ -542,7 +542,7 @@
   <transition>
     <ModalDialog v-if="isSaveModalAppear" size="large" @close="closeSaveModal">
       <template #header>
-        <ModalHeader title="保存しますか?" @close="closeSaveModal" />
+        <ModalHeader title="保存しますか？" @close="closeSaveModal" />
       </template>
       <template #contents>
         <FormGroup title="タイトル" :required="true">
@@ -579,7 +579,7 @@
   <transition>
     <ModalDialog v-if="isSavedModalAppear" @close="closeSavedModal">
       <template #contents>
-        作成が完了いたしました。
+        <p class="saved">作成が完了いたしました。</p>
       </template>
       <template #footer>
         <ModalFooter :noBorder="true">
@@ -795,6 +795,12 @@ export default defineComponent({
     font-weight: $font_weight_bold;
     margin-right: 28px;
   }
+}
+
+.saved {
+  font-size: 20px;
+  font-weight: $font_weight_bold;
+  text-align: center;
 }
 
 .btn:focus {

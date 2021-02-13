@@ -80,7 +80,7 @@ export default {
   &.empty {
     background-color: rgba(211, 211, 211, 0.85);
   }
-  &.full {
+  &.flexible {
     width: 100%;
     flex-grow: 1;
     flex-shrink: 1;
