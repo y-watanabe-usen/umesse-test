@@ -76,10 +76,10 @@
                 ></meter>
                 <div class="buttons">
                   <button class="btn-play" :disabled="!hasRecordedData" @click="play">
-                    <img src="@/assets/recording_play.svg">再生
+                    <img src="@/assets/icon_play.svg">再生
                   </button>
                   <button class="btn-delete" :disabled="!hasRecordedData" @click="deleteRecordedData">
-                    <img src="@/assets/recording_delete.svg">削除
+                    <img src="@/assets/icon_delete.svg">削除
                   </button>
                 </div>
                 <p class="description">
@@ -96,6 +96,7 @@
   <transition>
     <ModalDialog
       v-if="isModalAppear"
+      size="large"
       :closeDisabled="uploadRecoridngState === UPLOAD_RECORDING_STATE.UPLOADING"
       @close="closeModal"
     >

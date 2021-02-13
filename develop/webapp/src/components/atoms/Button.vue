@@ -52,6 +52,12 @@ button {
     color: black;
     background-color: white;
   }
+  &.rectangle {
+    border-radius: 4px;
+    font-size: 20px;
+    color: black;
+    background-color: white;
+  }
   &:disabled {
     color: white;
     background-color: rgb(173, 173, 173);

@@ -6,13 +6,13 @@
     </p>
     <div class="input-wrapper">
       <slot />
+      <p class="description" v-if="description != ''">{{ description }}</p>
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { reactive } from "vue";
-import { useRouter } from "vue-router";
 
 export default {
   name: "FromGroup",
@@ -24,10 +24,13 @@ export default {
     required: {
       type: Boolean,
       default: false,
-    }
+    },
+    description: {
+      type: String,
+      default: '',
+    },
   },
   setup(props: any) {
-    const router = useRouter();
     const state = reactive({});
     return {
       state,
@@ -40,7 +43,7 @@ export default {
 @import '@/scss/_variables.scss';
 
 .form-group {
-  @include flex-between;
+  @include flex_between;
   margin-left: 75px;
   margin-right: 75px;
   margin-bottom: 26px;
@@ -68,6 +71,14 @@ export default {
     width: 100%;
     flex-grow: 1;
     flex-shrink: 1;
+    position: relative;
+    .description {
+      color: rgb(123, 123, 123);
+      font-size: 16px;
+      position: absolute;
+      left: 0;
+      bottom: -24px;
+    }
   }
 }
 </style>

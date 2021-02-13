@@ -14,8 +14,8 @@ import { reactive, SetupContext } from "vue";
 export default {
   name: "TextBox",
   props: {
-    type: {
-      value: String,
+    value: {
+      type: String,
       required: true,
     },
     isDisabled: {
@@ -27,12 +27,12 @@ export default {
     const state = reactive({});
     const onUpdate = (event: Event) => {
       if (event.target instanceof HTMLInputElement) {
-          context.emit('update:value', event.target.value);
+        context.emit('update:value', event.target.value);
       }
     }
     const onChange = (event: Event) => {
       if (event.target instanceof HTMLInputElement) {
-          context.emit('change', event.target.value);
+        context.emit('change', event.target.value);
       }
     }
     return {

@@ -92,6 +92,7 @@ header {
   margin-bottom: 46px;
   height: 40px;
   h2 {
+    min-width: 210px;
     color: white;
     line-height: 32px;
     img {
@@ -109,6 +110,8 @@ header {
     }
   }
   .nav {
+    @include flex_end;
+    min-width: 194px;
     margin-right: 16px;
     li {
       width: 40px;

@@ -13,8 +13,8 @@ import { reactive, SetupContext } from "vue";
 export default {
   name: "TextArea",
   props: {
-    type: {
-      value: String,
+    value: {
+      type: String,
       required: true,
     },
     isDisabled: {
@@ -26,7 +26,7 @@ export default {
     const state = reactive({});
     const onUpdate = (event: Event) => {
       if (event.target instanceof HTMLTextAreaElement) {
-          context.emit('update:value', event.target.value);
+        context.emit('update:value', event.target.value);
       }
     }
     return {
