@@ -117,8 +117,10 @@
                     </div>
                   </div>
                   <span class="d-block pb-2"
-                    >{{ cm.description }}<br />{{ cm.seconds }}秒
-                    {{ cm.startDate }} {{ cm.endDate }} ステータス：{{
+                    >{{ cm.description }}<br />{{
+                      convertNumberToTime(cm.seconds)
+                    }}
+                    {{ convertDatestringToDateJp(cm.startDate) }} ステータス：{{
                       cm.status
                     }}</span
                   >
@@ -459,6 +461,10 @@ import { useUploadCmService } from "@/services/uploadCmService";
 import { config } from "@/utils/UMesseApiConfiguration";
 import { CmItem } from "umesseapi/models/cm-item";
 import { useGlobalStore } from "@/store";
+import {
+  convertDatestringToDateJp,
+  convertNumberToTime,
+} from "@/utils/FormatDate";
 
 export default defineComponent({
   components: {
@@ -510,7 +516,7 @@ export default defineComponent({
       state.selectedCm = cm;
     };
 
-    const play = async (cm : CmItem) => {
+    const play = async (cm: CmItem) => {
       if (state.isPlaying) return;
       const response = await resourcesapi.getSignedUrl(cm.cmId, "cm");
       console.log(response.data.url);
@@ -540,6 +546,8 @@ export default defineComponent({
       remove,
       clickScene,
       selectCm,
+      convertDatestringToDateJp,
+      convertNumberToTime,
     };
   },
 });
