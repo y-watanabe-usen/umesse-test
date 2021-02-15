@@ -1,14 +1,14 @@
 {
   "name": "umesseapi",
   "version": "0.0.1",
-  "description": "OpenAPI client for ",
+  "description": "OpenAPI client for umesseapi",
   "author": "OpenAPI-Generator Contributors",
   "keywords": [
     "axios",
     "typescript",
     "openapi-client",
     "openapi-generator",
-    ""
+    "umesseapi"
   ],
   "license": "Unlicense",
   "main": "./dist/index.js",

@@ -22,3 +22,4 @@ export * from './scene-item';
 export * from './template-item';
 export * from './tts-item';
 export * from './user';
+export * from './user-resource-create-item';

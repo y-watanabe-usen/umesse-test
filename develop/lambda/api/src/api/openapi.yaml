@@ -438,7 +438,11 @@ paths:
           type: string
           example: "123456789"
       requestBody:
-        $ref: '#/components/requestBodies/UserResourceCreateRequest'
+        description: ユーザー素材データ作成リクエストBody
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserResourceCreateItem'
       responses:
         "200":
           description: successful response
@@ -707,7 +711,11 @@ paths:
           type: string
           example: "123456789"
       requestBody:
-        $ref: '#/components/requestBodies/UserResourceCreateRequest'
+        description: ユーザー素材データ作成リクエストBody
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserResourceCreateItem'
       responses:
         "200":
           description: successful response
@@ -2481,6 +2489,19 @@ components:
         dataProcessType: 01：正常完了、09：取込失敗
         errorCode: E0001
         cmId: 123456789-c-12345678
+    UserResourceCreateItem:
+      properties:
+        filename:
+          type: string
+        recordedFile:
+          type: string
+          format: binary
+        title:
+          type: string
+          example: サンプル
+        description:
+          type: string
+          example: サンプル
     Error:
       type: object
       properties:

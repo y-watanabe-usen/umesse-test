@@ -217,7 +217,6 @@ exports.createUserResource = async (unisCustomerCd, category, body) => {
     const checkParams = validation.checkParams({
       unisCustomerCd: unisCustomerCd,
       category: category,
-      body: body,
     });
     if (checkParams) throw checkParams;
 
