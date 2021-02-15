@@ -14,6 +14,16 @@ export function sToHms(second: number) {
 }
 
 /**
+ * ナレーション選択画面に表示する業種を取得する
+ * @param
+ * @return Industry[]
+ */
+export function getNarrationIndustries() {
+  const getCdList = ['01', '02', '10', '20', '30', '31', '40', '50', '51', '90']
+  return getIndustries(getCdList)
+}
+
+/**
  * BGM選択画面に表示する業種を取得する
  * @param
  * @return Industry[]

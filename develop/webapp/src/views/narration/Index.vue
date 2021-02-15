@@ -8,23 +8,27 @@
     <template #contents>
       <ContentsBase>
         <div class="row">
-          <div class="col-2 bg-menu pl-1 pr-1 rounded-left">
+          <div class="col-2 bg-menu rounded-left">
             <button
               type="button"
               class="btn btn-menu text-left text-white"
               :class="[
-                industry.id == activeIndustryId ? 'btn-light' : 'btn-link',
-                industry.id == activeIndustryId ? 'text-dark' : 'text-white',
-                industry.id == 1 ? 'mt-2' : '',
+                narrationIndustry.cd == activeNarrationIndustryCd
+                  ? 'btn-primary'
+                  : 'btn-link',
+                narrationIndustry.cd == activeNarrationIndustryCd
+                  ? 'text-white'
+                  : 'text-dark',
+                narrationIndustry.cd == 1 ? 'mt-2' : '',
               ]"
-              v-for="industry in industries"
-              :key="industry.id"
-              @click="clickIndustry(industry.id)"
+              v-for="narrationIndustry in narrationIndustries"
+              :key="narrationIndustry.cd"
+              @click="clickNarrationIndustry(narrationIndustry.cd)"
             >
-              {{ industry.name }}
+              {{ narrationIndustry.name }}
             </button>
           </div>
-          <div class="col-10 bg-white rounded-right">
+          <div class="col-9 bg-white rounded-right">
             <div class="my-3">
               <h6 class="border-bottom border-gray pb-2 mb-0">
                 <select class="form-control w-25">
@@ -33,110 +37,92 @@
                   </option>
                 </select>
               </h6>
-              <template v-if="displayMode == DisplayMode.Scene">
+              <div
+                class="media text-muted pt-3"
+                v-for="narration in narrations"
+                :key="narration.contentsId"
+              >
                 <div
-                  class="media text-muted pt-3"
-                  v-for="scene in scenes"
-                  :key="scene.id"
+                  class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray pl-3"
                 >
                   <div
-                    class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray pl-3"
-                    @click="clickScene(scene.id)"
+                    class="d-flex justify-content-between align-items-center w-100"
                   >
-                    <div
-                      class="d-flex justify-content-between align-items-center w-100"
-                    >
-                      <strong class="text-dark h5 pt-2 pb-2">{{
-                        scene.name
-                      }}</strong>
+                    <strong class="text-dark h5 pt-2 pb-2">{{
+                      narration.title
+                    }}</strong>
+                    <div>
+                      <button
+                        type="button"
+                        class="btn btn-light shadow btn-manuscript"
+                        data-toggle="modal"
+                        data-target=".bd-try-manuscript"
+                        @click="selectNarration(narration)"
+                      >
+                        <svg
+                          width="1em"
+                          height="1em"
+                          viewBox="0 0 16 16"
+                          class="bi bi-file-earmark-text-fill"
+                          fill="currentColor"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M2 2a2 2 0 0 1 2-2h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm7.5 1.5v-2l3 3h-2a1 1 0 0 1-1-1zM4.5 8a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7zM4 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5z"
+                          />
+                        </svg>
+                        原稿
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-light shadow btn-try"
+                        data-toggle="modal"
+                        data-target=".bd-try-modal-lg"
+                        @click="selectNarration(narration)"
+                      >
+                        <svg
+                          width="1em"
+                          height="1em"
+                          viewBox="0 0 16 16"
+                          class="bi bi-play-fill"
+                          fill="currentColor"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            d="M11.596 8.697l-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"
+                          />
+                        </svg>
+                        試聴
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-light shadow btn-edit"
+                        @click="setNarration(narration)"
+                      >
+                        選択
+                        <svg
+                          width="1em"
+                          height="1em"
+                          viewBox="0 0 16 16"
+                          class="bi bi-chevron-right"
+                          fill="currentColor"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <path
+                            fill-rule="evenodd"
+                            d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"
+                          />
+                        </svg>
+                      </button>
                     </div>
                   </div>
-                </div>
-              </template>
-              <template v-if="displayMode == DisplayMode.Narration">
-                <div
-                  class="media text-muted pt-3"
-                  v-for="narration in narrations"
-                  :key="narration.id"
-                >
-                  <div
-                    class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray pl-3"
+                  <span class="d-block pb-2"
+                    >{{ narration.description }}<br />{{ narration.seconds }}秒
+                    {{ narration.timestamp }}</span
                   >
-                    <div
-                      class="d-flex justify-content-between align-items-center w-100"
-                    >
-                      <strong class="text-dark h5 pt-2 pb-2">{{
-                        narration.name
-                      }}</strong>
-                      <div>
-                        <button
-                          type="button"
-                          class="btn btn-light shadow btn-manuscript"
-                        >
-                          <svg
-                            width="1em"
-                            height="1em"
-                            viewBox="0 0 16 16"
-                            class="bi bi-file-earmark-text-fill"
-                            fill="currentColor"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              fill-rule="evenodd"
-                              d="M2 2a2 2 0 0 1 2-2h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm7.5 1.5v-2l3 3h-2a1 1 0 0 1-1-1zM4.5 8a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7zM4 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5z"
-                            />
-                          </svg>
-                          原稿
-                        </button>
-                        <button
-                          type="button"
-                          class="btn btn-light shadow btn-try"
-                          data-toggle="modal"
-                          data-target=".bd-try-modal-lg"
-                        >
-                          <svg
-                            width="1em"
-                            height="1em"
-                            viewBox="0 0 16 16"
-                            class="bi bi-play-fill"
-                            fill="currentColor"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              d="M11.596 8.697l-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"
-                            />
-                          </svg>
-                          試聴
-                        </button>
-                        <button
-                          type="button"
-                          class="btn btn-light shadow btn-edit"
-                        >
-                          選択
-                          <svg
-                            width="1em"
-                            height="1em"
-                            viewBox="0 0 16 16"
-                            class="bi bi-chevron-right"
-                            fill="currentColor"
-                            xmlns="http://www.w3.org/2000/svg"
-                          >
-                            <path
-                              fill-rule="evenodd"
-                              d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"
-                            />
-                          </svg>
-                        </button>
-                      </div>
-                    </div>
-                    <span class="d-block pb-2"
-                      >{{ narration.manuscript }}<br />{{
-                        narration.detail
-                      }}</span
-                    >
-                  </div>
                 </div>
-              </template>
+              </div>
             </div>
           </div>
         </div>
@@ -144,6 +130,42 @@
     </template>
   </BasicLayout>
   <!-- modal -->
+  <div
+    class="modal fade bd-try-manuscript"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="myLargeModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">原稿</h5>
+          <button
+            type="button"
+            class="close"
+            data-dismiss="modal"
+            aria-label="Close"
+          >
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          {{ selectedNarration?.manuscript }}
+        </div>
+        <div class="modal-footer text-center">
+          <button
+            type="button"
+            class="btn btn-light btn-close"
+            data-dismiss="modal"
+          >
+            閉じる
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div
     class="modal fade bd-try-modal-lg"
     tabindex="-1"
@@ -182,7 +204,7 @@
                   <button
                     type="button"
                     class="btn btn-light shadow btn-play"
-                    @click="play"
+                    @click="play(selectedNarration)"
                   >
                     <svg
                       width="1em"
@@ -317,7 +339,6 @@ import {
   reactive,
   toRefs,
 } from "vue";
-// import NarrationStore from "@/store/narration";
 import AudioStore from "@/store/audio";
 import AudioPlayer from "@/utils/AudioPlayer";
 import * as UMesseApi from "umesseapi";
@@ -325,6 +346,11 @@ import * as Common from "@/utils/Common";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
 import Header from "@/components/organisms/Header.vue";
+import { config } from "@/utils/UMesseApiConfiguration";
+import { NarrationItem } from "umesseapi/models";
+import { useGlobalStore } from "@/store";
+import router from "@/router";
+import { useRoute } from "vue-router";
 
 export default defineComponent({
   components: {
@@ -333,22 +359,18 @@ export default defineComponent({
     Header,
   },
   setup() {
-    enum DisplayMode {
-      Scene,
-      Narration,
-    }
-
-    // const narrationStore = NarrationStore();
+    const route = useRoute();
     const audioStore = AudioStore();
     const audioPlayer = AudioPlayer();
-    const api = new UMesseApi.ResourcesApi(
-      new UMesseApi.Configuration({ basePath: process.env.VUE_APP_BASE_URL })
-    );
-
+    const api = new UMesseApi.ResourcesApi(config);
+    const { cm, base } = useGlobalStore();
+    const index = route.params.index ?? 0;
     const state = reactive({
+      narrationIndustries: Common.getNarrationIndustries(),
       sorts: ["名前順", "作成日順", "更新日順"],
-      activeIndustryId: 1,
-      displayMode: DisplayMode.Scene,
+      activeNarrationIndustryCd: "01",
+      narrations: [] as NarrationItem[],
+      selectedNarration: null as NarrationItem | null,
       isPlaying: computed(() => audioPlayer.isPlaying()),
       isDownloading: computed(() => audioStore.isDownloading),
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
@@ -361,53 +383,59 @@ export default defineComponent({
       ),
     });
 
-    const play = async () => {
-      if (state.isPlaying) return;
-      const response = await api.getSignedUrl("ID", "CATEGORY");
+    const setNarration = (narration: NarrationItem) => {
+      cm.setNarration(narration, +index);
+      router.push({ name: "Cm" });
+    };
+
+    const selectNarration = (narration: NarrationItem) => {
+      state.selectedNarration = narration;
+    };
+
+    const clickNarrationIndustry = (narrationIndustryCd: string) => {
+      state.activeNarrationIndustryCd = narrationIndustryCd;
+      fetchNarration();
+    };
+
+    const fetchNarration = async () => {
+      const response = await api.listNarration(state.activeNarrationIndustryCd);
+      state.narrations = response.data;
+    };
+
+    const play = async (narration: NarrationItem) => {
+      const audioBuffer = await getAudioBuffer(
+        narration.contentsId,
+        narration.category
+      );
+      audioPlayer.start(audioBuffer);
+    };
+
+    const getAudioBuffer = async (contentsId: string, category: string) => {
+      const cacheKey = `${category}/${contentsId}`;
+      if (base.cache.has(cacheKey)) {
+        return <AudioBuffer>base.cache.get(cacheKey);
+      }
+      const response = await api.getSignedUrl(contentsId, category);
       await audioStore.download(response.data.url);
-      audioPlayer.start(<AudioBuffer>audioStore.audioBuffer);
+      base.cache.set(cacheKey, <AudioBuffer>audioStore.audioBuffer);
+      return <AudioBuffer>audioStore.audioBuffer;
     };
 
     const stop = () => {
       if (state.isPlaying) audioPlayer.stop();
     };
 
-    // 表示する業種
-    // const industries = computed(() => narrationStore.industries);
-    // // 表示するシーン
-    // const scenes = computed(() => narrationStore.scenes);
-    // // 表示するナレーション
-    // const narrations = computed(() => narrationStore.narrations);
-
-    // TODO: onCreatedがない？？
     onMounted(async () => {
-      // await narrationStore.fetchNarrationLists();
-      clickIndustry(state.activeIndustryId);
+      fetchNarration();
     });
 
-    const changeDisplayMode = (mode: DisplayMode) => {
-      state.displayMode = mode;
-    };
-    const clickIndustry = (id: number) => {
-      state.activeIndustryId = id;
-      // narrationStore.findIndustry(id);
-      changeDisplayMode(DisplayMode.Scene);
-    };
-    const clickScene = (id: number) => {
-      // narrationStore.fetchNarrationSceneLists(id);
-      changeDisplayMode(DisplayMode.Narration);
-    };
-
     return {
-      DisplayMode,
       ...toRefs(state),
-      // industries,
-      // scenes,
-      // narrations,
-      clickIndustry,
-      clickScene,
       play,
       stop,
+      setNarration,
+      selectNarration,
+      clickNarrationIndustry,
     };
   },
 });

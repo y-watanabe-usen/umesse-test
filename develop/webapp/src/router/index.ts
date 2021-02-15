@@ -47,6 +47,11 @@ const routes: Array<RouteRecordRaw> = [
     component: Narration
   },
   {
+    path: '/narration/:index',
+    name: 'SelectNarration',
+    component: Narration
+  },
+  {
     path: '/recording',
     name: 'Recording',
     component: Recording

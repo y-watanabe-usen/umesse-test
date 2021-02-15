@@ -57,6 +57,9 @@ export default function cmStore() {
     )
   }
 
+  const clearNarration = (index: number) => {
+    state.narrationItems.splice(index, 1)
+  }
   const clearOpenChime = () => {
     state.openChimeItem = null
   }
@@ -74,6 +77,13 @@ export default function cmStore() {
   }
   const setBgm = (bgmItem: BgmItem) => {
     state.bgmItem = bgmItem
+  }
+  const setNarration = (narrationItem: NarrationItem, index?: number) => {
+    if (index) {
+      state.narrationItems[index] = narrationItem
+    } else {
+      state.narrationItems.push(narrationItem)
+    }
   }
 
   return {
@@ -93,9 +103,11 @@ export default function cmStore() {
     get createCmData() {
       return state.createUserCmResponseItem
     },
+    clearNarration,
     clearOpenChime,
     clearEndChime,
     clearBgm,
+    setNarration,
     setOpenChime,
     setEndChime,
     setBgm,
