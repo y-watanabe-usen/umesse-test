@@ -6,10 +6,10 @@ import {
 import { useGlobalStore } from "@/store";
 import { inject, InjectionKey, provide, reactive, toRefs } from "vue";
 import { RecordingItem } from "umesseapi/models/recording-item";
+import { config } from "@/utils/UMesseApiConfiguration";
 
 // recording.
 export default function recordingStore() {
-  const config = new UMesseApi.Configuration({ basePath: process.env.VUE_APP_BASE_URL })
   const umesseApi = new UMesseApi.RecordingApi(config);
   const resourcesApi = new UMesseApi.ResourcesApi(config)
   const uploadRecordingService = useUploadRecordingService(umesseApi);

@@ -6,10 +6,10 @@ import {
 import { useGlobalStore } from "@/store";
 import { inject, InjectionKey, provide, reactive, toRefs } from "vue";
 import { TtsItem } from "umesseapi/models/tts-item";
+import { config } from "@/utils/UMesseApiConfiguration";
 
-// recording.
+// tts.
 export default function ttsStore() {
-  const config = new UMesseApi.Configuration({ basePath: process.env.VUE_APP_BASE_URL })
   const umesseApi = new UMesseApi.TtsApi(config);
   const resourcesApi = new UMesseApi.ResourcesApi(config)
   const uploadTtsService = useUploadTtsService(umesseApi);
