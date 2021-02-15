@@ -364,7 +364,7 @@ export default defineComponent({
     const audioPlayer = AudioPlayer();
     const api = new UMesseApi.ResourcesApi(config);
     const { cm, base } = useGlobalStore();
-    const index = route.params.index ?? 0;
+    const index = route.params.index;
     const state = reactive({
       narrationIndustries: Common.getNarrationIndustries(),
       sorts: ["名前順", "作成日順", "更新日順"],
@@ -384,7 +384,11 @@ export default defineComponent({
     });
 
     const setNarration = (narration: NarrationItem) => {
-      cm.setNarration(narration, +index);
+      if (index) {
+        cm.setNarration(narration, +index);
+      } else {
+        cm.setNarration(narration);
+      }
       router.push({ name: "Cm" });
     };
 

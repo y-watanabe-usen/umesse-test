@@ -74,7 +74,7 @@ export default function cmStore() {
   }
 
   const setNarration = (narrationItem: NarrationItem, index?: number) => {
-    if (index) {
+    if (index != null) {
       state.narrationItems[index] = narrationItem
     } else {
       state.narrationItems.push(narrationItem)
