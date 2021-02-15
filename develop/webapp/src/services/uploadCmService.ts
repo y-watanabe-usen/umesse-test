@@ -104,9 +104,10 @@ export function useUploadCmService(api: UMesseApi.CmApi) {
     bgmContentsId: string | null
   ) => {
     let narrations: Narration[] | undefined = undefined;
-    if (narrationContentsIds) {
+    if (narrationContentsIds?.length) {
       narrationContentsIds.forEach((v) => {
-        narrations?.push({ contentsId: v, volume: 150 });
+        if (!narrations) narrations = []
+        narrations.push({ contentsId: v, volume: 150 });
       });
     }
     const startChime: StartChime | undefined = startChimeContentsId
