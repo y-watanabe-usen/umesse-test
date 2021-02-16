@@ -14,10 +14,10 @@
           <div class="contents">
             <p class="recording" @click="toggleVoiceRecorder">
               <span v-if="isRecording === false">
-                <img src="@/assets/recording_start.svg">
+                <img src="@/assets/recording_start.svg" />
               </span>
               <span v-else>
-                <img src="@/assets/recording_stop.svg">
+                <img src="@/assets/recording_stop.svg" />
               </span>
             </p>
             <div class="right">
@@ -75,11 +75,19 @@
                   :value="playbackTime"
                 ></meter>
                 <div class="buttons">
-                  <button class="btn-play" :disabled="!hasRecordedData" @click="play">
-                    <img src="@/assets/icon_play.svg">再生
+                  <button
+                    class="btn-play"
+                    :disabled="!hasRecordedData"
+                    @click="play"
+                  >
+                    <img src="@/assets/icon_play.svg" />再生
                   </button>
-                  <button class="btn-delete" :disabled="!hasRecordedData" @click="deleteRecordedData">
-                    <img src="@/assets/icon_delete.svg">削除
+                  <button
+                    class="btn-delete"
+                    :disabled="!hasRecordedData"
+                    @click="deleteRecordedData"
+                  >
+                    <img src="@/assets/icon_delete.svg" />削除
                   </button>
                 </div>
                 <p class="description">
@@ -195,6 +203,9 @@ import ModalFooter from "@/components/molecules/ModalFooter.vue";
 import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
+import { useGlobalStore } from "@/store";
+import { RecordingItem } from "umesseapi/models";
+import router from "@/router";
 
 export default defineComponent({
   components: {
@@ -214,6 +225,7 @@ export default defineComponent({
     const recordingStore = provideRecordingStore(); //FIXME: provide name.
     const audioRecorder = AudioRecorder();
     const audioPlayer = AudioPlayer();
+    const { cm, base } = useGlobalStore();
     const state = reactive({
       file: <RecordingFile>{},
       uploadRecoridngState: computed(() => recordingStore.getStatus()),
@@ -255,6 +267,9 @@ export default defineComponent({
       // state.file.blob = await audioRecorder.getWaveBlob();
       state.file.blob = await audioRecorder.getMp3Blob();
       recordingStore.uploadRecordingData(state.file);
+      const id = "1";
+      cm.setNarration(<RecordingItem>recordingStore.getUserRecording(id));
+      router.push({ name: "Cm" });
       closeModal();
     };
 

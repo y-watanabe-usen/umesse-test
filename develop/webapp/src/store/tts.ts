@@ -55,7 +55,8 @@ export default function ttsStore() {
   };
 
   const uploadTtsData = async (recordingFile: RecordingFile) => {
-    await uploadTtsService.upload(token(), recordingFile);
+    const res  = await uploadTtsService.upload(token(), recordingFile);
+    console.log("res", res)
     fetchTtsData();
   };
 
