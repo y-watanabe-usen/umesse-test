@@ -1,5 +1,6 @@
 "use strict";
 
+const { constants } = require("umesse-lib/constants");
 const {
   createTts,
   getResource,
@@ -57,7 +58,7 @@ exports.getSignedUrl = function (id, category) {
 exports.listBgm = function (industryCd) {
   return new Promise(async function (resolve, reject) {
     var response = {};
-    const json = await getResource("bgm", industryCd);
+    const json = await getResource(constants.resourceCategory.BGM, industryCd);
     response["application/json"] = json;
     if (Object.keys(response).length > 0 && !json.message) {
       resolve(response[Object.keys(response)[0]]);
@@ -76,7 +77,7 @@ exports.listBgm = function (industryCd) {
 exports.listChime = function () {
   return new Promise(async function (resolve, reject) {
     var response = {};
-    const json = await getResource("chime");
+    const json = await getResource(constants.resourceCategory.CHIME);
     response["application/json"] = json;
     if (Object.keys(response).length > 0 && !json.message) {
       resolve(response[Object.keys(response)[0]]);
@@ -97,7 +98,11 @@ exports.listChime = function () {
 exports.listFree = function (industryCd, sceneCd) {
   return new Promise(async function (resolve, reject) {
     var response = {};
-    const json = await getResource("free", industryCd, sceneCd);
+    const json = await getResource(
+      constants.resourceCategory.BGM,
+      industryCd,
+      sceneCd
+    );
     response["application/json"] = json;
     if (Object.keys(response).length > 0 && !json.message) {
       resolve(response[Object.keys(response)[0]]);
@@ -118,7 +123,11 @@ exports.listFree = function (industryCd, sceneCd) {
 exports.listNarration = function (industryCd, sceneCd) {
   return new Promise(async function (resolve, reject) {
     var response = {};
-    const json = await getResource("narration", industryCd, sceneCd);
+    const json = await getResource(
+      constants.resourceCategory.NARRATION,
+      industryCd,
+      sceneCd
+    );
     response["application/json"] = json;
     if (Object.keys(response).length > 0 && !json.message) {
       resolve(response[Object.keys(response)[0]]);
@@ -139,7 +148,11 @@ exports.listNarration = function (industryCd, sceneCd) {
 exports.listTemplate = function (industryCd, sceneCd) {
   return new Promise(async function (resolve, reject) {
     var response = {};
-    const json = await getResource("template", industryCd, sceneCd);
+    const json = await getResource(
+      constants.resourceCategory.TEMPLATE,
+      industryCd,
+      sceneCd
+    );
     response["application/json"] = json;
     if (Object.keys(response).length > 0 && !json.message) {
       resolve(response[Object.keys(response)[0]]);
