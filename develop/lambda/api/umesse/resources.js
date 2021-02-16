@@ -87,17 +87,15 @@ exports.getSignedUrl = async (id, category) => {
 
     let bucket = "";
     let path = "";
-    let file = "";
     switch (category) {
       case constants.resourceCategory.CM:
-        file = `${id}.aac`;
-      case constants.resourceCategory.RECORDING:
-        file = `${id}.wav`;
-      case constants.resourceCategory.TTS:
-        file = `${id}.mp3`;
-        const str = id.split("-");
         bucket = constants.s3Bucket().users;
-        path = `users/${str[0]}/${category}/${file}`;
+        path = `users/${id.split("-")[0]}/${category}/${id}.aac`;
+        break;
+      case constants.resourceCategory.RECORDING:
+      case constants.resourceCategory.TTS:
+        bucket = constants.s3Bucket().users;
+        path = `users/${id.split("-")[0]}/${category}/${id}.mp3`;
         break;
       case constants.resourceCategory.BGM:
       case constants.resourceCategory.CHIME:
@@ -219,7 +217,6 @@ exports.createUserResource = async (unisCustomerCd, category, body) => {
     const checkParams = validation.checkParams({
       unisCustomerCd: unisCustomerCd,
       category: category,
-      body: body,
     });
     if (checkParams) throw checkParams;
 
@@ -230,7 +227,7 @@ exports.createUserResource = async (unisCustomerCd, category, body) => {
     // S3へPUT
     let res = await s3Manager.put(
       constants.s3Bucket().users,
-      `users/${unisCustomerCd}/${category}/${id}.wav`,
+      `users/${unisCustomerCd}/${category}/${id}.mp3`,
       binaryData
     );
     if (!res) throw "put failed";
@@ -361,7 +358,7 @@ exports.deleteUserResource = async (unisCustomerCd, category, id) => {
     // S3上の録音音声を削除
     await s3Manager.delete(
       constants.s3Bucket().users,
-      `users/${unisCustomerCd}/${category}/${id}.wav`
+      `users/${unisCustomerCd}/${category}/${id}.mp3`
     );
 
     // DynamoDBのデータ更新

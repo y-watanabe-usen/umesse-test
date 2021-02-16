@@ -1,6 +1,7 @@
 import { reactive } from 'vue';
 import { AudioRecorderState } from './state';
 import { useWaveEncoder } from '@/utils/WaveEncoder';
+import { useMp3Encoder } from '@/utils/Mp3Encoder';
 
 export default () => {
   const state = reactive<AudioRecorderState>({
@@ -15,7 +16,15 @@ export default () => {
   const start = async () => {
     if (state.recording) { throw new Error(`recording state = ${state.recording}.`); }
     reset();
-    const stream: MediaStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    const stream: MediaStream = await navigator.mediaDevices.getUserMedia({
+      audio: {
+        autoGainControl: true,
+        channelCount: 1,
+        echoCancellation: true,
+        noiseSuppression: true,
+        sampleRate: 44100,
+      }
+    });
     mediaRecorder = new MediaRecorder(stream);
     mediaRecorder.onstop = () => {
       state.recording = false;
@@ -60,8 +69,16 @@ export default () => {
     return undefined;
   };
 
+  const getMp3Blob = async () => {
+    const audioBuffer = await getAudioBuffer();
+    if (audioBuffer) {
+      return useMp3Encoder.encode(audioBuffer);
+    }
+    return undefined;
+  };
+
   return {
     start, stop, reset, isRecording, hasRecording,
-    getWaveBlob, getAudioBuffer,
+    getWaveBlob, getMp3Blob, getAudioBuffer,
   };
 };

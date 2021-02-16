@@ -252,7 +252,8 @@ export default defineComponent({
 
     const uploadRecordingFile = async () => {
       /// check state.file.
-      state.file.blob = await audioRecorder.getWaveBlob();
+      // state.file.blob = await audioRecorder.getWaveBlob();
+      state.file.blob = await audioRecorder.getMp3Blob();
       recordingStore.uploadRecordingData(state.file);
       closeModal();
     };
