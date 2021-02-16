@@ -616,7 +616,7 @@ export default defineComponent({
     const { cm } = useGlobalStore();
     const state = reactive({
       openChime: computed(() => cm.openChime),
-      narrarions: computed(() => cm.narrationItems),
+      narrarions: computed(() => cm.narrations),
       bgm: computed(() => cm.bgm),
       endChime: computed(() => cm.endChime),
       isPlaying: computed(() => audioPlayer.isPlaying()),
