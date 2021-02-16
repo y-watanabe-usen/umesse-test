@@ -3,6 +3,10 @@
 resource "aws_api_gateway_rest_api" "umesse" {
   for_each = toset(var.name)
   name     = format("%s-api", each.key)
+
+  binary_media_types = [
+    "multipart/form-data",
+  ]
 }
 
 # TODO: 一旦dev環境のみ
