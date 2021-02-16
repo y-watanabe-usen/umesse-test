@@ -269,6 +269,7 @@ export default defineComponent({
       recordingStore.uploadRecordingData(state.file);
       const id = "1";
       cm.setNarration(<RecordingItem>recordingStore.getUserRecording(id));
+      console.log( <RecordingItem>recordingStore.getUserRecording(id))
       router.push({ name: "Cm" });
       closeModal();
     };

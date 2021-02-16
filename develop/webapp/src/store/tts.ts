@@ -35,7 +35,9 @@ export default function ttsStore() {
     }
   };
 
-  const getUserTts = async (id: string) => {
+  const getUserTts = (id: string) => {
+    // TODO: API側で登録が出来るようになったらちゃんとしたデータを返す
+    return { ttsId: 1, title: "TTSデータ" }
     const item = state.ttsItems.find((element) => element.ttsId === id);
     return item;
   };
@@ -55,7 +57,7 @@ export default function ttsStore() {
   };
 
   const uploadTtsData = async (recordingFile: RecordingFile) => {
-    const res  = await uploadTtsService.upload(token(), recordingFile);
+    const res = await uploadTtsService.upload(token(), recordingFile);
     console.log("res", res)
     fetchTtsData();
   };
