@@ -236,6 +236,7 @@ import ModalDialog from "@/components/molecules/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
 import { useGlobalStore } from "@/store";
+import { TtsItem } from "umesseapi/models";
 
 export default defineComponent({
   components: {
@@ -252,7 +253,7 @@ export default defineComponent({
     const ttsStore = provideTtsStore(); //FIXME: provide name.
     const audioPlayer = AudioPlayer();
     const speakers = ["risa", "takeru"];
-    const { base } = useGlobalStore();
+    const { cm, base } = useGlobalStore();
     const state = reactive({
       file: <RecordingFile>{},
       uploadTtsState: computed(() => ttsStore.getStatus()),
@@ -302,6 +303,8 @@ export default defineComponent({
     };
 
     const toCreateCm = () => {
+      const id = "1";
+      cm.setNarration(<TtsItem>ttsStore.getUserTts(id));
       router.push({ name: "Cm" });
     };
 

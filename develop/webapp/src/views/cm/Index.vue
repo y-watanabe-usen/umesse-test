@@ -160,29 +160,32 @@
                   </svg>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <router-link
+                  <a
                     class="dropdown-item"
-                    :to="{ name: 'Recording' }"
+                    href="#"
+                    @click="changeRecording(index)"
                   >
-                    自分で録音して音声と入れ替える</router-link
+                    自分で録音して音声と入れ替える</a
                   >
-                  <router-link
+                  <a
                     class="dropdown-item"
-                    :to="{ name: 'SelectNarration', params: { index: index } }"
+                    href="#"
+                    @click="changeNarration(index)"
+                    >他のナレーションと入れ替える</a
                   >
-                    他のナレーションと入れ替える</router-link
-                  >
-                  <router-link
+                  <a
                     class="dropdown-item"
-                    :to="{ name: 'VoiceTemplate' }"
+                    href="#"
+                    @click="changeVoiceTemplate(index)"
                   >
-                    合成音声(テンプレートから)入れ替える</router-link
+                    合成音声(テンプレートから)入れ替える</a
                   >
-                  <router-link
+                  <a
                     class="dropdown-item"
-                    :to="{ name: 'VoiceFree' }"
+                    href="#"
+                    @click="changeVoiceFree(index)"
                   >
-                    合成音声(フリー入力から)入れ替える</router-link
+                    合成音声(フリー入力から)入れ替える</a
                   >
                   <a
                     class="dropdown-item"
@@ -204,11 +207,7 @@
               "
               :isEmpty="true"
               size="flexible"
-              @add="
-                $router.push({
-                  name: 'Narration',
-                })
-              "
+              @add="addNarration"
             />
           </template>
         </template>
@@ -593,6 +592,8 @@ import TextArea from "@/components/atoms/TextArea.vue";
 import SelectBox from "@/components/atoms/SelectBox.vue";
 import CmLayout from "@/components/templates/CmLayout.vue";
 import CmItem from "@/components/molecules/CmItem.vue";
+import { MAX_NARRATION_COUNT } from "@/store/cm";
+import router from "@/router";
 
 export default defineComponent({
   components: {
@@ -613,10 +614,9 @@ export default defineComponent({
     const audioStore = AudioStore();
     const audioPlayer = AudioPlayer();
     const { cm } = useGlobalStore();
-    const MAX_NARRATION_COUNT = 4;
     const state = reactive({
       openChime: computed(() => cm.openChime),
-      narrarions: computed(() => cm.narrationItems),
+      narrarions: computed(() => cm.narrations),
       bgm: computed(() => cm.bgm),
       endChime: computed(() => cm.endChime),
       isPlaying: computed(() => audioPlayer.isPlaying()),
@@ -721,6 +721,27 @@ export default defineComponent({
     };
     const sToHms = (second: number) => Common.sToHms(second);
 
+    const addNarration = () => {
+      cm.unSelectNarrationIndex();
+      router.push({ name: "Narration" });
+    };
+    const changeRecording = (index: number) => {
+      cm.selectNarrationIndex(index);
+      router.push({ name: "Recording" });
+    };
+    const changeNarration = (index: number) => {
+      cm.selectNarrationIndex(index);
+      router.push({ name: "Narration" });
+    };
+    const changeVoiceTemplate = (index: number) => {
+      cm.selectNarrationIndex(index);
+      router.push({ name: "VoiceTemplate" });
+    };
+    const changeVoiceFree = (index: number) => {
+      cm.selectNarrationIndex(index);
+      router.push({ name: "VoiceFree" });
+    };
+
     return {
       ...toRefs(state),
       clearNarration,
@@ -742,6 +763,11 @@ export default defineComponent({
       updateAndOpenSavedModal,
       Constants,
       sToHms,
+      addNarration,
+      changeRecording,
+      changeNarration,
+      changeVoiceTemplate,
+      changeVoiceFree,
       UPLOAD_CM_STATE,
       MAX_NARRATION_COUNT,
     };

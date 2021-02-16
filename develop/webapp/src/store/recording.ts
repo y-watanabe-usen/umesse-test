@@ -30,7 +30,9 @@ export default function recordingStore() {
     }
   };
 
-  const getUserRecording = async (id: string) => {
+  const getUserRecording = (id: string) => {
+    // TODO: API側で登録が出来るようになったらちゃんとしたデータを返す
+    return {recordingId: 1, title: "録音データ"}
     const item = state.recordingItems.find((element) => element.recordingId === id);
     return item;
     //    const item = await umesseApi.getUserRecording(
