@@ -44,69 +44,27 @@
               </p>
             </template>
             <template #operations>
-              <button
-                type="button"
-                class="btn btn-light shadow btn-manuscript"
-                data-toggle="modal"
-                data-target=".bd-try-manuscript"
-                @click="selectNarration(narration)"
+              <Button
+                type="rectangle"
+                class="btn-document"
+                @click="selectNarrationAndOpenDocumentModal(narration)"
               >
-                <svg
-                  width="1em"
-                  height="1em"
-                  viewBox="0 0 16 16"
-                  class="bi bi-file-earmark-text-fill"
-                  fill="currentColor"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M2 2a2 2 0 0 1 2-2h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm7.5 1.5v-2l3 3h-2a1 1 0 0 1-1-1zM4.5 8a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7zM4 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5z"
-                  />
-                </svg>
-                原稿
-              </button>
-              <button
-                type="button"
-                class="btn btn-light shadow btn-try"
-                data-toggle="modal"
-                data-target=".bd-try-modal-lg"
-                @click="selectNarration(narration)"
+                <img src="@/assets/icon_document.svg" />原稿
+              </Button>
+              <Button
+                type="rectangle"
+                class="btn-play"
+                @click="selectNarrationAndOpenPlayModal(narration)"
               >
-                <svg
-                  width="1em"
-                  height="1em"
-                  viewBox="0 0 16 16"
-                  class="bi bi-play-fill"
-                  fill="currentColor"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M11.596 8.697l-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"
-                  />
-                </svg>
-                試聴
-              </button>
-              <button
-                type="button"
-                class="btn btn-light shadow btn-edit"
+                <img src="@/assets/icon_play.svg" />試聴
+              </Button>
+              <Button
+                type="rectangle"
+                class="btn-select"
                 @click="setNarration(narration)"
               >
-                選択
-                <svg
-                  width="1em"
-                  height="1em"
-                  viewBox="0 0 16 16"
-                  class="bi bi-chevron-right"
-                  fill="currentColor"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"
-                  />
-                </svg>
-              </button>
+                選択<img src="@/assets/icon_select.svg" />
+              </Button>
             </template>
           </ListItem>
         </List>
@@ -114,204 +72,163 @@
     </template>
   </BasicLayout>
   <!-- modal -->
-  <div
-    class="modal fade bd-try-manuscript"
-    tabindex="-1"
-    role="dialog"
-    aria-labelledby="myLargeModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">原稿</h5>
-          <button
-            type="button"
-            class="close"
-            data-dismiss="modal"
-            aria-label="Close"
-          >
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          {{ selectedNarration?.manuscript }}
-        </div>
-        <div class="modal-footer text-center">
-          <button
-            type="button"
-            class="btn btn-light btn-close"
-            data-dismiss="modal"
-          >
-            閉じる
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div
-    class="modal fade bd-try-modal-lg"
-    tabindex="-1"
-    role="dialog"
-    aria-labelledby="myLargeModalLabel"
-    aria-hidden="true"
-  >
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">試聴</h5>
-          <button
-            type="button"
-            class="close"
-            data-dismiss="modal"
-            aria-label="Close"
-          >
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div class="row">
-            <div class="col-4">
-              <template v-if="isDownloading">
-                <button class="btn btn-play btn-light" type="button" disabled>
-                  <span
-                    class="spinner-border spinner-border-sm"
-                    role="status"
-                    aria-hidden="true"
-                  ></span>
-                  <span class="sr-only">Loading...</span>
+  <transition>
+    <ModalDialog v-if="isDocumentModalAppear" @close="closeDocumentModal">
+      <template #header>
+        <ModalHeader title="原稿" @close="closeDocumentModal" />
+      </template>
+      <template #contents>
+        {{ selectedNarration?.manuscript }}
+      </template>
+      <template #footer>
+        <ModalFooter :noBorder="true">
+          <Button type="rectangle" @click="closeDocumentModal">終了</Button>
+        </ModalFooter>
+      </template>
+    </ModalDialog>
+  </transition>
+  <transition>
+    <ModalDialog v-if="isPlayModalAppear" @close="closePlayModal">
+      <template #header>
+        <ModalHeader title="試聴" @close="closePlayModal" />
+      </template>
+      <template #contents>
+        <div class="row">
+          <div class="col-4">
+            <template v-if="isDownloading">
+              <button class="btn btn-play btn-light" type="button" disabled>
+                <span
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                <span class="sr-only">Loading...</span>
+              </button>
+            </template>
+            <template v-else>
+              <template v-if="!isPlaying">
+                <button
+                  type="button"
+                  class="btn btn-light shadow btn-play"
+                  @click="play(selectedNarration)"
+                >
+                  <svg
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 16 16"
+                    class="bi bi-play-fill"
+                    fill="currentColor"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M11.596 8.697l-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"
+                    />
+                  </svg>
+                  再生
                 </button>
               </template>
               <template v-else>
-                <template v-if="!isPlaying">
-                  <button
-                    type="button"
-                    class="btn btn-light shadow btn-play"
-                    @click="play(selectedNarration)"
+                <button
+                  type="button"
+                  class="btn btn-light shadow btn-play"
+                  @click="stop"
+                >
+                  <svg
+                    width="1em"
+                    height="1em"
+                    viewBox="0 0 16 16"
+                    class="bi bi-stop-fill"
+                    fill="currentColor"
+                    xmlns="http://www.w3.org/2000/svg"
                   >
-                    <svg
-                      width="1em"
-                      height="1em"
-                      viewBox="0 0 16 16"
-                      class="bi bi-play-fill"
-                      fill="currentColor"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M11.596 8.697l-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"
-                      />
-                    </svg>
-                    再生
-                  </button>
-                </template>
-                <template v-else>
-                  <button
-                    type="button"
-                    class="btn btn-light shadow btn-play"
-                    @click="stop"
-                  >
-                    <svg
-                      width="1em"
-                      height="1em"
-                      viewBox="0 0 16 16"
-                      class="bi bi-stop-fill"
-                      fill="currentColor"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M5 3.5h6A1.5 1.5 0 0 1 12.5 5v6a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 11V5A1.5 1.5 0 0 1 5 3.5z"
-                      />
-                    </svg>
-                    停止
-                  </button>
-                </template>
+                    <path
+                      d="M5 3.5h6A1.5 1.5 0 0 1 12.5 5v6a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 11V5A1.5 1.5 0 0 1 5 3.5z"
+                    />
+                  </svg>
+                  停止
+                </button>
               </template>
-            </div>
-            <div class="col-8">
-              <div class="row">
-                <div class="col text-left" style="font-size: 17px">
-                  {{ playbackTimeHms }}
-                </div>
-                <div class="col text-right" style="font-size: 17px">
-                  {{ durationHms }}
-                </div>
-              </div>
-              <meter
-                min="0"
-                :max="duration"
-                class="w-100"
-                :value="playbackTime"
-              ></meter>
-            </div>
+            </template>
           </div>
-          <div class="row pt-5">
-            <div class="col-4">
-              タブレット音量<br />
-              <small>タブレットのスピーカーから音が出ます。</small>
-            </div>
-            <div class="col-8">
-              <div class="row">
-                <div class="col text-left">
-                  <svg
-                    width="1em"
-                    height="1em"
-                    viewBox="0 0 16 16"
-                    class="bi bi-volume-down-fill"
-                    fill="currentColor"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M8.717 3.55A.5.5 0 0 1 9 4v8a.5.5 0 0 1-.812.39L5.825 10.5H3.5A.5.5 0 0 1 3 10V6a.5.5 0 0 1 .5-.5h2.325l2.363-1.89a.5.5 0 0 1 .529-.06z"
-                    />
-                    <path
-                      d="M10.707 11.182A4.486 4.486 0 0 0 12.025 8a4.486 4.486 0 0 0-1.318-3.182L10 5.525A3.489 3.489 0 0 1 11.025 8c0 .966-.392 1.841-1.025 2.475l.707.707z"
-                    />
-                  </svg>
-                </div>
-                <div class="col text-center">volume 32</div>
-                <div class="col text-right">
-                  <svg
-                    width="1em"
-                    height="1em"
-                    viewBox="0 0 16 16"
-                    class="bi bi-volume-up-fill"
-                    fill="currentColor"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      d="M11.536 14.01A8.473 8.473 0 0 0 14.026 8a8.473 8.473 0 0 0-2.49-6.01l-.708.707A7.476 7.476 0 0 1 13.025 8c0 2.071-.84 3.946-2.197 5.303l.708.707z"
-                    />
-                    <path
-                      d="M10.121 12.596A6.48 6.48 0 0 0 12.025 8a6.48 6.48 0 0 0-1.904-4.596l-.707.707A5.483 5.483 0 0 1 11.025 8a5.483 5.483 0 0 1-1.61 3.89l.706.706z"
-                    />
-                    <path
-                      d="M8.707 11.182A4.486 4.486 0 0 0 10.025 8a4.486 4.486 0 0 0-1.318-3.182L8 5.525A3.489 3.489 0 0 1 9.025 8 3.49 3.49 0 0 1 8 10.475l.707.707z"
-                    />
-                    <path
-                      fill-rule="evenodd"
-                      d="M6.717 3.55A.5.5 0 0 1 7 4v8a.5.5 0 0 1-.812.39L3.825 10.5H1.5A.5.5 0 0 1 1 10V6a.5.5 0 0 1 .5-.5h2.325l2.363-1.89a.5.5 0 0 1 .529-.06z"
-                    />
-                  </svg>
-                </div>
+          <div class="col-8">
+            <div class="row">
+              <div class="col text-left" style="font-size: 17px">
+                {{ playbackTimeHms }}
               </div>
-              <meter min="0" max="15" class="w-100" value="1"></meter>
+              <div class="col text-right" style="font-size: 17px">
+                {{ durationHms }}
+              </div>
             </div>
+            <meter
+              min="0"
+              :max="duration"
+              class="w-100"
+              :value="playbackTime"
+            ></meter>
           </div>
         </div>
-        <div class="modal-footer text-center">
-          <button
-            type="button"
-            class="btn btn-light btn-close"
-            data-dismiss="modal"
-          >
-            終了
-          </button>
+        <div class="row pt-5">
+          <div class="col-4">
+            タブレット音量<br />
+            <small>タブレットのスピーカーから音が出ます。</small>
+          </div>
+          <div class="col-8">
+            <div class="row">
+              <div class="col text-left">
+                <svg
+                  width="1em"
+                  height="1em"
+                  viewBox="0 0 16 16"
+                  class="bi bi-volume-down-fill"
+                  fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M8.717 3.55A.5.5 0 0 1 9 4v8a.5.5 0 0 1-.812.39L5.825 10.5H3.5A.5.5 0 0 1 3 10V6a.5.5 0 0 1 .5-.5h2.325l2.363-1.89a.5.5 0 0 1 .529-.06z"
+                  />
+                  <path
+                    d="M10.707 11.182A4.486 4.486 0 0 0 12.025 8a4.486 4.486 0 0 0-1.318-3.182L10 5.525A3.489 3.489 0 0 1 11.025 8c0 .966-.392 1.841-1.025 2.475l.707.707z"
+                  />
+                </svg>
+              </div>
+              <div class="col text-center">volume 32</div>
+              <div class="col text-right">
+                <svg
+                  width="1em"
+                  height="1em"
+                  viewBox="0 0 16 16"
+                  class="bi bi-volume-up-fill"
+                  fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M11.536 14.01A8.473 8.473 0 0 0 14.026 8a8.473 8.473 0 0 0-2.49-6.01l-.708.707A7.476 7.476 0 0 1 13.025 8c0 2.071-.84 3.946-2.197 5.303l.708.707z"
+                  />
+                  <path
+                    d="M10.121 12.596A6.48 6.48 0 0 0 12.025 8a6.48 6.48 0 0 0-1.904-4.596l-.707.707A5.483 5.483 0 0 1 11.025 8a5.483 5.483 0 0 1-1.61 3.89l.706.706z"
+                  />
+                  <path
+                    d="M8.707 11.182A4.486 4.486 0 0 0 10.025 8a4.486 4.486 0 0 0-1.318-3.182L8 5.525A3.489 3.489 0 0 1 9.025 8 3.49 3.49 0 0 1 8 10.475l.707.707z"
+                  />
+                  <path
+                    fill-rule="evenodd"
+                    d="M6.717 3.55A.5.5 0 0 1 7 4v8a.5.5 0 0 1-.812.39L3.825 10.5H1.5A.5.5 0 0 1 1 10V6a.5.5 0 0 1 .5-.5h2.325l2.363-1.89a.5.5 0 0 1 .529-.06z"
+                  />
+                </svg>
+              </div>
+            </div>
+            <meter min="0" max="15" class="w-100" value="1"></meter>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
+      </template>
+      <template #footer>
+        <ModalFooter :noBorder="true">
+          <Button type="rectangle" @click="stopAndClosePlayModal">終了</Button>
+        </ModalFooter>
+      </template>
+    </ModalDialog>
+  </transition>
 </template>
 
 <script lang="ts">
@@ -330,11 +247,15 @@ import * as Common from "@/utils/Common";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
 import Header from "@/components/organisms/Header.vue";
+import Button from "@/components/atoms/Button.vue";
 import SubMenu from "@/components/organisms/SubMenu.vue";
 import SubMenuItem from "@/components/molecules/SubMenuItem.vue";
 import List from "@/components/organisms/List.vue";
 import ListHeader from "@/components/molecules/ListHeader.vue";
 import ListItem from "@/components/molecules/ListItem.vue";
+import ModalDialog from "@/components/organisms/ModalDialog.vue";
+import ModalHeader from "@/components/molecules/ModalHeader.vue";
+import ModalFooter from "@/components/molecules/ModalFooter.vue";
 import { config } from "@/utils/UMesseApiConfiguration";
 import { NarrationItem } from "umesseapi/models";
 import { useGlobalStore } from "@/store";
@@ -350,11 +271,15 @@ export default defineComponent({
     BasicLayout,
     ContentsBase,
     Header,
+    Button,
     SubMenu,
     SubMenuItem,
     List,
     ListHeader,
     ListItem,
+    ModalDialog,
+    ModalHeader,
+    ModalFooter,
   },
   setup() {
     const route = useRoute();
@@ -378,6 +303,8 @@ export default defineComponent({
       durationHms: computed(() =>
         convertNumberToTime(audioPlayer.getDuration())
       ),
+      isDocumentModalAppear: false,
+      isPlayModalAppear: false,
     });
 
     const setNarration = (narration: NarrationItem) => {
@@ -422,6 +349,33 @@ export default defineComponent({
       if (state.isPlaying) audioPlayer.stop();
     };
 
+    const openDocumentModal = () => {
+      state.isDocumentModalAppear = true;
+    };
+    const closeDocumentModal = () => {
+      state.isDocumentModalAppear = false;
+    };
+
+    const openPlayModal = () => {
+      state.isPlayModalAppear = true;
+    };
+    const closePlayModal = () => {
+      state.isPlayModalAppear = false;
+    };
+
+    const selectNarrationAndOpenDocumentModal = (narration: NarrationItem) => {
+      selectNarration(narration);
+      openDocumentModal();
+    }
+    const selectNarrationAndOpenPlayModal = (narration: NarrationItem) => {
+      selectNarration(narration);
+      openPlayModal();
+    }
+    const stopAndClosePlayModal = () => {
+      stop();
+      closePlayModal();
+    };
+
     onMounted(async () => {
       fetchNarration();
     });
@@ -435,7 +389,19 @@ export default defineComponent({
       clickNarrationIndustry,
       convertDatestringToDateJp,
       convertNumberToTime,
+      openDocumentModal,
+      closeDocumentModal,
+      openPlayModal,
+      closePlayModal,
+      selectNarrationAndOpenDocumentModal,
+      selectNarrationAndOpenPlayModal,
+      stopAndClosePlayModal,
     };
   },
 });
 </script>
+
+<style lang="scss" scoped>
+@import "@/scss/_variables.scss";
+@include fade_animation;
+</style>

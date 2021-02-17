@@ -452,6 +452,9 @@ export default defineComponent({
     }
   }
 }
+.button-wrapper {
+  @include flex_center;
+}
 .failed {
   color: #ed6267;
   font-weight: 400;

@@ -79,14 +79,35 @@ export default {
   .operations {
     @include flex_start;
     align-items: center;
-    width: 428px;
+    width: 402px;
     padding-left: 20px;
     padding-right: 6px;
     flex-grow: 0;
     flex-shrink: 0;
     ::v-deep button {
       width: 120px;
+      font-size: 16px;
       margin-right: 14px;
+      padding-left: 0;
+      padding-right: 0;
+      &.btn-document {
+        img {
+          height: 28px;
+          margin-right: 12px;
+        }
+      }
+      &.btn-play {
+        img {
+          height: 23px;
+          margin-right: 12px;
+        }
+      }
+      &.btn-select {
+        img {
+          height: 18px;
+          margin-left: 20px;
+        }
+      }
     }
   }
 }
