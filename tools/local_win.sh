@@ -16,6 +16,7 @@ docker-compose up -d --build
 
 # start terraform
 cd $LAMBDA_API_DIR
+rm -rf tmp
 npm pack ../layer/nodejs/node_modules/umesse-lib/ && npm install --no-save umesse-lib-0.0.1.tgz
 
 cd $LAMBDA_CONVERTER_DIR
