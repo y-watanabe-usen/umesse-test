@@ -1,6 +1,9 @@
 "use strict";
 
 const { getUser } = require("../../umesse/user");
+const assert = require('assert');
+const { respondWithCode } = require("../utils/writer");
+const { UMesseError } = require("../../umesse/error");
 
 /**
  * ユーザー情報取得
@@ -11,13 +14,12 @@ const { getUser } = require("../../umesse/user");
  **/
 exports.getUser = function (xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
-    var response = {};
-    const json = await getUser(xUnisCustomerCd);
-    response["application/json"] = json;
-    if (Object.keys(response).length > 0 && !json.message) {
-      resolve(response[Object.keys(response)[0]]);
-    } else {
-      reject(response[Object.keys(response)[0]]);
+    try {
+      const json = await getUser(xUnisCustomerCd);
+      resolve(json);
+    } catch (e) {
+      assert(e instanceof UMesseError);
+      reject(respondWithCode(e.statusCode, { message: e.message }))
     }
   });
 };
