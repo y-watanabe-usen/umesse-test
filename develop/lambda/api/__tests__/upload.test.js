@@ -5,6 +5,7 @@ process.env.environment = "local";
 
 const aws = require("aws-sdk");
 const { getUploadCm } = require("../umesse/upload");
+const { BadRequestError, InternalServerError } = require("../umesse/error");
 
 // test data
 const json = require("./data/upload.test.json");
@@ -29,13 +30,11 @@ describe("外部連携CMデータ", () => {
   });
 
   test("[error] 外部連携CMデータ取得　データ存在しない", async () => {
-    const response = await getUploadCm("999999999");
-    expect(response).toEqual({ message: "not found" });
+    await expect(getUploadCm("999999999")).rejects.toThrow(new InternalServerError("not found"));
   });
 
   test("[error] 外部連携CMデータ取得　パラメータなし", async () => {
-    const response = await getUploadCm("");
-    expect(response).toEqual({ message: "params failed" });
+    await expect(getUploadCm("")).rejects.toThrow(new BadRequestError("params failed"));
   });
 });
 
