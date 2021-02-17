@@ -43,18 +43,18 @@ button {
   box-shadow: $box_shadow_weak;
   cursor: pointer;
   &.primary {
-    font-size: 20px;
+    font-size: 19px;
     color: white;
     background-color: $color_blue;
   }
   &.secondary {
-    font-size: 20px;
+    font-size: 19px;
     color: black;
     background-color: white;
   }
   &.rectangle {
     border-radius: 4px;
-    font-size: 20px;
+    font-size: 19px;
     color: black;
     background-color: white;
   }

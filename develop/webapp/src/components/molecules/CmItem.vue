@@ -164,7 +164,7 @@ export default {
       @include flex_start;
       align-items: center;
       color: $color_blue;
-      font-size: 20px;
+      font-size: 19px;
       height: 30px;
       line-height: 30px;
       img {

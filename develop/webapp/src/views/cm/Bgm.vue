@@ -427,7 +427,7 @@ export default defineComponent({
 @include fade_animation;
 
 .saved {
-  font-size: 20px;
+  font-size: 19px;
   font-weight: $font_weight_bold;
   text-align: center;
 }

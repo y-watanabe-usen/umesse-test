@@ -19,113 +19,97 @@
             </SubMenuItem>
           </SubMenu>
         </template>
-        <div class="row">
-          <div class="col-9 bg-white rounded-right">
-            <div class="my-3">
-              <h6 class="border-bottom border-gray pb-2 mb-0">
-                <select class="form-control w-25">
-                  <option v-for="sort in sorts" :key="sort">
-                    {{ sort }}
-                  </option>
-                </select>
-              </h6>
-              <div
-                class="media text-muted pt-3"
-                v-for="narration in narrations"
-                :key="narration.contentsId"
+        <List>
+          <template #header>
+            <ListHeader>
+              <select class="form-control w-25">
+                <option v-for="sort in sorts" :key="sort">
+                  {{ sort }}
+                </option>
+              </select>
+            </ListHeader>
+          </template>
+          <ListItem v-for="narration in narrations" :key="narration.contentsId">
+            <template #title>
+              <h2>{{ narration.title }}</h2>
+            </template>
+            <template #line1>
+              <p>{{ narration.description }}</p>
+            </template>
+            <template #line2>
+              <p>
+                <span class="duration">{{ convertNumberToTime(narration.seconds) }}</span>
+                <span class="start">放送開始日{{ convertDatestringToDateJp(narration.timestamp) }}</span>
+                <span class="end">有効期限{{ convertDatestringToDateJp(narration.timestamp) }}</span>
+              </p>
+            </template>
+            <template #operations>
+              <button
+                type="button"
+                class="btn btn-light shadow btn-manuscript"
+                data-toggle="modal"
+                data-target=".bd-try-manuscript"
+                @click="selectNarration(narration)"
               >
-                <div
-                  class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray pl-3"
+                <svg
+                  width="1em"
+                  height="1em"
+                  viewBox="0 0 16 16"
+                  class="bi bi-file-earmark-text-fill"
+                  fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg"
                 >
-                  <div
-                    class="d-flex justify-content-between align-items-center w-100"
-                  >
-                    <strong class="text-dark h5 pt-2 pb-2">{{
-                      narration.title
-                    }}</strong>
-                    <div>
-                      <button
-                        type="button"
-                        class="btn btn-light shadow btn-manuscript"
-                        data-toggle="modal"
-                        data-target=".bd-try-manuscript"
-                        @click="selectNarration(narration)"
-                      >
-                        <svg
-                          width="1em"
-                          height="1em"
-                          viewBox="0 0 16 16"
-                          class="bi bi-file-earmark-text-fill"
-                          fill="currentColor"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            fill-rule="evenodd"
-                            d="M2 2a2 2 0 0 1 2-2h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm7.5 1.5v-2l3 3h-2a1 1 0 0 1-1-1zM4.5 8a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7zM4 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5z"
-                          />
-                        </svg>
-                        原稿
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-light shadow btn-try"
-                        data-toggle="modal"
-                        data-target=".bd-try-modal-lg"
-                        @click="selectNarration(narration)"
-                      >
-                        <svg
-                          width="1em"
-                          height="1em"
-                          viewBox="0 0 16 16"
-                          class="bi bi-play-fill"
-                          fill="currentColor"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M11.596 8.697l-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"
-                          />
-                        </svg>
-                        試聴
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-light shadow btn-edit"
-                        @click="setNarration(narration)"
-                      >
-                        選択
-                        <svg
-                          width="1em"
-                          height="1em"
-                          viewBox="0 0 16 16"
-                          class="bi bi-chevron-right"
-                          fill="currentColor"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            fill-rule="evenodd"
-                            d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"
-                          />
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-                  <span class="d-block pb-2"
-                    >{{ narration.description }}<br />{{
-                      convertNumberToTime(narration.seconds)
-                    }}
-                    <!-- TODO: 仮の数値(放送開始日、有効期限) -->
-                    放送開始日{{
-                      convertDatestringToDateJp(narration.timestamp)
-                    }}
-                    有効期限{{
-                      convertDatestringToDateJp(narration.timestamp)
-                    }}</span
-                  >
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+                  <path
+                    fill-rule="evenodd"
+                    d="M2 2a2 2 0 0 1 2-2h5.293A1 1 0 0 1 10 .293L13.707 4a1 1 0 0 1 .293.707V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2zm7.5 1.5v-2l3 3h-2a1 1 0 0 1-1-1zM4.5 8a.5.5 0 0 0 0 1h7a.5.5 0 0 0 0-1h-7zM4 10.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 2a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 0 1h-4a.5.5 0 0 1-.5-.5z"
+                  />
+                </svg>
+                原稿
+              </button>
+              <button
+                type="button"
+                class="btn btn-light shadow btn-try"
+                data-toggle="modal"
+                data-target=".bd-try-modal-lg"
+                @click="selectNarration(narration)"
+              >
+                <svg
+                  width="1em"
+                  height="1em"
+                  viewBox="0 0 16 16"
+                  class="bi bi-play-fill"
+                  fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M11.596 8.697l-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"
+                  />
+                </svg>
+                試聴
+              </button>
+              <button
+                type="button"
+                class="btn btn-light shadow btn-edit"
+                @click="setNarration(narration)"
+              >
+                選択
+                <svg
+                  width="1em"
+                  height="1em"
+                  viewBox="0 0 16 16"
+                  class="bi bi-chevron-right"
+                  fill="currentColor"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"
+                  />
+                </svg>
+              </button>
+            </template>
+          </ListItem>
+        </List>
       </ContentsBase>
     </template>
   </BasicLayout>
@@ -345,9 +329,12 @@ import * as UMesseApi from "umesseapi";
 import * as Common from "@/utils/Common";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
+import Header from "@/components/organisms/Header.vue";
 import SubMenu from "@/components/organisms/SubMenu.vue";
 import SubMenuItem from "@/components/molecules/SubMenuItem.vue";
-import Header from "@/components/organisms/Header.vue";
+import List from "@/components/organisms/List.vue";
+import ListHeader from "@/components/molecules/ListHeader.vue";
+import ListItem from "@/components/molecules/ListItem.vue";
 import { config } from "@/utils/UMesseApiConfiguration";
 import { NarrationItem } from "umesseapi/models";
 import { useGlobalStore } from "@/store";
@@ -362,9 +349,12 @@ export default defineComponent({
   components: {
     BasicLayout,
     ContentsBase,
+    Header,
     SubMenu,
     SubMenuItem,
-    Header,
+    List,
+    ListHeader,
+    ListItem,
   },
   setup() {
     const route = useRoute();
@@ -449,31 +439,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style scoped>
-.bg-menu {
-  background: -moz-linear-gradient(top, #89929e, #a4a8ad);
-  background: -webkit-linear-gradient(top, #89929e, #a4a8ad);
-  background: linear-gradient(to bottom, #89929e, #a4a8ad);
-}
-.btn-menu {
-  width: 100%;
-  height: 80px;
-  margin-bottom: 10px;
-  text-decoration: none;
-}
-.btn-manuscript,
-.btn-try,
-.btn-edit {
-  width: 100px;
-  height: 40px;
-}
-.btn-try,
-.btn-edit {
-  margin-left: 20px;
-}
-.btn-play,
-.btn-close {
-  width: 200px;
-}
-</style>

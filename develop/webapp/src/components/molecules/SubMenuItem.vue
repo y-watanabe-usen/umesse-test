@@ -38,7 +38,7 @@ export default {
     height: 82px;
     border-radius: 12px;
     color: rgb(112, 112, 112);
-    font-size: 20px;
+    font-size: 19px;
     font-weight: $font_weight_bold;
     padding-left: 20px;
     padding-right: 20px;
