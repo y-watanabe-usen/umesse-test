@@ -1,6 +1,9 @@
 "use strict";
 
 const { getExternalCm, completeExternalCm } = require("../../umesse/external");
+const assert = require('assert');
+const { respondWithCode } = require("../utils/writer");
+const { UMesseError } = require("../../umesse/error");
 
 /**
  * CM外部連携完了（外部システム専用）
@@ -13,13 +16,12 @@ const { getExternalCm, completeExternalCm } = require("../../umesse/external");
  **/
 exports.completeExternalCm = function (body, external, unisCustomerCd) {
   return new Promise(async function (resolve, reject) {
-    var response = {};
-    const json = await completeExternalCm(unisCustomerCd, external, body);
-    response["application/json"] = json;
-    if (Object.keys(response).length > 0 && !json.message) {
-      resolve(response[Object.keys(response)[0]]);
-    } else {
-      reject(response[Object.keys(response)[0]]);
+    try {
+      const json = await completeExternalCm(unisCustomerCd, external, body);
+      resolve(json);
+    } catch (e) {
+      assert(e instanceof UMesseError);
+      reject(respondWithCode(e.statusCode, { message: e.message }))
     }
   });
 };
@@ -34,13 +36,12 @@ exports.completeExternalCm = function (body, external, unisCustomerCd) {
  **/
 exports.getExternalCm = function (external, unisCustomerCd) {
   return new Promise(async function (resolve, reject) {
-    var response = {};
-    const json = await getExternalCm(unisCustomerCd, external);
-    response["application/json"] = json;
-    if (Object.keys(response).length > 0 && !json.message) {
-      resolve(response[Object.keys(response)[0]]);
-    } else {
-      reject(response[Object.keys(response)[0]]);
+    try {
+      const json = await getExternalCm(unisCustomerCd, external);
+      resolve(json);
+    } catch (e) {
+      assert(e instanceof UMesseError);
+      reject(respondWithCode(e.statusCode, { message: e.message }))
     }
   });
 };
@@ -54,13 +55,12 @@ exports.getExternalCm = function (external, unisCustomerCd) {
  **/
 exports.listExternalCm = function (external) {
   return new Promise(async function (resolve, reject) {
-    var response = {};
-    const json = await getExternalCm("", external);
-    response["application/json"] = json;
-    if (Object.keys(response).length > 0 && !json.message) {
-      resolve(response[Object.keys(response)[0]]);
-    } else {
-      reject(response[Object.keys(response)[0]]);
+    try {
+      const json = await getExternalCm("", external);
+      resolve(json);
+    } catch (e) {
+      assert(e instanceof UMesseError);
+      reject(respondWithCode(e.statusCode, { message: e.message }))
     }
   });
 };

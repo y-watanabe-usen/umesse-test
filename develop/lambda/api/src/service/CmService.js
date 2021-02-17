@@ -1,4 +1,7 @@
 "use strict";
+const assert = require('assert');
+const { respondWithCode } = require("../utils/writer");
+const { UMesseError } = require("../../umesse/error");
 
 const { getCm, createCm, updateCm, deleteCm } = require("../../umesse/cm");
 
@@ -12,13 +15,12 @@ const { getCm, createCm, updateCm, deleteCm } = require("../../umesse/cm");
  **/
 exports.createUserCm = function (body, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
-    var response = {};
-    const json = await createCm(xUnisCustomerCd, body);
-    response["application/json"] = json;
-    if (Object.keys(response).length > 0 && !json.message) {
-      resolve(response[Object.keys(response)[0]]);
-    } else {
-      reject(response[Object.keys(response)[0]]);
+    try {
+      const json = await createCm(xUnisCustomerCd, body);
+      resolve(json);
+    } catch (e) {
+      assert(e instanceof UMesseError);
+      reject(respondWithCode(e.statusCode, { message: e.message }))
     }
   });
 };
@@ -33,13 +35,12 @@ exports.createUserCm = function (body, xUnisCustomerCd) {
  **/
 exports.deleteUserCm = function (cmId, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
-    var response = {};
-    const json = await deleteCm(xUnisCustomerCd, cmId);
-    response["application/json"] = json;
-    if (Object.keys(response).length > 0 && !json.message) {
-      resolve(response[Object.keys(response)[0]]);
-    } else {
-      reject(response[Object.keys(response)[0]]);
+    try {
+      const json = await deleteCm(xUnisCustomerCd, cmId);
+      resolve(json);
+    } catch (e) {
+      assert(e instanceof UMesseError);
+      reject(respondWithCode(e.statusCode, { message: e.message }))
     }
   });
 };
@@ -54,13 +55,12 @@ exports.deleteUserCm = function (cmId, xUnisCustomerCd) {
  **/
 exports.getUserCm = function (cmId, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
-    var response = {};
-    const json = await getCm(xUnisCustomerCd, cmId);
-    response["application/json"] = json;
-    if (Object.keys(response).length > 0 && !json.message) {
-      resolve(response[Object.keys(response)[0]]);
-    } else {
-      reject(response[Object.keys(response)[0]]);
+    try {
+      const json = await getCm(xUnisCustomerCd, cmId);
+      resolve(json);
+    } catch (e) {
+      assert(e instanceof UMesseError);
+      reject(respondWithCode(e.statusCode, { message: e.message }))
     }
   });
 };
@@ -74,13 +74,12 @@ exports.getUserCm = function (cmId, xUnisCustomerCd) {
  **/
 exports.listUserCm = function (xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
-    var response = {};
-    const json = await getCm(xUnisCustomerCd);
-    response["application/json"] = json;
-    if (Object.keys(response).length > 0 && !json.message) {
-      resolve(response[Object.keys(response)[0]]);
-    } else {
-      reject(response[Object.keys(response)[0]]);
+    try {
+      const json = await getCm(xUnisCustomerCd);
+      resolve(json);
+    } catch (e) {
+      assert(e instanceof UMesseError);
+      reject(respondWithCode(e.statusCode, { message: e.message }))
     }
   });
 };
@@ -96,13 +95,12 @@ exports.listUserCm = function (xUnisCustomerCd) {
  **/
 exports.updateUserCm = function (body, cmId, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
-    var response = {};
-    const json = await updateCm(xUnisCustomerCd, cmId, body);
-    response["application/json"] = json;
-    if (Object.keys(response).length > 0 && !json.message) {
-      resolve(response[Object.keys(response)[0]]);
-    } else {
-      reject(response[Object.keys(response)[0]]);
+    try {
+      const json = await updateCm(xUnisCustomerCd, cmId, body);
+      resolve(json);
+    } catch (e) {
+      assert(e instanceof UMesseError);
+      reject(respondWithCode(e.statusCode, { message: e.message }))
     }
   });
 };

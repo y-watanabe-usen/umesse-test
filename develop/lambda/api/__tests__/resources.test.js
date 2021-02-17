@@ -13,6 +13,7 @@ const {
   createUserResource,
   deleteUserResource,
 } = require("../umesse/resources");
+const {BadRequestError, InternalServerError} = require("../umesse/error");
 
 // test data
 const json = require("./data/resources.test.json");
@@ -73,13 +74,11 @@ describe("署名付きデータ取得", () => {
   });
 
   test("[error] 署名付きURLデータ取得　データ存在しない", async () => {
-    const response = await getSignedUrl(data.cm[0].cmId, "none");
-    expect(response).toEqual({ message: "unknown category" });
+    await expect(getSignedUrl(data.cm[0].cmId, "none")).rejects.toThrow(new InternalServerError("unknown category"));
   });
 
   test("[error] 署名付きURLデータ取得　データ存在しない", async () => {
-    const response = await getSignedUrl("", "cm");
-    expect(response).toEqual({ message: "params failed" });
+    await expect(getSignedUrl("", "cm")).rejects.toThrow(new BadRequestError("params failed"));
   });
 });
 
@@ -125,17 +124,15 @@ describe("ユーザー音声データ取得", () => {
   });
 
   test("[error] ユーザー音声データ取得　データ存在しない", async () => {
-    const response = await getUserResource(
+    await expect(getUserResource(
       data.unisCustomerCd,
       "recording",
       "999999999"
-    );
-    expect(response).toEqual({ message: "not found" });
+    )).rejects.toThrow(new InternalServerError("not found"));
   });
 
   test("[error] ユーザー音声データ取得　パラメータなし", async () => {
-    const response = await getUserResource("");
-    expect(response).toEqual({ message: "params failed" });
+    await expect(getUserResource("")).rejects.toThrow(new BadRequestError("params failed"));
   });
 });
 

@@ -6,6 +6,9 @@ const {
   updateUserResource,
   deleteUserResource,
 } = require("../../umesse/resources");
+const assert = require('assert');
+const { respondWithCode } = require("../utils/writer");
+const { UMesseError } = require("../../umesse/error");
 const category = "tts";
 
 /**
@@ -17,13 +20,12 @@ const category = "tts";
  **/
 exports.createUserTts = function (body, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
-    var response = {};
-    const json = await createUserResource(xUnisCustomerCd, category, body);
-    response["application/json"] = json;
-    if (Object.keys(response).length > 0 && !json.message) {
-      resolve(response[Object.keys(response)[0]]);
-    } else {
-      reject(response[Object.keys(response)[0]]);
+    try {
+      const json = await createUserResource(xUnisCustomerCd, category, body);
+      resolve(json);
+    } catch (e) {
+      assert(e instanceof UMesseError);
+      reject(respondWithCode(e.statusCode, { message: e.message }))
     }
   });
 };
@@ -38,13 +40,12 @@ exports.createUserTts = function (body, xUnisCustomerCd) {
  **/
 exports.deleteUserTts = function (ttsId, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
-    var response = {};
-    const json = await deleteUserResource(xUnisCustomerCd, category, ttsId);
-    response["application/json"] = json;
-    if (Object.keys(response).length > 0 && !json.message) {
-      resolve(response[Object.keys(response)[0]]);
-    } else {
-      reject(response[Object.keys(response)[0]]);
+    try {
+      const json = await deleteUserResource(xUnisCustomerCd, category, ttsId);
+      resolve(json);
+    } catch (e) {
+      assert(e instanceof UMesseError);
+      reject(respondWithCode(e.statusCode, { message: e.message }))
     }
   });
 };
@@ -59,13 +60,12 @@ exports.deleteUserTts = function (ttsId, xUnisCustomerCd) {
  **/
 exports.getUserTts = function (ttsId, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
-    var response = {};
-    const json = await getUserResource(xUnisCustomerCd, category, ttsId);
-    response["application/json"] = json;
-    if (Object.keys(response).length > 0 && !json.message) {
-      resolve(response[Object.keys(response)[0]]);
-    } else {
-      reject(response[Object.keys(response)[0]]);
+    try {
+      const json = await getUserResource(xUnisCustomerCd, category, ttsId);
+      resolve(json);
+    } catch (e) {
+      assert(e instanceof UMesseError);
+      reject(respondWithCode(e.statusCode, { message: e.message }))
     }
   });
 };
@@ -79,13 +79,12 @@ exports.getUserTts = function (ttsId, xUnisCustomerCd) {
  **/
 exports.listUserTts = function (xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
-    var response = {};
-    const json = await getUserResource(xUnisCustomerCd, category);
-    response["application/json"] = json;
-    if (Object.keys(response).length > 0 && !json.message) {
-      resolve(response[Object.keys(response)[0]]);
-    } else {
-      reject(response[Object.keys(response)[0]]);
+    try {
+      const json = await getUserResource(xUnisCustomerCd, category);
+      resolve(json);
+    } catch (e) {
+      assert(e instanceof UMesseError);
+      reject(respondWithCode(e.statusCode, { message: e.message }))
     }
   });
 };
@@ -101,18 +100,16 @@ exports.listUserTts = function (xUnisCustomerCd) {
  **/
 exports.updateUserTts = function (body, ttsId, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
-    var response = {};
-    const json = await updateUserResource(
-      xUnisCustomerCd,
-      category,
-      ttsId,
-      body
-    );
-    response["application/json"] = json;
-    if (Object.keys(response).length > 0 && !json.message) {
-      resolve(response[Object.keys(response)[0]]);
-    } else {
-      reject(response[Object.keys(response)[0]]);
+    try {
+      const json = await updateUserResource(
+        xUnisCustomerCd,
+        category,
+        ttsId,
+        body);
+      resolve(json);
+    } catch (e) {
+      assert(e instanceof UMesseError);
+      reject(respondWithCode(e.statusCode, { message: e.message }))
     }
   });
 };

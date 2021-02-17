@@ -5,6 +5,9 @@ const {
   createUploadCm,
   deleteUploadCm,
 } = require("../../umesse/upload");
+const assert = require('assert');
+const { respondWithCode } = require("../utils/writer");
+const { UMesseError } = require("../../umesse/error");
 
 /**
  * CM外部連携追加
@@ -17,13 +20,12 @@ const {
  **/
 exports.createUploadCm = function (body, cmId, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
-    var response = {};
-    const json = await createUploadCm(xUnisCustomerCd, cmId, body);
-    response["application/json"] = json;
-    if (Object.keys(response).length > 0 && !json.message) {
-      resolve(response[Object.keys(response)[0]]);
-    } else {
-      reject(response[Object.keys(response)[0]]);
+    try {
+      const json = await createUploadCm(xUnisCustomerCd, cmId, body);
+      resolve(json);
+    } catch (e) {
+      assert(e instanceof UMesseError);
+      reject(respondWithCode(e.statusCode, { message: e.message }))
     }
   });
 };
@@ -38,13 +40,12 @@ exports.createUploadCm = function (body, cmId, xUnisCustomerCd) {
  **/
 exports.deleteUploadCm = function (cmId, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
-    var response = {};
-    const json = await deleteUploadCm(xUnisCustomerCd, cmId);
-    response["application/json"] = json;
-    if (Object.keys(response).length > 0 && !json.message) {
-      resolve(response[Object.keys(response)[0]]);
-    } else {
-      reject(response[Object.keys(response)[0]]);
+    try {
+      const json = await deleteUploadCm(xUnisCustomerCd, cmId);
+      resolve(json);
+    } catch (e) {
+      assert(e instanceof UMesseError);
+      reject(respondWithCode(e.statusCode, { message: e.message }))
     }
   });
 };
@@ -59,13 +60,12 @@ exports.deleteUploadCm = function (cmId, xUnisCustomerCd) {
  **/
 exports.getUploadCm = function (cmId, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
-    var response = {};
-    const json = await getUploadCm(xUnisCustomerCd, cmId);
-    response["application/json"] = json;
-    if (Object.keys(response).length > 0 && !json.message) {
-      resolve(response[Object.keys(response)[0]]);
-    } else {
-      reject(response[Object.keys(response)[0]]);
+    try {
+      const json = await getUploadCm(xUnisCustomerCd, cmId);
+      resolve(json);
+    } catch (e) {
+      assert(e instanceof UMesseError);
+      reject(respondWithCode(e.statusCode, { message: e.message }))
     }
   });
 };
@@ -79,13 +79,12 @@ exports.getUploadCm = function (cmId, xUnisCustomerCd) {
  **/
 exports.listUploadCm = function (xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
-    var response = {};
-    const json = await getUploadCm(xUnisCustomerCd);
-    response["application/json"] = json;
-    if (Object.keys(response).length > 0 && !json.message) {
-      resolve(response[Object.keys(response)[0]]);
-    } else {
-      reject(response[Object.keys(response)[0]]);
+    try {
+      const json = await getUploadCm(xUnisCustomerCd);
+      resolve(json);
+    } catch (e) {
+      assert(e instanceof UMesseError);
+      reject(respondWithCode(e.statusCode, { message: e.message }))
     }
   });
 };
