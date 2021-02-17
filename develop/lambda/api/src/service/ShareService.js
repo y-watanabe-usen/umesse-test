@@ -16,13 +16,12 @@ const {
  **/
 exports.createShareCm = function (cmId, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
-    var response = {};
-    const json = await createShareCm(xUnisCustomerCd, cmId);
-    response["application/json"] = json;
-    if (Object.keys(response).length > 0 && !json.message) {
-      resolve(response[Object.keys(response)[0]]);
-    } else {
-      reject(response[Object.keys(response)[0]]);
+    try {
+      const json = await createShareCm(xUnisCustomerCd, cmId);
+      resolve(json);
+    } catch (e) {
+      assert(e instanceof UMesseError);
+      reject(respondWithCode(e.statusCode, { message: e.message }))
     }
   });
 };
@@ -37,13 +36,12 @@ exports.createShareCm = function (cmId, xUnisCustomerCd) {
  **/
 exports.deleteShareCm = function (cmId, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
-    var response = {};
-    const json = await deleteShareCm(xUnisCustomerCd, cmId);
-    response["application/json"] = json;
-    if (Object.keys(response).length > 0 && !json.message) {
-      resolve(response[Object.keys(response)[0]]);
-    } else {
-      reject(response[Object.keys(response)[0]]);
+    try {
+      const json = await deleteShareCm(xUnisCustomerCd, cmId);
+      resolve(json);
+    } catch (e) {
+      assert(e instanceof UMesseError);
+      reject(respondWithCode(e.statusCode, { message: e.message }))
     }
   });
 };
@@ -58,13 +56,12 @@ exports.deleteShareCm = function (cmId, xUnisCustomerCd) {
  **/
 exports.getShareCm = function (cmId, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
-    var response = {};
-    const json = await getShareCm(xUnisCustomerCd, cmId);
-    response["application/json"] = json;
-    if (Object.keys(response).length > 0 && !json.message) {
-      resolve(response[Object.keys(response)[0]]);
-    } else {
-      reject(response[Object.keys(response)[0]]);
+    try {
+      const json = await getShareCm(xUnisCustomerCd, cmId);
+      resolve(json);
+    } catch (e) {
+      assert(e instanceof UMesseError);
+      reject(respondWithCode(e.statusCode, { message: e.message }))
     }
   });
 };
@@ -78,13 +75,12 @@ exports.getShareCm = function (cmId, xUnisCustomerCd) {
  **/
 exports.listShareCm = function (xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
-    var response = {};
-    const json = await getShareCm(xUnisCustomerCd);
-    response["application/json"] = json;
-    if (Object.keys(response).length > 0 && !json.message) {
-      resolve(response[Object.keys(response)[0]]);
-    } else {
-      reject(response[Object.keys(response)[0]]);
+    try {
+      const json = await getShareCm(xUnisCustomerCd);
+      resolve(json);
+    } catch (e) {
+      assert(e instanceof UMesseError);
+      reject(respondWithCode(e.statusCode, { message: e.message }))
     }
   });
 };
