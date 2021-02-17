@@ -7,23 +7,19 @@
     </template>
     <template #contents>
       <ContentsBase>
-        <div class="row">
-          <div class="col-2 bg-menu pl-1 pr-1 rounded-left">
-            <button
-              type="button"
-              class="btn btn-menu text-left text-white"
-              :class="[
-                scene.cd == activeSceneCd ? 'btn-primary' : 'btn-link',
-                scene.cd == activeSceneCd ? 'text-white' : 'text-dark',
-                scene.cd == 1 ? 'mt-2' : '',
-              ]"
+        <template #sub-menu>
+          <SubMenu>
+            <SubMenuItem
               v-for="scene in scenes"
               :key="scene.cd"
+              :isSelected="scene.cd == activeSceneCd"
               @click="clickScene(scene.cd)"
             >
               {{ scene.name }}
-            </button>
-          </div>
+            </SubMenuItem>
+          </SubMenu>
+        </template>
+        <div class="row">
           <div class="col-9 bg-white rounded-right">
             <div class="my-3">
               <h6 class="border-bottom border-gray pb-2 mb-0">
@@ -455,6 +451,8 @@ import AudioStore from "@/store/audio";
 import * as Common from "@/utils/Common";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
+import SubMenu from "@/components/organisms/SubMenu.vue";
+import SubMenuItem from "@/components/molecules/SubMenuItem.vue";
 import Header from "@/components/organisms/Header.vue";
 import * as UMesseApi from "umesseapi";
 import { useUploadCmService } from "@/services/uploadCmService";
@@ -470,6 +468,8 @@ export default defineComponent({
   components: {
     BasicLayout,
     ContentsBase,
+    SubMenu,
+    SubMenuItem,
     Header,
   },
   setup() {

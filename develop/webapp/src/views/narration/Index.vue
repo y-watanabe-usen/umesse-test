@@ -7,27 +7,19 @@
     </template>
     <template #contents>
       <ContentsBase>
-        <div class="row">
-          <div class="col-2 bg-menu rounded-left">
-            <button
-              type="button"
-              class="btn btn-menu text-left text-white"
-              :class="[
-                narrationIndustry.cd == activeNarrationIndustryCd
-                  ? 'btn-primary'
-                  : 'btn-link',
-                narrationIndustry.cd == activeNarrationIndustryCd
-                  ? 'text-white'
-                  : 'text-dark',
-                narrationIndustry.cd == 1 ? 'mt-2' : '',
-              ]"
+        <template #sub-menu>
+          <SubMenu>
+            <SubMenuItem
               v-for="narrationIndustry in narrationIndustries"
               :key="narrationIndustry.cd"
+              :isSelected="narrationIndustry.cd == activeNarrationIndustryCd"
               @click="clickNarrationIndustry(narrationIndustry.cd)"
             >
               {{ narrationIndustry.name }}
-            </button>
-          </div>
+            </SubMenuItem>
+          </SubMenu>
+        </template>
+        <div class="row">
           <div class="col-9 bg-white rounded-right">
             <div class="my-3">
               <h6 class="border-bottom border-gray pb-2 mb-0">
@@ -353,6 +345,8 @@ import * as UMesseApi from "umesseapi";
 import * as Common from "@/utils/Common";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
+import SubMenu from "@/components/organisms/SubMenu.vue";
+import SubMenuItem from "@/components/molecules/SubMenuItem.vue";
 import Header from "@/components/organisms/Header.vue";
 import { config } from "@/utils/UMesseApiConfiguration";
 import { NarrationItem } from "umesseapi/models";
@@ -368,6 +362,8 @@ export default defineComponent({
   components: {
     BasicLayout,
     ContentsBase,
+    SubMenu,
+    SubMenuItem,
     Header,
   },
   setup() {
