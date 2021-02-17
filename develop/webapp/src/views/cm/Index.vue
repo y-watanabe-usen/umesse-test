@@ -583,7 +583,7 @@ import { UPLOAD_CM_STATE } from "@/services/uploadCmService";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import Header from "@/components/organisms/Header.vue";
 import Button from "@/components/atoms/Button.vue";
-import ModalDialog from "@/components/molecules/ModalDialog.vue";
+import ModalDialog from "@/components/organisms/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
 import FormGroup from "@/components/molecules/FormGroup.vue";

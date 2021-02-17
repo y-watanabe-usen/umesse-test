@@ -45,7 +45,7 @@
 import { useGlobalStore } from "@/store";
 import { defineComponent, onMounted, reactive, toRefs } from "vue";
 import MainMenu from "@/components/organisms/MainMenu.vue";
-import ModalDialog from "@/components/molecules/ModalDialog.vue";
+import ModalDialog from "@/components/organisms/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 
 export default defineComponent({
