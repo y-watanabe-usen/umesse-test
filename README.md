@@ -44,6 +44,7 @@
 - [npm](https://nodejs.org/ja/download/)
 - [yarn](https://classic.yarnpkg.com/ja/docs/install/#windows-stable)
 - [terraform](https://www.terraform.io/downloads.html)
+- [ffmpeg](https://ffmpeg.org/)
 
 ### ローカル環境
 
