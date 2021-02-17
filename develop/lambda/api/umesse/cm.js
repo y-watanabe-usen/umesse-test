@@ -314,7 +314,7 @@ function generateCm(unisCustomerCd, cmId, materials) {
         throw "not narration";
 
       // UMesseConverter.
-      const converter = new UMesseConverter(s3Manager, unisCustomerCd, cmId);
+      const converter = new UMesseConverter(s3Manager);
 
       // 出力ファイルパス解決.
       const workDir = converter.getWorkDir(unisCustomerCd, cmId);
