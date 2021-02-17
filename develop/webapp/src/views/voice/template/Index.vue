@@ -79,7 +79,10 @@
                       </router-link>
                     </div>
                   </div>
-                  <span class="d-block pb-2">{{ template.manuscript }} </span>
+                  <span class="d-block pb-2"
+                    >{{ template.manuscript }}
+                    <br />約00:00<!-- TODO: 仮の数値 -->
+                  </span>
                 </div>
               </div>
             </div>

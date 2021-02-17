@@ -120,7 +120,7 @@
                     >{{ cm.description }}<br />{{
                       convertNumberToTime(cm.seconds)
                     }}
-                    {{ convertDatestringToDateJp(cm.startDate) }} ステータス：{{
+                    {{ convertDatestringToDate(cm.startDate) }} ステータス：{{
                       cm.status
                     }}</span
                   >
@@ -462,7 +462,7 @@ import { config } from "@/utils/UMesseApiConfiguration";
 import { CmItem } from "umesseapi/models/cm-item";
 import { useGlobalStore } from "@/store";
 import {
-  convertDatestringToDateJp,
+  convertDatestringToDate,
   convertNumberToTime,
 } from "@/utils/FormatDate";
 
@@ -489,11 +489,11 @@ export default defineComponent({
       isDownloading: computed(() => audioStore.isDownloading),
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       playbackTimeHms: computed(() =>
-        Common.sToHms(Math.floor(audioPlayer.getPlaybackTime()))
+        convertNumberToTime(Math.floor(audioPlayer.getPlaybackTime()))
       ),
       duration: computed(() => audioPlayer.getDuration()),
       durationHms: computed(() =>
-        Common.sToHms(Math.floor(audioPlayer.getDuration()))
+        convertNumberToTime(Math.floor(audioPlayer.getDuration()))
       ),
       selectedCm: null as CmItem | null,
     });
@@ -546,7 +546,7 @@ export default defineComponent({
       remove,
       clickScene,
       selectCm,
-      convertDatestringToDateJp,
+      convertDatestringToDate,
       convertNumberToTime,
     };
   },

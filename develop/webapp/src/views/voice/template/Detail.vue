@@ -292,7 +292,7 @@ import { useRouter } from "vue-router";
 import AudioPlayer from "@/utils/AudioPlayer";
 import { RecordingFile, UPLOAD_TTS_STATE } from "@/services/uploadTtsService";
 import provideTtsStore from "@/store/tts";
-import * as Common from "@/utils/Common";
+import * as FormatDate from "@/utils/FormatDate";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
 import Header from "@/components/organisms/Header.vue";
@@ -326,11 +326,11 @@ export default defineComponent({
       isCreating: computed(() => ttsStore.isCreating()),
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       playbackTimeHms: computed(() =>
-        Common.sToHms(Math.floor(audioPlayer.getPlaybackTime()))
+        FormatDate.convertNumberToTime(Math.floor(audioPlayer.getPlaybackTime()))
       ),
       duration: computed(() => audioPlayer.getDuration()),
       durationHms: computed(() =>
-        Common.sToHms(Math.floor(audioPlayer.getDuration()))
+        FormatDate.convertNumberToTime(Math.floor(audioPlayer.getDuration()))
       ),
       storeName: "",
       endTime: "21:00",

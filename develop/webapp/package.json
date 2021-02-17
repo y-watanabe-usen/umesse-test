@@ -16,11 +16,8 @@
     "@types/lru-cache": "^5.1.0",
     "axios": "^0.20.0",
     "core-js": "^3.6.5",
-<<<<<<< HEAD
     "lamejs": "^1.2.0",
-=======
     "dayjs": "^1.10.4",
->>>>>>> 851c10b (date format)
     "lru-cache": "^6.0.0",
     "register-service-worker": "^1.7.1",
     "sass": "^1.32.5",
