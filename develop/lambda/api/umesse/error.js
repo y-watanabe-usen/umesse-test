@@ -1,7 +1,8 @@
 'use strict';
 
-class UMesseError /*extends Error */ {
+class UMesseError extends Error {
     constructor(message) {
+        super(message);
         this.message = message;
     }
     get name() {
@@ -14,11 +15,9 @@ class UMesseError /*extends Error */ {
 class AppError extends UMesseError {
     constructor(statusCode, message) {
         super(message);
-        this.statusCode= statusCode;
+        this.statusCode = statusCode;
     }
 }
-
-
 /// Error Handling. 
 class BadRequestError extends AppError {
     constructor(message) {
@@ -30,15 +29,24 @@ class NotFoundError extends AppError {
         super(404, message);
     }
 }
-class UnhandledError extends AppError {
+class AWSError extends AppError {
+    constructor(awserror) {
+        super(500, awnserror.message);
+    }
+}
+class InternalServerError extends AppError {
     constructor(message) {
         super(500, message);
     }
 }
+class UnhandledError extends InternalServerError { }
 
 module.exports = {
+    UMesseError,
     AppError,
     BadRequestError,
     NotFoundError,
+    InternalServerError,
+    AWSError,
     UnhandledError
 }
