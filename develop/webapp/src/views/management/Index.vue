@@ -489,11 +489,11 @@ export default defineComponent({
       isDownloading: computed(() => audioStore.isDownloading),
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       playbackTimeHms: computed(() =>
-        convertNumberToTime(Math.floor(audioPlayer.getPlaybackTime()))
+        convertNumberToTime(audioPlayer.getPlaybackTime())
       ),
       duration: computed(() => audioPlayer.getDuration()),
       durationHms: computed(() =>
-        convertNumberToTime(Math.floor(audioPlayer.getDuration()))
+        convertNumberToTime(audioPlayer.getDuration())
       ),
       selectedCm: null as CmItem | null,
     });

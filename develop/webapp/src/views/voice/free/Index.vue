@@ -261,11 +261,11 @@ export default defineComponent({
       isPlaying: computed(() => audioPlayer.isPlaying()),
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       playbackTimeHms: computed(() =>
-        FormatDate.convertNumberToTime(Math.floor(audioPlayer.getPlaybackTime()))
+        FormatDate.convertNumberToTime(audioPlayer.getPlaybackTime())
       ),
       duration: computed(() => audioPlayer.getDuration()),
       durationHms: computed(() =>
-        FormatDate.convertNumberToTime(Math.floor(audioPlayer.getDuration()))
+        FormatDate.convertNumberToTime(audioPlayer.getDuration())
       ),
       text: "",
       speaker: "risa",
