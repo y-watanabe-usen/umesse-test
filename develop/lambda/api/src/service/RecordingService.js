@@ -6,6 +6,9 @@ const {
   updateUserResource,
   deleteUserResource,
 } = require("../../umesse/resources");
+const assert = require('assert');
+const { respondWithCode } = require("../utils/writer");
+const { UMesseError } = require("../../umesse/error");
 const category = "recording";
 
 /**
@@ -17,13 +20,12 @@ const category = "recording";
  **/
 exports.createUserRecording = function (body, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
-    var response = {};
-    const json = await createUserResource(xUnisCustomerCd, category, body);
-    response["application/json"] = json;
-    if (Object.keys(response).length > 0 && !json.message) {
-      resolve(response[Object.keys(response)[0]]);
-    } else {
-      reject(response[Object.keys(response)[0]]);
+    try {
+      const json = await createUserResource(xUnisCustomerCd, category, body);
+      resolve(json);
+    } catch (e) {
+      assert(e instanceof UMesseError);
+      reject(respondWithCode(e.statusCode, { message: e.message }))
     }
   });
 };
@@ -38,17 +40,16 @@ exports.createUserRecording = function (body, xUnisCustomerCd) {
  **/
 exports.deleteUserRecording = function (recordingId, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
-    var response = {};
-    const json = await deleteUserResource(
-      xUnisCustomerCd,
-      category,
-      recordingId
-    );
-    response["application/json"] = json;
-    if (Object.keys(response).length > 0 && !json.message) {
-      resolve(response[Object.keys(response)[0]]);
-    } else {
-      reject(response[Object.keys(response)[0]]);
+    try {
+      const json = await deleteUserResource(
+        xUnisCustomerCd,
+        category,
+        recordingId
+      );
+      resolve(json);
+    } catch (e) {
+      assert(e instanceof UMesseError);
+      reject(respondWithCode(e.statusCode, { message: e.message }))
     }
   });
 };
@@ -63,13 +64,12 @@ exports.deleteUserRecording = function (recordingId, xUnisCustomerCd) {
  **/
 exports.getUserRecording = function (recordingId, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
-    var response = {};
-    const json = await getUserResource(xUnisCustomerCd, category, recordingId);
-    response["application/json"] = json;
-    if (Object.keys(response).length > 0 && !json.message) {
-      resolve(response[Object.keys(response)[0]]);
-    } else {
-      reject(response[Object.keys(response)[0]]);
+    try {
+      const json = await getUserResource(xUnisCustomerCd, category, recordingId);
+      resolve(json);
+    } catch (e) {
+      assert(e instanceof UMesseError);
+      reject(respondWithCode(e.statusCode, { message: e.message }))
     }
   });
 };
@@ -83,13 +83,12 @@ exports.getUserRecording = function (recordingId, xUnisCustomerCd) {
  **/
 exports.listUserRecording = function (xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
-    var response = {};
-    const json = await getUserResource(xUnisCustomerCd, category);
-    response["application/json"] = json;
-    if (Object.keys(response).length > 0 && !json.message) {
-      resolve(response[Object.keys(response)[0]]);
-    } else {
-      reject(response[Object.keys(response)[0]]);
+    try {
+      const json = await getUserResource(xUnisCustomerCd, category);
+      resolve(json);
+    } catch (e) {
+      assert(e instanceof UMesseError);
+      reject(respondWithCode(e.statusCode, { message: e.message }))
     }
   });
 };
@@ -105,18 +104,17 @@ exports.listUserRecording = function (xUnisCustomerCd) {
  **/
 exports.updateUserRecording = function (body, recordingId, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
-    var response = {};
-    const json = await updateUserResource(
-      xUnisCustomerCd,
-      category,
-      recordingId,
-      body
-    );
-    response["application/json"] = json;
-    if (Object.keys(response).length > 0 && !json.message) {
-      resolve(response[Object.keys(response)[0]]);
-    } else {
-      reject(response[Object.keys(response)[0]]);
+    try {
+      const json = await updateUserResource(
+        xUnisCustomerCd,
+        category,
+        recordingId,
+        body
+      );
+      resolve(json);
+    } catch (e) {
+      assert(e instanceof UMesseError);
+      reject(respondWithCode(e.statusCode, { message: e.message }))
     }
   });
 };

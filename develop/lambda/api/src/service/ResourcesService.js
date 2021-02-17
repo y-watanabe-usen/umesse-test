@@ -6,6 +6,9 @@ const {
   getResource,
   getSignedUrl,
 } = require("../../umesse/resources");
+const assert = require('assert');
+const { respondWithCode } = require("../utils/writer");
+const { UMesseError } = require("../../umesse/error");
 
 /**
  * TTS音声作成
@@ -16,13 +19,12 @@ const {
  **/
 exports.createTts = function (body) {
   return new Promise(async function (resolve, reject) {
-    var response = {};
-    const json = await createTts(body);
-    response["application/json"] = json;
-    if (Object.keys(response).length > 0 && !json.message) {
-      resolve(response[Object.keys(response)[0]]);
-    } else {
-      reject(response[Object.keys(response)[0]]);
+    try {
+      const json = await createTts(body);
+      resolve(json);
+    } catch (e) {
+      assert(e instanceof UMesseError);
+      reject(respondWithCode(e.statusCode, { message: e.message }))
     }
   });
 };
@@ -37,13 +39,12 @@ exports.createTts = function (body) {
  **/
 exports.getSignedUrl = function (id, category) {
   return new Promise(async function (resolve, reject) {
-    var response = {};
-    const json = await getSignedUrl(id, category);
-    response["application/json"] = json;
-    if (Object.keys(response).length > 0 && !json.message) {
-      resolve(response[Object.keys(response)[0]]);
-    } else {
-      reject(response[Object.keys(response)[0]]);
+    try {
+      const json = await getSignedUrl(id, category);
+      resolve(json);
+    } catch (e) {
+      assert(e instanceof UMesseError);
+      reject(respondWithCode(e.statusCode, { message: e.message }))
     }
   });
 };
@@ -57,13 +58,12 @@ exports.getSignedUrl = function (id, category) {
  **/
 exports.listBgm = function (industryCd) {
   return new Promise(async function (resolve, reject) {
-    var response = {};
-    const json = await getResource(constants.resourceCategory.BGM, industryCd);
-    response["application/json"] = json;
-    if (Object.keys(response).length > 0 && !json.message) {
-      resolve(response[Object.keys(response)[0]]);
-    } else {
-      reject(response[Object.keys(response)[0]]);
+    try {
+      const json = await getResource(constants.resourceCategory.BGM, industryCd);
+      resolve(json);
+    } catch (e) {
+      assert(e instanceof UMesseError);
+      reject(respondWithCode(e.statusCode, { message: e.message }))
     }
   });
 };
@@ -76,13 +76,12 @@ exports.listBgm = function (industryCd) {
  **/
 exports.listChime = function () {
   return new Promise(async function (resolve, reject) {
-    var response = {};
-    const json = await getResource(constants.resourceCategory.CHIME);
-    response["application/json"] = json;
-    if (Object.keys(response).length > 0 && !json.message) {
-      resolve(response[Object.keys(response)[0]]);
-    } else {
-      reject(response[Object.keys(response)[0]]);
+    try {
+      const json = await getResource(constants.resourceCategory.CHIME);
+      resolve(json);
+    } catch (e) {
+      assert(e instanceof UMesseError);
+      reject(respondWithCode(e.statusCode, { message: e.message }))
     }
   });
 };
@@ -97,17 +96,16 @@ exports.listChime = function () {
  **/
 exports.listFree = function (industryCd, sceneCd) {
   return new Promise(async function (resolve, reject) {
-    var response = {};
-    const json = await getResource(
-      constants.resourceCategory.BGM,
-      industryCd,
-      sceneCd
-    );
-    response["application/json"] = json;
-    if (Object.keys(response).length > 0 && !json.message) {
-      resolve(response[Object.keys(response)[0]]);
-    } else {
-      reject(response[Object.keys(response)[0]]);
+    try {
+      const json = await getResource(
+        constants.resourceCategory.BGM,
+        industryCd,
+        sceneCd
+      );
+      resolve(json);
+    } catch (e) {
+      assert(e instanceof UMesseError);
+      reject(respondWithCode(e.statusCode, { message: e.message }))
     }
   });
 };
@@ -122,18 +120,18 @@ exports.listFree = function (industryCd, sceneCd) {
  **/
 exports.listNarration = function (industryCd, sceneCd) {
   return new Promise(async function (resolve, reject) {
-    var response = {};
-    const json = await getResource(
-      constants.resourceCategory.NARRATION,
-      industryCd,
-      sceneCd
-    );
-    response["application/json"] = json;
-    if (Object.keys(response).length > 0 && !json.message) {
-      resolve(response[Object.keys(response)[0]]);
-    } else {
-      reject(response[Object.keys(response)[0]]);
+    try {
+      const json = await getResource(
+        constants.resourceCategory.NARRATION,
+        industryCd,
+        sceneCd
+      );
+      resolve(json);
+    } catch (e) {
+      assert(e instanceof UMesseError);
+      reject(respondWithCode(e.statusCode, { message: e.message }))
     }
+
   });
 };
 
@@ -147,17 +145,16 @@ exports.listNarration = function (industryCd, sceneCd) {
  **/
 exports.listTemplate = function (industryCd, sceneCd) {
   return new Promise(async function (resolve, reject) {
-    var response = {};
-    const json = await getResource(
-      constants.resourceCategory.TEMPLATE,
-      industryCd,
-      sceneCd
-    );
-    response["application/json"] = json;
-    if (Object.keys(response).length > 0 && !json.message) {
-      resolve(response[Object.keys(response)[0]]);
-    } else {
-      reject(response[Object.keys(response)[0]]);
+    try {
+      const json = await getResource(
+        constants.resourceCategory.TEMPLATE,
+        industryCd,
+        sceneCd
+      );
+      resolve(json);
+    } catch (e) {
+      assert(e instanceof UMesseError);
+      reject(respondWithCode(e.statusCode, { message: e.message }))
     }
   });
 };

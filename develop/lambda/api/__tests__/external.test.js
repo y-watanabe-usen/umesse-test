@@ -11,6 +11,7 @@ const json = require("./data/external.test.json");
 const data = aws.DynamoDB.Converter.unmarshall(
   json["umesse-external"][0].PutRequest.Item
 );
+const { BadRequestError, InternalServerError } = require("../umesse/error");
 
 beforeAll(() => {
   jest.setTimeout(1000 * 30); // 30 sec
@@ -24,13 +25,11 @@ describe("外部連携CMデータ", () => {
   });
 
   test("[error] 外部連携CMデータ取得　データ存在しない", async () => {
-    const response = await getExternalCm("", "ssence");
-    expect(response).toEqual({ message: "not found" });
+    await expect(getExternalCm("", "ssence")).rejects.toThrow(new InternalServerError("not found"));
   });
 
   test("[error] 外部連携CMデータ取得　パラメータなし", async () => {
-    const response = await getExternalCm("");
-    expect(response).toEqual({ message: "params failed" });
+    await expect(getExternalCm("")).rejects.toThrow(new BadRequestError("params failed"));
   });
 });
 
