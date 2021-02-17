@@ -118,8 +118,16 @@
                     </div>
                   </div>
                   <span class="d-block pb-2"
-                    >{{ narration.description }}<br />{{ narration.seconds }}秒
-                    {{ narration.timestamp }}</span
+                    >{{ narration.description }}<br />{{
+                      convertNumberToTime(narration.seconds)
+                    }}
+                    <!-- TODO: 仮の数値(放送開始日、有効期限) -->
+                    放送開始日{{
+                      convertDatestringToDateJp(narration.timestamp)
+                    }}
+                    有効期限{{
+                      convertDatestringToDateJp(narration.timestamp)
+                    }}</span
                   >
                 </div>
               </div>
@@ -351,6 +359,10 @@ import { NarrationItem } from "umesseapi/models";
 import { useGlobalStore } from "@/store";
 import router from "@/router";
 import { useRoute } from "vue-router";
+import {
+  convertDatestringToDateJp,
+  convertNumberToTime,
+} from "@/utils/FormatDate";
 
 export default defineComponent({
   components: {
@@ -374,11 +386,11 @@ export default defineComponent({
       isDownloading: computed(() => audioStore.isDownloading),
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       playbackTimeHms: computed(() =>
-        Common.sToHms(Math.floor(audioPlayer.getPlaybackTime()))
+        convertNumberToTime(audioPlayer.getPlaybackTime())
       ),
       duration: computed(() => audioPlayer.getDuration()),
       durationHms: computed(() =>
-        Common.sToHms(Math.floor(audioPlayer.getDuration()))
+        convertNumberToTime(audioPlayer.getDuration())
       ),
     });
 
@@ -435,6 +447,8 @@ export default defineComponent({
       setNarration,
       selectNarration,
       clickNarrationIndustry,
+      convertDatestringToDateJp,
+      convertNumberToTime,
     };
   },
 });

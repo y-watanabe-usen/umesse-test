@@ -150,10 +150,10 @@
           <div class="col-8">
             <div class="row">
               <div class="col text-left" style="font-size: 17px">
-                {{ playbackTimeHms }}
+                {{ convertNumberToTime(playbackTime) }}
               </div>
               <div class="col text-right" style="font-size: 17px">
-                {{ durationHms }}
+                {{ convertNumberToTime(duration) }}
               </div>
             </div>
             <meter
@@ -279,6 +279,7 @@ import Button from "@/components/atoms/Button.vue";
 import ModalDialog from "@/components/molecules/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
+import { convertNumberToTime } from "@/utils/FormatDate";
 
 export default defineComponent({
   components: {
@@ -313,13 +314,7 @@ export default defineComponent({
       isPlaying: computed(() => audioPlayer.isPlaying()),
       isDownloading: computed(() => audioStore.isDownloading),
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
-      playbackTimeHms: computed(() =>
-        Common.sToHms(Math.floor(audioPlayer.getPlaybackTime()))
-      ),
       duration: computed(() => audioPlayer.getDuration()),
-      durationHms: computed(() =>
-        Common.sToHms(Math.floor(audioPlayer.getDuration()))
-      ),
       isPlayModalAppear: false,
       isSaveModalAppear: false,
       isSavedModalAppear: false,
@@ -339,7 +334,10 @@ export default defineComponent({
     };
 
     const play = async (chime: ChimeItem) => {
-      const audioBuffer = await getAudioBuffer(chime.contentsId, chime.category);
+      const audioBuffer = await getAudioBuffer(
+        chime.contentsId,
+        chime.category
+      );
       audioPlayer.start(audioBuffer);
     };
 
@@ -406,6 +404,7 @@ export default defineComponent({
       closeSavedModal,
       selectChimeAndOpenPlayModal,
       stopAndClosePlayModal,
+      convertNumberToTime,
     };
   },
 });

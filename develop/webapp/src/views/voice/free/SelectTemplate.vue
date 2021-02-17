@@ -142,10 +142,13 @@
                     </div>
                   </div>
                   <span class="d-block pb-2"
-                    >{{ freeItem.manuscript }}<br />{{
-                      freeItem.description
-                    }}</span
-                  >
+                    >{{ freeItem.manuscript }}<br />
+                    <!-- TODO: 仮の数値(秒数、放送開始日、有効期限) -->
+                    {{ freeItem.description }}<br />00:00 放送開始日{{
+                      convertDatestringToDateJp(freeItem.timestamp)
+                    }}
+                    有効期限{{ convertDatestringToDateJp(freeItem.timestamp) }}
+                  </span>
                 </div>
               </div>
             </div>
@@ -202,6 +205,7 @@ import { config } from "@/utils/UMesseApiConfiguration";
 import { FreeItem } from "umesseapi/models/free-item";
 import * as Common from "@/utils/Common";
 import { useGlobalStore } from "@/store";
+import { convertDatestringToDateJp } from "@/utils/FormatDate";
 
 export default defineComponent({
   components: {
@@ -249,6 +253,7 @@ export default defineComponent({
       clickFreeTemplateIndustry,
       setManuscript,
       selectFreeTemplate,
+      convertDatestringToDateJp,
     };
   },
 });

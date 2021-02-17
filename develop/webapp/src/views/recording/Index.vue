@@ -192,7 +192,7 @@ import {
 } from "@/services/uploadRecordingService";
 import * as UMesseApi from "umesseapi";
 import provideRecordingStore from "@/store/recording";
-import * as Common from "@/utils/Common";
+import * as FormatDate from "@/utils/FormatDate";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
 import Header from "@/components/organisms/Header.vue";
@@ -237,11 +237,11 @@ export default defineComponent({
       }),
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       playbackTimeHms: computed(() =>
-        Common.sToHms(Math.floor(audioPlayer.getPlaybackTime()))
+        FormatDate.convertNumberToTime(audioPlayer.getPlaybackTime())
       ),
       duration: computed(() => audioPlayer.getDuration()),
       durationHms: computed(() =>
-        Common.sToHms(Math.floor(audioPlayer.getDuration()))
+        FormatDate.convertNumberToTime(audioPlayer.getDuration())
       ),
       isModalAppear: false,
     });

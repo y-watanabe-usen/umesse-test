@@ -27,7 +27,7 @@
             title="Openチャイム"
             size="fixed"
             :contentTitle="openChime.title"
-            :duration="`${sToHms(openChime.seconds)}`"
+            :duration="`${convertNumberToTime(openChime.seconds)}`"
             :volume="100"
           >
             <template #operaions>
@@ -106,13 +106,13 @@
             <CmItem
               :title="
                 'ナレーション ' +
-                `${index + 1}` +
-                '/' +
-                `${MAX_NARRATION_COUNT}`
+                  `${index + 1}` +
+                  '/' +
+                  `${MAX_NARRATION_COUNT}`
               "
               size="flexible"
               :contentTitle="`${narration.title}`"
-              :duration="`${sToHms(narration.seconds)}`"
+              :duration="`${convertNumberToTime(narration.seconds)}`"
               :volume="100"
             >
               <template #operations>
@@ -201,9 +201,9 @@
             <CmItem
               :title="
                 'ナレーション ' +
-                `${narrarions.length + 1}` +
-                '/' +
-                `${MAX_NARRATION_COUNT}`
+                  `${narrarions.length + 1}` +
+                  '/' +
+                  `${MAX_NARRATION_COUNT}`
               "
               :isEmpty="true"
               size="flexible"
@@ -217,7 +217,7 @@
             title="BGM"
             size="flexible"
             :contentTitle="bgm.title"
-            :duration="`${sToHms(bgm.seconds)}`"
+            :duration="`${convertNumberToTime(bgm.seconds)}`"
             :volume="50"
           >
             <template #operaions>
@@ -288,7 +288,7 @@
             title="Endチャイム"
             size="fixed"
             :contentTitle="endChime.title"
-            :duration="`${sToHms(endChime.seconds)}`"
+            :duration="`${convertNumberToTime(endChime.seconds)}`"
             :volume="100"
           >
             <template #operaions>
@@ -577,7 +577,7 @@ import { defineComponent, computed, reactive, onMounted, toRefs } from "vue";
 import AudioPlayer from "@/utils/AudioPlayer";
 import AudioStore from "@/store/audio";
 import { useGlobalStore } from "@/store";
-import * as Common from "@/utils/Common";
+import * as FormatDate from "@/utils/FormatDate";
 import Constants from "@/utils/Constants";
 import { UPLOAD_CM_STATE } from "@/services/uploadCmService";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
@@ -626,11 +626,11 @@ export default defineComponent({
       status: computed(() => cm.status()),
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       playbackTimeHms: computed(() =>
-        Common.sToHms(Math.floor(audioPlayer.getPlaybackTime()))
+        FormatDate.convertNumberToTime(audioPlayer.getPlaybackTime())
       ),
       duration: computed(() => audioPlayer.getDuration()),
       durationHms: computed(() =>
-        Common.sToHms(Math.floor(audioPlayer.getDuration()))
+        FormatDate.convertNumberToTime(audioPlayer.getDuration())
       ),
       title: "",
       description: "",
@@ -719,7 +719,8 @@ export default defineComponent({
         openSavedModal();
       }, 500);
     };
-    const sToHms = (second: number) => Common.sToHms(second);
+    const convertNumberToTime = (second: number) =>
+      FormatDate.convertNumberToTime(second);
 
     const addNarration = () => {
       cm.unSelectNarrationIndex();
@@ -762,7 +763,7 @@ export default defineComponent({
       stopAndClosePlayModal,
       updateAndOpenSavedModal,
       Constants,
-      sToHms,
+      convertNumberToTime,
       addNarration,
       changeRecording,
       changeNarration,
