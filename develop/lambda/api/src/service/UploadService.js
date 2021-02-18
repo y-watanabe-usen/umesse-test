@@ -7,7 +7,7 @@ const {
 } = require("../../umesse/upload");
 const assert = require('assert');
 const { respondWithCode } = require("../utils/writer");
-const { UMesseError } = require("../../umesse/error");
+const { UMesseError } = require("umesse-lib/error");
 
 /**
  * CM外部連携追加
@@ -25,7 +25,7 @@ exports.createUploadCm = function (body, cmId, xUnisCustomerCd) {
       resolve(json);
     } catch (e) {
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { message: e.message }))
+      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
     }
   });
 };
@@ -45,7 +45,7 @@ exports.deleteUploadCm = function (cmId, xUnisCustomerCd) {
       resolve(json);
     } catch (e) {
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { message: e.message }))
+      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
     }
   });
 };
@@ -65,7 +65,7 @@ exports.getUploadCm = function (cmId, xUnisCustomerCd) {
       resolve(json);
     } catch (e) {
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { message: e.message }))
+      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
     }
   });
 };
@@ -84,7 +84,7 @@ exports.listUploadCm = function (xUnisCustomerCd) {
       resolve(json);
     } catch (e) {
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { message: e.message }))
+      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
     }
   });
 };

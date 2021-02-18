@@ -3,7 +3,7 @@
 const { getUser } = require("../../umesse/user");
 const assert = require('assert');
 const { respondWithCode } = require("../utils/writer");
-const { UMesseError } = require("../../umesse/error");
+const { UMesseError } = require("umesse-lib/error");
 
 /**
  * ユーザー情報取得
@@ -18,8 +18,9 @@ exports.getUser = function (xUnisCustomerCd) {
       const json = await getUser(xUnisCustomerCd);
       resolve(json);
     } catch (e) {
+      console.log(`error = ${e}`);
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { message: e.message }))
+      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
     }
   });
 };

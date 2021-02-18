@@ -13,7 +13,7 @@ const UMesseConverter = require("umesse-lib/converter");
 const { validation } = require("umesse-lib/validation");
 const { s3Manager } = require("umesse-lib/utils/s3Manager");
 const { sqsManager } = require("umesse-lib/utils/sqsManager");
-const { BadRequestError, InternalServerError } = require("./error");
+const { BadRequestError, InternalServerError } = require("umesse-lib/error");
 const db = require("./db");
 
 // CM取得（一覧・個別）

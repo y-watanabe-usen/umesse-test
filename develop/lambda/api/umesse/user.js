@@ -2,7 +2,7 @@
 
 const { debuglog, errorlog } = require("umesse-lib/constants");
 const { validation } = require("umesse-lib/validation");
-const { BadRequestError, InternalServerError } = require("./error");
+const { BadRequestError, InternalServerError } = require("umesse-lib/error");
 
 const db = require("./db");
 
@@ -24,7 +24,7 @@ exports.getUser = async (unisCustomerCd) => {
     debuglog(`db.Uesr.find(${unisCustomerCd})`);
     return await db.User.find(unisCustomerCd);
   } catch (e) {
-    errorlog(JSON.stringify(e));
+    errorlog(e);
     throw new InternalServerError(e.message);
   }
 };
