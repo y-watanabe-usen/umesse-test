@@ -7,79 +7,41 @@
     </template>
     <template #contents>
       <ContentsBase>
-        <div class="row">
-          <div class="col bg-white rounded-right">
-            <div class="my-3">
-              <h6 class="border-bottom border-gray pb-2 mb-0">
-                <select class="form-control w-25">
-                  <option v-for="sort in sorts" :key="sort">
-                    {{ sort }}
-                  </option>
-                </select>
-              </h6>
-              <div
-                class="media text-muted pt-3"
-                v-for="chime in chimes"
-                :key="chime.id"
+        <List>
+          <template #header>
+            <ListHeader>
+              <select class="form-control w-25">
+                <option v-for="sort in sorts" :key="sort">
+                  {{ sort }}
+                </option>
+              </select>
+            </ListHeader>
+          </template>
+          <ListItem v-for="chime in chimes" :key="chime.id">
+            <template #title>
+              <h2>{{ chime.title }}</h2>
+            </template>
+            <template #line1>
+              <p>{{ chime.description }}</p>
+            </template>
+            <template #operations>
+              <Button
+                type="rectangle"
+                class="btn-play"
+                @click="selectChimeAndOpenPlayModal(chime)"
               >
-                <div
-                  class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray pl-3"
-                >
-                  <div
-                    class="d-flex justify-content-between align-items-center w-100"
-                  >
-                    <strong class="text-dark h5 pt-2 pb-2">{{
-                      chime.title
-                    }}</strong>
-                    <div>
-                      <button
-                        type="button"
-                        class="btn btn-light shadow btn-try"
-                        data-toggle="modal"
-                        data-target=".bd-try-modal-lg"
-                        @click="selectChimeAndOpenPlayModal(chime)"
-                      >
-                        <svg
-                          width="1em"
-                          height="1em"
-                          viewBox="0 0 16 16"
-                          class="bi bi-play-fill"
-                          fill="currentColor"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M11.596 8.697l-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"
-                          />
-                        </svg>
-                        試聴
-                      </button>
-                      <button
-                        type="button"
-                        class="btn btn-light shadow btn-try ml-2"
-                        @click="setChime(chime)"
-                      >
-                        <svg
-                          width="1em"
-                          height="1em"
-                          viewBox="0 0 16 16"
-                          class="bi bi-play-fill"
-                          fill="currentColor"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M11.596 8.697l-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z"
-                          />
-                        </svg>
-                        選択
-                      </button>
-                    </div>
-                  </div>
-                  <span class="d-block pb-2">{{ chime.description }}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+                <img src="@/assets/icon_play.svg" />試聴
+              </Button>
+              <Button
+                type="rectangle"
+                class="btn-select"
+                @click="setChime(chime)"
+              >
+                選択<img src="@/assets/icon_select.svg" />
+              </Button>
+            </template>
+          </ListItem>
+        </List>
       </ContentsBase>
     </template>
   </BasicLayout>
@@ -276,6 +238,9 @@ import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
 import Header from "@/components/organisms/Header.vue";
 import Button from "@/components/atoms/Button.vue";
+import List from "@/components/organisms/List.vue";
+import ListHeader from "@/components/molecules/ListHeader.vue";
+import ListItem from "@/components/molecules/ListItem.vue";
 import ModalDialog from "@/components/organisms/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
@@ -287,6 +252,9 @@ export default defineComponent({
     ContentsBase,
     Header,
     Button,
+    List,
+    ListHeader,
+    ListItem,
     ModalDialog,
     ModalHeader,
     ModalFooter,
@@ -418,36 +386,5 @@ export default defineComponent({
   font-size: 20px;
   font-weight: $font_weight_bold;
   text-align: center;
-}
-
-.bg-menu {
-  background: #d9d9d9;
-}
-.btn-menu {
-  width: 100%;
-  height: 80px;
-  margin-bottom: 10px;
-  text-decoration: none;
-}
-.btn-try,
-.btn-edit {
-  width: 100px;
-  height: 40px;
-}
-.btn-edit {
-  margin-left: 20px;
-}
-.btn:focus {
-  box-shadow: none;
-}
-.btn-play,
-.btn-close {
-  width: 200px;
-}
-.btn-link {
-  color: #333;
-}
-.dropdown-toggle::after {
-  content: none;
 }
 </style>

@@ -819,18 +819,4 @@ export default defineComponent({
   font-weight: $font_weight_bold;
   text-align: center;
 }
-
-.btn:focus {
-  box-shadow: none;
-}
-.btn-play,
-.btn-close {
-  width: 200px;
-}
-.btn-link {
-  color: #333;
-}
-.dropdown-toggle::after {
-  content: none;
-}
 </style>

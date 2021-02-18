@@ -451,9 +451,9 @@ import AudioStore from "@/store/audio";
 import * as Common from "@/utils/Common";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
+import Header from "@/components/organisms/Header.vue";
 import SubMenu from "@/components/organisms/SubMenu.vue";
 import SubMenuItem from "@/components/molecules/SubMenuItem.vue";
-import Header from "@/components/organisms/Header.vue";
 import * as UMesseApi from "umesseapi";
 import { useUploadCmService } from "@/services/uploadCmService";
 import { config } from "@/utils/UMesseApiConfiguration";
@@ -468,9 +468,9 @@ export default defineComponent({
   components: {
     BasicLayout,
     ContentsBase,
+    Header,
     SubMenu,
     SubMenuItem,
-    Header,
   },
   setup() {
     const audioPlayer = AudioPlayer();

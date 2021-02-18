@@ -77,7 +77,7 @@ export default {
     }
   }
   .operations {
-    @include flex_start;
+    @include flex_end;
     align-items: center;
     width: 402px;
     padding-left: 20px;
