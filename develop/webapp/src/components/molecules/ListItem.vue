@@ -38,12 +38,13 @@ export default {
   .contents {
     @include flex_start;
     align-items: center;
-    width: 100%;
+    width: calc(100% - 428px - 68px);
     padding-left: 34px;
     padding-right: 34px;
     flex-grow: 1;
     flex-shrink: 1;
     .wrapper {
+      width: 100%;
       ::v-deep h2 {
         color: black;
         font-size: 20px;
@@ -54,12 +55,12 @@ export default {
       ::v-deep p {
         @include ellipsis;
         color: rgb(92, 92, 92);
-        font-size: 16px;
+        font-size: 18px;
         margin-top: 10px;
         margin-bottom: 10px;
         span {
           color: rgb(92, 92, 92);
-          font-size: 16px;
+          font-size: 18px;
         }
         .duration {
           display: inline-block;

@@ -29,7 +29,7 @@ export default {
   height: 100%;
   width: 100%;
   ::v-deep .list-header {
-    width: 100%;
+    width: calc(100% - 68px);
     height: 75px;
     flex-grow: 0;
     flex-shrink: 0;
