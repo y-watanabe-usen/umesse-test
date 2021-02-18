@@ -124,10 +124,11 @@ export const ResourcesApiAxiosParamCreator = function (configuration?: Configura
          * BGM素材を一覧で取得する
          * @summary BGM
          * @param {string} [industryCd] 業種CD
+         * @param {number} [sort] ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listBgm: async (industryCd?: string, options: any = {}): Promise<RequestArgs> => {
+        listBgm: async (industryCd?: string, sort?: number, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/bgm`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -141,6 +142,10 @@ export const ResourcesApiAxiosParamCreator = function (configuration?: Configura
 
             if (industryCd !== undefined) {
                 localVarQueryParameter['industryCd'] = industryCd;
+            }
+
+            if (sort !== undefined) {
+                localVarQueryParameter['sort'] = sort;
             }
 
             const query = new URLSearchParams(localVarUrlObj.search);
@@ -162,10 +167,11 @@ export const ResourcesApiAxiosParamCreator = function (configuration?: Configura
         /**
          * 開始/終了チャイムを一覧で取得する
          * @summary Open/Endチャイム
+         * @param {number} [sort] ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listChime: async (options: any = {}): Promise<RequestArgs> => {
+        listChime: async (sort?: number, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/chime`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -176,6 +182,10 @@ export const ResourcesApiAxiosParamCreator = function (configuration?: Configura
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            if (sort !== undefined) {
+                localVarQueryParameter['sort'] = sort;
+            }
 
             const query = new URLSearchParams(localVarUrlObj.search);
             for (const key in localVarQueryParameter) {
@@ -198,10 +208,11 @@ export const ResourcesApiAxiosParamCreator = function (configuration?: Configura
          * @summary TTSフリーワード一覧
          * @param {string} [industryCd] 業種CD
          * @param {string} [sceneCd] シーンCD
+         * @param {number} [sort] ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listFree: async (industryCd?: string, sceneCd?: string, options: any = {}): Promise<RequestArgs> => {
+        listFree: async (industryCd?: string, sceneCd?: string, sort?: number, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/free`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -219,6 +230,10 @@ export const ResourcesApiAxiosParamCreator = function (configuration?: Configura
 
             if (sceneCd !== undefined) {
                 localVarQueryParameter['sceneCd'] = sceneCd;
+            }
+
+            if (sort !== undefined) {
+                localVarQueryParameter['sort'] = sort;
             }
 
             const query = new URLSearchParams(localVarUrlObj.search);
@@ -242,10 +257,11 @@ export const ResourcesApiAxiosParamCreator = function (configuration?: Configura
          * @summary ナレーション
          * @param {string} [industryCd] 業種CD
          * @param {string} [sceneCd] シーンCD
+         * @param {number} [sort] ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listNarration: async (industryCd?: string, sceneCd?: string, options: any = {}): Promise<RequestArgs> => {
+        listNarration: async (industryCd?: string, sceneCd?: string, sort?: number, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/narration`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -263,6 +279,10 @@ export const ResourcesApiAxiosParamCreator = function (configuration?: Configura
 
             if (sceneCd !== undefined) {
                 localVarQueryParameter['sceneCd'] = sceneCd;
+            }
+
+            if (sort !== undefined) {
+                localVarQueryParameter['sort'] = sort;
             }
 
             const query = new URLSearchParams(localVarUrlObj.search);
@@ -286,10 +306,11 @@ export const ResourcesApiAxiosParamCreator = function (configuration?: Configura
          * @summary TTSテンプレート一覧
          * @param {string} [industryCd] 業種CD
          * @param {string} [sceneCd] シーンCD
+         * @param {number} [sort] ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listTemplate: async (industryCd?: string, sceneCd?: string, options: any = {}): Promise<RequestArgs> => {
+        listTemplate: async (industryCd?: string, sceneCd?: string, sort?: number, options: any = {}): Promise<RequestArgs> => {
             const localVarPath = `/template`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -307,6 +328,10 @@ export const ResourcesApiAxiosParamCreator = function (configuration?: Configura
 
             if (sceneCd !== undefined) {
                 localVarQueryParameter['sceneCd'] = sceneCd;
+            }
+
+            if (sort !== undefined) {
+                localVarQueryParameter['sort'] = sort;
             }
 
             const query = new URLSearchParams(localVarUrlObj.search);
@@ -367,11 +392,12 @@ export const ResourcesApiFp = function(configuration?: Configuration) {
          * BGM素材を一覧で取得する
          * @summary BGM
          * @param {string} [industryCd] 業種CD
+         * @param {number} [sort] ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listBgm(industryCd?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<BgmItem>>> {
-            const localVarAxiosArgs = await ResourcesApiAxiosParamCreator(configuration).listBgm(industryCd, options);
+        async listBgm(industryCd?: string, sort?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<BgmItem>>> {
+            const localVarAxiosArgs = await ResourcesApiAxiosParamCreator(configuration).listBgm(industryCd, sort, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -380,11 +406,12 @@ export const ResourcesApiFp = function(configuration?: Configuration) {
         /**
          * 開始/終了チャイムを一覧で取得する
          * @summary Open/Endチャイム
+         * @param {number} [sort] ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listChime(options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ChimeItem>>> {
-            const localVarAxiosArgs = await ResourcesApiAxiosParamCreator(configuration).listChime(options);
+        async listChime(sort?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ChimeItem>>> {
+            const localVarAxiosArgs = await ResourcesApiAxiosParamCreator(configuration).listChime(sort, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -395,11 +422,12 @@ export const ResourcesApiFp = function(configuration?: Configuration) {
          * @summary TTSフリーワード一覧
          * @param {string} [industryCd] 業種CD
          * @param {string} [sceneCd] シーンCD
+         * @param {number} [sort] ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listFree(industryCd?: string, sceneCd?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<FreeItem>>> {
-            const localVarAxiosArgs = await ResourcesApiAxiosParamCreator(configuration).listFree(industryCd, sceneCd, options);
+        async listFree(industryCd?: string, sceneCd?: string, sort?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<FreeItem>>> {
+            const localVarAxiosArgs = await ResourcesApiAxiosParamCreator(configuration).listFree(industryCd, sceneCd, sort, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -410,11 +438,12 @@ export const ResourcesApiFp = function(configuration?: Configuration) {
          * @summary ナレーション
          * @param {string} [industryCd] 業種CD
          * @param {string} [sceneCd] シーンCD
+         * @param {number} [sort] ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listNarration(industryCd?: string, sceneCd?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<NarrationItem>>> {
-            const localVarAxiosArgs = await ResourcesApiAxiosParamCreator(configuration).listNarration(industryCd, sceneCd, options);
+        async listNarration(industryCd?: string, sceneCd?: string, sort?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<NarrationItem>>> {
+            const localVarAxiosArgs = await ResourcesApiAxiosParamCreator(configuration).listNarration(industryCd, sceneCd, sort, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -425,11 +454,12 @@ export const ResourcesApiFp = function(configuration?: Configuration) {
          * @summary TTSテンプレート一覧
          * @param {string} [industryCd] 業種CD
          * @param {string} [sceneCd] シーンCD
+         * @param {number} [sort] ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listTemplate(industryCd?: string, sceneCd?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<TemplateItem>>> {
-            const localVarAxiosArgs = await ResourcesApiAxiosParamCreator(configuration).listTemplate(industryCd, sceneCd, options);
+        async listTemplate(industryCd?: string, sceneCd?: string, sort?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<TemplateItem>>> {
+            const localVarAxiosArgs = await ResourcesApiAxiosParamCreator(configuration).listTemplate(industryCd, sceneCd, sort, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -469,53 +499,58 @@ export const ResourcesApiFactory = function (configuration?: Configuration, base
          * BGM素材を一覧で取得する
          * @summary BGM
          * @param {string} [industryCd] 業種CD
+         * @param {number} [sort] ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listBgm(industryCd?: string, options?: any): AxiosPromise<Array<BgmItem>> {
-            return ResourcesApiFp(configuration).listBgm(industryCd, options).then((request) => request(axios, basePath));
+        listBgm(industryCd?: string, sort?: number, options?: any): AxiosPromise<Array<BgmItem>> {
+            return ResourcesApiFp(configuration).listBgm(industryCd, sort, options).then((request) => request(axios, basePath));
         },
         /**
          * 開始/終了チャイムを一覧で取得する
          * @summary Open/Endチャイム
+         * @param {number} [sort] ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listChime(options?: any): AxiosPromise<Array<ChimeItem>> {
-            return ResourcesApiFp(configuration).listChime(options).then((request) => request(axios, basePath));
+        listChime(sort?: number, options?: any): AxiosPromise<Array<ChimeItem>> {
+            return ResourcesApiFp(configuration).listChime(sort, options).then((request) => request(axios, basePath));
         },
         /**
          * TTSのフリーワード素材を一覧で取得する
          * @summary TTSフリーワード一覧
          * @param {string} [industryCd] 業種CD
          * @param {string} [sceneCd] シーンCD
+         * @param {number} [sort] ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listFree(industryCd?: string, sceneCd?: string, options?: any): AxiosPromise<Array<FreeItem>> {
-            return ResourcesApiFp(configuration).listFree(industryCd, sceneCd, options).then((request) => request(axios, basePath));
+        listFree(industryCd?: string, sceneCd?: string, sort?: number, options?: any): AxiosPromise<Array<FreeItem>> {
+            return ResourcesApiFp(configuration).listFree(industryCd, sceneCd, sort, options).then((request) => request(axios, basePath));
         },
         /**
          * ナレーション素材を一覧で取得する
          * @summary ナレーション
          * @param {string} [industryCd] 業種CD
          * @param {string} [sceneCd] シーンCD
+         * @param {number} [sort] ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listNarration(industryCd?: string, sceneCd?: string, options?: any): AxiosPromise<Array<NarrationItem>> {
-            return ResourcesApiFp(configuration).listNarration(industryCd, sceneCd, options).then((request) => request(axios, basePath));
+        listNarration(industryCd?: string, sceneCd?: string, sort?: number, options?: any): AxiosPromise<Array<NarrationItem>> {
+            return ResourcesApiFp(configuration).listNarration(industryCd, sceneCd, sort, options).then((request) => request(axios, basePath));
         },
         /**
          * TTSのテンプレート素材を一覧で取得する
          * @summary TTSテンプレート一覧
          * @param {string} [industryCd] 業種CD
          * @param {string} [sceneCd] シーンCD
+         * @param {number} [sort] ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listTemplate(industryCd?: string, sceneCd?: string, options?: any): AxiosPromise<Array<TemplateItem>> {
-            return ResourcesApiFp(configuration).listTemplate(industryCd, sceneCd, options).then((request) => request(axios, basePath));
+        listTemplate(industryCd?: string, sceneCd?: string, sort?: number, options?: any): AxiosPromise<Array<TemplateItem>> {
+            return ResourcesApiFp(configuration).listTemplate(industryCd, sceneCd, sort, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -554,57 +589,62 @@ export class ResourcesApi extends BaseAPI {
      * BGM素材を一覧で取得する
      * @summary BGM
      * @param {string} [industryCd] 業種CD
+     * @param {number} [sort] ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ResourcesApi
      */
-    public listBgm(industryCd?: string, options?: any) {
-        return ResourcesApiFp(this.configuration).listBgm(industryCd, options).then((request) => request(this.axios, this.basePath));
+    public listBgm(industryCd?: string, sort?: number, options?: any) {
+        return ResourcesApiFp(this.configuration).listBgm(industryCd, sort, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * 開始/終了チャイムを一覧で取得する
      * @summary Open/Endチャイム
+     * @param {number} [sort] ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ResourcesApi
      */
-    public listChime(options?: any) {
-        return ResourcesApiFp(this.configuration).listChime(options).then((request) => request(this.axios, this.basePath));
+    public listChime(sort?: number, options?: any) {
+        return ResourcesApiFp(this.configuration).listChime(sort, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * TTSのフリーワード素材を一覧で取得する
      * @summary TTSフリーワード一覧
      * @param {string} [industryCd] 業種CD
      * @param {string} [sceneCd] シーンCD
+     * @param {number} [sort] ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ResourcesApi
      */
-    public listFree(industryCd?: string, sceneCd?: string, options?: any) {
-        return ResourcesApiFp(this.configuration).listFree(industryCd, sceneCd, options).then((request) => request(this.axios, this.basePath));
+    public listFree(industryCd?: string, sceneCd?: string, sort?: number, options?: any) {
+        return ResourcesApiFp(this.configuration).listFree(industryCd, sceneCd, sort, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * ナレーション素材を一覧で取得する
      * @summary ナレーション
      * @param {string} [industryCd] 業種CD
      * @param {string} [sceneCd] シーンCD
+     * @param {number} [sort] ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ResourcesApi
      */
-    public listNarration(industryCd?: string, sceneCd?: string, options?: any) {
-        return ResourcesApiFp(this.configuration).listNarration(industryCd, sceneCd, options).then((request) => request(this.axios, this.basePath));
+    public listNarration(industryCd?: string, sceneCd?: string, sort?: number, options?: any) {
+        return ResourcesApiFp(this.configuration).listNarration(industryCd, sceneCd, sort, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * TTSのテンプレート素材を一覧で取得する
      * @summary TTSテンプレート一覧
      * @param {string} [industryCd] 業種CD
      * @param {string} [sceneCd] シーンCD
+     * @param {number} [sort] ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ResourcesApi
      */
-    public listTemplate(industryCd?: string, sceneCd?: string, options?: any) {
-        return ResourcesApiFp(this.configuration).listTemplate(industryCd, sceneCd, options).then((request) => request(this.axios, this.basePath));
+    public listTemplate(industryCd?: string, sceneCd?: string, sort?: number, options?: any) {
+        return ResourcesApiFp(this.configuration).listTemplate(industryCd, sceneCd, sort, options).then((request) => request(this.axios, this.basePath));
     }
 }

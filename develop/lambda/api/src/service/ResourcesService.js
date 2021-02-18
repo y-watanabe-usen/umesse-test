@@ -54,12 +54,13 @@ exports.getSignedUrl = function (id, category) {
  * BGM素材を一覧で取得する
  *
  * industryCd String 業種CD (optional)
+ * sort Integer (optional)
  * returns List
  **/
-exports.listBgm = function (industryCd) {
+exports.listBgm = function (industryCd, sort) {
   return new Promise(async function (resolve, reject) {
     try {
-      const json = await getResource(constants.resourceCategory.BGM, industryCd);
+      const json = await getResource(constants.resourceCategory.BGM, industryCd, "", sort);
       resolve(json);
     } catch (e) {
       assert(e instanceof UMesseError);
@@ -72,12 +73,13 @@ exports.listBgm = function (industryCd) {
  * Open/Endチャイム
  * 開始/終了チャイムを一覧で取得する
  *
+ * sort Integer (optional)
  * returns List
  **/
-exports.listChime = function () {
+exports.listChime = function (sort) {
   return new Promise(async function (resolve, reject) {
     try {
-      const json = await getResource(constants.resourceCategory.CHIME);
+      const json = await getResource(constants.resourceCategory.CHIME, "", "", sort);
       resolve(json);
     } catch (e) {
       assert(e instanceof UMesseError);
@@ -92,15 +94,17 @@ exports.listChime = function () {
  *
  * industryCd String 業種CD (optional)
  * sceneCd String シーンCD (optional)
+ * sort Integer (optional)
  * returns List
  **/
-exports.listFree = function (industryCd, sceneCd) {
+exports.listFree = function (industryCd, sceneCd, sort) {
   return new Promise(async function (resolve, reject) {
     try {
       const json = await getResource(
         constants.resourceCategory.BGM,
         industryCd,
-        sceneCd
+        sceneCd,
+        sort
       );
       resolve(json);
     } catch (e) {
@@ -116,15 +120,17 @@ exports.listFree = function (industryCd, sceneCd) {
  *
  * industryCd String 業種CD (optional)
  * sceneCd String シーンCD (optional)
+ * sort Integer (optional)
  * returns List
  **/
-exports.listNarration = function (industryCd, sceneCd) {
+exports.listNarration = function (industryCd, sceneCd, sort) {
   return new Promise(async function (resolve, reject) {
     try {
       const json = await getResource(
         constants.resourceCategory.NARRATION,
         industryCd,
-        sceneCd
+        sceneCd,
+        sort
       );
       resolve(json);
     } catch (e) {
@@ -141,15 +147,17 @@ exports.listNarration = function (industryCd, sceneCd) {
  *
  * industryCd String 業種CD (optional)
  * sceneCd String シーンCD (optional)
+ * sort Integer (optional)
  * returns List
  **/
-exports.listTemplate = function (industryCd, sceneCd) {
+exports.listTemplate = function (industryCd, sceneCd, sort) {
   return new Promise(async function (resolve, reject) {
     try {
       const json = await getResource(
         constants.resourceCategory.TEMPLATE,
         industryCd,
-        sceneCd
+        sceneCd,
+        sort
       );
       resolve(json);
     } catch (e) {

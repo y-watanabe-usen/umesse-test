@@ -761,6 +761,12 @@ paths:
           schema:
             type: string
             example: "001"
+        - name: sort
+          in: query
+          description: ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
+          schema:
+            type: integer
+            example: 1
       responses:
         200:
           description: successful response
@@ -802,6 +808,12 @@ paths:
           schema:
             type: string
             example: "001"
+        - name: sort
+          in: query
+          description: ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
+          schema:
+            type: integer
+            example: 1
       responses:
         200:
           description: successful response
@@ -829,8 +841,14 @@ paths:
       operationId: listChime
       # security:
       #   - ApiKeyAuth: []
-      # parameters:
+      parameters:
       # - $ref: "#/components/parameters/Token"
+        - name: sort
+          in: query
+          description: ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
+          schema:
+            type: integer
+            example: 1
       responses:
         200:
           description: successful response
@@ -872,6 +890,12 @@ paths:
           schema:
             type: string
             example: "001"
+        - name: sort
+          in: query
+          description: ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
+          schema:
+            type: integer
+            example: 1
       responses:
         200:
           description: successful response
@@ -913,6 +937,12 @@ paths:
           schema:
             type: string
             example: "001"
+        - name: sort
+          in: query
+          description: ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
+          schema:
+            type: integer
+            example: 1
       responses:
         200:
           description: successful response

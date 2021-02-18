@@ -14,12 +14,21 @@ const { s3Manager } = require("umesse-lib/utils/s3Manager");
 const { BadRequestError, InternalServerError } = require("./error");
 const db = require("./db");
 
-exports.getResource = async (category, industryCd, sceneCd) => {
+// 仮
+const SORT = {
+  TITLE_ASC: 1,
+  TITLE_DESC: 2,
+  TIMESTAMP_ASC: 3,
+  TIMESTAMP_DESC: 4,
+}
+
+exports.getResource = async (category, industryCd, sceneCd, sort) => {
   debuglog(
     `[getResource] ${JSON.stringify({
       category: category,
       industryCd: industryCd,
       sceneCd: sceneCd,
+      sceneCd: sort,
     })}`
   );
 
@@ -48,13 +57,47 @@ exports.getResource = async (category, industryCd, sceneCd) => {
     );
   }
 
-  // titleの昇順でソート
-  json.sort((a, b) => {
-    var r = 0;
-    if (a.title < b.title) { r = -1; }
-    else if (a.title > b.title) { r = 1; }
-    return r;
-  })
+  if (!sort) sort = 1;
+  let sortFunc;
+  switch (sort) {
+    case SORT.TITLE_ASC:
+      sortFunc = (a, b) => {
+        if (a.title < b.title) return -1;
+        if (a.title > b.title) return 1;
+        return 0;
+      }
+      break;
+    case SORT.TITLE_DESC:
+      // titleの降順でソート
+      sortFunc = (a, b) => {
+        if (a.title > b.title) return -1;
+        if (a.title < b.title) return 1;
+        return 0;
+      }
+      break;
+    case SORT.TIMESTAMP_ASC:
+      sortFunc = (a, b) => {
+        if (a.timestamp < b.timestamp) return -1;
+        if (a.timestamp > b.timestamp) return 1;
+        return 0;
+      }
+      break;
+    case SORT.TIMESTAMP_DESC:
+      sortFunc = (a, b) => {
+        if (a.timestamp > b.timestamp) return -1;
+        if (a.timestamp < b.timestamp) return 1;
+        return 0;
+      }
+      break;
+    default:
+      // titleの昇順でソート
+      sortFunc = (a, b) => {
+        if (a.title < b.title) return -1;
+        if (a.title > b.title) return 1;
+        return 0;
+      }
+  }
+  json.sort(sortFunc)
 
   if (!json) throw new InternalServerError("not found");
   return json;
