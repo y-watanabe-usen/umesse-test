@@ -1,9 +1,5 @@
-"use strict";
-const assert = require('assert');
-const { respondWithCode } = require("../utils/writer");
-const { UMesseError } = require("../../umesse/error");
+'use strict';
 
-const { getCm, createCm, updateCm, deleteCm } = require("../../umesse/cm");
 
 /**
  * CM新規結合
@@ -13,17 +9,83 @@ const { getCm, createCm, updateCm, deleteCm } = require("../../umesse/cm");
  * xUnisCustomerCd String UNIS顧客CD
  * returns CmItem
  **/
-exports.createUserCm = function (body, xUnisCustomerCd) {
-  return new Promise(async function (resolve, reject) {
-    try {
-      const json = await createCm(xUnisCustomerCd, body);
-      resolve(json);
-    } catch (e) {
-      assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { message: e.message }))
+exports.createUserCm = function(body,xUnisCustomerCd) {
+  return new Promise(function(resolve, reject) {
+    var examples = {};
+    examples['application/json'] = {
+  "seconds" : 540,
+  "endDate" : "9999-12-31T23:59:59+09:00",
+  "materials" : [ {
+    "startChime" : {
+      "contentsId" : "サンプル01",
+      "volume" : 50
+    },
+    "narrations" : [ {
+      "contentsId" : "サンプル01",
+      "volume" : 150
+    }, {
+      "contentsId" : "サンプル01",
+      "volume" : 150
+    } ],
+    "endChime" : {
+      "contentsId" : "サンプル02",
+      "volume" : 50
+    },
+    "bgm" : {
+      "contentsId" : "サンプル01",
+      "volume" : 50
+    }
+  }, {
+    "startChime" : {
+      "contentsId" : "サンプル01",
+      "volume" : 50
+    },
+    "narrations" : [ {
+      "contentsId" : "サンプル01",
+      "volume" : 150
+    }, {
+      "contentsId" : "サンプル01",
+      "volume" : 150
+    } ],
+    "endChime" : {
+      "contentsId" : "サンプル02",
+      "volume" : 50
+    },
+    "bgm" : {
+      "contentsId" : "サンプル01",
+      "volume" : 50
+    }
+  } ],
+  "productionType" : "01: 音楽系, 02: 素ナレ",
+  "description" : "タイムセールサンプル１",
+  "industry" : [ {
+    "industryName" : "業種名",
+    "industryCd" : "01"
+  }, {
+    "industryName" : "業種名",
+    "industryCd" : "01"
+  } ],
+  "cmId" : "123456789-c-12345678",
+  "title" : "タイムセール",
+  "startDate" : "2019-09-01T09:00:00+9:00",
+  "scene" : [ {
+    "sceneCd" : "01",
+    "sceneName" : "シーン名"
+  }, {
+    "sceneCd" : "01",
+    "sceneName" : "シーン名"
+  } ],
+  "status" : "00:CM削除, 01: CM作成中, 02: CM作成完了, 09: CM作成エラー, 11: センターアップロード中, 12: センターアップロード完了, 19: センターアップロードエラー, 21: S'senceアップロード中, 22: S'senceアップロード完了, 29: S'senceアップロードエラー",
+  "timestamp" : "2019-09-01T09:00:00+9:00"
+};
+    if (Object.keys(examples).length > 0) {
+      resolve(examples[Object.keys(examples)[0]]);
+    } else {
+      resolve();
     }
   });
-};
+}
+
 
 /**
  * CM情報削除
@@ -33,17 +95,83 @@ exports.createUserCm = function (body, xUnisCustomerCd) {
  * xUnisCustomerCd String UNIS顧客CD
  * returns CmItem
  **/
-exports.deleteUserCm = function (cmId, xUnisCustomerCd) {
-  return new Promise(async function (resolve, reject) {
-    try {
-      const json = await deleteCm(xUnisCustomerCd, cmId);
-      resolve(json);
-    } catch (e) {
-      assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { message: e.message }))
+exports.deleteUserCm = function(cmId,xUnisCustomerCd) {
+  return new Promise(function(resolve, reject) {
+    var examples = {};
+    examples['application/json'] = {
+  "seconds" : 540,
+  "endDate" : "9999-12-31T23:59:59+09:00",
+  "materials" : [ {
+    "startChime" : {
+      "contentsId" : "サンプル01",
+      "volume" : 50
+    },
+    "narrations" : [ {
+      "contentsId" : "サンプル01",
+      "volume" : 150
+    }, {
+      "contentsId" : "サンプル01",
+      "volume" : 150
+    } ],
+    "endChime" : {
+      "contentsId" : "サンプル02",
+      "volume" : 50
+    },
+    "bgm" : {
+      "contentsId" : "サンプル01",
+      "volume" : 50
+    }
+  }, {
+    "startChime" : {
+      "contentsId" : "サンプル01",
+      "volume" : 50
+    },
+    "narrations" : [ {
+      "contentsId" : "サンプル01",
+      "volume" : 150
+    }, {
+      "contentsId" : "サンプル01",
+      "volume" : 150
+    } ],
+    "endChime" : {
+      "contentsId" : "サンプル02",
+      "volume" : 50
+    },
+    "bgm" : {
+      "contentsId" : "サンプル01",
+      "volume" : 50
+    }
+  } ],
+  "productionType" : "01: 音楽系, 02: 素ナレ",
+  "description" : "タイムセールサンプル１",
+  "industry" : [ {
+    "industryName" : "業種名",
+    "industryCd" : "01"
+  }, {
+    "industryName" : "業種名",
+    "industryCd" : "01"
+  } ],
+  "cmId" : "123456789-c-12345678",
+  "title" : "タイムセール",
+  "startDate" : "2019-09-01T09:00:00+9:00",
+  "scene" : [ {
+    "sceneCd" : "01",
+    "sceneName" : "シーン名"
+  }, {
+    "sceneCd" : "01",
+    "sceneName" : "シーン名"
+  } ],
+  "status" : "00:CM削除, 01: CM作成中, 02: CM作成完了, 09: CM作成エラー, 11: センターアップロード中, 12: センターアップロード完了, 19: センターアップロードエラー, 21: S'senceアップロード中, 22: S'senceアップロード完了, 29: S'senceアップロードエラー",
+  "timestamp" : "2019-09-01T09:00:00+9:00"
+};
+    if (Object.keys(examples).length > 0) {
+      resolve(examples[Object.keys(examples)[0]]);
+    } else {
+      resolve();
     }
   });
-};
+}
+
 
 /**
  * CM情報取得
@@ -53,17 +181,83 @@ exports.deleteUserCm = function (cmId, xUnisCustomerCd) {
  * xUnisCustomerCd String UNIS顧客CD
  * returns CmItem
  **/
-exports.getUserCm = function (cmId, xUnisCustomerCd) {
-  return new Promise(async function (resolve, reject) {
-    try {
-      const json = await getCm(xUnisCustomerCd, cmId);
-      resolve(json);
-    } catch (e) {
-      assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { message: e.message }))
+exports.getUserCm = function(cmId,xUnisCustomerCd) {
+  return new Promise(function(resolve, reject) {
+    var examples = {};
+    examples['application/json'] = {
+  "seconds" : 540,
+  "endDate" : "9999-12-31T23:59:59+09:00",
+  "materials" : [ {
+    "startChime" : {
+      "contentsId" : "サンプル01",
+      "volume" : 50
+    },
+    "narrations" : [ {
+      "contentsId" : "サンプル01",
+      "volume" : 150
+    }, {
+      "contentsId" : "サンプル01",
+      "volume" : 150
+    } ],
+    "endChime" : {
+      "contentsId" : "サンプル02",
+      "volume" : 50
+    },
+    "bgm" : {
+      "contentsId" : "サンプル01",
+      "volume" : 50
+    }
+  }, {
+    "startChime" : {
+      "contentsId" : "サンプル01",
+      "volume" : 50
+    },
+    "narrations" : [ {
+      "contentsId" : "サンプル01",
+      "volume" : 150
+    }, {
+      "contentsId" : "サンプル01",
+      "volume" : 150
+    } ],
+    "endChime" : {
+      "contentsId" : "サンプル02",
+      "volume" : 50
+    },
+    "bgm" : {
+      "contentsId" : "サンプル01",
+      "volume" : 50
+    }
+  } ],
+  "productionType" : "01: 音楽系, 02: 素ナレ",
+  "description" : "タイムセールサンプル１",
+  "industry" : [ {
+    "industryName" : "業種名",
+    "industryCd" : "01"
+  }, {
+    "industryName" : "業種名",
+    "industryCd" : "01"
+  } ],
+  "cmId" : "123456789-c-12345678",
+  "title" : "タイムセール",
+  "startDate" : "2019-09-01T09:00:00+9:00",
+  "scene" : [ {
+    "sceneCd" : "01",
+    "sceneName" : "シーン名"
+  }, {
+    "sceneCd" : "01",
+    "sceneName" : "シーン名"
+  } ],
+  "status" : "00:CM削除, 01: CM作成中, 02: CM作成完了, 09: CM作成エラー, 11: センターアップロード中, 12: センターアップロード完了, 19: センターアップロードエラー, 21: S'senceアップロード中, 22: S'senceアップロード完了, 29: S'senceアップロードエラー",
+  "timestamp" : "2019-09-01T09:00:00+9:00"
+};
+    if (Object.keys(examples).length > 0) {
+      resolve(examples[Object.keys(examples)[0]]);
+    } else {
+      resolve();
     }
   });
-};
+}
+
 
 /**
  * CM一覧取得
@@ -72,17 +266,148 @@ exports.getUserCm = function (cmId, xUnisCustomerCd) {
  * xUnisCustomerCd String UNIS顧客CD
  * returns List
  **/
-exports.listUserCm = function (xUnisCustomerCd) {
-  return new Promise(async function (resolve, reject) {
-    try {
-      const json = await getCm(xUnisCustomerCd);
-      resolve(json);
-    } catch (e) {
-      assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { message: e.message }))
+exports.listUserCm = function(xUnisCustomerCd) {
+  return new Promise(function(resolve, reject) {
+    var examples = {};
+    examples['application/json'] = [ {
+  "seconds" : 540,
+  "endDate" : "9999-12-31T23:59:59+09:00",
+  "materials" : [ {
+    "startChime" : {
+      "contentsId" : "サンプル01",
+      "volume" : 50
+    },
+    "narrations" : [ {
+      "contentsId" : "サンプル01",
+      "volume" : 150
+    }, {
+      "contentsId" : "サンプル01",
+      "volume" : 150
+    } ],
+    "endChime" : {
+      "contentsId" : "サンプル02",
+      "volume" : 50
+    },
+    "bgm" : {
+      "contentsId" : "サンプル01",
+      "volume" : 50
+    }
+  }, {
+    "startChime" : {
+      "contentsId" : "サンプル01",
+      "volume" : 50
+    },
+    "narrations" : [ {
+      "contentsId" : "サンプル01",
+      "volume" : 150
+    }, {
+      "contentsId" : "サンプル01",
+      "volume" : 150
+    } ],
+    "endChime" : {
+      "contentsId" : "サンプル02",
+      "volume" : 50
+    },
+    "bgm" : {
+      "contentsId" : "サンプル01",
+      "volume" : 50
+    }
+  } ],
+  "productionType" : "01: 音楽系, 02: 素ナレ",
+  "description" : "タイムセールサンプル１",
+  "industry" : [ {
+    "industryName" : "業種名",
+    "industryCd" : "01"
+  }, {
+    "industryName" : "業種名",
+    "industryCd" : "01"
+  } ],
+  "cmId" : "123456789-c-12345678",
+  "title" : "タイムセール",
+  "startDate" : "2019-09-01T09:00:00+9:00",
+  "scene" : [ {
+    "sceneCd" : "01",
+    "sceneName" : "シーン名"
+  }, {
+    "sceneCd" : "01",
+    "sceneName" : "シーン名"
+  } ],
+  "status" : "00:CM削除, 01: CM作成中, 02: CM作成完了, 09: CM作成エラー, 11: センターアップロード中, 12: センターアップロード完了, 19: センターアップロードエラー, 21: S'senceアップロード中, 22: S'senceアップロード完了, 29: S'senceアップロードエラー",
+  "timestamp" : "2019-09-01T09:00:00+9:00"
+}, {
+  "seconds" : 540,
+  "endDate" : "9999-12-31T23:59:59+09:00",
+  "materials" : [ {
+    "startChime" : {
+      "contentsId" : "サンプル01",
+      "volume" : 50
+    },
+    "narrations" : [ {
+      "contentsId" : "サンプル01",
+      "volume" : 150
+    }, {
+      "contentsId" : "サンプル01",
+      "volume" : 150
+    } ],
+    "endChime" : {
+      "contentsId" : "サンプル02",
+      "volume" : 50
+    },
+    "bgm" : {
+      "contentsId" : "サンプル01",
+      "volume" : 50
+    }
+  }, {
+    "startChime" : {
+      "contentsId" : "サンプル01",
+      "volume" : 50
+    },
+    "narrations" : [ {
+      "contentsId" : "サンプル01",
+      "volume" : 150
+    }, {
+      "contentsId" : "サンプル01",
+      "volume" : 150
+    } ],
+    "endChime" : {
+      "contentsId" : "サンプル02",
+      "volume" : 50
+    },
+    "bgm" : {
+      "contentsId" : "サンプル01",
+      "volume" : 50
+    }
+  } ],
+  "productionType" : "01: 音楽系, 02: 素ナレ",
+  "description" : "タイムセールサンプル１",
+  "industry" : [ {
+    "industryName" : "業種名",
+    "industryCd" : "01"
+  }, {
+    "industryName" : "業種名",
+    "industryCd" : "01"
+  } ],
+  "cmId" : "123456789-c-12345678",
+  "title" : "タイムセール",
+  "startDate" : "2019-09-01T09:00:00+9:00",
+  "scene" : [ {
+    "sceneCd" : "01",
+    "sceneName" : "シーン名"
+  }, {
+    "sceneCd" : "01",
+    "sceneName" : "シーン名"
+  } ],
+  "status" : "00:CM削除, 01: CM作成中, 02: CM作成完了, 09: CM作成エラー, 11: センターアップロード中, 12: センターアップロード完了, 19: センターアップロードエラー, 21: S'senceアップロード中, 22: S'senceアップロード完了, 29: S'senceアップロードエラー",
+  "timestamp" : "2019-09-01T09:00:00+9:00"
+} ];
+    if (Object.keys(examples).length > 0) {
+      resolve(examples[Object.keys(examples)[0]]);
+    } else {
+      resolve();
     }
   });
-};
+}
+
 
 /**
  * CM情報更新
@@ -93,14 +418,80 @@ exports.listUserCm = function (xUnisCustomerCd) {
  * xUnisCustomerCd String UNIS顧客CD
  * returns CmItem
  **/
-exports.updateUserCm = function (body, cmId, xUnisCustomerCd) {
-  return new Promise(async function (resolve, reject) {
-    try {
-      const json = await updateCm(xUnisCustomerCd, cmId, body);
-      resolve(json);
-    } catch (e) {
-      assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { message: e.message }))
+exports.updateUserCm = function(body,cmId,xUnisCustomerCd) {
+  return new Promise(function(resolve, reject) {
+    var examples = {};
+    examples['application/json'] = {
+  "seconds" : 540,
+  "endDate" : "9999-12-31T23:59:59+09:00",
+  "materials" : [ {
+    "startChime" : {
+      "contentsId" : "サンプル01",
+      "volume" : 50
+    },
+    "narrations" : [ {
+      "contentsId" : "サンプル01",
+      "volume" : 150
+    }, {
+      "contentsId" : "サンプル01",
+      "volume" : 150
+    } ],
+    "endChime" : {
+      "contentsId" : "サンプル02",
+      "volume" : 50
+    },
+    "bgm" : {
+      "contentsId" : "サンプル01",
+      "volume" : 50
+    }
+  }, {
+    "startChime" : {
+      "contentsId" : "サンプル01",
+      "volume" : 50
+    },
+    "narrations" : [ {
+      "contentsId" : "サンプル01",
+      "volume" : 150
+    }, {
+      "contentsId" : "サンプル01",
+      "volume" : 150
+    } ],
+    "endChime" : {
+      "contentsId" : "サンプル02",
+      "volume" : 50
+    },
+    "bgm" : {
+      "contentsId" : "サンプル01",
+      "volume" : 50
+    }
+  } ],
+  "productionType" : "01: 音楽系, 02: 素ナレ",
+  "description" : "タイムセールサンプル１",
+  "industry" : [ {
+    "industryName" : "業種名",
+    "industryCd" : "01"
+  }, {
+    "industryName" : "業種名",
+    "industryCd" : "01"
+  } ],
+  "cmId" : "123456789-c-12345678",
+  "title" : "タイムセール",
+  "startDate" : "2019-09-01T09:00:00+9:00",
+  "scene" : [ {
+    "sceneCd" : "01",
+    "sceneName" : "シーン名"
+  }, {
+    "sceneCd" : "01",
+    "sceneName" : "シーン名"
+  } ],
+  "status" : "00:CM削除, 01: CM作成中, 02: CM作成完了, 09: CM作成エラー, 11: センターアップロード中, 12: センターアップロード完了, 19: センターアップロードエラー, 21: S'senceアップロード中, 22: S'senceアップロード完了, 29: S'senceアップロードエラー",
+  "timestamp" : "2019-09-01T09:00:00+9:00"
+};
+    if (Object.keys(examples).length > 0) {
+      resolve(examples[Object.keys(examples)[0]]);
+    } else {
+      resolve();
     }
   });
-};
+}
+

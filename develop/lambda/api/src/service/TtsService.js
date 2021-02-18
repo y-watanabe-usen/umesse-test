@@ -1,15 +1,5 @@
-"use strict";
+'use strict';
 
-const {
-  getUserResource,
-  createUserResource,
-  updateUserResource,
-  deleteUserResource,
-} = require("../../umesse/resources");
-const assert = require('assert');
-const { respondWithCode } = require("../utils/writer");
-const { UMesseError } = require("../../umesse/error");
-const category = "tts";
 
 /**
  * 新規録音データ
@@ -18,17 +8,30 @@ const category = "tts";
  * xUnisCustomerCd String UNIS顧客CD
  * returns List
  **/
-exports.createUserTts = function (body, xUnisCustomerCd) {
-  return new Promise(async function (resolve, reject) {
-    try {
-      const json = await createUserResource(xUnisCustomerCd, category, body);
-      resolve(json);
-    } catch (e) {
-      assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { message: e.message }))
+exports.createUserTts = function(xUnisCustomerCd) {
+  return new Promise(function(resolve, reject) {
+    var examples = {};
+    examples['application/json'] = [ {
+  "ttsId" : "123456789-t-12345678",
+  "description" : "サンプル",
+  "title" : "サンプル",
+  "startDate" : "2019-09-01T09:00:00+9:00",
+  "timestamp" : "2019-09-01T09:00:00+9:00"
+}, {
+  "ttsId" : "123456789-t-12345678",
+  "description" : "サンプル",
+  "title" : "サンプル",
+  "startDate" : "2019-09-01T09:00:00+9:00",
+  "timestamp" : "2019-09-01T09:00:00+9:00"
+} ];
+    if (Object.keys(examples).length > 0) {
+      resolve(examples[Object.keys(examples)[0]]);
+    } else {
+      resolve();
     }
   });
-};
+}
+
 
 /**
  * TTSデータ削除
@@ -38,17 +41,24 @@ exports.createUserTts = function (body, xUnisCustomerCd) {
  * xUnisCustomerCd String UNIS顧客CD
  * returns TtsItem
  **/
-exports.deleteUserTts = function (ttsId, xUnisCustomerCd) {
-  return new Promise(async function (resolve, reject) {
-    try {
-      const json = await deleteUserResource(xUnisCustomerCd, category, ttsId);
-      resolve(json);
-    } catch (e) {
-      assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { message: e.message }))
+exports.deleteUserTts = function(ttsId,xUnisCustomerCd) {
+  return new Promise(function(resolve, reject) {
+    var examples = {};
+    examples['application/json'] = {
+  "ttsId" : "123456789-t-12345678",
+  "description" : "サンプル",
+  "title" : "サンプル",
+  "startDate" : "2019-09-01T09:00:00+9:00",
+  "timestamp" : "2019-09-01T09:00:00+9:00"
+};
+    if (Object.keys(examples).length > 0) {
+      resolve(examples[Object.keys(examples)[0]]);
+    } else {
+      resolve();
     }
   });
-};
+}
+
 
 /**
  * TTSデータ取得
@@ -58,17 +68,24 @@ exports.deleteUserTts = function (ttsId, xUnisCustomerCd) {
  * xUnisCustomerCd String UNIS顧客CD
  * returns TtsItem
  **/
-exports.getUserTts = function (ttsId, xUnisCustomerCd) {
-  return new Promise(async function (resolve, reject) {
-    try {
-      const json = await getUserResource(xUnisCustomerCd, category, ttsId);
-      resolve(json);
-    } catch (e) {
-      assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { message: e.message }))
+exports.getUserTts = function(ttsId,xUnisCustomerCd) {
+  return new Promise(function(resolve, reject) {
+    var examples = {};
+    examples['application/json'] = {
+  "ttsId" : "123456789-t-12345678",
+  "description" : "サンプル",
+  "title" : "サンプル",
+  "startDate" : "2019-09-01T09:00:00+9:00",
+  "timestamp" : "2019-09-01T09:00:00+9:00"
+};
+    if (Object.keys(examples).length > 0) {
+      resolve(examples[Object.keys(examples)[0]]);
+    } else {
+      resolve();
     }
   });
-};
+}
+
 
 /**
  * TTSデータ一覧取得
@@ -77,17 +94,30 @@ exports.getUserTts = function (ttsId, xUnisCustomerCd) {
  * xUnisCustomerCd String UNIS顧客CD
  * returns List
  **/
-exports.listUserTts = function (xUnisCustomerCd) {
-  return new Promise(async function (resolve, reject) {
-    try {
-      const json = await getUserResource(xUnisCustomerCd, category);
-      resolve(json);
-    } catch (e) {
-      assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { message: e.message }))
+exports.listUserTts = function(xUnisCustomerCd) {
+  return new Promise(function(resolve, reject) {
+    var examples = {};
+    examples['application/json'] = [ {
+  "ttsId" : "123456789-t-12345678",
+  "description" : "サンプル",
+  "title" : "サンプル",
+  "startDate" : "2019-09-01T09:00:00+9:00",
+  "timestamp" : "2019-09-01T09:00:00+9:00"
+}, {
+  "ttsId" : "123456789-t-12345678",
+  "description" : "サンプル",
+  "title" : "サンプル",
+  "startDate" : "2019-09-01T09:00:00+9:00",
+  "timestamp" : "2019-09-01T09:00:00+9:00"
+} ];
+    if (Object.keys(examples).length > 0) {
+      resolve(examples[Object.keys(examples)[0]]);
+    } else {
+      resolve();
     }
   });
-};
+}
+
 
 /**
  * TTSデータ更新（メタデータのみ）
@@ -98,18 +128,21 @@ exports.listUserTts = function (xUnisCustomerCd) {
  * xUnisCustomerCd String UNIS顧客CD
  * returns TtsItem
  **/
-exports.updateUserTts = function (body, ttsId, xUnisCustomerCd) {
-  return new Promise(async function (resolve, reject) {
-    try {
-      const json = await updateUserResource(
-        xUnisCustomerCd,
-        category,
-        ttsId,
-        body);
-      resolve(json);
-    } catch (e) {
-      assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { message: e.message }))
+exports.updateUserTts = function(body,ttsId,xUnisCustomerCd) {
+  return new Promise(function(resolve, reject) {
+    var examples = {};
+    examples['application/json'] = {
+  "ttsId" : "123456789-t-12345678",
+  "description" : "サンプル",
+  "title" : "サンプル",
+  "startDate" : "2019-09-01T09:00:00+9:00",
+  "timestamp" : "2019-09-01T09:00:00+9:00"
+};
+    if (Object.keys(examples).length > 0) {
+      resolve(examples[Object.keys(examples)[0]]);
+    } else {
+      resolve();
     }
   });
-};
+}
+
