@@ -14,12 +14,13 @@ const { dynamodbManager } = require("umesse-lib/utils/dynamodbManager");
 const { s3Manager } = require("umesse-lib/utils/s3Manager");
 const { BadRequestError, InternalServerError } = require("./error");
 
-exports.getResource = async (category, industryCd, sceneCd) => {
+exports.getResource = async (category, industryCd, sceneCd, sort) => {
   debuglog(
     `[getResource] ${JSON.stringify({
       category: category,
       industryCd: industryCd,
       sceneCd: sceneCd,
+      sceneCd: sort,
     })}`
   );
 
@@ -60,13 +61,50 @@ exports.getResource = async (category, industryCd, sceneCd) => {
     );
   }
 
-  // titleの昇順でソート
-  json.sort((a, b) => {
-    var r = 0;
-    if (a.title < b.title) { r = -1; }
-    else if (a.title > b.title) { r = 1; }
-    return r;
-  })
+  if (!sort) sort = 1;
+  let sortFunc;
+  switch (sort) {
+    case 1:
+      // titleの昇順でソート
+      sortFunc = (a, b) => {
+        if (a.title < b.title) return -1;
+        if (a.title > b.title) return 1;
+        return 0;
+      }
+      break;
+    case 2:
+      // titleの降順でソート
+      sortFunc = (a, b) => {
+        if (a.title > b.title) return -1;
+        if (a.title < b.title) return 1;
+        return 0;
+      }
+      break;
+    case 3:
+      // timestampの昇順でソート
+      sortFunc = (a, b) => {
+        if (a.timestamp < b.timestamp) return -1;
+        if (a.timestamp > b.timestamp) return 1;
+        return 0;
+      }
+      break;
+    case 4:
+      // timestampの降順でソート
+      sortFunc = (a, b) => {
+        if (a.timestamp > b.timestamp) return -1;
+        if (a.timestamp < b.timestamp) return 1;
+        return 0;
+      }
+      break;
+    default:
+      // titleの昇順でソート
+      sortFunc = (a, b) => {
+        if (a.title < b.title) return -1;
+        if (a.title > b.title) return 1;
+        return 0;
+      }
+  }
+  json.sort(sortFunc)
 
   if (!json) throw new InternalServerError("not found");
   return json;
