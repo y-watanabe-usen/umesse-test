@@ -7,87 +7,49 @@
     </template>
     <template #contents>
       <ContentsBase>
-        <div class="row">
-          <div class="col-2 bg-menu pl-1 pr-1 rounded-left">
-            <button
-              type="button"
-              class="btn btn-menu text-left text-white"
-              :class="[
-                templateIndustry.cd == activeTemplateIndustryCd
-                  ? 'btn-primary'
-                  : 'btn-link',
-                templateIndustry.cd == activeTemplateIndustryCd
-                  ? 'text-white'
-                  : 'text-dark',
-                templateIndustry.cd == 1 ? 'mt-2' : '',
-              ]"
+        <template #sub-menu>
+          <SubMenu>
+            <SubMenuItem
               v-for="templateIndustry in templateIndustries"
               :key="templateIndustry.cd"
+              :isSelected="templateIndustry.cd == activeTemplateIndustryCd"
               @click="clickTemplateIndustry(templateIndustry.cd)"
             >
               {{ templateIndustry.name }}
-            </button>
-          </div>
-          <div class="col-9 bg-white rounded-right">
-            <div class="my-3">
-              <h6 class="border-bottom border-gray pb-2 mb-0">
-                <select class="form-control w-25">
-                  <option v-for="sort in sorts" :key="sort">
-                    {{ sort }}
-                  </option>
-                </select>
-              </h6>
-              <div
-                class="media text-muted pt-3"
-                v-for="template in templates"
-                :key="template.contentsId"
+            </SubMenuItem>
+          </SubMenu>
+        </template>
+        <List>
+          <template #header>
+            <ListHeader>
+              <select class="form-control w-25">
+                <option v-for="sort in sorts" :key="sort">
+                  {{ sort }}
+                </option>
+              </select>
+            </ListHeader>
+          </template>
+          <ListItem v-for="template in templates" :key="template.contentsId">
+            <template #title>
+              <h2>{{ template.title }}</h2>
+            </template>
+            <template #line1>
+              <p>{{ template.manuscript }}</p>
+            </template>
+            <template #line2>
+              <p>約00:00<!-- TODO: 仮の数値 --></p>
+            </template>
+            <template #operations>
+              <Button
+                type="rectangle"
+                class="btn-select"
+                @click="$router.push({ name: 'VoiceTemplateDetail' })"
               >
-                <div
-                  class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray pl-3"
-                >
-                  <div
-                    class="d-flex justify-content-between align-items-center w-100"
-                  >
-                    <strong class="text-dark h5 pt-2 pb-2">{{
-                      template.title
-                    }}</strong>
-                    <div>
-                      <router-link :to="{ name: 'VoiceTemplateDetail' }">
-                        <button
-                          type="button"
-                          class="btn btn-light shadow btn-try"
-                        >
-                          選択
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="7.099"
-                            height="12.198"
-                            viewBox="0 0 7.099 12.198"
-                            class="ml-2"
-                          >
-                            <path
-                              d="M933.947,184.472l4.685,4.685-4.685,4.685"
-                              transform="translate(-932.533 -183.057)"
-                              fill="none"
-                              stroke="#578ed9"
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="2"
-                            />
-                          </svg>
-                        </button>
-                      </router-link>
-                    </div>
-                  </div>
-                  <span class="d-block pb-2"
-                    >{{ template.manuscript }}
-                    <br />約00:00<!-- TODO: 仮の数値 -->
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+                選択<img src="@/assets/icon_select.svg" />
+              </Button>
+            </template>
+          </ListItem>
+        </List>
       </ContentsBase>
     </template>
   </BasicLayout>
@@ -98,6 +60,12 @@ import { computed, defineComponent, onMounted, reactive, toRefs } from "vue";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
 import Header from "@/components/organisms/Header.vue";
+import Button from "@/components/atoms/Button.vue";
+import SubMenu from "@/components/organisms/SubMenu.vue";
+import SubMenuItem from "@/components/molecules/SubMenuItem.vue";
+import List from "@/components/organisms/List.vue";
+import ListHeader from "@/components/molecules/ListHeader.vue";
+import ListItem from "@/components/molecules/ListItem.vue";
 import { config } from "@/utils/UMesseApiConfiguration";
 import * as UMesseApi from "umesseapi";
 import { TemplateItem } from "umesseapi/models";
@@ -108,6 +76,12 @@ export default defineComponent({
     BasicLayout,
     ContentsBase,
     Header,
+    Button,
+    SubMenu,
+    SubMenuItem,
+    List,
+    ListHeader,
+    ListItem,
   },
   setup() {
     const api = new UMesseApi.ResourcesApi(config);
@@ -139,36 +113,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style scoped>
-.bg-menu {
-  background: #d9d9d9;
-}
-.btn-menu {
-  width: 100%;
-  height: 80px;
-  margin-bottom: 10px;
-  text-decoration: none;
-}
-.btn-try,
-.btn-edit {
-  width: 100px;
-  height: 40px;
-}
-.btn-edit {
-  margin-left: 20px;
-}
-.btn:focus {
-  box-shadow: none;
-}
-.btn-play,
-.btn-close {
-  width: 200px;
-}
-.btn-link {
-  color: #333;
-}
-.dropdown-toggle::after {
-  content: none;
-}
-</style>

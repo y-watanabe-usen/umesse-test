@@ -1,9 +1,9 @@
 <template>
-  <div class="contents-base">
-    <slot name="sub-menu" />
-    <div class="contents">
+  <div class="list">
+    <slot name="header" />
+    <ul>
       <slot />
-    </div>
+    </ul>
   </div>
 </template>
 
@@ -11,7 +11,7 @@
 import { reactive } from "vue";
 
 export default {
-  name: "ContentsBase",
+  name: "List",
   setup() {
     const state = reactive({});
     return {
@@ -24,27 +24,20 @@ export default {
 <style lang="scss" scoped>
 @import '@/scss/_variables.scss';
 
-.contents-base {
-  @include flex_start;
-  background-color: rgba(255, 255, 255, 0.75);
-  margin-left: 20px;
-  margin-right: 20px;
-  width: calc(100% - 40px);
+.list {
+  @include flex_col_start;
   height: 100%;
-  border-top-left-radius: 14px;
-  border-top-right-radius: 14px;
-  box-shadow: $box_shadow;
-  overflow: hidden;
-  ::v-deep .sub-menu {
-    width: 214px;
-    height: 100%;
+  width: 100%;
+  ::v-deep .list-header {
+    width: calc(100% - 68px);
+    height: 75px;
     flex-grow: 0;
     flex-shrink: 0;
   }
-  .contents {
+  ul {
     width: 100%;
     height: 100%;
-    background-color: white;
+    margin-bottom: 0;
     overflow: hidden;
     overflow-y: scroll;
     scroll-behavior: smooth;

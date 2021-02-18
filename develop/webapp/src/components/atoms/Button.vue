@@ -30,7 +30,7 @@ export default {
 @import '@/scss/_variables.scss';
 
 button {
-  display: inline-block;
+  @include flex_center;
   height: 50px;
   color: $color_blue;
   font-size: 16px;
@@ -43,20 +43,23 @@ button {
   box-shadow: $box_shadow_weak;
   cursor: pointer;
   &.primary {
-    font-size: 20px;
+    font-size: 19px;
     color: white;
     background-color: $color_blue;
   }
   &.secondary {
-    font-size: 20px;
+    font-size: 19px;
     color: black;
     background-color: white;
   }
   &.rectangle {
+    height: 60px;
+    line-height: 60px;
     border-radius: 4px;
-    font-size: 20px;
+    font-size: 19px;
     color: black;
     background-color: white;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.29);
   }
   &:disabled {
     color: white;
