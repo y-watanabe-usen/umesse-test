@@ -10,9 +10,9 @@ const {
   generateId,
 } = require("umesse-lib/constants");
 const { validation } = require("umesse-lib/validation");
-const { dynamodbManager } = require("umesse-lib/utils/dynamodbManager");
 const { s3Manager } = require("umesse-lib/utils/s3Manager");
 const { BadRequestError, InternalServerError } = require("./error");
+const db = require("./db");
 
 exports.getResource = async (category, industryCd, sceneCd) => {
   debuglog(
@@ -29,26 +29,14 @@ exports.getResource = async (category, industryCd, sceneCd) => {
   });
   if (checkParams) throw new BadRequestError(checkParams);
 
-  const options = {
-    FilterExpression: "category = :category",
-    ExpressionAttributeValues: {
-      ":category": category,
-    },
-  };
-
-  let res;
+  let json;
   try {
-    res = await dynamodbManager.scan(
-      constants.dynamoDbTable().contents,
-      options
-    );
+    json = await db.Contents.findByCategory(category);
   } catch (e) {
     errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
-  if (!res || !res.Items.length) throw new InternalServerError("not found");
 
-  let json = res.Items;
   if (industryCd) {
     json = json.filter((item) =>
       item.industry.some((el) => el.industryCd === industryCd)
@@ -177,25 +165,14 @@ exports.getUserResource = async (unisCustomerCd, category, id) => {
   });
   if (checkParams) throw new BadRequestError(checkParams);
 
-  const key = { unisCustomerCd: unisCustomerCd };
-  const options = {
-    ProjectionExpression: category,
-  };
-  debuglog(JSON.stringify({ key: key, options: options }));
-
-  let res;
+  let json;
   try {
-    res = await dynamodbManager.get(
-      constants.dynamoDbTable().users,
-      key,
-      options);
+    json = await db.User.findCategory(unisCustomerCd, category);
   } catch (e) {
     errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
-  if (!res || !res.Item) throw new InternalServerError("not found");
 
-  let json = res.Item[category];
   if (id) {
     json = json.filter((item) => item[`${category}Id`] === id)[0];
   }
@@ -244,32 +221,13 @@ exports.createUserResource = async (unisCustomerCd, category, body) => {
     startDate: timestamp(),
     timestamp: timestamp(),
   };
-  const key = { unisCustomerCd: unisCustomerCd };
-  const options = {
-    UpdateExpression: "SET #category = list_append(#category, :data)",
-    ExpressionAttributeNames: {
-      "#category": category,
-    },
-    ExpressionAttributeValues: {
-      ":data": [data],
-    },
-    ReturnValues: "UPDATED_NEW",
-  };
-  debuglog(JSON.stringify({ key: key, options: options }));
 
   try {
-    res = await dynamodbManager.update(
-      constants.dynamoDbTable().users,
-      key,
-      options);
+    return await db.User.updateData(unisCustomerCd, category, data);
   } catch (e) {
     errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
-  if (!res) throw new InternalServerError("update failed");
-
-  let json = res.Attributes[category].pop();
-  return json;
 };
 
 // ユーザー作成の音声更新
@@ -303,34 +261,13 @@ exports.updateUserResource = async (unisCustomerCd, category, id, body) => {
     resource[key] = body[key];
   });
   resource.timestamp = timestamp();
-  const key = { unisCustomerCd: unisCustomerCd };
-  const options = {
-    UpdateExpression: `SET #category[${index}] = :resource`,
-    ExpressionAttributeNames: {
-      "#category": category,
-    },
-    ExpressionAttributeValues: {
-      ":resource": resource,
-    },
-    ReturnValues: "UPDATED_NEW",
-  };
-  debuglog(JSON.stringify({ key: key, options: options }));
 
-  let res;
   try {
-    res = await dynamodbManager.update(
-      constants.dynamoDbTable().users,
-      key,
-      options
-    );
+    return await db.User.updateResource(unisCustomerCd, category, resource);
   } catch (e) {
     errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
-  if (!res) throw new InternalServerError("update failed");
-
-  let json = res.Attributes[category][index];
-  return json;
 };
 
 // ユーザー作成の音声削除
@@ -355,7 +292,7 @@ exports.deleteUserResource = async (unisCustomerCd, category, id) => {
   if (!list || !list.length) throw new InternalServerError("not found");
   const index = list.findIndex((item) => item[`${category}Id`] === id);
   if (index < 0) throw new InternalServerError("not found");
-  const resource = list[index];
+  //const resource = list[index];
 
   // S3上の録音音声を削除
   try {
@@ -369,31 +306,12 @@ exports.deleteUserResource = async (unisCustomerCd, category, id) => {
   }
 
   // DynamoDBのデータ更新
-  const key = { unisCustomerCd: unisCustomerCd };
-  const options = {
-    UpdateExpression: `REMOVE #category[${index}]`,
-    ExpressionAttributeNames: {
-      "#category": category,
-    },
-    ReturnValues: "UPDATED_NEW",
-  };
-  debuglog(JSON.stringify({ key: key, options: options }));
-
-  let res;
   try {
-    res = await dynamodbManager.update(
-      constants.dynamoDbTable().users,
-      key,
-      options
-    );
+    return await db.User.deleteFromCategory(unisCustomerCd, index, category);
   } catch (e) {
     errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
-  if (!res) throw new InternalServerError("update failed");
-
-  let json = res.Attributes[category];
-  return json;
 };
 
 // TTS作成

@@ -7,6 +7,7 @@ const { s3Manager } = require("umesse-lib/utils/s3Manager");
 const { getCm } = require("./cm");
 const { getUser } = require("./user");
 const { BadRequestError, InternalServerError } = require("./error");
+const db = require("./db");
 
 // 共有CM取得（一覧・個別）
 exports.getShareCm = async (unisCustomerCd, cmId) => {
@@ -23,25 +24,15 @@ exports.getShareCm = async (unisCustomerCd, cmId) => {
   });
   if (checkParams) throw new BadRequestError(checkParams);
 
-  const key = { unisCustomerCd: unisCustomerCd };
-  const options = {
-    ProjectionExpression: "cm",
-  };
-  debuglog(JSON.stringify({ key: key, options: options }));
 
-  let res;
+  let json;
   try {
-    res = await dynamodbManager.get(
-      constants.dynamoDbTable().users,
-      key,
-      options);
+    json = await db.User.findCm(unisCustomerCd);
   } catch (e) {
     errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
-  if (!res || !res.Item) throw new InternalServerError("not found");
 
-  let json = res.Item.cm;
   json = json.filter((item) => item.status === constants.cmStatus.SHARING);
   if (cmId) {
     json = json.filter((item) => item.cmId === cmId)[0];
@@ -96,29 +87,14 @@ exports.createShareCm = async (unisCustomerCd, cmId) => {
   // DynamoDBのデータ更新
   cm.status = constants.cmStatus.SHARING;
   cm.timestamp = timestamp();
-  const key = { unisCustomerCd: unisCustomerCd };
-  const options = {
-    UpdateExpression: `SET cm[${index}] = :cm`,
-    ExpressionAttributeValues: {
-      ":cm": cm,
-    },
-    ReturnValues: "UPDATED_NEW",
-  };
-  debuglog(JSON.stringify({ key: key, options: options }));
+
 
   try {
-    res = await dynamodbManager.update(
-      constants.dynamoDbTable().users,
-      key,
-      options);
+    return await db.User.updateCm(unisCustomerCd, index, cm);
   } catch (e) {
     errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
-  if (!res) throw new InternalServerError("update failed");
-
-  let json = res.Attributes.cm[index];
-  return json;
 };
 
 // 共有CM解除
@@ -164,28 +140,11 @@ exports.deleteShareCm = async (unisCustomerCd, cmId) => {
   // DynamoDBのデータ更新
   cm.status = constants.cmStatus.COMPLETE;
   cm.timestamp = timestamp();
-  const key = { unisCustomerCd: unisCustomerCd };
-  const options = {
-    UpdateExpression: `SET cm[${index}] = :cm`,
-    ExpressionAttributeValues: {
-      ":cm": cm,
-    },
-    ReturnValues: "UPDATED_NEW",
-  };
-  debuglog(JSON.stringify({ key: key, options: options }));
 
-  let res;
   try {
-    res = await dynamodbManager.update(
-      constants.dynamoDbTable().users,
-      key,
-      options);
+    return await db.User.updateCm(unisCustomerCd, index, cm);
   } catch (e) {
     erorrolg(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
-  if (!res) throw new InternalServerError("update failed");
-
-  let json = res.Attributes.cm[index];
-  return json;
 };

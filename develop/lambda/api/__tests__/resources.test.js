@@ -62,6 +62,7 @@ const narrationData = {
   timestamp: "2019-09-01T09:00:00+9:00",
 };
 
+console.error = jest.fn();
 beforeAll(() => {
   jest.setTimeout(1000 * 30); // 30 sec
 });

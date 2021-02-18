@@ -13,6 +13,7 @@ const data = aws.DynamoDB.Converter.unmarshall(
   json["umesse-external"][0].PutRequest.Item
 );
 
+console.error = jest.fn();
 beforeAll(() => {
   jest.setTimeout(1000 * 30); // 30 sec
 });
