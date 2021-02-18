@@ -8,7 +8,7 @@ const {
 } = require("../../umesse/resources");
 const assert = require('assert');
 const { respondWithCode } = require("../utils/writer");
-const { UMesseError } = require("../../umesse/error");
+const { UMesseError } = require("umesse-lib/error");
 const category = "tts";
 
 /**
@@ -25,7 +25,7 @@ exports.createUserTts = function (body, xUnisCustomerCd) {
       resolve(json);
     } catch (e) {
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { message: e.message }))
+      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
     }
   });
 };
@@ -45,7 +45,7 @@ exports.deleteUserTts = function (ttsId, xUnisCustomerCd) {
       resolve(json);
     } catch (e) {
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { message: e.message }))
+      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
     }
   });
 };
@@ -65,7 +65,7 @@ exports.getUserTts = function (ttsId, xUnisCustomerCd) {
       resolve(json);
     } catch (e) {
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { message: e.message }))
+      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
     }
   });
 };
@@ -84,7 +84,7 @@ exports.listUserTts = function (xUnisCustomerCd) {
       resolve(json);
     } catch (e) {
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { message: e.message }))
+      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
     }
   });
 };
@@ -109,7 +109,7 @@ exports.updateUserTts = function (body, ttsId, xUnisCustomerCd) {
       resolve(json);
     } catch (e) {
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { message: e.message }))
+      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
     }
   });
 };

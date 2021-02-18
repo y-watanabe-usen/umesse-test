@@ -3,7 +3,7 @@
 const { constants, debuglog, timestamp, errorlog } = require("umesse-lib/constants");
 const { validation } = require("umesse-lib/validation");
 const { getCm } = require("./cm");
-const { BadRequestError, InternalServerError } = require("./error");
+const { BadRequestError, InternalServerError } = require("umesse-lib/error");
 const db = require("./db");
 
 // 外部連携データ取得（一覧・個別）

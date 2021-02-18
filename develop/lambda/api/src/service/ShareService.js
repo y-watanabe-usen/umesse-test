@@ -7,7 +7,7 @@ const {
 } = require("../../umesse/share");
 const assert = require('assert');
 const { respondWithCode } = require("../utils/writer");
-const { UMesseError } = require("../../umesse/error");
+const { UMesseError } = require("umesse-lib/error");
 
 /**
  * CM共有追加
@@ -24,7 +24,7 @@ exports.createShareCm = function (cmId, xUnisCustomerCd) {
       resolve(json);
     } catch (e) {
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { message: e.message }))
+      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
     }
   });
 };
@@ -44,7 +44,7 @@ exports.deleteShareCm = function (cmId, xUnisCustomerCd) {
       resolve(json);
     } catch (e) {
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { message: e.message }))
+      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
     }
   });
 };
@@ -64,7 +64,7 @@ exports.getShareCm = function (cmId, xUnisCustomerCd) {
       resolve(json);
     } catch (e) {
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { message: e.message }))
+      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
     }
   });
 };
@@ -83,7 +83,7 @@ exports.listShareCm = function (xUnisCustomerCd) {
       resolve(json);
     } catch (e) {
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { message: e.message }))
+      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
     }
   });
 };

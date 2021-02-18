@@ -2,11 +2,10 @@
 
 const { constants, debuglog, errorlog, timestamp } = require("umesse-lib/constants");
 const { validation } = require("umesse-lib/validation");
-const { dynamodbManager } = require("umesse-lib/utils/dynamodbManager");
 const { s3Manager } = require("umesse-lib/utils/s3Manager");
 const { getCm } = require("./cm");
 const { getUser } = require("./user");
-const { BadRequestError, InternalServerError } = require("./error");
+const { BadRequestError, InternalServerError } = require("umesse-lib/error");
 const db = require("./db");
 
 // 共有CM取得（一覧・個別）

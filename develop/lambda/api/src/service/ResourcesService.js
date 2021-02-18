@@ -8,7 +8,7 @@ const {
 } = require("../../umesse/resources");
 const assert = require('assert');
 const { respondWithCode } = require("../utils/writer");
-const { UMesseError } = require("../../umesse/error");
+const { UMesseError } = require("umesse-lib/error");
 
 /**
  * TTS音声作成
@@ -24,7 +24,7 @@ exports.createTts = function (body) {
       resolve(json);
     } catch (e) {
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { message: e.message }))
+      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
     }
   });
 };
@@ -44,7 +44,7 @@ exports.getSignedUrl = function (id, category) {
       resolve(json);
     } catch (e) {
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { message: e.message }))
+      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
     }
   });
 };
@@ -64,7 +64,7 @@ exports.listBgm = function (industryCd, sort) {
       resolve(json);
     } catch (e) {
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { message: e.message }))
+      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
     }
   });
 };
@@ -83,7 +83,7 @@ exports.listChime = function (sort) {
       resolve(json);
     } catch (e) {
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { message: e.message }))
+      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
     }
   });
 };
@@ -109,7 +109,7 @@ exports.listFree = function (industryCd, sceneCd, sort) {
       resolve(json);
     } catch (e) {
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { message: e.message }))
+      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
     }
   });
 };
@@ -135,7 +135,7 @@ exports.listNarration = function (industryCd, sceneCd, sort) {
       resolve(json);
     } catch (e) {
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { message: e.message }))
+      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
     }
 
   });
@@ -162,7 +162,7 @@ exports.listTemplate = function (industryCd, sceneCd, sort) {
       resolve(json);
     } catch (e) {
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { message: e.message }))
+      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
     }
   });
 };

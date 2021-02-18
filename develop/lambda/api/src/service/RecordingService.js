@@ -8,7 +8,7 @@ const {
 } = require("../../umesse/resources");
 const assert = require('assert');
 const { respondWithCode } = require("../utils/writer");
-const { UMesseError } = require("../../umesse/error");
+const { UMesseError } = require("umesse-lib/error");
 const category = "recording";
 
 /**
@@ -25,7 +25,7 @@ exports.createUserRecording = function (body, xUnisCustomerCd) {
       resolve(json);
     } catch (e) {
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { message: e.message }))
+      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
     }
   });
 };
@@ -49,7 +49,7 @@ exports.deleteUserRecording = function (recordingId, xUnisCustomerCd) {
       resolve(json);
     } catch (e) {
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { message: e.message }))
+      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
     }
   });
 };
@@ -69,7 +69,7 @@ exports.getUserRecording = function (recordingId, xUnisCustomerCd) {
       resolve(json);
     } catch (e) {
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { message: e.message }))
+      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
     }
   });
 };
@@ -88,7 +88,7 @@ exports.listUserRecording = function (xUnisCustomerCd) {
       resolve(json);
     } catch (e) {
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { message: e.message }))
+      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
     }
   });
 };
@@ -114,7 +114,7 @@ exports.updateUserRecording = function (body, recordingId, xUnisCustomerCd) {
       resolve(json);
     } catch (e) {
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { message: e.message }))
+      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
     }
   });
 };
