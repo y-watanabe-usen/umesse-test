@@ -3,8 +3,9 @@
 var utils = require('../utils/writer.js');
 var Recording = require('../service/RecordingService');
 
-module.exports.createUserRecording = function createUserRecording (req, res, next, xUnisCustomerCd) {
-  Recording.createUserRecording(xUnisCustomerCd)
+module.exports.createUserRecording = function createUserRecording (req, res, next, body, xUnisCustomerCd) {
+  console.log("xUnisCustomerCd", xUnisCustomerCd)
+  Recording.createUserRecording(body, xUnisCustomerCd)
     .then(function (response) {
       utils.writeJson(res, response);
     })

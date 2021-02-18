@@ -10,7 +10,7 @@
       </template>
       <template v-else>
         <p class="content-title">{{ contentTitle }}</p>
-        <button class="sound"><img src="@/assets/icon_sound.svg"></button>
+        <button class="sound" @click="$emit('togglePlay')"><img src="@/assets/icon_sound.svg"></button>
         <p class="duration">{{ duration }}</p>
       </template>
     </div>

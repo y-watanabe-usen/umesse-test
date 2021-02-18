@@ -201,14 +201,17 @@
         <div class="row pt-4">
           <div class="col-2">説明</div>
           <div class="col-10">
-            <textarea class="form-control"></textarea>
+            <textarea
+              class="form-control"
+              v-model="file.description"
+            ></textarea>
           </div>
         </div>
       </template>
       <template #footer>
         <ModalFooter>
           <Button type="secondary" @click="closeModal">キャンセル</Button>
-          <Button type="primary" @click="toCreateCm"
+          <Button type="primary" @click="uploadTtsFile"
             >保存して作成を続ける</Button
           >
         </ModalFooter>
@@ -298,13 +301,12 @@ export default defineComponent({
 
     const uploadTtsFile = async () => {
       /// check state.file.
+      console.log("uploadTtsFile");
       state.file.blob = await ttsStore.getUploadTtsData();
-      ttsStore.uploadTtsData(state.file);
-    };
-
-    const toCreateCm = () => {
-      const id = "1";
-      cm.setNarration(<TtsItem>ttsStore.getUserTts(id));
+      const uploadedData: any = await ttsStore.uploadTtsData(state.file);
+      uploadedData.ttsId = uploadedData.id;
+      console.log("uploadedData", uploadedData);
+      cm.setNarration(<TtsItem>uploadedData);
       router.push({ name: "Cm" });
     };
 
@@ -323,7 +325,7 @@ export default defineComponent({
       play,
       stop,
       createTtsData,
-      toCreateCm,
+      uploadTtsFile,
       openModal,
       closeModal,
       UPLOAD_TTS_STATE,

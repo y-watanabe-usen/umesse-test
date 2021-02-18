@@ -264,20 +264,23 @@
         <div class="row pt-4">
           <div class="col-2">タイトル</div>
           <div class="col-10">
-            <input class="form-control" type="text" />
+            <input class="form-control" type="text" v-model="file.title" />
           </div>
         </div>
         <div class="row pt-4">
           <div class="col-2">説明</div>
           <div class="col-10">
-            <textarea class="form-control"></textarea>
+            <textarea
+              class="form-control"
+              v-model="file.description"
+            ></textarea>
           </div>
         </div>
       </template>
       <template #footer>
         <ModalFooter>
           <Button type="secondary" @click="closeModal">キャンセル</Button>
-          <Button type="primary" @click="toCreateCm"
+          <Button type="primary" @click="uploadTtsFile"
             >保存して作成を続ける</Button
           >
         </ModalFooter>
@@ -364,14 +367,14 @@ export default defineComponent({
     const uploadTtsFile = async () => {
       /// check state.file.
       state.file.blob = await ttsStore.getUploadTtsData();
-      ttsStore.uploadTtsData(state.file);
-    };
-
-    const toCreateCm = () => {
-      const id = "1";
-      cm.setNarration(<TtsItem>ttsStore.getUserTts(id));
+      const uploadedData: any = await ttsStore.uploadTtsData(state.file);
+      // TODO: 本来はttsidが返ってくるはずだけどidで返ってきてる
+      uploadedData.ttsId = uploadedData.id;
+      console.log("uploadedData", uploadedData);
+      cm.setNarration(<TtsItem>uploadedData);
       router.push({ name: "Cm" });
     };
+
     const openModal = () => {
       state.isModalAppear = true;
       console.log("openModal");
@@ -386,7 +389,7 @@ export default defineComponent({
       play,
       stop,
       createTtsData,
-      toCreateCm,
+      uploadTtsFile,
       openModal,
       closeModal,
     };

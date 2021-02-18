@@ -1,4 +1,6 @@
 import { reactive } from "vue";
+import * as UMesseApi from "umesseapi";
+import { RecordingItem } from "umesseapi/models";
 
 export interface RecordingFile {
   title: string | undefined;
@@ -13,18 +15,15 @@ export enum UPLOAD_RECORDING_STATE {
   ERROR,
 }
 
-interface FunctionInterface {
-  createUserRecording(xUnisCustomerCd: string, filename?: string, recordedFile?: string, title?: string, description?: string): Promise<any>;
-}
-export function useUploadRecordingService(api: FunctionInterface) {
+export function useUploadRecordingService(api: UMesseApi.RecordingApi) {
   const state = reactive({
     status: UPLOAD_RECORDING_STATE.NONE as UPLOAD_RECORDING_STATE,
   });
 
   const getStatus = () => state.status;
 
-  const upload = async (authToken: string, file: RecordingFile) => {
-    return new Promise(function(resolve, reject) {
+  const upload = async (authToken: string, file: RecordingFile): Promise<RecordingItem> => {
+    return new Promise(function (resolve, reject) {
       if (state.status === UPLOAD_RECORDING_STATE.UPLOADING) {
         return reject(new Error(`state is uploading`));
       }
@@ -33,12 +32,13 @@ export function useUploadRecordingService(api: FunctionInterface) {
 
       var fr = new FileReader();
 
-      fr.onload = function() {
+      fr.onload = function () {
         api
-          .createUserRecording(authToken, file.title!, fr.result as string,file.title,'FIXME: file.description')
-          .then((value) =>
-            resolve((state.status = UPLOAD_RECORDING_STATE.UPLOADED))
-          )
+          .createUserRecording(authToken, file.title!, fr.result as string, file.title, file.description)
+          .then((value) => {
+            (state.status = UPLOAD_RECORDING_STATE.UPLOADED)
+            resolve(<RecordingItem>value.data)
+          })
           .catch((error) =>
             reject((state.status = UPLOAD_RECORDING_STATE.ERROR))
           );
