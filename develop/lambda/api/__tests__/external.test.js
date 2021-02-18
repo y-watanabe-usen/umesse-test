@@ -13,6 +13,7 @@ const data = aws.DynamoDB.Converter.unmarshall(
 );
 const { BadRequestError, InternalServerError } = require("../umesse/error");
 
+console.error = jest.fn();
 beforeAll(() => {
   jest.setTimeout(1000 * 30); // 30 sec
 });

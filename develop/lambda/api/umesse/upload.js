@@ -5,6 +5,7 @@ const { validation } = require("umesse-lib/validation");
 const { dynamodbManager } = require("umesse-lib/utils/dynamodbManager");
 const { getCm } = require("./cm");
 const { BadRequestError, InternalServerError } = require("./error");
+const db = require("./db");
 
 // 外部連携データ取得（一覧・個別）
 exports.getUploadCm = async (unisCustomerCd, cmId) => {
@@ -21,38 +22,13 @@ exports.getUploadCm = async (unisCustomerCd, cmId) => {
   });
   if (checkParams) throw new BadRequestError(checkParams);
 
-  const items = await findUploadedCm(unisCustomerCd, cmId);
-
-  return items;
-};
-
-async function findUploadedCm(unisCustomerCd, cmId) {
-
-  const options = {
-    KeyConditionExpression: "unisCustomerCd = :unisCustomerCd",
-    ExpressionAttributeValues: {
-      ":unisCustomerCd": unisCustomerCd,
-    },
-  };
-  let res;
   try {
-    res = await dynamodbManager.query(
-      constants.dynamoDbTable().external,
-      options
-    );
+    return await db.External.findById(unisCustomerCd, cmId);
   } catch (e) {
-    errorlog(JSON.stringify(e));
+    console.error(e.message);
     throw new InternalServerError(e.message);
   }
-  if (!res || !res.Items.length) throw new InternalServerError("not found");
-
-  let json = res.Items;
-  if (cmId) {
-    json = json.filter((item) => item.cmId === cmId)[0];
-  }
-  if (!json) throw new InternalServerError("not found");
-  return json;
-}
+};
 
 // CM外部連携
 exports.createUploadCm = async (unisCustomerCd, cmId, body) => {
@@ -98,47 +74,24 @@ exports.createUploadCm = async (unisCustomerCd, cmId, body) => {
     timestamp: timestamp(),
   };
 
-  let res;
   try {
-    res = await dynamodbManager.put(
-      constants.dynamoDbTable().external,
-      item,
-      {}
-    );
+    const _ = await db.External.add(item);
   } catch (e) {
     errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
-  if (!res) throw new InternalServerError("put failed");
 
   // DynamoDBのデータ更新
   cm.uploadSystem = body.uploadSystem;
   cm.status = constants.cmStatus.EXTERNAL_UPLOADING;
   cm.timestamp = timestamp();
-  const key = { unisCustomerCd: unisCustomerCd };
-  const options = {
-    UpdateExpression: `SET cm[${index}] = :cm`,
-    ExpressionAttributeValues: {
-      ":cm": cm,
-    },
-    ReturnValues: "UPDATED_NEW",
-  };
-  debuglog(JSON.stringify({ key: key, options: options }));
 
   try {
-    res = await dynamodbManager.update(
-      constants.dynamoDbTable().users,
-      key,
-      options
-    );
+    return await db.User.updateCm(unisCustomerCd, index, cm);
   } catch (e) {
     errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
-  if (!res) throw new InternalServerError("update failed");
-
-  let json = res.Attributes.cm[index];
-  return json;
 };
 
 // CM外部連携解除
@@ -177,44 +130,21 @@ exports.deleteUploadCm = async (unisCustomerCd, cmId) => {
     status: "1",
     timestamp: timestamp(),
   };
-  let res;
   try {
-    res = await dynamodbManager.put(
-      constants.dynamoDbTable().external,
-      item,
-      {}
-    );
+    const _ = await db.External.add(item);
   } catch (e) {
     errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
-  if (!res) throw new InternalServerError("put failed");
 
   // DynamoDBのデータ更新
   cm.status = constants.cmStatus.EXTERNAL_UPLOADING;
   cm.timestamp = timestamp();
-  const key = { unisCustomerCd: unisCustomerCd };
-  const options = {
-    UpdateExpression: `SET cm[${index}] = :cm`,
-    ExpressionAttributeValues: {
-      ":cm": cm,
-    },
-    ReturnValues: "UPDATED_NEW",
-  };
-  debuglog(JSON.stringify({ key: key, options: options }));
 
   try {
-    res = await dynamodbManager.update(
-      constants.dynamoDbTable().users,
-      key,
-      options
-    );
+    return await db.User.updateCm(unisCustomerCd, index, cm);
   } catch (e) {
     errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
-  if (!res) throw new InternalServerError("update failed");
-
-  let json = res.Attributes.cm[index];
-  return json;
 };

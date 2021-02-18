@@ -1,10 +1,10 @@
 "use strict";
 
-const { constants, debuglog, timestamp } = require("umesse-lib/constants");
+const { constants, debuglog, timestamp, errorlog } = require("umesse-lib/constants");
 const { validation } = require("umesse-lib/validation");
-const { dynamodbManager } = require("umesse-lib/utils/dynamodbManager");
 const { getCm } = require("./cm");
 const { BadRequestError, InternalServerError } = require("./error");
+const db = require("./db");
 
 // 外部連携データ取得（一覧・個別）
 exports.getExternalCm = async (unisCustomerCd, external) => {
@@ -21,29 +21,15 @@ exports.getExternalCm = async (unisCustomerCd, external) => {
   });
   if (checkParams) throw new BadRequestError(checkParams);
 
-  const options = {
-    FilterExpression: "uploadSystem = :uploadSystem AND #status = :status",
-    ExpressionAttributeNames: {
-      "#status": "status",
-    },
-    ExpressionAttributeValues: {
-      ":uploadSystem": constants.cmUploadSystem[external.toUpperCase()],
-      ":status": "1",
-    },
-  };
-  let res;
+  let uploadSystem = constants.cmUploadSystem[external.toUpperCase()];
+  let json;
   try {
-    res = await dynamodbManager.scan(
-      constants.dynamoDbTable().external,
-      options
-    );
+    json = await db.External.findByUploadSystem(uploadSystem);
   } catch (e) {
     errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
-  if (!res || !res.Items.length) throw new InternalServerError("not found");
 
-  let json = res.Items;
   if (unisCustomerCd) {
     json = json.filter((item) => item.unisCustomerCd === unisCustomerCd)[0];
   }
@@ -79,24 +65,14 @@ exports.completeExternalCm = async (unisCustomerCd, external, body) => {
   const ret = await this.getExternalCm(unisCustomerCd, external);
   if (!ret) throw new InternalServerError("not found");
 
-  const key = { unisCustomerCd: unisCustomerCd };
-  let options = "";
-  let res = "";
-
   if (body.dataProcessType == "01") {
     // 正常完了の場合
     try {
-      res = await dynamodbManager.delete(
-        constants.dynamoDbTable().external,
-        key,
-        {}
-      );
+      const _ = await db.External.delete(unisCustomerCd);
     } catch (e) {
       errorlog(JSON.stringify(e));
       throw InternalServerError(e.message);
     }
-    if (!res) throw new InternalServerError("delete failed");
-
     if (ret.dataProcessType == "03") {
       cm.uploadSystem = "";
       cm.status = constants.cmStatus.COMPLETE;
@@ -105,60 +81,27 @@ exports.completeExternalCm = async (unisCustomerCd, external, body) => {
     }
   } else {
     // エラー終了の場合
-    options = {
-      UpdateExpression:
-        "SET #status = :status, errorCode = :errorCode, errorMessage = :errorMessage, #timestamp = :timestamp",
-      ExpressionAttributeNames: {
-        "#status": "status",
-        "#timestamp": "timestamp",
-      },
-      ExpressionAttributeValues: {
-        ":status": "9",
-        ":errorCode": body.errorCode,
-        ":errorMessage": body.errorMessage,
-        ":timestamp": timestamp(),
-      },
-      ReturnValues: "UPDATED_NEW",
+    let data = {
+      ":status": "9",
+      ":errorCode": body.errorCode,
+      ":errorMessage": body.errorMessage,
+      ":timestamp": timestamp()
     };
     try {
-      res = await dynamodbManager.update(
-        constants.dynamoDbTable().external,
-        key,
-        options
-      );
+      const _ = await db.External.updateErrorData(unisCustomerCd, data);
     } catch (e) {
       errorlog(JSON.stringify(e));
       throw new InternalServerError(e.message);
-
     }
-    if (!res) throw new InternalServerError("update failed");
-
     cm.status = constants.cmStatus.EXTERNAL_ERROR;
   }
+  cm.timestamp = timestamp();
 
   // DynamoDBのデータ更新
-  cm.timestamp = timestamp();
-  options = {
-    UpdateExpression: `SET cm[${index}] = :cm`,
-    ExpressionAttributeValues: {
-      ":cm": cm,
-    },
-    ReturnValues: "UPDATED_NEW",
-  };
-  debuglog(JSON.stringify({ key: key, options: options }));
-
   try {
-    res = await dynamodbManager.update(
-      constants.dynamoDbTable().users,
-      key,
-      options
-    );
+    return await db.User.updateCm(unisCustomerCd, index, cm);
   } catch (e) {
     errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
-  if (!res) throw new InternalServerError("update failed");
-
-  let json = res.Attributes.cm[index];
-  return json;
 };
