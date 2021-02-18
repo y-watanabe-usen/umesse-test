@@ -93,19 +93,22 @@ export default {
       padding-right: 0;
       &.btn-document {
         img {
+          width: 22px;
           height: 28px;
           margin-right: 12px;
         }
       }
       &.btn-play {
         img {
+          width: 30px;
           height: 23px;
           margin-right: 12px;
         }
       }
       &.btn-select {
         img {
-          height: 18px;
+          width: 10px;
+          height: 17px;
           margin-left: 20px;
         }
       }
