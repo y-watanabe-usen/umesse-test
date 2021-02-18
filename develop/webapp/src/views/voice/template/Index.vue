@@ -89,9 +89,9 @@
 import { computed, defineComponent, onMounted, reactive, toRefs } from "vue";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
+import Header from "@/components/organisms/Header.vue";
 import SubMenu from "@/components/organisms/SubMenu.vue";
 import SubMenuItem from "@/components/molecules/SubMenuItem.vue";
-import Header from "@/components/organisms/Header.vue";
 import { config } from "@/utils/UMesseApiConfiguration";
 import * as UMesseApi from "umesseapi";
 import { TemplateItem } from "umesseapi/models";
@@ -101,9 +101,9 @@ export default defineComponent({
   components: {
     BasicLayout,
     ContentsBase,
+    Header,
     SubMenu,
     SubMenuItem,
-    Header,
   },
   setup() {
     const api = new UMesseApi.ResourcesApi(config);
