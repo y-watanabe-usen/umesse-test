@@ -29,6 +29,7 @@
             :contentTitle="openChime.title"
             :duration="`${convertNumberToTime(openChime.seconds)}`"
             :volume="100"
+            @togglePlay="playOpenChime"
           >
             <template #operaions>
               <button
@@ -220,6 +221,7 @@
             :contentTitle="bgm.title"
             :duration="`${convertNumberToTime(bgm.seconds)}`"
             :volume="50"
+            @togglePlay="playBgm"
           >
             <template #operaions>
               <button
@@ -603,6 +605,7 @@ import {
 import router from "@/router";
 import * as UMesseApi from "umesseapi";
 import { config } from "@/utils/UMesseApiConfiguration";
+import { ChimeItem } from "umesseapi/models";
 
 export default defineComponent({
   components: {
@@ -651,10 +654,20 @@ export default defineComponent({
       isSavedModalAppear: false,
     });
 
+    const playOpenChime = async () => {
+      const chime = cm.openChime;
+      if (!chime) return;
+      playChime(chime);
+    };
+
     const playEndChime = async () => {
       const chime = cm.endChime;
-      console.log("chime", chime)
       if (!chime) return;
+      playChime(chime);
+    };
+
+    const playChime = async (chime: ChimeItem) => {
+      stop();
       const audioBuffer = await getAudioBuffer(
         chime.contentsId,
         chime.category
@@ -664,10 +677,8 @@ export default defineComponent({
 
     const playNarration = async (index: number) => {
       const narration = cm.narration(index);
-      console.log("narration", narration);
-      console.log("narrations", cm.narrations);
-      console.log("narrations", cm.narrationItems);
       if (!narration) return;
+      stop();
       let id: string = "";
       let category: string = "";
       if (isNarrationItem(narration)) {
@@ -680,11 +691,16 @@ export default defineComponent({
         id = narration.ttsId;
         category = "tts";
       }
-      console.log("id, category", id, category);
       const audioBuffer = await getAudioBuffer(id, category);
       audioPlayer.start(audioBuffer);
     };
-
+    const playBgm = async () => {
+      const bgm = cm.bgm;
+      if (!bgm) return;
+      stop();
+      const audioBuffer = await getAudioBuffer(bgm.contentsId, bgm.category);
+      audioPlayer.start(audioBuffer);
+    };
     const getAudioBuffer = async (contentsId: string, category: string) => {
       const cacheKey = `${category}/${contentsId}`;
       if (base.cache.has(cacheKey)) {
@@ -827,7 +843,9 @@ export default defineComponent({
       UPLOAD_CM_STATE,
       MAX_NARRATION_COUNT,
       playNarration,
+      playOpenChime,
       playEndChime,
+      playBgm,
     };
   },
 });
