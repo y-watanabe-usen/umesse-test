@@ -62,9 +62,9 @@ export function useUploadCmService(api: UMesseApi.CmApi) {
     uploadSystem: string
   ) => {
     return new Promise(function (resolve, reject) {
-      if (state.status !== UPLOAD_CM_STATE.CREATED) {
-        return reject(new Error(`state is not created`));
-      }
+      // if (state.status !== UPLOAD_CM_STATE.CREATED) {
+      //   return reject(new Error(`state is not created`));
+      // }
       // TODO: check arguments here.
       state.status = UPLOAD_CM_STATE.UPDATING;
 

@@ -14,6 +14,12 @@ export type UploadSystem = {
   name: string,
 }
 
+export type CmStatus = {
+  cd: string, // id
+  status: string,
+  name: string,
+}
+
 export default class Constants {
   public static readonly APP_NAME = "U MESSE"
 
@@ -94,5 +100,16 @@ export default class Constants {
     { cd: '01', name: 'U MUSIC' },
     { cd: '02', name: "S'sence" },
   ]
-}
 
+  public static readonly CM_STATUS: CmStatus[] = [
+    { cd: "00", status: "DELETE", name: "CM削除" },
+    { cd: "01", status: "CREATING", name: "CM作成中" },
+    { cd: "02", status: "COMPLETE", name: "CM作成完了" },
+    { cd: "03", status: "CONVERT", name: "CMエンコード中" },
+    { cd: "04", status: "SHARING", name: "CM共有中" },
+    { cd: "09", status: "ERROR", name: "CMエラー" },
+    { cd: "11", status: "EXTERNAL_UPLOADING", name: "外部システムアップロード中" },
+    { cd: "12", status: "EXTERNAL_COMPLETE", name: "外部システムアップロード完了" },
+    { cd: "19", status: "EXTERNAL_ERROR", name: "外部システムアップロードエラー" },
+  ]
+}

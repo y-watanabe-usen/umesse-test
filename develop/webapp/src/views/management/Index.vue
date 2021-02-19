@@ -38,16 +38,24 @@
             </template>
             <template #line2>
               <p>
-                <span class="duration">{{ convertNumberToTime(cm.seconds) }}</span>
-                <span class="start">{{ convertDatestringToDate(cm.startDate) }}</span>
-                <span class="end">ステータス：{{ cm.status }}</span>
+                <span class="duration">{{
+                  convertNumberToTime(cm.seconds)
+                }}</span>
+                <span class="start">{{
+                  convertDatestringToDate(cm.startDate)
+                }}</span>
+                <span class="end"
+                  >ステータス：{{
+                    Constants.CM_STATUS.find((v) => v.cd == cm.status).name
+                  }}</span
+                >
               </p>
             </template>
             <template #operations>
               <Button
                 type="rectangle"
                 class="btn-play"
-                @click="selectCmAndOpenPlayModal(narration)"
+                @click="selectCmAndOpenPlayModal(cm)"
               >
                 <img src="@/assets/icon_play.svg" />試聴
               </Button>
@@ -73,23 +81,20 @@
                   />
                 </svg>
               </button>
-              <div
-                class="dropdown-menu"
-                aria-labelledby="dropdownMenuButton"
-              >
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a
                   class="dropdown-item"
                   href="#"
-                  @click.prevent="openSaveModal()"
+                  @click.prevent="selectCmAndOpenSaveModal(cm)"
                   >タイトル/説明 編集</a
                 >
-                <a class="dropdown-item" href="#">コンテンツ編集</a>
-                <a class="dropdown-item" href="#"
-                  >U MUSICにアップロード</a
+                <a class="dropdown-item" href="#" @click="toEditCm(cm)"
+                  >コンテンツ編集</a
                 >
+                <a class="dropdown-item" href="#">U MUSICにアップロード</a>
                 <a
                   class="dropdown-item"
-                  @click.prevent="openRemoveModal()"
+                  @click.prevent="selectCmAndOpenRemoveModal(cm)"
                   href="#"
                   >削除</a
                 >
@@ -124,7 +129,7 @@
                 <button
                   type="button"
                   class="btn btn-light shadow btn-play"
-                  @click="play(selectCm)"
+                  @click="play(selectedCm)"
                 >
                   <svg
                     width="1em"
@@ -250,18 +255,16 @@
       </template>
       <template #contents>
         <FormGroup title="タイトル" :required="true">
-          <TextBox />
+          <TextBox v-model:value="title" />
         </FormGroup>
         <FormGroup title="説明">
-          <TextArea />
+          <TextArea v-model:value="description" />
         </FormGroup>
       </template>
       <template #footer>
         <ModalFooter>
           <Button type="secondary" @click="closeSaveModal">キャンセル</Button>
-          <Button
-            type="primary"
-            @click="saveAndOpenSavedModal"
+          <Button type="primary" @click="saveAndOpenSavedModal"
             >保存する</Button
           >
         </ModalFooter>
@@ -269,7 +272,11 @@
     </ModalDialog>
   </transition>
   <transition>
-    <ModalDialog v-if="isSavedModalAppear" size="small" @close="closeSavedModal">
+    <ModalDialog
+      v-if="isSavedModalAppear"
+      size="small"
+      @close="closeSavedModal"
+    >
       <template #contents>
         <p class="message">保存が完了しました。</p>
       </template>
@@ -291,9 +298,7 @@
       <template #footer>
         <ModalFooter>
           <Button type="secondary" @click="closeRemoveModal">キャンセル</Button>
-          <Button
-            type="primary"
-            @click="removeAndOpenRemovedModal"
+          <Button type="primary" @click="removeAndOpenRemovedModal"
             >はい</Button
           >
         </ModalFooter>
@@ -301,7 +306,11 @@
     </ModalDialog>
   </transition>
   <transition>
-    <ModalDialog v-if="isRemovedModalAppear" size="small" @close="closeRemovedModal">
+    <ModalDialog
+      v-if="isRemovedModalAppear"
+      size="small"
+      @close="closeRemovedModal"
+    >
       <template #contents>
         <p class="message">削除が完了しました。</p>
       </template>
@@ -343,6 +352,8 @@ import {
   convertDatestringToDate,
   convertNumberToTime,
 } from "@/utils/FormatDate";
+import Constants from "@/utils/Constants";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
   components: {
@@ -363,15 +374,16 @@ export default defineComponent({
     TextArea,
   },
   setup() {
+    const router = useRouter();
     const audioPlayer = AudioPlayer();
     const audioStore = AudioStore();
     const cmApi = new UMesseApi.CmApi(config);
     const uploadCmService = useUploadCmService(cmApi);
     const resourcesapi = new UMesseApi.ResourcesApi(config);
-    const { auth } = useGlobalStore();
+    const { auth, cm } = useGlobalStore();
 
     const state = reactive({
-      activeSceneCd: "004",
+      activeSceneCd: "001",
       scenes: computed(() => Common.getManagementScenes()),
       sorts: ["名前順", "作成日順", "更新日順"],
       cms: [] as CmItem[],
@@ -386,6 +398,8 @@ export default defineComponent({
         convertNumberToTime(audioPlayer.getDuration())
       ),
       selectedCm: null as CmItem | null,
+      title: "",
+      description: "",
       isPlayModalAppear: false,
       isSaveModalAppear: false,
       isSavedModalAppear: false,
@@ -404,7 +418,10 @@ export default defineComponent({
       const xUnisCustomerCd = "123456789";
       // TODO: sceneを指定する必要がある？
       const response = await cmApi.listUserCm(xUnisCustomerCd);
-      state.cms = response.data;
+      state.cms = response.data.filter((v) => {
+        if (!v.scene) return false;
+        return v.scene.sceneCd == state.activeSceneCd;
+      });
     };
 
     const selectCm = (cm: CmItem) => {
@@ -423,11 +440,24 @@ export default defineComponent({
       if (state.isPlaying) audioPlayer.stop();
     };
 
+    const save = async (cm: CmItem) => {
+      const xUnisCustomerCd = "123456789";
+      const response = await uploadCmService.update(
+        xUnisCustomerCd,
+        cm.cmId,
+        state.title,
+        state.description,
+        cm.scene.sceneCd,
+        cm.productionType
+      );
+      fetchCm();
+    };
     const remove = async (cmId: string) => {
       // TODO: auth.getToken()のトークンだとデータが空なので固定値をセットする
       // const xUnisCustomerCd = auth.getToken()!!;
       const xUnisCustomerCd = "123456789";
       const response = await uploadCmService.remove(xUnisCustomerCd, cmId);
+      fetchCm();
     };
 
     const openPlayModal = () => {
@@ -469,23 +499,41 @@ export default defineComponent({
       selectCm(cm);
       openPlayModal();
     };
+    const selectCmAndOpenSaveModal = (cm: CmItem) => {
+      selectCm(cm);
+      state.title = cm.title;
+      state.description = cm.description;
+      console.log(state.title);
+      openSaveModal();
+    };
+    const selectCmAndOpenRemoveModal = (cm: CmItem) => {
+      selectCm(cm);
+      openRemoveModal();
+    };
     const stopAndClosePlayModal = () => {
       stop();
       closePlayModal();
     };
-    const saveAndOpenSavedModal = () => {
-      // 保存処理
+    const saveAndOpenSavedModal = async () => {
+      if (!state.selectedCm) return;
+      await save(state.selectedCm);
       closeSaveModal();
       setTimeout(() => {
         openSavedModal();
       }, 500);
     };
-    const removeAndOpenRemovedModal = () => {
-      remove('1');
+    const removeAndOpenRemovedModal = async () => {
+      await remove(state.selectedCm?.cmId);
       closeRemoveModal();
       setTimeout(() => {
         openRemovedModal();
       }, 500);
+    };
+
+    const toEditCm = (cmItem: CmItem) => {
+      console.log(cmItem);
+      // cm.
+      // router.push({ name: "Cm" });
     };
 
     onMounted(async () => {
@@ -512,9 +560,13 @@ export default defineComponent({
       openRemovedModal,
       closeRemovedModal,
       selectCmAndOpenPlayModal,
+      selectCmAndOpenSaveModal,
+      selectCmAndOpenRemoveModal,
       stopAndClosePlayModal,
       saveAndOpenSavedModal,
       removeAndOpenRemovedModal,
+      toEditCm,
+      Constants,
     };
   },
 });
