@@ -57,8 +57,7 @@ export function getFreeTemplateIndustries() {
  * @return Scene[]
  */
 export function getManagementScenes() {
-  const getCdList = ["004", "005", "006", "007", "008", "009", "010"];
-  return getScenes(getCdList);
+  return getScenes();
 }
 
 function getIndustries(cdList: string[]) {
@@ -71,7 +70,8 @@ function getIndustries(cdList: string[]) {
   return result;
 }
 
-function getScenes(cdList: string[]) {
+function getScenes(cdList?: string[]) {
+  if (!cdList) return Constants.SCENES;
   let result: Scene[] = [];
   cdList.forEach((v) => {
     result.push(Constants.SCENES.find((vv) => vv.cd == v)!);

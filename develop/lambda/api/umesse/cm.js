@@ -145,12 +145,15 @@ exports.updateCm = async (unisCustomerCd, cmId, body) => {
         unisCustomerCd: unisCustomerCd,
         cmId: cmId,
       }),
-      QueueUrl: CONVERTER_SQS_QUEUE_URL,
+      QueueUrl: constants.sqsQueueUrl(),
       DelaySeconds: 0,
     };
 
-    res = await SQS.sqsManager(params);
-    if (!res) throw new InternalServerError("update failed");
+    // FIXME: ローカル環境だとここでエラーになって先の検証が出来ないので、一旦ローカル環境では動かないようにしてる
+    if (process.env.environment != "local") {
+      res = await SQS.sqsManager(params);
+      if (!res) throw new InternalServerError("update failed");
+    }
 
     cm.status = constants.cmStatus.CONVERT;
     dataProcessType = "01";
@@ -176,7 +179,7 @@ exports.updateCm = async (unisCustomerCd, cmId, body) => {
       endDatetime: cm.endDate,
       productionType: cm.productionType,
       contentTime: cm.seconds,
-      sceneCd: cm.scene.sceneCd,
+      sceneCd: body.scene.sceneCd,
       uploadSystem: body.uploadSystem,
       status: status,
       timestamp: timestamp(),

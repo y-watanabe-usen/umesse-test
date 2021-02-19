@@ -783,8 +783,8 @@ export default defineComponent({
       stop();
       closePlayModal();
     };
-    const updateAndOpenSavedModal = () => {
-      update();
+    const updateAndOpenSavedModal = async () => {
+      await update();
       closeSaveModal();
       setTimeout(() => {
         openSavedModal();
