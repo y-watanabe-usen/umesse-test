@@ -145,7 +145,7 @@ exports.updateCm = async (unisCustomerCd, cmId, body) => {
         unisCustomerCd: unisCustomerCd,
         cmId: cmId,
       }),
-      QueueUrl: CONVERTER_SQS_QUEUE_URL,
+      QueueUrl: constants.sqsQueueUrl(),
       DelaySeconds: 0,
     };
 
@@ -176,7 +176,7 @@ exports.updateCm = async (unisCustomerCd, cmId, body) => {
       endDatetime: cm.endDate,
       productionType: cm.productionType,
       contentTime: cm.seconds,
-      sceneCd: cm.scene.sceneCd,
+      sceneCd: body.scene.sceneCd,
       uploadSystem: body.uploadSystem,
       status: status,
       timestamp: timestamp(),
