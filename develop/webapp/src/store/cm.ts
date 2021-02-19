@@ -8,13 +8,13 @@ import { useUploadCmService } from "@/services/uploadCmService";
 import { CreateUserCmResponseItem } from "@/models/CreateUserCmResponseItem";
 import { RecordingItem, TtsItem } from "umesseapi/models";
 
-function isNarrationItem(arg: any): arg is NarrationItem {
+export function isNarrationItem(arg: any): arg is NarrationItem {
   return arg.contentsId !== undefined;
 }
-function isRecordingItem(arg: any): arg is RecordingItem {
+export function isRecordingItem(arg: any): arg is RecordingItem {
   return arg.recordingId !== undefined;
 }
-function isTtsItem(arg: any): arg is TtsItem {
+export function isTtsItem(arg: any): arg is TtsItem {
   return arg.ttsId !== undefined;
 }
 
@@ -121,6 +121,11 @@ export default function cmStore() {
   const setBgm = (bgmItem: BgmItem) => {
     state.bgmItem = bgmItem
   }
+
+  const narration = (index: number) => {
+    return state.narrationItems[index]
+  }
+
   return {
     ...toRefs(state),
     get openChime() {
@@ -129,6 +134,7 @@ export default function cmStore() {
     get endChime() {
       return state.endChimeItem
     },
+    narration,
     get narrations() {
       return state.narrationItems
     },

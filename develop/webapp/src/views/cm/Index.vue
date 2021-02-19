@@ -29,6 +29,7 @@
             :contentTitle="openChime.title"
             :duration="`${convertNumberToTime(openChime.seconds)}`"
             :volume="100"
+            @togglePlay="playOpenChime"
           >
             <template #operaions>
               <button
@@ -106,14 +107,15 @@
             <CmItem
               :title="
                 'ナレーション ' +
-                  `${index + 1}` +
-                  '/' +
-                  `${MAX_NARRATION_COUNT}`
+                `${index + 1}` +
+                '/' +
+                `${MAX_NARRATION_COUNT}`
               "
               size="flexible"
               :contentTitle="`${narration.title}`"
               :duration="`${convertNumberToTime(narration.seconds)}`"
               :volume="100"
+              @togglePlay="playNarration(index)"
             >
               <template #operations>
                 <button
@@ -201,9 +203,9 @@
             <CmItem
               :title="
                 'ナレーション ' +
-                  `${narrarions.length + 1}` +
-                  '/' +
-                  `${MAX_NARRATION_COUNT}`
+                `${narrarions.length + 1}` +
+                '/' +
+                `${MAX_NARRATION_COUNT}`
               "
               :isEmpty="true"
               size="flexible"
@@ -219,6 +221,7 @@
             :contentTitle="bgm.title"
             :duration="`${convertNumberToTime(bgm.seconds)}`"
             :volume="50"
+            @togglePlay="playBgm"
           >
             <template #operaions>
               <button
@@ -290,6 +293,7 @@
             :contentTitle="endChime.title"
             :duration="`${convertNumberToTime(endChime.seconds)}`"
             :volume="100"
+            @togglePlay="playEndChime"
           >
             <template #operaions>
               <button
@@ -592,8 +596,16 @@ import TextArea from "@/components/atoms/TextArea.vue";
 import SelectBox from "@/components/atoms/SelectBox.vue";
 import CmLayout from "@/components/templates/CmLayout.vue";
 import CmItem from "@/components/molecules/CmItem.vue";
-import { MAX_NARRATION_COUNT } from "@/store/cm";
+import {
+  isNarrationItem,
+  isRecordingItem,
+  isTtsItem,
+  MAX_NARRATION_COUNT,
+} from "@/store/cm";
 import router from "@/router";
+import * as UMesseApi from "umesseapi";
+import { config } from "@/utils/UMesseApiConfiguration";
+import { ChimeItem } from "umesseapi/models";
 
 export default defineComponent({
   components: {
@@ -613,7 +625,8 @@ export default defineComponent({
   setup() {
     const audioStore = AudioStore();
     const audioPlayer = AudioPlayer();
-    const { cm } = useGlobalStore();
+    const { cm, base } = useGlobalStore();
+    const resourcesApi = new UMesseApi.ResourcesApi(config);
     const state = reactive({
       openChime: computed(() => cm.openChime),
       narrarions: computed(() => cm.narrations),
@@ -640,6 +653,64 @@ export default defineComponent({
       isSaveModalAppear: false,
       isSavedModalAppear: false,
     });
+
+    const playOpenChime = async () => {
+      const chime = cm.openChime;
+      if (!chime) return;
+      playChime(chime);
+    };
+
+    const playEndChime = async () => {
+      const chime = cm.endChime;
+      if (!chime) return;
+      playChime(chime);
+    };
+
+    const playChime = async (chime: ChimeItem) => {
+      stop();
+      const audioBuffer = await getAudioBuffer(
+        chime.contentsId,
+        chime.category
+      );
+      audioPlayer.start(audioBuffer);
+    };
+
+    const playNarration = async (index: number) => {
+      const narration = cm.narration(index);
+      if (!narration) return;
+      stop();
+      let id: string = "";
+      let category: string = "";
+      if (isNarrationItem(narration)) {
+        id = narration.contentsId;
+        category = narration.category;
+      } else if (isRecordingItem(narration)) {
+        id = narration.recordingId;
+        category = "recording";
+      } else if (isTtsItem(narration)) {
+        id = narration.ttsId;
+        category = "tts";
+      }
+      const audioBuffer = await getAudioBuffer(id, category);
+      audioPlayer.start(audioBuffer);
+    };
+    const playBgm = async () => {
+      const bgm = cm.bgm;
+      if (!bgm) return;
+      stop();
+      const audioBuffer = await getAudioBuffer(bgm.contentsId, bgm.category);
+      audioPlayer.start(audioBuffer);
+    };
+    const getAudioBuffer = async (contentsId: string, category: string) => {
+      const cacheKey = `${category}/${contentsId}`;
+      if (base.cache.has(cacheKey)) {
+        return <AudioBuffer>base.cache.get(cacheKey);
+      }
+      const response = await resourcesApi.getSignedUrl(contentsId, category);
+      await audioStore.download(response.data.url);
+      base.cache.set(cacheKey, <AudioBuffer>audioStore.audioBuffer);
+      return <AudioBuffer>audioStore.audioBuffer;
+    };
 
     const clearNarration = (index: number) => {
       cm.clearNarration(index);
@@ -771,6 +842,10 @@ export default defineComponent({
       changeVoiceFree,
       UPLOAD_CM_STATE,
       MAX_NARRATION_COUNT,
+      playNarration,
+      playOpenChime,
+      playEndChime,
+      playBgm,
     };
   },
 });

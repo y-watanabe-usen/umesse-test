@@ -13,7 +13,7 @@ export default function recordingStore() {
   const umesseApi = new UMesseApi.RecordingApi(config);
   const resourcesApi = new UMesseApi.ResourcesApi(config)
   const uploadRecordingService = useUploadRecordingService(umesseApi);
-  const { auth } = useGlobalStore();
+  const { auth, cm } = useGlobalStore();
   const state = reactive({
     recordingItems: [] as RecordingItem[],
     error: undefined as string | undefined,
@@ -25,14 +25,13 @@ export default function recordingStore() {
     try {
       const response = await umesseApi.listUserRecording(token());
       state.recordingItems = response.data;
+      console.log("response.data", response.data)
     } catch (err) {
       state.error = err.message;
     }
   };
 
   const getUserRecording = (id: string) => {
-    // TODO: API側で登録が出来るようになったらちゃんとしたデータを返す
-    return {recordingId: 1, title: "録音データ"}
     const item = state.recordingItems.find((element) => element.recordingId === id);
     return item;
     //    const item = await umesseApi.getUserRecording(
@@ -56,8 +55,9 @@ export default function recordingStore() {
   };
 
   const uploadRecordingData = async (recordingFile: RecordingFile) => {
-    await uploadRecordingService.upload(token(), recordingFile);
+    const response = await uploadRecordingService.upload(token(), recordingFile);
     fetchRecordingData();
+    return response;
   };
 
   return {

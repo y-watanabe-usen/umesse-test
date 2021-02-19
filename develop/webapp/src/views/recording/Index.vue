@@ -266,10 +266,11 @@ export default defineComponent({
       /// check state.file.
       // state.file.blob = await audioRecorder.getWaveBlob();
       state.file.blob = await audioRecorder.getMp3Blob();
-      recordingStore.uploadRecordingData(state.file);
-      const id = "1";
-      cm.setNarration(<RecordingItem>recordingStore.getUserRecording(id));
-      console.log( <RecordingItem>recordingStore.getUserRecording(id))
+      const uploadedData: any = await recordingStore.uploadRecordingData(
+        state.file
+      );
+      uploadedData.recordingId = uploadedData.id;
+      cm.setNarration(<RecordingItem>uploadedData);
       router.push({ name: "Cm" });
       closeModal();
     };
