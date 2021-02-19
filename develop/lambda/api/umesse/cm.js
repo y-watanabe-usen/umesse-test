@@ -149,8 +149,11 @@ exports.updateCm = async (unisCustomerCd, cmId, body) => {
       DelaySeconds: 0,
     };
 
-    res = await SQS.sqsManager(params);
-    if (!res) throw new InternalServerError("update failed");
+    // FIXME: ローカル環境だとここでエラーになって先の検証が出来ないので、一旦ローカル環境では動かないようにしてる
+    if (process.env.environment != "local") {
+      res = await SQS.sqsManager(params);
+      if (!res) throw new InternalServerError("update failed");
+    }
 
     cm.status = constants.cmStatus.CONVERT;
     dataProcessType = "01";
