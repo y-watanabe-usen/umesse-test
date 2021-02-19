@@ -200,17 +200,37 @@
             </CmItem>
           </template>
           <template v-if="narrarions.length < MAX_NARRATION_COUNT">
-            <CmItem
-              :title="
-                'ナレーション ' +
-                `${narrarions.length + 1}` +
-                '/' +
-                `${MAX_NARRATION_COUNT}`
-              "
-              :isEmpty="true"
-              size="flexible"
-              @add="addNarration"
-            />
+            <div style="width: 100%">
+              <CmItem
+                :title="
+                  'ナレーション ' +
+                  `${narrarions.length + 1}` +
+                  '/' +
+                  `${MAX_NARRATION_COUNT}`
+                "
+                :isEmpty="true"
+                size="flexible"
+                id="dropdownMenuButton"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+                class="dropdown-toggle"
+              />
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#" @click="addRecording()">
+                  自分で録音した音声を追加する</a
+                >
+                <a class="dropdown-item" href="#" @click="addNarration()"
+                  >ナレーションを追加する</a
+                >
+                <a class="dropdown-item" href="#" @click="addVoiceTemplate()">
+                  合成音声(テンプレートから)を追加する</a
+                >
+                <a class="dropdown-item" href="#" @click="addVoiceFree()">
+                  合成音声(フリー入力から)を追加する</a
+                >
+              </div>
+            </div>
           </template>
         </template>
         <template #bottom>
@@ -793,9 +813,21 @@ export default defineComponent({
     const convertNumberToTime = (second: number) =>
       FormatDate.convertNumberToTime(second);
 
+    const addRecording = () => {
+      cm.unSelectNarrationIndex();
+      router.push({ name: "Recording" });
+    };
     const addNarration = () => {
       cm.unSelectNarrationIndex();
       router.push({ name: "Narration" });
+    };
+    const addVoiceTemplate = () => {
+      cm.unSelectNarrationIndex();
+      router.push({ name: "VoiceTemplate" });
+    };
+    const addVoiceFree = () => {
+      cm.unSelectNarrationIndex();
+      router.push({ name: "VoiceFree" });
     };
     const changeRecording = (index: number) => {
       cm.selectNarrationIndex(index);
@@ -835,7 +867,10 @@ export default defineComponent({
       updateAndOpenSavedModal,
       Constants,
       convertNumberToTime,
+      addRecording,
       addNarration,
+      addVoiceTemplate,
+      addVoiceFree,
       changeRecording,
       changeNarration,
       changeVoiceTemplate,
