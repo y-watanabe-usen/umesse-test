@@ -11,7 +11,7 @@ resource "aws_cloudfront_distribution" "umesse" {
   default_root_object = "index.html"
   price_class         = "PriceClass_200"
 
-  web_acl_id = aws_waf_web_acl.umesse.id
+  web_acl_id = aws_wafv2_web_acl.umesse_webapp.arn
 
   origin {
     domain_name = aws_s3_bucket.webapp[each.key].bucket_regional_domain_name
@@ -53,45 +53,36 @@ resource "aws_cloudfront_distribution" "umesse" {
   }
 }
 
-resource "aws_waf_geo_match_set" "geo_match_set" {
-  name = "geo_match_set"
-
-  geo_match_constraint {
-    type  = "Country"
-    value = "JP"
-  }
-}
-
-resource "aws_waf_rule" "waf_rule" {
-  depends_on = [
-    aws_waf_geo_match_set.geo_match_set
-  ]
-  name        = "match"
-  metric_name = "match"
-
-  predicates {
-    data_id = aws_waf_geo_match_set.geo_match_set.id
-    negated = false
-    type    = "IPMatch"
-  }
-}
-
-resource "aws_waf_web_acl" "umesse" {
-  depends_on  = [aws_waf_rule.waf_rule]
-  name        = "allow"
-  metric_name = "allow"
+resource "aws_wafv2_web_acl" "umesse_webapp" {
+  name     = "umesse_webapp"
+  scope    = "CLOUDFRONT"
+  # provider = "us-east-1"
 
   default_action {
-    type = "BLOCK"
+    block {}
+  }
+  visibility_config {
+    cloudwatch_metrics_enabled = false
+    metric_name                = "umesse_webapp"
+    sampled_requests_enabled   = false
   }
 
-  rules {
-    action {
-      type = "ALLOW"
-    }
+  rule {
+    name     = "allow-geo-match-jp"
+    priority = 10
 
-    priority = 1
-    rule_id  = aws_waf_rule.waf_rule.id
-    type     = "REGULAR"
+    action {
+      allow {}
+    }
+    visibility_config {
+      cloudwatch_metrics_enabled = false
+      metric_name                = "allow-geo-match-jp"
+      sampled_requests_enabled   = false
+    }
+    statement {
+      geo_match_statement {
+        country_codes = ["JP"]
+      }
+    }
   }
 }
