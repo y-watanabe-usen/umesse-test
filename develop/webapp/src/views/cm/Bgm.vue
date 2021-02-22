@@ -22,9 +22,9 @@
         <List>
           <template #header>
             <ListHeader>
-              <select class="form-control w-25">
-                <option v-for="sort in sorts" :key="sort">
-                  {{ sort }}
+              <select class="form-control w-25" v-model="sort" @change="sortBgm">
+                <option v-for="bgmSort in bgmSorts" :key="bgmSort.cd" :value="bgmSort.cd">
+                  {{ bgmSort.name }}
                 </option>
               </select>
             </ListHeader>
@@ -283,7 +283,8 @@ export default defineComponent({
 
     const state = reactive({
       activeBgmIndustryCd: "01",
-      sorts: ["名前順", "作成日順", "更新日順"],
+      sort: 1,
+      bgmSorts: computed(() => Common.getSort()),
       bgms: [] as BgmItem[],
       bgmIndustries: computed(() => Common.getBgmIndustries()),
       selectedBgm: null as BgmItem | null,
@@ -312,6 +313,11 @@ export default defineComponent({
 
     const fetchBgm = async () => {
       const response = await api.listBgm(state.activeBgmIndustryCd);
+      state.bgms = response.data;
+    };
+
+    const sortBgm = async () => {
+      const response = await api.listBgm(state.activeBgmIndustryCd, state.sort);
       state.bgms = response.data;
     };
 
@@ -385,6 +391,7 @@ export default defineComponent({
       selectBgmAndOpenPlayModal,
       stopAndClosePlayModal,
       convertNumberToTime,
+      sortBgm,
     };
   },
 });

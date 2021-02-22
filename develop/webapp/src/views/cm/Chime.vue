@@ -10,9 +10,9 @@
         <List>
           <template #header>
             <ListHeader>
-              <select class="form-control w-25">
-                <option v-for="sort in sorts" :key="sort">
-                  {{ sort }}
+              <select class="form-control w-25" v-model="sort" @change="sortChime">
+                  <option v-for="chimeSort in chimeSorts" :key="chimeSort.cd" :value="chimeSort.cd">
+                    {{ chimeSort.name }}
                 </option>
               </select>
             </ListHeader>
@@ -276,7 +276,8 @@ export default defineComponent({
         },
       ],
       activeMenuId: 1,
-      sorts: ["名前順", "作成日順", "更新日順"],
+      sort: 1,
+      chimeSorts: computed(() => Common.getSort()),
       chimes: [] as ChimeItem[],
       selectedChime: null as ChimeItem | null,
       isPlaying: computed(() => audioPlayer.isPlaying()),
@@ -299,6 +300,11 @@ export default defineComponent({
 
     const selectChime = (chime: ChimeItem) => {
       state.selectedChime = chime;
+    };
+
+    const sortChime = async () => {
+      const response = await api.listChime(state.sort);
+      state.chimes = response.data;
     };
 
     const play = async (chime: ChimeItem) => {
@@ -373,6 +379,7 @@ export default defineComponent({
       selectChimeAndOpenPlayModal,
       stopAndClosePlayModal,
       convertNumberToTime,
+      sortChime,
     };
   },
 });

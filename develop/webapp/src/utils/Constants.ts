@@ -20,6 +20,11 @@ export type CmStatus = {
   name: string,
 }
 
+export type Sorts = {
+  cd: number, // id
+  name: string,
+}
+
 export default class Constants {
   public static readonly APP_NAME = "U MESSE"
 
@@ -111,5 +116,12 @@ export default class Constants {
     { cd: "11", status: "EXTERNAL_UPLOADING", name: "外部システムアップロード中" },
     { cd: "12", status: "EXTERNAL_COMPLETE", name: "外部システムアップロード完了" },
     { cd: "19", status: "EXTERNAL_ERROR", name: "外部システムアップロードエラー" },
+  ]
+
+  public static readonly SORTS: Sorts[] = [
+    { cd: 1, name: '名前昇順'},
+    { cd: 2, name: '名前降順'},
+    { cd: 3, name: '日時昇順'},
+    { cd: 4, name: '日時降順'},
   ]
 }
