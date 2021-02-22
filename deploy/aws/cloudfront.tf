@@ -11,6 +11,8 @@ resource "aws_cloudfront_distribution" "umesse" {
   default_root_object = "index.html"
   price_class         = "PriceClass_200"
 
+  web_acl_id = aws_waf_web_acl.umesse.id
+
   origin {
     domain_name = aws_s3_bucket.webapp[each.key].bucket_regional_domain_name
     origin_id   = aws_s3_bucket.webapp[each.key].id
@@ -35,9 +37,9 @@ resource "aws_cloudfront_distribution" "umesse" {
     }
 
     viewer_protocol_policy = "redirect-to-https"
-    default_ttl            = 3600
+    default_ttl            = 0
     min_ttl                = 0
-    max_ttl                = 86400
+    max_ttl                = 0
   }
 
   restrictions {
@@ -48,5 +50,48 @@ resource "aws_cloudfront_distribution" "umesse" {
 
   viewer_certificate {
     cloudfront_default_certificate = true
+  }
+}
+
+resource "aws_waf_geo_match_set" "geo_match_set" {
+  name = "geo_match_set"
+
+  geo_match_constraint {
+    type  = "Country"
+    value = "JP"
+  }
+}
+
+resource "aws_waf_rule" "waf_rule" {
+  depends_on = [
+    aws_waf_geo_match_set.geo_match_set
+  ]
+  name        = "match"
+  metric_name = "match"
+
+  predicates {
+    data_id = aws_waf_geo_match_set.geo_match_set.id
+    negated = false
+    type    = "IPMatch"
+  }
+}
+
+resource "aws_waf_web_acl" "umesse" {
+  depends_on  = [aws_waf_rule.waf_rule]
+  name        = "allow"
+  metric_name = "allow"
+
+  default_action {
+    type = "BLOCK"
+  }
+
+  rules {
+    action {
+      type = "ALLOW"
+    }
+
+    priority = 1
+    rule_id  = aws_waf_rule.waf_rule.id
+    type     = "REGULAR"
   }
 }

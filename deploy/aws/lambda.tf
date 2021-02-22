@@ -5,8 +5,9 @@ data "archive_file" "umesse_api_file" {
   output_path = "${path.module}/umesse_api_lambda.zip"
   excludes = [
     "__tests__",
-    "app.local.js",
+    "coverage",
     "node_modules/umesse-lib",
+    "app.local.js",
   ]
 }
 
@@ -16,8 +17,9 @@ data "archive_file" "umesse_converter_file" {
   output_path = "${path.module}/umesse_converter_lambda.zip"
   excludes = [
     "__tests__",
-    "sqsRequest.js",
+    "coverage",
     "node_modules/umesse-lib",
+    "sqsRequest.js",
   ]
 }
 
