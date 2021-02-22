@@ -1,5 +1,4 @@
 #### Cloud Front ####
-
 resource "aws_cloudfront_origin_access_identity" "umesse" {
   for_each = toset(var.name)
   comment  = format("%s-app", each.key)
@@ -40,6 +39,12 @@ resource "aws_cloudfront_distribution" "umesse" {
     default_ttl            = 0
     min_ttl                = 0
     max_ttl                = 0
+
+    lambda_function_association {
+      event_type   = "viewer-request"
+      lambda_arn   = aws_lambda_function.umesse_webapp_function.qualified_arn
+      include_body = false
+    }
   }
 
   restrictions {
@@ -53,6 +58,7 @@ resource "aws_cloudfront_distribution" "umesse" {
   }
 }
 
+#### WAF2 ####
 resource "aws_wafv2_web_acl" "umesse_webapp" {
   name     = "umesse_webapp"
   scope    = "CLOUDFRONT"
@@ -85,4 +91,34 @@ resource "aws_wafv2_web_acl" "umesse_webapp" {
       }
     }
   }
+}
+
+#### Lambda@Edge ####
+data "archive_file" "umesse_webapp_file" {
+  type        = "zip"
+  source_file = "${path.module}/../../develop/lambda/auth/webapp.js"
+  output_path = "${path.module}/umesse_webapp_lambda.zip"
+}
+
+resource "aws_lambda_function" "umesse_webapp_function" {
+  function_name    = "UMesseWebAppBasicAuthFunction"
+  handler          = "webapp.handler"
+  role             = aws_iam_role.umesse_webapp_lambda_role.arn
+  runtime          = "nodejs12.x"
+  filename         = data.archive_file.umesse_webapp_file.output_path
+  source_code_hash = data.archive_file.umesse_webapp_file.output_base64sha256
+  memory_size      = "128"
+  timeout          = "5"
+  provider         = aws.us_east_1
+  publish          = true
+}
+
+resource "aws_iam_role" "umesse_webapp_lambda_role" {
+  name               = "umesse_webapp_lambda_role"
+  assume_role_policy = file("iam_role_policy.json")
+}
+
+resource "aws_iam_role_policy_attachment" "umesse_webapp_lambda" {
+  role       = aws_iam_role.umesse_webapp_lambda_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
 }
