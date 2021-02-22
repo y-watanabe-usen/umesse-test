@@ -9,6 +9,10 @@ jobs:
     name: Terraform
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        build_lambda_dir: ['./develop/lambda/api', './develop/lambda/converter', './develop/lambda/layer/nodejs/node_modules/umesse-lib']
+
     defaults:
       run:
         shell: bash
@@ -24,23 +28,13 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ap-northeast-1
 
-    - name: configure node env
+    - name: Setup Nodejs
       uses: actions/setup-node@v2
       with:
         node-version: '14'
 
-    - name: Build Lambda Api
-      working-directory: ./develop/lambda/api
-      run: |
-        npm install --production
-
-    - name: Build Lambda Converter
-      working-directory: ./develop/lambda/converter
-      run: |
-        npm install --production
-
-    - name: Build Lambda Lib
-      working-directory: ./develop/lambda/layer/nodejs/node_modules/umesse-lib
+    - name: Build Lambda
+      working-directory: ${{ matrix.build_lambda_dir }}
       run: |
         npm install --production
 
