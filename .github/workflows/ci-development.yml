@@ -28,8 +28,8 @@ jobs:
       with:
         terraform_version: 0.14.7
 
-    - name: Terraform Format
-      run: terraform fmt -recursive -check
+        #    - name: Terraform Format
+        #      run: terraform fmt -recursive -check
 
     - name: Terraform plan
       working-directory: ./deploy/local
