@@ -264,7 +264,10 @@
       <template #footer>
         <ModalFooter>
           <Button type="secondary" @click="closeSaveModal">キャンセル</Button>
-          <Button type="primary" @click="saveAndOpenSavedModal"
+          <Button
+            type="primary"
+            :isDisabled="!title"
+            @click="saveAndOpenSavedModal"
             >保存する</Button
           >
         </ModalFooter>
