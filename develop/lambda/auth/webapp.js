@@ -7,7 +7,7 @@ exports.handler = (event, context, callback) => {
 
   // Configure authentication
   const authUser = "umesse";
-  const authPass = "z3euO6DQ2RRZON3o";
+  const authPass = "webapp"; // FIXME:
 
   // Construct the Basic Auth string
   const authString =
