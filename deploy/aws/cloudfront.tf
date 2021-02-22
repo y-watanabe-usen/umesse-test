@@ -56,7 +56,7 @@ resource "aws_cloudfront_distribution" "umesse" {
 resource "aws_wafv2_web_acl" "umesse_webapp" {
   name     = "umesse_webapp"
   scope    = "CLOUDFRONT"
-  # provider = "us-east-1"
+  provider = aws.us_east_1
 
   default_action {
     block {}

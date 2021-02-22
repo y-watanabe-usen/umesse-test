@@ -34,3 +34,16 @@ provider "aws" {
   skip_metadata_api_check     = true
   s3_force_path_style         = true
 }
+
+# waf2 を設定する場合、us-east-1 (バージニア北部)で実行する必要があるため
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/wafv2_web_acl#scope
+provider "aws" {
+  region                      = "us-east-1"
+  profile                     = "umesse"
+  shared_credentials_file     = "~/.aws/credentials"
+  alias                       = "us_east_1"
+  skip_credentials_validation = true
+  skip_requesting_account_id  = true
+  skip_metadata_api_check     = true
+  s3_force_path_style         = true
+}
