@@ -22,9 +22,9 @@
         <List>
           <template #header>
             <ListHeader>
-              <select class="form-control w-25">
-                <option v-for="sort in sorts" :key="sort">
-                  {{ sort }}
+              <select class="form-control w-25" v-model="sort" @change="sortNarration">
+                  <option v-for="narrationSort in narrationSorts" :key="narrationSort.cd" :value="narrationSort.cd">
+                    {{ narrationSort.name }}
                 </option>
               </select>
             </ListHeader>
@@ -289,7 +289,8 @@ export default defineComponent({
     const { cm, base } = useGlobalStore();
     const state = reactive({
       narrationIndustries: Common.getNarrationIndustries(),
-      sorts: ["名前順", "作成日順", "更新日順"],
+      sort: 1,
+      narrationSorts: computed(() => Common.getSort()),
       activeNarrationIndustryCd: "01",
       narrations: [] as NarrationItem[],
       selectedNarration: null as NarrationItem | null,
@@ -323,6 +324,11 @@ export default defineComponent({
 
     const fetchNarration = async () => {
       const response = await api.listNarration(state.activeNarrationIndustryCd);
+      state.narrations = response.data;
+    };
+
+    const sortNarration = async () => {
+      const response = await api.listNarration(state.activeNarrationIndustryCd, undefined, state.sort);
       state.narrations = response.data;
     };
 
@@ -396,6 +402,7 @@ export default defineComponent({
       selectNarrationAndOpenDocumentModal,
       selectNarrationAndOpenPlayModal,
       stopAndClosePlayModal,
+      sortNarration,
     };
   },
 });

@@ -1,4 +1,4 @@
-import Constants, { Industry, Scene } from "@/utils/Constants";
+import Constants, { Industry, Scene, Sorts } from "@/utils/Constants";
 
 /**
  * ナレーション選択画面に表示する業種を取得する
@@ -60,6 +60,16 @@ export function getManagementScenes() {
   return getScenes();
 }
 
+/**
+ * 選択画面に表示する並び替えを取得する
+ * @param
+ * @return Industry[]
+ */
+export function getSort() {
+  const getCdList = [1, 2, 3, 4];
+  return getSorts(getCdList);
+}
+
 function getIndustries(cdList: string[]) {
   let result: Industry[] = [];
   cdList.forEach((v) => {
@@ -77,6 +87,15 @@ function getScenes(cdList?: string[]) {
     result.push(Constants.SCENES.find((vv) => vv.cd == v)!);
   });
   // TODO: sort
+
+  return result;
+}
+
+function getSorts(cdList: number[]) {
+  let result: Sorts[] = [];
+  cdList.forEach((v) => {
+    result.push(Constants.SORTS.find((vv) => vv.cd == v)!);
+  });
 
   return result;
 }
