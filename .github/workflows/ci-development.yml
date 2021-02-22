@@ -50,7 +50,7 @@ jobs:
         terraform_version: 0.14.7
 
     - name: Terraform plan
-      working-directory: ./deploy/local
+      working-directory: ./deploy/aws
       run: |
         terraform init
         terraform validate
