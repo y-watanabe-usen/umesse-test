@@ -192,26 +192,20 @@
             </div>
           </div>
         </div>
-        <div class="row pt-4">
-          <div class="col-2">タイトル</div>
-          <div class="col-10">
-            <input class="form-control" type="text" v-model="file.title" />
-          </div>
-        </div>
-        <div class="row pt-4">
-          <div class="col-2">説明</div>
-          <div class="col-10">
-            <textarea
-              class="form-control"
-              v-model="file.description"
-            ></textarea>
-          </div>
-        </div>
+        <FormGroup title="タイトル" :required="true">
+          <TextBox v-model:value="title" />
+        </FormGroup>
+        <FormGroup title="説明">
+          <TextArea v-model:value="description" />
+        </FormGroup>
       </template>
       <template #footer>
         <ModalFooter>
           <Button type="secondary" @click="closeModal">キャンセル</Button>
-          <Button type="primary" @click="uploadTtsFile"
+          <Button
+            type="primary"
+            :isDisabled="!title"
+            @click="uploadTtsFile"
             >保存して作成を続ける</Button
           >
         </ModalFooter>
@@ -238,6 +232,9 @@ import Button from "@/components/atoms/Button.vue";
 import ModalDialog from "@/components/organisms/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
+import FormGroup from "@/components/molecules/FormGroup.vue";
+import TextBox from "@/components/atoms/TextBox.vue";
+import TextArea from "@/components/atoms/TextArea.vue";
 import { useGlobalStore } from "@/store";
 import { TtsItem } from "umesseapi/models";
 
@@ -250,6 +247,9 @@ export default defineComponent({
     ModalDialog,
     ModalHeader,
     ModalFooter,
+    FormGroup,
+    TextBox,
+    TextArea,
   },
   setup() {
     const router = useRouter();
@@ -271,6 +271,8 @@ export default defineComponent({
         FormatDate.convertNumberToTime(audioPlayer.getDuration())
       ),
       text: "",
+      title: "",
+      description: "",
       speaker: "risa",
       isModalAppear: false,
     });
