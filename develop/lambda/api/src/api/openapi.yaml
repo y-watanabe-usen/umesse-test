@@ -940,10 +940,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ExternalItem'
-                x-content-type: application/json
+                $ref: '#/components/schemas/ExternalItems'
         "400":
           description: Bad request. Response invalid.
           content:
@@ -1782,10 +1779,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/ExternalItem'
-                x-content-type: application/json
+                $ref: '#/components/schemas/ExternalItems'
         "400":
           description: Bad request. Response invalid.
           content:
@@ -2450,6 +2444,62 @@ components:
       example:
         isBase64Encoded: "true"
         body: base64 string
+    ExternalItems:
+      properties:
+        unisCustomers:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExternalItems_unisCustomers'
+      example:
+        unisCustomers:
+        - cmMetas:
+          - startDatetime: 2020-01-01T12:34:56+09:00
+            cmName: 時報A
+            fileName: 123456789-c-12345678.aac
+            sceneCd: "001"
+            dataProcessType: 01：追加、02：変更、03：削除
+            cmCommentManuscript: テストCMです
+            productionType: 01：音楽系、02：素ナレ
+            contentTime: 30000
+            cmId: 123456789-c-12345678
+            url: https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx
+            endDatetime: 9999-12-31T23:59:59+09:00
+          - startDatetime: 2020-01-01T12:34:56+09:00
+            cmName: 時報A
+            fileName: 123456789-c-12345678.aac
+            sceneCd: "001"
+            dataProcessType: 01：追加、02：変更、03：削除
+            cmCommentManuscript: テストCMです
+            productionType: 01：音楽系、02：素ナレ
+            contentTime: 30000
+            cmId: 123456789-c-12345678
+            url: https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx
+            endDatetime: 9999-12-31T23:59:59+09:00
+          unisCustomerCd: "123456789"
+        - cmMetas:
+          - startDatetime: 2020-01-01T12:34:56+09:00
+            cmName: 時報A
+            fileName: 123456789-c-12345678.aac
+            sceneCd: "001"
+            dataProcessType: 01：追加、02：変更、03：削除
+            cmCommentManuscript: テストCMです
+            productionType: 01：音楽系、02：素ナレ
+            contentTime: 30000
+            cmId: 123456789-c-12345678
+            url: https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx
+            endDatetime: 9999-12-31T23:59:59+09:00
+          - startDatetime: 2020-01-01T12:34:56+09:00
+            cmName: 時報A
+            fileName: 123456789-c-12345678.aac
+            sceneCd: "001"
+            dataProcessType: 01：追加、02：変更、03：削除
+            cmCommentManuscript: テストCMです
+            productionType: 01：音楽系、02：素ナレ
+            contentTime: 30000
+            cmId: 123456789-c-12345678
+            url: https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx
+            endDatetime: 9999-12-31T23:59:59+09:00
+          unisCustomerCd: "123456789"
     ExternalItem:
       properties:
         unisCustomerCd:
@@ -2458,11 +2508,31 @@ components:
         cmMetas:
           type: array
           items:
-            $ref: '#/components/schemas/ExternalItem'
+            $ref: '#/components/schemas/ExternalMetaItem'
       example:
         cmMetas:
-        - null
-        - null
+        - startDatetime: 2020-01-01T12:34:56+09:00
+          cmName: 時報A
+          fileName: 123456789-c-12345678.aac
+          sceneCd: "001"
+          dataProcessType: 01：追加、02：変更、03：削除
+          cmCommentManuscript: テストCMです
+          productionType: 01：音楽系、02：素ナレ
+          contentTime: 30000
+          cmId: 123456789-c-12345678
+          url: https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx
+          endDatetime: 9999-12-31T23:59:59+09:00
+        - startDatetime: 2020-01-01T12:34:56+09:00
+          cmName: 時報A
+          fileName: 123456789-c-12345678.aac
+          sceneCd: "001"
+          dataProcessType: 01：追加、02：変更、03：削除
+          cmCommentManuscript: テストCMです
+          productionType: 01：音楽系、02：素ナレ
+          contentTime: 30000
+          cmId: 123456789-c-12345678
+          url: https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx
+          endDatetime: 9999-12-31T23:59:59+09:00
         unisCustomerCd: "123456789"
     ExternalMetaItem:
       properties:
@@ -2507,15 +2577,22 @@ components:
           description: 尺時間
           format: int64
           example: 30000
-        fileSize:
-          type: integer
-          description: ファイルサイズ
-          format: int64
-          example: 1234567
         sceneCd:
           type: string
           description: シーンCD
           example: "001"
+      example:
+        startDatetime: 2020-01-01T12:34:56+09:00
+        cmName: 時報A
+        fileName: 123456789-c-12345678.aac
+        sceneCd: "001"
+        dataProcessType: 01：追加、02：変更、03：削除
+        cmCommentManuscript: テストCMです
+        productionType: 01：音楽系、02：素ナレ
+        contentTime: 30000
+        cmId: 123456789-c-12345678
+        url: https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx
+        endDatetime: 9999-12-31T23:59:59+09:00
     ExternalCompleteItem:
       properties:
         dataProcessType:
@@ -2630,6 +2707,40 @@ components:
       example:
         contentsId: サンプル01
         volume: 50
+    ExternalItems_unisCustomers:
+      properties:
+        unisCustomerCd:
+          type: string
+          example: "123456789"
+        cmMetas:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExternalMetaItem'
+      example:
+        cmMetas:
+        - startDatetime: 2020-01-01T12:34:56+09:00
+          cmName: 時報A
+          fileName: 123456789-c-12345678.aac
+          sceneCd: "001"
+          dataProcessType: 01：追加、02：変更、03：削除
+          cmCommentManuscript: テストCMです
+          productionType: 01：音楽系、02：素ナレ
+          contentTime: 30000
+          cmId: 123456789-c-12345678
+          url: https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx
+          endDatetime: 9999-12-31T23:59:59+09:00
+        - startDatetime: 2020-01-01T12:34:56+09:00
+          cmName: 時報A
+          fileName: 123456789-c-12345678.aac
+          sceneCd: "001"
+          dataProcessType: 01：追加、02：変更、03：削除
+          cmCommentManuscript: テストCMです
+          productionType: 01：音楽系、02：素ナレ
+          contentTime: 30000
+          cmId: 123456789-c-12345678
+          url: https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx
+          endDatetime: 9999-12-31T23:59:59+09:00
+        unisCustomerCd: "123456789"
   responses:
     BadRequest:
       description: Bad request. Response invalid.

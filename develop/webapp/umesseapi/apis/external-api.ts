@@ -18,6 +18,7 @@ import { Configuration } from '../configuration';
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
 import { ExternalCompleteItem } from '../models';
 import { ExternalItem } from '../models';
+import { ExternalItems } from '../models';
 /**
  * ExternalApi - axios parameter creator
  * @export
@@ -208,7 +209,7 @@ export const ExternalApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listExternalCm(external: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ExternalItem>>> {
+        async listExternalCm(external: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalItems>> {
             const localVarAxiosArgs = await ExternalApiAxiosParamCreator(configuration).listExternalCm(external, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
@@ -254,7 +255,7 @@ export const ExternalApiFactory = function (configuration?: Configuration, baseP
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listExternalCm(external: string, options?: any): AxiosPromise<Array<ExternalItem>> {
+        listExternalCm(external: string, options?: any): AxiosPromise<ExternalItems> {
             return ExternalApiFp(configuration).listExternalCm(external, options).then((request) => request(axios, basePath));
         },
     };
