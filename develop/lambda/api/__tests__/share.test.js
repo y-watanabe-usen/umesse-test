@@ -5,7 +5,7 @@ process.env.environment = "local";
 
 const aws = require("aws-sdk");
 const { getShareCm } = require("../umesse/share");
-const {BadRequestError, InternalServerError} = require("../umesse/error");
+const { BadRequestError, InternalServerError } = require("umesse-lib/error");
 
 // test data
 const json = require("./data/share.test.json");
@@ -31,11 +31,15 @@ describe("共有CMデータ取得", () => {
   });
 
   test("[error] 共有CMデータ取得　データ存在しない", async () => {
-    await expect(getShareCm("999999999")).rejects.toThrow(new InternalServerError("not found"));
+    await expect(getShareCm("999999999")).rejects.toThrow(
+      new InternalServerError("not found")
+    );
   });
 
   test("[error] 共有CMデータ取得　パラメータなし", async () => {
-    await expect(getShareCm("")).rejects.toThrow(new BadRequestError("params failed"));
+    await expect(getShareCm("")).rejects.toThrow(
+      new BadRequestError("params failed")
+    );
   });
 });
 

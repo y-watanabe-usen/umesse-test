@@ -13,8 +13,8 @@
           "customerGroupName": { "S": "テスト01グループ" },
           "contractStatusCd": { "S": "2" },
           "contractStatusName": { "S": "確定" },
-          "createDate": { "S": "2019-09-01T09:00:00+9:00" },
-          "renewalDate": { "S": "2019-09-01T09:00:00+9:00" }
+          "createDate": { "S": "2019-09-01T09:00:00+09:00" },
+          "renewalDate": { "S": "2019-09-01T09:00:00+09:00" }
         }
       }
     }

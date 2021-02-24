@@ -5,13 +5,13 @@ process.env.environment = "local";
 
 const aws = require("aws-sdk");
 const { getCm, createCm, updateCm, deleteCm } = require("../umesse/cm");
+const { BadRequestError, InternalServerError } = require("umesse-lib/error");
 
 // test data
 const json = require("./data/cm.test.json");
 const data = aws.DynamoDB.Converter.unmarshall(
   json["umesse-users"][0].PutRequest.Item
 );
-const { BadRequestError, InternalServerError } = require("../umesse/error");
 
 beforeAll(() => {
   jest.setTimeout(1000 * 30); // 30 sec
@@ -30,11 +30,15 @@ describe("CMデータ取得", () => {
   });
 
   test("[error] CMデータ取得　CMデータ存在しない", async () => {
-    await expect(getCm(data.unisCustomerCd, "99999999")).rejects.toThrow(new InternalServerError("not found"));
+    await expect(getCm(data.unisCustomerCd, "99999999")).rejects.toThrow(
+      new InternalServerError("not found")
+    );
   });
 
   test("[error] CMデータ取得　パラメータなし", async () => {
-    await expect(getCm("")).rejects.toThrow(new BadRequestError("params failed"));
+    await expect(getCm("")).rejects.toThrow(
+      new BadRequestError("params failed")
+    );
   });
 });
 
@@ -61,7 +65,9 @@ describe("CM新規作成", () => {
   });
 
   test("[error] CM新規作成　パラメータなし", async () => {
-    await expect(createCm("")).rejects.toThrow(new BadRequestError("params failed"));
+    await expect(createCm("")).rejects.toThrow(
+      new BadRequestError("params failed")
+    );
   });
 });
 
@@ -85,11 +91,15 @@ describe("CMデータ更新", () => {
       title: "テスト",
       description: "テスト",
     };
-    await expect(updateCm(data.unisCustomerCd, "999999999", body)).rejects.toThrow(new InternalServerError("not found"));
+    await expect(
+      updateCm(data.unisCustomerCd, "999999999", body)
+    ).rejects.toThrow(new InternalServerError("not found"));
   });
 
   test("[error] CMデータ更新　パラメータなし", async () => {
-    await expect(updateCm("")).rejects.toThrow(new BadRequestError("params failed"));
+    await expect(updateCm("")).rejects.toThrow(
+      new BadRequestError("params failed")
+    );
   });
 });
 
@@ -107,11 +117,15 @@ describe("CMデータ削除", () => {
   });
 
   test("[error] CMデータ削除　CMデータ存在しない", async () => {
-    await expect(deleteCm(data.unisCustomerCd, "999999999")).rejects.toThrow(new InternalServerError("not found"));
+    await expect(deleteCm(data.unisCustomerCd, "999999999")).rejects.toThrow(
+      new InternalServerError("not found")
+    );
   });
 
   test("[error] CMデータ削除　パラメータなし", async () => {
-    await expect(deleteCm("")).rejects.toThrow(new BadRequestError("params failed"));
+    await expect(deleteCm("")).rejects.toThrow(
+      new BadRequestError("params failed")
+    );
   });
 });
 
