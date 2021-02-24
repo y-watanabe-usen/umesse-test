@@ -52,12 +52,21 @@ export function getFreeTemplateIndustries() {
 }
 
 /**
- * 店内アナウンスの管理画面に表示するシーンを取得する
+ * 店内アナウンスの管理画面・CM音源保存時に表示するシーンを取得する
  * @param
  * @return Scene[]
  */
 export function getManagementScenes() {
   return getScenes();
+}
+
+/**
+ * 表示するアップロード先を取得する
+ * @param
+ * @return UploadSystem[]
+ */
+export function getUploadSystems() {
+  return getUploadSystem();
 }
 
 /**
@@ -95,6 +104,16 @@ function getSorts(cdList: number[]) {
   let result: Sorts[] = [];
   cdList.forEach((v) => {
     result.push(Constants.SORTS.find((vv) => vv.cd == v)!);
+  });
+
+  return result;
+}
+
+function getUploadSystem(cdList?: string[]) {
+  if (!cdList) return Constants.UPLOAD_SYSTEMS;
+  let result: Scene[] = [];
+  cdList.forEach((v) => {
+    result.push(Constants.UPLOAD_SYSTEMS.find((vv) => vv.cd == v)!);
   });
 
   return result;

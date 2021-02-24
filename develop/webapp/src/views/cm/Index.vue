@@ -539,27 +539,26 @@
           <TextArea v-model:value="description" />
         </FormGroup>
         <FormGroup title="シーン">
-          <SelectBox
-            v-model:value="scene"
-            :options="
-              Constants.SCENES.map((scene) => {
-                return { title: scene.name, value: scene.cd };
-              })
-            "
-          />
+          <div  class="select-box">
+            <select v-model="scene">
+              <option v-for="scene in scenes" :key="scene.cd" :value="scene.cd">
+                {{ scene.name }}
+              </option>
+            </select>
+          </div>
         </FormGroup>
+
         <FormGroup
           title="アップロード先"
           description="あとで、管理画面からアップロード先を変更することが出来ます。"
         >
-          <SelectBox
-            v-model:value="uploadSystem"
-            :options="
-              Constants.UPLOAD_SYSTEMS.map((uploadSystem) => {
-                return { title: uploadSystem.name, value: uploadSystem.cd };
-              })
-            "
-          />
+          <div  class="select-box">
+            <select v-model="uploadSystem">
+              <option v-for="uploadSystem in uploadSystems" :key="uploadSystem.cd" :value="uploadSystem.cd">
+                {{ uploadSystem.name }}
+              </option>
+            </select>
+          </div>
         </FormGroup>
       </template>
       <template #footer>
@@ -624,6 +623,7 @@ import router from "@/router";
 import * as UMesseApi from "umesseapi";
 import { config } from "@/utils/UMesseApiConfiguration";
 import { ChimeItem } from "umesseapi/models";
+import * as Common from "@/utils/Common";
 
 export default defineComponent({
   components: {
@@ -646,6 +646,8 @@ export default defineComponent({
     const { cm, base } = useGlobalStore();
     const resourcesApi = new UMesseApi.ResourcesApi(config);
     const state = reactive({
+      scenes: computed(() => Common.getManagementScenes()),
+      uploadSystems: computed(() => Common.getUploadSystems()),
       openChime: computed(() => cm.openChime),
       narrarions: computed(() => cm.narrations),
       bgm: computed(() => cm.bgm),
@@ -930,5 +932,38 @@ export default defineComponent({
 
 .dropdown-toggle::after {
   content: none;
+}
+
+.select-box {
+  height: 58px;
+  width: 100%;
+  border: 1px solid rgb(190, 190, 190);
+  border-radius: 6px;
+  position: relative;
+  &::before {
+    position: absolute;
+    top: 36px;
+    right: 12px;
+    width: 0;
+    height: 0;
+    padding: 0;
+    content: '';
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid rgb(95, 95, 95);
+    pointer-events: none;
+  }
+  select {
+    width: calc(100% - 48px);
+    height: 100%;
+    outline: none;
+    border: none;
+    appearance: none;
+    font-size: 19px;
+    font-weight: $font_weight_bold;
+    line-height: 58px;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
 }
 </style>
