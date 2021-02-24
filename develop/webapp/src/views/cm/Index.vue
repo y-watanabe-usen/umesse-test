@@ -209,26 +209,8 @@
               "
               :isEmpty="true"
               size="flexible"
-              id="dropdownMenuButton"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-              class="dropdown-toggle"
+              @add="addNarration"
             />
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-              <a class="dropdown-item" href="#" @click="addRecording()">
-                自分で録音した音声を追加する</a
-              >
-              <a class="dropdown-item" href="#" @click="addNarration()"
-                >ナレーションを追加する</a
-              >
-              <a class="dropdown-item" href="#" @click="addVoiceTemplate()">
-                合成音声(テンプレートから)を追加する</a
-              >
-              <a class="dropdown-item" href="#" @click="addVoiceFree()">
-                合成音声(フリー入力から)を追加する</a
-              >
-            </div>
           </template>
         </template>
         <template #bottom>
