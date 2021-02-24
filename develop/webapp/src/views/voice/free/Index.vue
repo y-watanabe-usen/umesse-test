@@ -193,10 +193,10 @@
           </div>
         </div>
         <FormGroup title="タイトル" :required="true">
-          <TextBox v-model:value="title" />
+          <TextBox v-model:value="file.title" />
         </FormGroup>
         <FormGroup title="説明">
-          <TextArea v-model:value="description" />
+          <TextArea v-model:value="file.description" />
         </FormGroup>
       </template>
       <template #footer>
@@ -204,7 +204,7 @@
           <Button type="secondary" @click="closeModal">キャンセル</Button>
           <Button
             type="primary"
-            :isDisabled="!title"
+            :isDisabled="file.title === undefined || file.title === ''"
             @click="uploadTtsFile"
             >保存して作成を続ける</Button
           >
@@ -271,8 +271,6 @@ export default defineComponent({
         FormatDate.convertNumberToTime(audioPlayer.getDuration())
       ),
       text: "",
-      title: "",
-      description: "",
       speaker: "risa",
       isModalAppear: false,
     });
