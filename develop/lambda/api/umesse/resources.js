@@ -337,6 +337,14 @@ exports.deleteUserResource = async (unisCustomerCd, category, id) => {
   if (index < 0) throw new InternalServerError("not found");
   //const resource = list[index];
 
+  // DynamoDBのデータ更新
+  let res;
+  try {
+    res = await db.User.deleteFromCategory(unisCustomerCd, index, category);
+  } catch (e) {
+    errorlog(JSON.stringify(e));
+    throw new InternalServerError(e.message);
+  }
   // S3上の録音音声を削除
   try {
     await s3Manager.delete(
@@ -345,16 +353,8 @@ exports.deleteUserResource = async (unisCustomerCd, category, id) => {
     );
   } catch (e) {
     errorlog(JSON.stringify(e));
-    throw new InternalServerError(e.message);
   }
-
-  // DynamoDBのデータ更新
-  try {
-    return await db.User.deleteFromCategory(unisCustomerCd, index, category);
-  } catch (e) {
-    errorlog(JSON.stringify(e));
-    throw new InternalServerError(e.message);
-  }
+  return res;
 };
 
 // TTS作成

@@ -125,6 +125,17 @@ exports.deleteShareCm = async (unisCustomerCd, cmId) => {
   const user = await getUser(unisCustomerCd);
   if (!user) throw new InternalServerError("not found");
 
+  // DynamoDBのデータ更新
+  cm.status = constants.cmStatus.COMPLETE;
+  cm.timestamp = timestamp();
+
+  let res;
+  try {
+    res = await db.User.updateCm(unisCustomerCd, index, cm);
+  } catch (e) {
+    erorrolg(JSON.stringify(e));
+    throw new InternalServerError(e.message);
+  }
   // S3上のCMを削除
   try {
     await s3Manager.delete(
@@ -133,17 +144,6 @@ exports.deleteShareCm = async (unisCustomerCd, cmId) => {
     );
   } catch (e) {
     errorlog(JSON.stringify(e));
-    throw new InternalServerError(e.message);
   }
-
-  // DynamoDBのデータ更新
-  cm.status = constants.cmStatus.COMPLETE;
-  cm.timestamp = timestamp();
-
-  try {
-    return await db.User.updateCm(unisCustomerCd, index, cm);
-  } catch (e) {
-    erorrolg(JSON.stringify(e));
-    throw new InternalServerError(e.message);
-  }
+  return res;
 };
