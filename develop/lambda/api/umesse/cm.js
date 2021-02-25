@@ -231,6 +231,16 @@ exports.deleteCm = async (unisCustomerCd, cmId) => {
   const cm = list[index];
 
   // TODO: CMステータス状態によるチェック
+  // DynamoDBのデータ更新
+  cm.status = constants.cmStatus.DELETE;
+  cm.timestamp = timestamp();
+  let res;
+  try {
+    res = await db.User.updateCm(unisCustomerCd, index, cm);
+  } catch (e) {
+    errorlog(JSON.stringify(e));
+    throw new InternalServerError(e.message);
+  }
 
   // S3上のCMを削除
   try {
@@ -240,18 +250,8 @@ exports.deleteCm = async (unisCustomerCd, cmId) => {
     );
   } catch (e) {
     errorlog(JSON.stringify(e));
-    throw new InternalServerError(e.message);
   }
-
-  // DynamoDBのデータ更新
-  cm.status = constants.cmStatus.DELETE;
-  cm.timestamp = timestamp();
-  try {
-    return await db.User.updateCm(unisCustomerCd, index, cm);
-  } catch (e) {
-    errorlog(JSON.stringify(e));
-    throw new InternalServerError(e.message);
-  }
+  return res;
 };
 
 // CM結合処理
