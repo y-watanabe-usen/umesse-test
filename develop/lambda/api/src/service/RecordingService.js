@@ -1,5 +1,15 @@
-'use strict';
+"use strict";
 
+const {
+  getUserResource,
+  createUserResource,
+  updateUserResource,
+  deleteUserResource,
+} = require("../../umesse/resources");
+const assert = require('assert');
+const { respondWithCode } = require("../utils/writer");
+const { UMesseError } = require("umesse-lib/error");
+const category = "recording";
 
 /**
  * 新規録音データ
@@ -8,30 +18,17 @@
  * xUnisCustomerCd String UNIS顧客CD
  * returns List
  **/
-exports.createUserRecording = function(xUnisCustomerCd) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = [ {
-  "description" : "サンプル",
-  "recordingId" : "123456789-r-12345678",
-  "title" : "サンプル",
-  "startDate" : "2019-09-01T09:00:00+9:00",
-  "timestamp" : "2019-09-01T09:00:00+9:00"
-}, {
-  "description" : "サンプル",
-  "recordingId" : "123456789-r-12345678",
-  "title" : "サンプル",
-  "startDate" : "2019-09-01T09:00:00+9:00",
-  "timestamp" : "2019-09-01T09:00:00+9:00"
-} ];
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
+exports.createUserRecording = function (body, xUnisCustomerCd) {
+  return new Promise(async function (resolve, reject) {
+    try {
+      const json = await createUserResource(xUnisCustomerCd, category, body);
+      resolve(json);
+    } catch (e) {
+      assert(e instanceof UMesseError);
+      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
     }
   });
-}
-
+};
 
 /**
  * 録音データ削除
@@ -41,24 +38,21 @@ exports.createUserRecording = function(xUnisCustomerCd) {
  * xUnisCustomerCd String UNIS顧客CD
  * returns RecordingItem
  **/
-exports.deleteUserRecording = function(recordingId,xUnisCustomerCd) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "description" : "サンプル",
-  "recordingId" : "123456789-r-12345678",
-  "title" : "サンプル",
-  "startDate" : "2019-09-01T09:00:00+9:00",
-  "timestamp" : "2019-09-01T09:00:00+9:00"
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
+exports.deleteUserRecording = function (recordingId, xUnisCustomerCd) {
+  return new Promise(async function (resolve, reject) {
+    try {
+      const json = await deleteUserResource(
+        xUnisCustomerCd,
+        category,
+        recordingId
+      );
+      resolve(json);
+    } catch (e) {
+      assert(e instanceof UMesseError);
+      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
     }
   });
-}
-
+};
 
 /**
  * 録音データ取得
@@ -68,24 +62,17 @@ exports.deleteUserRecording = function(recordingId,xUnisCustomerCd) {
  * xUnisCustomerCd String UNIS顧客CD
  * returns RecordingItem
  **/
-exports.getUserRecording = function(recordingId,xUnisCustomerCd) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "description" : "サンプル",
-  "recordingId" : "123456789-r-12345678",
-  "title" : "サンプル",
-  "startDate" : "2019-09-01T09:00:00+9:00",
-  "timestamp" : "2019-09-01T09:00:00+9:00"
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
+exports.getUserRecording = function (recordingId, xUnisCustomerCd) {
+  return new Promise(async function (resolve, reject) {
+    try {
+      const json = await getUserResource(xUnisCustomerCd, category, recordingId);
+      resolve(json);
+    } catch (e) {
+      assert(e instanceof UMesseError);
+      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
     }
   });
-}
-
+};
 
 /**
  * 録音データ一覧取得
@@ -94,30 +81,17 @@ exports.getUserRecording = function(recordingId,xUnisCustomerCd) {
  * xUnisCustomerCd String UNIS顧客CD
  * returns List
  **/
-exports.listUserRecording = function(xUnisCustomerCd) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = [ {
-  "description" : "サンプル",
-  "recordingId" : "123456789-r-12345678",
-  "title" : "サンプル",
-  "startDate" : "2019-09-01T09:00:00+9:00",
-  "timestamp" : "2019-09-01T09:00:00+9:00"
-}, {
-  "description" : "サンプル",
-  "recordingId" : "123456789-r-12345678",
-  "title" : "サンプル",
-  "startDate" : "2019-09-01T09:00:00+9:00",
-  "timestamp" : "2019-09-01T09:00:00+9:00"
-} ];
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
+exports.listUserRecording = function (xUnisCustomerCd) {
+  return new Promise(async function (resolve, reject) {
+    try {
+      const json = await getUserResource(xUnisCustomerCd, category);
+      resolve(json);
+    } catch (e) {
+      assert(e instanceof UMesseError);
+      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
     }
   });
-}
-
+};
 
 /**
  * 録音データ更新（メタデータのみ）
@@ -128,21 +102,19 @@ exports.listUserRecording = function(xUnisCustomerCd) {
  * xUnisCustomerCd String UNIS顧客CD
  * returns RecordingItem
  **/
-exports.updateUserRecording = function(body,recordingId,xUnisCustomerCd) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "description" : "サンプル",
-  "recordingId" : "123456789-r-12345678",
-  "title" : "サンプル",
-  "startDate" : "2019-09-01T09:00:00+9:00",
-  "timestamp" : "2019-09-01T09:00:00+9:00"
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
+exports.updateUserRecording = function (body, recordingId, xUnisCustomerCd) {
+  return new Promise(async function (resolve, reject) {
+    try {
+      const json = await updateUserResource(
+        xUnisCustomerCd,
+        category,
+        recordingId,
+        body
+      );
+      resolve(json);
+    } catch (e) {
+      assert(e instanceof UMesseError);
+      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
     }
   });
-}
-
+};

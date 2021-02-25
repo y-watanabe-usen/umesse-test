@@ -1,5 +1,13 @@
-'use strict';
+"use strict";
 
+const {
+  getUploadCm,
+  createUploadCm,
+  deleteUploadCm,
+} = require("../../umesse/upload");
+const assert = require('assert');
+const { respondWithCode } = require("../utils/writer");
+const { UMesseError } = require("umesse-lib/error");
 
 /**
  * CM外部連携追加
@@ -10,21 +18,17 @@
  * xUnisCustomerCd String UNIS顧客CD
  * returns ExternalItem
  **/
-exports.createUploadCm = function(body,cmId,xUnisCustomerCd) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "cmMetas" : [ null, null ],
-  "unisCustomerCd" : "123456789"
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
+exports.createUploadCm = function (body, cmId, xUnisCustomerCd) {
+  return new Promise(async function (resolve, reject) {
+    try {
+      const json = await createUploadCm(xUnisCustomerCd, cmId, body);
+      resolve(json);
+    } catch (e) {
+      assert(e instanceof UMesseError);
+      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
     }
   });
-}
-
+};
 
 /**
  * CM外部連携解除
@@ -34,21 +38,17 @@ exports.createUploadCm = function(body,cmId,xUnisCustomerCd) {
  * xUnisCustomerCd String UNIS顧客CD
  * returns ExternalItem
  **/
-exports.deleteUploadCm = function(cmId,xUnisCustomerCd) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "cmMetas" : [ null, null ],
-  "unisCustomerCd" : "123456789"
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
+exports.deleteUploadCm = function (cmId, xUnisCustomerCd) {
+  return new Promise(async function (resolve, reject) {
+    try {
+      const json = await deleteUploadCm(xUnisCustomerCd, cmId);
+      resolve(json);
+    } catch (e) {
+      assert(e instanceof UMesseError);
+      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
     }
   });
-}
-
+};
 
 /**
  * CM外部連携情報取得
@@ -58,21 +58,17 @@ exports.deleteUploadCm = function(cmId,xUnisCustomerCd) {
  * xUnisCustomerCd String UNIS顧客CD
  * returns ExternalItem
  **/
-exports.getUploadCm = function(cmId,xUnisCustomerCd) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = {
-  "cmMetas" : [ null, null ],
-  "unisCustomerCd" : "123456789"
-};
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
+exports.getUploadCm = function (cmId, xUnisCustomerCd) {
+  return new Promise(async function (resolve, reject) {
+    try {
+      const json = await getUploadCm(xUnisCustomerCd, cmId);
+      resolve(json);
+    } catch (e) {
+      assert(e instanceof UMesseError);
+      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
     }
   });
-}
-
+};
 
 /**
  * CM外部連携情報一覧取得
@@ -81,21 +77,14 @@ exports.getUploadCm = function(cmId,xUnisCustomerCd) {
  * xUnisCustomerCd String UNIS顧客CD
  * returns List
  **/
-exports.listUploadCm = function(xUnisCustomerCd) {
-  return new Promise(function(resolve, reject) {
-    var examples = {};
-    examples['application/json'] = [ {
-  "cmMetas" : [ null, null ],
-  "unisCustomerCd" : "123456789"
-}, {
-  "cmMetas" : [ null, null ],
-  "unisCustomerCd" : "123456789"
-} ];
-    if (Object.keys(examples).length > 0) {
-      resolve(examples[Object.keys(examples)[0]]);
-    } else {
-      resolve();
+exports.listUploadCm = function (xUnisCustomerCd) {
+  return new Promise(async function (resolve, reject) {
+    try {
+      const json = await getUploadCm(xUnisCustomerCd);
+      resolve(json);
+    } catch (e) {
+      assert(e instanceof UMesseError);
+      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
     }
   });
-}
-
+};
