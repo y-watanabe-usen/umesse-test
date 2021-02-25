@@ -3,8 +3,8 @@
 var utils = require('../utils/writer.js');
 var Tts = require('../service/TtsService');
 
-module.exports.createUserTts = function createUserTts (req, res, next, body, xUnisCustomerCd) {
-  Tts.createUserTts(body, xUnisCustomerCd)
+module.exports.createUserTts = function createUserTts (req, res, next, xUnisCustomerCd) {
+  Tts.createUserTts(xUnisCustomerCd)
     .then(function (response) {
       utils.writeJson(res, response);
     })

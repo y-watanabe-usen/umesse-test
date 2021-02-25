@@ -1,9 +1,5 @@
-"use strict";
+'use strict';
 
-const { getUser } = require("../../umesse/user");
-const assert = require('assert');
-const { respondWithCode } = require("../utils/writer");
-const { UMesseError } = require("umesse-lib/error");
 
 /**
  * ユーザー情報取得
@@ -12,15 +8,28 @@ const { UMesseError } = require("umesse-lib/error");
  * xUnisCustomerCd String UNIS顧客CD
  * returns User
  **/
-exports.getUser = function (xUnisCustomerCd) {
-  return new Promise(async function (resolve, reject) {
-    try {
-      const json = await getUser(xUnisCustomerCd);
-      resolve(json);
-    } catch (e) {
-      console.log(`error = ${e}`);
-      assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
+exports.getUser = function(xUnisCustomerCd) {
+  return new Promise(function(resolve, reject) {
+    var examples = {};
+    examples['application/json'] = {
+  "contractStatusName" : "確定",
+  "contractStatusCd" : "2",
+  "customerGroupName" : "CAFÉ USENグループ",
+  "contractCd" : "N01234567890123456789",
+  "unisCustomerCd" : "123456789",
+  "customerNameKana" : "カフェユーセン",
+  "serviceCd" : "U01",
+  "renewalDate" : "2019-09-01T09:00:00+9:00",
+  "serviceName" : "U∞MUSIC",
+  "customerName" : "カフェUSEN",
+  "customerGroupCd" : "1234567",
+  "createDate" : "2019-09-01T09:00:00+9:00"
+};
+    if (Object.keys(examples).length > 0) {
+      resolve(examples[Object.keys(examples)[0]]);
+    } else {
+      resolve();
     }
   });
-};
+}
+
