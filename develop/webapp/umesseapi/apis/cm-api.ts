@@ -173,10 +173,11 @@ export const CmApiAxiosParamCreator = function (configuration?: Configuration) {
          * CMの情報を一覧で取得する
          * @summary CM一覧取得
          * @param {string} xUnisCustomerCd UNIS顧客CD
+         * @param {number} [sort] ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listUserCm: async (xUnisCustomerCd: string, options: any = {}): Promise<RequestArgs> => {
+        listUserCm: async (xUnisCustomerCd: string, sort?: number, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'xUnisCustomerCd' is not null or undefined
             if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
                 throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling listUserCm.');
@@ -191,6 +192,10 @@ export const CmApiAxiosParamCreator = function (configuration?: Configuration) {
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            if (sort !== undefined) {
+                localVarQueryParameter['sort'] = sort;
+            }
 
             if (xUnisCustomerCd !== undefined && xUnisCustomerCd !== null) {
                 localVarHeaderParameter['x-unis-customer-cd'] = String(xUnisCustomerCd);
@@ -324,11 +329,12 @@ export const CmApiFp = function(configuration?: Configuration) {
          * CMの情報を一覧で取得する
          * @summary CM一覧取得
          * @param {string} xUnisCustomerCd UNIS顧客CD
+         * @param {number} [sort] ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listUserCm(xUnisCustomerCd: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CmItem>>> {
-            const localVarAxiosArgs = await CmApiAxiosParamCreator(configuration).listUserCm(xUnisCustomerCd, options);
+        async listUserCm(xUnisCustomerCd: string, sort?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CmItem>>> {
+            const localVarAxiosArgs = await CmApiAxiosParamCreator(configuration).listUserCm(xUnisCustomerCd, sort, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -396,11 +402,12 @@ export const CmApiFactory = function (configuration?: Configuration, basePath?: 
          * CMの情報を一覧で取得する
          * @summary CM一覧取得
          * @param {string} xUnisCustomerCd UNIS顧客CD
+         * @param {number} [sort] ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listUserCm(xUnisCustomerCd: string, options?: any): AxiosPromise<Array<CmItem>> {
-            return CmApiFp(configuration).listUserCm(xUnisCustomerCd, options).then((request) => request(axios, basePath));
+        listUserCm(xUnisCustomerCd: string, sort?: number, options?: any): AxiosPromise<Array<CmItem>> {
+            return CmApiFp(configuration).listUserCm(xUnisCustomerCd, sort, options).then((request) => request(axios, basePath));
         },
         /**
          * CMの情報を更新する
@@ -464,12 +471,13 @@ export class CmApi extends BaseAPI {
      * CMの情報を一覧で取得する
      * @summary CM一覧取得
      * @param {string} xUnisCustomerCd UNIS顧客CD
+     * @param {number} [sort] ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof CmApi
      */
-    public listUserCm(xUnisCustomerCd: string, options?: any) {
-        return CmApiFp(this.configuration).listUserCm(xUnisCustomerCd, options).then((request) => request(this.axios, this.basePath));
+    public listUserCm(xUnisCustomerCd: string, sort?: number, options?: any) {
+        return CmApiFp(this.configuration).listUserCm(xUnisCustomerCd, sort, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * CMの情報を更新する
