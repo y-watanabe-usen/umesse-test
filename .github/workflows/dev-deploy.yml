@@ -1,8 +1,9 @@
-name: ci-development
+name: dev-deploy
 
 on:
-  pull_request:
-    branches: [ master ]
+  push:
+    branches:
+    - master
 
 jobs:
   terraform:
@@ -49,12 +50,13 @@ jobs:
       with:
         terraform_version: 0.14.7
 
-    - name: Terraform plan
+    - name: Terraform apply
       working-directory: ./deploy/aws
       run: |
         terraform init
         terraform validate
         terraform plan
+        terraform apply -auto-approve
 
   webapp:
     name: Webapp
@@ -68,13 +70,21 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
 
+    - name: configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-northeast-1
+
     - name: Setup Nodejs
       uses: actions/setup-node@v2
       with:
         node-version: '14'
 
-    - name: Build Webapp
+    - name: Build Webapp & Upload s3
       working-directory: ./develop/webapp
       run: |
         yarn install
         yarn build --mode development
+        aws s3 sync --exact-timestamps --delete ./dist/ s3://dev-umesse-webapp/
