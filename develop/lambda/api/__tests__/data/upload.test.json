@@ -41,7 +41,7 @@
           "contentTime": { "N": "60" },
           "sceneCd": { "S": "01" },
           "uploadSystem": { "S": "01" },
-          "status": { "S": "1" },
+          "status": { "S": "0" },
           "timestamp": { "S": "2020-01-01T12:34:56+09:00" }
         }
       }

@@ -22,18 +22,35 @@ exports.getExternalCm = async (unisCustomerCd, external) => {
   if (checkParams) throw new BadRequestError(checkParams);
 
   let uploadSystem = constants.cmUploadSystem[external.toUpperCase()];
-  let json;
+  let ret;
   try {
-    json = await db.External.findByUploadSystem(uploadSystem);
+    ret = await db.External.findByUploadSystem(uploadSystem);
   } catch (e) {
     errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
 
   if (unisCustomerCd) {
-    json = json.filter((item) => item.unisCustomerCd === unisCustomerCd)[0];
+    ret = ret.filter((item) => item.unisCustomerCd === unisCustomerCd);
   }
-  if (!json) throw new InternalServerError("not found");
+  if (!ret) throw new InternalServerError("not found");
+
+  // レスポンスの成形
+  const customers = Array.from(new Set(ret.map((item) => item.unisCustomerCd)));
+  let json = { unisCustomers: [] };
+  for (const customer of customers) {
+    let metas = ret
+      .filter((item) => item.unisCustomerCd === customer)
+      .map((item) => {
+        delete item.unisCustomerCd;
+        return item;
+      });
+    json.unisCustomers.push({
+      unisCustomerCd: customer,
+      cmMetas: metas,
+    });
+  }
+
   return json;
 };
 

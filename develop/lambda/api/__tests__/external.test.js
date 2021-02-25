@@ -8,10 +8,37 @@ const { getExternalCm } = require("../umesse/external");
 const { BadRequestError, InternalServerError } = require("umesse-lib/error");
 
 // test data
-const json = require("./data/external.test.json");
-const data = aws.DynamoDB.Converter.unmarshall(
-  json["umesse-external"][0].PutRequest.Item
-);
+const data = {
+  unisCustomers: [
+    {
+      unisCustomerCd: "060000002",
+      cmMetas: [
+        {
+          dataProcessType: "02",
+          cmId: "060000002-c-00000001",
+          cmName: "時報A",
+          cmCommentManuscript: "テストCMです",
+        },
+      ],
+    },
+    {
+      unisCustomerCd: "060000000",
+      cmMetas: [
+        {
+          dataProcessType: "01",
+          cmId: "060000000-c-00000001",
+          cmName: "時報A",
+          cmCommentManuscript: "テストCMです",
+          startDatetime: "2020-01-01T12:34:56+09:00",
+          endDatetime: "9999-12-31T23:59:59+09:00",
+          productionType: "01",
+          contentTime: 60,
+          sceneCd: "01",
+        },
+      ],
+    },
+  ],
+};
 
 console.error = jest.fn();
 beforeAll(() => {
