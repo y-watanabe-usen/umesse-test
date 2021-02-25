@@ -89,6 +89,12 @@ paths:
       parameters:
         # - $ref: "#/components/parameters/Token"
         - $ref: "#/components/parameters/UnisCustomerCd"
+        - name: sort
+          in: query
+          description: ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
+          schema:
+            type: integer
+            example: 1
       responses:
         200:
           description: successful response
