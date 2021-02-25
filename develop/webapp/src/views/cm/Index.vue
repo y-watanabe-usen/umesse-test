@@ -523,6 +523,7 @@
         <FormGroup title="シーン">
           <SelectBox
             v-model:value="scene"
+            @change="scene = $event.target.value"
             :options="
               Constants.SCENES.map((scene) => {
                 return { title: scene.name, value: scene.cd };
@@ -536,6 +537,7 @@
         >
           <SelectBox
             v-model:value="uploadSystem"
+            @change="uploadSystem = $event.target.value"
             :options="
               Constants.UPLOAD_SYSTEMS.map((uploadSystem) => {
                 return { title: uploadSystem.name, value: uploadSystem.cd };
