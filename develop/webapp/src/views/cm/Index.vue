@@ -543,8 +543,8 @@
             v-model:value="scene"
             @change="scene = $event.target.value"
             :options="
-              Constants.SCENES.map((ascene) => {
-                return { title: ascene.name, value: ascene.cd };
+              Constants.SCENES.map((scene) => {
+                return { title: scene.name, value: scene.cd };
               })
             "
           />
