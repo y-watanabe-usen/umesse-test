@@ -2,32 +2,12 @@
 
 const { constants } = require("umesse-lib/constants");
 const {
-  createTts,
   getResource,
   getSignedUrl,
 } = require("../../umesse/resources");
 const assert = require('assert');
 const { respondWithCode } = require("../utils/writer");
 const { UMesseError } = require("umesse-lib/error");
-
-/**
- * TTS音声作成
- * TTS音声を作成する
- *
- * body Object TTS作成リクエストBody (optional)
- * returns CreateTtsItem
- **/
-exports.createTts = function (body) {
-  return new Promise(async function (resolve, reject) {
-    try {
-      const json = await createTts(body);
-      resolve(json);
-    } catch (e) {
-      assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
-    }
-  });
-};
 
 /**
  * S3オブジェクトの署名付きURLの取得

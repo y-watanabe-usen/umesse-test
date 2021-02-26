@@ -14,19 +14,13 @@
 /**
  * 
  * @export
- * @interface CreateTtsItem
+ * @interface GenerateTtsItem
  */
-export interface CreateTtsItem {
+export interface GenerateTtsItem {
     /**
      * 
-     * @type {string}
-     * @memberof CreateTtsItem
+     * @type {Array&lt;GenerateTtsItemTts&gt;}
+     * @memberof GenerateTtsItem
      */
-    body?: any;
-    /**
-     * 
-     * @type {Array}
-     * @memberof CreateTtsItem
-     */
-    isBase64Encoded?: any;
+    tts?: any;
 }

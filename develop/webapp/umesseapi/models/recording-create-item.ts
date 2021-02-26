@@ -14,31 +14,31 @@
 /**
  * 
  * @export
- * @interface UserResourceCreateItem
+ * @interface RecordingCreateItem
  */
-export interface UserResourceCreateItem {
+export interface RecordingCreateItem {
     /**
      * 
      * @type {string}
-     * @memberof UserResourceCreateItem
+     * @memberof RecordingCreateItem
      */
     filename?: any;
     /**
      * 
      * @type {string}
-     * @memberof UserResourceCreateItem
+     * @memberof RecordingCreateItem
      */
     recordedFile?: any;
     /**
      * 
      * @type {string}
-     * @memberof UserResourceCreateItem
+     * @memberof RecordingCreateItem
      */
     title?: any;
     /**
      * 
      * @type {string}
-     * @memberof UserResourceCreateItem
+     * @memberof RecordingCreateItem
      */
     description?: any;
 }

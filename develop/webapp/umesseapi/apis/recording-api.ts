@@ -25,7 +25,7 @@ export const RecordingApiAxiosParamCreator = function (configuration?: Configura
     return {
         /**
          * 録音音声素材を新規登録する
-         * @summary 新規録音データ
+         * @summary 録音データ登録
          * @param {string} xUnisCustomerCd UNIS顧客CD
          * @param {string} [filename] 
          * @param {string} [recordedFile] 
@@ -296,7 +296,7 @@ export const RecordingApiFp = function(configuration?: Configuration) {
     return {
         /**
          * 録音音声素材を新規登録する
-         * @summary 新規録音データ
+         * @summary 録音データ登録
          * @param {string} xUnisCustomerCd UNIS顧客CD
          * @param {string} [filename] 
          * @param {string} [recordedFile] 
@@ -383,7 +383,7 @@ export const RecordingApiFactory = function (configuration?: Configuration, base
     return {
         /**
          * 録音音声素材を新規登録する
-         * @summary 新規録音データ
+         * @summary 録音データ登録
          * @param {string} xUnisCustomerCd UNIS顧客CD
          * @param {string} [filename] 
          * @param {string} [recordedFile] 
@@ -451,7 +451,7 @@ export const RecordingApiFactory = function (configuration?: Configuration, base
 export class RecordingApi extends BaseAPI {
     /**
      * 録音音声素材を新規登録する
-     * @summary 新規録音データ
+     * @summary 録音データ登録
      * @param {string} xUnisCustomerCd UNIS顧客CD
      * @param {string} [filename] 
      * @param {string} [recordedFile] 

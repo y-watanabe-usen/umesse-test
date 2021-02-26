@@ -12,9 +12,10 @@ const { UMesseError } = require("umesse-lib/error");
 const category = "recording";
 
 /**
- * 新規録音データ
+ * 録音データ登録
  * 録音音声素材を新規登録する
  *
+ * body List 録音音声登録リクエストBody (optional)
  * xUnisCustomerCd String UNIS顧客CD
  * returns List
  **/

@@ -3,16 +3,6 @@
 var utils = require('../utils/writer.js');
 var Resources = require('../service/ResourcesService');
 
-module.exports.createTts = function createTts (req, res, next, body) {
-  Resources.createTts(body)
-    .then(function (response) {
-      utils.writeJson(res, response);
-    })
-    .catch(function (response) {
-      utils.writeJson(res, response);
-    });
-};
-
 module.exports.getSignedUrl = function getSignedUrl (req, res, next, id, category) {
   Resources.getSignedUrl(id, category)
     .then(function (response) {

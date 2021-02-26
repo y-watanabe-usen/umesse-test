@@ -257,7 +257,7 @@ paths:
     post:
       tags:
         - recording
-      summary: 新規録音データ
+      summary: 録音データ登録
       description: 録音音声素材を新規登録する
       operationId: createUserRecording
       # security:
@@ -271,7 +271,7 @@ paths:
           multipart/form-data:
             schema:
               type: object
-              $ref: '#/components/schemas/UserResourceCreateItem'
+              $ref: '#/components/schemas/RecordingCreateItem'
       responses:
         200:
           description: successful response
@@ -405,7 +405,7 @@ paths:
     post:
       tags:
         - tts
-      summary: 新規録音データ
+      summary: TTSデータ登録
       description: 合成音声素材を新規登録する
       operationId: createUserTts
       # security:
@@ -414,12 +414,7 @@ paths:
         # - $ref: "#/components/parameters/Token"
         - $ref: "#/components/parameters/UnisCustomerCd"
       requestBody:
-        description: ユーザー素材データ作成リクエストBody
-        content:
-          multipart/form-data:
-            schema:
-              type: object
-              $ref: '#/components/schemas/UserResourceCreateItem'
+        $ref: "#/components/requestBodies/CreateTtsRequest"
       responses:
         200:
           description: successful response
@@ -436,6 +431,37 @@ paths:
           $ref: "#/components/responses/NotFound"
         5XX:
           $ref: "#/components/responses/Unexpected"
+
+  /user/tts/generate:
+    post:
+      tags:
+        - tts
+      summary: TTSデータ生成
+      description: 合成音声を生成する
+      operationId: generateUserTts
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        # - $ref: "#/components/parameters/Token"
+        - $ref: "#/components/parameters/UnisCustomerCd"
+      requestBody:
+        $ref: "#/components/requestBodies/GenerateTtsRequest"
+      responses:
+        200:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GenerateTtsItem"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        404:
+          $ref: "#/components/responses/NotFound"
+        5XX:
+          $ref: "#/components/responses/Unexpected"
+
 
   /user/tts/{ttsId}:
     get:
@@ -1009,33 +1035,6 @@ paths:
         5XX:
           $ref: "#/components/responses/Unexpected"
 
-  /tts:
-    post:
-      tags:
-        - resources
-      summary: TTS音声作成
-      description: TTS音声を作成する
-      operationId: createTts
-      # security:
-      #   - ApiKeyAuth: []
-      requestBody:
-        $ref: "#/components/requestBodies/TtsRequest"
-      responses:
-        200:
-          description: successful response
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/CreateTtsItem"
-        400:
-          $ref: "#/components/responses/BadRequest"
-        401:
-          $ref: "#/components/responses/Unauthorized"
-        404:
-          $ref: "#/components/responses/NotFound"
-        5XX:
-          $ref: "#/components/responses/Unexpected"
-
   /{external}/cm:
     get:
       tags:
@@ -1533,6 +1532,19 @@ components:
         timestamp:
           type: string
           example: "2019-09-01T09:00:00+9:00"
+    RecordingCreateItem:
+      properties:
+        filename:
+          type: string
+        recordedFile:
+          type: string
+          format: binary
+        title:
+          type: string
+          example: サンプル
+        description:
+          type: string
+          example: サンプル
     TtsItem:
       properties:
         ttsId:
@@ -1554,15 +1566,19 @@ components:
         timestamp:
           type: string
           example: "2019-09-01T09:00:00+9:00"
-    CreateTtsItem:
+    GenerateTtsItem:
       properties:
-        body:
-          type: string
-          format: base64
-          example: "base64 string"
-        isBase64Encoded:
+        tts:
           type: array
-          example: "true"
+          items:
+            type: object
+            properties:
+              url:
+                type: string
+                example: "https://xxxxx/tts-jp.mp3?AWSAccessKeyId=xxxxxxxx"
+              lang:
+                type: string
+                example: "ja | en | zh | ko"
     ExternalItems:
       properties:
         unisCustomers:
@@ -1646,19 +1662,6 @@ components:
         errorMessege:
           type: string
           example: "CM名に規定外の文字が使用されています"
-    UserResourceCreateItem:
-      properties:
-        filename:
-          type: string
-        recordedFile:
-          type: string
-          format: binary
-        title:
-          type: string
-          example: サンプル
-        description:
-          type: string
-          example: サンプル
     Error:
       description: Error
       type: object
@@ -1724,24 +1727,6 @@ components:
               uploadSystem:
                 type: string
                 example: "01: センター, 02: S'sence"
-    UserResourceCreateRequest:
-      description: ユーザー素材データ作成リクエストBody
-      content:
-        multipart/form-data:
-          schema:
-            type: object
-            properties:
-              filename:
-                type: string
-              recordedFile:
-                type: string
-                format: binary
-              title:
-                type: string
-                example: "サンプル"
-              description:
-                type: string
-                example: "サンプル"
     UserResourceUpdateRequest:
       description: ユーザー素材データ更新リクエストBody
       content:
@@ -1765,25 +1750,42 @@ components:
               uploadSystem:
                 type: string
                 example: "01: センター, 02: S'sence"
-    TtsRequest:
+    CreateTtsRequest:
+      description: TTS登録リクエストBody
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: サンプル
+                description:
+                  type: string
+                  example: サンプル
+                lang:
+                  type: string
+                  example: "ja | en | zh | ko"
+    GenerateTtsRequest:
       description: TTS作成リクエストBody
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              text:
-                type: string
-                example: "こんにちは。"
-              speaker:
-                type: string
-                example: "risa"
-              pitch:
-                type: string
-                example: "100"
-              speed:
-                type: string
-                example: "100"
+            type: array
+            items:
+              type: object
+              properties:
+                text:
+                  type: string
+                  example: "こんにちは。"
+                lang:
+                  type: string
+                  example: "ja | en | zh | ko"
+                speaker:
+                  type: string
+                  example: "0: 男性, 1: 女性"
     ExternalCompleteRequest:
       description: 外部連携完了リクエストBody
       content:
