@@ -2,8 +2,8 @@
 
 const {
   getUserResource,
-  createUserResource,
-  generateUserResource,
+  createTtsResource,
+  generateTtsResource,
   updateUserResource,
   deleteUserResource,
 } = require("../../umesse/resources");
@@ -23,7 +23,7 @@ const category = "tts";
 exports.createUserTts = function (body, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     try {
-      const json = await createUserResource(xUnisCustomerCd, category, body);
+      const json = await createTtsResource(xUnisCustomerCd, body);
       resolve(json);
     } catch (e) {
       assert(e instanceof UMesseError);
@@ -64,7 +64,7 @@ exports.deleteUserTts = function (ttsId, xUnisCustomerCd) {
 exports.generateUserTts = function (body, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     try {
-      const json = await generateUserResource(xUnisCustomerCd, body);
+      const json = await generateTtsResource(xUnisCustomerCd, body);
       resolve(json);
     } catch (e) {
       assert(e instanceof UMesseError);

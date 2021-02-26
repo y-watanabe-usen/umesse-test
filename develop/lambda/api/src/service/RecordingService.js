@@ -2,7 +2,7 @@
 
 const {
   getUserResource,
-  createUserResource,
+  createRecordingResource,
   updateUserResource,
   deleteUserResource,
 } = require("../../umesse/resources");
@@ -22,7 +22,7 @@ const category = "recording";
 exports.createUserRecording = function (body, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     try {
-      const json = await createUserResource(xUnisCustomerCd, category, body);
+      const json = await createRecordingResource(xUnisCustomerCd, body);
       resolve(json);
     } catch (e) {
       assert(e instanceof UMesseError);
