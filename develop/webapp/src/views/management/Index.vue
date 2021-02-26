@@ -160,7 +160,7 @@
           <Button type="secondary" @click="closeSaveModal">キャンセル</Button>
           <Button
             type="primary"
-            :isDisabled="!title"
+            :isDisabled="!title || isUploading"
             @click="saveAndOpenSavedModal"
             >保存する</Button
           >
@@ -261,7 +261,6 @@ import {
 import Constants from "@/utils/Constants";
 import { useRouter } from "vue-router";
 import SelectBox from "@/components/atoms/SelectBox.vue";
-
 export default defineComponent({
   components: {
     BasicLayout,
@@ -292,7 +291,6 @@ export default defineComponent({
     const uploadCmService = useUploadCmService(cmApi);
     const resourcesapi = new UMesseApi.ResourcesApi(config);
     const { auth, cm } = useGlobalStore();
-
     const state = reactive({
       activeSceneCd: "001",
       scenes: computed(() => Common.getManagementScenes()),
@@ -312,13 +310,12 @@ export default defineComponent({
       isSavedModalAppear: false,
       isRemoveModalAppear: false,
       isRemovedModalAppear: false,
+      isUploading: false,
     });
-
     const clickScene = (sceneCd: string) => {
       state.activeSceneCd = sceneCd;
       fetchCm();
     };
-
     const fetchCm = async () => {
       // TODO: auth.getToken()のトークンだとデータが空なので固定値をセットする
       // const xUnisCustomerCd = auth.getToken()!!;
@@ -330,11 +327,9 @@ export default defineComponent({
         return v.scene.sceneCd == state.activeSceneCd;
       });
     };
-
     const selectCm = (cm: CmItem) => {
       state.selectedCm = cm;
     };
-
     const play = async (cm: CmItem) => {
       if (state.isPlaying) return;
       const response = await resourcesapi.getSignedUrl(cm.cmId, "cm");
@@ -342,11 +337,9 @@ export default defineComponent({
       await audioStore.download(response.data.url);
       audioPlayer.start(<AudioBuffer>audioStore.audioBuffer);
     };
-
     const stop = () => {
       if (state.isPlaying) audioPlayer.stop();
     };
-
     const save = async (cm: CmItem) => {
       const xUnisCustomerCd = "123456789";
       const response = await uploadCmService.update(
@@ -366,42 +359,36 @@ export default defineComponent({
       const response = await uploadCmService.remove(xUnisCustomerCd, cmId);
       fetchCm();
     };
-
     const openPlayModal = () => {
       state.isPlayModalAppear = true;
     };
     const closePlayModal = () => {
       state.isPlayModalAppear = false;
     };
-
     const openSaveModal = () => {
       state.isSaveModalAppear = true;
     };
     const closeSaveModal = () => {
       state.isSaveModalAppear = false;
     };
-
     const openSavedModal = () => {
       state.isSavedModalAppear = true;
     };
     const closeSavedModal = () => {
       state.isSavedModalAppear = false;
     };
-
     const openRemoveModal = () => {
       state.isRemoveModalAppear = true;
     };
     const closeRemoveModal = () => {
       state.isRemoveModalAppear = false;
     };
-
     const openRemovedModal = () => {
       state.isRemovedModalAppear = true;
     };
     const closeRemovedModal = () => {
       state.isRemovedModalAppear = false;
     };
-
     const selectCmAndOpenPlayModal = (cm: CmItem) => {
       selectCm(cm);
       openPlayModal();
@@ -423,12 +410,20 @@ export default defineComponent({
       closePlayModal();
     };
     const saveAndOpenSavedModal = async () => {
-      if (!state.selectedCm) return;
-      await save(state.selectedCm);
-      closeSaveModal();
-      setTimeout(() => {
-        openSavedModal();
-      }, 500);
+      try {
+        state.isUploading = true;
+        if (!state.selectedCm) return;
+        await save(state.selectedCm);
+        state.isUploading = false;
+        closeSaveModal();
+        setTimeout(() => {
+          openSavedModal();
+        }, 500);
+      } catch (e) {
+        console.log(e.message);
+      } finally {
+        state.isUploading = false;
+      }
     };
     const removeAndOpenRemovedModal = async () => {
       await remove(state.selectedCm?.cmId);
@@ -437,17 +432,14 @@ export default defineComponent({
         openRemovedModal();
       }, 500);
     };
-
     const toEditCm = (cmItem: CmItem) => {
       console.log(cmItem);
       cm.setCm(cmItem)
       router.push({ name: "Cm" });
     };
-
     onMounted(async () => {
       fetchCm();
     });
-
     return {
       ...toRefs(state),
       play,
@@ -484,7 +476,6 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import "@/scss/_variables.scss";
 @include fade_animation;
-
 .btn:focus {
   box-shadow: none;
 }
