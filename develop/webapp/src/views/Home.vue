@@ -17,62 +17,24 @@
     </ul>
   </header>
   <MainMenu />
-  <!-- modal -->
-  <transition>
-    <ModalDialog v-if="isModalAppear" @close="closeModal">
-      <template #header>
-        <ModalHeader title="setting" @close="closeModal" />
-      </template>
-      <template #contents>
-        <div class="modal-contents custom-control custom-switch">
-          <input
-            type="checkbox"
-            class="custom-control-input"
-            id="customSwitch1"
-            v-model="isDarkTheme"
-            @change="toggleDarkTheme()"
-          />
-          <label class="custom-control-label" for="customSwitch1"
-            >switch dark mode</label
-          >
-        </div>
-      </template>
-    </ModalDialog>
-  </transition>
 </template>
 
 <script lang="ts">
 import { useGlobalStore } from "@/store";
 import { defineComponent, onMounted, reactive, toRefs } from "vue";
 import MainMenu from "@/components/organisms/MainMenu.vue";
-import ModalDialog from "@/components/organisms/ModalDialog.vue";
-import ModalHeader from "@/components/molecules/ModalHeader.vue";
 
 export default defineComponent({
   components: {
     MainMenu,
-    ModalDialog,
-    ModalHeader,
   },
   name: "Home",
   setup() {
     const { auth, base } = useGlobalStore();
-    const state = reactive({
-      isModalAppear: false,
-    });
-    const openModal = () => {
-      state.isModalAppear = true;
-    };
-    const closeModal = () => {
-      state.isModalAppear = false;
-    };
     onMounted(() => {
       auth.requestAuth();
     });
     return {
-      ...toRefs(state),
-      openModal,
-      closeModal,
       ...auth,
       ...base,
     };
@@ -124,9 +86,6 @@ header {
       }
     }
   }
-}
-.modal-contents {
-  padding: 30px;
 }
 @include fade_animation;
 </style>
