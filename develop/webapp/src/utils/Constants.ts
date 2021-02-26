@@ -20,6 +20,11 @@ export type CmStatus = {
   name: string,
 }
 
+export type AppInformation = {
+  cd: string, // id
+  name: string,
+}
+
 export default class Constants {
   public static readonly APP_NAME = "U MESSE"
 
@@ -111,5 +116,11 @@ export default class Constants {
     { cd: "11", status: "EXTERNAL_UPLOADING", name: "外部システムアップロード中" },
     { cd: "12", status: "EXTERNAL_COMPLETE", name: "外部システムアップロード完了" },
     { cd: "19", status: "EXTERNAL_ERROR", name: "外部システムアップロードエラー" },
+  ]
+
+  public static readonly APP_INFORMATIONS: AppInformation[] = [
+    { cd: "01", name: "バージョン" },
+    { cd: "02", name: "U MESSE利用規約" },
+    { cd: "03", name: "アナウンス発注の利用規約" },
   ]
 }
