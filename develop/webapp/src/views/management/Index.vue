@@ -22,9 +22,9 @@
         <List>
           <template #header>
             <ListHeader>
-              <select class="form-control w-25">
-                <option v-for="sort in sorts" :key="sort">
-                  {{ sort }}
+              <select class="form-control w-25" v-model="sort" @change="sortCm">
+                  <option v-for="cmSort in cmSorts" :key="cmSort.cd" :value="cmSort.cd">
+                    {{ cmSort.name }}
                 </option>
               </select>
             </ListHeader>
@@ -42,7 +42,7 @@
                   convertNumberToTime(cm.seconds)
                 }}</span>
                 <span class="start">{{
-                  convertDatestringToDate(cm.startDate)
+                  convertDatestringToDate(cm.timestamp)
                 }}</span>
                 <span class="end"
                   >ステータス：{{
@@ -260,6 +260,17 @@
         <FormGroup title="説明">
           <TextArea v-model:value="description" />
         </FormGroup>
+        <FormGroup title="シーン">
+          <SelectBox
+            v-model:value="scene"
+            @change="scene = $event.target.value"
+            :options="
+              Constants.SCENES.map((scene) => {
+                return { title: scene.name, value: scene.cd };
+              })
+            "
+          />
+        </FormGroup>
       </template>
       <template #footer>
         <ModalFooter>
@@ -357,6 +368,7 @@ import {
 } from "@/utils/FormatDate";
 import Constants from "@/utils/Constants";
 import { useRouter } from "vue-router";
+import SelectBox from "@/components/atoms/SelectBox.vue";
 
 export default defineComponent({
   components: {
@@ -375,6 +387,7 @@ export default defineComponent({
     FormGroup,
     TextBox,
     TextArea,
+    SelectBox,
   },
   setup() {
     const router = useRouter();
@@ -388,8 +401,9 @@ export default defineComponent({
     const state = reactive({
       activeSceneCd: "001",
       scenes: computed(() => Common.getManagementScenes()),
-      sorts: ["名前順", "作成日順", "更新日順"],
       cms: [] as CmItem[],
+      sort: 4,
+      cmSorts: computed(() => Common.getSort()),
       isPlaying: computed(() => audioPlayer.isPlaying()),
       isDownloading: computed(() => audioStore.isDownloading),
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
@@ -403,6 +417,7 @@ export default defineComponent({
       selectedCm: null as CmItem | null,
       title: "",
       description: "",
+      scene: "",
       isPlayModalAppear: false,
       isSaveModalAppear: false,
       isSavedModalAppear: false,
@@ -420,7 +435,16 @@ export default defineComponent({
       // const xUnisCustomerCd = auth.getToken()!!;
       const xUnisCustomerCd = "123456789";
       // TODO: sceneを指定する必要がある？
-      const response = await cmApi.listUserCm(xUnisCustomerCd);
+      const response = await cmApi.listUserCm(xUnisCustomerCd, state.sort);
+      state.cms = response.data.filter((v) => {
+        if (!v.scene) return false;
+        return v.scene.sceneCd == state.activeSceneCd;
+      });
+    };
+
+    const sortCm = async () => {
+      const xUnisCustomerCd = "123456789";
+      const response = await cmApi.listUserCm(xUnisCustomerCd, state.sort);
       state.cms = response.data.filter((v) => {
         if (!v.scene) return false;
         return v.scene.sceneCd == state.activeSceneCd;
@@ -450,7 +474,7 @@ export default defineComponent({
         cm.cmId,
         state.title,
         state.description,
-        cm.scene.sceneCd,
+        state.scene,
         cm.productionType
       );
       fetchCm();
@@ -506,6 +530,7 @@ export default defineComponent({
       selectCm(cm);
       state.title = cm.title;
       state.description = cm.description;
+      state.scene = cm.scene.sceneCd;
       console.log(state.title);
       openSaveModal();
     };
@@ -570,6 +595,7 @@ export default defineComponent({
       removeAndOpenRemovedModal,
       toEditCm,
       Constants,
+      sortCm,
     };
   },
 });
