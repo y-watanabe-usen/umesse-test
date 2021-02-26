@@ -136,7 +136,7 @@ import ListItem from "@/components/molecules/ListItem.vue";
 import ModalDialog from "@/components/organisms/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
-import PlayDialogContents from "@/components/organisms/PlayDialogContents.vue";
+import PlayDialogContents from "@/components/molecules/PlayDialogContents.vue";
 import { config } from "@/utils/UMesseApiConfiguration";
 import { NarrationItem } from "umesseapi/models";
 import { useGlobalStore } from "@/store";
