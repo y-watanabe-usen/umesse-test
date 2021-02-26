@@ -92,6 +92,12 @@ export default function cmStore() {
   const clearBgm = () => {
     state.bgmItem = null
   }
+  const clearAll = () => {
+    clearAllNarration()
+    clearOpenChime()
+    clearEndChime()
+    clearBgm()
+  }
 
   const selectNarrationIndex = (index: number) => {
     state.selectedNarrationIndex = index
@@ -149,6 +155,7 @@ export default function cmStore() {
     clearOpenChime,
     clearEndChime,
     clearBgm,
+    clearAll,
     selectNarrationIndex,
     unSelectNarrationIndex,
     setNarration,
