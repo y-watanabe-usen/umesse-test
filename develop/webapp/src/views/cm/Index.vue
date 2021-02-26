@@ -200,37 +200,17 @@
             </CmItem>
           </template>
           <template v-if="narrarions.length < MAX_NARRATION_COUNT">
-            <div style="width: 100%">
-              <CmItem
-                :title="
-                  'ナレーション ' +
-                  `${narrarions.length + 1}` +
-                  '/' +
-                  `${MAX_NARRATION_COUNT}`
-                "
-                :isEmpty="true"
-                size="flexible"
-                id="dropdownMenuButton"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-                class="dropdown-toggle"
-              />
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a class="dropdown-item" href="#" @click="addRecording()">
-                  自分で録音した音声を追加する</a
-                >
-                <a class="dropdown-item" href="#" @click="addNarration()"
-                  >ナレーションを追加する</a
-                >
-                <a class="dropdown-item" href="#" @click="addVoiceTemplate()">
-                  合成音声(テンプレートから)を追加する</a
-                >
-                <a class="dropdown-item" href="#" @click="addVoiceFree()">
-                  合成音声(フリー入力から)を追加する</a
-                >
-              </div>
-            </div>
+            <CmItem
+              :title="
+                'ナレーション ' +
+                `${narrarions.length + 1}` +
+                '/' +
+                `${MAX_NARRATION_COUNT}`
+              "
+              :isEmpty="true"
+              size="flexible"
+              @add="addNarration"
+            />
           </template>
         </template>
         <template #bottom>
@@ -543,6 +523,7 @@
         <FormGroup title="シーン">
           <SelectBox
             v-model:value="scene"
+            @change="scene = $event.target.value"
             :options="
               Constants.SCENES.map((scene) => {
                 return { title: scene.name, value: scene.cd };
@@ -556,6 +537,7 @@
         >
           <SelectBox
             v-model:value="uploadSystem"
+            @change="uploadSystem = $event.target.value"
             :options="
               Constants.UPLOAD_SYSTEMS.map((uploadSystem) => {
                 return { title: uploadSystem.name, value: uploadSystem.cd };
@@ -928,5 +910,9 @@ export default defineComponent({
   font-size: 20px;
   font-weight: $font_weight_bold;
   text-align: center;
+}
+
+.dropdown-toggle::after {
+  content: none;
 }
 </style>

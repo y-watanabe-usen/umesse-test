@@ -1,0 +1,87 @@
+name: dev-dry-run-deploy
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  terraform:
+    name: Terraform
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-northeast-1
+
+    - name: Setup Nodejs
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Build Lambda Api
+      working-directory: ./develop/lambda/api
+      run: |
+        npm install --production
+
+    - name: Build Lambda Converter
+      working-directory: ./develop/lambda/converter
+      run: |
+        npm install --production
+
+    - name: Build Lambda Lib
+      working-directory: ./develop/lambda/layer/nodejs/node_modules/umesse-lib
+      run: |
+        npm install --production
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 0.14.7
+
+    - name: Terraform plan
+      working-directory: ./deploy/aws
+      run: |
+        terraform init
+        terraform validate
+        terraform plan
+
+  webapp:
+    name: Webapp
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-northeast-1
+
+    - name: Setup Nodejs
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Build Webapp
+      working-directory: ./develop/webapp
+      run: |
+        yarn install
+        yarn build --mode development

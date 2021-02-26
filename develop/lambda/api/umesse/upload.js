@@ -119,6 +119,18 @@ exports.deleteUploadCm = async (unisCustomerCd, cmId) => {
 
   // TODO: CMステータス状態によるチェック
 
+  // DynamoDBのデータ更新
+  cm.status = constants.cmStatus.EXTERNAL_UPLOADING;
+  cm.timestamp = timestamp();
+
+  let res;
+  try {
+    res = await db.User.updateCm(unisCustomerCd, index, cm);
+  } catch (e) {
+    errorlog(JSON.stringify(e));
+    throw new InternalServerError(e.message);
+  }
+
   // 連携用のデータ追加
   const item = {
     unisCustomerCd: unisCustomerCd,
@@ -133,17 +145,7 @@ exports.deleteUploadCm = async (unisCustomerCd, cmId) => {
     const _ = await db.External.add(item);
   } catch (e) {
     errorlog(JSON.stringify(e));
-    throw new InternalServerError(e.message);
   }
+  return res;
 
-  // DynamoDBのデータ更新
-  cm.status = constants.cmStatus.EXTERNAL_UPLOADING;
-  cm.timestamp = timestamp();
-
-  try {
-    return await db.User.updateCm(unisCustomerCd, index, cm);
-  } catch (e) {
-    errorlog(JSON.stringify(e));
-    throw new InternalServerError(e.message);
-  }
 };

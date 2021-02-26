@@ -20,6 +20,11 @@ export type CmStatus = {
   name: string,
 }
 
+export type Sorts = {
+  cd: number, // id
+  name: string,
+}
+
 export type AppInformation = {
   cd: string, // id
   name: string,
@@ -118,6 +123,13 @@ export default class Constants {
     { cd: "19", status: "EXTERNAL_ERROR", name: "外部システムアップロードエラー" },
   ]
 
+  public static readonly SORTS: Sorts[] = [
+    { cd: 1, name: '名前昇順'},
+    { cd: 2, name: '名前降順'},
+    { cd: 3, name: '日時昇順'},
+    { cd: 4, name: '日時降順'},
+  ]
+  
   public static readonly APP_INFORMATIONS: AppInformation[] = [
     { cd: "01", name: "バージョン" },
     { cd: "02", name: "U MESSE利用規約" },

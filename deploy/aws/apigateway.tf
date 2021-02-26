@@ -44,7 +44,6 @@ resource "aws_api_gateway_integration" "umesse" {
 resource "aws_api_gateway_deployment" "umesse_v1" {
   depends_on = [
     aws_api_gateway_integration.umesse,
-    # aws_api_gateway_integration.umesse_options,
   ]
   rest_api_id = aws_api_gateway_rest_api.umesse["dev-umesse"].id
   stage_name  = "v1"
@@ -138,60 +137,60 @@ resource "aws_api_gateway_usage_plan_key" "umesse_plan_key" {
 
 # TODO: 枠だけ作成するためstg、prodの一時用
 # MOCK
-resource "aws_api_gateway_resource" "umesse_mock" {
-  for_each    = toset(var.mock)
-  rest_api_id = aws_api_gateway_rest_api.umesse[each.key].id
-  parent_id   = aws_api_gateway_rest_api.umesse[each.key].root_resource_id
-  path_part   = "api"
-}
+# resource "aws_api_gateway_resource" "umesse_mock" {
+#   for_each    = toset(var.mock)
+#   rest_api_id = aws_api_gateway_rest_api.umesse[each.key].id
+#   parent_id   = aws_api_gateway_rest_api.umesse[each.key].root_resource_id
+#   path_part   = "api"
+# }
 
-resource "aws_api_gateway_method" "umesse_mock" {
-  for_each      = toset(var.mock)
-  rest_api_id   = aws_api_gateway_rest_api.umesse[each.key].id
-  resource_id   = aws_api_gateway_resource.umesse_mock[each.key].id
-  http_method   = "GET"
-  authorization = "NONE"
-}
+# resource "aws_api_gateway_method" "umesse_mock" {
+#   for_each      = toset(var.mock)
+#   rest_api_id   = aws_api_gateway_rest_api.umesse[each.key].id
+#   resource_id   = aws_api_gateway_resource.umesse_mock[each.key].id
+#   http_method   = "GET"
+#   authorization = "NONE"
+# }
 
-resource "aws_api_gateway_integration" "umesse_mock" {
-  for_each                = toset(var.mock)
-  rest_api_id             = aws_api_gateway_rest_api.umesse[each.key].id
-  resource_id             = aws_api_gateway_resource.umesse_mock[each.key].id
-  http_method             = aws_api_gateway_method.umesse_mock[each.key].http_method
-  integration_http_method = "GET"
-  type                    = "MOCK"
+# resource "aws_api_gateway_integration" "umesse_mock" {
+#   for_each                = toset(var.mock)
+#   rest_api_id             = aws_api_gateway_rest_api.umesse[each.key].id
+#   resource_id             = aws_api_gateway_resource.umesse_mock[each.key].id
+#   http_method             = aws_api_gateway_method.umesse_mock[each.key].http_method
+#   integration_http_method = "GET"
+#   type                    = "MOCK"
 
-  request_templates = {
-    "application/json" = <<EOF
-{
-  "statusCode": 200
-}
-EOF
-  }
-}
+#   request_templates = {
+#     "application/json" = <<EOF
+# {
+#   "statusCode": 200
+# }
+# EOF
+#   }
+# }
 
-resource "aws_api_gateway_method_response" "umesse_mock" {
-  for_each    = toset(var.mock)
-  rest_api_id = aws_api_gateway_rest_api.umesse[each.key].id
-  resource_id = aws_api_gateway_resource.umesse_mock[each.key].id
-  http_method = aws_api_gateway_method.umesse_mock[each.key].http_method
-  status_code = "200"
+# resource "aws_api_gateway_method_response" "umesse_mock" {
+#   for_each    = toset(var.mock)
+#   rest_api_id = aws_api_gateway_rest_api.umesse[each.key].id
+#   resource_id = aws_api_gateway_resource.umesse_mock[each.key].id
+#   http_method = aws_api_gateway_method.umesse_mock[each.key].http_method
+#   status_code = "200"
 
-  response_models = {
-    "application/json" = "Empty"
-  }
-}
+#   response_models = {
+#     "application/json" = "Empty"
+#   }
+# }
 
-resource "aws_api_gateway_integration_response" "umesse_mock" {
-  for_each    = toset(var.mock)
-  rest_api_id = aws_api_gateway_rest_api.umesse[each.key].id
-  resource_id = aws_api_gateway_resource.umesse_mock[each.key].id
-  http_method = aws_api_gateway_method.umesse_mock[each.key].http_method
-  status_code = aws_api_gateway_method_response.umesse_mock[each.key].status_code
+# resource "aws_api_gateway_integration_response" "umesse_mock" {
+#   for_each    = toset(var.mock)
+#   rest_api_id = aws_api_gateway_rest_api.umesse[each.key].id
+#   resource_id = aws_api_gateway_resource.umesse_mock[each.key].id
+#   http_method = aws_api_gateway_method.umesse_mock[each.key].http_method
+#   status_code = aws_api_gateway_method_response.umesse_mock[each.key].status_code
 
-  response_templates = {
-    "application/json" = <<EOF
-{ message: ${each.key} }
-EOF
-  }
-}
+#   response_templates = {
+#     "application/json" = <<EOF
+# { message: ${each.key} }
+# EOF
+#   }
+# }
