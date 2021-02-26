@@ -14,14 +14,6 @@ const { s3Manager } = require("umesse-lib/utils/s3Manager");
 const { BadRequestError, InternalServerError } = require("umesse-lib/error");
 const db = require("./db");
 
-// 仮
-const SORT = {
-  TITLE_ASC: 1,
-  TITLE_DESC: 2,
-  TIMESTAMP_ASC: 3,
-  TIMESTAMP_DESC: 4,
-}
-
 exports.getResource = async (category, industryCd, sceneCd, sort) => {
   debuglog(
     `[getResource] ${JSON.stringify({
