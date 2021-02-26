@@ -698,7 +698,7 @@ export default defineComponent({
       const bgm = cm.bgm;
       if (!bgm) return;
       stop();
-      const audioBuffer = await getAudioBuffer(bgm.contentsId!, bgm.category!);
+      const audioBuffer = await getAudioBuffer(bgm.contentsId, bgm.category);
       audioPlayer.start(audioBuffer);
     };
     const getAudioBuffer = async (contentsId: string, category: string) => {
