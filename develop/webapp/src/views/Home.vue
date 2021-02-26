@@ -10,7 +10,7 @@
     </p>
     <ul class="nav">
       <li>
-        <router-link to="#" @click="openModal">
+        <router-link :to="{ name: 'Setting' }">
           <img src="@/assets/icon_setting.svg" />
         </router-link>
       </li>

@@ -25,6 +25,11 @@ export type Sorts = {
   name: string,
 }
 
+export type AppInformation = {
+  cd: string, // id
+  name: string,
+}
+
 export default class Constants {
   public static readonly APP_NAME = "U MESSE"
 
@@ -123,5 +128,11 @@ export default class Constants {
     { cd: 2, name: '名前降順'},
     { cd: 3, name: '日時昇順'},
     { cd: 4, name: '日時降順'},
+  ]
+  
+  public static readonly APP_INFORMATIONS: AppInformation[] = [
+    { cd: "01", name: "バージョン" },
+    { cd: "02", name: "U MESSE利用規約" },
+    { cd: "03", name: "アナウンス発注の利用規約" },
   ]
 }

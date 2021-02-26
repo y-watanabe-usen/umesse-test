@@ -19,6 +19,7 @@ import OrderFlow6 from '@/views/order/Flow6.vue'
 import OrderEnd from '@/views/order/End.vue'
 import OrderHistory from '@/views/order/history/Index.vue'
 import OrderHistoryDetail from '@/views/order/history/Detail.vue'
+import Setting from '@/views/setting/Index.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -120,6 +121,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/order/history/:id',
     name: 'OrderHistoryDetail',
     component: OrderHistoryDetail
+  },
+  {
+    path: '/setting',
+    name: 'Setting',
+    component: Setting
   },
 ]
 
