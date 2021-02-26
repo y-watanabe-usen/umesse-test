@@ -1,4 +1,4 @@
-import { BgmItem, ChimeItem, CmItem, NarrationItem } from "umesseapi/models";
+import { BgmItem, ChimeItem, CmItem, NarrationItem, SceneItem } from "umesseapi/models";
 
 export default class DisplayCmItem {
   cmId = "";
@@ -95,7 +95,13 @@ export default class DisplayCmItem {
     volume?: number
   ) {
     this.clearOpenChime()
-    this.materials.openChime = new OpenChime(contentsId, title, description, seconds, timestamp, volume)
+    this.materials.openChime = new OpenChime(
+      contentsId,
+      title,
+      description,
+      seconds,
+      timestamp,
+      volume)
   }
   setEndChime(
     contentsId: string,
@@ -106,7 +112,13 @@ export default class DisplayCmItem {
     volume?: number
   ) {
     this.clearEndChime()
-    this.materials.endChime = new EndChime(contentsId, title, description, seconds, timestamp, volume)
+    this.materials.endChime = new EndChime(contentsId,
+      title,
+      description,
+      seconds,
+      timestamp,
+      volume
+    )
   }
   setBgm(
     contentsId: string,
@@ -117,7 +129,14 @@ export default class DisplayCmItem {
     volume?: number
   ) {
     this.clearBgm()
-    this.materials.bgm = new Bgm(contentsId, title, description, seconds, timestamp, volume)
+    this.materials.bgm = new Bgm(
+      contentsId,
+      title,
+      description,
+      seconds,
+      timestamp,
+      volume
+    )
   }
 
   setCm(cmItem: CmItem) {
@@ -127,36 +146,54 @@ export default class DisplayCmItem {
     this.description = cmItem.description;
     this.seconds = cmItem.seconds;
     if (cmItem.materials.narrations.length > 0) {
-      cmItem.materials.narrations.forEach((element: NarrationItem) => {
-        if (element.contentsId.match(`^[0-9a-z]+-r-[0-9a-z]{8}$`)) {
-          const narration = new Recording(element.contentsId, element.title)
-          this.materials.narrations.push(narration)
-        } else if (element.contentsId.match(`^[0-9a-z]+-t-[0-9a-z]{8}$`)) {
-          const narration = new Tts(element.contentsId, element.title)
-          this.materials.narrations.push(narration)
-        } else {
-          const narration = new Narration(element.contentsId, element.title)
-          this.materials.narrations.push(narration)
+      cmItem.materials.narrations.forEach((v: NarrationItem) => {
+        let category = "narration"
+        if (v.contentsId.match(`^[0-9a-z]+-r-[0-9a-z]{8}$`)) {
+          category = "recording"
+        } else if (v.contentsId.match(`^[0-9a-z]+-t-[0-9a-z]{8}$`)) {
+          category = "tts"
         }
+        this.setNarraion(null, category, v.contentsId, v.title, v.description, v.seconds, v.timestamp)
       });
     }
     if (cmItem.materials.startChime) {
       const chime = <ChimeItem>cmItem.materials.startChime
-      this.materials.openChime = new OpenChime(chime.contentsId, chime.title)
+      this.setOpenChime(
+        chime.contentsId,
+        chime.title,
+        chime.description,
+        chime.seconds,
+        chime.timestamp
+      )
     }
     if (cmItem.materials.endChime) {
       const chime = <ChimeItem>cmItem.materials.endChime
-      this.materials.endChime = new OpenChime(chime.contentsId, chime.title)
+      this.setEndChime(
+        chime.contentsId,
+        chime.title,
+        chime.description,
+        chime.seconds,
+        chime.timestamp
+      )
     }
     if (cmItem.materials.bgm) {
       const bgm = <BgmItem>cmItem.materials.bgm
-      this.materials.bgm = new Bgm(bgm.contentsId, bgm.title)
+      this.setBgm(
+        bgm.contentsId,
+        bgm.title,
+        bgm.description,
+        bgm.seconds,
+        bgm.timestamp
+      )
     }
     this.startDate = cmItem.startDate;
     this.endDate = cmItem.endDate;
     this.productionType = cmItem.productionType;
     // this.uploadSystem = cmItem.???;
-    // scene: Scene = new Scene();
+    if (cmItem.scene) {
+      const scene = <SceneItem>cmItem.scene
+      this.scene = new Scene(scene.sceneCd, scene.sceneName)
+    }
     this.status = cmItem.status;
     this.timestamp = cmItem.timestamp;
   }
