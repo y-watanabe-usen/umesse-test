@@ -540,9 +540,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/ExternalItem"
+                $ref: "#/components/schemas/ExternalItems"
         400:
           $ref: "#/components/responses/BadRequest"
         401:
@@ -1061,8 +1059,7 @@ paths:
           content:
             application/json:
               schema:
-                items:
-                  $ref: "#/components/schemas/ExternalItem"
+                $ref: "#/components/schemas/ExternalItems"
         400:
           $ref: "#/components/responses/BadRequest"
         401:
@@ -1566,6 +1563,19 @@ components:
         isBase64Encoded:
           type: array
           example: "true"
+    ExternalItems:
+      properties:
+        unisCustomers:
+          type: array
+          items:
+            properties:
+              unisCustomerCd:
+                type: string
+                example: "123456789"
+              cmMetas:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ExternalMetaItem"
     ExternalItem:
       properties:
         unisCustomerCd:
@@ -1574,7 +1584,7 @@ components:
         cmMetas:
           type: array
           items:
-            $ref: "#/components/schemas/ExternalItem"
+            $ref: "#/components/schemas/ExternalMetaItem"
     ExternalMetaItem:
       properties:
         dataProcessType:
@@ -1618,11 +1628,6 @@ components:
           description: 尺時間
           format: int64
           example: 30000
-        fileSize:
-          type: integer
-          description: ファイルサイズ
-          format: int64
-          example: 1234567
         sceneCd:
           type: string
           description: シーンCD

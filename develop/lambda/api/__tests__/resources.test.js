@@ -13,7 +13,7 @@ const {
   createUserResource,
   deleteUserResource,
 } = require("../umesse/resources");
-const {BadRequestError, InternalServerError} = require("../umesse/error");
+const { BadRequestError, InternalServerError } = require("umesse-lib/error");
 
 // test data
 const json = require("./data/resources.test.json");
@@ -38,7 +38,7 @@ const bgmData = {
       sceneName: "シーン01",
     },
   ],
-  timestamp: "2019-09-01T09:00:00+9:00",
+  timestamp: "2019-09-01T09:00:00+09:00",
 };
 const narrationData = {
   contentsId: "サンプル05",
@@ -59,7 +59,7 @@ const narrationData = {
       sceneName: "シーン05",
     },
   ],
-  timestamp: "2019-09-01T09:00:00+9:00",
+  timestamp: "2019-09-01T09:00:00+09:00",
 };
 
 console.error = jest.fn();
@@ -75,11 +75,15 @@ describe("署名付きデータ取得", () => {
   });
 
   test("[error] 署名付きURLデータ取得　データ存在しない", async () => {
-    await expect(getSignedUrl(data.cm[0].cmId, "none")).rejects.toThrow(new InternalServerError("unknown category"));
+    await expect(getSignedUrl(data.cm[0].cmId, "none")).rejects.toThrow(
+      new InternalServerError("unknown category")
+    );
   });
 
   test("[error] 署名付きURLデータ取得　データ存在しない", async () => {
-    await expect(getSignedUrl("", "cm")).rejects.toThrow(new BadRequestError("params failed"));
+    await expect(getSignedUrl("", "cm")).rejects.toThrow(
+      new BadRequestError("params failed")
+    );
   });
 });
 
@@ -125,15 +129,15 @@ describe("ユーザー音声データ取得", () => {
   });
 
   test("[error] ユーザー音声データ取得　データ存在しない", async () => {
-    await expect(getUserResource(
-      data.unisCustomerCd,
-      "recording",
-      "999999999"
-    )).rejects.toThrow(new InternalServerError("not found"));
+    await expect(
+      getUserResource(data.unisCustomerCd, "recording", "999999999")
+    ).rejects.toThrow(new InternalServerError("not found"));
   });
 
   test("[error] ユーザー音声データ取得　パラメータなし", async () => {
-    await expect(getUserResource("")).rejects.toThrow(new BadRequestError("params failed"));
+    await expect(getUserResource("")).rejects.toThrow(
+      new BadRequestError("params failed")
+    );
   });
 });
 

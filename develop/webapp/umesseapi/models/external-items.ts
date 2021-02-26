@@ -14,19 +14,13 @@
 /**
  * 
  * @export
- * @interface ExternalItem
+ * @interface ExternalItems
  */
-export interface ExternalItem {
+export interface ExternalItems {
     /**
      * 
-     * @type {string}
-     * @memberof ExternalItem
+     * @type {Array&lt;ExternalItemsUnisCustomers&gt;}
+     * @memberof ExternalItems
      */
-    unisCustomerCd?: any;
-    /**
-     * 
-     * @type {Array&lt;ExternalMetaItem&gt;}
-     * @memberof ExternalItem
-     */
-    cmMetas?: any;
+    unisCustomers?: any;
 }

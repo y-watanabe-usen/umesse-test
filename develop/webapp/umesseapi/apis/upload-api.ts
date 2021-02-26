@@ -17,6 +17,7 @@ import { Configuration } from '../configuration';
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
 import { ExternalItem } from '../models';
+import { ExternalItems } from '../models';
 /**
  * UploadApi - axios parameter creator
  * @export
@@ -280,7 +281,7 @@ export const UploadApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listUploadCm(xUnisCustomerCd: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<ExternalItem>>> {
+        async listUploadCm(xUnisCustomerCd: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalItems>> {
             const localVarAxiosArgs = await UploadApiAxiosParamCreator(configuration).listUploadCm(xUnisCustomerCd, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
@@ -337,7 +338,7 @@ export const UploadApiFactory = function (configuration?: Configuration, basePat
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listUploadCm(xUnisCustomerCd: string, options?: any): AxiosPromise<Array<ExternalItem>> {
+        listUploadCm(xUnisCustomerCd: string, options?: any): AxiosPromise<ExternalItems> {
             return UploadApiFp(configuration).listUploadCm(xUnisCustomerCd, options).then((request) => request(axios, basePath));
         },
     };

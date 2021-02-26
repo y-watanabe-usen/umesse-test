@@ -207,6 +207,17 @@ var External = {
                 ":uploadSystem": uploadSystem,
                 ":status": "1",
             },
+            ProjectionExpression:
+                "unisCustomerCd," +
+                "dataProcessType," +
+                "cmId," +
+                "cmName," +
+                "cmCommentManuscript," +
+                "startDatetime," +
+                "endDatetime," +
+                "productionType," +
+                "contentTime," +
+                "sceneCd",
         };
         let res = await dynamodbManager.scan(
             constants.dynamoDbTable().external,

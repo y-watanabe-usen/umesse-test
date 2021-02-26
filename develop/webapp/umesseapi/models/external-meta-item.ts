@@ -78,12 +78,6 @@ export interface ExternalMetaItem {
      */
     contentTime?: any;
     /**
-     * ファイルサイズ
-     * @type {number}
-     * @memberof ExternalMetaItem
-     */
-    fileSize?: any;
-    /**
      * シーンCD
      * @type {string}
      * @memberof ExternalMetaItem
