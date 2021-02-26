@@ -17,7 +17,7 @@ const { BadRequestError, InternalServerError } = require("umesse-lib/error");
 const db = require("./db");
 
 // CM取得（一覧・個別）
-exports.getCm = async (unisCustomerCd, cmId) => {
+exports.getCm = async (unisCustomerCd, cmId, sort) => {
   debuglog(
     `[getCm] ${JSON.stringify({
       unisCustomerCd: unisCustomerCd,
@@ -41,6 +41,49 @@ exports.getCm = async (unisCustomerCd, cmId) => {
   if (cmId) {
     json = json.filter((item) => item.cmId === cmId)[0];
   }
+
+  if (!sort) sort = 1;
+  let sortFunc;
+  switch (sort) {
+    case constants.sort.TITLE_ASC:
+      sortFunc = (a, b) => {
+        if (a.title < b.title) return -1;
+        if (a.title > b.title) return 1;
+        return 0;
+      }
+      break;
+    case constants.sort.TITLE_DESC:
+      // titleの降順でソート
+      sortFunc = (a, b) => {
+        if (a.title > b.title) return -1;
+        if (a.title < b.title) return 1;
+        return 0;
+      }
+      break;
+    case constants.sort.TIMESTAMP_ASC:
+      sortFunc = (a, b) => {
+        if (a.timestamp < b.timestamp) return -1;
+        if (a.timestamp > b.timestamp) return 1;
+        return 0;
+      }
+      break;
+    case constants.sort.TIMESTAMP_DESC:
+      sortFunc = (a, b) => {
+        if (a.timestamp > b.timestamp) return -1;
+        if (a.timestamp < b.timestamp) return 1;
+        return 0;
+      }
+      break;
+    default:
+      // titleの昇順でソート
+      sortFunc = (a, b) => {
+        if (a.title < b.title) return -1;
+        if (a.title > b.title) return 1;
+        return 0;
+      }
+  }
+  json.sort(sortFunc)
+
   if (!json) throw new InternalServerError("not found");
   return json;
 };

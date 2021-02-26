@@ -72,10 +72,10 @@ exports.getUserCm = function (cmId, xUnisCustomerCd) {
  * xUnisCustomerCd String UNIS顧客CD
  * returns List
  **/
-exports.listUserCm = function (xUnisCustomerCd) {
+exports.listUserCm = function (sort, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     try {
-      const json = await getCm(xUnisCustomerCd);
+      const json = await getCm(xUnisCustomerCd, "", sort);
       resolve(json);
     } catch (e) {
       assert(e instanceof UMesseError);

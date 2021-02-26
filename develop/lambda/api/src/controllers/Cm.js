@@ -33,8 +33,8 @@ module.exports.getUserCm = function getUserCm (req, res, next, cmId, xUnisCustom
     });
 };
 
-module.exports.listUserCm = function listUserCm (req, res, next, xUnisCustomerCd) {
-  Cm.listUserCm(xUnisCustomerCd)
+module.exports.listUserCm = function listUserCm (req, res, next, sort, xUnisCustomerCd) {
+  Cm.listUserCm(sort, xUnisCustomerCd)
     .then(function (response) {
       utils.writeJson(res, response);
     })

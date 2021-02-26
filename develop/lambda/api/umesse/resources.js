@@ -60,14 +60,14 @@ exports.getResource = async (category, industryCd, sceneCd, sort) => {
   if (!sort) sort = 1;
   let sortFunc;
   switch (sort) {
-    case SORT.TITLE_ASC:
+    case constants.sort.TITLE_ASC:
       sortFunc = (a, b) => {
         if (a.title < b.title) return -1;
         if (a.title > b.title) return 1;
         return 0;
       }
       break;
-    case SORT.TITLE_DESC:
+    case constants.sort.TITLE_DESC:
       // titleの降順でソート
       sortFunc = (a, b) => {
         if (a.title > b.title) return -1;
@@ -75,14 +75,14 @@ exports.getResource = async (category, industryCd, sceneCd, sort) => {
         return 0;
       }
       break;
-    case SORT.TIMESTAMP_ASC:
+    case constants.sort.TIMESTAMP_ASC:
       sortFunc = (a, b) => {
         if (a.timestamp < b.timestamp) return -1;
         if (a.timestamp > b.timestamp) return 1;
         return 0;
       }
       break;
-    case SORT.TIMESTAMP_DESC:
+    case constants.sort.TIMESTAMP_DESC:
       sortFunc = (a, b) => {
         if (a.timestamp > b.timestamp) return -1;
         if (a.timestamp < b.timestamp) return 1;
