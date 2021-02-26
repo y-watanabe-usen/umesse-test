@@ -1,3 +1,4 @@
+import Constants from "@/utils/Constants";
 import { BgmItem, ChimeItem, CmItem, NarrationItem, SceneItem } from "umesseapi/models";
 
 export default class DisplayCmItem {
@@ -72,9 +73,9 @@ export default class DisplayCmItem {
     volume?: number
   ) {
     const getNarraion = () => {
-      if (categody == "recording") {
+      if (categody == Constants.CATEGORY.RECORDING) {
         return new Recording(contentsId, title, description, seconds, timestamp, volume)
-      } else if (categody == "tts") {
+      } else if (categody == Constants.CATEGORY.TTS) {
         return new Tts(contentsId, title, description, seconds, timestamp, volume)
       } else {
         return new Narration(contentsId, title, description, seconds, timestamp, volume)
@@ -147,11 +148,11 @@ export default class DisplayCmItem {
     this.seconds = cmItem.seconds;
     if (cmItem.materials.narrations.length > 0) {
       cmItem.materials.narrations.forEach((v: NarrationItem) => {
-        let category = "narration"
+        let category: string = Constants.CATEGORY.NARRATION
         if (v.contentsId.match(`^[0-9a-z]+-r-[0-9a-z]{8}$`)) {
-          category = "recording"
+          category = Constants.CATEGORY.RECORDING
         } else if (v.contentsId.match(`^[0-9a-z]+-t-[0-9a-z]{8}$`)) {
-          category = "tts"
+          category = Constants.CATEGORY.TTS
         }
         this.setNarraion(null, category, v.contentsId, v.title, v.description, v.seconds, v.timestamp)
       });
@@ -206,32 +207,8 @@ export class Materials {
   bgm: Bgm | null = null;
 }
 
-export class Bgm {
-  readonly category = "bgm";
-  constructor(
-    public contentsId: string,
-    public title: string = "",
-    public description: string = "",
-    public seconds: number = 0,
-    public timestamp: string = "",
-    public volume: number = 0
-  ) { }
-}
-
-export class EndChime {
-  readonly category = "chime";
-  constructor(
-    public contentsId: string,
-    public title: string = "",
-    public description: string = "",
-    public seconds: number = 0,
-    public timestamp: string = "",
-    public volume: number = 0
-  ) { }
-}
-
 export class Narration {
-  readonly category = "narration";
+  readonly category = Constants.CATEGORY.NARRATION;
   constructor(
     public contentsId: string,
     public title: string = "",
@@ -242,7 +219,7 @@ export class Narration {
   ) { }
 }
 export class Recording {
-  readonly category = "recording";
+  readonly category = Constants.CATEGORY.RECORDING;
   constructor(
     public recordingId: string,
     public title: string = "",
@@ -253,7 +230,7 @@ export class Recording {
   ) { }
 }
 export class Tts {
-  readonly category = "tts";
+  readonly category = Constants.CATEGORY.TTS;
   constructor(
     public ttsId: string,
     public title: string = "",
@@ -263,11 +240,34 @@ export class Tts {
     public volume: number = 0
   ) { }
 }
-
 export class OpenChime {
-  readonly category = "chime";
+  readonly category = Constants.CATEGORY.CHIME;
   constructor(
     public contentsId: string = "",
+    public title: string = "",
+    public description: string = "",
+    public seconds: number = 0,
+    public timestamp: string = "",
+    public volume: number = 0
+  ) { }
+}
+
+export class EndChime {
+  readonly category = Constants.CATEGORY.CHIME;
+  constructor(
+    public contentsId: string,
+    public title: string = "",
+    public description: string = "",
+    public seconds: number = 0,
+    public timestamp: string = "",
+    public volume: number = 0
+  ) { }
+}
+
+export class Bgm {
+  readonly category = Constants.CATEGORY.BGM;
+  constructor(
+    public contentsId: string,
     public title: string = "",
     public description: string = "",
     public seconds: number = 0,

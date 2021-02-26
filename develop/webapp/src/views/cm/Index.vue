@@ -683,13 +683,13 @@ export default defineComponent({
       let category: string = "";
       if (isNarration(narration)) {
         id = narration.contentsId;
-        category = narration.category;
+        category = Constants.CATEGORY.NARRATION;
       } else if (isRecording(narration)) {
         id = narration.recordingId;
-        category = "recording";
+        category = Constants.CATEGORY.RECORDING;
       } else if (isTts(narration)) {
         id = narration.ttsId;
-        category = "tts";
+        category = Constants.CATEGORY.TTS;
       }
       const audioBuffer = await getAudioBuffer(id, category);
       audioPlayer.start(audioBuffer);

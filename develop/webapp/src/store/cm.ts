@@ -7,6 +7,7 @@ import * as UMesseApi from "umesseapi";
 import { useUploadCmService } from "@/services/uploadCmService";
 import { CmItem, RecordingItem, TtsItem } from "umesseapi/models";
 import DisplayCmItem, { Narration, Recording, Tts } from "@/models/DisplayCmItem";
+import Constants from "@/utils/Constants";
 
 export function isNarration(arg: any): arg is Narration {
   return arg.contentsId !== undefined;
@@ -108,13 +109,13 @@ export default function cmStore() {
     let category = ""
     if (isNarration(narrationItem)) {
       id = narrationItem.contentsId
-      category = "narration"
+      category = Constants.CATEGORY.NARRATION
     } else if (isRecording(narrationItem)) {
       id = narrationItem.recordingId
-      category = "recording"
+      category = Constants.CATEGORY.RECORDING
     } else if (isTts(narrationItem)) {
       id = narrationItem.ttsId
-      category = "tts"
+      category = Constants.CATEGORY.TTS
     }
     state.displayCmItem.setNarraion(
       state.selectedNarrationIndex,

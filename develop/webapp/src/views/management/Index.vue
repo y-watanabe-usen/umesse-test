@@ -425,7 +425,6 @@ export default defineComponent({
         if (!v.scene) return false;
         return v.scene.sceneCd == state.activeSceneCd;
       });
-      console.log(JSON.stringify(response.data[4]))
     };
 
     const selectCm = (cm: CmItem) => {
