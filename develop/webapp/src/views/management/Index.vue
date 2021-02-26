@@ -172,7 +172,9 @@
       @close="closeSavedModal"
     >
       <template #contents>
-        <p class="message">保存が完了しました。</p>
+        <MessageDialogContents>
+          保存が完了しました。
+        </MessageDialogContents>
       </template>
       <template #footer>
         <ModalFooter :noBorder="true">
@@ -187,7 +189,9 @@
         <ModalHeader title="確認" @close="closeRemoveModal" />
       </template>
       <template #contents>
-        <p class="message">削除してよろしいですか？</p>
+        <MessageDialogContents>
+          削除してよろしいですか？
+        </MessageDialogContents>
       </template>
       <template #footer>
         <ModalFooter>
@@ -206,7 +210,9 @@
       @close="closeRemovedModal"
     >
       <template #contents>
-        <p class="message">削除が完了しました。</p>
+        <MessageDialogContents>
+          削除が完了しました。
+        </MessageDialogContents>
       </template>
       <template #footer>
         <ModalFooter :noBorder="true">
@@ -235,6 +241,7 @@ import ModalDialog from "@/components/organisms/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
 import PlayDialogContents from "@/components/organisms/PlayDialogContents.vue";
+import MessageDialogContents from "@/components/organisms/MessageDialogContents.vue";
 import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
@@ -266,6 +273,7 @@ export default defineComponent({
     ModalHeader,
     ModalFooter,
     PlayDialogContents,
+    MessageDialogContents,
     FormGroup,
     TextBox,
     TextArea,
@@ -480,12 +488,6 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import "@/scss/_variables.scss";
 @include fade_animation;
-
-.message {
-  font-size: 20px;
-  font-weight: $font_weight_bold;
-  text-align: center;
-}
 
 .btn:focus {
   box-shadow: none;

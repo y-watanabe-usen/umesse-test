@@ -440,7 +440,9 @@
   <transition>
     <ModalDialog v-if="isSavedModalAppear" @close="closeSavedModal">
       <template #contents>
-        <p class="saved">作成が完了いたしました。</p>
+        <MessageDialogContents>
+          作成が完了いたしました。
+        </MessageDialogContents>
       </template>
       <template #footer>
         <ModalFooter :noBorder="true">
@@ -469,6 +471,7 @@ import ModalDialog from "@/components/organisms/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
 import PlayDialogContents from "@/components/organisms/PlayDialogContents.vue";
+import MessageDialogContents from "@/components/organisms/MessageDialogContents.vue";
 import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
@@ -495,6 +498,7 @@ export default defineComponent({
     ModalHeader,
     ModalFooter,
     PlayDialogContents,
+    MessageDialogContents,
     FormGroup,
     TextBox,
     TextArea,
@@ -773,12 +777,6 @@ export default defineComponent({
     font-weight: $font_weight_bold;
     margin-right: 28px;
   }
-}
-
-.saved {
-  font-size: 20px;
-  font-weight: $font_weight_bold;
-  text-align: center;
 }
 
 .dropdown-toggle::after {
