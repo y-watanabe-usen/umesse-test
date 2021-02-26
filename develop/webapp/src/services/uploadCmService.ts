@@ -27,7 +27,7 @@ export function useUploadCmService(api: UMesseApi.CmApi) {
     startChimeContentsId: string | null,
     endChimeContentsId: string | null,
     bgmContentsId: string | null
-  ) => {
+  ): Promise<CreateUserCmResponseItem> => {
     return new Promise(function (resolve, reject) {
       if (state.status === UPLOAD_CM_STATE.CREATING) {
         return reject(new Error(`state is creating`));

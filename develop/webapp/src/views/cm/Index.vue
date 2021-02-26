@@ -597,9 +597,9 @@ import SelectBox from "@/components/atoms/SelectBox.vue";
 import CmLayout from "@/components/templates/CmLayout.vue";
 import CmItem from "@/components/molecules/CmItem.vue";
 import {
-  isNarrationItem,
-  isRecordingItem,
-  isTtsItem,
+  isNarration,
+  isRecording,
+  isTts,
   MAX_NARRATION_COUNT,
 } from "@/store/cm";
 import router from "@/router";
@@ -681,13 +681,13 @@ export default defineComponent({
       stop();
       let id: string = "";
       let category: string = "";
-      if (isNarrationItem(narration)) {
+      if (isNarration(narration)) {
         id = narration.contentsId;
         category = narration.category;
-      } else if (isRecordingItem(narration)) {
+      } else if (isRecording(narration)) {
         id = narration.recordingId;
         category = "recording";
-      } else if (isTtsItem(narration)) {
+      } else if (isTts(narration)) {
         id = narration.ttsId;
         category = "tts";
       }
@@ -698,7 +698,7 @@ export default defineComponent({
       const bgm = cm.bgm;
       if (!bgm) return;
       stop();
-      const audioBuffer = await getAudioBuffer(bgm.contentsId, bgm.category);
+      const audioBuffer = await getAudioBuffer(bgm.contentsId!, bgm.category!);
       audioPlayer.start(audioBuffer);
     };
     const getAudioBuffer = async (contentsId: string, category: string) => {
@@ -745,9 +745,8 @@ export default defineComponent({
     };
 
     const play = async () => {
-      console.log(cm.createCmData);
-      if (!cm.createCmData) return;
-      await audioStore.download(cm.createCmData.url!!);
+      if (!cm.url) return;
+      await audioStore.download(cm.url!!);
       audioPlayer.start(<AudioBuffer>audioStore.audioBuffer);
     };
     const stop = () => {
