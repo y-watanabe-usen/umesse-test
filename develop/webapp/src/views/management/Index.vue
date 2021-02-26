@@ -536,8 +536,8 @@ export default defineComponent({
 
     const toEditCm = (cmItem: CmItem) => {
       console.log(cmItem);
-      // cm.
-      // router.push({ name: "Cm" });
+      cm.setCm(cmItem)
+      router.push({ name: "Cm" });
     };
 
     onMounted(async () => {

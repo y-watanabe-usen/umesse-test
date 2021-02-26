@@ -5,7 +5,7 @@ import { BgmItem } from "umesseapi/models/bgm-item";
 import { config } from "@/utils/UMesseApiConfiguration";
 import * as UMesseApi from "umesseapi";
 import { useUploadCmService } from "@/services/uploadCmService";
-import { RecordingItem, TtsItem } from "umesseapi/models";
+import { CmItem, RecordingItem, TtsItem } from "umesseapi/models";
 import DisplayCmItem, { Narration, Recording, Tts } from "@/models/DisplayCmItem";
 
 export function isNarration(arg: any): arg is Narration {
@@ -46,9 +46,9 @@ export default function cmStore() {
     const response = await uploadCmService.create(
       token,
       narrationContentsIds,
-      state.displayCmItem.openChime!.contentsId,
-      state.displayCmItem.endChime!.contentsId,
-      state.displayCmItem.bgm!.contentsId
+      state.displayCmItem.openChime?.contentsId ?? null,
+      state.displayCmItem.endChime?.contentsId ?? null,
+      state.displayCmItem.bgm?.contentsId ?? null
     )
     console.log(response)
     state.displayCmItem.cmId = response.cmId
@@ -116,17 +116,46 @@ export default function cmStore() {
       id = narrationItem.ttsId
       category = "tts"
     }
-    state.displayCmItem.setNarraion(state.selectedNarrationIndex, category, id, narrationItem.title)
+    state.displayCmItem.setNarraion(
+      state.selectedNarrationIndex,
+      category,
+      id,
+      narrationItem.title,
+      narrationItem.description,
+      0, //narrationItem.seconds,
+      narrationItem.timestamp,
+    )
     unSelectNarrationIndex();
   }
   const setOpenChime = (chimeItem: ChimeItem) => {
-    state.displayCmItem.setOpenChime(chimeItem.contentsId, chimeItem.title)
+    state.displayCmItem.setOpenChime(
+      chimeItem.contentsId,
+      chimeItem.title,
+      chimeItem.description,
+      chimeItem.seconds,
+      chimeItem.timestamp
+    )
   }
   const setEndChime = (chimeItem: ChimeItem) => {
-    state.displayCmItem.setEndChime(chimeItem.contentsId, chimeItem.title)
+    state.displayCmItem.setEndChime(
+      chimeItem.contentsId,
+      chimeItem.title,
+      chimeItem.description,
+      chimeItem.seconds,
+      chimeItem.timestamp
+    )
   }
   const setBgm = (bgmItem: BgmItem) => {
-    state.displayCmItem.setBgm(bgmItem.contentsId, bgmItem.title)
+    state.displayCmItem.setBgm(
+      bgmItem.contentsId,
+      bgmItem.title,
+      bgmItem.description,
+      bgmItem.seconds,
+      bgmItem.timestamp
+    )
+  }
+  const setCm = (cmItem: CmItem) => {
+    state.displayCmItem.setCm(cmItem)
   }
 
   const narration = (index: number) => state.displayCmItem.narration(index)
@@ -161,6 +190,7 @@ export default function cmStore() {
     setOpenChime,
     setEndChime,
     setBgm,
+    setCm,
     create,
     update,
     status,
