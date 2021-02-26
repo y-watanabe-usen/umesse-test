@@ -569,9 +569,7 @@
           <Button type="secondary" @click="closeSavedModal"
             >編集の続きをする</Button
           >
-          <Button type="primary" @click="$router.push({ name: 'Home' })"
-            >終了する</Button
-          >
+          <Button type="primary" @click="toHome">終了する</Button>
         </ModalFooter>
       </template>
     </ModalDialog>
@@ -827,7 +825,10 @@ export default defineComponent({
       cm.selectNarrationIndex(index);
       router.push({ name: "VoiceFree" });
     };
-
+    const toHome = () => {
+      cm.clearAll();
+      router.push({ name: "Home" });
+    };
     return {
       ...toRefs(state),
       clearNarration,
@@ -863,6 +864,7 @@ export default defineComponent({
       playOpenChime,
       playEndChime,
       playBgm,
+      toHome,
     };
   },
 });
