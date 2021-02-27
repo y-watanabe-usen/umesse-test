@@ -127,7 +127,7 @@
         <ModalHeader title="保存しますか？" @close="stopAndCloseModal" />
       </template>
       <template #contents>
-        <FormGroup title="試聴">
+        <FormGroup title="試聴" class="play-form-group">
           <PlayDialogContents
             :isLoading="isCreating"
             :isPlaying="isPlaying"
@@ -280,6 +280,9 @@ export default defineComponent({
 @import "@/scss/_variables.scss";
 @include fade_animation;
 
+.play-form-group {
+  margin-bottom: 60px;
+}
 .info1 {
   border-bottom: 1px solid #ccc;
 }
