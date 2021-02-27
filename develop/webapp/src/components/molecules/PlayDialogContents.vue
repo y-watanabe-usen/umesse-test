@@ -2,14 +2,16 @@
   <div class="play-dialog-contents">
     <div class="row">
       <template v-if="isLoading">
-        <button class="btn btn-play btn-light" type="button" disabled>
-          <span
-            class="spinner-border spinner-border-sm"
-            role="status"
-            aria-hidden="true"
-          ></span>
-          <span class="sr-only">Loading...</span>
-        </button>
+        <Button class="btn-play" :isDisabled="true" type="primary" @click="$emit('play')">
+          <div class="spinner">
+            <span
+              class="spinner-border spinner-border-sm"
+              role="status"
+              aria-hidden="true"
+            ></span>
+          </div>
+          再生
+        </Button>
       </template>
       <template v-else>
         <template v-if="!isPlaying">
@@ -93,12 +95,12 @@ export default {
   .btn-play,
   .btn-stop {
     width: 88px;
-    img {
+    img, .spinner {
       margin-right: 10px;
     }
   }
   .btn-play {
-    img {
+    img, .spinner {
       width: 30px;
       height: 23px;
     }
