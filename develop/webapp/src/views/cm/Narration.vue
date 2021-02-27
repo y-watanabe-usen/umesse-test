@@ -84,7 +84,7 @@
       </template>
       <template #footer>
         <ModalFooter :noBorder="true">
-          <Button type="rectangle" @click="closeDocumentModal">終了</Button>
+          <Button type="rectangle" @click="closeDocumentModal">閉じる</Button>
         </ModalFooter>
       </template>
     </ModalDialog>
