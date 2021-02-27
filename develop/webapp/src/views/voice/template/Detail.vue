@@ -127,19 +127,16 @@
         <ModalHeader title="保存しますか？" @close="stopAndCloseModal" />
       </template>
       <template #contents>
-        <div class="row">
-          <div class="col-2">試聴</div>
-          <div class="col-10">
-            <PlayDialogContents
-              :isLoading="isCreating"
-              :isPlaying="isPlaying"
-              :playbackTime="playbackTime"
-              :duration="duration"
-              @play="play(selectedBgm)"
-              @stop="stop"
-            />
-          </div>
-        </div>
+        <FormGroup title="試聴">
+          <PlayDialogContents
+            :isLoading="isCreating"
+            :isPlaying="isPlaying"
+            :playbackTime="playbackTime"
+            :duration="duration"
+            @play="play(selectedBgm)"
+            @stop="stop"
+          />
+        </FormGroup>
         <FormGroup title="タイトル" :required="true">
           <TextBox v-model:value="file.title" />
         </FormGroup>

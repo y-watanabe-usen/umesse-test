@@ -1,5 +1,5 @@
 <template>
-  <div class="message-dialog-contents">
+  <div class="text-dialog-contents">
     <p><slot /></p>
   </div>
 </template>
@@ -8,7 +8,7 @@
 import { reactive } from "vue";
 
 export default {
-  name: "MessageDialogContents",
+  name: "TextDialogContents",
   setup() {
     const state = reactive({});
     return {
@@ -21,11 +21,13 @@ export default {
 <style lang="scss" scoped>
 @import '@/scss/_variables.scss';
 
-.message-dialog-contents {
+.text-dialog-contents {
   p {
+    color: rgb(92, 92, 92);
     font-size: 19px;
-    font-weight: $font_weight_bold;
-    text-align: center;
+    margin-left: 42px;
+    margin-right: 42px;
+    line-height: 1.7em;
   }
 }
 </style>

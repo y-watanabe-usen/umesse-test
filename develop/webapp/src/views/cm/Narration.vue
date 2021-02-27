@@ -78,7 +78,9 @@
         <ModalHeader title="原稿" @close="closeDocumentModal" />
       </template>
       <template #contents>
-        {{ selectedNarration?.manuscript }}
+        <TextDialogContents>
+          {{ selectedNarration?.manuscript }}
+        </TextDialogContents>
       </template>
       <template #footer>
         <ModalFooter :noBorder="true">
@@ -137,6 +139,7 @@ import ModalDialog from "@/components/organisms/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
 import PlayDialogContents from "@/components/molecules/PlayDialogContents.vue";
+import TextDialogContents from "@/components/molecules/TextDialogContents.vue";
 import { config } from "@/utils/UMesseApiConfiguration";
 import { NarrationItem } from "umesseapi/models";
 import { useGlobalStore } from "@/store";
@@ -162,6 +165,7 @@ export default defineComponent({
     ModalHeader,
     ModalFooter,
     PlayDialogContents,
+    TextDialogContents,
   },
   setup() {
     const route = useRoute();
