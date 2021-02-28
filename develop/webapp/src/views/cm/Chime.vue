@@ -10,11 +10,15 @@
         <List>
           <template #header>
             <ListHeader>
-              <select class="form-control w-25" v-model="sort" @change="sortChime">
-                  <option v-for="chimeSort in chimeSorts" :key="chimeSort.cd" :value="chimeSort.cd">
-                    {{ chimeSort.name }}
-                </option>
-              </select>
+              <Sort
+                v-model="sort"
+                @update:modelValue="sortChime"
+                :options="
+                  chimeSorts.map((chimeSort) => {
+                    return { title: chimeSort.name, value: chimeSort.cd };
+                  })
+                "
+              />
             </ListHeader>
           </template>
           <ListItem v-for="chime in chimes" :key="chime.id">
@@ -120,6 +124,7 @@ import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
 import Header from "@/components/organisms/Header.vue";
 import Button from "@/components/atoms/Button.vue";
+import Sort from "@/components/molecules/Sort.vue";
 import List from "@/components/organisms/List.vue";
 import ListHeader from "@/components/molecules/ListHeader.vue";
 import ListItem from "@/components/molecules/ListItem.vue";
@@ -138,6 +143,7 @@ export default defineComponent({
     ContentsBase,
     Header,
     Button,
+    Sort,
     List,
     ListHeader,
     ListItem,

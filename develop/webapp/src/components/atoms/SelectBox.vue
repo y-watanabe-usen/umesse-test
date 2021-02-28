@@ -13,7 +13,6 @@ export default {
   name: "SelectBox",
   props: {
     modelValue: {
-      type: String,
       required: true,
     },
     options: {

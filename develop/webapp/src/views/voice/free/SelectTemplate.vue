@@ -22,11 +22,13 @@
         <List>
           <template #header>
             <ListHeader>
-              <select class="form-control w-25">
-                <option v-for="sort in sorts" :key="sort">
-                  {{ sort }}
-                </option>
-              </select>
+              <Sort
+                :options="
+                  sorts.map((sort) => {
+                    return { title: sort, value: sort };
+                  })
+                "
+              />
             </ListHeader>
           </template>
           <ListItem v-for="freeItem in freeItems" :key="freeItem.contentsId">
@@ -91,6 +93,7 @@ import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
 import Header from "@/components/organisms/Header.vue";
 import Button from "@/components/atoms/Button.vue";
+import Sort from "@/components/molecules/Sort.vue";
 import SubMenu from "@/components/organisms/SubMenu.vue";
 import SubMenuItem from "@/components/molecules/SubMenuItem.vue";
 import List from "@/components/organisms/List.vue";
@@ -113,6 +116,7 @@ export default defineComponent({
     ContentsBase,
     Header,
     Button,
+    Sort,
     SubMenu,
     SubMenuItem,
     List,

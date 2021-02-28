@@ -22,11 +22,15 @@
         <List>
           <template #header>
             <ListHeader>
-              <select class="form-control w-25" v-model="sort" @change="sortNarration">
-                  <option v-for="narrationSort in narrationSorts" :key="narrationSort.cd" :value="narrationSort.cd">
-                    {{ narrationSort.name }}
-                </option>
-              </select>
+              <Sort
+                v-model="sort"
+                @update:modelValue="sortNarration"
+                :options="
+                  narrationSorts.map((narrationSort) => {
+                    return { title: narrationSort.name, value: narrationSort.cd };
+                  })
+                "
+              />
             </ListHeader>
           </template>
           <ListItem v-for="narration in narrations" :key="narration.contentsId">
@@ -130,6 +134,7 @@ import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
 import Header from "@/components/organisms/Header.vue";
 import Button from "@/components/atoms/Button.vue";
+import Sort from "@/components/molecules/Sort.vue";
 import SubMenu from "@/components/organisms/SubMenu.vue";
 import SubMenuItem from "@/components/molecules/SubMenuItem.vue";
 import List from "@/components/organisms/List.vue";
@@ -156,6 +161,7 @@ export default defineComponent({
     ContentsBase,
     Header,
     Button,
+    Sort,
     SubMenu,
     SubMenuItem,
     List,

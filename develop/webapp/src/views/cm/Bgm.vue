@@ -22,11 +22,15 @@
         <List>
           <template #header>
             <ListHeader>
-              <select class="form-control w-25" v-model="sort" @change="sortBgm">
-                <option v-for="bgmSort in bgmSorts" :key="bgmSort.cd" :value="bgmSort.cd">
-                  {{ bgmSort.name }}
-                </option>
-              </select>
+              <Sort
+                v-model="sort"
+                @update:modelValue="sortBgm"
+                :options="
+                  bgmSorts.map((bgmSort) => {
+                    return { title: bgmSort.name, value: bgmSort.cd };
+                  })
+                "
+              />
             </ListHeader>
           </template>
           <ListItem v-for="bgm in bgms" :key="bgm.id">
@@ -131,6 +135,7 @@ import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
 import Header from "@/components/organisms/Header.vue";
 import Button from "@/components/atoms/Button.vue";
+import Sort from "@/components/molecules/Sort.vue";
 import SubMenu from "@/components/organisms/SubMenu.vue";
 import SubMenuItem from "@/components/molecules/SubMenuItem.vue";
 import List from "@/components/organisms/List.vue";
@@ -151,6 +156,7 @@ export default defineComponent({
     ContentsBase,
     Header,
     Button,
+    Sort,
     SubMenu,
     SubMenuItem,
     List,
