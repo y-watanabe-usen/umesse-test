@@ -1,6 +1,6 @@
 <template>
   <div class="select-box">
-    <select :value="value" @change="onChange">
+    <select :value="modelValue" @change="onChange">
       <option v-for="option in options" :key="option.value" :value="option.value">{{ option.title }}</option>
     </select>
   </div>
@@ -12,7 +12,7 @@ import { reactive, SetupContext } from "vue";
 export default {
   name: "SelectBox",
   props: {
-    value: {
+    modelValue: {
       type: String,
       required: true,
     },
@@ -25,7 +25,7 @@ export default {
     const state = reactive({});
     const onChange = (event: Event) => {
       if (event.target instanceof HTMLSelectElement) {
-        context.emit('change', event.target.value);
+        context.emit('update:modelValue', event.target.value);
       }
     }
     return {

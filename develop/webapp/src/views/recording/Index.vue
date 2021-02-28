@@ -121,7 +121,7 @@
         <form>
           <FormGroup title="タイトル" :required="true">
             <TextBox
-              v-model:value="file.title"
+              v-model="file.title"
               :isDisabled="
                 uploadRecoridngState !== UPLOAD_RECORDING_STATE.NONE &&
                 uploadRecoridngState !== UPLOAD_RECORDING_STATE.ERROR
@@ -130,7 +130,7 @@
           </FormGroup>
           <FormGroup title="説明">
             <TextArea
-              v-model:value="file.description"
+              v-model="file.description"
               :isDisabled="
                 uploadRecoridngState !== UPLOAD_RECORDING_STATE.NONE &&
                 uploadRecoridngState !== UPLOAD_RECORDING_STATE.ERROR

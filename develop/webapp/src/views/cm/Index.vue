@@ -393,15 +393,14 @@
       </template>
       <template #contents>
         <FormGroup title="タイトル" :required="true">
-          <TextBox v-model:value="title" />
+          <TextBox v-model="title" />
         </FormGroup>
         <FormGroup title="説明">
-          <TextArea v-model:value="description" />
+          <TextArea v-model="description" />
         </FormGroup>
         <FormGroup title="シーン">
           <SelectBox
-            v-model:value="scene"
-            @change="scene = $event.target.value"
+            v-model="scene"
             :options="
               Constants.SCENES.map((scene) => {
                 return { title: scene.name, value: scene.cd };
@@ -414,8 +413,7 @@
           description="あとで、管理画面からアップロード先を変更することが出来ます。"
         >
           <SelectBox
-            v-model:value="uploadSystem"
-            @change="uploadSystem = $event.target.value"
+            v-model="uploadSystem"
             :options="
               Constants.UPLOAD_SYSTEMS.map((uploadSystem) => {
                 return { title: uploadSystem.name, value: uploadSystem.cd };

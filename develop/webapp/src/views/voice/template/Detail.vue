@@ -138,10 +138,10 @@
           />
         </FormGroup>
         <FormGroup title="タイトル" :required="true">
-          <TextBox v-model:value="file.title" />
+          <TextBox v-model="file.title" />
         </FormGroup>
         <FormGroup title="説明">
-          <TextArea v-model:value="file.description" />
+          <TextArea v-model="file.description" />
         </FormGroup>
       </template>
       <template #footer>
