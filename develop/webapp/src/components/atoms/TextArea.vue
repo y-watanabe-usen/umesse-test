@@ -1,6 +1,6 @@
 <template>
   <textarea
-    :value="value"
+    :value="modelValue"
     :disabled="isDisabled"
     @input="onUpdate"
   >
@@ -13,7 +13,7 @@ import { reactive, SetupContext } from "vue";
 export default {
   name: "TextArea",
   props: {
-    value: {
+    modelValue: {
       type: String,
       required: true,
     },
@@ -26,7 +26,7 @@ export default {
     const state = reactive({});
     const onUpdate = (event: Event) => {
       if (event.target instanceof HTMLTextAreaElement) {
-        context.emit('update:value', event.target.value);
+        context.emit('update:modelValue', event.target.value);
       }
     }
     return {

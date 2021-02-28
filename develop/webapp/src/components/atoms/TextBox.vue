@@ -1,7 +1,7 @@
 <template>
   <input
     type="text"
-    :value="value"
+    :value="modelValue"
     :disabled="isDisabled"
     @input="onUpdate"
     @change="onChange"
@@ -14,7 +14,7 @@ import { reactive, SetupContext } from "vue";
 export default {
   name: "TextBox",
   props: {
-    value: {
+    modelValue: {
       type: String,
       required: true,
     },
@@ -27,7 +27,7 @@ export default {
     const state = reactive({});
     const onUpdate = (event: Event) => {
       if (event.target instanceof HTMLInputElement) {
-        context.emit('update:value', event.target.value);
+        context.emit('update:modelValue', event.target.value);
       }
     }
     const onChange = (event: Event) => {
