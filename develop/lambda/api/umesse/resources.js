@@ -233,6 +233,7 @@ exports.createTtsResource = async (unisCustomerCd, body) => {
   debuglog(
     `[createTtsResource] ${JSON.stringify({
       unisCustomerCd: unisCustomerCd,
+      body: body,
     })}`
   );
 
@@ -242,8 +243,8 @@ exports.createTtsResource = async (unisCustomerCd, body) => {
   });
   if (checkParams) throw new BadRequestError(checkParams);
 
-  let json;
-  for (const data of body) {
+  let json = [];
+  for (const tts of body) {
     // ID作成
     const id = generateId(unisCustomerCd, "t");
 
@@ -252,8 +253,8 @@ exports.createTtsResource = async (unisCustomerCd, body) => {
     try {
       res = await s3Manager.copy(
         constants.s3Bucket().users,
-        `users/${unisCustomerCd}/${constants.resourceCategory.RECORDING}/${id}.mp3`,
-        `users/${unisCustomerCd}/${constants.resourceCategory.RECORDING}/${data.lang}.mp3`
+        `users/${unisCustomerCd}/tts/${id}.mp3`,
+        `${constants.s3Bucket().users}/users/${unisCustomerCd}/tts/${tts.lang}.mp3`
       );
     } catch (e) {
       errorlog(JSON.stringify(e));
@@ -283,7 +284,7 @@ exports.createTtsResource = async (unisCustomerCd, body) => {
     }
   }
 
-  return json;
+  return { tts: json };
 };
 
 // TTS生成
@@ -291,14 +292,13 @@ exports.generateTtsResource = async (unisCustomerCd, body) => {
   debuglog(
     `[generateUserResource] ${JSON.stringify({
       unisCustomerCd: unisCustomerCd,
-      category: category,
       body: body,
     })}`
   );
 
   // パラメーターチェック
   const checkParams = validation.checkParams({
-    body: body,
+    unisCustomerCd: unisCustomerCd,
   });
   if (checkParams) throw new BadRequestError(checkParams);
 
@@ -308,13 +308,9 @@ exports.generateTtsResource = async (unisCustomerCd, body) => {
     port: 443,
     auth: `${constants.ttsConfig().key}:`,
     method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      "Content-Length": postData.length,
-    },
   };
 
-  let json;
+  let json = [];
   for (const data of body) {
     const postData = querystring.stringify({
       text: data.text,
@@ -323,6 +319,10 @@ exports.generateTtsResource = async (unisCustomerCd, body) => {
       speed: "95",
       format: "mp3",
     });
+    options.headers = {
+      "Content-Type": "application/x-www-form-urlencoded",
+      "Content-Length": postData.length,
+    };
     debuglog(JSON.stringify({ options: options, postData: postData }));
 
     // TTS API リクエスト
@@ -445,7 +445,7 @@ function requestTts(options, postData) {
       });
       response.on("end", () => {
         if (response.statusCode == 200) {
-          resolve(data);
+          resolve(Buffer.concat(data));
         } else {
           console.log(`${response.statusMessage}: ${data}`);
           reject(`${response.statusMessage}: ${data}`);
