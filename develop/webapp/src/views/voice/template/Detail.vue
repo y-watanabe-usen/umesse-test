@@ -199,7 +199,7 @@ export default defineComponent({
       ko:
         "오늘은 {storeName}에 내점 해 주셔서 대단히 감사합니다. 고객에게 알려드립니다. 당점의 영업 시간은 {endTime}까지로되어 있습니다. 오늘은 이용해 주셔서 감사합니다. 자, 천천히 보내시기 바랍니다.",
     };
-    const { cm, base } = useGlobalStore();
+    const { cm } = useGlobalStore();
     const state = reactive({
       isPlaying: computed(() => audioPlayer.isPlaying()),
       isGenerating: computed(() => ttsStore.isGenerating()),

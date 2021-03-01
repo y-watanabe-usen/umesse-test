@@ -225,7 +225,7 @@ export default defineComponent({
     const recordingStore = provideRecordingStore(); //FIXME: provide name.
     const audioRecorder = AudioRecorder();
     const audioPlayer = AudioPlayer();
-    const { cm, base } = useGlobalStore();
+    const { cm } = useGlobalStore();
     const state = reactive({
       file: <RecordingFile>{},
       uploadRecoridngState: computed(() => recordingStore.getStatus()),

@@ -114,10 +114,10 @@ import ModalFooter from "@/components/molecules/ModalFooter.vue";
 import TextDialogContents from "@/components/molecules/TextDialogContents.vue";
 import { FreeItem } from "umesseapi/models/free-item";
 import * as Common from "@/utils/Common";
-import { useGlobalStore } from "@/store";
 import { convertDatestringToDateJp } from "@/utils/FormatDate";
 import router from "@/router";
 import UMesseApi from "@/repository/UMesseApi";
+import UMesseCache from "@/repository/UMesseCache";
 
 export default defineComponent({
   components: {
@@ -137,7 +137,6 @@ export default defineComponent({
     TextDialogContents,
   },
   setup() {
-    const { base } = useGlobalStore();
     const state = reactive({
       freeTemplateIndustries: computed(() => Common.getBgmIndustries()),
       activeFreeTemplateIndustryCd: "01",
@@ -166,7 +165,7 @@ export default defineComponent({
     const selectFreeTemplate = (manuscript: string) => {
       // TODO: キャッシュに入れるでいいのか
       const cacheKey = "voice/free/selectTemplate";
-      base.cache.set(cacheKey, manuscript);
+      UMesseCache.freeCache.set(cacheKey, manuscript);
       router.push({ name: "VoiceFree" });
     };
 

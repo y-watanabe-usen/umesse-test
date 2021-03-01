@@ -485,6 +485,7 @@ import {
 import router from "@/router";
 import { ChimeItem } from "umesseapi/models";
 import UMesseApi from "@/repository/UMesseApi";
+import UMesseService from "@/services/UMesseService";
 
 export default defineComponent({
   components: {
@@ -506,7 +507,7 @@ export default defineComponent({
   setup() {
     const audioStore = AudioStore();
     const audioPlayer = AudioPlayer();
-    const { cm, base } = useGlobalStore();
+    const { cm } = useGlobalStore();
     const state = reactive({
       openChime: computed(() => cm.openChime),
       narrarions: computed(() => cm.narrations),
@@ -543,7 +544,7 @@ export default defineComponent({
 
     const playChime = async (chime: ChimeItem) => {
       stop();
-      const audioBuffer = await getAudioBuffer(
+      const audioBuffer = await UMesseService.resourcesService.getAudioBuffer(
         chime.contentsId,
         chime.category
       );
@@ -568,28 +569,21 @@ export default defineComponent({
         category = Constants.CATEGORY.TTS;
       }
       console.log(id, category);
-      const audioBuffer = await getAudioBuffer(id, category);
+      const audioBuffer = await UMesseService.resourcesService.getAudioBuffer(
+        id,
+        category
+      );
       audioPlayer.start(audioBuffer);
     };
     const playBgm = async () => {
       const bgm = cm.bgm;
       if (!bgm) return;
       stop();
-      const audioBuffer = await getAudioBuffer(bgm.contentsId, bgm.category);
-      audioPlayer.start(audioBuffer);
-    };
-    const getAudioBuffer = async (contentsId: string, category: string) => {
-      const cacheKey = `${category}/${contentsId}`;
-      if (base.cache.has(cacheKey)) {
-        return <AudioBuffer>base.cache.get(cacheKey);
-      }
-      const response = await UMesseApi.resourcesApi.getSignedUrl(
-        contentsId,
-        category
+      const audioBuffer = await UMesseService.resourcesService.getAudioBuffer(
+        bgm.contentsId,
+        bgm.category
       );
-      await audioStore.download(response.data.url);
-      base.cache.set(cacheKey, <AudioBuffer>audioStore.audioBuffer);
-      return <AudioBuffer>audioStore.audioBuffer;
+      audioPlayer.start(audioBuffer);
     };
 
     const clearNarration = (index: number) => {

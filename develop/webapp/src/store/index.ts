@@ -1,6 +1,5 @@
 import { InjectionKey, inject } from 'vue'
 import authStore from '@/store/modules/auth'
-import baseStore from '@/store/base'
 import cmStore from '@/store/cm'
 
 
@@ -8,8 +7,6 @@ import cmStore from '@/store/cm'
 export default function globalStore() {
   return {
     auth: authStore(),
-    base: baseStore(),
-    // TODO: glocalにあるべきではない
     cm: cmStore(),
   }
 }
