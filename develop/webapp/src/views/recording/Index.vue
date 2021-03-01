@@ -1,185 +1,140 @@
 <template>
   <div>
-  <BasicLayout>
-    <template #header>
-      <Header>
-        <template #title>録音する</template>
-        <template #buttons v-if="hasRecordedData === true">
-          <Button @click="openModal">確定</Button>
-        </template>
-      </Header>
-    </template>
-    <template #contents>
-      <ContentsBase>
-        <div class="center">
-          <div class="contents">
-            <p class="recording" @click="toggleVoiceRecorder">
-              <span v-if="isRecording === false">
-                <img src="@/assets/recording_start.svg" />
-              </span>
-              <span v-else>
-                <img src="@/assets/recording_stop.svg" />
-              </span>
-            </p>
-            <div class="right">
-              <div class="indicator-area">
-                <h5 class="volume-unit">db</h5>
-                <div class="volume">
-                  <h5>-60</h5>
-                  <h5>-50</h5>
-                  <h5>-40</h5>
-                  <h5>-35</h5>
-                  <h5>-30</h5>
-                  <h5>-25</h5>
-                  <h5>-20</h5>
-                  <h5>-15</h5>
-                  <h5>-10</h5>
-                  <h5>-5</h5>
-                  <h5>0</h5>
+    <BasicLayout>
+      <template #header>
+        <Header>
+          <template #title>録音する</template>
+          <template #buttons v-if="hasRecordedData === true">
+            <Button @click="openModal">確定</Button>
+          </template>
+        </Header>
+      </template>
+      <template #contents>
+        <ContentsBase>
+          <div class="center">
+            <div class="contents">
+              <p class="recording" @click="toggleVoiceRecorder">
+                <span v-if="isRecording === false">
+                  <img src="@/assets/recording_start.svg" />
+                </span>
+                <span v-else>
+                  <img src="@/assets/recording_stop.svg" />
+                </span>
+              </p>
+              <div class="right">
+                <div class="indicator-area">
+                  <h5 class="volume-unit">db</h5>
+                  <div class="volume">
+                    <h5>-60</h5>
+                    <h5>-50</h5>
+                    <h5>-40</h5>
+                    <h5>-35</h5>
+                    <h5>-30</h5>
+                    <h5>-25</h5>
+                    <h5>-20</h5>
+                    <h5>-15</h5>
+                    <h5>-10</h5>
+                    <h5>-5</h5>
+                    <h5>0</h5>
+                  </div>
+                  <div class="scales">
+                    <div class="scale"></div>
+                    <div class="scale"></div>
+                    <div class="scale"></div>
+                    <div class="scale"></div>
+                    <div class="scale"></div>
+                    <div class="scale"></div>
+                    <div class="scale"></div>
+                    <div class="scale"></div>
+                    <div class="scale"></div>
+                    <div class="scale"></div>
+                    <div class="scale"></div>
+                  </div>
+                  <meter
+                    min="-100"
+                    max="0"
+                    low="-10"
+                    high="-5"
+                    class="volume-meter"
+                    :value="decibel"
+                    optimum="-30"
+                  ></meter>
+                  <span id="avg-level-text"> {{ decibel }} </span> dB
+                  <h5 class="title">録音したデータ１</h5>
+                  <div class="time" v-if="hasRecordedData">
+                    <p>{{ playbackTimeHms }}</p>
+                    <p>{{ durationHms }}</p>
+                  </div>
+                  <div class="time" v-else>
+                    <p>— : — : —</p>
+                    <p>— : — : —</p>
+                  </div>
+                  <meter
+                    min="0"
+                    :max="duration"
+                    class="progress-meter"
+                    :value="playbackTime"
+                  ></meter>
+                  <div class="buttons">
+                    <button
+                      class="btn-play"
+                      :disabled="!hasRecordedData"
+                      @click="play"
+                    >
+                      <img src="@/assets/icon_play.svg" />再生
+                    </button>
+                    <button
+                      class="btn-delete"
+                      :disabled="!hasRecordedData"
+                      @click="deleteRecordedData"
+                    >
+                      <img src="@/assets/icon_delete.svg" />削除
+                    </button>
+                  </div>
+                  <p class="description">
+                    録音し直したい場合は、録音開始ボタンを押して再収録してください。
+                  </p>
                 </div>
-                <div class="scales">
-                  <div class="scale"></div>
-                  <div class="scale"></div>
-                  <div class="scale"></div>
-                  <div class="scale"></div>
-                  <div class="scale"></div>
-                  <div class="scale"></div>
-                  <div class="scale"></div>
-                  <div class="scale"></div>
-                  <div class="scale"></div>
-                  <div class="scale"></div>
-                  <div class="scale"></div>
-                </div>
-                <meter
-                  min="-100"
-                  max="0"
-                  low="-10"
-                  high="-5"
-                  class="volume-meter"
-                  :value="decibel"
-                  optimum="-30"
-                ></meter>
-                <span id="avg-level-text"> {{ decibel }} </span> dB
-                <h5 class="title">録音したデータ１</h5>
-                <div class="time" v-if="hasRecordedData">
-                  <p>{{ playbackTimeHms }}</p>
-                  <p>{{ durationHms }}</p>
-                </div>
-                <div class="time" v-else>
-                  <p>— : — : —</p>
-                  <p>— : — : —</p>
-                </div>
-                <meter
-                  min="0"
-                  :max="duration"
-                  class="progress-meter"
-                  :value="playbackTime"
-                ></meter>
-                <div class="buttons">
-                  <button
-                    class="btn-play"
-                    :disabled="!hasRecordedData"
-                    @click="play"
-                  >
-                    <img src="@/assets/icon_play.svg" />再生
-                  </button>
-                  <button
-                    class="btn-delete"
-                    :disabled="!hasRecordedData"
-                    @click="deleteRecordedData"
-                  >
-                    <img src="@/assets/icon_delete.svg" />削除
-                  </button>
-                </div>
-                <p class="description">
-                  録音し直したい場合は、録音開始ボタンを押して再収録してください。
-                </p>
               </div>
             </div>
           </div>
-        </div>
-      </ContentsBase>
-    </template>
-  </BasicLayout>
-  <!-- modal -->
-  <transition>
-    <ModalDialog
-      v-if="isModalAppear"
-      size="large"
-      :closeDisabled="uploadRecoridngState === UPLOAD_RECORDING_STATE.UPLOADING"
-      @close="closeModal"
-    >
-      <template #header>
-        <ModalHeader
-          title="保存しますか？"
-          :closeDisabled="
-            uploadRecoridngState === UPLOAD_RECORDING_STATE.UPLOADING
-          "
-          @close="closeModal"
-        />
+        </ContentsBase>
       </template>
-      <template #contents>
-        <form>
-          <FormGroup title="タイトル" :required="true">
-            <TextBox
-              v-model="file.title"
-              :isDisabled="
-                uploadRecoridngState !== UPLOAD_RECORDING_STATE.NONE &&
-                uploadRecoridngState !== UPLOAD_RECORDING_STATE.ERROR
-              "
-            />
-          </FormGroup>
-          <FormGroup title="説明">
-            <TextArea
-              v-model="file.description"
-              :isDisabled="
-                uploadRecoridngState !== UPLOAD_RECORDING_STATE.NONE &&
-                uploadRecoridngState !== UPLOAD_RECORDING_STATE.ERROR
-              "
-            />
-          </FormGroup>
-        </form>
-        <!-- 保存中 -->
-        <span v-if="uploadRecoridngState === UPLOAD_RECORDING_STATE.UPLOADING">
-          <div class="col-form-label">クルクルインジケーターとか</div>
-        </span>
-        <!-- 保存完了 -->
-        <span v-if="uploadRecoridngState === UPLOAD_RECORDING_STATE.UPLOADED">
-          <div class="col-form-label">保存が完了しました。</div>
-        </span>
-        <!-- 保存失敗 -->
-        <span v-if="uploadRecoridngState === UPLOAD_RECORDING_STATE.ERROR">
-          <div class="failed">保存に失敗しました。再度お試しください。</div>
-        </span>
-      </template>
-      <template #footer>
-        <ModalFooter>
-          <div
-            class="button-wrapper"
-            v-if="
-              uploadRecoridngState === UPLOAD_RECORDING_STATE.ERROR ||
-              uploadRecoridngState === UPLOAD_RECORDING_STATE.NONE
-            "
-          >
-            <Button type="secondary" @click="closeModal">キャンセル</Button>
-            <Button
-              type="primary"
-              :isDisabled="file.title === undefined || file.title === '' || isUploading"
-              @click="uploadRecordingFile"
-            >
-              保存して作成を続ける
-            </Button>
-          </div>
-          <div
-            class="button-wrapper"
-            v-if="uploadRecoridngState === UPLOAD_RECORDING_STATE.UPLOADED"
-          >
-            <Button type="primary" @click="closeModal">OK</Button>
-          </div>
-        </ModalFooter>
-      </template>
-    </ModalDialog>
-  </transition>
+    </BasicLayout>
+    <!-- modal -->
+    <transition>
+      <ModalDialog v-if="isModalAppear" size="large" @close="closeModal">
+        <template #header>
+          <ModalHeader title="保存しますか？" @close="closeModal" />
+        </template>
+        <template #contents>
+          <form>
+            <FormGroup title="タイトル" :required="true">
+              <TextBox v-model="file.title" />
+            </FormGroup>
+            <FormGroup title="説明">
+              <TextArea v-model="file.description" />
+            </FormGroup>
+          </form>
+        </template>
+        <template #footer>
+          <ModalFooter>
+            <div class="button-wrapper">
+              <Button type="secondary" @click="closeModal">キャンセル</Button>
+              <Button
+                type="primary"
+                :isDisabled="
+                  file.title === undefined || file.title === '' || isUploading
+                "
+                @click="uploadRecordingFile"
+              >
+                保存して作成を続ける
+              </Button>
+            </div>
+          </ModalFooter>
+        </template>
+      </ModalDialog>
+    </transition>
   </div>
 </template>
 
@@ -189,7 +144,6 @@ import AudioRecorder from "@/utils/AudioRecorder";
 import AudioPlayer from "@/utils/AudioPlayer";
 import {
   RecordingFile,
-  useUploadRecordingService,
   UPLOAD_RECORDING_STATE,
 } from "@/services/uploadRecordingService";
 import provideRecordingStore from "@/store/recording";
@@ -228,7 +182,6 @@ export default defineComponent({
     const { cm } = useGlobalStore();
     const state = reactive({
       file: <RecordingFile>{},
-      uploadRecoridngState: computed(() => recordingStore.getStatus()),
       isRecording: computed(() => audioRecorder.isRecording()),
       hasRecordedData: computed(() => audioRecorder.hasRecording()),
       decibel: computed(() => {

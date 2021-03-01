@@ -1,15 +1,14 @@
 import {
   RecordingFile,
-  useUploadRecordingService,
 } from "@/services/uploadRecordingService";
 import { useGlobalStore } from "@/store";
 import { inject, InjectionKey, provide, reactive, toRefs } from "vue";
 import { RecordingItem } from "umesseapi/models/recording-item";
 import UMesseApi from "@/repository/UMesseApi";
+import UMesseService from "@/services/UMesseService";
 
 // recording.
 export default function recordingStore() {
-  const uploadRecordingService = useUploadRecordingService(UMesseApi.recordingApi);
   const { auth, cm } = useGlobalStore();
   const state = reactive({
     recordingItems: [] as RecordingItem[],
@@ -31,10 +30,6 @@ export default function recordingStore() {
   const getUserRecording = (id: string) => {
     const item = state.recordingItems.find((element) => element.recordingId === id);
     return item;
-    //    const item = await umesseApi.getUserRecording(
-    //      state.recordingItems[0].id,
-    //      token()
-    //    );
   };
 
   const deleteUserRecording = async (id: string) => {
@@ -52,7 +47,7 @@ export default function recordingStore() {
   };
 
   const uploadRecordingData = async (recordingFile: RecordingFile) => {
-    const response = await uploadRecordingService.upload(token(), recordingFile);
+    const response = await UMesseService.uploadRecordingService.upload(token(), recordingFile);
     fetchRecordingData();
     return response;
   };
@@ -64,7 +59,7 @@ export default function recordingStore() {
     getUserRecording,
     deleteUserRecording,
     updateUserRecording,
-    ...uploadRecordingService,
+    // ...UMesseService.uploadRecordingService,
   };
 }
 

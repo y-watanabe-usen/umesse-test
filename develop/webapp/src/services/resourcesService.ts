@@ -1,7 +1,7 @@
 import Constants from "@/utils/Constants";
 import * as UMesseApi from "umesseapi";
 import UMesseCache from "@/repository/UMesseCache"
-import { BgmItem, ChimeItem, NarrationItem } from "umesseapi/models";
+import { BgmItem, ChimeItem, FreeItem, NarrationItem, TemplateItem } from "umesseapi/models";
 import AudioStore from "@/store/audio";
 
 export function useResourcesService(
@@ -88,7 +88,40 @@ export function useResourcesService(
           reject()
         );
     });
-    Constants
+  }
+
+  const fetchTemplate = async (
+    industryCd: string,
+    sort?: number
+  ): Promise<TemplateItem[]> => {
+    return new Promise(function (resolve, reject) {
+      resourcesApi
+        .listTemplate(industryCd, undefined, sort)
+        .then((value) => {
+          resolve(value.data)
+        })
+        .catch((error) =>
+          // TODO: Error
+          reject()
+        );
+    });
+  }
+
+  const fetchFree = async (
+    industryCd: string,
+    sort?: number
+  ): Promise<FreeItem[]> => {
+    return new Promise(function (resolve, reject) {
+      resourcesApi
+        .listFree(industryCd, undefined, sort)
+        .then((value) => {
+          resolve(value.data)
+        })
+        .catch((error) =>
+          // TODO: Error
+          reject()
+        );
+    });
   }
 
   const getAudioBuffer = async (contentsId: string, category: string) => {
@@ -109,6 +142,8 @@ export function useResourcesService(
     fetchNarration,
     fetchChime,
     fetchBgm,
+    fetchTemplate,
+    fetchFree,
     getAudioBuffer,
   };
 }

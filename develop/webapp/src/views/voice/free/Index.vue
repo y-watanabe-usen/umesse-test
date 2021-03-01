@@ -104,8 +104,6 @@ import { useRouter } from "vue-router";
 import AudioPlayer from "@/utils/AudioPlayer";
 import AudioStore from "@/store/audio";
 import {
-  RecordingFile,
-  useUploadTtsService,
   UPLOAD_TTS_STATE,
 } from "@/services/uploadTtsService";
 import provideTtsStore from "@/store/tts";
@@ -147,7 +145,6 @@ export default defineComponent({
     const lang = "ja";
     const { cm } = useGlobalStore();
     const state = reactive({
-      uploadTtsState: computed(() => ttsStore.getStatus()),
       isGenerating: computed(() => ttsStore.isGenerating()),
       isCreating: computed(() => ttsStore.isCreating()),
       isPlaying: computed(() => audioPlayer.isPlaying()),
