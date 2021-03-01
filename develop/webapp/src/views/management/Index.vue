@@ -24,7 +24,7 @@
             <ListHeader>
               <Sort
                 v-model="sort"
-                @update:modelValue="sortCm"
+                @update:modelValue="fetchCm"
                 :options="
                   cmSorts.map((cmSort) => {
                     return { title: cmSort.name, value: cmSort.cd };
@@ -331,15 +331,6 @@ export default defineComponent({
       });
     };
 
-    const sortCm = async () => {
-      const xUnisCustomerCd = "123456789";
-      const response = await cmApi.listUserCm(xUnisCustomerCd, state.sort);
-      state.cms = response.data.filter((v) => {
-        if (!v.scene) return false;
-        return v.scene.sceneCd == state.activeSceneCd;
-      });
-    };
-
     const selectCm = (cm: CmItem) => {
       state.selectedCm = cm;
     };
@@ -484,7 +475,7 @@ export default defineComponent({
       removeAndOpenRemovedModal,
       toEditCm,
       Constants,
-      sortCm,
+      fetchCm,
     };
   },
 });
