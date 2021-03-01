@@ -101,7 +101,7 @@
       <template #contents>
         <FormGroup title="試聴" class="play-form-group">
           <PlayDialogContents
-            :isLoading="isCreating"
+            :isLoading="isGenerating"
             :isPlaying="isPlaying"
             :playbackTime="playbackTime"
             :duration="duration"
@@ -109,22 +109,18 @@
             @stop="stop"
           />
         </FormGroup>
-        <FormGroup title="" >
-            <select class="form-control w-25" v-model="playLang">
-              <option
-                v-for="ttsLang in ttsLangs"
-                :key="ttsLang"
-                :value="ttsLang"
-              >
-                {{ ttsLang }}
-              </option>
-            </select>
+        <FormGroup title="">
+          <select class="form-control w-25" v-model="playLang">
+            <option v-for="ttsLang in ttsLangs" :key="ttsLang" :value="ttsLang">
+              {{ ttsLang }}
+            </option>
+          </select>
         </FormGroup>
         <FormGroup title="タイトル" :required="true">
-          <TextBox v-model="file.title" />
+          <TextBox v-model="title" />
         </FormGroup>
         <FormGroup title="説明">
-          <TextArea v-model="file.description" />
+          <TextArea v-model="description" />
         </FormGroup>
       </template>
       <template #footer>
@@ -134,8 +130,8 @@
           >
           <Button
             type="primary"
-            :isDisabled="file.title === undefined || file.title === ''"
-            @click="uploadTtsFile"
+            :isDisabled="title === undefined || title === ''"
+            @click="createTts"
             >保存して作成を続ける</Button
           >
         </ModalFooter>
@@ -201,8 +197,8 @@ export default defineComponent({
     const { cm, base } = useGlobalStore();
 
     const state = reactive({
-      file: <RecordingFile>{},
       isPlaying: computed(() => audioPlayer.isPlaying()),
+      isGenerating: computed(() => ttsStore.isGenerating()),
       isCreating: computed(() => ttsStore.isCreating()),
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       duration: computed(() => audioPlayer.getDuration()),
@@ -219,6 +215,8 @@ export default defineComponent({
       speaker: "1", // 女性
       langs: ["ja"],
       playLang: "ja",
+      title: "",
+      description: "",
     });
     const play = async () => {
       console.log("play");
@@ -231,15 +229,16 @@ export default defineComponent({
       if (state.isPlaying) audioPlayer.stop();
     };
 
-    const uploadTtsFile = async () => {
-      /// check state.file.
-      // state.file.blob = await ttsStore.getUploadTtsData();
-      // const uploadedData: any = await ttsStore.uploadTtsData(state.file);
-      // // TODO: 本来はttsidが返ってくるはずだけどidで返ってきてる
-      // uploadedData.ttsId = uploadedData.id;
-      // console.log("uploadedData", uploadedData);
-      // cm.setNarration(<TtsItem>uploadedData);
-      // router.push({ name: "Cm" });
+    const createTts = async () => {
+      const response = await ttsStore.createTtsData(
+        state.title,
+        state.description,
+        state.langs
+      );
+      response?.forEach((element) => {
+        cm.setNarration(element);
+      });
+      router.push({ name: "Cm" });
     };
 
     const openModal = async () => {
@@ -251,7 +250,7 @@ export default defineComponent({
         state.speaker,
         state.langs
       );
-      await ttsStore.generateTtsData(
+      await ttsStore.generateTtsDataFromTemplate(
         sourceText,
         state.storeName,
         state.endTime,
@@ -275,7 +274,7 @@ export default defineComponent({
       ttsLangs,
       play,
       stop,
-      uploadTtsFile,
+      createTts,
       openModal,
       closeModal,
       stopAndCloseModal,
