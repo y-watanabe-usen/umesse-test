@@ -118,9 +118,12 @@ exports.getSignedUrl = async (id, category) => {
       path = `users/${id.split("-")[0]}/${category}/${id}.aac`;
       break;
     case constants.resourceCategory.RECORDING:
-    case constants.resourceCategory.TTS:
       bucket = constants.s3Bucket().users;
       path = `users/${id.split("-")[0]}/${category}/${id}.mp3`;
+      break;
+    case constants.resourceCategory.TTS:
+      bucket = constants.s3Bucket().users;
+      path = `users/${id.split("-")[0]}/${category}/${id.split("-")[1]}.mp3`;
       break;
     case constants.resourceCategory.BGM:
     case constants.resourceCategory.CHIME:
@@ -344,8 +347,9 @@ exports.generateTtsResource = async (unisCustomerCd, body) => {
     }
     if (!res) throw new InternalServerError("put failed");
 
-    const url = await this.getSignedUrl(id, constants.resourceCategory.TTS);
-    json.push({ url: url, lang: data.lang });
+    const signedUrlId = `${unisCustomerCd}-${data.lang}`;
+    const url = await this.getSignedUrl(signedUrlId, constants.resourceCategory.TTS);
+    json.push({ url: url.url, lang: data.lang });
   }
 
   return { tts: json };
