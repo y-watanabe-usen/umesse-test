@@ -1,7 +1,3 @@
-import {
-  RecordingFile,
-  useUploadTtsService,
-} from "@/services/uploadTtsService";
 import globalStore, { useGlobalStore } from "@/store";
 import { inject, InjectionKey, provide, reactive, toRefs } from "vue";
 import { TtsItem } from "umesseapi/models/tts-item";
@@ -16,7 +12,6 @@ interface TtsData {
 
 // tts.
 export default function ttsStore() {
-  const uploadTtsService = useUploadTtsService(UMesseApi.ttsApi);
   const { auth } = useGlobalStore();
   const state = reactive({
     ttsItems: [] as TtsItem[],
@@ -184,7 +179,6 @@ export default function ttsStore() {
     resetTtsData,
     isGenerating,
     isCreating,
-    ...uploadTtsService,
   };
 }
 

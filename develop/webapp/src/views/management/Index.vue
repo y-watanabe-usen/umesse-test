@@ -245,7 +245,6 @@ import MessageDialogContents from "@/components/molecules/MessageDialogContents.
 import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
-import { useUploadCmService } from "@/services/uploadCmService";
 import { CmItem } from "umesseapi/models/cm-item";
 import { useGlobalStore } from "@/store";
 import {
@@ -256,6 +255,7 @@ import Constants from "@/utils/Constants";
 import { useRouter } from "vue-router";
 import SelectBox from "@/components/atoms/SelectBox.vue";
 import UMesseApi from "@/repository/UMesseApi";
+import UMesseService from "@/services/UMesseService";
 export default defineComponent({
   components: {
     BasicLayout,
@@ -282,7 +282,6 @@ export default defineComponent({
     const router = useRouter();
     const audioPlayer = AudioPlayer();
     const audioStore = AudioStore();
-    const uploadCmService = useUploadCmService(UMesseApi.cmApi);
     const { auth, cm } = useGlobalStore();
     const state = reactive({
       activeSceneCd: "001",
@@ -338,7 +337,7 @@ export default defineComponent({
     };
     const save = async (cm: CmItem) => {
       const xUnisCustomerCd = "123456789";
-      const response = await uploadCmService.update(
+      const response = await UMesseService.uploadCmService.update(
         xUnisCustomerCd,
         cm.cmId,
         state.title,
@@ -352,7 +351,10 @@ export default defineComponent({
       // TODO: auth.getToken()のトークンだとデータが空なので固定値をセットする
       // const xUnisCustomerCd = auth.getToken()!!;
       const xUnisCustomerCd = "123456789";
-      const response = await uploadCmService.remove(xUnisCustomerCd, cmId);
+      const response = await UMesseService.uploadCmService.remove(
+        xUnisCustomerCd,
+        cmId
+      );
       fetchCm();
     };
     const openPlayModal = () => {

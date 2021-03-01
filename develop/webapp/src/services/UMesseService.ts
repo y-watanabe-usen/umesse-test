@@ -1,6 +1,8 @@
 import UMesseApi from "@/repository/UMesseApi";
-import UMesseCache from "@/repository/UMesseCache";
-import { useResourcesService } from "./resourcesService";
+import { useResourcesService } from "@/services/resourcesService";
+import { useUploadCmService } from "@/services/uploadCmService";
+import { useUploadRecordingService } from "@/services/uploadRecordingService";
+import { useUploadTtsService } from "@/services/uploadTtsService";
 
 class UMesseService {
   private static _instance: UMesseService;
@@ -9,6 +11,18 @@ class UMesseService {
 
   get resourcesService() {
     return useResourcesService(UMesseApi.resourcesApi, UMesseApi.recordingApi)
+  }
+
+  get uploadCmService() {
+    return useUploadCmService(UMesseApi.cmApi)
+  }
+
+  get uploadRecordingService() {
+    return useUploadRecordingService(UMesseApi.recordingApi)
+  }
+
+  get uploadTtsService() {
+    return useUploadTtsService(UMesseApi.ttsApi)
   }
 
   public static get instance() {

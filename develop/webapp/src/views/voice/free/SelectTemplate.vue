@@ -116,8 +116,8 @@ import { FreeItem } from "umesseapi/models/free-item";
 import * as Common from "@/utils/Common";
 import { convertDatestringToDateJp } from "@/utils/FormatDate";
 import router from "@/router";
-import UMesseApi from "@/repository/UMesseApi";
 import UMesseCache from "@/repository/UMesseCache";
+import UMesseService from "@/services/UMesseService";
 
 export default defineComponent({
   components: {
@@ -152,10 +152,10 @@ export default defineComponent({
     };
 
     const fetchFreeTemplate = async () => {
-      const response = await UMesseApi.resourcesApi.listFree(
+      const response = await UMesseService.resourcesService.fetchFree(
         state.activeFreeTemplateIndustryCd
       );
-      state.freeItems = response.data;
+      state.freeItems = response;
     };
 
     const setManuscript = (manuscript: string) => {
