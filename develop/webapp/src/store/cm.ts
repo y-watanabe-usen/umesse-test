@@ -2,12 +2,11 @@ import { inject, InjectionKey, provide, reactive, toRefs } from "vue";
 import { ChimeItem } from "umesseapi/models/chime-item";
 import { NarrationItem } from "umesseapi/models/narration-item";
 import { BgmItem } from "umesseapi/models/bgm-item";
-import { config } from "@/utils/UMesseApiConfiguration";
-import * as UMesseApi from "umesseapi";
 import { useUploadCmService } from "@/services/uploadCmService";
 import { CmItem, RecordingItem, TtsItem } from "umesseapi/models";
 import DisplayCmItem, { Narration, Recording, Tts } from "@/models/DisplayCmItem";
 import Constants from "@/utils/Constants";
+import UMesseApi from "@/repository/UMesseApi";
 
 export function isNarration(arg: any): arg is Narration {
   return arg.contentsId !== undefined;
@@ -22,8 +21,7 @@ export function isTts(arg: any): arg is Tts {
 export const MAX_NARRATION_COUNT = 4;
 
 export default function cmStore() {
-  const cmApi = new UMesseApi.CmApi(config);
-  const uploadCmService = useUploadCmService(cmApi);
+  const uploadCmService = useUploadCmService(UMesseApi.cmApi);
   const state = reactive({
     displayCmItem: new DisplayCmItem(),
     selectedNarrationIndex: null as number | null,

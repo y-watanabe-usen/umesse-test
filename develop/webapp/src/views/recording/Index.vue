@@ -192,7 +192,6 @@ import {
   useUploadRecordingService,
   UPLOAD_RECORDING_STATE,
 } from "@/services/uploadRecordingService";
-import * as UMesseApi from "umesseapi";
 import provideRecordingStore from "@/store/recording";
 import * as FormatDate from "@/utils/FormatDate";
 import BasicLayout from "@/components/templates/BasicLayout.vue";

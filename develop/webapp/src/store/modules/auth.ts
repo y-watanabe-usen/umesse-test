@@ -1,7 +1,6 @@
 import { reactive, toRefs } from 'vue'
-import * as UMesseApi from "umesseapi"
 import router from '@/router'
-import { Configuration } from 'umesseapi';
+import UMesseApi from '@/repository/UMesseApi';
 
 export interface authState {
     token: string | undefined,
@@ -9,7 +8,7 @@ export interface authState {
     authenticating: boolean
 }
 
-export default function authStore(config:Configuration) {
+export default function authStore() {
     const state = reactive<authState>({
         token: undefined,
         error: undefined,
@@ -32,8 +31,7 @@ export default function authStore(config:Configuration) {
         console.log(`requestAuthorization`)
         state.authenticating = true
         try {
-            const api = new UMesseApi.AuthApi(config)
-            const response = await api.auth()
+            const response = await UMesseApi.authApi.auth()
             state.token = response.data.token
         } catch (e) {
             state.error = e.message

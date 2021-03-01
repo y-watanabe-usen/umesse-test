@@ -107,9 +107,9 @@
             <CmItem
               :title="
                 'ナレーション ' +
-                  `${index + 1}` +
-                  '/' +
-                  `${MAX_NARRATION_COUNT}`
+                `${index + 1}` +
+                '/' +
+                `${MAX_NARRATION_COUNT}`
               "
               size="flexible"
               :contentTitle="`${narration.title}`"
@@ -203,9 +203,9 @@
             <CmItem
               :title="
                 'ナレーション ' +
-                  `${narrarions.length + 1}` +
-                  '/' +
-                  `${MAX_NARRATION_COUNT}`
+                `${narrarions.length + 1}` +
+                '/' +
+                `${MAX_NARRATION_COUNT}`
               "
               :isEmpty="true"
               size="flexible"
@@ -483,9 +483,8 @@ import {
   MAX_NARRATION_COUNT,
 } from "@/store/cm";
 import router from "@/router";
-import * as UMesseApi from "umesseapi";
-import { config } from "@/utils/UMesseApiConfiguration";
 import { ChimeItem } from "umesseapi/models";
+import UMesseApi from "@/repository/UMesseApi";
 
 export default defineComponent({
   components: {
@@ -508,7 +507,6 @@ export default defineComponent({
     const audioStore = AudioStore();
     const audioPlayer = AudioPlayer();
     const { cm, base } = useGlobalStore();
-    const resourcesApi = new UMesseApi.ResourcesApi(config);
     const state = reactive({
       openChime: computed(() => cm.openChime),
       narrarions: computed(() => cm.narrations),
@@ -555,7 +553,7 @@ export default defineComponent({
     const playNarration = async (index: number) => {
       const narration = cm.narration(index);
       if (!narration) return;
-      console.log(narration)
+      console.log(narration);
       stop();
       let id: string = "";
       let category: string = "";
@@ -569,7 +567,7 @@ export default defineComponent({
         id = narration.ttsId;
         category = Constants.CATEGORY.TTS;
       }
-      console.log(id, category)
+      console.log(id, category);
       const audioBuffer = await getAudioBuffer(id, category);
       audioPlayer.start(audioBuffer);
     };
@@ -585,7 +583,10 @@ export default defineComponent({
       if (base.cache.has(cacheKey)) {
         return <AudioBuffer>base.cache.get(cacheKey);
       }
-      const response = await resourcesApi.getSignedUrl(contentsId, category);
+      const response = await UMesseApi.resourcesApi.getSignedUrl(
+        contentsId,
+        category
+      );
       await audioStore.download(response.data.url);
       base.cache.set(cacheKey, <AudioBuffer>audioStore.audioBuffer);
       return <AudioBuffer>audioStore.audioBuffer;

@@ -48,11 +48,7 @@
               >
                 <img src="@/assets/icon_play.svg" />試聴
               </Button>
-              <Button
-                type="rectangle"
-                class="btn-select"
-                @click="setBgm(bgm)"
-              >
+              <Button type="rectangle" class="btn-select" @click="setBgm(bgm)">
                 選択<img src="@/assets/icon_select.svg" />
               </Button>
             </template>
@@ -108,9 +104,7 @@
   <transition>
     <ModalDialog v-if="isSavedModalAppear" @close="closeSavedModal">
       <template #contents>
-        <MessageDialogContents>
-          保存が完了しました。
-        </MessageDialogContents>
+        <MessageDialogContents> 保存が完了しました。 </MessageDialogContents>
       </template>
       <template #footer>
         <ModalFooter :noBorder="true">
@@ -125,12 +119,10 @@
 import { computed, defineComponent, onMounted, reactive, toRefs } from "vue";
 import AudioPlayer from "@/utils/AudioPlayer";
 import AudioStore from "@/store/audio";
-import * as UMesseApi from "umesseapi";
 import { BgmItem } from "umesseapi/models";
 import { useGlobalStore } from "@/store";
 import { useRoute, useRouter } from "vue-router";
 import * as Common from "@/utils/Common";
-import { config } from "@/utils/UMesseApiConfiguration";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
 import Header from "@/components/organisms/Header.vue";
@@ -149,6 +141,7 @@ import MessageDialogContents from "@/components/molecules/MessageDialogContents.
 import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
+import UMesseApi from "@/repository/UMesseApi";
 
 export default defineComponent({
   components: {
@@ -175,7 +168,6 @@ export default defineComponent({
     const router = useRouter();
     const audioStore = AudioStore();
     const audioPlayer = AudioPlayer();
-    const api = new UMesseApi.ResourcesApi(config);
     const { cm, base } = useGlobalStore();
 
     const state = reactive({
@@ -209,12 +201,17 @@ export default defineComponent({
     };
 
     const fetchBgm = async () => {
-      const response = await api.listBgm(state.activeBgmIndustryCd);
+      const response = await UMesseApi.resourcesApi.listBgm(
+        state.activeBgmIndustryCd
+      );
       state.bgms = response.data;
     };
 
     const sortBgm = async () => {
-      const response = await api.listBgm(state.activeBgmIndustryCd, state.sort);
+      const response = await UMesseApi.resourcesApi.listBgm(
+        state.activeBgmIndustryCd,
+        state.sort
+      );
       state.bgms = response.data;
     };
 
@@ -228,7 +225,10 @@ export default defineComponent({
       if (base.cache.has(cacheKey)) {
         return <AudioBuffer>base.cache.get(cacheKey);
       }
-      const response = await api.getSignedUrl(contentsId, category);
+      const response = await UMesseApi.resourcesApi.getSignedUrl(
+        contentsId,
+        category
+      );
       await audioStore.download(response.data.url);
       base.cache.set(cacheKey, <AudioBuffer>audioStore.audioBuffer);
       return <AudioBuffer>audioStore.audioBuffer;

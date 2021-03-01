@@ -12,7 +12,9 @@
             <SubMenuItem
               v-for="freeTemplateIndustry in freeTemplateIndustries"
               :key="freeTemplateIndustry.cd"
-              :isSelected="freeTemplateIndustry.cd == activeFreeTemplateIndustryCd"
+              :isSelected="
+                freeTemplateIndustry.cd == activeFreeTemplateIndustryCd
+              "
               @click="clickFreeTemplateIndustry(freeTemplateIndustry.cd)"
             >
               {{ freeTemplateIndustry.name }}
@@ -41,8 +43,16 @@
             <template #line2>
               <p>
                 <span class="duration">00:00</span>
-                <span class="start">放送開始日{{ convertDatestringToDateJp(freeItem.timestamp) }}</span>
-                <span class="end">有効期限{{ convertDatestringToDateJp(freeItem.timestamp) }}</span>
+                <span class="start"
+                  >放送開始日{{
+                    convertDatestringToDateJp(freeItem.timestamp)
+                  }}</span
+                >
+                <span class="end"
+                  >有効期限{{
+                    convertDatestringToDateJp(freeItem.timestamp)
+                  }}</span
+                >
               </p>
             </template>
             <template #operations>
@@ -88,7 +98,6 @@
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, reactive, toRefs } from "vue";
-import * as UMesseApi from "umesseapi";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
 import Header from "@/components/organisms/Header.vue";
@@ -103,12 +112,12 @@ import ModalDialog from "@/components/organisms/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
 import TextDialogContents from "@/components/molecules/TextDialogContents.vue";
-import { config } from "@/utils/UMesseApiConfiguration";
 import { FreeItem } from "umesseapi/models/free-item";
 import * as Common from "@/utils/Common";
 import { useGlobalStore } from "@/store";
 import { convertDatestringToDateJp } from "@/utils/FormatDate";
 import router from "@/router";
+import UMesseApi from "@/repository/UMesseApi";
 
 export default defineComponent({
   components: {
@@ -128,7 +137,6 @@ export default defineComponent({
     TextDialogContents,
   },
   setup() {
-    const api = new UMesseApi.ResourcesApi(config);
     const { base } = useGlobalStore();
     const state = reactive({
       freeTemplateIndustries: computed(() => Common.getBgmIndustries()),
@@ -145,7 +153,9 @@ export default defineComponent({
     };
 
     const fetchFreeTemplate = async () => {
-      const response = await api.listFree(state.activeFreeTemplateIndustryCd);
+      const response = await UMesseApi.resourcesApi.listFree(
+        state.activeFreeTemplateIndustryCd
+      );
       state.freeItems = response.data;
     };
 
@@ -157,7 +167,7 @@ export default defineComponent({
       // TODO: キャッシュに入れるでいいのか
       const cacheKey = "voice/free/selectTemplate";
       base.cache.set(cacheKey, manuscript);
-      router.push({ name: 'VoiceFree' });
+      router.push({ name: "VoiceFree" });
     };
 
     const openDocumentModal = () => {
@@ -170,7 +180,7 @@ export default defineComponent({
     const setManuscriptAndOpenDocumentModal = (manuscript: string) => {
       setManuscript(manuscript);
       openDocumentModal();
-    }
+    };
 
     onMounted(async () => {
       await fetchFreeTemplate();
