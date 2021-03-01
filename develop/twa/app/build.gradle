@@ -22,30 +22,32 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 def twaManifest = [
-    applicationId: 'com.usen.umesse',
-    //  App running at:
-    //  - Local:   http://localhost:8080/
-    //  - Network: http://172.18.24.xxx:8080/
-    hostName: '10.0.2.2:8080', // The domain being opened in the TWA.
-    launchUrl: '/', // The start path for the TWA. Must be relative to the domain.
-    name: 'U MESSE', // The application name.
-    launcherName: 'U MESSE', // The name shown on the Android Launcher.
-    themeColor: '#39A0D2', // The color used for the status bar.
-    navigationColor: '#000000', // The color used for the navigation bar.
-    backgroundColor: '#FFFFFF', // The color used for the splash screen background.
-    enableNotifications: false, // Set to true to enable notification delegation.
-    // Every shortcut must include the following fields:
-    // - name: String that will show up in the shortcut.
-    // - short_name: Shorter string used if |name| is too long.
-    // - url: Absolute path of the URL to launch the app with (e.g '/create').
-    // - icon: Name of the resource in the drawable folder to use as an icon.
-    shortcuts: [],
-    // The duration of fade out animation in milliseconds to be played when removing splash screen.
-    splashScreenFadeOutDuration: 300,
-    generatorApp: 'bubblewrap-cli', // Application that generated the Android Project
-    // The fallback strategy for when Trusted Web Activity is not avilable. Possible values are
-    // 'customtabs' and 'webview'.
-    fallbackType: 'customtabs'
+        applicationId              : 'com.usen.umesse',
+        hostName                   : 'umesse.usen.com', // The domain being opened in the TWA.
+        launchUrl                  : '/', // The start path for the TWA. Must be relative to the domain.
+        name                       : 'U MESSE', // The application name.
+        launcherName               : 'U MESSE', // The name shown on the Android Launcher.
+        themeColor                 : '#39A0D2', // The color used for the status bar.
+        navigationColor            : '#000000', // The color used for the navigation bar.
+        navigationColorDark        : '#000000', // The color used for the dark navbar.
+        navigationDividerColor     : '#000000', // The navbar divider color.
+        navigationDividerColorDark : '#000000', // The dark navbar divider color.
+        backgroundColor            : '#FFFFFF', // The color used for the splash screen background.
+        enableNotifications        : true, // Set to true to enable notification delegation.
+        // Every shortcut must include the following fields:
+        // - name: String that will show up in the shortcut.
+        // - short_name: Shorter string used if |name| is too long.
+        // - url: Absolute path of the URL to launch the app with (e.g '/create').
+        // - icon: Name of the resource in the drawable folder to use as an icon.
+        shortcuts                  : [],
+        // The duration of fade out animation in milliseconds to be played when removing splash screen.
+        splashScreenFadeOutDuration: 300,
+        generatorApp               : 'bubblewrap-cli', // Application that generated the Android Project
+        // The fallback strategy for when Trusted Web Activity is not avilable. Possible values are
+        // 'customtabs' and 'webview'.
+        fallbackType               : 'customtabs',
+        enableSiteSettingsShortcut : 'true',
+        orientation                : 'landscape',
 ]
 
 android {
@@ -57,7 +59,6 @@ android {
             storePassword 'android'
         }
         release {
-            // TODO
         }
     }
     compileSdkVersion 29
@@ -74,19 +75,30 @@ android {
         // The name for the application on the Android Launcher
         resValue "string", "launcherName", twaManifest.launcherName
 
-        // The hostname is used when building the intent-filter, so the TWA is able to
-        // handle Intents to open https://svgomg.firebaseapp.com.
-        resValue "string", "hostName", twaManifest.hostName
-
         // This attribute sets the status bar color for the TWA. It can be either set here or in
         // `res/values/colors.xml`. Setting in both places is an error and the app will not
         // compile. If not set, the status bar color defaults to #FFFFFF - white.
         resValue "color", "colorPrimary", twaManifest.themeColor
 
-        // This attribute sets the navigation bar color for the TWA. It can be either set here or in
-        // `res/values/colors.xml`. Setting in both places is an error and the app will not
+        // This attribute sets the navigation bar color for the TWA. It can be either set here or
+        // in `res/values/colors.xml`. Setting in both places is an error and the app will not
         // compile. If not set, the navigation bar color defaults to #FFFFFF - white.
         resValue "color", "navigationColor", twaManifest.navigationColor
+
+        // This attribute sets the dark navigation bar color for the TWA. It can be either set here
+        // or in `res/values/colors.xml`. Setting in both places is an error and the app will not
+        // compile. If not set, the navigation bar color defaults to #000000 - black.
+        resValue "color", "navigationColorDark", twaManifest.navigationColorDark
+
+        // This attribute sets the navbar divider color for the TWA. It can be either 
+        // set here or in `res/values/colors.xml`. Setting in both places is an error and the app 
+        // will not compile. If not set, the divider color defaults to #00000000 - transparent.
+        resValue "color", "navigationDividerColor", twaManifest.navigationDividerColor
+
+        // This attribute sets the dark navbar divider color for the TWA. It can be either 
+        // set here or in `res/values/colors.xml`. Setting in both places is an error and the 
+        //app will not compile. If not set, the divider color defaults to #000000 - black.
+        resValue "color", "navigationDividerColorDark", twaManifest.navigationDividerColorDark
 
         // Sets the color for the background used for the splash screen when launching the
         // Trusted Web Activity.
@@ -112,44 +124,43 @@ android {
         resValue "string", "generatorApp", twaManifest.generatorApp
 
         resValue "string", "fallbackType", twaManifest.fallbackType
+
+        resValue "bool", "enableSiteSettingsShortcut", twaManifest.enableSiteSettingsShortcut
+        resValue "string", "orientation", twaManifest.orientation
     }
     buildTypes {
         debug {
             buildConfigField "String", "buildType", "\"debug\""
-
-            // The URL that will be used when launching the TWA from the Android Launcher
-            def launchUrl =  "http://" + twaManifest.hostName + twaManifest.launchUrl
-            resValue "string", "launchUrl", launchUrl
-
-            // The URL the Web Manifest for the Progressive Web App that the TWA points to. This
-            // is used by Chrome OS to open the Web version of the PWA instead of the TWA, as it
-            // will probably give a better user experience for non-mobile devices.
-            resValue "string", "webManifestUrl", 'http://localhost/manifest.json'
-
-            // This variable below expresses the relationship between the app and the site,
-            // as documented in the TWA documentation at
-            // https://developers.google.com/web/updates/2017/10/using-twa#set_up_digital_asset_links_in_an_android_app
-            // and is injected into the AndroidManifest.xml
-            resValue "string", "assetStatements",
-                    '[{ \\"relation\\": [\\"delegate_permission/common.handle_all_urls\\"],' +
-                            '\\"target\\": {\\"namespace\\": \\"web\\", \\"site\\": \\"http://' +
-                            twaManifest.hostName + '\\"}}]'
-
             debuggable true
             minifyEnabled false
             signingConfig signingConfigs.debug
         }
         release {
             buildConfigField "String", "buildType", "\"release\""
+            debuggable false
+            minifyEnabled true
+            signingConfig signingConfigs.debug
+        }
+    }
+    flavorDimensions "umesse"
+    productFlavors {
+        dev {
+            dimension "umesse"
+            getIsDefault().set(true)
+
+            def hostName = "umesse:webapp@d18uzobsytsled.cloudfront.net"
 
             // The URL that will be used when launching the TWA from the Android Launcher
-            def launchUrl =  "https://" + twaManifest.hostName + twaManifest.launchUrl
-            resValue "string", "launchUrl", launchUrl
+            resValue "string", "launchUrl", 'https://' + hostName + twaManifest.launchUrl
 
             // The URL the Web Manifest for the Progressive Web App that the TWA points to. This
             // is used by Chrome OS to open the Web version of the PWA instead of the TWA, as it
             // will probably give a better user experience for non-mobile devices.
-            resValue "string", "webManifestUrl", 'https://localhost/manifest.json'
+            resValue "string", "webManifestUrl", 'https://' + hostName + '/manifest.json'
+
+            // The hostname is used when building the intent-filter, so the TWA is able to
+            // handle Intents to open https://svgomg.firebaseapp.com.
+            resValue "string", "hostName", hostName
 
             // This variable below expresses the relationship between the app and the site,
             // as documented in the TWA documentation at
@@ -158,16 +169,67 @@ android {
             resValue "string", "assetStatements",
                     '[{ \\"relation\\": [\\"delegate_permission/common.handle_all_urls\\"],' +
                             '\\"target\\": {\\"namespace\\": \\"web\\", \\"site\\": \\"https://' +
-                            twaManifest.hostName + '\\"}}]'
+                            hostName + '\\"}}]'
+        }
+        stg {
+            dimension "umesse"
 
-            debuggable false
-            minifyEnabled true
-            signingConfig signingConfigs.release
+            def hostName = "umesse:webapp@d2zfj684wewt96.cloudfront.net"
+
+            // The URL that will be used when launching the TWA from the Android Launcher
+            resValue "string", "launchUrl", 'https://' + hostName + twaManifest.launchUrl
+
+            // The URL the Web Manifest for the Progressive Web App that the TWA points to. This
+            // is used by Chrome OS to open the Web version of the PWA instead of the TWA, as it
+            // will probably give a better user experience for non-mobile devices.
+            resValue "string", "webManifestUrl", 'https://' + hostName + '/manifest.json'
+
+            // The hostname is used when building the intent-filter, so the TWA is able to
+            // handle Intents to open https://svgomg.firebaseapp.com.
+            resValue "string", "hostName", hostName
+
+            // This variable below expresses the relationship between the app and the site,
+            // as documented in the TWA documentation at
+            // https://developers.google.com/web/updates/2017/10/using-twa#set_up_digital_asset_links_in_an_android_app
+            // and is injected into the AndroidManifest.xml
+            resValue "string", "assetStatements",
+                    '[{ \\"relation\\": [\\"delegate_permission/common.handle_all_urls\\"],' +
+                            '\\"target\\": {\\"namespace\\": \\"web\\", \\"site\\": \\"https://' +
+                            hostName + '\\"}}]'
+        }
+        prod {
+            dimension "umesse"
+
+            def hostName = "umesse:webapp@d1zbxts7cn9e4r.cloudfront.net"
+
+            // The URL that will be used when launching the TWA from the Android Launcher
+            resValue "string", "launchUrl", 'https://' + hostName + twaManifest.launchUrl
+
+            // The URL the Web Manifest for the Progressive Web App that the TWA points to. This
+            // is used by Chrome OS to open the Web version of the PWA instead of the TWA, as it
+            // will probably give a better user experience for non-mobile devices.
+            resValue "string", "webManifestUrl", 'https://' + hostName + '/manifest.json'
+
+            // The hostname is used when building the intent-filter, so the TWA is able to
+            // handle Intents to open https://svgomg.firebaseapp.com.
+            resValue "string", "hostName", hostName
+
+            // This variable below expresses the relationship between the app and the site,
+            // as documented in the TWA documentation at
+            // https://developers.google.com/web/updates/2017/10/using-twa#set_up_digital_asset_links_in_an_android_app
+            // and is injected into the AndroidManifest.xml
+            resValue "string", "assetStatements",
+                    '[{ \\"relation\\": [\\"delegate_permission/common.handle_all_urls\\"],' +
+                            '\\"target\\": {\\"namespace\\": \\"web\\", \\"site\\": \\"https://' +
+                            hostName + '\\"}}]'
         }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+    lintOptions {
+        checkReleaseBuilds false
     }
 }
 
@@ -186,30 +248,35 @@ task generateShorcutsFile {
     def xmlMarkup = new MarkupBuilder(new IndentPrinter(xmlWriter, "    ", true))
 
     xmlMarkup
-        .'shortcuts'('xmlns:android': 'http://schemas.android.com/apk/res/android') {
-            twaManifest.shortcuts.eachWithIndex { s, i ->
-                'shortcut'(
-                        'android:shortcutId': 'shortcut' + i,
-                        'android:enabled': 'true',
-                        'android:icon': '@drawable/' + s.icon,
-                        'android:shortcutShortLabel': '@string/shortcut_short_name_' + i,
-                        'android:shortcutLongLabel': '@string/shortcut_name_' + i) {
-                    'intent'(
-                            'android:action': 'android.intent.action.MAIN',
-                            'android:targetPackage': twaManifest.applicationId,
-                            'android:targetClass': 'com.google.androidbrowserhelper.trusted.LauncherActivity',
-                            'android:data': s.url)
-                    'categories'('android:name': 'android.intent.category.LAUNCHER')
+            .'shortcuts'('xmlns:android': 'http://schemas.android.com/apk/res/android') {
+                twaManifest.shortcuts.eachWithIndex { s, i ->
+                    'shortcut'(
+                            'android:shortcutId': 'shortcut' + i,
+                            'android:enabled': 'true',
+                            'android:icon': '@drawable/' + s.icon,
+                            'android:shortcutShortLabel': '@string/shortcut_short_name_' + i,
+                            'android:shortcutLongLabel': '@string/shortcut_name_' + i) {
+                        'intent'(
+                                'android:action': 'android.intent.action.MAIN',
+                                'android:targetPackage': twaManifest.applicationId,
+                                'android:targetClass': twaManifest.applicationId + '.LauncherActivity',
+                                'android:data': s.url)
+                        'categories'('android:name': 'android.intent.category.LAUNCHER')
+                    }
                 }
             }
-        }
     shortcutsFile.text = xmlWriter.toString() + '\n'
 }
 
 preBuild.dependsOn(generateShorcutsFile)
 
+repositories {
+
+}
+
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'com.google.androidbrowserhelper:androidbrowserhelper:1.3.2'
+
+    implementation 'com.google.androidbrowserhelper:androidbrowserhelper:2.2.0'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
