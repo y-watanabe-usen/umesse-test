@@ -172,13 +172,13 @@ export default defineComponent({
 
     const uploadTtsFile = async () => {
       /// check state.file.
-      console.log("uploadTtsFile");
-      state.file.blob = await ttsStore.getUploadTtsData();
-      const uploadedData: any = await ttsStore.uploadTtsData(state.file);
-      uploadedData.ttsId = uploadedData.id;
-      console.log("uploadedData", uploadedData);
-      cm.setNarration(<TtsItem>uploadedData);
-      router.push({ name: "Cm" });
+      // console.log("uploadTtsFile");
+      // state.file.blob = await ttsStore.getUploadTtsData();
+      // const uploadedData: any = await ttsStore.uploadTtsData(state.file);
+      // uploadedData.ttsId = uploadedData.id;
+      // console.log("uploadedData", uploadedData);
+      // cm.setNarration(<TtsItem>uploadedData);
+      // router.push({ name: "Cm" });
     };
 
     const openModal = () => {
