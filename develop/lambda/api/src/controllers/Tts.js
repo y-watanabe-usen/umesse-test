@@ -23,6 +23,16 @@ module.exports.deleteUserTts = function deleteUserTts (req, res, next, ttsId, xU
     });
 };
 
+module.exports.generateUserTts = function generateUserTts (req, res, next, body, xUnisCustomerCd) {
+  Tts.generateUserTts(body, xUnisCustomerCd)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
+
 module.exports.getUserTts = function getUserTts (req, res, next, ttsId, xUnisCustomerCd) {
   Tts.getUserTts(ttsId, xUnisCustomerCd)
     .then(function (response) {

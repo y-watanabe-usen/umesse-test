@@ -73,7 +73,7 @@ exports.createShareCm = async (unisCustomerCd, cmId) => {
     res = await s3Manager.copy(
       constants.s3Bucket().users,
       `group/${user.customerGroupCd}/cm/${cmId}.mp3`,
-      `users/${unisCustomerCd}/cm/${cmId}.mp3`
+      `${constants.s3Bucket().users}/users/${unisCustomerCd}/cm/${cmId}.mp3`
     );
   } catch (e) {
     erorrolg(JSON.stringify(e));

@@ -10,7 +10,9 @@ const {
   getSignedUrl,
   getResource,
   getUserResource,
-  createUserResource,
+  createRecordingResource,
+  createTtsResource,
+  generateTtsResource,
   deleteUserResource,
 } = require("../umesse/resources");
 const { BadRequestError, InternalServerError } = require("umesse-lib/error");
@@ -152,11 +154,7 @@ describe("ユーザー音声作成", () => {
       title: "録音テスト04",
       description: "録音テスト04",
     };
-    const response = await createUserResource(
-      data.unisCustomerCd,
-      "recording",
-      body
-    );
+    const response = await createRecordingResource(data.unisCustomerCd, body);
     expect(response).toEqual({
       id: expect.stringMatching(`^${data.unisCustomerCd}-r-[0-9a-z]{8}$`),
       title: body.title,
@@ -186,4 +184,68 @@ describe("ユーザー音声作成", () => {
   });
 });
 
+// TTS音声作成
+describe("TTS音声作成", () => {
+  test("[success] TTS音声新規生成", async () => {
+    const body = [
+      {
+        text: "こんにちは",
+        speaker: "1",
+        lang: "ja",
+      },
+      {
+        text: "hello",
+        speaker: "0",
+        lang: "en",
+      },
+    ];
+    const response = await generateTtsResource(data.unisCustomerCd, body);
+    expect(response).toEqual({
+      tts: [
+        {
+          url: expect.anything(),
+          lang: "ja",
+        },
+        {
+          url: expect.anything(),
+          lang: "en",
+        },
+      ],
+    });
+  });
+
+  test("[success] TTS音声新規登録", async () => {
+    const body = [
+      {
+        title: "TTSテストja",
+        description: "TTSテストja",
+        lang: "ja",
+      },
+      {
+        title: "TTSテストen",
+        description: "TTテストen",
+        lang: "en",
+      },
+    ];
+    const response = await createTtsResource(data.unisCustomerCd, body);
+    expect(response).toEqual({
+      tts: [
+        {
+          id: expect.stringMatching(`^${data.unisCustomerCd}-t-[0-9a-z]{8}$`),
+          title: body.title,
+          description: body.description,
+          startDate: expect.anything(),
+          timestamp: expect.anything(),
+        },
+        {
+          id: expect.stringMatching(`^${data.unisCustomerCd}-t-[0-9a-z]{8}$`),
+          title: body.title,
+          description: body.description,
+          startDate: expect.anything(),
+          timestamp: expect.anything(),
+        },
+      ],
+    });
+  });
+});
 // FIXME: error test

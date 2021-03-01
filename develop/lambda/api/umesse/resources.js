@@ -57,7 +57,7 @@ exports.getResource = async (category, industryCd, sceneCd, sort) => {
         if (a.title < b.title) return -1;
         if (a.title > b.title) return 1;
         return 0;
-      }
+      };
       break;
     case constants.sort.TITLE_DESC:
       // titleの降順でソート
@@ -65,21 +65,21 @@ exports.getResource = async (category, industryCd, sceneCd, sort) => {
         if (a.title > b.title) return -1;
         if (a.title < b.title) return 1;
         return 0;
-      }
+      };
       break;
     case constants.sort.TIMESTAMP_ASC:
       sortFunc = (a, b) => {
         if (a.timestamp < b.timestamp) return -1;
         if (a.timestamp > b.timestamp) return 1;
         return 0;
-      }
+      };
       break;
     case constants.sort.TIMESTAMP_DESC:
       sortFunc = (a, b) => {
         if (a.timestamp > b.timestamp) return -1;
         if (a.timestamp < b.timestamp) return 1;
         return 0;
-      }
+      };
       break;
     default:
       // titleの昇順でソート
@@ -87,9 +87,9 @@ exports.getResource = async (category, industryCd, sceneCd, sort) => {
         if (a.title < b.title) return -1;
         if (a.title > b.title) return 1;
         return 0;
-      }
+      };
   }
-  json.sort(sortFunc)
+  json.sort(sortFunc);
 
   if (!json) throw new InternalServerError("not found");
   return json;
@@ -115,7 +115,7 @@ exports.getSignedUrl = async (id, category) => {
   switch (category) {
     case constants.resourceCategory.CM:
       bucket = constants.s3Bucket().users;
-      path = `users/${id.split("-")[0]}/${category}/${id}.mp3`;
+      path = `users/${id.split("-")[0]}/${category}/${id}.aac`;
       break;
     case constants.resourceCategory.RECORDING:
     case constants.resourceCategory.TTS:
@@ -141,46 +141,6 @@ exports.getSignedUrl = async (id, category) => {
   }
   if (!res) throw InternalServerError("getSignedUrl failed");
   return { url: res };
-};
-
-// TTS作成
-exports.createTts = async (body) => {
-  debuglog(
-    `[createTts] ${JSON.stringify({
-      body: body,
-    })}`
-  );
-
-  // パラメーターチェック
-  const checkParams = validation.checkParams({
-    body: body,
-  });
-  if (checkParams) throw new BadRequestError(checkParams);
-
-  const postData = querystring.stringify({
-    ...body,
-    format: "mp3",
-  });
-  const options = {
-    host: constants.ttsConfig().host,
-    path: constants.ttsConfig().path,
-    port: 443,
-    auth: `${constants.ttsConfig().key}:`,
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      "Content-Length": postData.length,
-    },
-  };
-  debuglog(JSON.stringify({ options: options, postData: postData }));
-
-  let data;
-  try {
-    data = await requestTts(options, postData);
-  } catch (e) {
-    throw new InternalServerError(e.message);
-  }
-  return { body: data, isBase64Encoded: true };
 };
 
 // ユーザー作成の音声取得（一覧・個別）
@@ -215,24 +175,22 @@ exports.getUserResource = async (unisCustomerCd, category, id) => {
   return json;
 };
 
-// ユーザー作成の音声新規作成
-exports.createUserResource = async (unisCustomerCd, category, body) => {
+// ユーザー作成の録音音声新規作成
+exports.createRecordingResource = async (unisCustomerCd, body) => {
   debuglog(
-    `[createUserResource] ${JSON.stringify({
+    `[createRecordingResource] ${JSON.stringify({
       unisCustomerCd: unisCustomerCd,
-      category: category,
     })}`
   );
 
   // パラメーターチェック
   const checkParams = validation.checkParams({
     unisCustomerCd: unisCustomerCd,
-    category: category,
   });
   if (checkParams) throw new BadRequestError(checkParams);
 
   // ID作成
-  const id = generateId(unisCustomerCd, category.slice(0, 1));
+  const id = generateId(unisCustomerCd, "r");
 
   const binaryData = Buffer.from(body["recordedFile"], "binary");
   // S3へPUT
@@ -240,8 +198,9 @@ exports.createUserResource = async (unisCustomerCd, category, body) => {
   try {
     res = await s3Manager.put(
       constants.s3Bucket().users,
-      `users/${unisCustomerCd}/${category}/${id}.mp3`,
-      binaryData);
+      `users/${unisCustomerCd}/${constants.resourceCategory.RECORDING}/${id}.mp3`,
+      binaryData
+    );
   } catch (e) {
     errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
@@ -258,11 +217,138 @@ exports.createUserResource = async (unisCustomerCd, category, body) => {
   };
 
   try {
-    return await db.User.updateData(unisCustomerCd, category, data);
+    return await db.User.updateData(
+      unisCustomerCd,
+      constants.resourceCategory.RECORDING,
+      data
+    );
   } catch (e) {
     errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
+};
+
+// ユーザー作成の合成音声新規作成
+exports.createTtsResource = async (unisCustomerCd, body) => {
+  debuglog(
+    `[createTtsResource] ${JSON.stringify({
+      unisCustomerCd: unisCustomerCd,
+      body: body,
+    })}`
+  );
+
+  // パラメーターチェック
+  const checkParams = validation.checkParams({
+    unisCustomerCd: unisCustomerCd,
+  });
+  if (checkParams) throw new BadRequestError(checkParams);
+
+  let json = [];
+  for (const tts of body) {
+    // ID作成
+    const id = generateId(unisCustomerCd, "t");
+
+    // S3のオブジェクトリネーム
+    let res;
+    try {
+      res = await s3Manager.copy(
+        constants.s3Bucket().users,
+        `users/${unisCustomerCd}/tts/${id}.mp3`,
+        `${constants.s3Bucket().users}/users/${unisCustomerCd}/tts/${tts.lang}.mp3`
+      );
+    } catch (e) {
+      errorlog(JSON.stringify(e));
+      throw new InternalServerError(e.message);
+    }
+    if (!res) throw new InternalServerError("put failed");
+
+    // DynamoDBのデータ更新
+    const data = {
+      id: id,
+      title: body["title"],
+      description: body["description"],
+      startDate: timestamp(),
+      timestamp: timestamp(),
+    };
+
+    try {
+      res = await db.User.updateData(
+        unisCustomerCd,
+        constants.resourceCategory.RECORDING,
+        data
+      );
+      json.push(res);
+    } catch (e) {
+      errorlog(JSON.stringify(e));
+      throw new InternalServerError(e.message);
+    }
+  }
+
+  return { tts: json };
+};
+
+// TTS生成
+exports.generateTtsResource = async (unisCustomerCd, body) => {
+  debuglog(
+    `[generateUserResource] ${JSON.stringify({
+      unisCustomerCd: unisCustomerCd,
+      body: body,
+    })}`
+  );
+
+  // パラメーターチェック
+  const checkParams = validation.checkParams({
+    unisCustomerCd: unisCustomerCd,
+  });
+  if (checkParams) throw new BadRequestError(checkParams);
+
+  const options = {
+    host: constants.ttsConfig().host,
+    path: constants.ttsConfig().path,
+    port: 443,
+    auth: `${constants.ttsConfig().key}:`,
+    method: "POST",
+  };
+
+  let json = [];
+  for (const data of body) {
+    const postData = querystring.stringify({
+      text: data.text,
+      speaker: constants.ttsSpeakers[data.lang][data.speaker],
+      pitch: "105",
+      speed: "95",
+      format: "mp3",
+    });
+    options.headers = {
+      "Content-Type": "application/x-www-form-urlencoded",
+      "Content-Length": postData.length,
+    };
+    debuglog(JSON.stringify({ options: options, postData: postData }));
+
+    // TTS API リクエスト
+    let binaryData;
+    try {
+      binaryData = await requestTts(options, postData);
+    } catch (e) {
+      throw new InternalServerError(e.message);
+    }
+
+    // S3へPUT
+    const id = `users/${unisCustomerCd}/tts/${data.lang}.mp3`;
+    let res;
+    try {
+      res = await s3Manager.put(constants.s3Bucket().users, id, binaryData);
+    } catch (e) {
+      errorlog(JSON.stringify(e));
+      throw new InternalServerError(e.message);
+    }
+    if (!res) throw new InternalServerError("put failed");
+
+    const url = await this.getSignedUrl(id, constants.resourceCategory.TTS);
+    json.push({ url: url, lang: data.lang });
+  }
+
+  return { tts: json };
 };
 
 // ユーザー作成の音声更新
@@ -349,7 +435,7 @@ exports.deleteUserResource = async (unisCustomerCd, category, id) => {
   return res;
 };
 
-// TTS作成
+// TTSリクエスト
 function requestTts(options, postData) {
   return new Promise(function (resolve, reject) {
     const request = https.request(options, (response) => {
@@ -359,7 +445,7 @@ function requestTts(options, postData) {
       });
       response.on("end", () => {
         if (response.statusCode == 200) {
-          resolve(Buffer.concat(data).toString("base64"));
+          resolve(Buffer.concat(data));
         } else {
           console.log(`${response.statusMessage}: ${data}`);
           reject(`${response.statusMessage}: ${data}`);

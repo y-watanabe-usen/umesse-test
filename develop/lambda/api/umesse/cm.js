@@ -1,8 +1,6 @@
 "use strict";
 
-const { execSync } = require("child_process");
-const fs = require("fs");
-const path = require('path');
+const path = require("path");
 const {
   constants,
   debuglog,
@@ -42,6 +40,8 @@ exports.getCm = async (unisCustomerCd, cmId, sort) => {
     json = json.filter((item) => item.cmId === cmId)[0];
   }
 
+  if (!json) throw new InternalServerError("not found");
+
   if (!sort) sort = 1;
   let sortFunc;
   switch (sort) {
@@ -50,7 +50,7 @@ exports.getCm = async (unisCustomerCd, cmId, sort) => {
         if (a.title < b.title) return -1;
         if (a.title > b.title) return 1;
         return 0;
-      }
+      };
       break;
     case constants.sort.TITLE_DESC:
       // titleの降順でソート
@@ -58,21 +58,21 @@ exports.getCm = async (unisCustomerCd, cmId, sort) => {
         if (a.title > b.title) return -1;
         if (a.title < b.title) return 1;
         return 0;
-      }
+      };
       break;
     case constants.sort.TIMESTAMP_ASC:
       sortFunc = (a, b) => {
         if (a.timestamp < b.timestamp) return -1;
         if (a.timestamp > b.timestamp) return 1;
         return 0;
-      }
+      };
       break;
     case constants.sort.TIMESTAMP_DESC:
       sortFunc = (a, b) => {
         if (a.timestamp > b.timestamp) return -1;
         if (a.timestamp < b.timestamp) return 1;
         return 0;
-      }
+      };
       break;
     default:
       // titleの昇順でソート
@@ -80,11 +80,10 @@ exports.getCm = async (unisCustomerCd, cmId, sort) => {
         if (a.title < b.title) return -1;
         if (a.title > b.title) return 1;
         return 0;
-      }
+      };
   }
-  json.sort(sortFunc)
+  if (Array.isArray(json)) json.sort(sortFunc);
 
-  if (!json) throw new InternalServerError("not found");
   return json;
 };
 
@@ -106,7 +105,6 @@ exports.createCm = async (unisCustomerCd, body) => {
   // ナレーションチェック
   if (!body.materials.narrations || body.materials.narrations.length < 1)
     throw new BadRequestError("not narration");
-
 
   // ID生成
   const cmId = generateId(unisCustomerCd, "c");
@@ -333,4 +331,3 @@ async function generateCm(unisCustomerCd, cmId, materials) {
     throw new InternalServerError(e.message);
   }
 }
-

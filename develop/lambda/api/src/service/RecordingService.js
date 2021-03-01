@@ -2,7 +2,7 @@
 
 const {
   getUserResource,
-  createUserResource,
+  createRecordingResource,
   updateUserResource,
   deleteUserResource,
 } = require("../../umesse/resources");
@@ -12,16 +12,17 @@ const { UMesseError } = require("umesse-lib/error");
 const category = "recording";
 
 /**
- * 新規録音データ
+ * 録音データ登録
  * 録音音声素材を新規登録する
  *
+ * body List 録音音声登録リクエストBody (optional)
  * xUnisCustomerCd String UNIS顧客CD
  * returns List
  **/
 exports.createUserRecording = function (body, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     try {
-      const json = await createUserResource(xUnisCustomerCd, category, body);
+      const json = await createRecordingResource(xUnisCustomerCd, body);
       resolve(json);
     } catch (e) {
       assert(e instanceof UMesseError);

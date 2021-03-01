@@ -2,7 +2,8 @@
 
 const {
   getUserResource,
-  createUserResource,
+  createTtsResource,
+  generateTtsResource,
   updateUserResource,
   deleteUserResource,
 } = require("../../umesse/resources");
@@ -12,16 +13,17 @@ const { UMesseError } = require("umesse-lib/error");
 const category = "tts";
 
 /**
- * 新規録音データ
+ * TTSデータ登録
  * 合成音声素材を新規登録する
  *
+ * body List TTS登録リクエストBody (optional)
  * xUnisCustomerCd String UNIS顧客CD
  * returns List
  **/
 exports.createUserTts = function (body, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     try {
-      const json = await createUserResource(xUnisCustomerCd, category, body);
+      const json = await createTtsResource(xUnisCustomerCd, body);
       resolve(json);
     } catch (e) {
       assert(e instanceof UMesseError);
@@ -49,6 +51,28 @@ exports.deleteUserTts = function (ttsId, xUnisCustomerCd) {
     }
   });
 };
+
+
+/**
+ * TTSデータ生成
+ * 合成音声を生成する
+ *
+ * body List TTS作成リクエストBody (optional)
+ * xUnisCustomerCd String UNIS顧客CD
+ * returns GenerateTtsItem
+ **/
+exports.generateUserTts = function (body, xUnisCustomerCd) {
+  return new Promise(async function (resolve, reject) {
+    try {
+      const json = await generateTtsResource(xUnisCustomerCd, body);
+      resolve(json);
+    } catch (e) {
+      assert(e instanceof UMesseError);
+      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
+    }
+  });
+}
+
 
 /**
  * TTSデータ取得

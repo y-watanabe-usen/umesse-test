@@ -433,7 +433,7 @@ paths:
     post:
       tags:
       - recording
-      summary: 新規録音データ
+      summary: 録音データ登録
       description: 録音音声素材を新規登録する
       operationId: createUserRecording
       parameters:
@@ -451,7 +451,7 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/UserResourceCreateItem'
+              $ref: '#/components/schemas/RecordingCreateItem'
       responses:
         "200":
           description: successful response
@@ -706,7 +706,7 @@ paths:
     post:
       tags:
       - tts
-      summary: 新規録音データ
+      summary: TTSデータ登録
       description: 合成音声素材を新規登録する
       operationId: createUserTts
       parameters:
@@ -720,11 +720,7 @@ paths:
           type: string
           example: "123456789"
       requestBody:
-        description: ユーザー素材データ作成リクエストBody
-        content:
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/UserResourceCreateItem'
+        $ref: '#/components/requestBodies/CreateTtsRequest'
       responses:
         "200":
           description: successful response
@@ -735,6 +731,55 @@ paths:
                 items:
                   $ref: '#/components/schemas/TtsItem'
                 x-content-type: application/json
+        "400":
+          description: Bad request. Response invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: API key is missing or invalid
+          headers:
+            WWW_Authenticate:
+              style: simple
+              explode: false
+              schema:
+                type: string
+        "404":
+          description: A user with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error.
+      x-swagger-router-controller: Tts
+  /user/tts/generate:
+    post:
+      tags:
+      - tts
+      summary: TTSデータ生成
+      description: 合成音声を生成する
+      operationId: generateUserTts
+      parameters:
+      - name: x-unis-customer-cd
+        in: header
+        description: UNIS顧客CD
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: "123456789"
+      requestBody:
+        $ref: '#/components/requestBodies/GenerateTtsRequest'
+      responses:
+        "200":
+          description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GenerateTtsItem'
         "400":
           description: Bad request. Response invalid.
           content:
@@ -1726,45 +1771,6 @@ paths:
         "5XX":
           description: Unexpected error.
       x-swagger-router-controller: Resources
-  /tts:
-    post:
-      tags:
-      - resources
-      summary: TTS音声作成
-      description: TTS音声を作成する
-      operationId: createTts
-      requestBody:
-        $ref: '#/components/requestBodies/TtsRequest'
-      responses:
-        "200":
-          description: successful response
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/CreateTtsItem'
-        "400":
-          description: Bad request. Response invalid.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        "401":
-          description: API key is missing or invalid
-          headers:
-            WWW_Authenticate:
-              style: simple
-              explode: false
-              schema:
-                type: string
-        "404":
-          description: A user with the specified ID was not found.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        "5XX":
-          description: Unexpected error.
-      x-swagger-router-controller: Resources
   /{external}/cm:
     get:
       tags:
@@ -2414,6 +2420,19 @@ components:
         title: サンプル
         startDate: 2019-09-01T09:00:00+9:00
         timestamp: 2019-09-01T09:00:00+9:00
+    RecordingCreateItem:
+      properties:
+        filename:
+          type: string
+        recordedFile:
+          type: string
+          format: binary
+        title:
+          type: string
+          example: サンプル
+        description:
+          type: string
+          example: サンプル
     TtsItem:
       properties:
         ttsId:
@@ -2441,18 +2460,18 @@ components:
         title: サンプル
         startDate: 2019-09-01T09:00:00+9:00
         timestamp: 2019-09-01T09:00:00+9:00
-    CreateTtsItem:
+    GenerateTtsItem:
       properties:
-        body:
-          type: string
-          format: base64
-          example: base64 string
-        isBase64Encoded:
+        tts:
           type: array
-          example: "true"
+          items:
+            $ref: '#/components/schemas/GenerateTtsItem_tts'
       example:
-        isBase64Encoded: "true"
-        body: base64 string
+        tts:
+        - lang: ja | en | zh | ko
+          url: https://xxxxx/tts-jp.mp3?AWSAccessKeyId=xxxxxxxx
+        - lang: ja | en | zh | ko
+          url: https://xxxxx/tts-jp.mp3?AWSAccessKeyId=xxxxxxxx
     ExternalItems:
       properties:
         unisCustomers:
@@ -2621,19 +2640,6 @@ components:
         dataProcessType: 01：正常完了、09：取込失敗
         errorCode: E0001
         cmId: 123456789-c-12345678
-    UserResourceCreateItem:
-      properties:
-        filename:
-          type: string
-        recordedFile:
-          type: string
-          format: binary
-        title:
-          type: string
-          example: サンプル
-        description:
-          type: string
-          example: サンプル
     Error:
       type: object
       properties:
@@ -2716,6 +2722,18 @@ components:
       example:
         contentsId: サンプル01
         volume: 50
+    GenerateTtsItem_tts:
+      type: object
+      properties:
+        url:
+          type: string
+          example: https://xxxxx/tts-jp.mp3?AWSAccessKeyId=xxxxxxxx
+        lang:
+          type: string
+          example: ja | en | zh | ko
+      example:
+        lang: ja | en | zh | ko
+        url: https://xxxxx/tts-jp.mp3?AWSAccessKeyId=xxxxxxxx
     ExternalItems_unisCustomers:
       properties:
         unisCustomerCd:
@@ -2869,24 +2887,6 @@ components:
               uploadSystem:
                 type: string
                 example: '01: センター, 02: S''sence'
-    UserResourceCreateRequest:
-      description: ユーザー素材データ作成リクエストBody
-      content:
-        multipart/form-data:
-          schema:
-            type: object
-            properties:
-              filename:
-                type: string
-              recordedFile:
-                type: string
-                format: binary
-              title:
-                type: string
-                example: サンプル
-              description:
-                type: string
-                example: サンプル
     UserResourceUpdateRequest:
       description: ユーザー素材データ更新リクエストBody
       content:
@@ -2910,25 +2910,42 @@ components:
               uploadSystem:
                 type: string
                 example: '01: センター, 02: S''sence'
-    TtsRequest:
+    CreateTtsRequest:
+      description: TTS登録リクエストBody
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: サンプル
+                description:
+                  type: string
+                  example: サンプル
+                lang:
+                  type: string
+                  example: ja | en | zh | ko
+    GenerateTtsRequest:
       description: TTS作成リクエストBody
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              text:
-                type: string
-                example: こんにちは。
-              speaker:
-                type: string
-                example: risa
-              pitch:
-                type: string
-                example: "100"
-              speed:
-                type: string
-                example: "100"
+            type: array
+            items:
+              type: object
+              properties:
+                text:
+                  type: string
+                  example: こんにちは。
+                lang:
+                  type: string
+                  example: ja | en | zh | ko
+                speaker:
+                  type: string
+                  example: '0: 男性, 1: 女性'
     ExternalCompleteRequest:
       description: 外部連携完了リクエストBody
       content:
