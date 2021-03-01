@@ -44,7 +44,6 @@ import {
   reactive,
   toRefs,
 } from "vue";
-import * as UMesseApi from "umesseapi";
 import * as Common from "@/utils/Common";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
@@ -52,7 +51,6 @@ import Header from "@/components/organisms/Header.vue";
 import Button from "@/components/atoms/Button.vue";
 import SubMenu from "@/components/organisms/SubMenu.vue";
 import SubMenuItem from "@/components/molecules/SubMenuItem.vue";
-import { config } from "@/utils/UMesseApiConfiguration";
 import { useRoute } from "vue-router";
 import {
   convertDatestringToDateJp,
@@ -70,7 +68,6 @@ export default defineComponent({
   },
   setup() {
     const route = useRoute();
-    const api = new UMesseApi.ResourcesApi(config);
     const state = reactive({
       appInformations: computed(() => Common.getSettingAppInformations()),
       activeAppInformationCd: "01",

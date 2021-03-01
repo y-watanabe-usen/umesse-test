@@ -1,4 +1,3 @@
-import * as UMesseApi from "umesseapi";
 import {
   RecordingFile,
   useUploadTtsService,
@@ -6,9 +5,9 @@ import {
 import globalStore, { useGlobalStore } from "@/store";
 import { inject, InjectionKey, provide, reactive, toRefs } from "vue";
 import { TtsItem } from "umesseapi/models/tts-item";
-import { config } from "@/utils/UMesseApiConfiguration";
 import { GenerateUserTtsRequestItem } from "@/models/GenerateUserTtsRequestItem";
 import { CreateUserTtsRequestItem } from "@/models/CreateUserTtsRequestItem";
+import UMesseApi from "@/repository/UMesseApi";
 
 interface TtsData {
   url: string,
@@ -17,8 +16,7 @@ interface TtsData {
 
 // tts.
 export default function ttsStore() {
-  const umesseApi = new UMesseApi.TtsApi(config);
-  const uploadTtsService = useUploadTtsService(umesseApi);
+  const uploadTtsService = useUploadTtsService(UMesseApi.ttsApi);
   const { auth } = useGlobalStore();
   const state = reactive({
     ttsItems: [] as TtsItem[],
@@ -35,7 +33,7 @@ export default function ttsStore() {
 
   const fetchTtsData = async () => {
     try {
-      const response = await umesseApi.listUserTts(token());
+      const response = await UMesseApi.ttsApi.listUserTts(token());
       state.ttsItems = response.data;
       console.log(response.data)
     } catch (err) {
@@ -49,14 +47,14 @@ export default function ttsStore() {
   };
 
   const deleteUserTts = async (id: string) => {
-    await umesseApi.deleteUserTts(id, token());
+    await UMesseApi.ttsApi.deleteUserTts(id, token());
   };
   const updateUserTts = async (
     id: string,
     title: string,
     description: string
   ) => {
-    umesseApi.updateUserTts(token(), id, {
+    UMesseApi.ttsApi.updateUserTts(token(), id, {
       title: title,
       description: description,
     });
@@ -100,7 +98,7 @@ export default function ttsStore() {
         })
       })
       console.log(requestModel)
-      const response = await umesseApi.generateUserTts(
+      const response = await UMesseApi.ttsApi.generateUserTts(
         token(), requestModel)
       console.log(response.data.tts)
       state.ttsDatas = response.data.tts
@@ -127,7 +125,7 @@ export default function ttsStore() {
         lang: "ja",
         speaker: speaker,
       }]
-      const response = await umesseApi.generateUserTts(
+      const response = await UMesseApi.ttsApi.generateUserTts(
         token(), requestModel)
       console.log(response.data.tts)
       state.ttsDatas = response.data.tts
@@ -151,7 +149,7 @@ export default function ttsStore() {
         })
       })
 
-      const tmp: any = await umesseApi.createUserTts(token(), requestModel)
+      const tmp: any = await UMesseApi.ttsApi.createUserTts(token(), requestModel)
 
       // convert to TtsItem
       let response: TtsItem[] = []

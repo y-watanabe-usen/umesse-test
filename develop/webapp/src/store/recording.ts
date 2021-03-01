@@ -1,4 +1,3 @@
-import * as UMesseApi from "umesseapi";
 import {
   RecordingFile,
   useUploadRecordingService,
@@ -6,13 +5,11 @@ import {
 import { useGlobalStore } from "@/store";
 import { inject, InjectionKey, provide, reactive, toRefs } from "vue";
 import { RecordingItem } from "umesseapi/models/recording-item";
-import { config } from "@/utils/UMesseApiConfiguration";
+import UMesseApi from "@/repository/UMesseApi";
 
 // recording.
 export default function recordingStore() {
-  const umesseApi = new UMesseApi.RecordingApi(config);
-  const resourcesApi = new UMesseApi.ResourcesApi(config)
-  const uploadRecordingService = useUploadRecordingService(umesseApi);
+  const uploadRecordingService = useUploadRecordingService(UMesseApi.recordingApi);
   const { auth, cm } = useGlobalStore();
   const state = reactive({
     recordingItems: [] as RecordingItem[],
@@ -23,7 +20,7 @@ export default function recordingStore() {
 
   const fetchRecordingData = async () => {
     try {
-      const response = await umesseApi.listUserRecording(token());
+      const response = await UMesseApi.recordingApi.listUserRecording(token());
       state.recordingItems = response.data;
       console.log("response.data", response.data)
     } catch (err) {
@@ -41,14 +38,14 @@ export default function recordingStore() {
   };
 
   const deleteUserRecording = async (id: string) => {
-    await umesseApi.deleteUserRecording(id, token());
+    await UMesseApi.recordingApi.deleteUserRecording(id, token());
   };
   const updateUserRecording = async (
     id: string,
     title: string,
     description: string
   ) => {
-    umesseApi.updateUserRecording(token(), id, {
+    UMesseApi.recordingApi.updateUserRecording(token(), id, {
       title: title,
       description: description,
     });

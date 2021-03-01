@@ -27,7 +27,10 @@
                 @update:modelValue="sortNarration"
                 :options="
                   narrationSorts.map((narrationSort) => {
-                    return { title: narrationSort.name, value: narrationSort.cd };
+                    return {
+                      title: narrationSort.name,
+                      value: narrationSort.cd,
+                    };
                   })
                 "
               />
@@ -42,9 +45,19 @@
             </template>
             <template #line2>
               <p>
-                <span class="duration">{{ convertNumberToTime(narration.seconds) }}</span>
-                <span class="start">放送開始日{{ convertDatestringToDateJp(narration.timestamp) }}</span>
-                <span class="end">有効期限{{ convertDatestringToDateJp(narration.timestamp) }}</span>
+                <span class="duration">{{
+                  convertNumberToTime(narration.seconds)
+                }}</span>
+                <span class="start"
+                  >放送開始日{{
+                    convertDatestringToDateJp(narration.timestamp)
+                  }}</span
+                >
+                <span class="end"
+                  >有効期限{{
+                    convertDatestringToDateJp(narration.timestamp)
+                  }}</span
+                >
               </p>
             </template>
             <template #operations>
@@ -128,7 +141,6 @@ import {
 } from "vue";
 import AudioStore from "@/store/audio";
 import AudioPlayer from "@/utils/AudioPlayer";
-import * as UMesseApi from "umesseapi";
 import * as Common from "@/utils/Common";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
@@ -145,7 +157,6 @@ import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
 import PlayDialogContents from "@/components/molecules/PlayDialogContents.vue";
 import TextDialogContents from "@/components/molecules/TextDialogContents.vue";
-import { config } from "@/utils/UMesseApiConfiguration";
 import { NarrationItem } from "umesseapi/models";
 import { useGlobalStore } from "@/store";
 import router from "@/router";
@@ -154,6 +165,7 @@ import {
   convertDatestringToDateJp,
   convertNumberToTime,
 } from "@/utils/FormatDate";
+import UMesseApi from "@/repository/UMesseApi";
 
 export default defineComponent({
   components: {
@@ -177,7 +189,7 @@ export default defineComponent({
     const route = useRoute();
     const audioStore = AudioStore();
     const audioPlayer = AudioPlayer();
-    const api = new UMesseApi.ResourcesApi(config);
+    // const api = new UMesseApi.ResourcesApi(config);
     const { cm, base } = useGlobalStore();
     const state = reactive({
       narrationIndustries: Common.getNarrationIndustries(),
@@ -209,12 +221,18 @@ export default defineComponent({
     };
 
     const fetchNarration = async () => {
-      const response = await api.listNarration(state.activeNarrationIndustryCd);
+      const response = await UMesseApi.resourcesApi.listNarration(
+        state.activeNarrationIndustryCd
+      );
       state.narrations = response.data;
     };
 
     const sortNarration = async () => {
-      const response = await api.listNarration(state.activeNarrationIndustryCd, undefined, state.sort);
+      const response = await UMesseApi.resourcesApi.listNarration(
+        state.activeNarrationIndustryCd,
+        undefined,
+        state.sort
+      );
       state.narrations = response.data;
     };
 
@@ -231,7 +249,7 @@ export default defineComponent({
       if (base.cache.has(cacheKey)) {
         return <AudioBuffer>base.cache.get(cacheKey);
       }
-      const response = await api.getSignedUrl(contentsId, category);
+      const response = await UMesseApi.resourcesApi.getSignedUrl(contentsId, category);
       await audioStore.download(response.data.url);
       base.cache.set(cacheKey, <AudioBuffer>audioStore.audioBuffer);
       return <AudioBuffer>audioStore.audioBuffer;
@@ -258,11 +276,11 @@ export default defineComponent({
     const selectNarrationAndOpenDocumentModal = (narration: NarrationItem) => {
       selectNarration(narration);
       openDocumentModal();
-    }
+    };
     const selectNarrationAndOpenPlayModal = (narration: NarrationItem) => {
       selectNarration(narration);
       openPlayModal();
-    }
+    };
     const stopAndClosePlayModal = () => {
       stop();
       closePlayModal();

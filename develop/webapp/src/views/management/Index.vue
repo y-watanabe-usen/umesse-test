@@ -175,9 +175,7 @@
       @close="closeSavedModal"
     >
       <template #contents>
-        <MessageDialogContents>
-          保存が完了しました。
-        </MessageDialogContents>
+        <MessageDialogContents> 保存が完了しました。 </MessageDialogContents>
       </template>
       <template #footer>
         <ModalFooter :noBorder="true">
@@ -213,9 +211,7 @@
       @close="closeRemovedModal"
     >
       <template #contents>
-        <MessageDialogContents>
-          削除が完了しました。
-        </MessageDialogContents>
+        <MessageDialogContents> 削除が完了しました。 </MessageDialogContents>
       </template>
       <template #footer>
         <ModalFooter :noBorder="true">
@@ -249,9 +245,7 @@ import MessageDialogContents from "@/components/molecules/MessageDialogContents.
 import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
-import * as UMesseApi from "umesseapi";
 import { useUploadCmService } from "@/services/uploadCmService";
-import { config } from "@/utils/UMesseApiConfiguration";
 import { CmItem } from "umesseapi/models/cm-item";
 import { useGlobalStore } from "@/store";
 import {
@@ -261,6 +255,7 @@ import {
 import Constants from "@/utils/Constants";
 import { useRouter } from "vue-router";
 import SelectBox from "@/components/atoms/SelectBox.vue";
+import UMesseApi from "@/repository/UMesseApi";
 export default defineComponent({
   components: {
     BasicLayout,
@@ -287,9 +282,7 @@ export default defineComponent({
     const router = useRouter();
     const audioPlayer = AudioPlayer();
     const audioStore = AudioStore();
-    const cmApi = new UMesseApi.CmApi(config);
-    const uploadCmService = useUploadCmService(cmApi);
-    const resourcesapi = new UMesseApi.ResourcesApi(config);
+    const uploadCmService = useUploadCmService(UMesseApi.cmApi);
     const { auth, cm } = useGlobalStore();
     const state = reactive({
       activeSceneCd: "001",
@@ -321,7 +314,10 @@ export default defineComponent({
       // const xUnisCustomerCd = auth.getToken()!!;
       const xUnisCustomerCd = "123456789";
       // TODO: sceneを指定する必要がある？
-      const response = await cmApi.listUserCm(xUnisCustomerCd, state.sort);
+      const response = await UMesseApi.cmApi.listUserCm(
+        xUnisCustomerCd,
+        state.sort
+      );
       state.cms = response.data.filter((v) => {
         if (!v.scene) return false;
         return v.scene.sceneCd == state.activeSceneCd;
@@ -332,7 +328,7 @@ export default defineComponent({
     };
     const play = async (cm: CmItem) => {
       if (state.isPlaying) return;
-      const response = await resourcesapi.getSignedUrl(cm.cmId, "cm");
+      const response = await UMesseApi.resourcesApi.getSignedUrl(cm.cmId, "cm");
       console.log(response.data.url);
       await audioStore.download(response.data.url);
       audioPlayer.start(<AudioBuffer>audioStore.audioBuffer);
@@ -434,7 +430,7 @@ export default defineComponent({
     };
     const toEditCm = (cmItem: CmItem) => {
       console.log(cmItem);
-      cm.setCm(cmItem)
+      cm.setCm(cmItem);
       router.push({ name: "Cm" });
     };
     onMounted(async () => {

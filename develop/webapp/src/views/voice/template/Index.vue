@@ -69,10 +69,9 @@ import SubMenuItem from "@/components/molecules/SubMenuItem.vue";
 import List from "@/components/organisms/List.vue";
 import ListHeader from "@/components/molecules/ListHeader.vue";
 import ListItem from "@/components/molecules/ListItem.vue";
-import { config } from "@/utils/UMesseApiConfiguration";
-import * as UMesseApi from "umesseapi";
 import { TemplateItem } from "umesseapi/models";
 import * as Common from "@/utils/Common";
+import UMesseApi from "@/repository/UMesseApi";
 
 export default defineComponent({
   components: {
@@ -88,7 +87,6 @@ export default defineComponent({
     ListItem,
   },
   setup() {
-    const api = new UMesseApi.ResourcesApi(config);
     const state = reactive({
       templateIndustries: computed(() => Common.getBgmIndustries()),
       activeTemplateIndustryCd: "01",
@@ -102,7 +100,9 @@ export default defineComponent({
     };
 
     const fetchTemplate = async () => {
-      const response = await api.listTemplate(state.activeTemplateIndustryCd);
+      const response = await UMesseApi.resourcesApi.listTemplate(
+        state.activeTemplateIndustryCd
+      );
       state.templates = response.data;
     };
 
