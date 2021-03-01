@@ -4,6 +4,7 @@ import { CreateUserCmResponseItem } from "@/models/CreateUserCmResponseItem";
 import { UpdateUserCmRequestItem } from "@/models/UpdateUserCmRequestItem";
 import Constants from "@/utils/Constants";
 import * as UMesseApi from "umesseapi";
+import { CmItem } from "umesseapi/models/cm-item";
 
 export enum UPLOAD_CM_STATE {
   NONE,
@@ -21,6 +22,20 @@ export function useUploadCmService(api: UMesseApi.CmApi) {
 
   const getStatus = () => state.status;
 
+  const fetchCm = async (sceneCd: string, sort?: number) => {
+    const xUnisCustomerCd = "123456789"
+
+    const tmp = await api.listUserCm(
+      xUnisCustomerCd,
+      sort
+    );
+
+    const response = tmp.data.filter((v) => {
+      if (!v.scene) return false;
+      return v.scene.sceneCd == sceneCd;
+    });
+    return response
+  }
   const create = async (
     authToken: string,
     narrationContentsIds: string[] | null,
@@ -154,6 +169,6 @@ export function useUploadCmService(api: UMesseApi.CmApi) {
   };
 
   return {
-    create, update, remove, getStatus,
+    fetchCm, create, update, remove, getStatus,
   };
 }

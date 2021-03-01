@@ -124,7 +124,7 @@ export function useResourcesService(
     });
   }
 
-  const getAudioBuffer = async (contentsId: string, category: string) => {
+  const getAudioBufferByContentsId = async (contentsId: string, category: string) => {
     const cacheKey = `${category}/${contentsId}`;
     if (UMesseCache.audioCache.has(cacheKey)) {
       return <AudioBuffer>UMesseCache.audioCache.get(cacheKey);
@@ -133,8 +133,20 @@ export function useResourcesService(
       contentsId,
       category
     );
-    await audioStore.download(response.data.url);
-    UMesseCache.audioCache.set(cacheKey, <AudioBuffer>audioStore.audioBuffer);
+    return await getAudioBuffer(response.data.url, cacheKey);
+  }
+
+  const getAudioBufferByUrl = async (url: string) => {
+    const cacheKey = url;
+    if (UMesseCache.audioCache.has(cacheKey)) {
+      return <AudioBuffer>UMesseCache.audioCache.get(cacheKey);
+    }
+    return await getAudioBuffer(url, cacheKey);
+  }
+
+  const getAudioBuffer = async (url: string, cacheKey: string) => {
+    await audioStore.download(url);
+    UMesseCache.audioCache.set(cacheKey, audioStore.audioBuffer);
     return <AudioBuffer>audioStore.audioBuffer;
   }
 
@@ -144,6 +156,7 @@ export function useResourcesService(
     fetchBgm,
     fetchTemplate,
     fetchFree,
-    getAudioBuffer,
+    getAudioBufferByContentsId,
+    getAudioBufferByUrl,
   };
 }

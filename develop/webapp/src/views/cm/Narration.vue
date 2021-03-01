@@ -24,7 +24,7 @@
             <ListHeader>
               <Sort
                 v-model="sort"
-                @update:modelValue="sortNarration"
+                @update:modelValue="fetchNarration"
                 :options="
                   narrationSorts.map((narrationSort) => {
                     return {
@@ -221,13 +221,6 @@ export default defineComponent({
 
     const fetchNarration = async () => {
       const response = await UMesseService.resourcesService.fetchNarration(
-        state.activeNarrationIndustryCd
-      );
-      state.narrations = response;
-    };
-
-    const sortNarration = async () => {
-      const response = await UMesseService.resourcesService.fetchNarration(
         state.activeNarrationIndustryCd,
         state.sort
       );
@@ -235,7 +228,7 @@ export default defineComponent({
     };
 
     const play = async (narration: NarrationItem) => {
-      const audioBuffer = await UMesseService.resourcesService.getAudioBuffer(
+      const audioBuffer = await UMesseService.resourcesService.getAudioBufferByContentsId(
         narration.contentsId,
         narration.category
       );
@@ -293,7 +286,6 @@ export default defineComponent({
       selectNarrationAndOpenDocumentModal,
       selectNarrationAndOpenPlayModal,
       stopAndClosePlayModal,
-      sortNarration,
     };
   },
 });

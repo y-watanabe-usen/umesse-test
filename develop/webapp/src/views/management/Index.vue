@@ -254,7 +254,6 @@ import {
 import Constants from "@/utils/Constants";
 import { useRouter } from "vue-router";
 import SelectBox from "@/components/atoms/SelectBox.vue";
-import UMesseApi from "@/repository/UMesseApi";
 import UMesseService from "@/services/UMesseService";
 export default defineComponent({
   components: {
@@ -309,28 +308,22 @@ export default defineComponent({
       fetchCm();
     };
     const fetchCm = async () => {
-      // TODO: auth.getToken()のトークンだとデータが空なので固定値をセットする
-      // const xUnisCustomerCd = auth.getToken()!!;
-      const xUnisCustomerCd = "123456789";
-      // TODO: sceneを指定する必要がある？
-      const response = await UMesseApi.cmApi.listUserCm(
-        xUnisCustomerCd,
+      const response = await UMesseService.uploadCmService.fetchCm(
+        state.activeSceneCd,
         state.sort
       );
-      state.cms = response.data.filter((v) => {
-        if (!v.scene) return false;
-        return v.scene.sceneCd == state.activeSceneCd;
-      });
+      state.cms = response;
     };
     const selectCm = (cm: CmItem) => {
       state.selectedCm = cm;
     };
     const play = async (cm: CmItem) => {
       if (state.isPlaying) return;
-      const response = await UMesseApi.resourcesApi.getSignedUrl(cm.cmId, "cm");
-      console.log(response.data.url);
-      await audioStore.download(response.data.url);
-      audioPlayer.start(<AudioBuffer>audioStore.audioBuffer);
+      const audioBuffer = await UMesseService.resourcesService.getAudioBufferByContentsId(
+        cm.cmId,
+        Constants.CATEGORY.CM
+      );
+      audioPlayer.start(audioBuffer);
     };
     const stop = () => {
       if (state.isPlaying) audioPlayer.stop();
