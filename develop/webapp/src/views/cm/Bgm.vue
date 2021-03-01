@@ -24,7 +24,7 @@
             <ListHeader>
               <Sort
                 v-model="sort"
-                @update:modelValue="sortBgm"
+                @update:modelValue="fetchBgm"
                 :options="
                   bgmSorts.map((bgmSort) => {
                     return { title: bgmSort.name, value: bgmSort.cd };
@@ -142,6 +142,7 @@ import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
 import UMesseApi from "@/repository/UMesseApi";
+import UMesseService from "@/services/UMesseService";
 
 export default defineComponent({
   components: {
@@ -168,7 +169,7 @@ export default defineComponent({
     const router = useRouter();
     const audioStore = AudioStore();
     const audioPlayer = AudioPlayer();
-    const { cm, base } = useGlobalStore();
+    const { cm } = useGlobalStore();
 
     const state = reactive({
       activeBgmIndustryCd: "01",
@@ -201,37 +202,19 @@ export default defineComponent({
     };
 
     const fetchBgm = async () => {
-      const response = await UMesseApi.resourcesApi.listBgm(
-        state.activeBgmIndustryCd
-      );
-      state.bgms = response.data;
-    };
-
-    const sortBgm = async () => {
-      const response = await UMesseApi.resourcesApi.listBgm(
+      const response = await UMesseService.resourcesService.fetchBgm(
         state.activeBgmIndustryCd,
         state.sort
       );
-      state.bgms = response.data;
+      state.bgms = response;
     };
 
     const play = async (bgm: BgmItem) => {
-      const audioBuffer = await getAudioBuffer(bgm.contentsId, bgm.category);
-      audioPlayer.start(audioBuffer);
-    };
-
-    const getAudioBuffer = async (contentsId: string, category: string) => {
-      const cacheKey = `${category}/${contentsId}`;
-      if (base.cache.has(cacheKey)) {
-        return <AudioBuffer>base.cache.get(cacheKey);
-      }
-      const response = await UMesseApi.resourcesApi.getSignedUrl(
-        contentsId,
-        category
+      const audioBuffer = await UMesseService.resourcesService.getAudioBuffer(
+        bgm.contentsId,
+        bgm.category
       );
-      await audioStore.download(response.data.url);
-      base.cache.set(cacheKey, <AudioBuffer>audioStore.audioBuffer);
-      return <AudioBuffer>audioStore.audioBuffer;
+      audioPlayer.start(audioBuffer);
     };
 
     const stop = () => {
@@ -287,7 +270,6 @@ export default defineComponent({
       closeSavedModal,
       selectBgmAndOpenPlayModal,
       stopAndClosePlayModal,
-      sortBgm,
     };
   },
 });

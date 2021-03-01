@@ -30,13 +30,12 @@ export default defineComponent({
   },
   name: "Home",
   setup() {
-    const { auth, base } = useGlobalStore();
+    const { auth } = useGlobalStore();
     onMounted(() => {
       auth.requestAuth();
     });
     return {
       ...auth,
-      ...base,
     };
   },
 });

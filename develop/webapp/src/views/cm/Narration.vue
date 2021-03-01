@@ -165,7 +165,7 @@ import {
   convertDatestringToDateJp,
   convertNumberToTime,
 } from "@/utils/FormatDate";
-import UMesseApi from "@/repository/UMesseApi";
+import UMesseService from "@/services/UMesseService";
 
 export default defineComponent({
   components: {
@@ -189,8 +189,7 @@ export default defineComponent({
     const route = useRoute();
     const audioStore = AudioStore();
     const audioPlayer = AudioPlayer();
-    // const api = new UMesseApi.ResourcesApi(config);
-    const { cm, base } = useGlobalStore();
+    const { cm } = useGlobalStore();
     const state = reactive({
       narrationIndustries: Common.getNarrationIndustries(),
       sort: 1,
@@ -221,38 +220,26 @@ export default defineComponent({
     };
 
     const fetchNarration = async () => {
-      const response = await UMesseApi.resourcesApi.listNarration(
+      const response = await UMesseService.resourcesService.fetchNarration(
         state.activeNarrationIndustryCd
       );
-      state.narrations = response.data;
+      state.narrations = response;
     };
 
     const sortNarration = async () => {
-      const response = await UMesseApi.resourcesApi.listNarration(
+      const response = await UMesseService.resourcesService.fetchNarration(
         state.activeNarrationIndustryCd,
-        undefined,
         state.sort
       );
-      state.narrations = response.data;
+      state.narrations = response;
     };
 
     const play = async (narration: NarrationItem) => {
-      const audioBuffer = await getAudioBuffer(
+      const audioBuffer = await UMesseService.resourcesService.getAudioBuffer(
         narration.contentsId,
         narration.category
       );
       audioPlayer.start(audioBuffer);
-    };
-
-    const getAudioBuffer = async (contentsId: string, category: string) => {
-      const cacheKey = `${category}/${contentsId}`;
-      if (base.cache.has(cacheKey)) {
-        return <AudioBuffer>base.cache.get(cacheKey);
-      }
-      const response = await UMesseApi.resourcesApi.getSignedUrl(contentsId, category);
-      await audioStore.download(response.data.url);
-      base.cache.set(cacheKey, <AudioBuffer>audioStore.audioBuffer);
-      return <AudioBuffer>audioStore.audioBuffer;
     };
 
     const stop = () => {

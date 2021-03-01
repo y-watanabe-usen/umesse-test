@@ -1,24 +1,9 @@
 <template>
-  <div :class="isDarkTheme ? 'dark' : ''">
+  <div>
     <div class="bg-umesse-home"></div>
     <router-view />
   </div>
 </template>
-
-<script lang="ts">
-import { useGlobalStore } from "@/store";
-import { computed, defineComponent } from "vue";
-
-export default defineComponent({
-  setup() {
-    const { base } = useGlobalStore();
-    const isDarkTheme = computed(() => base.isDarkTheme);
-    return {
-      isDarkTheme,
-    };
-  },
-});
-</script>
 
 <style>
 * {

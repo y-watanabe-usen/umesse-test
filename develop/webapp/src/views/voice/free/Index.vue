@@ -123,6 +123,7 @@ import TextArea from "@/components/atoms/TextArea.vue";
 import { useGlobalStore } from "@/store";
 import { TtsItem } from "umesseapi/models";
 import Constants from "@/utils/Constants";
+import UMesseCache from "@/repository/UMesseCache";
 export default defineComponent({
   components: {
     BasicLayout,
@@ -144,7 +145,7 @@ export default defineComponent({
     const audioPlayer = AudioPlayer();
     const ttsSpeakers = Constants.TTS_GENDERS;
     const lang = "ja";
-    const { cm, base } = useGlobalStore();
+    const { cm } = useGlobalStore();
     const state = reactive({
       uploadTtsState: computed(() => ttsStore.getStatus()),
       isGenerating: computed(() => ttsStore.isGenerating()),
@@ -160,9 +161,9 @@ export default defineComponent({
     });
     // TODO: キャッシュでいいのか
     const cacheKey = "voice/free/selectTemplate";
-    if (base.cache.has(cacheKey)) {
-      state.text = <string>base.cache.get(cacheKey);
-      base.cache.del(cacheKey);
+    if (UMesseCache.freeCache.has(cacheKey)) {
+      state.text = <string>UMesseCache.freeCache.get(cacheKey);
+      UMesseCache.freeCache.del(cacheKey);
     } else {
       state.text = "おはよう";
     }

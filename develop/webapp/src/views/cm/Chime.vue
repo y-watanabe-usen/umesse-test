@@ -12,7 +12,7 @@
             <ListHeader>
               <Sort
                 v-model="sort"
-                @update:modelValue="sortChime"
+                @update:modelValue="fetchChime"
                 :options="
                   chimeSorts.map((chimeSort) => {
                     return { title: chimeSort.name, value: chimeSort.cd };
@@ -132,7 +132,7 @@ import MessageDialogContents from "@/components/molecules/MessageDialogContents.
 import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
-import UMesseApi from "@/repository/UMesseApi";
+import UMesseService from "@/services/UMesseService";
 
 export default defineComponent({
   components: {
@@ -158,7 +158,7 @@ export default defineComponent({
     const route = useRoute();
     const audioStore = AudioStore();
     const audioPlayer = AudioPlayer();
-    const { cm, base } = useGlobalStore();
+    const { cm } = useGlobalStore();
 
     const state = reactive({
       title: route.params.div == "open" ? "Openチャイム" : "Endチャイム",
@@ -195,31 +195,19 @@ export default defineComponent({
       state.selectedChime = chime;
     };
 
-    const sortChime = async () => {
-      const response = await UMesseApi.resourcesApi.listChime(state.sort);
-      state.chimes = response.data;
+    const fetchChime = async () => {
+      const response = await UMesseService.resourcesService.fetchChime(
+        state.sort
+      );
+      state.chimes = response;
     };
 
     const play = async (chime: ChimeItem) => {
-      const audioBuffer = await getAudioBuffer(
+      const audioBuffer = await UMesseService.resourcesService.getAudioBuffer(
         chime.contentsId,
         chime.category
       );
       audioPlayer.start(audioBuffer);
-    };
-
-    const getAudioBuffer = async (contentsId: string, category: string) => {
-      const cacheKey = `${category}/${contentsId}`;
-      if (base.cache.has(cacheKey)) {
-        return <AudioBuffer>base.cache.get(cacheKey);
-      }
-      const response = await UMesseApi.resourcesApi.getSignedUrl(
-        contentsId,
-        category
-      );
-      await audioStore.download(response.data.url);
-      base.cache.set(cacheKey, <AudioBuffer>audioStore.audioBuffer);
-      return <AudioBuffer>audioStore.audioBuffer;
     };
 
     const stop = () => {
@@ -257,8 +245,7 @@ export default defineComponent({
     };
 
     onMounted(async () => {
-      const response = await UMesseApi.resourcesApi.listChime();
-      state.chimes = response.data;
+      fetchChime();
     });
     return {
       ...toRefs(state),
@@ -274,7 +261,7 @@ export default defineComponent({
       closeSavedModal,
       selectChimeAndOpenPlayModal,
       stopAndClosePlayModal,
-      sortChime,
+      fetchChime,
     };
   },
 });
