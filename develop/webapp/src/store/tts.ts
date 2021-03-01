@@ -3,26 +3,34 @@ import {
   RecordingFile,
   useUploadTtsService,
 } from "@/services/uploadTtsService";
-import { useGlobalStore } from "@/store";
+import globalStore, { useGlobalStore } from "@/store";
 import { inject, InjectionKey, provide, reactive, toRefs } from "vue";
 import { TtsItem } from "umesseapi/models/tts-item";
 import { config } from "@/utils/UMesseApiConfiguration";
+import { GenerateUserTtsRequestItem } from "@/models/GenerateUserTtsRequestItem";
+import { CreateUserTtsRequestItem } from "@/models/CreateUserTtsRequestItem";
+
+interface TtsData {
+  url: string,
+  lang: string,
+}
 
 // tts.
 export default function ttsStore() {
   const umesseApi = new UMesseApi.TtsApi(config);
-  const resourcesApi = new UMesseApi.ResourcesApi(config)
   const uploadTtsService = useUploadTtsService(umesseApi);
   const { auth } = useGlobalStore();
   const state = reactive({
     ttsItems: [] as TtsItem[],
-    ttsData: new Uint8Array(),
+    ttsDatas: [] as TtsData[],
+    generating: false,
     creating: false,
     error: undefined as string | undefined,
   });
 
   const token = () => auth.getToken() || "123456789";
 
+  const isGenerating = () => state.generating
   const isCreating = () => state.creating
 
   const fetchTtsData = async () => {
@@ -54,50 +62,109 @@ export default function ttsStore() {
     });
   };
 
-  const uploadTtsData = async (recordingFile: RecordingFile) => {
-    const response = await uploadTtsService.upload(token(), recordingFile);
-    fetchTtsData();
-    return response;
-  };
+  const hasTtsData = () => (state.ttsDatas.length !== 0);
+  const resetTtsData = () => state.ttsDatas = [];
 
-  const hasTtsData = () => (state.ttsData.length !== 0);
-  const resetTtsData = () => state.ttsData = new Uint8Array();
-
-  const getTtsData = async () => {
+  const getTtsData = async (lang: string) => {
     if (!hasTtsData()) {
       return undefined;
     }
-    const blob = new Blob([state.ttsData]);
-    const context = new window.AudioContext();
-
-    return new Promise<AudioBuffer>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = (event: Event) => {
-        context.decodeAudioData(reader.result as ArrayBuffer, (buffer) => {
-          resolve(buffer);
-        });
-      };
-      reader.onerror = (event: Event) => {
-        reject(event);
-      };
-      reader.readAsArrayBuffer(blob);
-    });
+    const data = state.ttsDatas.find((element) => element.lang === lang);
+    return data;
   };
 
-  const createTtsData = async (text: String, speaker: String) => {
+  const generateTtsDataFromTemplate = async (
+    text: { [key: string]: string },
+    storeName: string,
+    endTime: string,
+    speaker: string,
+    langs: string[]
+  ) => {
     if (hasTtsData()) {
       resetTtsData();
     }
+
+    try {
+      state.generating = true
+
+      // TODO: lang毎の変換処理
+
+      let requestModel: GenerateUserTtsRequestItem[] = []
+      langs.forEach((v) => {
+        requestModel.push({
+          text: text[v]
+            .replace("{storeName}", storeName)
+            .replace("{endTime}", endTime),
+          lang: v,
+          speaker: speaker,
+        })
+      })
+      console.log(requestModel)
+      const response = await umesseApi.generateUserTts(
+        token(), requestModel)
+      console.log(response.data.tts)
+      state.ttsDatas = response.data.tts
+    } catch (err) {
+      console.log(err);
+      state.error = err.message;
+    } finally {
+      state.generating = false
+    }
+  };
+
+  const generateTtsDataFromFree = async (
+    text: string,
+    speaker: string,
+  ) => {
+    if (hasTtsData()) {
+      resetTtsData();
+    }
+
+    try {
+      state.generating = true
+      let requestModel: GenerateUserTtsRequestItem[] = [{
+        text: text,
+        lang: "ja",
+        speaker: speaker,
+      }]
+      const response = await umesseApi.generateUserTts(
+        token(), requestModel)
+      console.log(response.data.tts)
+      state.ttsDatas = response.data.tts
+    } catch (err) {
+      console.log(err);
+      state.error = err.message;
+    } finally {
+      state.generating = false
+    }
+  };
+
+  const createTtsData = async (title: string, description: string, langs: string[]) => {
     try {
       state.creating = true
-      const response = await resourcesApi.createTts({
-        text: text,
-        speaker: speaker,
-        pitch: 100,
-        speed: 100,
+      let requestModel: CreateUserTtsRequestItem[] = []
+      langs.forEach((v) => {
+        requestModel.push({
+          title: title,
+          description: description,
+          lang: v,
+        })
+      })
+
+      const tmp: any = await umesseApi.createUserTts(token(), requestModel)
+
+      // convert to TtsItem
+      let response: TtsItem[] = []
+      tmp.data.tts.forEach((element: any) => {
+        response.push({
+          ttsId: element.id,
+          title: element.title,
+          description: element.description,
+          startDate: element.startDate,
+          timestamp: element.timestamp,
+        })
       });
-      const binary = atob(response.data.body);
-      state.ttsData = Uint8Array.from(binary, c => c.charCodeAt(0));
+      return response;
     } catch (err) {
       console.log(err);
       state.error = err.message;
@@ -106,24 +173,18 @@ export default function ttsStore() {
     }
   };
 
-  const getUploadTtsData = async () => {
-    if (!hasTtsData()) {
-      return undefined;
-    }
-    return new Blob([state.ttsData], { type: 'audio/mpeg' });
-  }
-
   return {
     ...toRefs(state),
-    uploadTtsData,
     fetchTtsData,
     getUserTts,
     deleteUserTts,
     updateUserTts,
     getTtsData,
-    getUploadTtsData,
     createTtsData,
+    generateTtsDataFromTemplate,
+    generateTtsDataFromFree,
     resetTtsData,
+    isGenerating,
     isCreating,
     ...uploadTtsService,
   };

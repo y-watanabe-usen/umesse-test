@@ -32,19 +32,19 @@ export function useUploadTtsService(api: UMesseApi.TtsApi) {
 
       var fr = new FileReader();
 
-      fr.onload = function () {
-        // TODO: AWSでTTS作るなら音源ファイルは送らなくていい？
-        api
-          .createUserTts(authToken, file.title!, fr.result as string, file.title, file.description)
-          .then((value) => {
-            state.status = UPLOAD_TTS_STATE.UPLOADED
-            console.log("createUserTts", value.data)
-            resolve(<TtsItem>value.data)
-          })
-          .catch((error) =>
-            reject((state.status = UPLOAD_TTS_STATE.ERROR))
-          );
-      };
+      // fr.onload = function () {
+      //   // TODO: AWSでTTS作るなら音源ファイルは送らなくていい？
+      //   api
+      //     .createUserTts(authToken, file.title!, fr.result as string, file.title, file.description)
+      //     .then((value) => {
+      //       state.status = UPLOAD_TTS_STATE.UPLOADED
+      //       console.log("createUserTts", value.data)
+      //       resolve(<TtsItem>value.data)
+      //     })
+      //     .catch((error) =>
+      //       reject((state.status = UPLOAD_TTS_STATE.ERROR))
+      //     );
+      // };
       fr.readAsBinaryString(file.blob!!);
     });
   };

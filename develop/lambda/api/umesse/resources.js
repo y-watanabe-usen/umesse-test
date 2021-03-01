@@ -115,12 +115,19 @@ exports.getSignedUrl = async (id, category) => {
   switch (category) {
     case constants.resourceCategory.CM:
       bucket = constants.s3Bucket().users;
-      path = `users/${id.split("-")[0]}/${category}/${id}.aac`;
+      path = `users/${id.split("-")[0]}/${category}/${id}.mp3`;
       break;
     case constants.resourceCategory.RECORDING:
-    case constants.resourceCategory.TTS:
       bucket = constants.s3Bucket().users;
       path = `users/${id.split("-")[0]}/${category}/${id}.mp3`;
+      break;
+    case constants.resourceCategory.TTS:
+      bucket = constants.s3Bucket().users;
+      if (id.split("-").length == 3) {
+        path = `users/${id.split("-")[0]}/${category}/${id}.mp3`;
+      } else {
+        path = `users/${id.split("-")[0]}/${category}/${id.split("-")[1]}.mp3`;
+      }
       break;
     case constants.resourceCategory.BGM:
     case constants.resourceCategory.CHIME:
@@ -265,8 +272,8 @@ exports.createTtsResource = async (unisCustomerCd, body) => {
     // DynamoDBのデータ更新
     const data = {
       id: id,
-      title: body["title"],
-      description: body["description"],
+      title: `${tts.title}(${tts.lang})`,
+      description: tts.description,
       startDate: timestamp(),
       timestamp: timestamp(),
     };
@@ -344,8 +351,9 @@ exports.generateTtsResource = async (unisCustomerCd, body) => {
     }
     if (!res) throw new InternalServerError("put failed");
 
-    const url = await this.getSignedUrl(id, constants.resourceCategory.TTS);
-    json.push({ url: url, lang: data.lang });
+    const signedUrlId = `${unisCustomerCd}-${data.lang}`;
+    const url = await this.getSignedUrl(signedUrlId, constants.resourceCategory.TTS);
+    json.push({ url: url.url, lang: data.lang });
   }
 
   return { tts: json };

@@ -30,6 +30,11 @@ export type AppInformation = {
   name: string,
 }
 
+export type TtsGenders = {
+  cd: string,
+  name: string,
+}
+
 export default class Constants {
   public static readonly APP_NAME = "U MESSE"
 
@@ -145,4 +150,11 @@ export default class Constants {
     NARRATION: "narration",
     TEMPLATE: "template",
   } as const
+
+  public static readonly TTS_LANGS = ["ja", "en", "zh", "ko"]
+
+  public static readonly TTS_GENDERS: TtsGenders[] = [
+    { cd: "0", name: "男性" },
+    { cd: "1", name: "女性" },
+  ]
 }

@@ -17,8 +17,12 @@
                 <div class="col-2 m-auto">話者</div>
                 <div class="col-10 m-auto">
                   <select class="form-control w-25" v-model="speaker">
-                    <option v-for="speaker in speakers" :key="speaker">
-                      {{ speaker }}
+                    <option
+                      v-for="ttsSpeaker in ttsSpeakers"
+                      :key="ttsSpeaker.cd"
+                      :value="ttsSpeaker.cd"
+                    >
+                      {{ ttsSpeaker.name }}
                     </option>
                   </select>
                 </div>
@@ -28,55 +32,23 @@
               <div class="row" style="height: 100px">
                 <div class="col-2 m-auto">言語設定</div>
                 <div class="col-10 m-auto">
-                  <div class="form-check form-check-inline">
+                  <div
+                    class="form-check form-check-inline"
+                    v-for="(ttsLang, i) in ttsLangs"
+                    :key="i"
+                  >
                     <input
                       class="form-check-input"
                       type="checkbox"
-                      id="inlineCheckbox1"
-                      value="option1"
-                      style="position: fixed"
+                      :id="'inlineCheckbox' + `${i + 1}`"
+                      :value="ttsLang"
+                      v-model="langs"
                     />
-                    <label class="form-check-label" for="inlineCheckbox1"
-                      ><img class="country m-1" src="../../../assets/japan.svg"
-                    /></label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      id="inlineCheckbox2"
-                      value="option2"
-                      style="position: fixed"
-                    />
-                    <label class="form-check-label" for="inlineCheckbox2"
-                      ><img
-                        class="country m-1"
-                        src="../../../assets/america.svg"
-                    /></label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      id="inlineCheckbox3"
-                      value="option3"
-                      style="position: fixed"
-                    />
-                    <label class="form-check-label" for="inlineCheckbox3"
-                      ><img class="country m-1" src="../../../assets/china.svg"
-                    /></label>
-                  </div>
-                  <div class="form-check form-check-inline">
-                    <input
-                      class="form-check-input"
-                      type="checkbox"
-                      id="inlineCheckbox4"
-                      value="option4"
-                      style="position: fixed"
-                    />
-                    <label class="form-check-label" for="inlineCheckbox4"
-                      ><img class="country m-1" src="../../../assets/korea.svg"
-                    /></label>
+                    <label
+                      class="form-check-label"
+                      :for="'inlineCheckbox' + `${i + 1}`"
+                      >{{ ttsLang }}</label
+                    >
                   </div>
                 </div>
               </div>
@@ -129,7 +101,7 @@
       <template #contents>
         <FormGroup title="試聴" class="play-form-group">
           <PlayDialogContents
-            :isLoading="isCreating"
+            :isLoading="isGenerating"
             :isPlaying="isPlaying"
             :playbackTime="playbackTime"
             :duration="duration"
@@ -137,20 +109,29 @@
             @stop="stop"
           />
         </FormGroup>
+        <FormGroup title="">
+          <select class="form-control w-25" v-model="playLang">
+            <option v-for="ttsLang in ttsLangs" :key="ttsLang" :value="ttsLang">
+              {{ ttsLang }}
+            </option>
+          </select>
+        </FormGroup>
         <FormGroup title="タイトル" :required="true">
-          <TextBox v-model="file.title" />
+          <TextBox v-model="title" />
         </FormGroup>
         <FormGroup title="説明">
-          <TextArea v-model="file.description" />
+          <TextArea v-model="description" />
         </FormGroup>
       </template>
       <template #footer>
         <ModalFooter>
-          <Button type="secondary" @click="stopAndCloseModal">キャンセル</Button>
+          <Button type="secondary" @click="stopAndCloseModal"
+            >キャンセル</Button
+          >
           <Button
             type="primary"
-            :isDisabled="file.title === undefined || file.title === ''"
-            @click="uploadTtsFile"
+            :isDisabled="title === undefined || title === ''"
+            @click="createTts"
             >保存して作成を続ける</Button
           >
         </ModalFooter>
@@ -163,6 +144,7 @@
 import { computed, defineComponent, reactive, toRefs } from "vue";
 import { useRouter } from "vue-router";
 import AudioPlayer from "@/utils/AudioPlayer";
+import AudioStore from "@/store/audio";
 import { RecordingFile, UPLOAD_TTS_STATE } from "@/services/uploadTtsService";
 import provideTtsStore from "@/store/tts";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
@@ -178,6 +160,7 @@ import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
 import { useGlobalStore } from "@/store";
 import { TtsItem } from "umesseapi/models";
+import Constants from "@/utils/Constants";
 
 export default defineComponent({
   components: {
@@ -196,13 +179,26 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const ttsStore = provideTtsStore(); //FIXME: provide name.
+    const audioStore = AudioStore();
     const audioPlayer = AudioPlayer();
-    const speakers = ["risa", "takeru"];
+    const ttsSpeakers = Constants.TTS_GENDERS;
+    const ttsLangs = Constants.TTS_LANGS;
+    // TODO: 本当はAPIから取得
+    const sourceText = {
+      ja:
+        "本日は{storeName}へご来店いただきまして、誠にありがとうございます。お客様にご連絡申し上げます。当店の営業時間は、{endTime}までとなっております。本日はご利用、ありがとうございます。どうぞ、ごゆっくりお過ごしくださいませ。",
+      en:
+        "Thank you for visiting {storeName} today. We will contact you. Our store is open until {endTime}. Thank you for using today. Please spend your time slowly.",
+      zh:
+        "感谢您今天访问{storeName}。 我们将与您联系。 我们的商店营业至{endTime}。 感谢您今天使用。 请慢慢来。",
+      ko:
+        "오늘은 {storeName}에 내점 해 주셔서 대단히 감사합니다. 고객에게 알려드립니다. 당점의 영업 시간은 {endTime}까지로되어 있습니다. 오늘은 이용해 주셔서 감사합니다. 자, 천천히 보내시기 바랍니다.",
+    };
     const { cm, base } = useGlobalStore();
 
     const state = reactive({
-      file: <RecordingFile>{},
       isPlaying: computed(() => audioPlayer.isPlaying()),
+      isGenerating: computed(() => ttsStore.isGenerating()),
       isCreating: computed(() => ttsStore.isCreating()),
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       duration: computed(() => audioPlayer.getDuration()),
@@ -210,46 +206,57 @@ export default defineComponent({
       endTime: "21:00",
       isModalAppear: false,
       text: computed(() => {
-        const source =
-          "本日は{storeName}へご来店いただきまして、誠にありがとうございます。お客様にご連絡申し上げます。当店の営業時間は、{endTime}までとなっております。本日はご利用、ありがとうございます。どうぞ、ごゆっくりお過ごしくださいませ。";
+        const source = sourceText.ja;
         const text: string = source
           .replace("{storeName}", state.storeName)
           .replace("{endTime}", state.endTime);
         return text;
       }),
-      speaker: "risa",
+      speaker: "1", // 女性
+      langs: ["ja"],
+      playLang: "ja",
+      title: "",
+      description: "",
     });
-
     const play = async () => {
       console.log("play");
-      const audioBuffer = await ttsStore.getTtsData();
-      audioPlayer.start(audioBuffer!!);
+      const data = await ttsStore.getTtsData(state.playLang);
+      await audioStore.download(<string>data?.url);
+      audioPlayer.start(audioStore.audioBuffer!!);
     };
 
     const stop = () => {
       if (state.isPlaying) audioPlayer.stop();
     };
 
-    const createTtsData = async (text: string, speaker: string) => {
-      console.log("create");
-      await ttsStore.createTtsData(text, speaker);
-    };
-
-    const uploadTtsFile = async () => {
-      /// check state.file.
-      state.file.blob = await ttsStore.getUploadTtsData();
-      const uploadedData: any = await ttsStore.uploadTtsData(state.file);
-      // TODO: 本来はttsidが返ってくるはずだけどidで返ってきてる
-      uploadedData.ttsId = uploadedData.id;
-      console.log("uploadedData", uploadedData);
-      cm.setNarration(<TtsItem>uploadedData);
+    const createTts = async () => {
+      const response = await ttsStore.createTtsData(
+        state.title,
+        state.description,
+        state.langs
+      );
+      response?.forEach((element) => {
+        cm.setNarration(element);
+      });
       router.push({ name: "Cm" });
     };
 
-    const openModal = () => {
+    const openModal = async () => {
       state.isModalAppear = true;
-      console.log("openModal");
-      createTtsData(state.text, state.speaker);
+      console.log(
+        "openModal",
+        state.storeName,
+        state.endTime,
+        state.speaker,
+        state.langs
+      );
+      await ttsStore.generateTtsDataFromTemplate(
+        sourceText,
+        state.storeName,
+        state.endTime,
+        state.speaker,
+        state.langs
+      );
     };
 
     const closeModal = () => {
@@ -263,11 +270,11 @@ export default defineComponent({
 
     return {
       ...toRefs(state),
-      speakers,
+      ttsSpeakers,
+      ttsLangs,
       play,
       stop,
-      createTtsData,
-      uploadTtsFile,
+      createTts,
       openModal,
       closeModal,
       stopAndCloseModal,
@@ -304,5 +311,8 @@ export default defineComponent({
   margin: 20px;
   font-size: 20px;
   line-height: 2em;
+}
+input[type="checkbox"] {
+  -webkit-appearance: checkbox;
 }
 </style>

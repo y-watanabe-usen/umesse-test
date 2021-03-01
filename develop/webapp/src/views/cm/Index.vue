@@ -554,6 +554,7 @@ export default defineComponent({
     const playNarration = async (index: number) => {
       const narration = cm.narration(index);
       if (!narration) return;
+      console.log(narration)
       stop();
       let id: string = "";
       let category: string = "";
@@ -567,6 +568,7 @@ export default defineComponent({
         id = narration.ttsId;
         category = Constants.CATEGORY.TTS;
       }
+      console.log(id, category)
       const audioBuffer = await getAudioBuffer(id, category);
       audioPlayer.start(audioBuffer);
     };

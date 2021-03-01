@@ -17,8 +17,12 @@
                 <div class="col-2 m-auto">話者</div>
                 <div class="col-10 m-auto">
                   <select class="form-control w-25" v-model="speaker">
-                    <option v-for="speaker in speakers" :key="speaker">
-                      {{ speaker }}
+                    <option
+                      v-for="ttsSpeaker in ttsSpeakers"
+                      :key="ttsSpeaker.cd"
+                      :value="ttsSpeaker.cd"
+                    >
+                      {{ ttsSpeaker.name }}
                     </option>
                   </select>
                 </div>
@@ -60,7 +64,7 @@
       <template #contents>
         <FormGroup title="試聴" class="play-form-group">
           <PlayDialogContents
-            :isLoading="isCreating"
+            :isLoading="isGenerating"
             :isPlaying="isPlaying"
             :playbackTime="playbackTime"
             :duration="duration"
@@ -69,19 +73,21 @@
           />
         </FormGroup>
         <FormGroup title="タイトル" :required="true">
-          <TextBox v-model="file.title" />
+          <TextBox v-model="title" />
         </FormGroup>
         <FormGroup title="説明">
-          <TextArea v-model="file.description" />
+          <TextArea v-model="description" />
         </FormGroup>
       </template>
       <template #footer>
         <ModalFooter>
-          <Button type="secondary" @click="stopAndCloseModal">キャンセル</Button>
+          <Button type="secondary" @click="stopAndCloseModal"
+            >キャンセル</Button
+          >
           <Button
             type="primary"
-            :isDisabled="file.title === undefined || file.title === ''"
-            @click="uploadTtsFile"
+            :isDisabled="title === undefined || title === ''"
+            @click="createTts"
             >保存して作成を続ける</Button
           >
         </ModalFooter>
@@ -94,6 +100,7 @@
 import { defineComponent, reactive, computed, toRefs, provide } from "vue";
 import { useRouter } from "vue-router";
 import AudioPlayer from "@/utils/AudioPlayer";
+import AudioStore from "@/store/audio";
 import {
   RecordingFile,
   useUploadTtsService,
@@ -113,6 +120,7 @@ import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
 import { useGlobalStore } from "@/store";
 import { TtsItem } from "umesseapi/models";
+import Constants from "@/utils/Constants";
 
 export default defineComponent({
   components: {
@@ -131,19 +139,23 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const ttsStore = provideTtsStore(); //FIXME: provide name.
+    const audioStore = AudioStore();
     const audioPlayer = AudioPlayer();
-    const speakers = ["risa", "takeru"];
+    const ttsSpeakers = Constants.TTS_GENDERS;
+    const lang = "ja";
     const { cm, base } = useGlobalStore();
     const state = reactive({
-      file: <RecordingFile>{},
       uploadTtsState: computed(() => ttsStore.getStatus()),
+      isGenerating: computed(() => ttsStore.isGenerating()),
       isCreating: computed(() => ttsStore.isCreating()),
       isPlaying: computed(() => audioPlayer.isPlaying()),
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       duration: computed(() => audioPlayer.getDuration()),
       text: "",
-      speaker: "risa",
+      speaker: "1", // 女性
       isModalAppear: false,
+      title: "",
+      description: "",
     });
 
     // TODO: キャッシュでいいのか
@@ -157,33 +169,30 @@ export default defineComponent({
 
     const play = async () => {
       console.log("play");
-      const audioBuffer = await ttsStore.getTtsData();
-      audioPlayer.start(audioBuffer!!);
+      const data = await ttsStore.getTtsData(lang);
+      await audioStore.download(<string>data?.url);
+      audioPlayer.start(audioStore.audioBuffer!!);
     };
 
     const stop = () => {
       if (state.isPlaying) audioPlayer.stop();
     };
 
-    const createTtsData = async (text: string, speaker: string) => {
-      console.log("create");
-      await ttsStore.createTtsData(text, speaker);
-    };
-
-    const uploadTtsFile = async () => {
-      /// check state.file.
-      console.log("uploadTtsFile");
-      state.file.blob = await ttsStore.getUploadTtsData();
-      const uploadedData: any = await ttsStore.uploadTtsData(state.file);
-      uploadedData.ttsId = uploadedData.id;
-      console.log("uploadedData", uploadedData);
-      cm.setNarration(<TtsItem>uploadedData);
+    const createTts = async () => {
+      const response = await ttsStore.createTtsData(
+        state.title,
+        state.description,
+        [lang]
+      );
+      response?.forEach((element) => {
+        cm.setNarration(element);
+      });
       router.push({ name: "Cm" });
     };
 
-    const openModal = () => {
+    const openModal = async () => {
       state.isModalAppear = true;
-      createTtsData(state.text, state.speaker);
+      await ttsStore.generateTtsDataFromFree(state.text, state.speaker);
     };
 
     const closeModal = () => {
@@ -196,12 +205,11 @@ export default defineComponent({
     };
 
     return {
-      speakers,
+      ttsSpeakers,
       ...toRefs(state),
       play,
       stop,
-      createTtsData,
-      uploadTtsFile,
+      createTts,
       openModal,
       closeModal,
       stopAndCloseModal,
