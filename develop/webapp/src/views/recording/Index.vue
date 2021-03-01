@@ -1,4 +1,5 @@
 <template>
+  <div>
   <BasicLayout>
     <template #header>
       <Header>
@@ -163,7 +164,7 @@
             <Button type="secondary" @click="closeModal">キャンセル</Button>
             <Button
               type="primary"
-              :isDisabled="file.title === undefined || file.title === ''"
+              :isDisabled="file.title === undefined || file.title === '' || isUploading"
               @click="uploadRecordingFile"
             >
               保存して作成を続ける
@@ -179,6 +180,7 @@
       </template>
     </ModalDialog>
   </transition>
+  </div>
 </template>
 
 <script lang="ts">
@@ -206,7 +208,6 @@ import TextArea from "@/components/atoms/TextArea.vue";
 import { useGlobalStore } from "@/store";
 import { RecordingItem } from "umesseapi/models";
 import router from "@/router";
-
 export default defineComponent({
   components: {
     BasicLayout,
@@ -244,8 +245,8 @@ export default defineComponent({
         FormatDate.convertNumberToTime(audioPlayer.getDuration())
       ),
       isModalAppear: false,
+      isUploading: false,
     });
-
     // toggle voice recorder.
     const toggleVoiceRecorder = async () => {
       if (audioRecorder.isRecording()) {
@@ -254,34 +255,38 @@ export default defineComponent({
         audioRecorder.start();
       }
     };
-
     // playback a recorded data.
     const play = async () => {
       const audioBuffer = await audioRecorder.getAudioBuffer();
       audioPlayer.start(audioBuffer!!);
     };
     const deleteRecordedData = () => audioRecorder.reset();
-
     const uploadRecordingFile = async () => {
       /// check state.file.
       // state.file.blob = await audioRecorder.getWaveBlob();
-      state.file.blob = await audioRecorder.getMp3Blob();
-      const uploadedData: any = await recordingStore.uploadRecordingData(
-        state.file
-      );
-      uploadedData.recordingId = uploadedData.id;
-      cm.setNarration(<RecordingItem>uploadedData);
-      router.push({ name: "Cm" });
-      closeModal();
+      try {
+        state.isUploading = true;
+        state.file.blob = await audioRecorder.getMp3Blob();
+        const uploadedData: any = await recordingStore.uploadRecordingData(
+          state.file
+        );
+        uploadedData.recordingId = uploadedData.id;
+        cm.setNarration(<RecordingItem>uploadedData);
+        router.push({ name: "Cm" });
+        state.isUploading = false;
+        closeModal();
+      } catch (e) {
+        console.log(e.message);
+      } finally {
+        state.isUploading = false;
+      }
     };
-
     const openModal = () => {
       state.isModalAppear = true;
     };
     const closeModal = () => {
       state.isModalAppear = false;
     };
-
     return {
       ...toRefs(state),
       toggleVoiceRecorder,
@@ -299,7 +304,6 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import "@/scss/_variables.scss";
 @include fade_animation;
-
 .center {
   @include flex_center;
   height: 100%;

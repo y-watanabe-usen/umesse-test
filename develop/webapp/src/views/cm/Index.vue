@@ -107,9 +107,9 @@
             <CmItem
               :title="
                 'ナレーション ' +
-                `${index + 1}` +
-                '/' +
-                `${MAX_NARRATION_COUNT}`
+                  `${index + 1}` +
+                  '/' +
+                  `${MAX_NARRATION_COUNT}`
               "
               size="flexible"
               :contentTitle="`${narration.title}`"
@@ -203,9 +203,9 @@
             <CmItem
               :title="
                 'ナレーション ' +
-                `${narrarions.length + 1}` +
-                '/' +
-                `${MAX_NARRATION_COUNT}`
+                  `${narrarions.length + 1}` +
+                  '/' +
+                  `${MAX_NARRATION_COUNT}`
               "
               :isEmpty="true"
               size="flexible"
@@ -427,7 +427,7 @@
           <Button type="secondary" @click="closeSaveModal">キャンセル</Button>
           <Button
             type="primary"
-            :isDisabled="!title"
+            :isDisabled="!title || isUpdating"
             @click="updateAndOpenSavedModal"
             >保存する</Button
           >
@@ -528,6 +528,7 @@ export default defineComponent({
       isPlayModalAppear: false,
       isSaveModalAppear: false,
       isSavedModalAppear: false,
+      isUploading: false,
     });
 
     const playOpenChime = async () => {
@@ -661,11 +662,19 @@ export default defineComponent({
       closePlayModal();
     };
     const updateAndOpenSavedModal = async () => {
-      await update();
-      closeSaveModal();
-      setTimeout(() => {
-        openSavedModal();
-      }, 500);
+      try {
+        state.isUploading = true;
+        await update();
+        state.isUploading = false;
+        closeSaveModal();
+        setTimeout(() => {
+          openSavedModal();
+        }, 500);
+      } catch (e) {
+        console.log(e.message);
+      } finally {
+        state.isUploading = false;
+      }
     };
     const convertNumberToTime = (second: number) =>
       FormatDate.convertNumberToTime(second);

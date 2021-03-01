@@ -1,99 +1,101 @@
 <template>
-  <BasicLayout>
-    <template #header>
-      <Header>
-        <template #title>合成音声でナレーションを作成する</template>
-        <template #buttons>
-          <Button @click="openModal">確定</Button>
-        </template>
-      </Header>
-    </template>
-    <template #contents>
-      <ContentsBase>
-        <div class="rounded bg-white">
-          <div class="row p-4">
-            <div class="col">
-              <div class="row">
-                <div class="col-2 m-auto">話者</div>
-                <div class="col-10 m-auto">
-                  <select class="form-control w-25" v-model="speaker">
-                    <option
-                      v-for="ttsSpeaker in ttsSpeakers"
-                      :key="ttsSpeaker.cd"
-                      :value="ttsSpeaker.cd"
-                    >
-                      {{ ttsSpeaker.name }}
-                    </option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div class="col text-right">
-              <router-link
-                class="btn btn-light shadow my-auto"
-                :to="{ name: 'VoiceFreeSelectTemplate' }"
-              >
-                原稿をコピーする
-              </router-link>
-            </div>
-          </div>
-          <div class="row p-4">
-            <div
-              class="alert alert-dark alert-maniscript mx-auto my-3"
-              role="alert"
-            >
-              原稿
-            </div>
-            <textarea
-              class="col-12 p-3 rounded"
-              style="height: 500px"
-              placeholder="アナウンスの文言を入力してください。"
-              v-model="text"
-            ></textarea>
-          </div>
-        </div>
-      </ContentsBase>
-    </template>
-  </BasicLayout>
-  <!-- modal -->
-  <transition>
-    <ModalDialog v-if="isModalAppear" @close="stopAndCloseModal">
+  <div>
+    <BasicLayout>
       <template #header>
-        <ModalHeader title="保存しますか？" @close="stopAndCloseModal" />
+        <Header>
+          <template #title>合成音声でナレーションを作成する</template>
+          <template #buttons>
+            <Button @click="openModal">確定</Button>
+          </template>
+        </Header>
       </template>
       <template #contents>
-        <FormGroup title="試聴" class="play-form-group">
-          <PlayDialogContents
-            :isLoading="isGenerating"
-            :isPlaying="isPlaying"
-            :playbackTime="playbackTime"
-            :duration="duration"
-            @play="play(selectedBgm)"
-            @stop="stop"
-          />
-        </FormGroup>
-        <FormGroup title="タイトル" :required="true">
-          <TextBox v-model="title" />
-        </FormGroup>
-        <FormGroup title="説明">
-          <TextArea v-model="description" />
-        </FormGroup>
+        <ContentsBase>
+          <div class="rounded bg-white">
+            <div class="row p-4">
+              <div class="col">
+                <div class="row">
+                  <div class="col-2 m-auto">話者</div>
+                  <div class="col-10 m-auto">
+                    <select class="form-control w-25" v-model="speaker">
+                      <option
+                        v-for="ttsSpeaker in ttsSpeakers"
+                        :key="ttsSpeaker.cd"
+                        :value="ttsSpeaker.cd"
+                      >
+                        {{ ttsSpeaker.name }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="col text-right">
+                <router-link
+                  class="btn btn-light shadow my-auto"
+                  :to="{ name: 'VoiceFreeSelectTemplate' }"
+                >
+                  原稿をコピーする
+                </router-link>
+              </div>
+            </div>
+            <div class="row p-4">
+              <div
+                class="alert alert-dark alert-maniscript mx-auto my-3"
+                role="alert"
+              >
+                原稿
+              </div>
+              <textarea
+                class="col-12 p-3 rounded"
+                style="height: 500px"
+                placeholder="アナウンスの文言を入力してください。"
+                v-model="text"
+              ></textarea>
+            </div>
+          </div>
+        </ContentsBase>
       </template>
-      <template #footer>
-        <ModalFooter>
-          <Button type="secondary" @click="stopAndCloseModal"
-            >キャンセル</Button
-          >
-          <Button
-            type="primary"
-            :isDisabled="title === undefined || title === ''"
-            @click="createTts"
-            >保存して作成を続ける</Button
-          >
-        </ModalFooter>
-      </template>
-    </ModalDialog>
-  </transition>
+    </BasicLayout>
+    <!-- modal -->
+    <transition>
+      <ModalDialog v-if="isModalAppear" @close="stopAndCloseModal">
+        <template #header>
+          <ModalHeader title="保存しますか？" @close="stopAndCloseModal" />
+        </template>
+        <template #contents>
+          <FormGroup title="試聴" class="play-form-group">
+            <PlayDialogContents
+              :isLoading="isGenerating"
+              :isPlaying="isPlaying"
+              :playbackTime="playbackTime"
+              :duration="duration"
+              @play="play(selectedBgm)"
+              @stop="stop"
+            />
+          </FormGroup>
+          <FormGroup title="タイトル" :required="true">
+            <TextBox v-model="title" />
+          </FormGroup>
+          <FormGroup title="説明">
+            <TextArea v-model="description" />
+          </FormGroup>
+        </template>
+        <template #footer>
+          <ModalFooter>
+            <Button type="secondary" @click="stopAndCloseModal"
+              >キャンセル</Button
+            >
+            <Button
+              type="primary"
+              :isDisabled="title === undefined || title === '' || isCreating"
+              @click="createTts"
+              >保存して作成を続ける</Button
+            >
+          </ModalFooter>
+        </template>
+      </ModalDialog>
+    </transition>
+  </div>
 </template>
 
 <script lang="ts">
@@ -121,7 +123,6 @@ import TextArea from "@/components/atoms/TextArea.vue";
 import { useGlobalStore } from "@/store";
 import { TtsItem } from "umesseapi/models";
 import Constants from "@/utils/Constants";
-
 export default defineComponent({
   components: {
     BasicLayout,
@@ -157,7 +158,6 @@ export default defineComponent({
       title: "",
       description: "",
     });
-
     // TODO: キャッシュでいいのか
     const cacheKey = "voice/free/selectTemplate";
     if (base.cache.has(cacheKey)) {
@@ -166,14 +166,12 @@ export default defineComponent({
     } else {
       state.text = "おはよう";
     }
-
     const play = async () => {
       console.log("play");
       const data = await ttsStore.getTtsData(lang);
       await audioStore.download(<string>data?.url);
       audioPlayer.start(audioStore.audioBuffer!!);
     };
-
     const stop = () => {
       if (state.isPlaying) audioPlayer.stop();
     };
@@ -194,16 +192,13 @@ export default defineComponent({
       state.isModalAppear = true;
       await ttsStore.generateTtsDataFromFree(state.text, state.speaker);
     };
-
     const closeModal = () => {
       state.isModalAppear = false;
     };
-
     const stopAndCloseModal = () => {
       stop();
       closeModal();
     };
-
     return {
       ttsSpeakers,
       ...toRefs(state),
@@ -222,7 +217,6 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import "@/scss/_variables.scss";
 @include fade_animation;
-
 .play-form-group {
   margin-bottom: 60px;
 }
