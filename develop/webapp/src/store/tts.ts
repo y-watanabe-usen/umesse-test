@@ -7,6 +7,7 @@ import { useGlobalStore } from "@/store";
 import { inject, InjectionKey, provide, reactive, toRefs } from "vue";
 import { TtsItem } from "umesseapi/models/tts-item";
 import { config } from "@/utils/UMesseApiConfiguration";
+import { stringifyQuery } from "vue-router";
 
 // tts.
 export default function ttsStore() {
@@ -17,6 +18,7 @@ export default function ttsStore() {
   const state = reactive({
     ttsItems: [] as TtsItem[],
     ttsData: new Uint8Array(),
+    ttsUrl: null as string | null,
     creating: false,
     error: undefined as string | undefined,
   });
@@ -64,6 +66,7 @@ export default function ttsStore() {
   const resetTtsData = () => state.ttsData = new Uint8Array();
 
   const getTtsData = async () => {
+    return state.ttsUrl
     if (!hasTtsData()) {
       return undefined;
     }
@@ -90,14 +93,24 @@ export default function ttsStore() {
     }
     try {
       state.creating = true
-      const response = await resourcesApi.createTts({
-        text: text,
-        speaker: speaker,
-        pitch: 100,
-        speed: 100,
-      });
-      const binary = atob(response.data.body);
-      state.ttsData = Uint8Array.from(binary, c => c.charCodeAt(0));
+      const response = await umesseApi.generateUserTts(
+        token(), [
+        {
+          "text": "こんにちは",
+          "lang": "ja",
+          "speaker": "0"
+        },
+        {
+          "text": "hello",
+          "lang": "en",
+          "speaker": "1"
+        }
+      ])
+      console.log(response.data.tts)
+      console.log(response.data.tts[0].url)
+      state.ttsUrl = response.data.tts[0].url
+      // const binary = atob(response.data.body);
+      // state.ttsData = Uint8Array.from(binary, c => c.charCodeAt(0));
     } catch (err) {
       console.log(err);
       state.error = err.message;

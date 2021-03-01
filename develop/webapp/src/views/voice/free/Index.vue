@@ -157,8 +157,8 @@ export default defineComponent({
 
     const play = async () => {
       console.log("play");
-      const audioBuffer = await ttsStore.getTtsData();
-      audioPlayer.start(audioBuffer!!);
+      // const audioBuffer = await ttsStore.getTtsData();
+      // audioPlayer.start(audioBuffer!!);
     };
 
     const stop = () => {

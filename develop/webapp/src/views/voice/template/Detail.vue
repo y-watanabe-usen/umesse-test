@@ -146,7 +146,9 @@
       </template>
       <template #footer>
         <ModalFooter>
-          <Button type="secondary" @click="stopAndCloseModal">キャンセル</Button>
+          <Button type="secondary" @click="stopAndCloseModal"
+            >キャンセル</Button
+          >
           <Button
             type="primary"
             :isDisabled="file.title === undefined || file.title === ''"
@@ -163,6 +165,7 @@
 import { computed, defineComponent, reactive, toRefs } from "vue";
 import { useRouter } from "vue-router";
 import AudioPlayer from "@/utils/AudioPlayer";
+import AudioStore from "@/store/audio";
 import { RecordingFile, UPLOAD_TTS_STATE } from "@/services/uploadTtsService";
 import provideTtsStore from "@/store/tts";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
@@ -196,6 +199,7 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const ttsStore = provideTtsStore(); //FIXME: provide name.
+    const audioStore = AudioStore();
     const audioPlayer = AudioPlayer();
     const speakers = ["risa", "takeru"];
     const { cm, base } = useGlobalStore();
@@ -222,8 +226,9 @@ export default defineComponent({
 
     const play = async () => {
       console.log("play");
-      const audioBuffer = await ttsStore.getTtsData();
-      audioPlayer.start(audioBuffer!!);
+      const url = await ttsStore.getTtsData();
+      await audioStore.download(<string>url);
+      audioPlayer.start(audioStore.audioBuffer!!);
     };
 
     const stop = () => {
