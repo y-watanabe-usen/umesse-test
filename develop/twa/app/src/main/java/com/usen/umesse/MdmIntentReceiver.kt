@@ -1,12 +1,9 @@
 package com.usen.umesse
 
-import android.app.Activity
-import android.app.ActivityOptions
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat.startActivity
 import com.usen.umesse.mdm.MdmClient
 import com.usen.umesse.mdm.UsenCustomer
@@ -48,9 +45,9 @@ open class MdmIntentReceiver : BroadcastReceiver() {
         )
 
         MdmClient.sendBroadcast(context, usenCustomer)
-        val intent = Intent(context, CustomLauncherActivity::class.java)
+        val intent = Intent(context, LauncherActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        intent.putExtra("custCd", usenCustomer.unis_customer_cd)
+        intent.putExtra(UNIS_CUSTOMER_CD, usenCustomer.unis_customer_cd)
         startActivity(context, intent, null)
     }
 

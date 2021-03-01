@@ -1,13 +1,16 @@
 {
   "packageId": "com.usen.umesse",
-  "host": "10.0.2.2",
+  "host": "umesse.usen.com",
   "name": "U MESSE",
   "launcherName": "U MESSE",
   "display": "standalone",
   "themeColor": "#39A0D2",
   "navigationColor": "#000000",
+  "navigationColorDark": "#000000",
+  "navigationDividerColor": "#000000",
+  "navigationDividerColorDark": "#000000",
   "backgroundColor": "#FFFFFF",
-  "enableNotifications": false,
+  "enableNotifications": true,
   "startUrl": "/",
   "iconUrl": "http://localhost/512x512.png",
   "splashScreenFadeOutDuration": 300,
@@ -21,5 +24,12 @@
   "generatorApp": "bubblewrap-cli",
   "webManifestUrl": "http://localhost/manifest.json",
   "fallbackType": "customtabs",
+  "features": {},
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "orientation": "landscape",
   "appVersion": "1"
 }
