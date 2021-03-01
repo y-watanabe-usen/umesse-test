@@ -115,7 +115,7 @@ exports.getSignedUrl = async (id, category) => {
   switch (category) {
     case constants.resourceCategory.CM:
       bucket = constants.s3Bucket().users;
-      path = `users/${id.split("-")[0]}/${category}/${id}.aac`;
+      path = `users/${id.split("-")[0]}/${category}/${id}.mp3`;
       break;
     case constants.resourceCategory.RECORDING:
       bucket = constants.s3Bucket().users;
@@ -123,7 +123,11 @@ exports.getSignedUrl = async (id, category) => {
       break;
     case constants.resourceCategory.TTS:
       bucket = constants.s3Bucket().users;
-      path = `users/${id.split("-")[0]}/${category}/${id.split("-")[1]}.mp3`;
+      if (id.split("-").length == 3) {
+        path = `users/${id.split("-")[0]}/${category}/${id}.mp3`;
+      } else {
+        path = `users/${id.split("-")[0]}/${category}/${id.split("-")[1]}.mp3`;
+      }
       break;
     case constants.resourceCategory.BGM:
     case constants.resourceCategory.CHIME:
@@ -268,8 +272,8 @@ exports.createTtsResource = async (unisCustomerCd, body) => {
     // DynamoDBのデータ更新
     const data = {
       id: id,
-      title: body["title"],
-      description: body["description"],
+      title: `${tts.title}(${tts.lang})`,
+      description: tts.description,
       startDate: timestamp(),
       timestamp: timestamp(),
     };
