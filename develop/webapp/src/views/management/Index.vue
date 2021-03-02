@@ -92,12 +92,17 @@
                   @click.prevent="selectCmAndOpenSaveModal(cm)"
                   >タイトル/説明 編集</a
                 >
-                <a class="dropdown-item" href="#" @click="toEditCm(cm)"
+                <a 
+                  class="dropdown-item"
+                  :class="disabledEditContentsStatus.includes(cm.status) ? 'disabled' : ''"
+                  href="#"
+                  @click="toEditCm(cm)"
                   >コンテンツ編集</a
                 >
                 <a class="dropdown-item" href="#">U MUSICにアップロード</a>
                 <a
                   class="dropdown-item"
+                  :class="disabledDeleteStatus.includes(cm.status) ? 'disabled' : ''"
                   @click.prevent="selectCmAndOpenRemoveModal(cm)"
                   href="#"
                   >削除</a
@@ -282,6 +287,8 @@ export default defineComponent({
     const audioPlayer = AudioPlayer();
     const audioStore = AudioStore();
     const { auth, cm } = useGlobalStore();
+    const disabledEditContentsStatus = ['11', '12'];
+    const disabledDeleteStatus = ['00', '11'];
     const state = reactive({
       activeSceneCd: "001",
       scenes: computed(() => Common.getManagementScenes()),
@@ -459,6 +466,8 @@ export default defineComponent({
       toEditCm,
       Constants,
       fetchCm,
+      disabledEditContentsStatus,
+      disabledDeleteStatus,
     };
   },
 });
