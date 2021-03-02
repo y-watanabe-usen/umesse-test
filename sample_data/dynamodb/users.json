@@ -44,19 +44,22 @@
                         "L": [
                           {
                             "M": {
-                              "contentsId": { "S": "サンプル01" },
+                              "id": { "S": "サンプル01" },
+                              "category": { "S": "narration" },
                               "volume": { "N": "150" }
                             }
                           },
                           {
                             "M": {
-                              "contentsId": { "S": "サンプル02" },
+                              "id": { "S": "サンプル02" },
+                              "category": { "S": "narration" },
                               "volume": { "N": "150" }
                             }
                           },
                           {
                             "M": {
-                              "contentsId": { "S": "サンプル03" },
+                              "id": { "S": "サンプル03" },
+                              "category": { "S": "narration" },
                               "volume": { "N": "150" }
                             }
                           }
@@ -64,19 +67,22 @@
                       },
                       "startChime": {
                         "M": {
-                          "contentsId": { "S": "サンプル01" },
+                          "id": { "S": "サンプル01" },
+                          "category": { "S": "chime" },
                           "volume": { "N": "50" }
                         }
                       },
                       "endChime": {
                         "M": {
-                          "contentsId": { "S": "サンプル02" },
+                          "id": { "S": "サンプル02" },
+                          "category": { "S": "chime" },
                           "volume": { "N": "50" }
                         }
                       },
                       "bgm": {
                         "M": {
-                          "contentsId": { "S": "サンプル01" },
+                          "id": { "S": "サンプル01" },
+                          "category": { "S": "bgm" },
                           "volume": { "N": "50" }
                         }
                       }
@@ -121,19 +127,22 @@
                         "L": [
                           {
                             "M": {
-                              "contentsId": { "S": "サンプル01" },
+                              "id": { "S": "サンプル01" },
+                              "category": { "S": "narration" },
                               "volume": { "N": "150" }
                             }
                           },
                           {
                             "M": {
-                              "contentsId": { "S": "サンプル02" },
+                              "id": { "S": "サンプル02" },
+                              "category": { "S": "narration" },
                               "volume": { "N": "150" }
                             }
                           },
                           {
                             "M": {
-                              "contentsId": { "S": "サンプル03" },
+                              "id": { "S": "サンプル03" },
+                              "category": { "S": "narration" },
                               "volume": { "N": "150" }
                             }
                           }
@@ -141,19 +150,22 @@
                       },
                       "startChime": {
                         "M": {
-                          "contentsId": { "S": "サンプル01" },
+                          "id": { "S": "サンプル01" },
+                          "category": { "S": "chime" },
                           "volume": { "N": "50" }
                         }
                       },
                       "endChime": {
                         "M": {
-                          "contentsId": { "S": "サンプル02" },
+                          "id": { "S": "サンプル02" },
+                          "category": { "S": "chime" },
                           "volume": { "N": "50" }
                         }
                       },
                       "bgm": {
                         "M": {
-                          "contentsId": { "S": "サンプル01" },
+                          "id": { "S": "サンプル01" },
+                          "category": { "S": "bgm" },
                           "volume": { "N": "50" }
                         }
                       }
