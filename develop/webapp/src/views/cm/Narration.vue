@@ -148,7 +148,7 @@
   </transition>
   <ModalDialog v-if="isError" @close="closeErrorModal">
     <template #header>
-      <ModalHeader title="原稿" @close="closeErrorModal" />
+      <ModalHeader title="エラー" @close="closeErrorModal" />
     </template>
     <template #contents> {{ errorMessge }} </template>
     <template #footer>
