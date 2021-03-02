@@ -146,6 +146,17 @@
       </template>
     </ModalDialog>
   </transition>
+  <ModalDialog v-if="isError" @close="closeErrorModal">
+    <template #header>
+      <ModalHeader title="原稿" @close="closeErrorModal" />
+    </template>
+    <template #contents> {{ errorMessge }} </template>
+    <template #footer>
+      <ModalFooter :noBorder="true">
+        <Button type="rectangle" @click="closeErrorModal">閉じる</Button>
+      </ModalFooter>
+    </template>
+  </ModalDialog>
 </template>
 
 <script lang="ts">
@@ -185,6 +196,7 @@ import {
 } from "@/utils/FormatDate";
 import UMesseService from "@/services/UMesseService";
 import { Scene } from "@/utils/Constants";
+import { UMesseError } from "@/models/UMesseError";
 
 export default defineComponent({
   components: {
@@ -224,6 +236,8 @@ export default defineComponent({
       narrationIndustries: Common.getNarrationIndustries(),
       isDocumentModalAppear: false,
       isPlayModalAppear: false,
+      isError: false,
+      errorMessge: "",
     });
 
     const setNarration = (narration: NarrationItem) => {
@@ -253,13 +267,18 @@ export default defineComponent({
 
     const fetchNarration = async () => {
       if (!state.activeNarrationSceneCd) return;
-      const response = await UMesseService.resourcesService.fetchNarration(
-        state.activeNarrationIndustryCd,
-        state.activeNarrationSceneCd,
-        state.sort
-      );
-      state.scenes = [];
-      state.narrations = response;
+      try {
+        const response = await UMesseService.resourcesService.fetchNarration(
+          state.activeNarrationIndustryCd,
+          state.activeNarrationSceneCd,
+          state.sort
+        );
+        state.scenes = [];
+        state.narrations = response;
+      } catch (e) {
+        state.errorMessge = e.message;
+        state.isError = true;
+      }
     };
 
     const play = async (narration: NarrationItem) => {
@@ -301,6 +320,10 @@ export default defineComponent({
       closePlayModal();
     };
 
+    const closeErrorModal = () => {
+      state.isError = false;
+    };
+
     onMounted(async () => {
       fetchScene();
     });
@@ -322,6 +345,7 @@ export default defineComponent({
       selectNarrationAndOpenDocumentModal,
       selectNarrationAndOpenPlayModal,
       stopAndClosePlayModal,
+      closeErrorModal,
     };
   },
 });

@@ -3,6 +3,7 @@ import * as UMesseApi from "umesseapi";
 import UMesseCache from "@/repository/UMesseCache"
 import { BgmItem, ChimeItem, FreeItem, NarrationItem, TemplateItem } from "umesseapi/models";
 import AudioStore from "@/store/audio";
+import { UMesseErrorFromApiFactory } from "@/models/UMesseError";
 
 export function useResourcesService(
   resourcesApi: UMesseApi.ResourcesApi,
@@ -59,12 +60,12 @@ export function useResourcesService(
       resourcesApi
         .listNarration(industryCd, sceneCd, sort)
         .then((value) => {
+          console.log("resolve")
           resolve(value.data)
         })
-        .catch((error) =>
-          // TODO: Error
-          reject()
-        );
+        .catch((e) => {
+          reject(UMesseErrorFromApiFactory(e))
+        });
     });
   }
 
