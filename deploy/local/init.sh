@@ -18,5 +18,4 @@ $AWSCLI dynamodb batch-write-item --request-items file://../../sample_data/dynam
 $AWSCLI dynamodb batch-write-item --request-items file://../../sample_data/dynamodb/contents_bgm.json
 $AWSCLI dynamodb batch-write-item --request-items file://../../sample_data/dynamodb/contents_chime.json
 $AWSCLI dynamodb batch-write-item --request-items file://../../sample_data/dynamodb/contents_narration.json
-$AWSCLI dynamodb batch-write-item --request-items file://../../sample_data/dynamodb/contents_free.json
 $AWSCLI dynamodb batch-write-item --request-items file://../../sample_data/dynamodb/contents_template.json
