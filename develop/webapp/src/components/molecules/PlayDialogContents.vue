@@ -112,7 +112,7 @@ export default {
     }
   }
   .meter-wrapper {
-    width: 350px;
+    width: 430px;
     margin-left: 50px;
     meter {
       width: 100%;

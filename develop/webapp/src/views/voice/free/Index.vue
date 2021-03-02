@@ -12,46 +12,31 @@
       <template #contents>
         <ContentsBase>
           <div class="rounded bg-white">
-            <div class="row p-4">
-              <div class="col">
-                <div class="row">
-                  <div class="col-2 m-auto">話者</div>
-                  <div class="col-10 m-auto">
-                    <select class="form-control w-25" v-model="speaker">
-                      <option
-                        v-for="ttsSpeaker in ttsSpeakers"
-                        :key="ttsSpeaker.cd"
-                        :value="ttsSpeaker.cd"
-                      >
-                        {{ ttsSpeaker.name }}
-                      </option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-              <div class="col text-right">
-                <router-link
-                  class="btn btn-light shadow my-auto"
-                  :to="{ name: 'VoiceFreeSelectTemplate' }"
-                >
-                  原稿をコピーする
-                </router-link>
-              </div>
-            </div>
-            <div class="row p-4">
-              <div
-                class="alert alert-dark alert-maniscript mx-auto my-3"
-                role="alert"
+            <div class="row">
+              <FormGroup title="話者">
+                <SelectBox
+                  v-model="speaker"
+                  :options="
+                    ttsSpeakers.map((ttsSpeaker) => {
+                      return { title: ttsSpeaker.name, value: ttsSpeaker.cd };
+                    })
+                  "
+                />
+              </FormGroup>
+              <Button
+                class="btn-document"
+                type="rectangle"
+                @click="$router.push({ name: 'VoiceFreeSelectTemplate' })"
               >
-                原稿
-              </div>
-              <textarea
-                class="col-12 p-3 rounded"
-                style="height: 500px"
-                placeholder="アナウンスの文言を入力してください。"
-                v-model="text"
-              ></textarea>
+                原稿をコピーする
+              </Button>
             </div>
+            <p class="document-title">原稿</p>
+            <TextArea
+              class="document-text"
+              v-model="text"
+              placeholder="アナウンスの文言を入力してください。"
+            />
           </div>
         </ContentsBase>
       </template>
@@ -120,6 +105,7 @@ import PlayDialogContents from "@/components/molecules/PlayDialogContents.vue";
 import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
+import SelectBox from "@/components/atoms/SelectBox.vue";
 import { useGlobalStore } from "@/store";
 import Constants from "@/utils/Constants";
 import UMesseCache from "@/repository/UMesseCache";
@@ -138,6 +124,7 @@ export default defineComponent({
     FormGroup,
     TextBox,
     TextArea,
+    SelectBox,
     ModalUploading,
   },
   setup() {
@@ -231,13 +218,50 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import "@/scss/_variables.scss";
 @include fade_animation;
+.row {
+  @include flex_between;
+  margin-left: 40px;
+  margin-right: 40px;
+  margin-top: 36px;
+  .form-group {
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    ::v-deep {
+      .title {
+        width: 96px;
+      }
+      .input-wrapper {
+        width: 180px;
+      }
+    }
+  }
+  .btn-document {
+    color: rgb(97, 97, 97);
+  }
+}
+.document-title {
+  color: rgb(42, 44, 45);
+  font-size: 20px;
+  font-weight: $font_weight_bold;
+  background-color: rgb(196, 199, 201);
+  height: 44px;
+  width: 222px;
+  border-radius: 22px;
+  line-height: 44px;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+.document-text {
+  margin-left: 40px;
+  margin-right: 40px;
+  width: calc(100% - 130px);
+  height: 452px;
+}
 .play-form-group {
   margin-bottom: 60px;
-}
-.alert-maniscript {
-  text-align: center;
-  padding: 5px;
-  width: 150px;
-  border-radius: 2em;
 }
 </style>
