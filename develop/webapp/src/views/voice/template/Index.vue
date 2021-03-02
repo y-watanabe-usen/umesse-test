@@ -72,6 +72,7 @@ import ListItem from "@/components/molecules/ListItem.vue";
 import { TemplateItem } from "umesseapi/models";
 import * as Common from "@/utils/Common";
 import UMesseApi from "@/repository/UMesseApi";
+import UMesseService from "@/services/UMesseService";
 
 export default defineComponent({
   components: {
@@ -100,10 +101,10 @@ export default defineComponent({
     };
 
     const fetchTemplate = async () => {
-      const response = await UMesseApi.resourcesApi.listTemplate(
+      const response = await UMesseService.resourcesService.fetchTemplate(
         state.activeTemplateIndustryCd
       );
-      state.templates = response.data;
+      state.templates = response;
     };
 
     onMounted(async () => {

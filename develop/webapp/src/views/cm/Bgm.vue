@@ -141,7 +141,6 @@ import MessageDialogContents from "@/components/molecules/MessageDialogContents.
 import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
-import UMesseApi from "@/repository/UMesseApi";
 import UMesseService from "@/services/UMesseService";
 
 export default defineComponent({
@@ -210,7 +209,7 @@ export default defineComponent({
     };
 
     const play = async (bgm: BgmItem) => {
-      const audioBuffer = await UMesseService.resourcesService.getAudioBuffer(
+      const audioBuffer = await UMesseService.resourcesService.getAudioBufferByContentsId(
         bgm.contentsId,
         bgm.category
       );

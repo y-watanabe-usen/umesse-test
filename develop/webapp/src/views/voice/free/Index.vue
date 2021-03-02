@@ -103,9 +103,7 @@ import { defineComponent, reactive, computed, toRefs, provide } from "vue";
 import { useRouter } from "vue-router";
 import AudioPlayer from "@/utils/AudioPlayer";
 import AudioStore from "@/store/audio";
-import {
-  UPLOAD_TTS_STATE,
-} from "@/services/uploadTtsService";
+import { UPLOAD_TTS_STATE } from "@/services/uploadTtsService";
 import provideTtsStore from "@/store/tts";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
@@ -119,9 +117,9 @@ import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
 import { useGlobalStore } from "@/store";
-import { TtsItem } from "umesseapi/models";
 import Constants from "@/utils/Constants";
 import UMesseCache from "@/repository/UMesseCache";
+import UMesseService from "@/services/UMesseService";
 export default defineComponent({
   components: {
     BasicLayout,
@@ -167,8 +165,10 @@ export default defineComponent({
     const play = async () => {
       console.log("play");
       const data = await ttsStore.getTtsData(lang);
-      await audioStore.download(<string>data?.url);
-      audioPlayer.start(audioStore.audioBuffer!!);
+      const audioBuffer = await UMesseService.resourcesService.getAudioBufferByUrl(
+        <string>data?.url
+      );
+      audioPlayer.start(audioBuffer);
     };
     const stop = () => {
       if (state.isPlaying) audioPlayer.stop();

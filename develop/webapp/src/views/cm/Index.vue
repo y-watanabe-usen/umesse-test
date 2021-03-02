@@ -484,7 +484,6 @@ import {
 } from "@/store/cm";
 import router from "@/router";
 import { ChimeItem } from "umesseapi/models";
-import UMesseApi from "@/repository/UMesseApi";
 import UMesseService from "@/services/UMesseService";
 
 export default defineComponent({
@@ -544,7 +543,7 @@ export default defineComponent({
 
     const playChime = async (chime: ChimeItem) => {
       stop();
-      const audioBuffer = await UMesseService.resourcesService.getAudioBuffer(
+      const audioBuffer = await UMesseService.resourcesService.getAudioBufferByContentsId(
         chime.contentsId,
         chime.category
       );
@@ -569,7 +568,7 @@ export default defineComponent({
         category = Constants.CATEGORY.TTS;
       }
       console.log(id, category);
-      const audioBuffer = await UMesseService.resourcesService.getAudioBuffer(
+      const audioBuffer = await UMesseService.resourcesService.getAudioBufferByContentsId(
         id,
         category
       );
@@ -579,7 +578,7 @@ export default defineComponent({
       const bgm = cm.bgm;
       if (!bgm) return;
       stop();
-      const audioBuffer = await UMesseService.resourcesService.getAudioBuffer(
+      const audioBuffer = await UMesseService.resourcesService.getAudioBufferByContentsId(
         bgm.contentsId,
         bgm.category
       );
@@ -620,8 +619,10 @@ export default defineComponent({
 
     const play = async () => {
       if (!cm.url) return;
-      await audioStore.download(cm.url!!);
-      audioPlayer.start(<AudioBuffer>audioStore.audioBuffer);
+      const audioBuffer = await UMesseService.resourcesService.getAudioBufferByUrl(
+        cm.url
+      );
+      audioPlayer.start(audioBuffer);
     };
     const stop = () => {
       if (state.isPlaying) audioPlayer.stop();

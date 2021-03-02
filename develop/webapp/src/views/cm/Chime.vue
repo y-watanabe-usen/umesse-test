@@ -162,13 +162,6 @@ export default defineComponent({
 
     const state = reactive({
       title: route.params.div == "open" ? "Openチャイム" : "Endチャイム",
-      menus: [
-        {
-          id: 1,
-          title: "チャイム",
-        },
-      ],
-      activeMenuId: 1,
       sort: 1,
       chimeSorts: computed(() => Common.getSort()),
       chimes: [] as ChimeItem[],
@@ -203,7 +196,7 @@ export default defineComponent({
     };
 
     const play = async (chime: ChimeItem) => {
-      const audioBuffer = await UMesseService.resourcesService.getAudioBuffer(
+      const audioBuffer = await UMesseService.resourcesService.getAudioBufferByContentsId(
         chime.contentsId,
         chime.category
       );
@@ -247,6 +240,7 @@ export default defineComponent({
     onMounted(async () => {
       fetchChime();
     });
+
     return {
       ...toRefs(state),
       setChime,

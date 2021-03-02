@@ -167,6 +167,7 @@ import TextArea from "@/components/atoms/TextArea.vue";
 import { useGlobalStore } from "@/store";
 import { TtsItem } from "umesseapi/models";
 import Constants from "@/utils/Constants";
+import UMesseService from "@/services/UMesseService";
 export default defineComponent({
   components: {
     BasicLayout,
@@ -225,8 +226,10 @@ export default defineComponent({
     const play = async () => {
       console.log("play");
       const data = await ttsStore.getTtsData(state.playLang);
-      await audioStore.download(<string>data?.url);
-      audioPlayer.start(audioStore.audioBuffer!!);
+      const audioBuffer = await UMesseService.resourcesService.getAudioBufferByUrl(
+        <string>data?.url
+      );
+      audioPlayer.start(audioBuffer);
     };
     const stop = () => {
       if (state.isPlaying) audioPlayer.stop();
