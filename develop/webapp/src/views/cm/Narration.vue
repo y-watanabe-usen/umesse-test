@@ -150,7 +150,10 @@
     <template #header>
       <ModalHeader title="エラー" @close="closeErrorModal" />
     </template>
-    <template #contents> {{ errorMessge }} </template>
+    <template #contents
+      >{{ errorCode }} <br />
+      {{ errorMessge }}
+    </template>
     <template #footer>
       <ModalFooter :noBorder="true">
         <Button type="rectangle" @click="closeErrorModal">閉じる</Button>
@@ -237,6 +240,7 @@ export default defineComponent({
       isDocumentModalAppear: false,
       isPlayModalAppear: false,
       isError: false,
+      errorCode: "",
       errorMessge: "",
     });
 
@@ -276,6 +280,7 @@ export default defineComponent({
         state.scenes = [];
         state.narrations = response;
       } catch (e) {
+        state.errorCode = e.errorCode;
         state.errorMessge = e.message;
         state.isError = true;
       }
