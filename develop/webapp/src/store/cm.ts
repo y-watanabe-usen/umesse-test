@@ -20,6 +20,7 @@ export function isTts(arg: any): arg is Tts {
 export const MAX_NARRATION_COUNT = 4;
 
 export default function cmStore() {
+  const service = UMesseService.uploadCmService
   const state = reactive({
     displayCmItem: new DisplayCmItem(),
     selectedNarrationIndex: null as number | null,
@@ -27,7 +28,7 @@ export default function cmStore() {
   });
 
   const token = "123456789";
-  const status = () => UMesseService.uploadCmService.getStatus()
+  const status = () => service.getStatus()
 
   const create = async () => {
     let narrationContentsIds: string[] = []
@@ -40,7 +41,7 @@ export default function cmStore() {
         narrationContentsIds.push(v.ttsId)
       }
     })
-    const response = await UMesseService.uploadCmService.create(
+    const response = await service.create(
       token,
       narrationContentsIds,
       state.displayCmItem.openChime?.contentsId ?? null,
@@ -60,7 +61,7 @@ export default function cmStore() {
     sceneCd: string,
     uploadSystem: string
   ) => {
-    const response = await UMesseService.uploadCmService.update(
+    const response = await service.update(
       token,
       state.displayCmItem.cmId,
       title,
