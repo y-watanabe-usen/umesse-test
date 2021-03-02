@@ -22,7 +22,13 @@ export interface CmMaterialListItemStartChime {
      * @type {string}
      * @memberof CmMaterialListItemStartChime
      */
-    contentsId?: any;
+    id?: any;
+    /**
+     * カテゴリー
+     * @type {string}
+     * @memberof CmMaterialListItemStartChime
+     */
+    category?: any;
     /**
      * ボリューム値
      * @type {number}

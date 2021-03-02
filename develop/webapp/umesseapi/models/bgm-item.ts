@@ -22,7 +22,7 @@ export interface BgmItem {
      * @type {string}
      * @memberof BgmItem
      */
-    contentsId?: any;
+    id?: any;
     /**
      * カテゴリー
      * @type {string}
@@ -53,12 +53,6 @@ export interface BgmItem {
      * @memberof BgmItem
      */
     industry?: any;
-    /**
-     * 
-     * @type {Array&lt;SceneItem&gt;}
-     * @memberof BgmItem
-     */
-    scene?: any;
     /**
      * 
      * @type {string}

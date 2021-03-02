@@ -51,7 +51,7 @@ exports.getExternalCm = function (external, unisCustomerCd) {
  * 外部連携するCMの情報を一覧で取得する
  *
  * external String 外部システム区分
- * returns List
+ * returns ExternalItems
  **/
 exports.listExternalCm = function (external) {
   return new Promise(async function (resolve, reject) {

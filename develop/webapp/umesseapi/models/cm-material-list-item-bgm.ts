@@ -22,7 +22,13 @@ export interface CmMaterialListItemBgm {
      * @type {string}
      * @memberof CmMaterialListItemBgm
      */
-    contentsId?: any;
+    id?: any;
+    /**
+     * カテゴリー
+     * @type {string}
+     * @memberof CmMaterialListItemBgm
+     */
+    category?: any;
     /**
      * ボリューム値
      * @type {number}

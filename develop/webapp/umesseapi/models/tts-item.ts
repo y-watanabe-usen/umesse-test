@@ -22,7 +22,13 @@ export interface TtsItem {
      * @type {string}
      * @memberof TtsItem
      */
-    ttsId?: any;
+    id?: any;
+    /**
+     * カテゴリー
+     * @type {string}
+     * @memberof TtsItem
+     */
+    category?: any;
     /**
      * タイトル名
      * @type {string}

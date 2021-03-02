@@ -22,7 +22,7 @@ export interface FreeItem {
      * @type {string}
      * @memberof FreeItem
      */
-    contentsId?: any;
+    id?: any;
     /**
      * カテゴリー
      * @type {string}

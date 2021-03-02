@@ -29,14 +29,14 @@ exports.createUserCm = function (body, xUnisCustomerCd) {
  * CM情報削除
  * CMを削除する
  *
- * cmId String CM ID
+ * id String CM ID
  * xUnisCustomerCd String UNIS顧客CD
  * returns CmItem
  **/
-exports.deleteUserCm = function (cmId, xUnisCustomerCd) {
+exports.deleteUserCm = function (id, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     try {
-      const json = await deleteCm(xUnisCustomerCd, cmId);
+      const json = await deleteCm(xUnisCustomerCd, id);
       resolve(json);
     } catch (e) {
       assert(e instanceof UMesseError);
@@ -49,14 +49,14 @@ exports.deleteUserCm = function (cmId, xUnisCustomerCd) {
  * CM情報取得
  * CMの情報を取得する
  *
- * cmId String CM ID
+ * id String CM ID
  * xUnisCustomerCd String UNIS顧客CD
  * returns CmItem
  **/
-exports.getUserCm = function (cmId, xUnisCustomerCd) {
+exports.getUserCm = function (id, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     try {
-      const json = await getCm(xUnisCustomerCd, cmId);
+      const json = await getCm(xUnisCustomerCd, id);
       resolve(json);
     } catch (e) {
       assert(e instanceof UMesseError);
@@ -69,6 +69,7 @@ exports.getUserCm = function (cmId, xUnisCustomerCd) {
  * CM一覧取得
  * CMの情報を一覧で取得する
  *
+ * sort Integer ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順) (optional)
  * xUnisCustomerCd String UNIS顧客CD
  * returns List
  **/
@@ -89,14 +90,14 @@ exports.listUserCm = function (sort, xUnisCustomerCd) {
  * CMの情報を更新する
  *
  * body Object CMデータ更新リクエストBody (optional)
- * cmId String CM ID
+ * id String CM ID
  * xUnisCustomerCd String UNIS顧客CD
  * returns CmItem
  **/
-exports.updateUserCm = function (body, cmId, xUnisCustomerCd) {
+exports.updateUserCm = function (body, id, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     try {
-      const json = await updateCm(xUnisCustomerCd, cmId, body);
+      const json = await updateCm(xUnisCustomerCd, id, body);
       resolve(json);
     } catch (e) {
       assert(e instanceof UMesseError);

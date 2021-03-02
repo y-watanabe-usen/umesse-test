@@ -14,25 +14,31 @@
 /**
  * 
  * @export
- * @interface CmMaterialListItemEndChime
+ * @interface TemplateItemDetails
  */
-export interface CmMaterialListItemEndChime {
+export interface TemplateItemDetails {
     /**
-     * チャイムID
+     * 
      * @type {string}
-     * @memberof CmMaterialListItemEndChime
+     * @memberof TemplateItemDetails
+     */
+    text?: any;
+    /**
+     * ナレーションID
+     * @type {string}
+     * @memberof TemplateItemDetails
      */
     id?: any;
     /**
      * カテゴリー
      * @type {string}
-     * @memberof CmMaterialListItemEndChime
+     * @memberof TemplateItemDetails
      */
     category?: any;
     /**
-     * ボリューム値
-     * @type {number}
-     * @memberof CmMaterialListItemEndChime
+     * 
+     * @type {string}
+     * @memberof TemplateItemDetails
      */
-    volume?: any;
+    lang?: any;
 }

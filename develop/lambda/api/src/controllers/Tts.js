@@ -13,8 +13,8 @@ module.exports.createUserTts = function createUserTts (req, res, next, body, xUn
     });
 };
 
-module.exports.deleteUserTts = function deleteUserTts (req, res, next, ttsId, xUnisCustomerCd) {
-  Tts.deleteUserTts(ttsId, xUnisCustomerCd)
+module.exports.deleteUserTts = function deleteUserTts (req, res, next, id, xUnisCustomerCd) {
+  Tts.deleteUserTts(id, xUnisCustomerCd)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -33,8 +33,8 @@ module.exports.generateUserTts = function generateUserTts (req, res, next, body,
     });
 };
 
-module.exports.getUserTts = function getUserTts (req, res, next, ttsId, xUnisCustomerCd) {
-  Tts.getUserTts(ttsId, xUnisCustomerCd)
+module.exports.getUserTts = function getUserTts (req, res, next, id, xUnisCustomerCd) {
+  Tts.getUserTts(id, xUnisCustomerCd)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -53,8 +53,8 @@ module.exports.listUserTts = function listUserTts (req, res, next, xUnisCustomer
     });
 };
 
-module.exports.updateUserTts = function updateUserTts (req, res, next, body, ttsId, xUnisCustomerCd) {
-  Tts.updateUserTts(body, ttsId, xUnisCustomerCd)
+module.exports.updateUserTts = function updateUserTts (req, res, next, body, id, xUnisCustomerCd) {
+  Tts.updateUserTts(body, id, xUnisCustomerCd)
     .then(function (response) {
       utils.writeJson(res, response);
     })

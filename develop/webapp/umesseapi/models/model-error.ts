@@ -22,12 +22,6 @@ export interface ModelError {
      * @type {string}
      * @memberof ModelError
      */
-    status?: any;
-    /**
-     * 
-     * @type {string}
-     * @memberof ModelError
-     */
     code?: any;
     /**
      * 

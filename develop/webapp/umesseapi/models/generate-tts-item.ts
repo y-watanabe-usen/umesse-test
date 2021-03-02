@@ -18,9 +18,21 @@
  */
 export interface GenerateTtsItem {
     /**
-     * 
-     * @type {Array&lt;GenerateTtsItemTts&gt;}
+     * CM ID
+     * @type {string}
      * @memberof GenerateTtsItem
      */
-    tts?: any;
+    id?: any;
+    /**
+     * カテゴリー
+     * @type {string}
+     * @memberof GenerateTtsItem
+     */
+    category?: any;
+    /**
+     * 
+     * @type {Array&lt;GenerateTtsItemDetails&gt;}
+     * @memberof GenerateTtsItem
+     */
+    details?: any;
 }
