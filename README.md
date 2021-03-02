@@ -1,5 +1,8 @@
 # U MESSE
 
+[![dev-dry-run-deploy](https://github.com/openusen/umesse/actions/workflows/dev-dry-run-deploy.yml/badge.svg)](https://github.com/openusen/umesse/actions/workflows/dev-dry-run-deploy.yml)
+[![dev-deploy](https://github.com/openusen/umesse/actions/workflows/dev-deploy.yml/badge.svg)](https://github.com/openusen/umesse/actions/workflows/dev-deploy.yml)
+
 - [U MESSE](#u-messe)
   - [Index](#index)
   - [プロジェクト構成](#プロジェクト構成)
