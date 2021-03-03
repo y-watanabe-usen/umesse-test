@@ -49,7 +49,7 @@ export default function cmStore() {
       state.displayCmItem.bgm?.contentsId ?? null
     )
     console.log(response)
-    state.displayCmItem.cmId = response.cmId
+    state.displayCmItem.cmId = response.id
     state.displayCmItem.timestamp = response.timestamp
     state.displayCmItem.seconds = response.seconds
     state.displayCmItem.url = response.url!
@@ -127,7 +127,7 @@ export default function cmStore() {
   }
   const setOpenChime = (chimeItem: ChimeItem) => {
     state.displayCmItem.setOpenChime(
-      chimeItem.contentsId,
+      chimeItem.id,
       chimeItem.title,
       chimeItem.description,
       chimeItem.seconds,
@@ -136,7 +136,7 @@ export default function cmStore() {
   }
   const setEndChime = (chimeItem: ChimeItem) => {
     state.displayCmItem.setEndChime(
-      chimeItem.contentsId,
+      chimeItem.id,
       chimeItem.title,
       chimeItem.description,
       chimeItem.seconds,
@@ -145,7 +145,7 @@ export default function cmStore() {
   }
   const setBgm = (bgmItem: BgmItem) => {
     state.displayCmItem.setBgm(
-      bgmItem.contentsId,
+      bgmItem.id,
       bgmItem.title,
       bgmItem.description,
       bgmItem.seconds,

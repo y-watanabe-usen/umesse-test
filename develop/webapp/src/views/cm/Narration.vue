@@ -264,7 +264,7 @@ export default defineComponent({
 
     const play = async (narration: NarrationItem) => {
       const audioBuffer = await UMesseService.resourcesService.getAudioBufferByContentsId(
-        narration.contentsId,
+        narration.id,
         narration.category
       );
       audioPlayer.start(audioBuffer);

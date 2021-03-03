@@ -142,25 +142,25 @@ export default class DisplayCmItem {
 
   setCm(cmItem: CmItem) {
     this.reset()
-    this.cmId = cmItem.cmId;
+    this.cmId = cmItem.id;
     this.title = cmItem.title;
     this.description = cmItem.description;
     this.seconds = cmItem.seconds;
     if (cmItem.materials.narrations.length > 0) {
       cmItem.materials.narrations.forEach((v: NarrationItem) => {
         let category: string = Constants.CATEGORY.NARRATION
-        if (v.contentsId.match(`^[0-9a-z]+-r-[0-9a-z]{8}$`)) {
+        if (v.id.match(`^[0-9a-z]+-r-[0-9a-z]{8}$`)) {
           category = Constants.CATEGORY.RECORDING
-        } else if (v.contentsId.match(`^[0-9a-z]+-t-[0-9a-z]{8}$`)) {
+        } else if (v.id.match(`^[0-9a-z]+-t-[0-9a-z]{8}$`)) {
           category = Constants.CATEGORY.TTS
         }
-        this.setNarraion(null, category, v.contentsId, v.title, v.description, v.seconds, v.timestamp)
+        this.setNarraion(null, category, v.id, v.title, v.description, v.seconds, v.timestamp)
       });
     }
     if (cmItem.materials.startChime) {
       const chime = <ChimeItem>cmItem.materials.startChime
       this.setOpenChime(
-        chime.contentsId,
+        chime.id,
         chime.title,
         chime.description,
         chime.seconds,
@@ -170,7 +170,7 @@ export default class DisplayCmItem {
     if (cmItem.materials.endChime) {
       const chime = <ChimeItem>cmItem.materials.endChime
       this.setEndChime(
-        chime.contentsId,
+        chime.id,
         chime.title,
         chime.description,
         chime.seconds,
@@ -180,7 +180,7 @@ export default class DisplayCmItem {
     if (cmItem.materials.bgm) {
       const bgm = <BgmItem>cmItem.materials.bgm
       this.setBgm(
-        bgm.contentsId,
+        bgm.id,
         bgm.title,
         bgm.description,
         bgm.seconds,

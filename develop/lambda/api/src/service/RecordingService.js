@@ -35,17 +35,17 @@ exports.createUserRecording = function (body, xUnisCustomerCd) {
  * 録音データ削除
  * 録音音声素材を削除する
  *
- * recordingId String 録音音声ID
+ * id String 録音音声ID
  * xUnisCustomerCd String UNIS顧客CD
  * returns RecordingItem
  **/
-exports.deleteUserRecording = function (recordingId, xUnisCustomerCd) {
+exports.deleteUserRecording = function (id, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     try {
       const json = await deleteUserResource(
         xUnisCustomerCd,
         category,
-        recordingId
+        id
       );
       resolve(json);
     } catch (e) {
@@ -59,14 +59,14 @@ exports.deleteUserRecording = function (recordingId, xUnisCustomerCd) {
  * 録音データ取得
  * 録音音声素材の情報を取得する
  *
- * recordingId String 録音音声ID
+ * id String 録音音声ID
  * xUnisCustomerCd String UNIS顧客CD
  * returns RecordingItem
  **/
-exports.getUserRecording = function (recordingId, xUnisCustomerCd) {
+exports.getUserRecording = function (id, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     try {
-      const json = await getUserResource(xUnisCustomerCd, category, recordingId);
+      const json = await getUserResource(xUnisCustomerCd, category, id);
       resolve(json);
     } catch (e) {
       assert(e instanceof UMesseError);
@@ -99,17 +99,17 @@ exports.listUserRecording = function (xUnisCustomerCd) {
  * 録音音声素材の情報を更新する
  *
  * body Object ユーザー素材データ更新リクエストBody (optional)
- * recordingId String 録音音声ID
+ * id String 録音音声ID
  * xUnisCustomerCd String UNIS顧客CD
  * returns RecordingItem
  **/
-exports.updateUserRecording = function (body, recordingId, xUnisCustomerCd) {
+exports.updateUserRecording = function (body, id, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     try {
       const json = await updateUserResource(
         xUnisCustomerCd,
         category,
-        recordingId,
+        id,
         body
       );
       resolve(json);

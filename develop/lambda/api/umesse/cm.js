@@ -4,6 +4,7 @@ const path = require("path");
 const {
   constants,
   debuglog,
+  errorlog,
   timestamp,
   generateId,
 } = require("umesse-lib/constants");
@@ -15,11 +16,12 @@ const { BadRequestError, InternalServerError } = require("umesse-lib/error");
 const db = require("./db");
 
 // CM取得（一覧・個別）
-exports.getCm = async (unisCustomerCd, cmId, sort) => {
+exports.getCm = async (unisCustomerCd, id, sort) => {
   debuglog(
     `[getCm] ${JSON.stringify({
       unisCustomerCd: unisCustomerCd,
-      cmId: cmId,
+      id: id,
+      sort: sort,
     })}`
   );
 
@@ -36,8 +38,8 @@ exports.getCm = async (unisCustomerCd, cmId, sort) => {
     errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
-  if (cmId) {
-    json = json.filter((item) => item.cmId === cmId)[0];
+  if (id) {
+    json = json.filter((item) => item.cmId === id).shift();
   }
 
   if (!json) throw new InternalServerError("not found");
@@ -107,10 +109,10 @@ exports.createCm = async (unisCustomerCd, body) => {
     throw new BadRequestError("not narration");
 
   // ID生成
-  const cmId = generateId(unisCustomerCd, "c");
+  const id = generateId(unisCustomerCd, "c");
 
   // CM結合、S3へPUT
-  const seconds = await generateCm(unisCustomerCd, cmId, body.materials);
+  const seconds = await generateCm(unisCustomerCd, id, body.materials);
   if (!seconds) throw new InternalServerError("generate cm failed");
 
   // 署名付きURLの発行
@@ -118,7 +120,7 @@ exports.createCm = async (unisCustomerCd, body) => {
   try {
     url = await s3Manager.getSignedUrl(
       constants.s3Bucket().users,
-      `users/${unisCustomerCd}/cm/${cmId}.mp3`
+      `users/${unisCustomerCd}/cm/${id}.mp3`
     );
   } catch (e) {
     errorlog(JSON.stringify(e));
@@ -128,7 +130,7 @@ exports.createCm = async (unisCustomerCd, body) => {
 
   // DynamoDBのデータ更新
   const data = {
-    cmId: cmId,
+    cmId: id,
     materials: body.materials,
     productionType:
       "bgm" in body.materials
@@ -138,22 +140,25 @@ exports.createCm = async (unisCustomerCd, body) => {
     status: constants.cmStatus.CREATING,
     timestamp: timestamp(),
   };
+
+  let json;
   try {
-    let json = await db.User.addCm(unisCustomerCd, data);
-    json["url"] = url;
-    return json;
+    json = await db.User.addCm(unisCustomerCd, data);
   } catch (e) {
     errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
+
+  json["url"] = url;
+  return json;
 };
 
 // CM確定・更新
-exports.updateCm = async (unisCustomerCd, cmId, body) => {
+exports.updateCm = async (unisCustomerCd, id, body) => {
   debuglog(
     `[updateCm] ${JSON.stringify({
       unisCustomerCd: unisCustomerCd,
-      cmId: cmId,
+      id: id,
       body: body,
     })}`
   );
@@ -161,7 +166,7 @@ exports.updateCm = async (unisCustomerCd, cmId, body) => {
   // パラメーターチェック
   const checkParams = validation.checkParams({
     unisCustomerCd: unisCustomerCd,
-    cmId: cmId,
+    id: id,
     body: body,
   });
   if (checkParams) throw new BadRequestError(checkParams);
@@ -169,7 +174,7 @@ exports.updateCm = async (unisCustomerCd, cmId, body) => {
   // CM一覧から該当CMを取得
   const list = await this.getCm(unisCustomerCd);
   if (!list || !list.length) throw new InternalServerError("not found");
-  const index = list.findIndex((item) => item.cmId === cmId);
+  const index = list.findIndex((item) => item.cmId === id);
   if (index < 0) throw new InternalServerError("not found");
   const cm = list[index];
 
@@ -184,7 +189,8 @@ exports.updateCm = async (unisCustomerCd, cmId, body) => {
     const params = {
       MessageBody: JSON.stringify({
         unisCustomerCd: unisCustomerCd,
-        cmId: cmId,
+        id: id,
+        category: constants.resourceCategory.CM,
       }),
       QueueUrl: constants.sqsQueueUrl(),
       DelaySeconds: 0,
@@ -192,18 +198,18 @@ exports.updateCm = async (unisCustomerCd, cmId, body) => {
 
     // FIXME: ローカル環境だとここでエラーになって先の検証が出来ないので、一旦ローカル環境では動かないようにしてる
     if (process.env.environment != "local") {
-      res = await SQS.sqsManager(params);
+      res = await sqsManager.send(params);
       if (!res) throw new InternalServerError("update failed");
     }
 
     cm.status = constants.cmStatus.CONVERT;
-    dataProcessType = "01";
+    dataProcessType = constants.cmDataProcessType.ADD;
     status = "0";
   } else {
     // CMアップロード
     if (body.uploadSystem) {
       cm.status = constants.cmStatus.EXTERNAL_UPLOADING;
-      dataProcessType = "02";
+      dataProcessType = constants.cmDataProcessType.UPDATE;
       status = "1";
     }
   }
@@ -213,7 +219,7 @@ exports.updateCm = async (unisCustomerCd, cmId, body) => {
     const item = {
       unisCustomerCd: unisCustomerCd,
       dataProcessType: dataProcessType,
-      cmId: cmId,
+      cmId: id,
       cmName: cm.title,
       cmCommentManuscript: cm.description,
       startDatetime: cm.startDate,
@@ -249,29 +255,30 @@ exports.updateCm = async (unisCustomerCd, cmId, body) => {
 };
 
 // CM削除
-exports.deleteCm = async (unisCustomerCd, cmId) => {
+exports.deleteCm = async (unisCustomerCd, id) => {
   debuglog(
     `[deleteCm] ${JSON.stringify({
       unisCustomerCd: unisCustomerCd,
-      cmId: cmId,
+      id: id,
     })}`
   );
 
   // パラメーターチェック
   const checkParams = validation.checkParams({
     unisCustomerCd: unisCustomerCd,
-    cmId: cmId,
+    id: id,
   });
   if (checkParams) throw new BadRequestError(checkParams);
 
   // CM一覧から該当CMを取得
   const list = await this.getCm(unisCustomerCd);
   if (!list || !list.length) throw new InternalServerError("not found");
-  const index = list.findIndex((item) => item.cmId === cmId);
+  const index = list.findIndex((item) => item.cmId === id);
   if (index < 0) throw new InternalServerError("not found");
   const cm = list[index];
 
   // TODO: CMステータス状態によるチェック
+
   // DynamoDBのデータ更新
   cm.status = constants.cmStatus.DELETE;
   cm.timestamp = timestamp();
@@ -287,7 +294,7 @@ exports.deleteCm = async (unisCustomerCd, cmId) => {
   try {
     await s3Manager.delete(
       constants.s3Bucket().users,
-      `users/${unisCustomerCd}/cm/${cmId}.mp3`
+      `users/${unisCustomerCd}/cm/${id}.mp3`
     );
   } catch (e) {
     errorlog(JSON.stringify(e));
@@ -296,17 +303,17 @@ exports.deleteCm = async (unisCustomerCd, cmId) => {
 };
 
 // CM結合処理
-async function generateCm(unisCustomerCd, cmId, materials) {
+async function generateCm(unisCustomerCd, id, materials) {
   try {
     // UMesseConverter.
     const converter = new UMesseConverter(s3Manager);
 
     // 出力ファイルパス解決.
-    const workDir = converter.getWorkDir(unisCustomerCd, cmId);
-    const output = path.join(workDir, `${cmId}.mp3`);
+    const workDir = converter.getWorkDir(unisCustomerCd, id);
+    const output = path.join(workDir, `${id}.mp3`);
 
     // CM作成.
-    await converter.generateCm(unisCustomerCd, cmId, materials, output);
+    await converter.generateCm(unisCustomerCd, id, materials, output);
 
     // CMのduration取得.
     const seconds = await converter.getDuration(output);
@@ -321,7 +328,7 @@ async function generateCm(unisCustomerCd, cmId, materials) {
     });
     const res = await s3Manager.put(
       constants.s3Bucket().users,
-      `users/${unisCustomerCd}/cm/${cmId}.mp3`,
+      `users/${unisCustomerCd}/cm/${id}.mp3`,
       fileStream
     );
     if (!res) throw new InternalServerError("putObject failed");

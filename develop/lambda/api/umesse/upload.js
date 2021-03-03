@@ -7,11 +7,11 @@ const { BadRequestError, InternalServerError } = require("umesse-lib/error");
 const db = require("./db");
 
 // 外部連携データ取得（一覧・個別）
-exports.getUploadCm = async (unisCustomerCd, cmId) => {
+exports.getUploadCm = async (unisCustomerCd, id) => {
   debuglog(
     `[getUploadCm] ${JSON.stringify({
       unisCustomerCd: unisCustomerCd,
-      cmId: cmId,
+      id: id,
     })}`
   );
 
@@ -22,7 +22,7 @@ exports.getUploadCm = async (unisCustomerCd, cmId) => {
   if (checkParams) throw new BadRequestError(checkParams);
 
   try {
-    return await db.External.findById(unisCustomerCd, cmId);
+    return await db.External.findById(unisCustomerCd, id);
   } catch (e) {
     console.error(e.message);
     throw new InternalServerError(e.message);
@@ -30,11 +30,11 @@ exports.getUploadCm = async (unisCustomerCd, cmId) => {
 };
 
 // CM外部連携
-exports.createUploadCm = async (unisCustomerCd, cmId, body) => {
+exports.createUploadCm = async (unisCustomerCd, id, body) => {
   debuglog(
     `[createUploadCm] ${JSON.stringify({
       unisCustomerCd: unisCustomerCd,
-      cmId: cmId,
+      id: id,
       body: body,
     })}`
   );
@@ -42,7 +42,7 @@ exports.createUploadCm = async (unisCustomerCd, cmId, body) => {
   // パラメーターチェック
   const checkParams = validation.checkParams({
     unisCustomerCd: unisCustomerCd,
-    cmId: cmId,
+    id: id,
     body: body,
   });
   if (checkParams) throw new BadRequestError(checkParams);
@@ -50,7 +50,7 @@ exports.createUploadCm = async (unisCustomerCd, cmId, body) => {
   // CM一覧から該当CMを取得
   const list = await getCm(unisCustomerCd);
   if (!list || !list.length) throw new InternalServerError("not found");
-  const index = list.findIndex((item) => item.cmId === cmId);
+  const index = list.findIndex((item) => item.id === id);
   if (index < 0) throw new InternalServerError("not found");
   const cm = list[index];
 
@@ -60,7 +60,7 @@ exports.createUploadCm = async (unisCustomerCd, cmId, body) => {
   const item = {
     unisCustomerCd: unisCustomerCd,
     dataProcessType: "01",
-    cmId: cmId,
+    id: id,
     cmName: cm.title,
     cmCommentManuscript: cm.description,
     startDatetime: cm.startDate,
@@ -94,18 +94,18 @@ exports.createUploadCm = async (unisCustomerCd, cmId, body) => {
 };
 
 // CM外部連携解除
-exports.deleteUploadCm = async (unisCustomerCd, cmId) => {
+exports.deleteUploadCm = async (unisCustomerCd, id) => {
   debuglog(
     `[deleteUploadCm] ${JSON.stringify({
       unisCustomerCd: unisCustomerCd,
-      cmId: cmId,
+      id: id,
     })}`
   );
 
   // パラメーターチェック
   const checkParams = validation.checkParams({
     unisCustomerCd: unisCustomerCd,
-    cmId: cmId,
+    id: id,
     body: body,
   });
   if (checkParams) throw new BadRequestError(checkParams);
@@ -113,7 +113,7 @@ exports.deleteUploadCm = async (unisCustomerCd, cmId) => {
   // CM一覧から該当CMを取得
   const list = await getCm(unisCustomerCd);
   if (!list || !list.length) throw new InternalServerError("not found");
-  const index = list.findIndex((item) => item.cmId === cmId);
+  const index = list.findIndex((item) => item.id === id);
   if (index < 0) throw new InternalServerError("not found");
   const cm = list[index];
 
@@ -135,7 +135,7 @@ exports.deleteUploadCm = async (unisCustomerCd, cmId) => {
   const item = {
     unisCustomerCd: unisCustomerCd,
     dataProcessType: "03",
-    cmId: cmId,
+    id: id,
     endDateTime: timestamp(),
     uploadSystem: cm.uploadSystem,
     status: "1",

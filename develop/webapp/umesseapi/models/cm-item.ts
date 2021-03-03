@@ -22,7 +22,13 @@ export interface CmItem {
      * @type {string}
      * @memberof CmItem
      */
-    cmId?: any;
+    id?: any;
+    /**
+     * カテゴリー
+     * @type {string}
+     * @memberof CmItem
+     */
+    category?: any;
     /**
      * タイトル名
      * @type {string}

@@ -37,7 +37,7 @@ export default function ttsStore() {
   };
 
   const getUserTts = (id: string) => {
-    const item = state.ttsItems.find((element) => element.ttsId === id);
+    const item = state.ttsItems.find((element) => element.id === id);
     return item;
   };
 
@@ -95,8 +95,8 @@ export default function ttsStore() {
       console.log(requestModel)
       const response = await UMesseApi.ttsApi.generateUserTts(
         token(), requestModel)
-      console.log(response.data.tts)
-      state.ttsDatas = response.data.tts
+      console.log(response.data.details)
+      state.ttsDatas = response.data.details
     } catch (err) {
       console.log(err);
       state.error = err.message;
@@ -122,8 +122,8 @@ export default function ttsStore() {
       }]
       const response = await UMesseApi.ttsApi.generateUserTts(
         token(), requestModel)
-      console.log(response.data.tts)
-      state.ttsDatas = response.data.tts
+      console.log(response.data.details)
+      state.ttsDatas = response.data.details
     } catch (err) {
       console.log(err);
       state.error = err.message;
@@ -150,7 +150,7 @@ export default function ttsStore() {
       let response: TtsItem[] = []
       tmp.data.tts.forEach((element: any) => {
         response.push({
-          ttsId: element.id,
+          id: element.id,
           title: element.title,
           description: element.description,
           startDate: element.startDate,

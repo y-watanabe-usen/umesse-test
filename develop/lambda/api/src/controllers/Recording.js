@@ -13,8 +13,8 @@ module.exports.createUserRecording = function createUserRecording (req, res, nex
     });
 };
 
-module.exports.deleteUserRecording = function deleteUserRecording (req, res, next, recordingId, xUnisCustomerCd) {
-  Recording.deleteUserRecording(recordingId, xUnisCustomerCd)
+module.exports.deleteUserRecording = function deleteUserRecording (req, res, next, id, xUnisCustomerCd) {
+  Recording.deleteUserRecording(id, xUnisCustomerCd)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -23,8 +23,8 @@ module.exports.deleteUserRecording = function deleteUserRecording (req, res, nex
     });
 };
 
-module.exports.getUserRecording = function getUserRecording (req, res, next, recordingId, xUnisCustomerCd) {
-  Recording.getUserRecording(recordingId, xUnisCustomerCd)
+module.exports.getUserRecording = function getUserRecording (req, res, next, id, xUnisCustomerCd) {
+  Recording.getUserRecording(id, xUnisCustomerCd)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -43,8 +43,8 @@ module.exports.listUserRecording = function listUserRecording (req, res, next, x
     });
 };
 
-module.exports.updateUserRecording = function updateUserRecording (req, res, next, body, recordingId, xUnisCustomerCd) {
-  Recording.updateUserRecording(body, recordingId, xUnisCustomerCd)
+module.exports.updateUserRecording = function updateUserRecording (req, res, next, body, id, xUnisCustomerCd) {
+  Recording.updateUserRecording(body, id, xUnisCustomerCd)
     .then(function (response) {
       utils.writeJson(res, response);
     })

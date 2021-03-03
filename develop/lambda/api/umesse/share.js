@@ -9,11 +9,11 @@ const { BadRequestError, InternalServerError } = require("umesse-lib/error");
 const db = require("./db");
 
 // 共有CM取得（一覧・個別）
-exports.getShareCm = async (unisCustomerCd, cmId) => {
+exports.getShareCm = async (unisCustomerCd, id) => {
   debuglog(
     `[getShareCm] ${JSON.stringify({
       unisCustomerCd: unisCustomerCd,
-      cmId: cmId,
+      id: id,
     })}`
   );
 
@@ -33,33 +33,33 @@ exports.getShareCm = async (unisCustomerCd, cmId) => {
   }
 
   json = json.filter((item) => item.status === constants.cmStatus.SHARING);
-  if (cmId) {
-    json = json.filter((item) => item.cmId === cmId)[0];
+  if (id) {
+    json = json.filter((item) => item.cmId === id)[0];
   }
   if (!json) throw new InternalServerError("not found");
   return json;
 };
 
 // 共有CM追加
-exports.createShareCm = async (unisCustomerCd, cmId) => {
+exports.createShareCm = async (unisCustomerCd, id) => {
   debuglog(
     `[createShareCm] ${JSON.stringify({
       unisCustomerCd: unisCustomerCd,
-      cmId: cmId,
+      id: id,
     })}`
   );
 
   // パラメーターチェック
   const checkParams = validation.checkParams({
     unisCustomerCd: unisCustomerCd,
-    cmId: cmId,
+    id: id,
   });
   if (checkParams) throw new BadRequestError(checkParams);
 
   // CM一覧から該当CMを取得
   const list = await getCm(unisCustomerCd);
   if (!list || !list.length) throw new InternalServerError("not found");
-  const index = list.findIndex((item) => item.cmId === cmId);
+  const index = list.findIndex((item) => item.cmId === id);
   if (index < 0) throw new InternalServerError("not found");
   const cm = list[index];
 
@@ -72,8 +72,8 @@ exports.createShareCm = async (unisCustomerCd, cmId) => {
   try {
     res = await s3Manager.copy(
       constants.s3Bucket().users,
-      `group/${user.customerGroupCd}/cm/${cmId}.mp3`,
-      `${constants.s3Bucket().users}/users/${unisCustomerCd}/cm/${cmId}.mp3`
+      `group/${user.customerGroupCd}/cm/${id}.mp3`,
+      `${constants.s3Bucket().users}/users/${unisCustomerCd}/cm/${id}.mp3`
     );
   } catch (e) {
     erorrolg(JSON.stringify(e));
@@ -97,25 +97,25 @@ exports.createShareCm = async (unisCustomerCd, cmId) => {
 };
 
 // 共有CM解除
-exports.deleteShareCm = async (unisCustomerCd, cmId) => {
+exports.deleteShareCm = async (unisCustomerCd, id) => {
   debuglog(
     `[deleteShareCm] ${JSON.stringify({
       unisCustomerCd: unisCustomerCd,
-      cmId: cmId,
+      id: id,
     })}`
   );
 
   // パラメーターチェック
   const checkParams = validation.checkParams({
     unisCustomerCd: unisCustomerCd,
-    cmId: cmId,
+    id: id,
   });
   if (checkParams) throw new BadRequestError(checkParams);
 
   // CM一覧から該当CMを取得
   const list = await this.getCm(unisCustomerCd);
   if (!list || !list.length) throw new InternalServerError("not found");
-  const index = list.findIndex((item) => item.cmId === cmId);
+  const index = list.findIndex((item) => item.cmId === id);
   if (index < 0) throw new InternalServerError("not found");
   const cm = list[index];
 
@@ -140,7 +140,7 @@ exports.deleteShareCm = async (unisCustomerCd, cmId) => {
   try {
     await s3Manager.delete(
       constants.s3Bucket().users,
-      `group/${user.customerGroupCd}/cm/${cmId}.mp3`
+      `group/${user.customerGroupCd}/cm/${id}.mp3`
     );
   } catch (e) {
     errorlog(JSON.stringify(e));

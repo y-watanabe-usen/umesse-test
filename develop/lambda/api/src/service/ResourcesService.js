@@ -34,7 +34,7 @@ exports.getSignedUrl = function (id, category) {
  * BGM素材を一覧で取得する
  *
  * industryCd String 業種CD (optional)
- * sort Integer (optional)
+ * sort Integer ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順) (optional)
  * returns List
  **/
 exports.listBgm = function (industryCd, sort) {
@@ -74,7 +74,7 @@ exports.listChime = function (sort) {
  *
  * industryCd String 業種CD (optional)
  * sceneCd String シーンCD (optional)
- * sort Integer (optional)
+ * sort Integer ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順) (optional)
  * returns List
  **/
 exports.listFree = function (industryCd, sceneCd, sort) {
@@ -100,7 +100,7 @@ exports.listFree = function (industryCd, sceneCd, sort) {
  *
  * industryCd String 業種CD (optional)
  * sceneCd String シーンCD (optional)
- * sort Integer (optional)
+ * sort Integer ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順) (optional)
  * returns List
  **/
 exports.listNarration = function (industryCd, sceneCd, sort) {
@@ -127,7 +127,7 @@ exports.listNarration = function (industryCd, sceneCd, sort) {
  *
  * industryCd String 業種CD (optional)
  * sceneCd String シーンCD (optional)
- * sort Integer (optional)
+ * sort Integer ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順) (optional)
  * returns List
  **/
 exports.listTemplate = function (industryCd, sceneCd, sort) {

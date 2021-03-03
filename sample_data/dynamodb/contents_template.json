@@ -7,7 +7,35 @@
           "category": { "S": "template" },
           "title": { "S": "サンプル01" },
           "description": { "S": "テンプレート・サンプル01" },
-          "manuscript": { "S": "本日は ${customerName} へお越しいただき、誠にありがとうございます。" },
+          "manuscript": {
+            "S": "本日は ${customerName} へお越しいただき、誠にありがとうございます。"
+          },
+          "details": {
+            "L": [
+              {
+                "M": {
+                  "text": {
+                    "S": "本日は ${customerName} へお越しいただき、誠にありがとうございます。"
+                  },
+                  "lang": { "S": "ja" }
+                }
+              },
+              {
+                "M": {
+                  "text": {
+                    "S": "Thank you for visiting ${customerName} today."
+                  },
+                  "lang": { "S": "en" }
+                }
+              },
+              {
+                "M": {
+                  "text": { "S": "感谢您今天访问 ${customerName}。" },
+                  "lang": { "S": "zh" }
+                }
+              }
+            ]
+          },
           "industry": {
             "L": [
               {
@@ -24,70 +52,6 @@
                 "M": {
                   "sceneCd": { "S": "01" },
                   "sceneName": { "S": "シーン01" }
-                }
-              }
-            ]
-          },
-          "timestamp": { "S": "2019-09-01T09:00:00+09:00" }
-        }
-      }
-    },
-    {
-      "PutRequest": {
-        "Item": {
-          "contentsId": { "S": "サンプル02" },
-          "category": { "S": "template" },
-          "title": { "S": "サンプル02" },
-          "description": { "S": "テンプレート・サンプル02" },
-          "manuscript": { "S": "Thank you for visiting ${customerName} today." },
-          "industry": {
-            "L": [
-              {
-                "M": {
-                  "industryCd": { "S": "02" },
-                  "industryName": { "S": "業種02" }
-                }
-              }
-            ]
-          },
-          "scene": {
-            "L": [
-              {
-                "M": {
-                  "sceneCd": { "S": "02" },
-                  "sceneName": { "S": "シーン02" }
-                }
-              }
-            ]
-          },
-          "timestamp": { "S": "2019-09-01T09:00:00+09:00" }
-        }
-      }
-    },
-    {
-      "PutRequest": {
-        "Item": {
-          "contentsId": { "S": "サンプル03" },
-          "category": { "S": "template" },
-          "title": { "S": "サンプル03" },
-          "description": { "S": "テンプレート・サンプル03" },
-          "manuscript": { "S": "感谢您今天访问 ${customerName}。" },
-          "industry": {
-            "L": [
-              {
-                "M": {
-                  "industryCd": { "S": "03" },
-                  "industryName": { "S": "業種03" }
-                }
-              }
-            ]
-          },
-          "scene": {
-            "L": [
-              {
-                "M": {
-                  "sceneCd": { "S": "03" },
-                  "sceneName": { "S": "シーン03" }
                 }
               }
             ]

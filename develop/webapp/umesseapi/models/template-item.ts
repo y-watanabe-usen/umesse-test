@@ -22,7 +22,7 @@ export interface TemplateItem {
      * @type {string}
      * @memberof TemplateItem
      */
-    contentsId?: any;
+    id?: any;
     /**
      * カテゴリー
      * @type {string}
@@ -47,6 +47,12 @@ export interface TemplateItem {
      * @memberof TemplateItem
      */
     manuscript?: any;
+    /**
+     * 
+     * @type {Array&lt;TemplateItemDetails&gt;}
+     * @memberof TemplateItem
+     */
+    details?: any;
     /**
      * 
      * @type {Array&lt;IndustryItem&gt;}

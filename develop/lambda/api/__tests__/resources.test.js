@@ -187,21 +187,34 @@ describe("ユーザー音声作成", () => {
 // TTS音声作成
 describe("TTS音声作成", () => {
   test("[success] TTS音声新規生成", async () => {
-    const body = [
-      {
-        text: "こんにちは",
-        speaker: "1",
-        lang: "ja",
-      },
-      {
-        text: "hello",
-        speaker: "0",
-        lang: "en",
-      },
-    ];
+    const body = {
+      id: "サンプル01",
+      category: "template",
+      details: [
+        {
+          text: "こんにちは",
+          speaker: "1",
+          lang: "ja",
+        },
+        {
+          text: "hello",
+          speaker: "0",
+          lang: "en",
+        },
+        {
+          text: "test",
+          speaker: "0",
+          lang: "zh",
+          id: "サンプル01",
+          category: "narration",
+        },
+      ],
+    };
     const response = await generateTtsResource(data.unisCustomerCd, body);
     expect(response).toEqual({
-      tts: [
+      id: "サンプル01",
+      category: "template",
+      details: [
         {
           url: expect.anything(),
           lang: "ja",
@@ -210,42 +223,61 @@ describe("TTS音声作成", () => {
           url: expect.anything(),
           lang: "en",
         },
+        {
+          url: expect.anything(),
+          lang: "zh",
+        },
       ],
     });
   });
 
   test("[success] TTS音声新規登録", async () => {
-    const body = [
-      {
-        title: "TTSテストja",
-        description: "TTSテストja",
-        lang: "ja",
-      },
-      {
-        title: "TTSテストen",
-        description: "TTテストen",
-        lang: "en",
-      },
-    ];
-    const response = await createTtsResource(data.unisCustomerCd, body);
-    expect(response).toEqual({
-      tts: [
+    const body = {
+      id: "サンプル01",
+      category: "template",
+      details: [
         {
-          id: expect.stringMatching(`^${data.unisCustomerCd}-t-[0-9a-z]{8}$`),
-          title: body.title,
-          description: body.description,
-          startDate: expect.anything(),
-          timestamp: expect.anything(),
+          title: "TTSテスト",
+          description: "TTSテスト",
+          lang: "ja",
         },
         {
-          id: expect.stringMatching(`^${data.unisCustomerCd}-t-[0-9a-z]{8}$`),
-          title: body.title,
-          description: body.description,
-          startDate: expect.anything(),
-          timestamp: expect.anything(),
+          title: "TTSテスト",
+          description: "TTテスト",
+          lang: "en",
+        },
+        {
+          title: "TTSテスト",
+          description: "TTテスト",
+          lang: "zh",
+          id: "サンプル01",
+          category: "narration",
         },
       ],
-    });
+    };
+    const response = await createTtsResource(data.unisCustomerCd, body);
+    expect(response).toEqual([
+      {
+        id: expect.stringMatching(`^${data.unisCustomerCd}-t-[0-9a-z]{8}$`),
+        category: "tts",
+        title: `${body.details[0].title}(${body.details[0].lang})`,
+        description: body.details[0].description,
+        startDate: expect.anything(),
+        timestamp: expect.anything(),
+      },
+      {
+        id: expect.stringMatching(`^${data.unisCustomerCd}-t-[0-9a-z]{8}$`),
+        category: "tts",
+        title: `${body.details[1].title}(${body.details[1].lang})`,
+        description: body.details[1].description,
+        startDate: expect.anything(),
+        timestamp: expect.anything(),
+      },
+      {
+        id: body.details[2].id,
+        category: body.details[2].category,
+      },
+    ]);
   });
 });
 // FIXME: error test

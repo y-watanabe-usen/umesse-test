@@ -14,14 +14,14 @@ const { UMesseError } = require("umesse-lib/error");
  * CMを外部連携する
  *
  * body Object CM外部連携システムリクエストBody (optional)
- * cmId String CM ID
+ * id String CM ID
  * xUnisCustomerCd String UNIS顧客CD
  * returns ExternalItem
  **/
-exports.createUploadCm = function (body, cmId, xUnisCustomerCd) {
+exports.createUploadCm = function (body, id, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     try {
-      const json = await createUploadCm(xUnisCustomerCd, cmId, body);
+      const json = await createUploadCm(xUnisCustomerCd, id, body);
       resolve(json);
     } catch (e) {
       assert(e instanceof UMesseError);
@@ -34,14 +34,14 @@ exports.createUploadCm = function (body, cmId, xUnisCustomerCd) {
  * CM外部連携解除
  * CMの外部連携を解除する
  *
- * cmId String CM ID
+ * id String CM ID
  * xUnisCustomerCd String UNIS顧客CD
  * returns ExternalItem
  **/
-exports.deleteUploadCm = function (cmId, xUnisCustomerCd) {
+exports.deleteUploadCm = function (id, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     try {
-      const json = await deleteUploadCm(xUnisCustomerCd, cmId);
+      const json = await deleteUploadCm(xUnisCustomerCd, id);
       resolve(json);
     } catch (e) {
       assert(e instanceof UMesseError);
@@ -54,14 +54,14 @@ exports.deleteUploadCm = function (cmId, xUnisCustomerCd) {
  * CM外部連携情報取得
  * CMの外部連携状態を取得する
  *
- * cmId String CM ID
+ * id String CM ID
  * xUnisCustomerCd String UNIS顧客CD
  * returns ExternalItem
  **/
-exports.getUploadCm = function (cmId, xUnisCustomerCd) {
+exports.getUploadCm = function (id, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     try {
-      const json = await getUploadCm(xUnisCustomerCd, cmId);
+      const json = await getUploadCm(xUnisCustomerCd, id);
       resolve(json);
     } catch (e) {
       assert(e instanceof UMesseError);
@@ -75,7 +75,7 @@ exports.getUploadCm = function (cmId, xUnisCustomerCd) {
  * CMの外部連携状態を一覧で取得する
  *
  * xUnisCustomerCd String UNIS顧客CD
- * returns List
+ * returns ExternalItems
  **/
 exports.listUploadCm = function (xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {

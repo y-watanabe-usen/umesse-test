@@ -22,7 +22,13 @@ export interface RecordingItem {
      * @type {string}
      * @memberof RecordingItem
      */
-    recordingId?: any;
+    id?: any;
+    /**
+     * カテゴリー
+     * @type {string}
+     * @memberof RecordingItem
+     */
+    category?: any;
     /**
      * タイトル名
      * @type {string}

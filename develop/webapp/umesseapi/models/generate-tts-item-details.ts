@@ -14,19 +14,19 @@
 /**
  * 
  * @export
- * @interface GenerateTtsItemTts
+ * @interface GenerateTtsItemDetails
  */
-export interface GenerateTtsItemTts {
+export interface GenerateTtsItemDetails {
     /**
      * 
      * @type {string}
-     * @memberof GenerateTtsItemTts
+     * @memberof GenerateTtsItemDetails
      */
     url?: any;
     /**
      * 
      * @type {string}
-     * @memberof GenerateTtsItemTts
+     * @memberof GenerateTtsItemDetails
      */
     lang?: any;
 }
