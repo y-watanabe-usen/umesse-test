@@ -29,7 +29,8 @@ describe("convert", () => {
         {
           body: JSON.stringify({
             unisCustomerCd: cmData.unisCustomerCd,
-            cmId: cmData.cm[0].cmId,
+            id: cmData.cm[0].cmId,
+            category: "cm",
           }),
         },
       ],
@@ -69,7 +70,8 @@ describe("convert", () => {
         {
           body: JSON.stringify({
             unisCustomerCd: "999999999",
-            cmId: cmData.cm[1].cmId,
+            id: cmData.cm[1].cmId,
+            category: "cm",
           }),
         },
       ],
@@ -84,7 +86,8 @@ describe("convert", () => {
         {
           body: JSON.stringify({
             unisCustomerCd: cmData.unisCustomerCd,
-            cmId: "999999999",
+            id: "999999999",
+            category: "cm",
           }),
         },
       ],
@@ -99,7 +102,8 @@ describe("convert", () => {
         {
           body: JSON.stringify({
             unisCustomerCd: cmData.unisCustomerCd,
-            cmId: cmData.cm[1].cmId,
+            id: cmData.cm[1].cmId,
+            category: "cm",
           }),
         },
       ],
@@ -114,7 +118,8 @@ describe("convert", () => {
         {
           body: JSON.stringify({
             unisCustomerCd: cmData.unisCustomerCd,
-            cmId: cmData.cm[2].cmId,
+            id: cmData.cm[2].cmId,
+            category: "cm",
           }),
         },
       ],

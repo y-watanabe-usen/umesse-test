@@ -20,11 +20,13 @@ exports.handler = async (event, context) => {
 
     // TODO: body message check
     const unisCustomerCd = body.unisCustomerCd;
-    const cmId = body.cmId;
+    const id = body.id;
+    const category = body.category;
     // パラメーターチェック
     const checkParams = validation.checkParams({
       unisCustomerCd: unisCustomerCd,
-      cmId: cmId,
+      id: id,
+      category: category,
     });
     if (checkParams) throw checkParams;
 
@@ -43,7 +45,7 @@ exports.handler = async (event, context) => {
     if (!res || !res.Item) throw "not found";
     const list = res.Item.cm;
     if (!list) throw "not found";
-    const index = list.findIndex((item) => item.cmId === cmId);
+    const index = list.findIndex((item) => item.cmId === id);
     if (index < 0) throw "not found";
     const cm = list[index];
 
@@ -52,7 +54,7 @@ exports.handler = async (event, context) => {
       throw "音圧調整/エンコードができません";
 
     // CMコンバート処理
-    res = await convertCm(unisCustomerCd, cmId);
+    res = await convertCm(unisCustomerCd, id);
     if (res) throw res;
 
     // DynamoDbデータ更新
@@ -110,7 +112,7 @@ exports.handler = async (event, context) => {
 };
 
 // CM音圧調整処理
-function convertCm(unisCustomerCd, cmId) {
+function convertCm(unisCustomerCd, id) {
   return new Promise(async function (resolve, reject) {
     const workDir = `/tmp/umesse/${unisCustomerCd}/convert`;
     const ffmpeg = `ffmpeg -hide_banner`;
@@ -120,17 +122,17 @@ function convertCm(unisCustomerCd, cmId) {
 
       let res = await s3Manager.get(
         constants.s3Bucket().users,
-        `users/${unisCustomerCd}/cm/${cmId}.mp3`
+        `users/${unisCustomerCd}/cm/${id}.mp3`
       );
       if (!res || !res.Body) throw "getObject failed";
 
-      fs.writeFileSync(`${workDir}/${cmId}.mp3`, res.Body);
+      fs.writeFileSync(`${workDir}/${id}.mp3`, res.Body);
 
       let command = "";
       let data = "";
 
       // 1. wav変換
-      command = `${ffmpeg} -y -i ${workDir}/${cmId}.mp3 \
+      command = `${ffmpeg} -y -i ${workDir}/${id}.mp3 \
         -ar 44100 -acodec pcm_s16le -ac 2 -map_metadata -1 -flags +bitexact ${workDir}/tmp_1.wav`;
       debuglog(command);
       execSync(command);
@@ -158,24 +160,24 @@ function convertCm(unisCustomerCd, cmId) {
 
       // 5. ラウドネス調整 + HE-AACv2化
       command = `${ffmpeg} -y -i ${workDir}/tmp_2.wav \
-        -af volume=0dB -acodec libfdk_aac -profile:a aac_he_v2 -ab 48k -ar 48000 -ac 2 ${workDir}/${cmId}.aac`;
+        -af volume=0dB -acodec libfdk_aac -profile:a aac_he_v2 -ab 48k -ar 48000 -ac 2 ${workDir}/${id}.aac`;
       if (data.input_i > -17.5) {
         command = `${ffmpeg} -y -i ${workDir}/tmp_2.wav \
           -af volume=-${
             parseFloat(data.input_i) + 17.5
-          }dB -acodec libfdk_aac -profile:a aac_he_v2 -ab 48k -ar 48000 -ac 2 ${workDir}/${cmId}.aac`;
+          }dB -acodec libfdk_aac -profile:a aac_he_v2 -ab 48k -ar 48000 -ac 2 ${workDir}/${id}.aac`;
       }
       debuglog(command);
       execSync(command);
 
       // S3へPUT
-      const fileStream = fs.createReadStream(`${workDir}/${cmId}.aac`);
+      const fileStream = fs.createReadStream(`${workDir}/${id}.aac`);
       fileStream.on("error", (e) => {
         throw e;
       });
       res = await s3Manager.put(
         constants.s3Bucket().users,
-        `users/${unisCustomerCd}/cm/${cmId}.aac`,
+        `users/${unisCustomerCd}/cm/${id}.aac`,
         fileStream
       );
       if (!res) throw "putObject failed";
@@ -183,7 +185,7 @@ function convertCm(unisCustomerCd, cmId) {
       // FIXME: エンコード前の音源は削除するか検討（一旦コメントアウト）
       // await s3Manager.delete(
       //   constants.s3Bucket().users,
-      //   `users/${unisCustomerCd}/cm/${cmId}.mp3`
+      //   `users/${unisCustomerCd}/cm/${id}.mp3`
       // );
 
       debuglog("converter complete");
