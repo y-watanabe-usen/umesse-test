@@ -23,8 +23,8 @@
             "L": [
               {
                 "M": {
-                  "sceneCd": { "S": "01" },
-                  "sceneName": { "S": "シーン01" }
+                  "sceneCd": { "S": "001" },
+                  "sceneName": { "S": "シーン001" }
                 }
               }
             ]
@@ -46,8 +46,8 @@
             "L": [
               {
                 "M": {
-                  "industryCd": { "S": "02" },
-                  "industryName": { "S": "業種02" }
+                  "industryCd": { "S": "01" },
+                  "industryName": { "S": "業種01" }
                 }
               }
             ]
@@ -56,8 +56,8 @@
             "L": [
               {
                 "M": {
-                  "sceneCd": { "S": "02" },
-                  "sceneName": { "S": "シーン02" }
+                  "sceneCd": { "S": "001" },
+                  "sceneName": { "S": "シーン001" }
                 }
               }
             ]
@@ -79,8 +79,8 @@
             "L": [
               {
                 "M": {
-                  "industryCd": { "S": "03" },
-                  "industryName": { "S": "業種03" }
+                  "industryCd": { "S": "01" },
+                  "industryName": { "S": "業種01" }
                 }
               }
             ]
@@ -89,8 +89,8 @@
             "L": [
               {
                 "M": {
-                  "sceneCd": { "S": "03" },
-                  "sceneName": { "S": "シーン03" }
+                  "sceneCd": { "S": "001" },
+                  "sceneName": { "S": "シーン001" }
                 }
               }
             ]
@@ -112,8 +112,8 @@
             "L": [
               {
                 "M": {
-                  "industryCd": { "S": "04" },
-                  "industryName": { "S": "業種04" }
+                  "industryCd": { "S": "10" },
+                  "industryName": { "S": "業種10" }
                 }
               }
             ]
@@ -122,8 +122,8 @@
             "L": [
               {
                 "M": {
-                  "sceneCd": { "S": "04" },
-                  "sceneName": { "S": "シーン04" }
+                  "sceneCd": { "S": "004" },
+                  "sceneName": { "S": "シーン004" }
                 }
               }
             ]
@@ -145,8 +145,8 @@
             "L": [
               {
                 "M": {
-                  "industryCd": { "S": "05" },
-                  "industryName": { "S": "業種05" }
+                  "industryCd": { "S": "10" },
+                  "industryName": { "S": "業種10" }
                 }
               }
             ]
@@ -155,8 +155,8 @@
             "L": [
               {
                 "M": {
-                  "sceneCd": { "S": "05" },
-                  "sceneName": { "S": "シーン05" }
+                  "sceneCd": { "S": "004" },
+                  "sceneName": { "S": "シーン004" }
                 }
               }
             ]
@@ -178,8 +178,8 @@
             "L": [
               {
                 "M": {
-                  "industryCd": { "S": "06" },
-                  "industryName": { "S": "業種06" }
+                  "industryCd": { "S": "10" },
+                  "industryName": { "S": "業種10" }
                 }
               }
             ]
@@ -188,8 +188,8 @@
             "L": [
               {
                 "M": {
-                  "sceneCd": { "S": "06" },
-                  "sceneName": { "S": "シーン06" }
+                  "sceneCd": { "S": "004" },
+                  "sceneName": { "S": "シーン004" }
                 }
               }
             ]
@@ -211,8 +211,8 @@
             "L": [
               {
                 "M": {
-                  "industryCd": { "S": "07" },
-                  "industryName": { "S": "業種07" }
+                  "industryCd": { "S": "10" },
+                  "industryName": { "S": "業種10" }
                 }
               }
             ]
@@ -221,8 +221,8 @@
             "L": [
               {
                 "M": {
-                  "sceneCd": { "S": "07" },
-                  "sceneName": { "S": "シーン07" }
+                  "sceneCd": { "S": "004" },
+                  "sceneName": { "S": "シーン004" }
                 }
               }
             ]
@@ -244,8 +244,8 @@
             "L": [
               {
                 "M": {
-                  "industryCd": { "S": "08" },
-                  "industryName": { "S": "業種08" }
+                  "industryCd": { "S": "10" },
+                  "industryName": { "S": "業種10" }
                 }
               }
             ]
@@ -254,8 +254,8 @@
             "L": [
               {
                 "M": {
-                  "sceneCd": { "S": "08" },
-                  "sceneName": { "S": "シーン08" }
+                  "sceneCd": { "S": "004" },
+                  "sceneName": { "S": "シーン004" }
                 }
               }
             ]
@@ -277,8 +277,8 @@
             "L": [
               {
                 "M": {
-                  "industryCd": { "S": "09" },
-                  "industryName": { "S": "業種09" }
+                  "industryCd": { "S": "10" },
+                  "industryName": { "S": "業種10" }
                 }
               }
             ]
@@ -287,8 +287,8 @@
             "L": [
               {
                 "M": {
-                  "sceneCd": { "S": "09" },
-                  "sceneName": { "S": "シーン09" }
+                  "sceneCd": { "S": "004" },
+                  "sceneName": { "S": "シーン004" }
                 }
               }
             ]
@@ -320,8 +320,8 @@
             "L": [
               {
                 "M": {
-                  "sceneCd": { "S": "10" },
-                  "sceneName": { "S": "シーン10" }
+                  "sceneCd": { "S": "004" },
+                  "sceneName": { "S": "シーン004" }
                 }
               }
             ]
