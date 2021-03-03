@@ -28,7 +28,7 @@ export default function recordingStore() {
   };
 
   const getUserRecording = (id: string) => {
-    const item = state.recordingItems.find((element) => element.recordingId === id);
+    const item = state.recordingItems.find((element) => element.id === id);
     return item;
   };
 

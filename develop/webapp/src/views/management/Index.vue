@@ -327,7 +327,7 @@ export default defineComponent({
     const play = async (cm: CmItem) => {
       if (state.isPlaying) return;
       const audioBuffer = await UMesseService.resourcesService.getAudioBufferByContentsId(
-        cm.cmId,
+        cm.id,
         Constants.CATEGORY.CM
       );
       audioPlayer.start(audioBuffer);
@@ -339,7 +339,7 @@ export default defineComponent({
       const xUnisCustomerCd = "123456789";
       const response = await UMesseService.uploadCmService.update(
         xUnisCustomerCd,
-        cm.cmId,
+        cm.id,
         state.title,
         state.description,
         state.scene,
@@ -424,7 +424,7 @@ export default defineComponent({
       }
     };
     const removeAndOpenRemovedModal = async () => {
-      await remove(state.selectedCm?.cmId);
+      await remove(state.selectedCm?.id);
       closeRemoveModal();
       setTimeout(() => {
         openRemovedModal();

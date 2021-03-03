@@ -197,7 +197,7 @@ export default defineComponent({
 
     const play = async (chime: ChimeItem) => {
       const audioBuffer = await UMesseService.resourcesService.getAudioBufferByContentsId(
-        chime.contentsId,
+        chime.id,
         chime.category
       );
       audioPlayer.start(audioBuffer);

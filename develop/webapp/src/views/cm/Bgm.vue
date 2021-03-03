@@ -210,7 +210,7 @@ export default defineComponent({
 
     const play = async (bgm: BgmItem) => {
       const audioBuffer = await UMesseService.resourcesService.getAudioBufferByContentsId(
-        bgm.contentsId,
+        bgm.id,
         bgm.category
       );
       audioPlayer.start(audioBuffer);

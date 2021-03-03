@@ -28,7 +28,7 @@ export function useResourcesService(
             value.data.forEach((v: any) => {
               if (sceneCd == "901" && v.id && v.id.match(`^[0-9a-z]+-r-[0-9a-z]{8}$`)) {
                 data.push({
-                  contentsId: v.id,
+                  id: v.id,
                   title: v.title,
                   description: v.description,
                   category: Constants.CATEGORY.RECORDING,
@@ -36,7 +36,7 @@ export function useResourcesService(
                 })
               } else if (sceneCd == "902" && v.id && v.id.match(`^[0-9a-z]+-t-[0-9a-z]{8}$`)) {
                 data.push({
-                  contentsId: v.id,
+                  id: v.id,
                   title: v.title,
                   description: v.description,
                   category: Constants.CATEGORY.TTS,

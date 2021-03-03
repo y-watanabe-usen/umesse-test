@@ -23,8 +23,8 @@ export default function authStore() {
         // 認証済み
         if (state.token) return
 
-        const custCd = router.currentRoute.value.query.custCd as string
-        if (custCd == undefined) {
+        const unisCustomerCd = router.currentRoute.value.query.unisCustomerCd as string
+        if (unisCustomerCd == undefined) {
             return state.error = ''
         }
 
