@@ -19,72 +19,90 @@
             </SubMenuItem>
           </SubMenu>
         </template>
-        <List>
-          <template #header>
-            <ListHeader>
-              <Sort
-                v-model="sort"
-                @update:modelValue="fetchNarration"
-                :options="
-                  narrationSorts.map((narrationSort) => {
-                    return {
-                      title: narrationSort.name,
-                      value: narrationSort.cd,
-                    };
-                  })
-                "
-              />
-            </ListHeader>
-          </template>
-          <ListItem v-for="narration in narrations" :key="narration.contentsId">
-            <template #title>
-              <h2>{{ narration.title }}</h2>
+        <template v-if="!activeNarrationSceneCd">
+          <List>
+            <ListItem
+              v-for="scene in scenes"
+              :key="scene.cd"
+              @click="clickNarrationScene(scene.cd)"
+            >
+              <template #title>
+                <h2>{{ scene.name }}</h2>
+              </template>
+            </ListItem>
+          </List>
+        </template>
+        <template v-else>
+          <List>
+            <template #header>
+              <ListHeader>
+                <Sort
+                  v-model="sort"
+                  @update:modelValue="fetchNarration"
+                  :options="
+                    narrationSorts.map((narrationSort) => {
+                      return {
+                        title: narrationSort.name,
+                        value: narrationSort.cd,
+                      };
+                    })
+                  "
+                />
+              </ListHeader>
             </template>
-            <template #line1>
-              <p>{{ narration.description }}</p>
-            </template>
-            <template #line2>
-              <p>
-                <span class="duration">{{
-                  convertNumberToTime(narration.seconds)
-                }}</span>
-                <span class="start"
-                  >放送開始日{{
-                    convertDatestringToDateJp(narration.timestamp)
-                  }}</span
+            <ListItem
+              v-for="narration in narrations"
+              :key="narration.contentsId"
+            >
+              <template #title>
+                <h2>{{ narration.title }}</h2>
+              </template>
+              <template #line1>
+                <p>{{ narration.description }}</p>
+              </template>
+              <template #line2>
+                <p>
+                  <span class="duration">{{
+                    convertNumberToTime(narration.seconds)
+                  }}</span>
+                  <span class="start"
+                    >放送開始日{{
+                      convertDatestringToDateJp(narration.timestamp)
+                    }}</span
+                  >
+                  <span class="end"
+                    >有効期限{{
+                      convertDatestringToDateJp(narration.timestamp)
+                    }}</span
+                  >
+                </p>
+              </template>
+              <template #operations>
+                <Button
+                  type="rectangle"
+                  class="btn-document"
+                  @click="selectNarrationAndOpenDocumentModal(narration)"
                 >
-                <span class="end"
-                  >有効期限{{
-                    convertDatestringToDateJp(narration.timestamp)
-                  }}</span
+                  <img src="@/assets/icon_document.svg" />原稿
+                </Button>
+                <Button
+                  type="rectangle"
+                  class="btn-play"
+                  @click="selectNarrationAndOpenPlayModal(narration)"
                 >
-              </p>
-            </template>
-            <template #operations>
-              <Button
-                type="rectangle"
-                class="btn-document"
-                @click="selectNarrationAndOpenDocumentModal(narration)"
-              >
-                <img src="@/assets/icon_document.svg" />原稿
-              </Button>
-              <Button
-                type="rectangle"
-                class="btn-play"
-                @click="selectNarrationAndOpenPlayModal(narration)"
-              >
-                <img src="@/assets/icon_play.svg" />試聴
-              </Button>
-              <Button
-                type="rectangle"
-                class="btn-select"
-                @click="setNarration(narration)"
-              >
-                選択<img src="@/assets/icon_select.svg" />
-              </Button>
-            </template>
-          </ListItem>
-        </List>
+                  <img src="@/assets/icon_play.svg" />試聴
+                </Button>
+                <Button
+                  type="rectangle"
+                  class="btn-select"
+                  @click="setNarration(narration)"
+                >
+                  選択<img src="@/assets/icon_select.svg" />
+                </Button>
+              </template>
+            </ListItem>
+          </List>
+        </template>
       </ContentsBase>
     </template>
   </BasicLayout>
@@ -166,6 +184,7 @@ import {
   convertNumberToTime,
 } from "@/utils/FormatDate";
 import UMesseService from "@/services/UMesseService";
+import { Scene } from "@/utils/Constants";
 
 export default defineComponent({
   components: {
@@ -191,16 +210,18 @@ export default defineComponent({
     const audioPlayer = AudioPlayer();
     const { cm } = useGlobalStore();
     const state = reactive({
-      narrationIndustries: Common.getNarrationIndustries(),
       sort: 1,
       narrationSorts: computed(() => Common.getSort()),
       activeNarrationIndustryCd: "01",
+      activeNarrationSceneCd: null as string | null,
       narrations: [] as NarrationItem[],
+      scenes: [] as Scene[],
       selectedNarration: null as NarrationItem | null,
       isPlaying: computed(() => audioPlayer.isPlaying()),
       isDownloading: computed(() => audioStore.isDownloading),
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       duration: computed(() => audioPlayer.getDuration()),
+      narrationIndustries: Common.getNarrationIndustries(),
       isDocumentModalAppear: false,
       isPlayModalAppear: false,
     });
@@ -216,14 +237,28 @@ export default defineComponent({
 
     const clickNarrationIndustry = (narrationIndustryCd: string) => {
       state.activeNarrationIndustryCd = narrationIndustryCd;
+      state.activeNarrationSceneCd = null;
+      fetchScene();
+    };
+
+    const clickNarrationScene = (narrationSceneCd: string) => {
+      state.activeNarrationSceneCd = narrationSceneCd;
       fetchNarration();
     };
 
+    const fetchScene = () => {
+      state.scenes = Common.getIndustryScenes(state.activeNarrationIndustryCd);
+      state.narrations = [];
+    };
+
     const fetchNarration = async () => {
+      if (!state.activeNarrationSceneCd) return;
       const response = await UMesseService.resourcesService.fetchNarration(
         state.activeNarrationIndustryCd,
+        state.activeNarrationSceneCd,
         state.sort
       );
+      state.scenes = [];
       state.narrations = response;
     };
 
@@ -267,7 +302,7 @@ export default defineComponent({
     };
 
     onMounted(async () => {
-      fetchNarration();
+      fetchScene();
     });
 
     return {
@@ -277,6 +312,7 @@ export default defineComponent({
       setNarration,
       selectNarration,
       clickNarrationIndustry,
+      clickNarrationScene,
       convertDatestringToDateJp,
       convertNumberToTime,
       openDocumentModal,
