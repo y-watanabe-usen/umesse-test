@@ -13,6 +13,7 @@ export function useResourcesService(
 
   const fetchNarration = async (
     industryCd: string,
+    sceneCd: string,
     sort?: number
   ): Promise<NarrationItem[]> => {
     console.log(industryCd)
@@ -25,19 +26,29 @@ export function useResourcesService(
             console.log(value)
             let data: NarrationItem[] = []
             value.data.forEach((v: any) => {
-              data.push({
-                contentsId: v.id,
-                title: v.title,
-                description: v.description,
-                category: Constants.CATEGORY.RECORDING,
-                timestamp: v.timestamp,
-              })
+              if (sceneCd == "901" && v.id && v.id.match(`^[0-9a-z]+-r-[0-9a-z]{8}$`)) {
+                data.push({
+                  contentsId: v.id,
+                  title: v.title,
+                  description: v.description,
+                  category: Constants.CATEGORY.RECORDING,
+                  timestamp: v.timestamp,
+                })
+              } else if (sceneCd == "902" && v.id && v.id.match(`^[0-9a-z]+-t-[0-9a-z]{8}$`)) {
+                data.push({
+                  contentsId: v.id,
+                  title: v.title,
+                  description: v.description,
+                  category: Constants.CATEGORY.TTS,
+                  timestamp: v.timestamp,
+                })
+              }
             })
             console.log(data)
             resolve(<NarrationItem[]>data)
           })
-          .catch((error) => {
-            console.log("reject")
+          .catch((e) => {
+            console.log("reject", e)
             // TODO: Error
             reject()
           }
@@ -46,7 +57,7 @@ export function useResourcesService(
     }
     return new Promise(function (resolve, reject) {
       resourcesApi
-        .listNarration(industryCd, undefined, sort)
+        .listNarration(industryCd, sceneCd, sort)
         .then((value) => {
           resolve(value.data)
         })
