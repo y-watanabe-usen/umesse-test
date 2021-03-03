@@ -251,47 +251,55 @@ exports.createTtsResource = async (unisCustomerCd, body) => {
   if (checkParams) throw new BadRequestError(checkParams);
 
   let json = [];
-  for (const tts of body) {
-    // ID作成
-    const id = generateId(unisCustomerCd, "t");
+  for (const data of body.details) {
+    let id = "";
 
-    // S3のオブジェクトリネーム
-    let res;
-    try {
-      res = await s3Manager.copy(
-        constants.s3Bucket().users,
-        `users/${unisCustomerCd}/tts/${id}.mp3`,
-        `${constants.s3Bucket().users}/users/${unisCustomerCd}/tts/${tts.lang}.mp3`
-      );
-    } catch (e) {
-      errorlog(JSON.stringify(e));
-      throw new InternalServerError(e.message);
-    }
-    if (!res) throw new InternalServerError("put failed");
+    if (data.id && data.category) {
+      json.push({ id: data.id, category: data.category });
+    } else {
+      id = generateId(unisCustomerCd, "t");
 
-    // DynamoDBのデータ更新
-    const data = {
-      id: id,
-      title: `${tts.title}(${tts.lang})`,
-      description: tts.description,
-      startDate: timestamp(),
-      timestamp: timestamp(),
-    };
+      // S3のオブジェクトリネーム
+      let res;
+      try {
+        res = await s3Manager.copy(
+          constants.s3Bucket().users,
+          `users/${unisCustomerCd}/tts/${id}.mp3`,
+          `${constants.s3Bucket().users}/users/${unisCustomerCd}/tts/${
+            data.lang
+          }.mp3`
+        );
+      } catch (e) {
+        errorlog(JSON.stringify(e));
+        throw new InternalServerError(e.message);
+      }
+      if (!res) throw new InternalServerError("put failed");
 
-    try {
-      res = await db.User.updateData(
-        unisCustomerCd,
-        constants.resourceCategory.RECORDING,
-        data
-      );
-      json.push(res);
-    } catch (e) {
-      errorlog(JSON.stringify(e));
-      throw new InternalServerError(e.message);
+      // DynamoDBのデータ更新
+      const item = {
+        id: id,
+        title: `${data.title}(${data.lang})`,
+        description: data.description,
+        startDate: timestamp(),
+        timestamp: timestamp(),
+      };
+
+      try {
+        res = await db.User.updateData(
+          unisCustomerCd,
+          constants.resourceCategory.RECORDING,
+          item
+        );
+        res.category = "tts";
+        json.push(res);
+      } catch (e) {
+        errorlog(JSON.stringify(e));
+        throw new InternalServerError(e.message);
+      }
     }
   }
 
-  return { tts: json };
+  return json;
 };
 
 // TTS生成
@@ -317,46 +325,55 @@ exports.generateTtsResource = async (unisCustomerCd, body) => {
     method: "POST",
   };
 
-  let json = [];
-  for (const data of body) {
-    const postData = querystring.stringify({
-      text: data.text,
-      speaker: constants.ttsSpeakers[data.lang][data.speaker],
-      pitch: "105",
-      speed: "95",
-      format: "mp3",
-    });
-    options.headers = {
-      "Content-Type": "application/x-www-form-urlencoded",
-      "Content-Length": postData.length,
-    };
-    debuglog(JSON.stringify({ options: options, postData: postData }));
+  let json = {
+    id: body.id,
+    category: body.category,
+    details: [],
+  };
+  for (const data of body.details) {
+    let id = "";
 
-    // TTS API リクエスト
-    let binaryData;
-    try {
-      binaryData = await requestTts(options, postData);
-    } catch (e) {
-      throw new InternalServerError(e.message);
+    if (data.id && data.category) {
+      id = `${data.category}/${data.id}.mp3`;
+    } else {
+      const postData = querystring.stringify({
+        text: data.text,
+        speaker: constants.ttsSpeakers[data.lang][data.speaker],
+        pitch: "105",
+        speed: "95",
+        format: "mp3",
+      });
+      options.headers = {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Content-Length": postData.length,
+      };
+      debuglog(JSON.stringify({ options: options, postData: postData }));
+
+      // TTS API リクエスト
+      let binaryData;
+      try {
+        binaryData = await requestTts(options, postData);
+      } catch (e) {
+        throw new InternalServerError(e.message);
+      }
+
+      // S3へPUT
+      id = `users/${unisCustomerCd}/tts/${data.lang}.mp3`;
+      let res;
+      try {
+        res = await s3Manager.put(constants.s3Bucket().users, id, binaryData);
+      } catch (e) {
+        errorlog(JSON.stringify(e));
+        throw new InternalServerError(e.message);
+      }
+      if (!res) throw new InternalServerError("put failed");
     }
 
-    // S3へPUT
-    const id = `users/${unisCustomerCd}/tts/${data.lang}.mp3`;
-    let res;
-    try {
-      res = await s3Manager.put(constants.s3Bucket().users, id, binaryData);
-    } catch (e) {
-      errorlog(JSON.stringify(e));
-      throw new InternalServerError(e.message);
-    }
-    if (!res) throw new InternalServerError("put failed");
-
-    const signedUrlId = `${unisCustomerCd}-${data.lang}`;
-    const url = await this.getSignedUrl(signedUrlId, constants.resourceCategory.TTS);
-    json.push({ url: url.url, lang: data.lang });
+    const url = await this.getSignedUrl(id, constants.resourceCategory.TTS);
+    json.details.push({ url: url.url, lang: data.lang });
   }
 
-  return { tts: json };
+  return json;
 };
 
 // ユーザー作成の音声更新
