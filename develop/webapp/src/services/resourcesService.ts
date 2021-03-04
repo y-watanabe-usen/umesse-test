@@ -111,6 +111,7 @@ export function useResourcesService(
       resourcesApi
         .listTemplate(industryCd, undefined, sort)
         .then((value) => {
+          console.log(value.data)
           resolve(value.data)
         })
         .catch((error) =>

@@ -102,22 +102,10 @@ export default function cmStore() {
       // ナレーションがMAX_NARRATION_COUNT数分あるのに、更に末尾に追加しようとしたら何もしない
       return
     }
-    let id = ""
-    let category = ""
-    if (isNarration(narrationItem)) {
-      id = narrationItem.contentsId
-      category = Constants.CATEGORY.NARRATION
-    } else if (isRecording(narrationItem)) {
-      id = narrationItem.recordingId
-      category = Constants.CATEGORY.RECORDING
-    } else if (isTts(narrationItem)) {
-      id = narrationItem.ttsId
-      category = Constants.CATEGORY.TTS
-    }
     state.displayCmItem.setNarraion(
       state.selectedNarrationIndex,
-      category,
-      id,
+      narrationItem.category,
+      narrationItem.id,
       narrationItem.title,
       narrationItem.description,
       0, //narrationItem.seconds,

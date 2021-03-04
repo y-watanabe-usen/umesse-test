@@ -120,17 +120,17 @@ export function useUploadCmService(api: UMesseApi.CmApi) {
     if (narrationContentsIds?.length) {
       narrationContentsIds.forEach((v) => {
         if (!narrations) narrations = []
-        narrations.push({ contentsId: v, volume: 150 });
+        narrations.push({ id: v, volume: 150 });
       });
     }
     const startChime: StartChime | undefined = startChimeContentsId
-      ? { contentsId: startChimeContentsId, volume: 50 }
+      ? { id: startChimeContentsId, category:Constants.CATEGORY.CHIME, volume: 50 }
       : undefined;
     const endChime: EndChime | undefined = endChimeContentsId
-      ? { contentsId: endChimeContentsId, volume: 50 }
+      ? { id: endChimeContentsId, category:Constants.CATEGORY.CHIME, volume: 50 }
       : undefined;
     const bgm: Bgm | undefined = bgmContentsId
-      ? { contentsId: bgmContentsId, volume: 50 }
+      ? { id: bgmContentsId, category:Constants.CATEGORY.BGM, volume: 50 }
       : undefined;
     const requestModel: CreateUserCmRequestItem = {
       materials: {

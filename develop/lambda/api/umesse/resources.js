@@ -371,7 +371,8 @@ exports.generateTtsResource = async (unisCustomerCd, body) => {
       if (!res) throw new InternalServerError("put failed");
     }
 
-    const url = await this.getSignedUrl(id, constants.resourceCategory.TTS);
+    const signedId = `${unisCustomerCd}-${data.lang}`;
+    const url = await this.getSignedUrl(signedId, constants.resourceCategory.TTS);
     json.details.push({ url: url.url, lang: data.lang });
   }
 
