@@ -27,10 +27,9 @@ export default function cmStore() {
     error: undefined as string | undefined,
   });
 
-  const token = "123456789";
   const status = () => service.getStatus()
 
-  const create = async () => {
+  const create = async (authToken: string) => {
     let narrationContentsIds: string[] = []
     state.displayCmItem.narrations.forEach((v) => {
       if (isNarration(v)) {
@@ -42,7 +41,7 @@ export default function cmStore() {
       }
     })
     const response = await service.create(
-      token,
+      authToken,
       narrationContentsIds,
       state.displayCmItem.openChime?.contentsId ?? null,
       state.displayCmItem.endChime?.contentsId ?? null,
@@ -56,13 +55,14 @@ export default function cmStore() {
   }
 
   const update = async (
+    authToken: string,
     title: string,
     description: string | null,
     sceneCd: string,
     uploadSystem: string
   ) => {
     const response = await service.update(
-      token,
+      authToken,
       state.displayCmItem.id,
       title,
       description,

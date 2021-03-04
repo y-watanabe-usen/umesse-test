@@ -223,7 +223,8 @@ export default defineComponent({
     const route = useRoute();
     const audioStore = AudioStore();
     const audioPlayer = AudioPlayer();
-    const { cm } = useGlobalStore();
+    const { auth, cm } = useGlobalStore();
+    const authToken = <string>auth.getToken();
     const state = reactive({
       sort: 1,
       narrationSorts: computed(() => Common.getSort()),
@@ -273,6 +274,7 @@ export default defineComponent({
       if (!state.activeNarrationSceneCd) return;
       try {
         const response = await UMesseService.resourcesService.fetchNarration(
+          authToken,
           state.activeNarrationIndustryCd,
           state.activeNarrationSceneCd,
           state.sort

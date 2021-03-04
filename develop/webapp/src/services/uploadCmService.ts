@@ -22,17 +22,16 @@ export function useUploadCmService(api: UMesseApi.CmApi) {
 
   const getStatus = () => state.status;
 
-  const fetchCm = async (sceneCd: string, sort?: number) => {
-    const xUnisCustomerCd = "123456789"
-
+  const fetchCm = async (authToken: string, sceneCd: string, sort?: number) => {
     const tmp = await api.listUserCm(
-      xUnisCustomerCd,
+      authToken,
       sort
     );
     const response = tmp.data.filter((v) => {
       if (!v.scene) return false;
       return v.scene.sceneCd == sceneCd;
     });
+    console.log(response)
     return response
   }
   const create = async (
@@ -96,19 +95,19 @@ export function useUploadCmService(api: UMesseApi.CmApi) {
   }
 
   // deleteは予約語なのでremove
-  const remove = async (authToken: string, cmId: string) => {
+  const remove = async (authToken: string, id: string) => {
     return new Promise(function (resolve, reject) {
       api
-        .deleteUserCm(cmId, authToken)
+        .deleteUserCm(id, authToken)
         .then((value) => {
           console.log(value.data)
           resolve(state.status = UPLOAD_CM_STATE.NONE)
         })
-        .catch((error) =>
+        .catch((error) => {
+          console.log(error)
           reject((state.status = UPLOAD_CM_STATE.ERROR))
-        );
+        });
     });
-
   }
 
   const getCreateUserCmRequestModel = (

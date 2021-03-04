@@ -15,7 +15,7 @@ export default function recordingStore() {
     error: undefined as string | undefined,
   });
 
-  const token = () => auth.getToken() || "123456789";
+  const token = () => <string>auth.getToken();
 
   const fetchRecordingData = async () => {
     try {

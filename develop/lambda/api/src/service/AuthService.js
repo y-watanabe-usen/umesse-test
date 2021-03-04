@@ -11,7 +11,7 @@ exports.auth = function(body) {
   return new Promise(function(resolve, reject) {
     var examples = {};
     examples['application/json'] = {
-  "token" : "1234567890"
+  "token" : "123456789"
 };
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
