@@ -230,11 +230,11 @@ export default defineComponent({
         cm.setNarration(<RecordingItem>uploadedData);
         router.push({ name: "Cm" });
         closeModalUploading();
+        closeModal();
       } catch (e) {
         console.log(e.message);
       } finally {
         closeModalUploading();
-        closeModal();
       }
     };
     const openModal = () => {
