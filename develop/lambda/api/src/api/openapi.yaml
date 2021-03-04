@@ -124,7 +124,7 @@ paths:
           example: "123456789"
       - name: sort
         in: query
-        description: ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
+        description: "ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)"
         required: false
         style: form
         explode: true
@@ -1421,7 +1421,7 @@ paths:
           example: "001"
       - name: sort
         in: query
-        description: ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
+        description: "ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)"
         required: false
         style: form
         explode: true
@@ -1489,7 +1489,7 @@ paths:
           example: "001"
       - name: sort
         in: query
-        description: ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
+        description: "ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)"
         required: false
         style: form
         explode: true
@@ -1539,7 +1539,7 @@ paths:
       parameters:
       - name: sort
         in: query
-        description: ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
+        description: "ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)"
         required: false
         style: form
         explode: true
@@ -1607,7 +1607,7 @@ paths:
           example: "001"
       - name: sort
         in: query
-        description: ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
+        description: "ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)"
         required: false
         style: form
         explode: true
@@ -1675,7 +1675,7 @@ paths:
           example: "001"
       - name: sort
         in: query
-        description: ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
+        description: "ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)"
         required: false
         style: form
         explode: true
@@ -1787,7 +1787,7 @@ paths:
         explode: false
         schema:
           type: string
-          example: 'center: センター, ssence: S''sence'
+          example: "center: センター, ssence: S'sence"
       responses:
         "200":
           description: successful response
@@ -1834,7 +1834,7 @@ paths:
         explode: false
         schema:
           type: string
-          example: 'center: センター, ssence: S''sence'
+          example: "center: センター, ssence: S'sence"
       - name: unisCustomerCd
         in: path
         description: UNIS顧客CD
@@ -1889,7 +1889,7 @@ paths:
         explode: false
         schema:
           type: string
-          example: 'center: センター, ssence: S''sence'
+          example: "center: センター, ssence: S'sence"
       - name: unisCustomerCd
         in: path
         description: UNIS顧客CD
@@ -2035,8 +2035,8 @@ components:
           example: 9999-12-31T23:59:59+09:00
         productionType:
           type: string
-          description: CM区分(音楽系:BGMあり, 素ナレ:BGMなし)
-          example: '01: 音楽系, 02: 素ナレ'
+          description: "CM区分(音楽系:BGMあり, 素ナレ:BGMなし)"
+          example: "01: 音楽系, 02: 素ナレ"
         industry:
           type: array
           items:
@@ -2052,15 +2052,15 @@ components:
         status:
           type: string
           description: CMステータス
-          example: '00:CM削除, 01: CM作成中, 02: CM作成完了, 09: CM作成エラー, 11: センターアップロード中,
-            12: センターアップロード完了, 19: センターアップロードエラー, 21: S''senceアップロード中, 22: S''senceアップロード完了,
-            29: S''senceアップロードエラー'
+          example: "00:CM削除, 01: CM作成中, 02: CM作成完了, 09: CM作成エラー, 11: センターアップロード中,\
+            \ 12: センターアップロード完了, 19: センターアップロードエラー, 21: S'senceアップロード中, 22: S'senceア\
+            ップロード完了, 29: S'senceアップロードエラー"
         timestamp:
           type: string
           example: 2019-09-01T09:00:00+9:00
       example:
         endDate: 9999-12-31T23:59:59+09:00
-        productionType: '01: 音楽系, 02: 素ナレ'
+        productionType: "01: 音楽系, 02: 素ナレ"
         description: タイムセールサンプル１
         industry:
         - industryName: 業種名
@@ -2116,9 +2116,9 @@ components:
         id: 123456789-c-12345678
         category: cm
         startDate: 2019-09-01T09:00:00+9:00
-        status: '00:CM削除, 01: CM作成中, 02: CM作成完了, 09: CM作成エラー, 11: センターアップロード中, 12:
-          センターアップロード完了, 19: センターアップロードエラー, 21: S''senceアップロード中, 22: S''senceアップロード完了,
-          29: S''senceアップロードエラー'
+        status: "00:CM削除, 01: CM作成中, 02: CM作成完了, 09: CM作成エラー, 11: センターアップロード中, 12:\
+          \ センターアップロード完了, 19: センターアップロードエラー, 21: S'senceアップロード中, 22: S'senceアップロード\
+          完了, 29: S'senceアップロードエラー"
         timestamp: 2019-09-01T09:00:00+9:00
     CmMaterialListItem:
       properties:
@@ -2369,11 +2369,13 @@ components:
         manuscript: 本日はご来店いただきましてありがとうございます。当店は18時30分閉店です
         description: 放送開始日2020年10月15日 有効期限2020年10月20日
         details:
-        - text: 本日はご来店いただきましてありがとうございます。当店は18時30分閉店です
+        - speaker: "0: 男性, 1: 女性"
+          text: 本日はご来店いただきましてありがとうございます。当店は18時30分閉店です
           id: サンプル01
           category: narration
           lang: ja | en | zh | ko
-        - text: 本日はご来店いただきましてありがとうございます。当店は18時30分閉店です
+        - speaker: "0: 男性, 1: 女性"
+          text: 本日はご来店いただきましてありがとうございます。当店は18時30分閉店です
           id: サンプル01
           category: narration
           lang: ja | en | zh | ko
@@ -2800,7 +2802,11 @@ components:
         lang:
           type: string
           example: ja | en | zh | ko
+        speaker:
+          type: string
+          example: "0: 男性, 1: 女性"
       example:
+        speaker: "0: 男性, 1: 女性"
         text: 本日はご来店いただきましてありがとうございます。当店は18時30分閉店です
         id: サンプル01
         category: narration
@@ -2969,7 +2975,7 @@ components:
                 $ref: '#/components/schemas/SceneItem'
               uploadSystem:
                 type: string
-                example: '01: センター, 02: S''sence'
+                example: "01: センター, 02: S'sence"
     UserResourceUpdateRequest:
       description: ユーザー素材データ更新リクエストBody
       content:
@@ -2992,7 +2998,7 @@ components:
             properties:
               uploadSystem:
                 type: string
-                example: '01: センター, 02: S''sence'
+                example: "01: センター, 02: S'sence"
     CreateTtsRequest:
       description: TTS登録リクエストBody
       content:
@@ -3047,7 +3053,7 @@ components:
                       example: こんにちは。
                     speaker:
                       type: string
-                      example: '0: 男性, 1: 女性'
+                      example: "0: 男性, 1: 女性"
                     lang:
                       type: string
                       example: ja | en | zh | ko

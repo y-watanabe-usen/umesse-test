@@ -1518,6 +1518,9 @@ components:
               lang:
                 type: string
                 example: "ja | en | zh | ko"
+              speaker:
+                type: string
+                example: "0: 男性, 1: 女性"
         industry:
           items:
             $ref: "#/components/schemas/IndustryItem"
@@ -1898,3 +1901,4 @@ components:
             $ref: "#/components/schemas/Error"
     Unexpected:
       description: Unexpected error.
+

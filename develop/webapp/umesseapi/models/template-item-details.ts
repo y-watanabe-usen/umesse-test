@@ -41,4 +41,10 @@ export interface TemplateItemDetails {
      * @memberof TemplateItemDetails
      */
     lang?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof TemplateItemDetails
+     */
+    speaker?: any;
 }
