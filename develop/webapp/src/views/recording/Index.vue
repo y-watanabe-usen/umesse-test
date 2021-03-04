@@ -123,9 +123,7 @@
               <Button type="secondary" @click="closeModal">キャンセル</Button>
               <Button
                 type="primary"
-                :isDisabled="
-                  file.title === undefined || file.title === '' || isUploading
-                "
+                :isDisabled="file.title === undefined || file.title === ''"
                 @click="uploadRecordingFile"
               >
                 保存して作成を続ける
@@ -134,6 +132,10 @@
           </ModalFooter>
         </template>
       </ModalDialog>
+    </transition>
+    <transition>
+      <ModalUploading v-if="isModalUploading" title="音源の合成中">
+      </ModalUploading>
     </transition>
   </div>
 </template>
@@ -161,6 +163,7 @@ import TextArea from "@/components/atoms/TextArea.vue";
 import { useGlobalStore } from "@/store";
 import { RecordingItem } from "umesseapi/models";
 import router from "@/router";
+import ModalUploading from "@/components/organisms/ModalUploading.vue";
 export default defineComponent({
   components: {
     BasicLayout,
@@ -173,6 +176,7 @@ export default defineComponent({
     FormGroup,
     TextBox,
     TextArea,
+    ModalUploading,
   },
   name: "RecordingStart",
   setup() {
@@ -197,7 +201,7 @@ export default defineComponent({
         FormatDate.convertNumberToTime(audioPlayer.getDuration())
       ),
       isModalAppear: false,
-      isUploading: false,
+      isModalUploading: false,
     });
     // toggle voice recorder.
     const toggleVoiceRecorder = async () => {
@@ -217,7 +221,7 @@ export default defineComponent({
       /// check state.file.
       // state.file.blob = await audioRecorder.getWaveBlob();
       try {
-        state.isUploading = true;
+        openModalUploading();
         state.file.blob = await audioRecorder.getMp3Blob();
         const uploadedData: any = await recordingStore.uploadRecordingData(
           state.file
@@ -225,12 +229,12 @@ export default defineComponent({
         uploadedData.recordingId = uploadedData.id;
         cm.setNarration(<RecordingItem>uploadedData);
         router.push({ name: "Cm" });
-        state.isUploading = false;
-        closeModal();
+        closeModalUploading();
       } catch (e) {
         console.log(e.message);
       } finally {
-        state.isUploading = false;
+        closeModalUploading();
+        closeModal();
       }
     };
     const openModal = () => {
@@ -238,6 +242,12 @@ export default defineComponent({
     };
     const closeModal = () => {
       state.isModalAppear = false;
+    };
+    const openModalUploading = () => {
+      state.isModalUploading = true;
+    };
+    const closeModalUploading = () => {
+      state.isModalUploading = false;
     };
     return {
       ...toRefs(state),
