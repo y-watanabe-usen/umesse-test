@@ -4,7 +4,10 @@
       <Header>
         <template #title>
           <div class="header-info">
-            <Button @click="createAndOpenPlayModal">
+            <Button
+              :isDisabled="narrations.length === 0"
+              @click="createAndOpenPlayModal"
+              >
               <img src="@/assets/icon_play.svg" />試聴する
             </Button>
             <p>約2分15秒</p>
@@ -101,7 +104,7 @@
         </template>
         <template #top>
           <template
-            v-for="(narration, index) in narrarions"
+            v-for="(narration, index) in narrations"
             :key="narration.contentsId"
           >
             <CmItem
@@ -199,11 +202,11 @@
               </template>
             </CmItem>
           </template>
-          <template v-if="narrarions.length < MAX_NARRATION_COUNT">
+          <template v-if="narrations.length < MAX_NARRATION_COUNT">
             <CmItem
               :title="
                 'ナレーション ' +
-                `${narrarions.length + 1}` +
+                `${narrations.length + 1}` +
                 '/' +
                 `${MAX_NARRATION_COUNT}`
               "
@@ -509,7 +512,7 @@ export default defineComponent({
     const { cm } = useGlobalStore();
     const state = reactive({
       openChime: computed(() => cm.openChime),
-      narrarions: computed(() => cm.narrations),
+      narrations: computed(() => cm.narrations),
       bgm: computed(() => cm.bgm),
       endChime: computed(() => cm.endChime),
       isPlaying: computed(() => audioPlayer.isPlaying()),
