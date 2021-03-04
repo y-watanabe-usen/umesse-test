@@ -69,7 +69,6 @@ export default function cmStore() {
       sceneCd,
       uploadSystem
     )
-    console.log(response)
   }
 
   const clearNarration = (index: number) => {

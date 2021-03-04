@@ -1,7 +1,5 @@
-import { isRecordingById, isTtsById } from "@/utils/Common";
 import Constants from "@/utils/Constants";
 import { BgmItem, ChimeItem, CmItem, NarrationItem, SceneItem } from "umesseapi/models";
-import { createCommentVNode } from "vue";
 
 export default class DisplayCmItem {
   id = "";
@@ -150,12 +148,6 @@ export default class DisplayCmItem {
     this.seconds = cmItem.seconds;
     if (cmItem.materials.narrations.length > 0) {
       cmItem.materials.narrations.forEach((v: NarrationItem) => {
-        // let category: string = Constants.CATEGORY.NARRATION
-        // if (isRecordingById(v.id)) {
-        //   category = Constants.CATEGORY.RECORDING
-        // } else if (isTtsById(v.id)) {
-        //   category = Constants.CATEGORY.TTS
-        // }
         this.setNarraion(null, v.category, v.id, v.title, v.description, v.seconds, v.timestamp)
       });
     }
