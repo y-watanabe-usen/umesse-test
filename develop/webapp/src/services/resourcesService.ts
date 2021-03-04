@@ -13,6 +13,7 @@ export function useResourcesService(
   const audioStore = AudioStore();
 
   const fetchNarration = async (
+    authToken: string,
     industryCd: string,
     sceneCd: string,
     sort?: number
@@ -22,7 +23,7 @@ export function useResourcesService(
       // ユーザー作成音声は別のAPIからデータ取得
       return new Promise(function (resolve, reject) {
         recordingApi
-          .listUserRecording("123456789")
+          .listUserRecording(authToken)
           .then((value) => {
             console.log(value)
             let data: NarrationItem[] = []

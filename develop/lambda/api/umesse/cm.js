@@ -86,6 +86,15 @@ exports.getCm = async (unisCustomerCd, id, sort) => {
   }
   if (Array.isArray(json)) json.sort(sortFunc);
 
+  if (Array.isArray(json)) {
+    json = json.map((element) => {
+      element["id"] = element["cmId"];
+      delete element["cmId"];
+      element["category"] = constants.resourceCategory.CM;
+      return element;
+    })
+  }
+
   return json;
 };
 
@@ -177,7 +186,7 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
   // CM一覧から該当CMを取得
   const list = await this.getCm(unisCustomerCd);
   if (!list || !list.length) throw new InternalServerError("not found");
-  const index = list.findIndex((item) => item.cmId === id);
+  const index = list.findIndex((item) => item.id === id);
   if (index < 0) throw new InternalServerError("not found");
   const cm = list[index];
 
@@ -281,7 +290,7 @@ exports.deleteCm = async (unisCustomerCd, id) => {
   // CM一覧から該当CMを取得
   const list = await this.getCm(unisCustomerCd);
   if (!list || !list.length) throw new InternalServerError("not found");
-  const index = list.findIndex((item) => item.cmId === id);
+  const index = list.findIndex((item) => item.id === id);
   if (index < 0) throw new InternalServerError("not found");
   const cm = list[index];
 

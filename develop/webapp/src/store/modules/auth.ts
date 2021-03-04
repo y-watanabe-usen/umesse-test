@@ -24,9 +24,9 @@ export default function authStore() {
         if (state.token) return
 
         const unisCustomerCd = router.currentRoute.value.query.unisCustomerCd as string
-        if (unisCustomerCd == undefined) {
-            return state.error = ''
-        }
+        // if (unisCustomerCd == undefined) {
+        //     return state.error = ''
+        // }
 
         console.log(`requestAuthorization`)
         state.authenticating = true

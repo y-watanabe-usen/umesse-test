@@ -92,9 +92,13 @@
                   @click.prevent="selectCmAndOpenSaveModal(cm)"
                   >タイトル/説明 編集</a
                 >
-                <a 
+                <a
                   class="dropdown-item"
-                  :class="disabledEditContentsStatus.includes(cm.status) ? 'disabled' : ''"
+                  :class="
+                    disabledEditContentsStatus.includes(cm.status)
+                      ? 'disabled'
+                      : ''
+                  "
                   href="#"
                   @click="toEditCm(cm)"
                   >コンテンツ編集</a
@@ -102,7 +106,9 @@
                 <a class="dropdown-item" href="#">U MUSICにアップロード</a>
                 <a
                   class="dropdown-item"
-                  :class="disabledDeleteStatus.includes(cm.status) ? 'disabled' : ''"
+                  :class="
+                    disabledDeleteStatus.includes(cm.status) ? 'disabled' : ''
+                  "
                   @click.prevent="selectCmAndOpenRemoveModal(cm)"
                   href="#"
                   >削除</a
@@ -287,8 +293,9 @@ export default defineComponent({
     const audioPlayer = AudioPlayer();
     const audioStore = AudioStore();
     const { auth, cm } = useGlobalStore();
-    const disabledEditContentsStatus = ['11', '12'];
-    const disabledDeleteStatus = ['00', '11'];
+    const disabledEditContentsStatus = ["11", "12"];
+    const disabledDeleteStatus = ["00", "11"];
+    const authToken = <string>auth.getToken();
     const state = reactive({
       activeSceneCd: "001",
       scenes: computed(() => Common.getManagementScenes()),
@@ -316,6 +323,7 @@ export default defineComponent({
     };
     const fetchCm = async () => {
       const response = await UMesseService.uploadCmService.fetchCm(
+        authToken,
         state.activeSceneCd,
         state.sort
       );
@@ -336,9 +344,8 @@ export default defineComponent({
       if (state.isPlaying) audioPlayer.stop();
     };
     const save = async (cm: CmItem) => {
-      const xUnisCustomerCd = "123456789";
       const response = await UMesseService.uploadCmService.update(
-        xUnisCustomerCd,
+        authToken,
         cm.id,
         state.title,
         state.description,
@@ -348,11 +355,8 @@ export default defineComponent({
       fetchCm();
     };
     const remove = async (cmId: string) => {
-      // TODO: auth.getToken()のトークンだとデータが空なので固定値をセットする
-      // const xUnisCustomerCd = auth.getToken()!!;
-      const xUnisCustomerCd = "123456789";
       const response = await UMesseService.uploadCmService.remove(
-        xUnisCustomerCd,
+        authToken,
         cmId
       );
       fetchCm();

@@ -21,7 +21,7 @@ export default function ttsStore() {
     error: undefined as string | undefined,
   });
 
-  const token = () => auth.getToken() || "123456789";
+  const token = () => <string>auth.getToken();
 
   const isGenerating = () => state.generating
   const isCreating = () => state.creating

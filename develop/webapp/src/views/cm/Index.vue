@@ -506,7 +506,8 @@ export default defineComponent({
   setup() {
     const audioStore = AudioStore();
     const audioPlayer = AudioPlayer();
-    const { cm } = useGlobalStore();
+    const { auth, cm } = useGlobalStore();
+    const authToken = <string>auth.getToken();
     const state = reactive({
       openChime: computed(() => cm.openChime),
       narrarions: computed(() => cm.narrations),
@@ -599,7 +600,7 @@ export default defineComponent({
     };
     const create = async () => {
       try {
-        cm.create();
+        cm.create(authToken);
       } catch (e) {
         console.log(e);
       }
@@ -607,6 +608,7 @@ export default defineComponent({
     const update = async () => {
       try {
         cm.update(
+          authToken,
           state.title,
           state.description,
           state.scene,
