@@ -29,7 +29,7 @@ export function useUploadCmService(api: UMesseApi.CmApi) {
       xUnisCustomerCd,
       sort
     );
-
+    console.log(tmp)
     const response = tmp.data.filter((v) => {
       if (!v.scene) return false;
       return v.scene.sceneCd == sceneCd;
@@ -70,7 +70,7 @@ export function useUploadCmService(api: UMesseApi.CmApi) {
 
   const update = async (
     authToken: string,
-    cmId: string,
+    id: string,
     title: string,
     description: string | null,
     sceneCd: string,
@@ -84,15 +84,17 @@ export function useUploadCmService(api: UMesseApi.CmApi) {
       state.status = UPLOAD_CM_STATE.UPDATING;
 
       const requestModel = getUpdateUserCmRequestModel(title, description, sceneCd, uploadSystem)
+      console.log("requestModel", requestModel)
       api
-        .updateUserCm(authToken, cmId, requestModel)
+        .updateUserCm(authToken, id, requestModel)
         .then((value) => {
           console.log(value.data)
           resolve(state.status = UPLOAD_CM_STATE.UPDATED)
         })
-        .catch((error) =>
+        .catch((error) => {
+          console.log("reject", error)
           reject((state.status = UPLOAD_CM_STATE.ERROR))
-        );
+        });
     });
   }
 

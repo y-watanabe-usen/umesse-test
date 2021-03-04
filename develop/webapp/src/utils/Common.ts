@@ -128,6 +128,23 @@ export function getSettingAppInformations() {
   return getAppInformation();
 }
 
+/**
+ * idの形式がRecordingか判定
+ * @param id string
+ * @return bool
+ */
+export function isRecordingById(id: string) {
+  return id.match(`^[0-9a-z]+-r-[0-9a-z]{8}$`)
+}
+
+/**
+ * idの形式がTtsか判定
+ * @param id string
+ * @return bool
+ */
+export function isTtsById(id: string) {
+  return id.match(`^[0-9a-z]+-t-[0-9a-z]{8}$`)
+}
 
 function getIndustries(cdList: string[]) {
   let result: Industry[] = [];
