@@ -5,33 +5,341 @@
         "Item": {
           "contentsId": { "S": "サンプル01" },
           "category": { "S": "template" },
-          "title": { "S": "サンプル01" },
-          "description": { "S": "テンプレート・サンプル01" },
+          "title": { "S": "タバコ販売のお断り" },
+          "description": { "S": "テンプレート・サンプル01, 日本語、英語、中国語、韓国語" },
           "manuscript": {
-            "S": "本日は ${customerName} へお越しいただき、誠にありがとうございます。"
+            "S": "本日は、{customerName}にご来店いただきまして誠にありがとうございます。ご来店のお客様にご案内申し上げます。未成年へのタバコの販売は法律で堅く禁じられておりますので、当店ではお買い上げの際に、お客様に身分証明書のご提示をお願いする場合がございます。皆様のご理解とご協力をお願い致します。"
           },
           "details": {
             "L": [
               {
                 "M": {
                   "text": {
-                    "S": "本日は ${customerName} へお越しいただき、誠にありがとうございます。"
+                    "S": "本日は、{customerName}にご来店いただきまして誠にありがとうございます。ご来店のお客様にご案内申し上げます。未成年へのタバコの販売は法律で堅く禁じられておりますので、当店ではお買い上げの際に、お客様に身分証明書のご提示をお願いする場合がございます。皆様のご理解とご協力をお願い致します。"
                   },
-                  "lang": { "S": "ja" }
+                  "lang": { "S": "ja" },
+                  "speaker": { "S": "0" }
                 }
               },
               {
                 "M": {
                   "text": {
-                    "S": "Thank you for visiting ${customerName} today."
+                    "S": "本日は、{customerName}にご来店いただきまして誠にありがとうございます。ご来店のお客様にご案内申し上げます。未成年へのタバコの販売は法律で堅く禁じられておりますので、当店ではお買い上げの際に、お客様に身分証明書のご提示をお願いする場合がございます。皆様のご理解とご協力をお願い致します。"
                   },
-                  "lang": { "S": "en" }
+                  "lang": { "S": "ja" },
+                  "speaker": { "S": "1" }
                 }
               },
               {
                 "M": {
-                  "text": { "S": "感谢您今天访问 ${customerName}。" },
-                  "lang": { "S": "zh" }
+                  "text": {
+                    "S": "Thank you for visiting our store today. We would like to inform our customers. The sale of cigarettes to minors is strictly prohibited by law, so we may ask you to show your ID at the time of purchase. We appreciate your understanding and cooperation."
+                  },
+                  "lang": { "S": "en" },
+                  "speaker": { "S": "0" }
+                }
+              },
+              {
+                "M": {
+                  "text": {
+                    "S": "Thank you for visiting our store today. We would like to inform our customers. The sale of cigarettes to minors is strictly prohibited by law, so we may ask you to show your ID at the time of purchase. We appreciate your understanding and cooperation."
+                  },
+                  "lang": { "S": "en" },
+                  "speaker": { "S": "1" }
+                }
+              },
+              {
+                "M": {
+                  "text": {
+                    "S": "感谢您今天访问我们的商店。 我们想通知我们的客户。 法律严格禁止向未成年人出售香烟，因此我们可能会要求您在购买时出示身份证件。 感谢您的理解与合作。"
+                  },
+                  "lang": { "S": "zh" },
+                  "speaker": { "S": "0" }
+                }
+              },
+              {
+                "M": {
+                  "text": {
+                    "S": "感谢您今天访问我们的商店。 我们想通知我们的客户。 法律严格禁止向未成年人出售香烟，因此我们可能会要求您在购买时出示身份证件。 感谢您的理解与合作。"
+                  },
+                  "lang": { "S": "zh" },
+                  "speaker": { "S": "1" }
+                }
+              },
+              {
+                "M": {
+                  "text": {
+                    "S": "오늘은, 당점에 내점 주셔서 대단히 감사합니다. 내점 고객에게 안내 말씀드립니다. 미성년자에 대한 담배 판매는 법으로 엄격히 금지되어 있기 때문에, 당점에서는 구입시에 고객에게 신분증 제시를 요청할 수 있습니다. 여러분의 이해와 협조를 부탁드립니다."
+                  },
+                  "lang": { "S": "ko" },
+                  "speaker": { "S": "0" }
+                }
+              },
+              {
+                "M": {
+                  "text": {
+                    "S": "오늘은, 당점에 내점 주셔서 대단히 감사합니다. 내점 고객에게 안내 말씀드립니다. 미성년자에 대한 담배 판매는 법으로 엄격히 금지되어 있기 때문에, 당점에서는 구입시에 고객에게 신분증 제시를 요청할 수 있습니다. 여러분의 이해와 협조를 부탁드립니다."
+                  },
+                  "lang": { "S": "zh" },
+                  "speaker": { "S": "1" }
+                }
+              }
+            ]
+          },
+          "industry": {
+            "L": [
+              {
+                "M": {
+                  "industryCd": { "S": "01" },
+                  "industryName": { "S": "業種01" }
+                }
+              }
+            ]
+          },
+          "scene": {
+            "L": [
+              {
+                "M": {
+                  "sceneCd": { "S": "01" },
+                  "sceneName": { "S": "シーン01" }
+                }
+              }
+            ]
+          },
+          "timestamp": { "S": "2019-09-01T09:00:00+09:00" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "contentsId": { "S": "サンプル02" },
+          "category": { "S": "template" },
+          "title": { "S": "店内禁煙" },
+          "description": { "S": "テンプレート・サンプル02, 日本語、英語" },
+          "manuscript": {
+            "S": "本日は、{customerName}にご来店いただきまして誠にありがとうございます。ご来店のお客様にご案内申し上げます。当店は終日店内禁煙となっておりますので、所定の場所以外での喫煙はご遠慮くださいますよう、何卒ご理解・ご協力の程、よろしくお願い致します。"
+          },
+          "details": {
+            "L": [
+              {
+                "M": {
+                  "text": {
+                    "S": "本日は、{customerName}にご来店いただきまして誠にありがとうございます。ご来店のお客様にご案内申し上げます。当店は終日店内禁煙となっておりますので、所定の場所以外での喫煙はご遠慮くださいますよう、何卒ご理解・ご協力の程、よろしくお願い致します。"
+                  },
+                  "lang": { "S": "ja" },
+                  "speaker": { "S": "0" }
+                }
+              },
+              {
+                "M": {
+                  "text": {
+                    "S": "本日は、{customerName}にご来店いただきまして誠にありがとうございます。ご来店のお客様にご案内申し上げます。当店は終日店内禁煙となっておりますので、所定の場所以外での喫煙はご遠慮くださいますよう、何卒ご理解・ご協力の程、よろしくお願い致します。"
+                  },
+                  "lang": { "S": "ja" },
+                  "speaker": { "S": "1" }
+                }
+              },
+              {
+                "M": {
+                  "text": {
+                    "S": "Thank you for visiting our store today. We would like to inform our customers. Our shop is non-smoking throughout the day, so please refrain from smoking outside the designated areas. We appreciate your understanding and cooperation."
+                  },
+                  "lang": { "S": "en" },
+                  "speaker": { "S": "0" }
+                }
+              },
+              {
+                "M": {
+                  "text": {
+                    "S": "Thank you for visiting our store today. We would like to inform our customers. Our shop is non-smoking throughout the day, so please refrain from smoking outside the designated areas. We appreciate your understanding and cooperation."
+                  },
+                  "lang": { "S": "en" },
+                  "speaker": { "S": "1" }
+                }
+              }
+            ]
+          },
+          "industry": {
+            "L": [
+              {
+                "M": {
+                  "industryCd": { "S": "01" },
+                  "industryName": { "S": "業種01" }
+                }
+              }
+            ]
+          },
+          "scene": {
+            "L": [
+              {
+                "M": {
+                  "sceneCd": { "S": "01" },
+                  "sceneName": { "S": "シーン01" }
+                }
+              }
+            ]
+          },
+          "timestamp": { "S": "2019-09-01T09:00:00+09:00" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "contentsId": { "S": "サンプル03" },
+          "category": { "S": "template" },
+          "title": { "S": "閉店時間のご案内" },
+          "description": { "S": "テンプレート・サンプル03, 日本語、英語、中国語、韓国語" },
+          "manuscript": {
+            "S": "本日は{customerName}へご来店いただきまして、誠にありがとうございます。お客様にご連絡申し上げます。当店の営業時間は、{endTime}までとなっております。本日はご利用、ありがとうございます。どうぞ、ごゆっくりお過ごしくださいませ。"
+          },
+          "details": {
+            "L": [
+              {
+                "M": {
+                  "text": {
+                    "S": "本日は{customerName}へご来店いただきまして、誠にありがとうございます。お客様にご連絡申し上げます。当店の営業時間は、{endTime}までとなっております。本日はご利用、ありがとうございます。どうぞ、ごゆっくりお過ごしくださいませ。"
+                  },
+                  "lang": { "S": "ja" },
+                  "speaker": { "S": "0" }
+                }
+              },
+              {
+                "M": {
+                  "text": {
+                    "S": "本日は{customerName}へご来店いただきまして、誠にありがとうございます。お客様にご連絡申し上げます。当店の営業時間は、{endTime}までとなっております。本日はご利用、ありがとうございます。どうぞ、ごゆっくりお過ごしくださいませ。"
+                  },
+                  "lang": { "S": "ja" },
+                  "speaker": { "S": "1" }
+                }
+              },
+              {
+                "M": {
+                  "text": {
+                    "S": "Thank you for visiting our store today. We will contact you. Our store is open until {endTime}. Thank you for using today. Please spend your time slowly."
+                  },
+                  "lang": { "S": "en" },
+                  "speaker": { "S": "0" }
+                }
+              },
+              {
+                "M": {
+                  "text": {
+                    "S": "Thank you for visiting our store today. We will contact you. Our store is open until {endTime}. Thank you for using today. Please spend your time slowly."
+                  },
+                  "lang": { "S": "en" },
+                  "speaker": { "S": "1" }
+                }
+              },
+              {
+                "M": {
+                  "text": {
+                    "S": "感谢您今天访问我们的商店。 我们将与您联系。 我们的商店营业至{endTime}。 感谢您今天使用。 请慢慢来。"
+                  },
+                  "lang": { "S": "zh" },
+                  "speaker": { "S": "0" }
+                }
+              },
+              {
+                "M": {
+                  "text": {
+                    "S": "感谢您今天访问我们的商店。 我们将与您联系。 我们的商店营业至{endTime}。 感谢您今天使用。 请慢慢来。"
+                  },
+                  "lang": { "S": "zh" },
+                  "speaker": { "S": "1" }
+                }
+              },
+              {
+                "M": {
+                  "text": {
+                    "S": "오늘은 당점에 내점 해 주셔서 대단히 감사합니다. 고객에게 알려드립니다. 당점의 영업 시간은 {endTime}까지로되어 있습니다. 오늘은 이용해 주셔서 감사합니다. 자, 천천히 보내시기 바랍니다."
+                  },
+                  "lang": { "S": "ko" },
+                  "speaker": { "S": "0" }
+                }
+              },
+              {
+                "M": {
+                  "text": {
+                    "S": "오늘은 당점에 내점 해 주셔서 대단히 감사합니다. 고객에게 알려드립니다. 당점의 영업 시간은 {endTime}까지로되어 있습니다. 오늘은 이용해 주셔서 감사합니다. 자, 천천히 보내시기 바랍니다."
+                  },
+                  "lang": { "S": "ko" },
+                  "speaker": { "S": "1" }
+                }
+              }
+            ]
+          },
+          "industry": {
+            "L": [
+              {
+                "M": {
+                  "industryCd": { "S": "01" },
+                  "industryName": { "S": "業種01" }
+                }
+              }
+            ]
+          },
+          "scene": {
+            "L": [
+              {
+                "M": {
+                  "sceneCd": { "S": "01" },
+                  "sceneName": { "S": "シーン01" }
+                }
+              }
+            ]
+          },
+          "timestamp": { "S": "2019-09-01T09:00:00+09:00" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "contentsId": { "S": "サンプル04" },
+          "category": { "S": "template" },
+          "title": { "S": "まもなく閉店時間" },
+          "description": { "S": "テンプレート・サンプル04, 日本語、英語" },
+          "manuscript": {
+            "S": "本日は{customerName}へご来店頂きまして、誠にありがとうございます。お買い物中のお客様にご案内申しあげます。誠に勝手ではございますが、当店の営業時間は、{endTime}までとなっております。まもなく閉店時間でございます。お客様の、またのご来店を心よりお待ち申しあげております。本日のご来店、誠に有難うございます。"
+          },
+          "details": {
+            "L": [
+              {
+                "M": {
+                  "text": {
+                    "S": "本日は{customerName}へご来店頂きまして、誠にありがとうございます。お買い物中のお客様にご案内申しあげます。誠に勝手ではございますが、当店の営業時間は、{endTime}までとなっております。まもなく閉店時間でございます。お客様の、またのご来店を心よりお待ち申しあげております。本日のご来店、誠に有難うございます。"
+                  },
+                  "lang": { "S": "ja" },
+                  "speaker": { "S": "0" }
+                }
+              },
+              {
+                "M": {
+                  "text": {
+                    "S": "本日は{customerName}へご来店頂きまして、誠にありがとうございます。お買い物中のお客様にご案内申しあげます。誠に勝手ではございますが、当店の営業時間は、{endTime}までとなっております。まもなく閉店時間でございます。お客様の、またのご来店を心よりお待ち申しあげております。本日のご来店、誠に有難うございます。"
+                  },
+                  "lang": { "S": "ja" },
+                  "speaker": { "S": "1" }
+                }
+              },
+              {
+                "M": {
+                  "text": {
+                    "S": "Thank you for visiting our store today. We would like to inform customers who are shopping. We are sorry for the inconvenience, but our business hours are until {endTime}. It will be closing time soon. We look forward to seeing you again. Thank you for visiting us today."
+                  },
+                  "lang": { "S": "en" },
+                  "speaker": { "S": "0" }
+                }
+              },
+              {
+                "M": {
+                  "text": {
+                    "S": "Thank you for visiting our store today. We would like to inform customers who are shopping. We are sorry for the inconvenience, but our business hours are until {endTime}. It will be closing time soon. We look forward to seeing you again. Thank you for visiting us today."
+                  },
+                  "lang": { "S": "en" },
+                  "speaker": { "S": "1" }
                 }
               }
             ]
