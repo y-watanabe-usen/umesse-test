@@ -49,7 +49,7 @@ export default function cmStore() {
       state.displayCmItem.bgm?.contentsId ?? null
     )
     console.log(response)
-    state.displayCmItem.cmId = response.id
+    state.displayCmItem.id = response.id
     state.displayCmItem.timestamp = response.timestamp
     state.displayCmItem.seconds = response.seconds
     state.displayCmItem.url = response.url!
@@ -63,7 +63,7 @@ export default function cmStore() {
   ) => {
     const response = await service.update(
       token,
-      state.displayCmItem.cmId,
+      state.displayCmItem.id,
       title,
       description,
       sceneCd,

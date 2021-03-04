@@ -223,8 +223,9 @@ exports.createRecordingResource = async (unisCustomerCd, body) => {
     timestamp: timestamp(),
   };
 
+  let json;
   try {
-    return await db.User.updateData(
+    json = await db.User.updateData(
       unisCustomerCd,
       constants.resourceCategory.RECORDING,
       data
@@ -233,6 +234,8 @@ exports.createRecordingResource = async (unisCustomerCd, body) => {
     errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
+  json["category"] = constants.resourceCategory.RECORDING
+  return json;
 };
 
 // ユーザー作成の合成音声新規作成
@@ -265,8 +268,7 @@ exports.createTtsResource = async (unisCustomerCd, body) => {
         res = await s3Manager.copy(
           constants.s3Bucket().users,
           `users/${unisCustomerCd}/tts/${id}.mp3`,
-          `${constants.s3Bucket().users}/users/${unisCustomerCd}/tts/${
-            data.lang
+          `${constants.s3Bucket().users}/users/${unisCustomerCd}/tts/${data.lang
           }.mp3`
         );
       } catch (e) {
@@ -287,7 +289,7 @@ exports.createTtsResource = async (unisCustomerCd, body) => {
       try {
         res = await db.User.updateData(
           unisCustomerCd,
-          constants.resourceCategory.RECORDING,
+          constants.resourceCategory.TTS,
           item
         );
         res.category = "tts";

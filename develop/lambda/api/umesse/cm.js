@@ -149,6 +149,9 @@ exports.createCm = async (unisCustomerCd, body) => {
     throw new InternalServerError(e.message);
   }
 
+  json["id"] = id;
+  delete json["cmId"];
+  json["category"] = constants.resourceCategory.CM;
   json["url"] = url;
   return json;
 };
@@ -246,12 +249,17 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
   });
   cm.timestamp = timestamp();
 
+  let json;
   try {
-    return await db.User.updateCm(unisCustomerCd, index, cm);
+    json = await db.User.updateCm(unisCustomerCd, index, cm);
   } catch (e) {
     errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
+  json["id"] = id;
+  delete json["cmId"];
+  json["category"] = constants.resourceCategory.CM;
+  return json
 };
 
 // CM削除

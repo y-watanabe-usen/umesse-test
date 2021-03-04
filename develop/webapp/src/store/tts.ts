@@ -122,7 +122,7 @@ export default function ttsStore() {
       }]
       const response = await UMesseApi.ttsApi.generateUserTts(
         token(), requestModel)
-      console.log(response.data.details)
+      console.log(response.data)
       state.ttsDatas = response.data.details
     } catch (err) {
       console.log(err);
