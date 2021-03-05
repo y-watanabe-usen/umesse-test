@@ -147,7 +147,7 @@ export function isTtsById(id: string) {
 }
 
 function getIndustries(cdList: string[]) {
-  let result: Industry[] = [];
+  const result: Industry[] = [];
   cdList.forEach((v) => {
     result.push(Constants.INDUSTORIES.find((vv) => vv.cd == v)!);
   });
@@ -158,7 +158,7 @@ function getIndustries(cdList: string[]) {
 
 function getScenes(cdList?: string[]) {
   if (!cdList) return Constants.SCENES;
-  let result: Scene[] = [];
+  const result: Scene[] = [];
   cdList.forEach((v) => {
     result.push(Constants.SCENES.find((vv) => vv.cd == v)!);
   });
@@ -168,7 +168,7 @@ function getScenes(cdList?: string[]) {
 }
 
 function getSorts(cdList: number[]) {
-  let result: Sorts[] = [];
+  const result: Sorts[] = [];
   cdList.forEach((v) => {
     result.push(Constants.SORTS.find((vv) => vv.cd == v)!);
   });
@@ -178,7 +178,7 @@ function getSorts(cdList: number[]) {
 
 function getAppInformation(cdList?: string[]) {
   if (!cdList) return Constants.APP_INFORMATIONS;
-  let result: AppInformation[] = [];
+  const result: AppInformation[] = [];
   cdList.forEach((v) => {
     result.push(Constants.APP_INFORMATIONS.find((vv) => vv.cd == v)!);
   });

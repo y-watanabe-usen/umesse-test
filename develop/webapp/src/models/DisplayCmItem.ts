@@ -16,10 +16,10 @@ export default class DisplayCmItem {
   timestamp = "";
   url = "";
 
-  narration(index: number) {
+  narration(index: number): Narration | Recording | Tts {
     return this.materials.narrations[index]
   }
-  get narrations() {
+  get narrations(): (Narration | Recording | Tts)[] {
     return this.materials.narrations
   }
   get openChime() {
@@ -46,7 +46,7 @@ export default class DisplayCmItem {
   clearBgm() {
     this.materials.bgm = null
   }
-  reset() {
+  reset(): void {
     this.id = "";
     this.title = "";
     this.description = "";
