@@ -88,6 +88,7 @@ exports.getCm = async (unisCustomerCd, id, sort) => {
 
   if (Array.isArray(json)) {
     json = json.map((element) => {
+      if (element["id"]) return element;
       element["id"] = element["cmId"];
       delete element["cmId"];
       element["category"] = constants.resourceCategory.CM;
