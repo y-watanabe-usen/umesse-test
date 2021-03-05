@@ -84,4 +84,5 @@ jobs:
       working-directory: ./develop/webapp
       run: |
         yarn install
+        yarn lint
         yarn build --mode development

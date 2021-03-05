@@ -24,14 +24,15 @@ export default {
     isWide: {
       type: Boolean,
       default: false,
-    }
+    },
   },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setup(props: any) {
     const router = useRouter();
     const state = reactive({});
     const onClick = () => {
-      router.push({ name: props.to })
-    }
+      router.push({ name: props.to });
+    };
     return {
       state,
       onClick,
@@ -41,7 +42,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/_variables.scss';
+@import "@/scss/_variables.scss";
 
 .main-menu-item {
   margin-bottom: 56px;

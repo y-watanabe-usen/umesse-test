@@ -49,7 +49,7 @@ export default () => {
 
     return new Promise<AudioBuffer>((resolve, reject) => {
       const reader = new FileReader();
-      reader.onload = (event: Event) => {
+      reader.onload = () => {
         context.decodeAudioData(reader.result as ArrayBuffer, (buffer) => {
           resolve(buffer);
         });

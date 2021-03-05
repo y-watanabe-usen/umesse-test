@@ -1,120 +1,125 @@
 <template>
-  <BasicLayout>
-    <template #header>
-      <Header>
-        <template #title>
-          <div class="header-info">
+  <div>
+    <BasicLayout>
+      <template #header>
+        <Header>
+          <template #title>
+            <div class="header-info">
+              <Button
+                :isDisabled="narrations.length === 0"
+                @click="createAndOpenPlayModal"
+              >
+                <img
+                  v-show="narrations.length === 0"
+                  src="@/assets/icon_play_white.svg"
+                />
+                <img
+                  v-show="narrations.length !== 0"
+                  src="@/assets/icon_play.svg"
+                />
+                試聴する
+              </Button>
+              <p>約2分15秒</p>
+            </div>
+          </template>
+          <template #buttons>
             <Button
-              :isDisabled="narrations.length === 0"
-              @click="createAndOpenPlayModal"
-              >
-              <img v-show="narrations.length === 0" src="@/assets/icon_play_white.svg" />
-              <img v-show="narrations.length !== 0" src="@/assets/icon_play.svg" />
-              試聴する
-            </Button>
-            <p>約2分15秒</p>
-          </div>
-        </template>
-        <template #buttons>
-          <Button
-            :isDisabled="!(status >= UPLOAD_CM_STATE.CREATED)"
-            @click="openSaveModal"
-            >確定</Button
-          >
-        </template>
-      </Header>
-    </template>
-    <template #contents>
-      <CmLayout>
-        <template #left>
-          <CmItem
-            v-if="openChime"
-            title="Openチャイム"
-            size="fixed"
-            :contentTitle="openChime.title"
-            :duration="`${convertNumberToTime(openChime.seconds)}`"
-            :volume="100"
-            @togglePlay="playOpenChime"
-          >
-            <template #operaions>
-              <button
-                class="btn btn-link dropdown-toggle p-0"
-                type="button"
-                id="dropdownMenuButton"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                <svg
-                  id="メニュー"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="30"
-                  height="6"
-                  viewBox="0 0 30 6"
-                >
-                  <circle
-                    id="楕円形_2"
-                    data-name="楕円形 2"
-                    cx="3"
-                    cy="3"
-                    r="3"
-                    fill="#578ed9"
-                  />
-                  <circle
-                    id="楕円形_3"
-                    data-name="楕円形 3"
-                    cx="3"
-                    cy="3"
-                    r="3"
-                    transform="translate(12)"
-                    fill="#578ed9"
-                  />
-                  <circle
-                    id="楕円形_4"
-                    data-name="楕円形 4"
-                    cx="3"
-                    cy="3"
-                    r="3"
-                    transform="translate(24)"
-                    fill="#578ed9"
-                  />
-                </svg>
-              </button>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <router-link
-                  class="dropdown-item"
-                  :to="{ name: 'CmChime', params: { div: 'open' } }"
-                >
-                  変更
-                </router-link>
-                <a
-                  class="dropdown-item"
-                  href="#"
-                  @click.prevent="clearOpenChime"
-                  >削除</a
-                >
-              </div>
-            </template>
-          </CmItem>
-          <CmItem
-            v-else
-            title="Openチャイム"
-            :isEmpty="true"
-            size="fixed"
-            @add="$router.push({ name: 'CmChime', params: { div: 'open' } })"
-          />
-        </template>
-        <template #top>
-          <template
-            v-for="(narration, index) in narrations"
-            :key="narration.contentsId"
-          >
+              :isDisabled="!(status >= UPLOAD_CM_STATE.CREATED)"
+              @click="openSaveModal"
+              >確定</Button
+            >
+          </template>
+        </Header>
+      </template>
+      <template #contents>
+        <CmLayout>
+          <template #left>
             <CmItem
+              v-if="openChime"
+              title="Openチャイム"
+              size="fixed"
+              :contentTitle="openChime.title"
+              :duration="`${convertNumberToTime(openChime.seconds)}`"
+              :volume="100"
+              @togglePlay="playOpenChime"
+            >
+              <template #operaions>
+                <button
+                  class="btn btn-link dropdown-toggle p-0"
+                  type="button"
+                  id="dropdownMenuButton"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  <svg
+                    id="メニュー"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="30"
+                    height="6"
+                    viewBox="0 0 30 6"
+                  >
+                    <circle
+                      id="楕円形_2"
+                      data-name="楕円形 2"
+                      cx="3"
+                      cy="3"
+                      r="3"
+                      fill="#578ed9"
+                    />
+                    <circle
+                      id="楕円形_3"
+                      data-name="楕円形 3"
+                      cx="3"
+                      cy="3"
+                      r="3"
+                      transform="translate(12)"
+                      fill="#578ed9"
+                    />
+                    <circle
+                      id="楕円形_4"
+                      data-name="楕円形 4"
+                      cx="3"
+                      cy="3"
+                      r="3"
+                      transform="translate(24)"
+                      fill="#578ed9"
+                    />
+                  </svg>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <router-link
+                    class="dropdown-item"
+                    :to="{ name: 'CmChime', params: { div: 'open' } }"
+                  >
+                    変更
+                  </router-link>
+                  <a
+                    class="dropdown-item"
+                    href="#"
+                    @click.prevent="clearOpenChime"
+                    >削除</a
+                  >
+                </div>
+              </template>
+            </CmItem>
+            <CmItem
+              v-else
+              title="Openチャイム"
+              :isEmpty="true"
+              size="fixed"
+              @add="$router.push({ name: 'CmChime', params: { div: 'open' } })"
+            />
+          </template>
+          <template #top>
+            <CmItem
+              v-for="(narration, index) in narrations"
+              :key="narration.id"
               :title="
                 'ナレーション ' +
-                  `${index + 1}` +
-                  '/' +
-                  `${MAX_NARRATION_COUNT}`
+                `${index + 1}` +
+                '/' +
+                `${MAX_NARRATION_COUNT}`
               "
               size="flexible"
               :contentTitle="`${narration.title}`"
@@ -203,268 +208,277 @@
                 </div>
               </template>
             </CmItem>
+            <template v-if="narrations.length < MAX_NARRATION_COUNT">
+              <CmItem
+                :title="
+                  'ナレーション ' +
+                  `${narrations.length + 1}` +
+                  '/' +
+                  `${MAX_NARRATION_COUNT}`
+                "
+                :isEmpty="true"
+                size="flexible"
+                @add="addNarration"
+              />
+            </template>
           </template>
-          <template v-if="narrations.length < MAX_NARRATION_COUNT">
+          <template #bottom>
             <CmItem
-              :title="
-                'ナレーション ' +
-                `${narrations.length + 1}` +
-                '/' +
-                `${MAX_NARRATION_COUNT}`
-              "
+              v-if="bgm"
+              title="BGM"
+              size="flexible"
+              :contentTitle="bgm.title"
+              :duration="`${convertNumberToTime(bgm.seconds)}`"
+              :volume="50"
+              @togglePlay="playBgm"
+            >
+              <template #operaions>
+                <button
+                  class="btn btn-link dropdown-toggle p-0"
+                  type="button"
+                  id="dropdownMenuButton"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  <svg
+                    id="メニュー"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="30"
+                    height="6"
+                    viewBox="0 0 30 6"
+                  >
+                    <circle
+                      id="楕円形_2"
+                      data-name="楕円形 2"
+                      cx="3"
+                      cy="3"
+                      r="3"
+                      fill="#578ed9"
+                    />
+                    <circle
+                      id="楕円形_3"
+                      data-name="楕円形 3"
+                      cx="3"
+                      cy="3"
+                      r="3"
+                      transform="translate(12)"
+                      fill="#578ed9"
+                    />
+                    <circle
+                      id="楕円形_4"
+                      data-name="楕円形 4"
+                      cx="3"
+                      cy="3"
+                      r="3"
+                      transform="translate(24)"
+                      fill="#578ed9"
+                    />
+                  </svg>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <router-link class="dropdown-item" :to="{ name: 'CmBgm' }">
+                    変更
+                  </router-link>
+                  <a class="dropdown-item" href="#" @click.prevent="clearBgm"
+                    >削除</a
+                  >
+                </div>
+              </template>
+            </CmItem>
+            <CmItem
+              v-else
+              title="BGM"
               :isEmpty="true"
               size="flexible"
-              @add="addNarration"
+              @add="$router.push({ name: 'CmBgm' })"
             />
           </template>
+          <template #right>
+            <CmItem
+              v-if="endChime"
+              title="Endチャイム"
+              size="fixed"
+              :contentTitle="endChime.title"
+              :duration="`${convertNumberToTime(endChime.seconds)}`"
+              :volume="100"
+              @togglePlay="playEndChime"
+            >
+              <template #operaions>
+                <button
+                  class="btn btn-link dropdown-toggle p-0"
+                  type="button"
+                  id="dropdownMenuButton"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  <svg
+                    id="メニュー"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="30"
+                    height="6"
+                    viewBox="0 0 30 6"
+                  >
+                    <circle
+                      id="楕円形_2"
+                      data-name="楕円形 2"
+                      cx="3"
+                      cy="3"
+                      r="3"
+                      fill="#578ed9"
+                    />
+                    <circle
+                      id="楕円形_3"
+                      data-name="楕円形 3"
+                      cx="3"
+                      cy="3"
+                      r="3"
+                      transform="translate(12)"
+                      fill="#578ed9"
+                    />
+                    <circle
+                      id="楕円形_4"
+                      data-name="楕円形 4"
+                      cx="3"
+                      cy="3"
+                      r="3"
+                      transform="translate(24)"
+                      fill="#578ed9"
+                    />
+                  </svg>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <router-link
+                    class="dropdown-item"
+                    :to="{ name: 'CmChime', params: { div: 'end' } }"
+                  >
+                    変更
+                  </router-link>
+                  <a
+                    class="dropdown-item"
+                    href="#"
+                    @click.prevent="clearEndChime"
+                    >削除</a
+                  >
+                </div>
+              </template>
+            </CmItem>
+            <CmItem
+              v-else
+              title="Endチャイム"
+              :isEmpty="true"
+              size="fixed"
+              @add="$router.push({ name: 'CmChime', params: { div: 'end' } })"
+            />
+          </template>
+        </CmLayout>
+      </template>
+    </BasicLayout>
+    <!-- modal -->
+    <transition>
+      <ModalDialog v-if="isPlayModalAppear" @close="stopAndClosePlayModal">
+        <template #header>
+          <ModalHeader title="試聴" @close="stopAndClosePlayModal" />
         </template>
-        <template #bottom>
-          <CmItem
-            v-if="bgm"
-            title="BGM"
-            size="flexible"
-            :contentTitle="bgm.title"
-            :duration="`${convertNumberToTime(bgm.seconds)}`"
-            :volume="50"
-            @togglePlay="playBgm"
-          >
-            <template #operaions>
-              <button
-                class="btn btn-link dropdown-toggle p-0"
-                type="button"
-                id="dropdownMenuButton"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                <svg
-                  id="メニュー"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="30"
-                  height="6"
-                  viewBox="0 0 30 6"
-                >
-                  <circle
-                    id="楕円形_2"
-                    data-name="楕円形 2"
-                    cx="3"
-                    cy="3"
-                    r="3"
-                    fill="#578ed9"
-                  />
-                  <circle
-                    id="楕円形_3"
-                    data-name="楕円形 3"
-                    cx="3"
-                    cy="3"
-                    r="3"
-                    transform="translate(12)"
-                    fill="#578ed9"
-                  />
-                  <circle
-                    id="楕円形_4"
-                    data-name="楕円形 4"
-                    cx="3"
-                    cy="3"
-                    r="3"
-                    transform="translate(24)"
-                    fill="#578ed9"
-                  />
-                </svg>
-              </button>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <router-link class="dropdown-item" :to="{ name: 'CmBgm' }">
-                  変更
-                </router-link>
-                <a class="dropdown-item" href="#" @click.prevent="clearBgm"
-                  >削除</a
-                >
-              </div>
-            </template>
-          </CmItem>
-          <CmItem
-            v-else
-            title="BGM"
-            :isEmpty="true"
-            size="flexible"
-            @add="$router.push({ name: 'CmBgm' })"
-          />
-        </template>
-        <template #right>
-          <CmItem
-            v-if="endChime"
-            title="Endチャイム"
-            size="fixed"
-            :contentTitle="endChime.title"
-            :duration="`${convertNumberToTime(endChime.seconds)}`"
-            :volume="100"
-            @togglePlay="playEndChime"
-          >
-            <template #operaions>
-              <button
-                class="btn btn-link dropdown-toggle p-0"
-                type="button"
-                id="dropdownMenuButton"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                <svg
-                  id="メニュー"
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="30"
-                  height="6"
-                  viewBox="0 0 30 6"
-                >
-                  <circle
-                    id="楕円形_2"
-                    data-name="楕円形 2"
-                    cx="3"
-                    cy="3"
-                    r="3"
-                    fill="#578ed9"
-                  />
-                  <circle
-                    id="楕円形_3"
-                    data-name="楕円形 3"
-                    cx="3"
-                    cy="3"
-                    r="3"
-                    transform="translate(12)"
-                    fill="#578ed9"
-                  />
-                  <circle
-                    id="楕円形_4"
-                    data-name="楕円形 4"
-                    cx="3"
-                    cy="3"
-                    r="3"
-                    transform="translate(24)"
-                    fill="#578ed9"
-                  />
-                </svg>
-              </button>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <router-link
-                  class="dropdown-item"
-                  :to="{ name: 'CmChime', params: { div: 'end' } }"
-                >
-                  変更
-                </router-link>
-                <a class="dropdown-item" href="#" @click.prevent="clearEndChime"
-                  >削除</a
-                >
-              </div>
-            </template>
-          </CmItem>
-          <CmItem
-            v-else
-            title="Endチャイム"
-            :isEmpty="true"
-            size="fixed"
-            @add="$router.push({ name: 'CmChime', params: { div: 'end' } })"
+        <template #contents>
+          <PlayDialogContents
+            :isLoading="isDownloading || isCreating"
+            :isPlaying="isPlaying"
+            :playbackTime="playbackTime"
+            :duration="duration"
+            @play="play(selectedBgm)"
+            @stop="stop"
           />
         </template>
-      </CmLayout>
-    </template>
-  </BasicLayout>
-  <!-- modal -->
-  <transition>
-    <ModalDialog v-if="isPlayModalAppear" @close="stopAndClosePlayModal">
-      <template #header>
-        <ModalHeader title="試聴" @close="stopAndClosePlayModal" />
-      </template>
-      <template #contents>
-        <PlayDialogContents
-          :isLoading="isDownloading || isCreating"
-          :isPlaying="isPlaying"
-          :playbackTime="playbackTime"
-          :duration="duration"
-          @play="play(selectedBgm)"
-          @stop="stop"
-        />
-      </template>
-      <template #footer>
-        <ModalFooter :noBorder="true">
-          <Button type="rectangle" @click="stopAndClosePlayModal">終了</Button>
-        </ModalFooter>
-      </template>
-    </ModalDialog>
-  </transition>
-  <transition>
-    <ModalDialog v-if="isSaveModalAppear" size="large" @close="closeSaveModal">
-      <template #header>
-        <ModalHeader title="保存しますか？" @close="closeSaveModal" />
-      </template>
-      <template #contents>
-        <FormGroup title="タイトル" :required="true">
-          <TextBox v-model="title" />
-        </FormGroup>
-        <FormGroup title="説明">
-          <TextArea v-model="description" />
-        </FormGroup>
-        <FormGroup title="シーン">
-          <SelectBox
-            v-model="scene"
-            :options="
-              Constants.SCENES.map((scene) => {
-                return { title: scene.name, value: scene.cd };
-              })
-            "
-          />
-        </FormGroup>
-        <FormGroup
-          title="アップロード先"
-          description="あとで、管理画面からアップロード先を変更することが出来ます。"
-        >
-          <SelectBox
-            v-model="uploadSystem"
-            :options="
-              Constants.UPLOAD_SYSTEMS.map((uploadSystem) => {
-                return { title: uploadSystem.name, value: uploadSystem.cd };
-              })
-            "
-          />
-        </FormGroup>
-      </template>
-      <template #footer>
-        <ModalFooter>
-          <Button type="secondary" @click="closeSaveModal">キャンセル</Button>
-          <Button
-            type="primary"
-            :isDisabled="!title || isUpdating"
-            @click="updateAndOpenSavedModal"
-            >保存する</Button
+        <template #footer>
+          <ModalFooter :noBorder="true">
+            <Button type="rectangle" @click="stopAndClosePlayModal"
+              >終了</Button
+            >
+          </ModalFooter>
+        </template>
+      </ModalDialog>
+    </transition>
+    <transition>
+      <ModalDialog
+        v-if="isSaveModalAppear"
+        size="large"
+        @close="closeSaveModal"
+      >
+        <template #header>
+          <ModalHeader title="保存しますか？" @close="closeSaveModal" />
+        </template>
+        <template #contents>
+          <FormGroup title="タイトル" :required="true">
+            <TextBox v-model="title" />
+          </FormGroup>
+          <FormGroup title="説明">
+            <TextArea v-model="description" />
+          </FormGroup>
+          <FormGroup title="シーン">
+            <SelectBox
+              v-model="scene"
+              :options="
+                Constants.SCENES.map((scene) => {
+                  return { title: scene.name, value: scene.cd };
+                })
+              "
+            />
+          </FormGroup>
+          <FormGroup
+            title="アップロード先"
+            description="あとで、管理画面からアップロード先を変更することが出来ます。"
           >
-        </ModalFooter>
-      </template>
-    </ModalDialog>
-  </transition>
-  <transition>
-    <ModalDialog v-if="isSavedModalAppear" @close="closeSavedModal">
-      <template #contents>
-        <MessageDialogContents>
-          作成が完了いたしました。
-        </MessageDialogContents>
-      </template>
-      <template #footer>
-        <ModalFooter :noBorder="true">
-          <Button type="secondary" @click="closeSavedModal"
-            >編集の続きをする</Button
-          >
-          <Button type="primary" @click="toHome">終了する</Button>
-        </ModalFooter>
-      </template>
-    </ModalDialog>
-  </transition>
-  <transition>
-    <ModalUploading v-if="isModalUploading" title="音源の合成中">
-    </ModalUploading>
-  </transition>
+            <SelectBox
+              v-model="uploadSystem"
+              :options="
+                Constants.UPLOAD_SYSTEMS.map((uploadSystem) => {
+                  return { title: uploadSystem.name, value: uploadSystem.cd };
+                })
+              "
+            />
+          </FormGroup>
+        </template>
+        <template #footer>
+          <ModalFooter>
+            <Button type="secondary" @click="closeSaveModal">キャンセル</Button>
+            <Button
+              type="primary"
+              :isDisabled="!title || isUpdating"
+              @click="updateAndOpenSavedModal"
+              >保存する</Button
+            >
+          </ModalFooter>
+        </template>
+      </ModalDialog>
+    </transition>
+    <transition>
+      <ModalDialog v-if="isSavedModalAppear" @close="closeSavedModal">
+        <template #contents>
+          <MessageDialogContents>
+            作成が完了いたしました。
+          </MessageDialogContents>
+        </template>
+        <template #footer>
+          <ModalFooter :noBorder="true">
+            <Button type="secondary" @click="closeSavedModal"
+              >編集の続きをする</Button
+            >
+            <Button type="primary" @click="toHome">終了する</Button>
+          </ModalFooter>
+        </template>
+      </ModalDialog>
+    </transition>
+    <transition>
+      <ModalUploading v-if="isModalUploading" title="音源の合成中">
+      </ModalUploading>
+    </transition>
+  </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, reactive, onMounted, toRefs } from "vue";
+import { defineComponent, computed, reactive, toRefs } from "vue";
 import AudioPlayer from "@/utils/AudioPlayer";
 import AudioStore from "@/store/audio";
 import { useGlobalStore } from "@/store";
@@ -485,12 +499,7 @@ import TextArea from "@/components/atoms/TextArea.vue";
 import SelectBox from "@/components/atoms/SelectBox.vue";
 import CmLayout from "@/components/templates/CmLayout.vue";
 import CmItem from "@/components/molecules/CmItem.vue";
-import {
-  isNarration,
-  isRecording,
-  isTts,
-  MAX_NARRATION_COUNT,
-} from "@/store/cm";
+import { MAX_NARRATION_COUNT } from "@/store/cm";
 import router from "@/router";
 import { ChimeItem } from "umesseapi/models";
 import UMesseService from "@/services/UMesseService";

@@ -19,7 +19,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/_variables.scss';
+@import "@/scss/_variables.scss";
 
 .message-dialog-contents {
   p {

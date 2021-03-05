@@ -1,5 +1,5 @@
-type lang = "ja" | "en" | "zh" | "ko"
-type speaker = "0" | "1"
+export type lang = "ja" | "en" | "zh" | "ko"
+export type speaker = "0" | "1"
 
 export interface TemplateDetailItem {
   text: string;

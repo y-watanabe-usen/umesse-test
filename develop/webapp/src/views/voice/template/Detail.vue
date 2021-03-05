@@ -154,9 +154,7 @@
 import { computed, defineComponent, reactive, toRefs } from "vue";
 import { useRouter } from "vue-router";
 import AudioPlayer from "@/utils/AudioPlayer";
-import AudioStore from "@/store/audio";
-import { RecordingFile, UPLOAD_TTS_STATE } from "@/services/uploadTtsService";
-import provideTtsStore, { TtsStore, useTtsStore } from "@/store/tts";
+import provideTtsStore from "@/store/tts";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
 import Header from "@/components/organisms/Header.vue";
@@ -169,12 +167,12 @@ import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
 import { useGlobalStore } from "@/store";
-import { TemplateItem, TtsItem } from "umesseapi/models";
+import { TemplateItem } from "umesseapi/models";
 import Constants from "@/utils/Constants";
 import UMesseService from "@/services/UMesseService";
 import ModalUploading from "@/components/organisms/ModalUploading.vue";
 import UMesseCache from "@/repository/UMesseCache";
-import { TemplateDetailItem } from "@/models/TemplateDetailItem";
+import { lang, speaker, TemplateDetailItem } from "@/models/TemplateDetailItem";
 export default defineComponent({
   components: {
     BasicLayout,
@@ -193,7 +191,6 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const ttsStore = provideTtsStore(); //FIXME: provide name.
-    const audioStore = AudioStore();
     const audioPlayer = AudioPlayer();
     const ttsSpeakers = Constants.TTS_GENDERS;
     const { cm } = useGlobalStore();
@@ -201,15 +198,17 @@ export default defineComponent({
     const template = <TemplateItem>UMesseCache.freeCache.get("voice/template");
     let templateDetails: TemplateDetailItem[] = [];
     let ttsLangs: string[] = [];
-    template.details.forEach((element: any) => {
-      templateDetails.push({
-        text: element.text,
-        lang: element.lang,
-        speaker: element.speaker,
-      });
-      if (ttsLangs.find((v) => v == element.lang) == undefined)
-        ttsLangs.push(element.lang);
-    });
+    template.details.forEach(
+      (element: { text: string; lang: lang; speaker: speaker }) => {
+        templateDetails.push({
+          text: element.text,
+          lang: element.lang,
+          speaker: element.speaker,
+        });
+        if (ttsLangs.find((v) => v == element.lang) == undefined)
+          ttsLangs.push(element.lang);
+      }
+    );
 
     const state = reactive({
       isPlaying: computed(() => audioPlayer.isPlaying()),

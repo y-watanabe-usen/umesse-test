@@ -26,16 +26,16 @@
           <div v-if="activeAppInformationCd === '02'">
             <h2>U MESSE利用規約</h2>
             <p>
-              xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br>
-              xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br>
+              xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br />
+              xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br />
               xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
             </p>
           </div>
           <div v-if="activeAppInformationCd === '03'">
             <h2>アナウンス発注の利用規約</h2>
             <p>
-              xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br>
-              xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br>
+              xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br />
+              xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br />
               xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
             </p>
           </div>
@@ -49,8 +49,6 @@
 import {
   defineComponent,
   computed,
-  ref,
-  onMounted,
   reactive,
   toRefs,
 } from "vue";
@@ -58,10 +56,8 @@ import * as Common from "@/utils/Common";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
 import Header from "@/components/organisms/Header.vue";
-import Button from "@/components/atoms/Button.vue";
 import SubMenu from "@/components/organisms/SubMenu.vue";
 import SubMenuItem from "@/components/molecules/SubMenuItem.vue";
-import { useRoute } from "vue-router";
 import {
   convertDatestringToDateJp,
   convertNumberToTime,
@@ -72,12 +68,10 @@ export default defineComponent({
     BasicLayout,
     ContentsBase,
     Header,
-    Button,
     SubMenu,
     SubMenuItem,
   },
   setup() {
-    const route = useRoute();
     const state = reactive({
       appInformations: computed(() => Common.getSettingAppInformations()),
       activeAppInformationCd: "01",

@@ -174,7 +174,7 @@ export const ERROR_CODE = {
   A4999: "A4999",
   // 想定外エラー
   A9999: "A9999",
-} as const
+} as const;
 export type ERROR_CODE = typeof ERROR_CODE[keyof typeof ERROR_CODE]
 
 export const ERROR_PATTERN = {
@@ -191,4 +191,4 @@ export const ERROR_PATTERN = {
   "A4999": "サーバーへの接続に失敗しました。通信環境をご確認の上、リロードボタンを押してください。",
   // 想定外エラー
   "A9999": "予期せぬエラーが発生しました。アプリケーションを再起動してください。",
-}
+};

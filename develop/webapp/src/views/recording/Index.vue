@@ -141,7 +141,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, computed, toRefs, provide } from "vue";
+import { defineComponent, reactive, computed, toRefs } from "vue";
 import AudioRecorder from "@/utils/AudioRecorder";
 import AudioPlayer from "@/utils/AudioPlayer";
 import {
@@ -161,7 +161,6 @@ import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
 import { useGlobalStore } from "@/store";
-import { RecordingItem } from "umesseapi/models";
 import router from "@/router";
 import ModalUploading from "@/components/organisms/ModalUploading.vue";
 export default defineComponent({
@@ -214,7 +213,7 @@ export default defineComponent({
     // playback a recorded data.
     const play = async () => {
       const audioBuffer = await audioRecorder.getAudioBuffer();
-      audioPlayer.start(audioBuffer!!);
+      if (audioBuffer) audioPlayer.start(audioBuffer);
     };
     const deleteRecordedData = () => audioRecorder.reset();
     const uploadRecordingFile = async () => {
@@ -223,11 +222,8 @@ export default defineComponent({
       try {
         openModalUploading();
         state.file.blob = await audioRecorder.getMp3Blob();
-        const uploadedData: any = await recordingStore.uploadRecordingData(
-          state.file
-        );
-        uploadedData.recordingId = uploadedData.id;
-        cm.setNarration(<RecordingItem>uploadedData);
+        const response = await recordingStore.uploadRecordingData(state.file);
+        cm.setNarration(response);
         router.push({ name: "Cm" });
         closeModalUploading();
         closeModal();

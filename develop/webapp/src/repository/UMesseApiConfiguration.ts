@@ -1,4 +1,4 @@
-import { Configuration } from "umesseapi"
+import { Configuration } from "umesseapi";
 
 const headerOptions = process.env.VUE_APP_API_KEY ? {
   "x-api-key": process.env.VUE_APP_API_KEY
@@ -8,4 +8,4 @@ export const config = new Configuration({
   baseOptions: {
     headers: headerOptions
   }
-})
+});

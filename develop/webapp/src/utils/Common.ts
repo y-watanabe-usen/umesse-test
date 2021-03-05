@@ -28,7 +28,7 @@ export function getNarrationIndustries() {
  * @return Scene[]
  */
 export function getIndustryScenes(industryCd: string) {
-  let getCdList: string[] = []
+  let getCdList: string[] = [];
   switch (industryCd) {
     case "01":
       getCdList = ["001"];
@@ -65,7 +65,7 @@ export function getIndustryScenes(industryCd: string) {
       break;
     default:
       getCdList = ["001", "002", "003", "004", "005", "006", "007", "008", "009", "010", "011", "012", "013", "014", "015", "016", "017", "018", "019", "020", "021", "022", "023", "024", "025", "026", "027", "028", "029", "030", "031", "032", "033", "034", "035", "036", "037", "038", "039", "040", "041", "042", "043", "044", "045", "046", "047", "048", "049", "050", "051", "052", "053", "901", "902",];
-      break
+      break;
   }
   return getScenes(getCdList);
 }
@@ -124,7 +124,7 @@ export function getSort() {
  * @param
  * @return AppInformation[]
  */
-export function getSettingAppInformations() {
+export function getSettingAppInformations(): AppInformation[] {
   return getAppInformation();
 }
 
@@ -133,8 +133,8 @@ export function getSettingAppInformations() {
  * @param id string
  * @return bool
  */
-export function isRecordingById(id: string) {
-  return id.match(`^[0-9a-z]+-r-[0-9a-z]{8}$`)
+export function isRecordingById(id: string): boolean {
+  return id.match(`^[0-9a-z]+-r-[0-9a-z]{8}$`) ? true : false;
 }
 
 /**
@@ -142,14 +142,16 @@ export function isRecordingById(id: string) {
  * @param id string
  * @return bool
  */
-export function isTtsById(id: string) {
-  return id.match(`^[0-9a-z]+-t-[0-9a-z]{8}$`)
+export function isTtsById(id: string): boolean {
+  return id.match(`^[0-9a-z]+-t-[0-9a-z]{8}$`) ? true : false;
 }
 
 function getIndustries(cdList: string[]) {
-  let result: Industry[] = [];
+  const result: Industry[] = [];
   cdList.forEach((v) => {
-    result.push(Constants.INDUSTORIES.find((vv) => vv.cd == v)!);
+    const industry = Constants.INDUSTORIES.find((vv) => vv.cd == v);
+    if (industry) result.push(industry);
+
   });
   // TODO: sort
 
@@ -158,9 +160,10 @@ function getIndustries(cdList: string[]) {
 
 function getScenes(cdList?: string[]) {
   if (!cdList) return Constants.SCENES;
-  let result: Scene[] = [];
+  const result: Scene[] = [];
   cdList.forEach((v) => {
-    result.push(Constants.SCENES.find((vv) => vv.cd == v)!);
+    const scene = Constants.SCENES.find((vv) => vv.cd == v);
+    if (scene) result.push(scene);
   });
   // TODO: sort
 
@@ -168,9 +171,10 @@ function getScenes(cdList?: string[]) {
 }
 
 function getSorts(cdList: number[]) {
-  let result: Sorts[] = [];
+  const result: Sorts[] = [];
   cdList.forEach((v) => {
-    result.push(Constants.SORTS.find((vv) => vv.cd == v)!);
+    const sort = Constants.SORTS.find((vv) => vv.cd == v);
+    if (sort) result.push(sort);
   });
 
   return result;
@@ -178,9 +182,10 @@ function getSorts(cdList: number[]) {
 
 function getAppInformation(cdList?: string[]) {
   if (!cdList) return Constants.APP_INFORMATIONS;
-  let result: AppInformation[] = [];
+  const result: AppInformation[] = [];
   cdList.forEach((v) => {
-    result.push(Constants.APP_INFORMATIONS.find((vv) => vv.cd == v)!);
+    const appInformation = Constants.APP_INFORMATIONS.find((vv) => vv.cd == v);
+    if (appInformation) result.push(appInformation);
   });
 
   return result;

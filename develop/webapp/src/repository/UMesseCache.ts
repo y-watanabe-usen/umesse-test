@@ -18,10 +18,10 @@ class UMesseCache {
   }
 
   get audioCache() {
-    return this._audioCache
+    return this._audioCache;
   }
   get freeCache() {
-    return this._freeCache
+    return this._freeCache;
   }
 
   public static get instance() {

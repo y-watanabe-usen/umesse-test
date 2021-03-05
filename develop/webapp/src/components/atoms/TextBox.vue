@@ -23,18 +23,19 @@ export default {
       default: false,
     },
   },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setup(props: any, context: SetupContext) {
     const state = reactive({});
     const onUpdate = (event: Event) => {
       if (event.target instanceof HTMLInputElement) {
-        context.emit('update:modelValue', event.target.value);
+        context.emit("update:modelValue", event.target.value);
       }
-    }
+    };
     const onChange = (event: Event) => {
       if (event.target instanceof HTMLInputElement) {
-        context.emit('change', event.target.value);
+        context.emit("change", event.target.value);
       }
-    }
+    };
     return {
       state,
       onUpdate,
@@ -45,7 +46,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/_variables.scss';
+@import "@/scss/_variables.scss";
 
 input {
   height: 58px;

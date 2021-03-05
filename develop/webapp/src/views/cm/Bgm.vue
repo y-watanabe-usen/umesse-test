@@ -1,136 +1,148 @@
 <template>
-  <BasicLayout>
-    <template #header>
-      <Header>
-        <template #title>BGM</template>
-      </Header>
-    </template>
-    <template #contents>
-      <ContentsBase>
-        <template #sub-menu>
-          <SubMenu>
-            <SubMenuItem
-              v-for="bgmIndustry in bgmIndustries"
-              :key="bgmIndustry.cd"
-              :isSelected="bgmIndustry.cd == activeBgmIndustryCd"
-              @click="clickBgmIndustry(bgmIndustry.cd)"
-            >
-              {{ bgmIndustry.name }}
-            </SubMenuItem>
-          </SubMenu>
-        </template>
-        <List>
-          <template #header>
-            <ListHeader>
-              <Sort
-                v-model="sort"
-                @update:modelValue="fetchBgm"
-                :options="
-                  bgmSorts.map((bgmSort) => {
-                    return { title: bgmSort.name, value: bgmSort.cd };
-                  })
-                "
-              />
-            </ListHeader>
-          </template>
-          <ListItem v-for="bgm in bgms" :key="bgm.id">
-            <template #title>
-              <h2>{{ bgm.title }}</h2>
-            </template>
-            <template #line1>
-              <p>{{ bgm.description }}</p>
-            </template>
-            <template #operations>
-              <Button
-                type="rectangle"
-                class="btn-play"
-                @click="selectBgmAndOpenPlayModal(bgm)"
+  <div>
+    <BasicLayout>
+      <template #header>
+        <Header>
+          <template #title>BGM</template>
+        </Header>
+      </template>
+      <template #contents>
+        <ContentsBase>
+          <template #sub-menu>
+            <SubMenu>
+              <SubMenuItem
+                v-for="bgmIndustry in bgmIndustries"
+                :key="bgmIndustry.cd"
+                :isSelected="bgmIndustry.cd == activeBgmIndustryCd"
+                @click="clickBgmIndustry(bgmIndustry.cd)"
               >
-                <img src="@/assets/icon_play.svg" />試聴
-              </Button>
-              <Button type="rectangle" class="btn-select" @click="setBgm(bgm)">
-                選択<img src="@/assets/icon_select.svg" />
-              </Button>
+                {{ bgmIndustry.name }}
+              </SubMenuItem>
+            </SubMenu>
+          </template>
+          <List>
+            <template #header>
+              <ListHeader>
+                <Sort
+                  v-model="sort"
+                  @update:modelValue="fetchBgm"
+                  :options="
+                    bgmSorts.map((bgmSort) => {
+                      return { title: bgmSort.name, value: bgmSort.cd };
+                    })
+                  "
+                />
+              </ListHeader>
             </template>
-          </ListItem>
-        </List>
-      </ContentsBase>
-    </template>
-  </BasicLayout>
-  <!-- modal -->
-  <transition>
-    <ModalDialog v-if="isPlayModalAppear" @close="stopAndClosePlayModal">
-      <template #header>
-        <ModalHeader title="試聴" @close="stopAndClosePlayModal" />
+            <ListItem v-for="bgm in bgms" :key="bgm.id">
+              <template #title>
+                <h2>{{ bgm.title }}</h2>
+              </template>
+              <template #line1>
+                <p>{{ bgm.description }}</p>
+              </template>
+              <template #operations>
+                <Button
+                  type="rectangle"
+                  class="btn-play"
+                  @click="selectBgmAndOpenPlayModal(bgm)"
+                >
+                  <img src="@/assets/icon_play.svg" />試聴
+                </Button>
+                <Button
+                  type="rectangle"
+                  class="btn-select"
+                  @click="setBgm(bgm)"
+                >
+                  選択<img src="@/assets/icon_select.svg" />
+                </Button>
+              </template>
+            </ListItem>
+          </List>
+        </ContentsBase>
       </template>
-      <template #contents>
-        <PlayDialogContents
-          :isLoading="isDownloading"
-          :isPlaying="isPlaying"
-          :playbackTime="playbackTime"
-          :duration="duration"
-          @play="play(selectedBgm)"
-          @stop="stop"
-        />
-      </template>
-      <template #footer>
-        <ModalFooter :noBorder="true">
-          <Button type="rectangle" @click="stopAndClosePlayModal">終了</Button>
-        </ModalFooter>
-      </template>
-    </ModalDialog>
-  </transition>
-  <transition>
-    <ModalDialog v-if="isSaveModalAppear" size="large" @close="closeSaveModal">
-      <template #header>
-        <ModalHeader title="保存しますか？" @close="closeSaveModal" />
-      </template>
-      <template #contents>
-        <FormGroup title="タイトル" :required="true">
-          <TextBox />
-        </FormGroup>
-        <FormGroup title="説明">
-          <TextArea />
-        </FormGroup>
-      </template>
-      <template #footer>
-        <ModalFooter>
-          <Button type="secondary" @click="closeSaveModal">キャンセル</Button>
-          <Button type="primary" @click="closeSaveModal">保存する</Button>
-        </ModalFooter>
-      </template>
-    </ModalDialog>
-  </transition>
-  <transition>
-    <ModalDialog v-if="isSavedModalAppear" @close="closeSavedModal">
-      <template #contents>
-        <MessageDialogContents> 保存が完了しました。 </MessageDialogContents>
-      </template>
-      <template #footer>
-        <ModalFooter :noBorder="true">
-          <Button type="rectangle" @click="closeSavedModal">閉じる</Button>
-        </ModalFooter>
-      </template>
-    </ModalDialog>
-  </transition>
-  <transition>
-    <ModalDialog v-if="isError" @close="closeErrorModal">
-      <template #header>
-        <ModalHeader title="エラー" @close="closeErrorModal" />
-      </template>
-      <template #contents>
-        <MessageDialogContents>
-          {{ errorCode }} <br />
-          {{ errorMessge }}
-        </MessageDialogContents>
-      </template>
-      <template #footer>
-        <ModalFooter :noBorder="true">
-          <Button type="rectangle" @click="closeErrorModal">閉じる</Button>
-        </ModalFooter>
-      </template>
-    </ModalDialog>
-  </transition>
+    </BasicLayout>
+    <!-- modal -->
+    <transition>
+      <ModalDialog v-if="isPlayModalAppear" @close="stopAndClosePlayModal">
+        <template #header>
+          <ModalHeader title="試聴" @close="stopAndClosePlayModal" />
+        </template>
+        <template #contents>
+          <PlayDialogContents
+            :isLoading="isDownloading"
+            :isPlaying="isPlaying"
+            :playbackTime="playbackTime"
+            :duration="duration"
+            @play="play(selectedBgm)"
+            @stop="stop"
+          />
+        </template>
+        <template #footer>
+          <ModalFooter :noBorder="true">
+            <Button type="rectangle" @click="stopAndClosePlayModal"
+              >終了</Button
+            >
+          </ModalFooter>
+        </template>
+      </ModalDialog>
+    </transition>
+    <transition>
+      <ModalDialog
+        v-if="isSaveModalAppear"
+        size="large"
+        @close="closeSaveModal"
+      >
+        <template #header>
+          <ModalHeader title="保存しますか？" @close="closeSaveModal" />
+        </template>
+        <template #contents>
+          <FormGroup title="タイトル" :required="true">
+            <TextBox />
+          </FormGroup>
+          <FormGroup title="説明">
+            <TextArea />
+          </FormGroup>
+        </template>
+        <template #footer>
+          <ModalFooter>
+            <Button type="secondary" @click="closeSaveModal">キャンセル</Button>
+            <Button type="primary" @click="closeSaveModal">保存する</Button>
+          </ModalFooter>
+        </template>
+      </ModalDialog>
+    </transition>
+    <transition>
+      <ModalDialog v-if="isSavedModalAppear" @close="closeSavedModal">
+        <template #contents>
+          <MessageDialogContents> 保存が完了しました。 </MessageDialogContents>
+        </template>
+        <template #footer>
+          <ModalFooter :noBorder="true">
+            <Button type="rectangle" @click="closeSavedModal">閉じる</Button>
+          </ModalFooter>
+        </template>
+      </ModalDialog>
+    </transition>
+    <transition>
+      <ModalDialog v-if="isError" @close="closeErrorModal">
+        <template #header>
+          <ModalHeader title="エラー" @close="closeErrorModal" />
+        </template>
+        <template #contents>
+          <MessageDialogContents>
+            {{ errorCode }} <br />
+            {{ errorMessge }}
+          </MessageDialogContents>
+        </template>
+        <template #footer>
+          <ModalFooter :noBorder="true">
+            <Button type="rectangle" @click="closeErrorModal">閉じる</Button>
+          </ModalFooter>
+        </template>
+      </ModalDialog>
+    </transition>
+  </div>
 </template>
 
 <script lang="ts">
@@ -139,7 +151,7 @@ import AudioPlayer from "@/utils/AudioPlayer";
 import AudioStore from "@/store/audio";
 import { BgmItem } from "umesseapi/models";
 import { useGlobalStore } from "@/store";
-import { useRoute, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 import * as Common from "@/utils/Common";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
@@ -160,7 +172,6 @@ import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
 import UMesseService from "@/services/UMesseService";
-import { UMesseError } from "@/models/UMesseError";
 
 export default defineComponent({
   components: {

@@ -27,10 +27,10 @@ export default {
     },
     description: {
       type: String,
-      default: '',
+      default: "",
     },
   },
-  setup(props: any) {
+  setup() {
     const state = reactive({});
     return {
       state,
@@ -40,7 +40,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/_variables.scss';
+@import "@/scss/_variables.scss";
 
 .form-group {
   @include flex_between;

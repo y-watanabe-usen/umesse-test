@@ -24,16 +24,17 @@ export default {
     },
     placeholder: {
       type: String,
-      default: '',
-    }
+      default: "",
+    },
   },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setup(props: any, context: SetupContext) {
     const state = reactive({});
     const onUpdate = (event: Event) => {
       if (event.target instanceof HTMLTextAreaElement) {
-        context.emit('update:modelValue', event.target.value);
+        context.emit("update:modelValue", event.target.value);
       }
-    }
+    };
     return {
       state,
       onUpdate,
@@ -43,7 +44,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/_variables.scss';
+@import "@/scss/_variables.scss";
 
 textarea {
   height: 116px;

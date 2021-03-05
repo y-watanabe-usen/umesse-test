@@ -16,47 +16,47 @@ class UMesseApi {
   private _externalApi: api.ExternalApi
 
   private constructor() {
-    this._pingApi = new api.PingApi(config)
-    this._authApi = new api.AuthApi(config)
-    this._userApi = new api.UserApi(config)
-    this._cmApi = new api.CmApi(config)
-    this._recordingApi = new api.RecordingApi(config)
-    this._ttsApi = new api.TtsApi(config)
-    this._uploadApi = new api.UploadApi(config)
-    this._shareApi = new api.ShareApi(config)
-    this._resourcesApi = new api.ResourcesApi(config)
-    this._externalApi = new api.ExternalApi(config)
+    this._pingApi = new api.PingApi(config);
+    this._authApi = new api.AuthApi(config);
+    this._userApi = new api.UserApi(config);
+    this._cmApi = new api.CmApi(config);
+    this._recordingApi = new api.RecordingApi(config);
+    this._ttsApi = new api.TtsApi(config);
+    this._uploadApi = new api.UploadApi(config);
+    this._shareApi = new api.ShareApi(config);
+    this._resourcesApi = new api.ResourcesApi(config);
+    this._externalApi = new api.ExternalApi(config);
   }
 
   get pingApi() {
-    return this._pingApi
+    return this._pingApi;
   }
   get authApi() {
-    return this._authApi
+    return this._authApi;
   }
   get userApi() {
-    return this._userApi
+    return this._userApi;
   }
   get cmApi() {
-    return this._cmApi
+    return this._cmApi;
   }
   get recordingApi() {
-    return this._recordingApi
+    return this._recordingApi;
   }
   get ttsApi() {
-    return this._ttsApi
+    return this._ttsApi;
   }
   get uploadApi() {
-    return this._uploadApi
+    return this._uploadApi;
   }
   get shareApi() {
-    return this._shareApi
+    return this._shareApi;
   }
   get resourcesApi() {
-    return this._resourcesApi
+    return this._resourcesApi;
   }
   get externalApi() {
-    return this._externalApi
+    return this._externalApi;
   }
 
   public static get instance() {

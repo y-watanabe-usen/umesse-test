@@ -4,8 +4,6 @@
 //
 //   const CreateUserCmRequestItem = Convert.toCreateUserCmRequestItem(json);
 
-import Constants from "@/utils/Constants";
-
 export interface CreateUserCmRequestItem {
   materials?: Materials;
 }

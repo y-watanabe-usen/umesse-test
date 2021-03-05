@@ -1,240 +1,250 @@
 <template>
-  <BasicLayout>
-    <template #header>
-      <Header>
-        <template #title>店内アナウンスの管理</template>
-      </Header>
-    </template>
-    <template #contents>
-      <ContentsBase>
-        <template #sub-menu>
-          <SubMenu>
-            <SubMenuItem
-              v-for="scene in scenes"
-              :key="scene.cd"
-              :isSelected="scene.cd == activeSceneCd"
-              @click="clickScene(scene.cd)"
-            >
-              {{ scene.name }}
-            </SubMenuItem>
-          </SubMenu>
-        </template>
-        <List>
-          <template #header>
-            <ListHeader>
-              <Sort
-                v-model="sort"
-                @update:modelValue="fetchCm"
-                :options="
-                  cmSorts.map((cmSort) => {
-                    return { title: cmSort.name, value: cmSort.cd };
-                  })
-                "
-              />
-            </ListHeader>
+  <div>
+    <BasicLayout>
+      <template #header>
+        <Header>
+          <template #title>店内アナウンスの管理</template>
+        </Header>
+      </template>
+      <template #contents>
+        <ContentsBase>
+          <template #sub-menu>
+            <SubMenu>
+              <SubMenuItem
+                v-for="scene in scenes"
+                :key="scene.cd"
+                :isSelected="scene.cd == activeSceneCd"
+                @click="clickScene(scene.cd)"
+              >
+                {{ scene.name }}
+              </SubMenuItem>
+            </SubMenu>
           </template>
-          <ListItem v-for="cm in cms" :key="cm.cmId">
-            <template #title>
-              <h2>{{ cm.title }}</h2>
-            </template>
-            <template #line1>
-              <p>{{ cm.description }}</p>
-            </template>
-            <template #line2>
-              <p>
-                <span class="duration">{{
-                  convertNumberToTime(cm.seconds)
-                }}</span>
-                <span class="start">{{
-                  convertDatestringToDate(cm.timestamp)
-                }}</span>
-                <span class="end"
-                  >ステータス：{{
-                    Constants.CM_STATUS.find((v) => v.cd == cm.status).name
-                  }}</span
-                >
-              </p>
-            </template>
-            <template #operations>
-              <Button
-                type="rectangle"
-                class="btn-play"
-                @click="selectCmAndOpenPlayModal(cm)"
-              >
-                <img src="@/assets/icon_play.svg" />試聴
-              </Button>
-              <button
-                class="btn btn-link dropdown-toggle btn-lg"
-                type="button"
-                id="dropdownMenuButton"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-              >
-                <svg
-                  width="2.5em"
-                  height="2.5em"
-                  viewBox="0 0 16 16"
-                  class="bi bi-three-dots"
-                  fill="currentColor"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"
-                  />
-                </svg>
-              </button>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a
-                  class="dropdown-item"
-                  href="#"
-                  @click.prevent="selectCmAndOpenSaveModal(cm)"
-                  >タイトル/説明 編集</a
-                >
-                <a
-                  class="dropdown-item"
-                  :class="
-                    disabledEditContentsStatus.includes(cm.status)
-                      ? 'disabled'
-                      : ''
+          <List>
+            <template #header>
+              <ListHeader>
+                <Sort
+                  v-model="sort"
+                  @update:modelValue="fetchCm"
+                  :options="
+                    cmSorts.map((cmSort) => {
+                      return { title: cmSort.name, value: cmSort.cd };
+                    })
                   "
-                  href="#"
-                  @click="toEditCm(cm)"
-                  >コンテンツ編集</a
-                >
-                <a class="dropdown-item" href="#">U MUSICにアップロード</a>
-                <a
-                  class="dropdown-item"
-                  :class="
-                    disabledDeleteStatus.includes(cm.status) ? 'disabled' : ''
-                  "
-                  @click.prevent="selectCmAndOpenRemoveModal(cm)"
-                  href="#"
-                  >削除</a
-                >
-              </div>
+                />
+              </ListHeader>
             </template>
-          </ListItem>
-        </List>
-      </ContentsBase>
-    </template>
-  </BasicLayout>
-  <!-- modal -->
-  <transition>
-    <ModalDialog v-if="isPlayModalAppear" @close="stopAndClosePlayModal">
-      <template #header>
-        <ModalHeader title="試聴" @close="stopAndClosePlayModal" />
+            <ListItem v-for="cm in cms" :key="cm.cmId">
+              <template #title>
+                <h2>{{ cm.title }}</h2>
+              </template>
+              <template #line1>
+                <p>{{ cm.description }}</p>
+              </template>
+              <template #line2>
+                <p>
+                  <span class="duration">{{
+                    convertNumberToTime(cm.seconds)
+                  }}</span>
+                  <span class="start">{{
+                    convertDatestringToDate(cm.timestamp)
+                  }}</span>
+                  <span class="end"
+                    >ステータス：{{
+                      Constants.CM_STATUS.find((v) => v.cd == cm.status).name
+                    }}</span
+                  >
+                </p>
+              </template>
+              <template #operations>
+                <Button
+                  type="rectangle"
+                  class="btn-play"
+                  @click="selectCmAndOpenPlayModal(cm)"
+                >
+                  <img src="@/assets/icon_play.svg" />試聴
+                </Button>
+                <button
+                  class="btn btn-link dropdown-toggle btn-lg"
+                  type="button"
+                  id="dropdownMenuButton"
+                  data-toggle="dropdown"
+                  aria-haspopup="true"
+                  aria-expanded="false"
+                >
+                  <svg
+                    width="2.5em"
+                    height="2.5em"
+                    viewBox="0 0 16 16"
+                    class="bi bi-three-dots"
+                    fill="currentColor"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"
+                    />
+                  </svg>
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a
+                    class="dropdown-item"
+                    href="#"
+                    @click.prevent="selectCmAndOpenSaveModal(cm)"
+                    >タイトル/説明 編集</a
+                  >
+                  <a
+                    class="dropdown-item"
+                    :class="
+                      disabledEditContentsStatus.includes(cm.status)
+                        ? 'disabled'
+                        : ''
+                    "
+                    href="#"
+                    @click="toEditCm(cm)"
+                    >コンテンツ編集</a
+                  >
+                  <a class="dropdown-item" href="#">U MUSICにアップロード</a>
+                  <a
+                    class="dropdown-item"
+                    :class="
+                      disabledDeleteStatus.includes(cm.status) ? 'disabled' : ''
+                    "
+                    @click.prevent="selectCmAndOpenRemoveModal(cm)"
+                    href="#"
+                    >削除</a
+                  >
+                </div>
+              </template>
+            </ListItem>
+          </List>
+        </ContentsBase>
       </template>
-      <template #contents>
-        <PlayDialogContents
-          :isLoading="isDownloading"
-          :isPlaying="isPlaying"
-          :playbackTime="playbackTime"
-          :duration="duration"
-          @play="play(selectedCm)"
-          @stop="stop"
-        />
-      </template>
-      <template #footer>
-        <ModalFooter :noBorder="true">
-          <Button type="rectangle" @click="stopAndClosePlayModal">終了</Button>
-        </ModalFooter>
-      </template>
-    </ModalDialog>
-  </transition>
-  <transition>
-    <ModalDialog v-if="isSaveModalAppear" size="large" @close="closeSaveModal">
-      <template #header>
-        <ModalHeader title="タイトルと説明の編集" @close="closeSaveModal" />
-      </template>
-      <template #contents>
-        <FormGroup title="タイトル" :required="true">
-          <TextBox v-model="title" />
-        </FormGroup>
-        <FormGroup title="説明">
-          <TextArea v-model="description" />
-        </FormGroup>
-        <FormGroup title="シーン">
-          <SelectBox
-            v-model="scene"
-            :options="
-              Constants.SCENES.map((scene) => {
-                return { title: scene.name, value: scene.cd };
-              })
-            "
+    </BasicLayout>
+    <!-- modal -->
+    <transition>
+      <ModalDialog v-if="isPlayModalAppear" @close="stopAndClosePlayModal">
+        <template #header>
+          <ModalHeader title="試聴" @close="stopAndClosePlayModal" />
+        </template>
+        <template #contents>
+          <PlayDialogContents
+            :isLoading="isDownloading"
+            :isPlaying="isPlaying"
+            :playbackTime="playbackTime"
+            :duration="duration"
+            @play="play(selectedCm)"
+            @stop="stop"
           />
-        </FormGroup>
-      </template>
-      <template #footer>
-        <ModalFooter>
-          <Button type="secondary" @click="closeSaveModal">キャンセル</Button>
-          <Button
-            type="primary"
-            :isDisabled="!title"
-            @click="saveAndOpenSavedModal"
-            >保存する</Button
-          >
-        </ModalFooter>
-      </template>
-    </ModalDialog>
-  </transition>
-  <transition>
-    <ModalDialog
-      v-if="isSavedModalAppear"
-      size="small"
-      @close="closeSavedModal"
-    >
-      <template #contents>
-        <MessageDialogContents> 保存が完了しました。 </MessageDialogContents>
-      </template>
-      <template #footer>
-        <ModalFooter :noBorder="true">
-          <Button type="rectangle" @click="closeSavedModal">閉じる</Button>
-        </ModalFooter>
-      </template>
-    </ModalDialog>
-  </transition>
-  <transition>
-    <ModalDialog v-if="isRemoveModalAppear" @close="closeRemoveModal">
-      <template #header>
-        <ModalHeader title="確認" @close="closeRemoveModal" />
-      </template>
-      <template #contents>
-        <MessageDialogContents>
-          削除してよろしいですか？
-        </MessageDialogContents>
-      </template>
-      <template #footer>
-        <ModalFooter>
-          <Button type="secondary" @click="closeRemoveModal">キャンセル</Button>
-          <Button type="primary" @click="removeAndOpenRemovedModal"
-            >はい</Button
-          >
-        </ModalFooter>
-      </template>
-    </ModalDialog>
-  </transition>
-  <transition>
-    <ModalDialog
-      v-if="isRemovedModalAppear"
-      size="small"
-      @close="closeRemovedModal"
-    >
-      <template #contents>
-        <MessageDialogContents> 削除が完了しました。 </MessageDialogContents>
-      </template>
-      <template #footer>
-        <ModalFooter :noBorder="true">
-          <Button type="rectangle" @click="closeRemovedModal">閉じる</Button>
-        </ModalFooter>
-      </template>
-    </ModalDialog>
-  </transition>
-  <transition>
-    <ModalUploading v-if="isModalUploading" :title="titleModalUploading">
-    </ModalUploading>
-  </transition>
+        </template>
+        <template #footer>
+          <ModalFooter :noBorder="true">
+            <Button type="rectangle" @click="stopAndClosePlayModal"
+              >終了</Button
+            >
+          </ModalFooter>
+        </template>
+      </ModalDialog>
+    </transition>
+    <transition>
+      <ModalDialog
+        v-if="isSaveModalAppear"
+        size="large"
+        @close="closeSaveModal"
+      >
+        <template #header>
+          <ModalHeader title="タイトルと説明の編集" @close="closeSaveModal" />
+        </template>
+        <template #contents>
+          <FormGroup title="タイトル" :required="true">
+            <TextBox v-model="title" />
+          </FormGroup>
+          <FormGroup title="説明">
+            <TextArea v-model="description" />
+          </FormGroup>
+          <FormGroup title="シーン">
+            <SelectBox
+              v-model="scene"
+              :options="
+                Constants.SCENES.map((scene) => {
+                  return { title: scene.name, value: scene.cd };
+                })
+              "
+            />
+          </FormGroup>
+        </template>
+        <template #footer>
+          <ModalFooter>
+            <Button type="secondary" @click="closeSaveModal">キャンセル</Button>
+            <Button
+              type="primary"
+              :isDisabled="!title"
+              @click="saveAndOpenSavedModal"
+              >保存する</Button
+            >
+          </ModalFooter>
+        </template>
+      </ModalDialog>
+    </transition>
+    <transition>
+      <ModalDialog
+        v-if="isSavedModalAppear"
+        size="small"
+        @close="closeSavedModal"
+      >
+        <template #contents>
+          <MessageDialogContents> 保存が完了しました。 </MessageDialogContents>
+        </template>
+        <template #footer>
+          <ModalFooter :noBorder="true">
+            <Button type="rectangle" @click="closeSavedModal">閉じる</Button>
+          </ModalFooter>
+        </template>
+      </ModalDialog>
+    </transition>
+    <transition>
+      <ModalDialog v-if="isRemoveModalAppear" @close="closeRemoveModal">
+        <template #header>
+          <ModalHeader title="確認" @close="closeRemoveModal" />
+        </template>
+        <template #contents>
+          <MessageDialogContents>
+            削除してよろしいですか？
+          </MessageDialogContents>
+        </template>
+        <template #footer>
+          <ModalFooter>
+            <Button type="secondary" @click="closeRemoveModal"
+              >キャンセル</Button
+            >
+            <Button type="primary" @click="removeAndOpenRemovedModal"
+              >はい</Button
+            >
+          </ModalFooter>
+        </template>
+      </ModalDialog>
+    </transition>
+    <transition>
+      <ModalDialog
+        v-if="isRemovedModalAppear"
+        size="small"
+        @close="closeRemovedModal"
+      >
+        <template #contents>
+          <MessageDialogContents> 削除が完了しました。 </MessageDialogContents>
+        </template>
+        <template #footer>
+          <ModalFooter :noBorder="true">
+            <Button type="rectangle" @click="closeRemovedModal">閉じる</Button>
+          </ModalFooter>
+        </template>
+      </ModalDialog>
+    </transition>
+    <transition>
+      <ModalUploading v-if="isModalUploading" :title="titleModalUploading">
+      </ModalUploading>
+    </transition>
+  </div>
 </template>
 
 <script lang="ts">
@@ -351,7 +361,7 @@ export default defineComponent({
       if (state.isPlaying) audioPlayer.stop();
     };
     const save = async (cm: CmItem) => {
-      const response = await UMesseService.uploadCmService.update(
+      await UMesseService.uploadCmService.update(
         authToken,
         cm.id,
         state.title,
@@ -362,10 +372,7 @@ export default defineComponent({
       fetchCm();
     };
     const remove = async (cmId: string) => {
-      const response = await UMesseService.uploadCmService.remove(
-        authToken,
-        cmId
-      );
+      await UMesseService.uploadCmService.remove(authToken, cmId);
       fetchCm();
     };
     const openPlayModal = () => {

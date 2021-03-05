@@ -4,15 +4,15 @@
       <p class="title">{{ title }}</p>
       <transition>
         <div class="vld-parent">
-        <loading
-          :active="true"
-          :can-cancel="false"
-          :is-full-page="true"
-          :height="50"
-          :widht="50"
-          :background-color="transparent"
-          :opacity="0"
-        ></loading>
+          <loading
+            :active="true"
+            :can-cancel="false"
+            :is-full-page="true"
+            :height="50"
+            :widht="50"
+            :background-color="transparent"
+            :opacity="0"
+          ></loading>
         </div>
       </transition>
     </div>
@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts">
-import { reactive, SetupContext } from "vue";
+import { reactive } from "vue";
 import Loading from "vue3-loading-overlay";
 import "vue3-loading-overlay/dist/vue3-loading-overlay.css";
 

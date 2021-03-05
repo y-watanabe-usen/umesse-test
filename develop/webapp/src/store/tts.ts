@@ -1,10 +1,9 @@
-import globalStore, { useGlobalStore } from "@/store";
+import { useGlobalStore } from "@/store";
 import { inject, InjectionKey, provide, reactive, toRefs } from "vue";
 import { TtsItem } from "umesseapi/models/tts-item";
 import { GenerateUserTtsRequestDetailItem, GenerateUserTtsRequestItem } from "@/models/GenerateUserTtsRequestItem";
 import { CreateUserTtsRequestDetailItem, CreateUserTtsRequestItem } from "@/models/CreateUserTtsRequestItem";
 import UMesseApi from "@/repository/UMesseApi";
-import { TemplateItem } from "umesseapi/models/template-item";
 import { TemplateDetailItem } from "@/models/TemplateDetailItem";
 
 interface TtsData {
@@ -25,14 +24,14 @@ export default function ttsStore() {
 
   const token = () => <string>auth.getToken();
 
-  const isGenerating = () => state.generating
-  const isCreating = () => state.creating
+  const isGenerating = () => state.generating;
+  const isCreating = () => state.creating;
 
   const fetchTtsData = async () => {
     try {
       const response = await UMesseApi.ttsApi.listUserTts(token());
       state.ttsItems = response.data;
-      console.log(response.data)
+      console.log(response.data);
     } catch (err) {
       state.error = err.message;
     }
@@ -80,39 +79,39 @@ export default function ttsStore() {
     }
 
     try {
-      state.generating = true
+      state.generating = true;
 
       // TODO: lang毎の変換処理
 
-      let details: GenerateUserTtsRequestDetailItem[] = []
+      const details: GenerateUserTtsRequestDetailItem[] = [];
       langs.forEach((v) => {
-        const templateDetail = templateDetails.find(vv => (vv.lang == v && vv.speaker == speaker))!
-
+        const templateDetail = templateDetails.find(vv => (vv.lang == v && vv.speaker == speaker));
+        if (!templateDetail) return;
         details.push({
           text: templateDetail.text
             .replace("{customerName}", customerName)
             .replace("{endTime}", endTime),
           lang: v,
           speaker: speaker,
-        })
-      })
+        });
+      });
       const requestModel: GenerateUserTtsRequestItem = {
         // idとcategoryは後々のバージョンアップで使う予定
         id: "",
         category: "",
         details: details
-      }
+      };
 
-      console.log("generateUserTts", token(), requestModel)
+      console.log("generateUserTts", token(), requestModel);
       const response = await UMesseApi.ttsApi.generateUserTts(
-        token(), requestModel)
-      console.log(response.data.details)
-      state.ttsDatas = response.data.details
+        token(), requestModel);
+      console.log(response.data.details);
+      state.ttsDatas = response.data.details;
     } catch (err) {
       console.log(err);
       state.error = err.message;
     } finally {
-      state.generating = false
+      state.generating = false;
     }
   };
 
@@ -125,7 +124,7 @@ export default function ttsStore() {
     }
 
     try {
-      state.generating = true
+      state.generating = true;
       const requestModel: GenerateUserTtsRequestItem = {
         // idとcategoryは後々のバージョンアップで使う予定
         id: "",
@@ -135,45 +134,45 @@ export default function ttsStore() {
           lang: "ja",
           speaker: speaker,
         }]
-      }
+      };
       const response = await UMesseApi.ttsApi.generateUserTts(
-        token(), requestModel)
-      console.log(response.data)
-      state.ttsDatas = response.data.details
+        token(), requestModel);
+      console.log(response.data);
+      state.ttsDatas = response.data.details;
     } catch (err) {
       console.log(err);
       state.error = err.message;
     } finally {
-      state.generating = false
+      state.generating = false;
     }
   };
 
   const createTtsData = async (title: string, description: string, langs: string[]) => {
     try {
-      state.creating = true
-      let details: CreateUserTtsRequestDetailItem[] = []
+      state.creating = true;
+      const details: CreateUserTtsRequestDetailItem[] = [];
       langs.forEach((v) => {
         details.push({
           title: title,
           description: description,
           lang: v,
-        })
-      })
+        });
+      });
       const requestModel: CreateUserTtsRequestItem = {
         // idとcategoryは後々のバージョンアップで使う予定
         id: "",
         category: "",
         details: details
-      }
+      };
 
-      const response = await UMesseApi.ttsApi.createUserTts(token(), requestModel)
-      console.log(response)
+      const response = await UMesseApi.ttsApi.createUserTts(token(), requestModel);
+      console.log(response);
       return response.data;
     } catch (err) {
       console.log(err);
       state.error = err.message;
     } finally {
-      state.creating = false
+      state.creating = false;
     }
   };
 

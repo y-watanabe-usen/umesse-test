@@ -32,14 +32,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/_variables.scss';
+@import "@/scss/_variables.scss";
 
 .cm-layout {
   @include flex_between;
   margin-left: 16px;
   margin-right: 16px;
   margin-top: 40px;
-  .left, .right {
+  .left,
+  .right {
     @include flex_center;
     width: 208px;
     flex-grow: 0;
@@ -49,7 +50,8 @@ export default {
     width: 100%;
     flex-grow: 1;
     flex-shrink: 1;
-    .top, .bottom {
+    .top,
+    .bottom {
       @include flex_between;
       height: 310px;
     }
