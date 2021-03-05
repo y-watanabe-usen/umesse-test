@@ -26,6 +26,7 @@ export default {
     font-size: 19px;
     font-weight: $font_weight_bold;
     text-align: center;
+    line-height: 1.7em;
   }
 }
 </style>
