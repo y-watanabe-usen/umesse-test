@@ -171,7 +171,7 @@
           <Button type="secondary" @click="closeSaveModal">キャンセル</Button>
           <Button
             type="primary"
-            :isDisabled="!title || isUploading"
+            :isDisabled="!title"
             @click="saveAndOpenSavedModal"
             >保存する</Button
           >
@@ -231,6 +231,10 @@
       </template>
     </ModalDialog>
   </transition>
+  <transition>
+    <ModalUploading v-if="isModalUploading" :title="titleModalUploading">
+    </ModalUploading>
+  </transition>
 </template>
 
 <script lang="ts">
@@ -266,6 +270,7 @@ import Constants from "@/utils/Constants";
 import { useRouter } from "vue-router";
 import SelectBox from "@/components/atoms/SelectBox.vue";
 import UMesseService from "@/services/UMesseService";
+import ModalUploading from "@/components/organisms/ModalUploading.vue";
 export default defineComponent({
   components: {
     BasicLayout,
@@ -287,6 +292,7 @@ export default defineComponent({
     TextBox,
     TextArea,
     SelectBox,
+    ModalUploading,
   },
   setup() {
     const router = useRouter();
@@ -315,7 +321,8 @@ export default defineComponent({
       isSavedModalAppear: false,
       isRemoveModalAppear: false,
       isRemovedModalAppear: false,
-      isUploading: false,
+      isModalUploading: false,
+      titleModalUploading: "",
     });
     const clickScene = (sceneCd: string) => {
       state.activeSceneCd = sceneCd;
@@ -413,26 +420,38 @@ export default defineComponent({
     };
     const saveAndOpenSavedModal = async () => {
       try {
-        state.isUploading = true;
+        state.titleModalUploading = "音源の合成中";
+        openModalUploading();
         if (!state.selectedCm) return;
         await save(state.selectedCm);
-        state.isUploading = false;
+        closeModalUploading();
         closeSaveModal();
-        setTimeout(() => {
-          openSavedModal();
-        }, 500);
+        openSavedModal();
+        // setTimeout(() => {
+        //   openSavedModal();
+        // }, 500);
       } catch (e) {
         console.log(e.message);
       } finally {
-        state.isUploading = false;
+        closeModalUploading();
       }
     };
     const removeAndOpenRemovedModal = async () => {
-      await remove(state.selectedCm?.id);
-      closeRemoveModal();
-      setTimeout(() => {
+      try {
+        state.titleModalUploading = "音源の削除中";
+        openModalUploading();
+        await remove(state.selectedCm?.id);
+        closeModalUploading();
+        closeRemoveModal();
         openRemovedModal();
-      }, 500);
+        // setTimeout(() => {
+        //   openRemovedModal();
+        // }, 500);
+      } catch (e) {
+        console.log(e.message);
+      } finally {
+        closeModalUploading();
+      }
     };
     const toEditCm = (cmItem: CmItem) => {
       console.log(cmItem);
@@ -442,6 +461,12 @@ export default defineComponent({
     onMounted(async () => {
       fetchCm();
     });
+    const openModalUploading = () => {
+      state.isModalUploading = true;
+    };
+    const closeModalUploading = () => {
+      state.isModalUploading = false;
+    };
     return {
       ...toRefs(state),
       play,

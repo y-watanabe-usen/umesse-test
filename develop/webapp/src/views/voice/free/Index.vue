@@ -95,6 +95,10 @@
         </template>
       </ModalDialog>
     </transition>
+    <transition>
+      <ModalUploading v-if="isModalUploading" title="音源の合成中">
+      </ModalUploading>
+    </transition>
   </div>
 </template>
 
@@ -120,6 +124,7 @@ import { useGlobalStore } from "@/store";
 import Constants from "@/utils/Constants";
 import UMesseCache from "@/repository/UMesseCache";
 import UMesseService from "@/services/UMesseService";
+import ModalUploading from "@/components/organisms/ModalUploading.vue";
 export default defineComponent({
   components: {
     BasicLayout,
@@ -133,6 +138,7 @@ export default defineComponent({
     FormGroup,
     TextBox,
     TextArea,
+    ModalUploading,
   },
   setup() {
     const router = useRouter();
@@ -153,6 +159,7 @@ export default defineComponent({
       isModalAppear: false,
       title: "",
       description: "",
+      isModalUploading: false,
     });
     // TODO: キャッシュでいいのか
     const cacheKey = "voice/free/selectTemplate";
@@ -175,6 +182,7 @@ export default defineComponent({
     };
 
     const createTts = async () => {
+      openModalUploading();
       const response = await ttsStore.createTtsData(
         state.title,
         state.description,
@@ -184,6 +192,7 @@ export default defineComponent({
         cm.setNarration(element);
       });
       router.push({ name: "Cm" });
+      closeModalUploading();
     };
 
     const openModal = async () => {
@@ -196,6 +205,13 @@ export default defineComponent({
     const stopAndCloseModal = () => {
       stop();
       closeModal();
+    };
+    const openModalUploading = () => {
+      state.isModalUploading = true;
+      closeModal();
+    };
+    const closeModalUploading = () => {
+      state.isModalUploading = false;
     };
     return {
       ttsSpeakers,

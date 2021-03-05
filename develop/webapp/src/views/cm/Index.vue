@@ -110,9 +110,9 @@
             <CmItem
               :title="
                 'ナレーション ' +
-                `${index + 1}` +
-                '/' +
-                `${MAX_NARRATION_COUNT}`
+                  `${index + 1}` +
+                  '/' +
+                  `${MAX_NARRATION_COUNT}`
               "
               size="flexible"
               :contentTitle="`${narration.title}`"
@@ -455,6 +455,10 @@
       </template>
     </ModalDialog>
   </transition>
+  <transition>
+    <ModalUploading v-if="isModalUploading" title="音源の合成中">
+    </ModalUploading>
+  </transition>
 </template>
 
 <script lang="ts">
@@ -488,6 +492,7 @@ import {
 import router from "@/router";
 import { ChimeItem } from "umesseapi/models";
 import UMesseService from "@/services/UMesseService";
+import ModalUploading from "@/components/organisms/ModalUploading.vue";
 
 export default defineComponent({
   components: {
@@ -505,6 +510,7 @@ export default defineComponent({
     SelectBox,
     CmLayout,
     CmItem,
+    ModalUploading,
   },
   setup() {
     const audioStore = AudioStore();
@@ -530,7 +536,7 @@ export default defineComponent({
       isPlayModalAppear: false,
       isSaveModalAppear: false,
       isSavedModalAppear: false,
-      isUploading: false,
+      isModalUploading: false,
     });
 
     const playOpenChime = async () => {
@@ -664,17 +670,18 @@ export default defineComponent({
     };
     const updateAndOpenSavedModal = async () => {
       try {
-        state.isUploading = true;
+        openModalUploading();
         await update();
-        state.isUploading = false;
+        closeModalUploading();
         closeSaveModal();
-        setTimeout(() => {
-          openSavedModal();
-        }, 500);
+        openSavedModal();
+        // setTimeout(() => {
+        //   openSavedModal();
+        // }, 5000);
       } catch (e) {
         console.log(e.message);
       } finally {
-        state.isUploading = false;
+        closeModalUploading();
       }
     };
     const convertNumberToTime = (second: number) =>
@@ -715,6 +722,12 @@ export default defineComponent({
     const toHome = () => {
       cm.clearAll();
       router.push({ name: "Home" });
+    };
+    const openModalUploading = () => {
+      state.isModalUploading = true;
+    };
+    const closeModalUploading = () => {
+      state.isModalUploading = false;
     };
     return {
       ...toRefs(state),
