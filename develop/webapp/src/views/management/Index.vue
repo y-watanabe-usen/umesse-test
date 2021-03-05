@@ -239,6 +239,22 @@
       <ModalUploading v-if="isModalUploading" :title="titleModalUploading">
       </ModalUploading>
     </transition>
+    <transition>
+      <ModalDialog v-if="isError" @close="closeErrorModal">
+        <template #header>
+          <ModalHeader title="エラー" @close="closeErrorModal" />
+        </template>
+        <template #contents
+          >{{ errorCode }} <br />
+          {{ errorMessge }}
+        </template>
+        <template #footer>
+          <ModalFooter :noBorder="true">
+            <Button type="rectangle" @click="closeErrorModal">閉じる</Button>
+          </ModalFooter>
+        </template>
+      </ModalDialog>
+    </transition>
   </div>
 </template>
 
@@ -277,6 +293,7 @@ import SelectBox from "@/components/atoms/SelectBox.vue";
 import UMesseService from "@/services/UMesseService";
 import ModalUploading from "@/components/organisms/ModalUploading.vue";
 import DropdownMenu from "@/components/molecules/DropdownMenu.vue";
+import { UMesseError } from "@/models/UMesseError";
 export default defineComponent({
   components: {
     BasicLayout,
@@ -331,18 +348,27 @@ export default defineComponent({
       isModalUploading: false,
       dropdownCmId: "",
       titleModalUploading: "",
+      isError: false,
+      errorCode: "",
+      errorMessge: "",
     });
     const clickScene = (sceneCd: string) => {
       state.activeSceneCd = sceneCd;
       fetchCm();
     };
     const fetchCm = async () => {
-      const response = await UMesseService.uploadCmService.fetchCm(
-        authToken,
-        state.activeSceneCd,
-        state.sort
-      );
-      state.cms = response;
+      try {
+        const response = await UMesseService.uploadCmService.fetchCm(
+          authToken,
+          state.activeSceneCd,
+          state.sort
+        );
+        state.cms = response;
+      } catch (e) {
+        state.errorCode = e.errorCode;
+        state.errorMessge = e.message;
+        state.isError = true;
+      }
     };
     const selectCm = (cm: CmItem) => {
       state.selectedCm = cm;
@@ -359,19 +385,30 @@ export default defineComponent({
       if (state.isPlaying) audioPlayer.stop();
     };
     const save = async (cm: CmItem) => {
-      await UMesseService.uploadCmService.update(
-        authToken,
-        cm.id,
-        state.title,
-        state.description,
-        state.scene,
-        cm.productionType
-      );
-      fetchCm();
+      try {
+        await UMesseService.uploadCmService.update(
+          authToken,
+          cm.id,
+          state.title,
+          state.description,
+          state.scene,
+          cm.productionType
+        );
+        fetchCm();
+      } catch (e) {
+        throw e;
+      }
     };
     const remove = async (cmId: string) => {
-      await UMesseService.uploadCmService.remove(authToken, cmId);
-      fetchCm();
+      try {
+        await UMesseService.uploadCmService.remove(
+          authToken,
+          cmId
+        );
+        fetchCm();
+      } catch (e) {
+        throw e;
+      }
     };
     const openPlayModal = () => {
       state.isPlayModalAppear = true;
@@ -436,6 +473,9 @@ export default defineComponent({
         openSavedModal();
       } catch (e) {
         console.log(e.message);
+        state.errorCode = e.errorCode;
+        state.errorMessge = e.message;
+        state.isError = true;
       } finally {
         closeModalUploading();
       }
@@ -449,7 +489,11 @@ export default defineComponent({
         closeRemoveModal();
         openRemovedModal();
       } catch (e) {
+        closeRemoveModal();
         console.log(e.message);
+        state.errorCode = e.errorCode;
+        state.errorMessge = e.message;
+        state.isError = true;
       } finally {
         closeModalUploading();
       }
@@ -479,6 +523,9 @@ export default defineComponent({
         closeAllDropdownMenu();
         state.dropdownCmId = cmId;
       }
+    };
+    const closeErrorModal = () => {
+      state.isError = false;
     };
     return {
       ...toRefs(state),
@@ -513,6 +560,7 @@ export default defineComponent({
       disabledDeleteStatus,
       closeAllDropdownMenu,
       toggleDropdown,
+      closeErrorModal,
     };
   },
 });
