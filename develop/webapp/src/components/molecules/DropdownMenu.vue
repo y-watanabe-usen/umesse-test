@@ -4,7 +4,7 @@
       v-for="param in params"
       :key="param.title"
       :class="{ caution: param.isCaution }"
-      @click="param.action()"
+      @click.stop="param.action()"
     >
       {{ param.title }}
     </li>
@@ -35,11 +35,11 @@ export default {
     },
     offset: {
       type: Number,
-      defaul: 0,
+      default: 0,
     },
     arrowOffset: {
       type: Number,
-      defaul: 0,
+      default: 0,
     },
     direction: {
       type: String,
@@ -68,6 +68,7 @@ export default {
 @import '@/scss/_variables.scss';
 
 .dropdown-menu {
+  display: block;
   position: absolute;
   background-color: white;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);

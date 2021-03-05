@@ -45,32 +45,28 @@
             >
               <template #operations>
                 <button
-                  class="btn btn-link dropdown-toggle p-0"
+                  class="btn-more"
                   type="button"
-                  id="dropdownMenuButton"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
                 >
                   <img src="@/assets/icon_more.svg" />
+                  <DropdownMenu
+                    :width="200"
+                    :targetWidth="30"
+                    :targetHeight="30"
+                    direction="down"
+                    :params="[
+                      {
+                        title: '変更',
+                        action: () => { $router.push({ name: 'CmChime', params: { div: 'open' } }) }
+                      },
+                      {
+                        title: '削除',
+                        action: () => { clearOpenChime() },
+                        isCaution: true,
+                      },
+                    ]"
+                  />
                 </button>
-                <DropdownMenu
-                  :width="200"
-                  :targetWidth="30"
-                  :targetHeight="30"
-                  direction="down"
-                  :params="[
-                    {
-                      title: '変更',
-                      action: () => { $router.push({ name: 'CmChime', params: { div: 'open' } }) }
-                    },
-                    {
-                      title: '削除',
-                      action: () => { clearOpenChime() },
-                      isCaution: true,
-                    },
-                  ]"
-                />
               </template>
             </CmItem>
             <CmItem
@@ -101,44 +97,40 @@
               >
                 <template #operations>
                   <button
-                    class="btn btn-link dropdown-toggle p-0"
+                    class="btn-more"
                     type="button"
-                    id="dropdownMenuButton"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false"
                   >
                     <img src="@/assets/icon_more.svg" />
+                    <DropdownMenu
+                      :width="320"
+                      :targetWidth="30"
+                      :targetHeight="30"
+                      direction="down"
+                      :params="[
+                        {
+                          title: '自分で録音して音声と入れ替える',
+                          action: () => { changeRecording(index) }
+                        },
+                        {
+                          title: '他のナレーションと入れ替える',
+                          action: () => { changeNarration(index) }
+                        },
+                        {
+                          title: '合成音声(テンプレートから)入れ替える',
+                          action: () => { changeVoiceTemplate(index) }
+                        },
+                        {
+                          title: '合成音声(フリー入力から)入れ替える',
+                          action: () => { changeVoiceFree(index) }
+                        },
+                        {
+                          title: '削除',
+                          action: () => { clearNarration(index) },
+                          isCaution: true,
+                        },
+                      ]"
+                    />
                   </button>
-                  <DropdownMenu
-                    :width="320"
-                    :targetWidth="30"
-                    :targetHeight="30"
-                    direction="down"
-                    :params="[
-                      {
-                        title: '自分で録音して音声と入れ替える',
-                        action: () => { changeRecording(index) }
-                      },
-                      {
-                        title: '他のナレーションと入れ替える',
-                        action: () => { changeNarration(index) }
-                      },
-                      {
-                        title: '合成音声(テンプレートから)入れ替える',
-                        action: () => { changeVoiceTemplate(index) }
-                      },
-                      {
-                        title: '合成音声(フリー入力から)入れ替える',
-                        action: () => { changeVoiceFree(index) }
-                      },
-                      {
-                        title: '削除',
-                        action: () => { clearNarration(index) },
-                        isCaution: true,
-                      },
-                    ]"
-                  />
                 </template>
               </CmItem>
             </template>
@@ -168,32 +160,28 @@
             >
               <template #operations>
                 <button
-                  class="btn btn-link dropdown-toggle p-0"
+                  class="btn-more"
                   type="button"
-                  id="dropdownMenuButton"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
                 >
                   <img src="@/assets/icon_more.svg" />
+                  <DropdownMenu
+                    :width="200"
+                    :targetWidth="30"
+                    :targetHeight="30"
+                    direction="up"
+                    :params="[
+                      {
+                        title: '変更',
+                        action: () => { $router.push({ name: 'CmBgm' }) }
+                      },
+                      {
+                        title: '削除',
+                        action: () => { clearBgm() },
+                        isCaution: true,
+                      },
+                    ]"
+                  />
                 </button>
-                <DropdownMenu
-                  :width="200"
-                  :targetWidth="30"
-                  :targetHeight="30"
-                  direction="down"
-                  :params="[
-                    {
-                      title: '変更',
-                      action: () => { $router.push({ name: 'CmBgm' }) }
-                    },
-                    {
-                      title: '削除',
-                      action: () => { clearBgm() },
-                      isCaution: true,
-                    },
-                  ]"
-                />
               </template>
             </CmItem>
             <CmItem
@@ -216,33 +204,29 @@
             >
               <template #operations>
                 <button
-                  class="btn btn-link dropdown-toggle p-0"
+                  class="btn-more"
                   type="button"
-                  id="dropdownMenuButton"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
                 >
                   <img src="@/assets/icon_more.svg" />
+                  <DropdownMenu
+                    :width="200"
+                    :targetWidth="30"
+                    :targetHeight="30"
+                    :offset="-54"
+                    direction="down"
+                    :params="[
+                      {
+                        title: '変更',
+                        action: () => { $router.push({ name: 'CmChime', params: { div: 'end' } }) }
+                      },
+                      {
+                        title: '削除',
+                        action: () => { clearEndChime() },
+                        isCaution: true,
+                      },
+                    ]"
+                  />
                 </button>
-                <DropdownMenu
-                  :width="200"
-                  :targetWidth="30"
-                  :targetHeight="30"
-                  :offset="-30"
-                  direction="down"
-                  :params="[
-                    {
-                      title: '変更',
-                      action: () => { $router.push({ name: 'CmChime', params: { div: 'end' } }) }
-                    },
-                    {
-                      title: '削除',
-                      action: () => { clearEndChime() },
-                      isCaution: true,
-                    },
-                  ]"
-                />
               </template>
             </CmItem>
             <CmItem
