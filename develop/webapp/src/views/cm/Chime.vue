@@ -105,20 +105,24 @@
       </template>
     </ModalDialog>
   </transition>
-  <ModalDialog v-if="isError" @close="closeErrorModal">
-    <template #header>
-      <ModalHeader title="エラー" @close="closeErrorModal" />
-    </template>
-    <template #contents
-      >{{ errorCode }} <br />
-      {{ errorMessge }}
-    </template>
-    <template #footer>
-      <ModalFooter :noBorder="true">
-        <Button type="rectangle" @click="closeErrorModal">閉じる</Button>
-      </ModalFooter>
-    </template>
-  </ModalDialog>
+  <transition>
+    <ModalDialog v-if="isError" @close="closeErrorModal">
+      <template #header>
+        <ModalHeader title="エラー" @close="closeErrorModal" />
+      </template>
+      <template #contents>
+        <MessageDialogContents>
+          {{ errorCode }} <br />
+          {{ errorMessge }}
+        </MessageDialogContents>
+      </template>
+      <template #footer>
+        <ModalFooter :noBorder="true">
+          <Button type="rectangle" @click="closeErrorModal">閉じる</Button>
+        </ModalFooter>
+      </template>
+    </ModalDialog>
+  </transition>
 </template>
 
 <script lang="ts">
