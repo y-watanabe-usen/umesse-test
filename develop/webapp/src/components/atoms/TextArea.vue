@@ -2,6 +2,7 @@
   <textarea
     :value="modelValue"
     :disabled="isDisabled"
+    :placeholder="placeholder"
     @input="onUpdate"
   >
   </textarea>
@@ -21,6 +22,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    placeholder: {
+      type: String,
+      default: '',
+    }
   },
   setup(props: any, context: SetupContext) {
     const state = reactive({});

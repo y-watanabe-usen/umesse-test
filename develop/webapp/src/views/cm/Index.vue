@@ -8,7 +8,9 @@
               :isDisabled="narrations.length === 0"
               @click="createAndOpenPlayModal"
               >
-              <img src="@/assets/icon_play.svg" />試聴する
+              <img v-show="narrations.length === 0" src="@/assets/icon_play_white.svg" />
+              <img v-show="narrations.length !== 0" src="@/assets/icon_play.svg" />
+              試聴する
             </Button>
             <p>約2分15秒</p>
           </div>

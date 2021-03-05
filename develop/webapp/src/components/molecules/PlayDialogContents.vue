@@ -4,11 +4,16 @@
       <template v-if="isLoading">
         <Button class="btn-play" :isDisabled="true" type="primary" @click="$emit('play')">
           <div class="spinner">
-            <span
-              class="spinner-border spinner-border-sm"
-              role="status"
-              aria-hidden="true"
-            ></span>
+            <loading
+              color="#fff"
+              :active="true"
+              :can-cancel="false"
+              :is-full-page="true"
+              :height="23"
+              :widht="23"
+              :background-color="transparent"
+              :opacity="0"
+            ></loading>
           </div>
           再生
         </Button>
@@ -48,11 +53,14 @@
 import { reactive } from "vue";
 import { convertNumberToTime } from "@/utils/FormatDate";
 import Button from "@/components/atoms/Button.vue";
+import Loading from "vue3-loading-overlay";
+import "vue3-loading-overlay/dist/vue3-loading-overlay.css";
 
 export default {
   name: "PlayDialogContents",
   components: {
     Button,
+    Loading,
   },
   props: {
     isLoading: {
@@ -104,6 +112,11 @@ export default {
       width: 30px;
       height: 23px;
     }
+    .vld-overlay {
+      width: 100%;
+      height: 100%;
+      position: static;
+    }
   }
   .btn-stop {
     img {
@@ -112,7 +125,7 @@ export default {
     }
   }
   .meter-wrapper {
-    width: 350px;
+    width: 430px;
     margin-left: 50px;
     meter {
       width: 100%;
