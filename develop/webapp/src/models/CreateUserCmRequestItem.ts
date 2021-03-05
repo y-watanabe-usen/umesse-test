@@ -4,6 +4,8 @@
 //
 //   const CreateUserCmRequestItem = Convert.toCreateUserCmRequestItem(json);
 
+import Constants from "@/utils/Constants";
+
 export interface CreateUserCmRequestItem {
   materials?: Materials;
 }
@@ -16,22 +18,26 @@ export interface Materials {
 }
 
 export interface Bgm {
-  contentsId?: string;
+  id?: string;
+  category?: string,
   volume?: number;
 }
 
 export interface EndChime {
-  contentsId?: string;
+  id?: string;
+  category?: string,
   volume?: number;
 }
 
 export interface Narration {
-  contentsId?: string;
+  id?: string;
+  category?: string
   volume?: number;
 }
 
 export interface StartChime {
-  contentsId?: string;
+  id?: string;
+  category?: string,
   volume?: number;
 }
 

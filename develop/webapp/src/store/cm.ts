@@ -30,22 +30,12 @@ export default function cmStore() {
   const status = () => service.getStatus()
 
   const create = async (authToken: string) => {
-    let narrationContentsIds: string[] = []
-    state.displayCmItem.narrations.forEach((v) => {
-      if (isNarration(v)) {
-        narrationContentsIds.push(v.contentsId)
-      } else if (isRecording(v)) {
-        narrationContentsIds.push(v.recordingId)
-      } else if (isTts(v)) {
-        narrationContentsIds.push(v.ttsId)
-      }
-    })
     const response = await service.create(
       authToken,
-      narrationContentsIds,
-      state.displayCmItem.openChime?.contentsId ?? null,
-      state.displayCmItem.endChime?.contentsId ?? null,
-      state.displayCmItem.bgm?.contentsId ?? null
+      state.displayCmItem.narrations,
+      state.displayCmItem.openChime?.id ?? null,
+      state.displayCmItem.endChime?.id ?? null,
+      state.displayCmItem.bgm?.id ?? null
     )
     console.log(response)
     state.displayCmItem.id = response.id
@@ -102,22 +92,11 @@ export default function cmStore() {
       // ナレーションがMAX_NARRATION_COUNT数分あるのに、更に末尾に追加しようとしたら何もしない
       return
     }
-    let id = ""
-    let category = ""
-    if (isNarration(narrationItem)) {
-      id = narrationItem.contentsId
-      category = Constants.CATEGORY.NARRATION
-    } else if (isRecording(narrationItem)) {
-      id = narrationItem.recordingId
-      category = Constants.CATEGORY.RECORDING
-    } else if (isTts(narrationItem)) {
-      id = narrationItem.ttsId
-      category = Constants.CATEGORY.TTS
-    }
+    console.log(narrationItem)
     state.displayCmItem.setNarraion(
       state.selectedNarrationIndex,
-      category,
-      id,
+      narrationItem.category,
+      narrationItem.id,
       narrationItem.title,
       narrationItem.description,
       0, //narrationItem.seconds,

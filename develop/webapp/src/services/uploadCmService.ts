@@ -5,6 +5,7 @@ import { UpdateUserCmRequestItem } from "@/models/UpdateUserCmRequestItem";
 import Constants from "@/utils/Constants";
 import * as UMesseApi from "umesseapi";
 import { CmItem } from "umesseapi/models/cm-item";
+import { Recording, Tts } from "@/models/DisplayCmItem";
 
 export enum UPLOAD_CM_STATE {
   NONE,
@@ -36,7 +37,7 @@ export function useUploadCmService(api: UMesseApi.CmApi) {
   }
   const create = async (
     authToken: string,
-    narrationContentsIds: string[] | null,
+    narrations: (Narration | Recording | Tts)[],
     startChimeContentsId: string | null,
     endChimeContentsId: string | null,
     bgmContentsId: string | null
@@ -49,7 +50,7 @@ export function useUploadCmService(api: UMesseApi.CmApi) {
       state.status = UPLOAD_CM_STATE.CREATING;
 
       const requestModel = getCreateUserCmRequestModel(
-        narrationContentsIds,
+        narrations,
         startChimeContentsId,
         endChimeContentsId,
         bgmContentsId
@@ -111,26 +112,19 @@ export function useUploadCmService(api: UMesseApi.CmApi) {
   }
 
   const getCreateUserCmRequestModel = (
-    narrationContentsIds: string[] | null,
+    narrations: (Narration | Recording | Tts)[],
     startChimeContentsId: string | null,
     endChimeContentsId: string | null,
     bgmContentsId: string | null
   ) => {
-    let narrations: Narration[] | undefined = undefined;
-    if (narrationContentsIds?.length) {
-      narrationContentsIds.forEach((v) => {
-        if (!narrations) narrations = []
-        narrations.push({ contentsId: v, volume: 150 });
-      });
-    }
     const startChime: StartChime | undefined = startChimeContentsId
-      ? { contentsId: startChimeContentsId, volume: 50 }
+      ? { id: startChimeContentsId, category: Constants.CATEGORY.CHIME, volume: 50 }
       : undefined;
     const endChime: EndChime | undefined = endChimeContentsId
-      ? { contentsId: endChimeContentsId, volume: 50 }
+      ? { id: endChimeContentsId, category: Constants.CATEGORY.CHIME, volume: 50 }
       : undefined;
     const bgm: Bgm | undefined = bgmContentsId
-      ? { contentsId: bgmContentsId, volume: 50 }
+      ? { id: bgmContentsId, category: Constants.CATEGORY.BGM, volume: 15 }
       : undefined;
     const requestModel: CreateUserCmRequestItem = {
       materials: {

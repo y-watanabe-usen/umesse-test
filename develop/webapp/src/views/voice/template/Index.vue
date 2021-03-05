@@ -39,13 +39,16 @@
               <p>{{ template.manuscript }}</p>
             </template>
             <template #line2>
-              <p>約00:00<!-- TODO: 仮の数値 --></p>
+              <p>
+                約00:00<!-- TODO: 仮の数値 -->／
+                {{ template.description }}
+              </p>
             </template>
             <template #operations>
               <Button
                 type="rectangle"
                 class="btn-select"
-                @click="$router.push({ name: 'VoiceTemplateDetail' })"
+                @click="toVoiceTemplateDetail(template)"
               >
                 選択<img src="@/assets/icon_select.svg" />
               </Button>
@@ -71,8 +74,10 @@ import ListHeader from "@/components/molecules/ListHeader.vue";
 import ListItem from "@/components/molecules/ListItem.vue";
 import { TemplateItem } from "umesseapi/models";
 import * as Common from "@/utils/Common";
-import UMesseApi from "@/repository/UMesseApi";
 import UMesseService from "@/services/UMesseService";
+import { provideTtsStore, useTtsStore } from "@/store/tts";
+import router from "@/router";
+import UMesseCache from "@/repository/UMesseCache";
 
 export default defineComponent({
   components: {
@@ -88,6 +93,7 @@ export default defineComponent({
     ListItem,
   },
   setup() {
+    const ttsStore = provideTtsStore();
     const state = reactive({
       templateIndustries: computed(() => Common.getBgmIndustries()),
       activeTemplateIndustryCd: "01",
@@ -107,6 +113,11 @@ export default defineComponent({
       state.templates = response;
     };
 
+    const toVoiceTemplateDetail = (templateItem: TemplateItem) => {
+      // TODO: キャッシュでいいのか
+      UMesseCache.freeCache.set("voice/template", templateItem)
+      router.push({ name: "VoiceTemplateDetail" });
+    };
     onMounted(async () => {
       await fetchTemplate();
     });
@@ -114,6 +125,7 @@ export default defineComponent({
     return {
       ...toRefs(state),
       clickTemplateIndustry,
+      toVoiceTemplateDetail,
     };
   },
 });

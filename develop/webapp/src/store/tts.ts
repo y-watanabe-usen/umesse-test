@@ -1,9 +1,11 @@
 import globalStore, { useGlobalStore } from "@/store";
 import { inject, InjectionKey, provide, reactive, toRefs } from "vue";
 import { TtsItem } from "umesseapi/models/tts-item";
-import { GenerateUserTtsRequestItem } from "@/models/GenerateUserTtsRequestItem";
-import { CreateUserTtsRequestItem } from "@/models/CreateUserTtsRequestItem";
+import { GenerateUserTtsRequestDetailItem, GenerateUserTtsRequestItem } from "@/models/GenerateUserTtsRequestItem";
+import { CreateUserTtsRequestDetailItem, CreateUserTtsRequestItem } from "@/models/CreateUserTtsRequestItem";
 import UMesseApi from "@/repository/UMesseApi";
+import { TemplateItem } from "umesseapi/models/template-item";
+import { TemplateDetailItem } from "@/models/TemplateDetailItem";
 
 interface TtsData {
   url: string,
@@ -67,8 +69,8 @@ export default function ttsStore() {
   };
 
   const generateTtsDataFromTemplate = async (
-    text: { [key: string]: string },
-    storeName: string,
+    templateDetails: TemplateDetailItem[],
+    customerName: string,
     endTime: string,
     speaker: string,
     langs: string[]
@@ -82,17 +84,26 @@ export default function ttsStore() {
 
       // TODO: lang毎の変換処理
 
-      let requestModel: GenerateUserTtsRequestItem[] = []
+      let details: GenerateUserTtsRequestDetailItem[] = []
       langs.forEach((v) => {
-        requestModel.push({
-          text: text[v]
-            .replace("{storeName}", storeName)
+        const templateDetail = templateDetails.find(vv => (vv.lang == v && vv.speaker == speaker))!
+
+        details.push({
+          text: templateDetail.text
+            .replace("{customerName}", customerName)
             .replace("{endTime}", endTime),
           lang: v,
           speaker: speaker,
         })
       })
-      console.log(requestModel)
+      const requestModel: GenerateUserTtsRequestItem = {
+        // idとcategoryは後々のバージョンアップで使う予定
+        id: "",
+        category: "",
+        details: details
+      }
+
+      console.log("generateUserTts", token(), requestModel)
       const response = await UMesseApi.ttsApi.generateUserTts(
         token(), requestModel)
       console.log(response.data.details)
@@ -115,11 +126,16 @@ export default function ttsStore() {
 
     try {
       state.generating = true
-      let requestModel: GenerateUserTtsRequestItem[] = [{
-        text: text,
-        lang: "ja",
-        speaker: speaker,
-      }]
+      const requestModel: GenerateUserTtsRequestItem = {
+        // idとcategoryは後々のバージョンアップで使う予定
+        id: "",
+        category: "",
+        details: [{
+          text: text,
+          lang: "ja",
+          speaker: speaker,
+        }]
+      }
       const response = await UMesseApi.ttsApi.generateUserTts(
         token(), requestModel)
       console.log(response.data)
@@ -135,29 +151,24 @@ export default function ttsStore() {
   const createTtsData = async (title: string, description: string, langs: string[]) => {
     try {
       state.creating = true
-      let requestModel: CreateUserTtsRequestItem[] = []
+      let details: CreateUserTtsRequestDetailItem[] = []
       langs.forEach((v) => {
-        requestModel.push({
+        details.push({
           title: title,
           description: description,
           lang: v,
         })
       })
+      const requestModel: CreateUserTtsRequestItem = {
+        // idとcategoryは後々のバージョンアップで使う予定
+        id: "",
+        category: "",
+        details: details
+      }
 
-      const tmp: any = await UMesseApi.ttsApi.createUserTts(token(), requestModel)
-
-      // convert to TtsItem
-      let response: TtsItem[] = []
-      tmp.data.tts.forEach((element: any) => {
-        response.push({
-          id: element.id,
-          title: element.title,
-          description: element.description,
-          startDate: element.startDate,
-          timestamp: element.timestamp,
-        })
-      });
-      return response;
+      const response = await UMesseApi.ttsApi.createUserTts(token(), requestModel)
+      console.log(response)
+      return response.data;
     } catch (err) {
       console.log(err);
       state.error = err.message;

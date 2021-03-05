@@ -91,6 +91,13 @@ exports.getResource = async (category, industryCd, sceneCd, sort) => {
   }
   json.sort(sortFunc);
 
+  json = json.map((element) => {
+    element["id"] = element["contentsId"];
+    delete element["contentsId"];
+    element["category"] = category;
+    return element;
+  })
+
   if (!json) throw new InternalServerError("not found");
   return json;
 };
@@ -371,7 +378,8 @@ exports.generateTtsResource = async (unisCustomerCd, body) => {
       if (!res) throw new InternalServerError("put failed");
     }
 
-    const url = await this.getSignedUrl(id, constants.resourceCategory.TTS);
+    const signedId = `${unisCustomerCd}-${data.lang}`;
+    const url = await this.getSignedUrl(signedId, constants.resourceCategory.TTS);
     json.details.push({ url: url.url, lang: data.lang });
   }
 

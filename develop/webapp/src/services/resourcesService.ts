@@ -8,6 +8,7 @@ import { UMesseErrorFromApiFactory } from "@/models/UMesseError";
 export function useResourcesService(
   resourcesApi: UMesseApi.ResourcesApi,
   recordingApi: UMesseApi.RecordingApi,
+  ttsApi: UMesseApi.TtsApi,
 ) {
 
   const audioStore = AudioStore();
@@ -21,14 +22,13 @@ export function useResourcesService(
     console.log(industryCd)
     if (industryCd == "02") {
       // ユーザー作成音声は別のAPIからデータ取得
-      return new Promise(function (resolve, reject) {
-        recordingApi
-          .listUserRecording(authToken)
-          .then((value) => {
-            console.log(value)
-            let data: NarrationItem[] = []
-            value.data.forEach((v: any) => {
-              if (sceneCd == "901" && v.id && v.id.match(`^[0-9a-z]+-r-[0-9a-z]{8}$`)) {
+      if (sceneCd == "901") {
+        return new Promise(function (resolve, reject) {
+          recordingApi
+            .listUserRecording(authToken)
+            .then((value) => {
+              let data: NarrationItem[] = []
+              value.data.forEach((v: any) => {
                 data.push({
                   id: v.id,
                   title: v.title,
@@ -36,7 +36,24 @@ export function useResourcesService(
                   category: Constants.CATEGORY.RECORDING,
                   timestamp: v.timestamp,
                 })
-              } else if (sceneCd == "902" && v.id && v.id.match(`^[0-9a-z]+-t-[0-9a-z]{8}$`)) {
+              })
+              resolve(<NarrationItem[]>data)
+            })
+            .catch((e) => {
+              console.log("reject", e)
+              // TODO: Error
+              reject()
+            }
+            );
+        });
+      } else {
+        return new Promise(function (resolve, reject) {
+          ttsApi
+            .listUserTts(authToken)
+            .then((value) => {
+              console.log(value)
+              let data: NarrationItem[] = []
+              value.data.forEach((v: any) => {
                 data.push({
                   id: v.id,
                   title: v.title,
@@ -44,24 +61,26 @@ export function useResourcesService(
                   category: Constants.CATEGORY.TTS,
                   timestamp: v.timestamp,
                 })
-              }
+              })
+              console.log(data)
+              resolve(<NarrationItem[]>data)
             })
-            console.log(data)
-            resolve(<NarrationItem[]>data)
-          })
-          .catch((e) => {
-            console.log("reject", e)
-            // TODO: Error
-            reject()
-          }
-          );
-      });
+            .catch((e) => {
+              console.log("reject", e)
+              // TODO: Error
+              reject()
+            }
+            );
+        });
+
+      }
     }
     return new Promise(function (resolve, reject) {
       resourcesApi
         .listNarration(industryCd, sceneCd, sort)
         .then((value) => {
           console.log("resolve")
+          console.log("listNarration", value.data)
           resolve(value.data)
         })
         .catch((e) => {
@@ -111,6 +130,7 @@ export function useResourcesService(
       resourcesApi
         .listTemplate(industryCd, undefined, sort)
         .then((value) => {
+          console.log(value.data)
           resolve(value.data)
         })
         .catch((error) =>

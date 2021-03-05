@@ -64,7 +64,7 @@
                       class="form-control"
                       type="text"
                       placeholder="カタカナで入力"
-                      v-model="storeName"
+                      v-model="customerName"
                     />
                   </div>
                 </div>
@@ -156,7 +156,7 @@ import { useRouter } from "vue-router";
 import AudioPlayer from "@/utils/AudioPlayer";
 import AudioStore from "@/store/audio";
 import { RecordingFile, UPLOAD_TTS_STATE } from "@/services/uploadTtsService";
-import provideTtsStore from "@/store/tts";
+import provideTtsStore, { TtsStore, useTtsStore } from "@/store/tts";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
 import Header from "@/components/organisms/Header.vue";
@@ -169,10 +169,12 @@ import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
 import { useGlobalStore } from "@/store";
-import { TtsItem } from "umesseapi/models";
+import { TemplateItem, TtsItem } from "umesseapi/models";
 import Constants from "@/utils/Constants";
 import UMesseService from "@/services/UMesseService";
 import ModalUploading from "@/components/organisms/ModalUploading.vue";
+import UMesseCache from "@/repository/UMesseCache";
+import { TemplateDetailItem } from "@/models/TemplateDetailItem";
 export default defineComponent({
   components: {
     BasicLayout,
@@ -194,40 +196,41 @@ export default defineComponent({
     const audioStore = AudioStore();
     const audioPlayer = AudioPlayer();
     const ttsSpeakers = Constants.TTS_GENDERS;
-    const ttsLangs = Constants.TTS_LANGS;
-    // TODO: 本当はAPIから取得
-    const sourceText = {
-      ja:
-        "本日は{storeName}へご来店いただきまして、誠にありがとうございます。お客様にご連絡申し上げます。当店の営業時間は、{endTime}までとなっております。本日はご利用、ありがとうございます。どうぞ、ごゆっくりお過ごしくださいませ。",
-      en:
-        "Thank you for visiting {storeName} today. We will contact you. Our store is open until {endTime}. Thank you for using today. Please spend your time slowly.",
-      zh:
-        "感谢您今天访问{storeName}。 我们将与您联系。 我们的商店营业至{endTime}。 感谢您今天使用。 请慢慢来。",
-      ko:
-        "오늘은 {storeName}에 내점 해 주셔서 대단히 감사합니다. 고객에게 알려드립니다. 당점의 영업 시간은 {endTime}까지로되어 있습니다. 오늘은 이용해 주셔서 감사합니다. 자, 천천히 보내시기 바랍니다.",
-    };
     const { cm } = useGlobalStore();
+
+    const template = <TemplateItem>UMesseCache.freeCache.get("voice/template");
+    let templateDetails: TemplateDetailItem[] = [];
+    let ttsLangs: string[] = [];
+    template.details.forEach((element: any) => {
+      templateDetails.push({
+        text: element.text,
+        lang: element.lang,
+        speaker: element.speaker,
+      });
+      if (ttsLangs.find((v) => v == element.lang) == undefined)
+        ttsLangs.push(element.lang);
+    });
+
     const state = reactive({
       isPlaying: computed(() => audioPlayer.isPlaying()),
       isGenerating: computed(() => ttsStore.isGenerating()),
       isCreating: computed(() => ttsStore.isCreating()),
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       duration: computed(() => audioPlayer.getDuration()),
-      storeName: "",
+      customerName: "",
       endTime: "21:00",
       isModalAppear: false,
       text: computed(() => {
-        const source = sourceText.ja;
-        const text: string = source
-          .replace("{storeName}", state.storeName)
+        const text: string = template.manuscript
+          .replace("{customerName}", state.customerName)
           .replace("{endTime}", state.endTime);
         return text;
       }),
       speaker: "1", // 女性
       langs: ["ja"],
       playLang: "ja",
-      title: "",
-      description: "",
+      title: template.title,
+      description: template.description,
       isModalUploading: false,
     });
     const play = async () => {
@@ -257,16 +260,9 @@ export default defineComponent({
 
     const openModal = async () => {
       state.isModalAppear = true;
-      console.log(
-        "openModal",
-        state.storeName,
-        state.endTime,
-        state.speaker,
-        state.langs
-      );
       await ttsStore.generateTtsDataFromTemplate(
-        sourceText,
-        state.storeName,
+        templateDetails,
+        state.customerName,
         state.endTime,
         state.speaker,
         state.langs
@@ -295,6 +291,8 @@ export default defineComponent({
       openModal,
       closeModal,
       stopAndCloseModal,
+      template,
+      templateDetails,
     };
   },
 });
