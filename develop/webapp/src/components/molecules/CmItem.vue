@@ -176,6 +176,12 @@ export default {
         margin-right: 10px;
       }
     }
+    .operations {
+      ::v-deep button, img {
+        width: 30px;
+        height: 30px;
+      }
+    }
   }
 }
 </style>

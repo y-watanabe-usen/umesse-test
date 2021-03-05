@@ -136,76 +136,37 @@
                   aria-haspopup="true"
                   aria-expanded="false"
                 >
-                  <svg
-                    id="メニュー"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="30"
-                    height="6"
-                    viewBox="0 0 30 6"
-                  >
-                    <circle
-                      id="楕円形_2"
-                      data-name="楕円形 2"
-                      cx="3"
-                      cy="3"
-                      r="3"
-                      fill="#578ed9"
-                    />
-                    <circle
-                      id="楕円形_3"
-                      data-name="楕円形 3"
-                      cx="3"
-                      cy="3"
-                      r="3"
-                      transform="translate(12)"
-                      fill="#578ed9"
-                    />
-                    <circle
-                      id="楕円形_4"
-                      data-name="楕円形 4"
-                      cx="3"
-                      cy="3"
-                      r="3"
-                      transform="translate(24)"
-                      fill="#578ed9"
-                    />
-                  </svg>
+                  <img src="@/assets/icon_more.svg" />
                 </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <a
-                    class="dropdown-item"
-                    href="#"
-                    @click="changeRecording(index)"
-                  >
-                    自分で録音して音声と入れ替える</a
-                  >
-                  <a
-                    class="dropdown-item"
-                    href="#"
-                    @click="changeNarration(index)"
-                    >他のナレーションと入れ替える</a
-                  >
-                  <a
-                    class="dropdown-item"
-                    href="#"
-                    @click="changeVoiceTemplate(index)"
-                  >
-                    合成音声(テンプレートから)入れ替える</a
-                  >
-                  <a
-                    class="dropdown-item"
-                    href="#"
-                    @click="changeVoiceFree(index)"
-                  >
-                    合成音声(フリー入力から)入れ替える</a
-                  >
-                  <a
-                    class="dropdown-item"
-                    href="#"
-                    @click="clearNarration(index)"
-                    >削除</a
-                  >
-                </div>
+                <DropdownMenu
+                  :width="320"
+                  :targetWidth="30"
+                  :targetHeight="30"
+                  direction="down"
+                  :params="[
+                    {
+                      title: '自分で録音して音声と入れ替える',
+                      action: () => { changeRecording(index) }
+                    },
+                    {
+                      title: '他のナレーションと入れ替える',
+                      action: () => { changeNarration(index) }
+                    },
+                    {
+                      title: '合成音声(テンプレートから)入れ替える',
+                      action: () => { changeVoiceTemplate(index) }
+                    },
+                    {
+                      title: '合成音声(フリー入力から)入れ替える',
+                      action: () => { changeVoiceFree(index) }
+                    },
+                    {
+                      title: '削除',
+                      action: () => { clearNarration(index) },
+                      isCaution: true,
+                    },
+                  ]"
+                />
               </template>
             </CmItem>
             <template v-if="narrations.length < MAX_NARRATION_COUNT">
@@ -499,6 +460,7 @@ import TextArea from "@/components/atoms/TextArea.vue";
 import SelectBox from "@/components/atoms/SelectBox.vue";
 import CmLayout from "@/components/templates/CmLayout.vue";
 import CmItem from "@/components/molecules/CmItem.vue";
+import DropdownMenu from "@/components/molecules/DropdownMenu.vue";
 import { MAX_NARRATION_COUNT } from "@/store/cm";
 import router from "@/router";
 import { ChimeItem } from "umesseapi/models";
@@ -521,6 +483,7 @@ export default defineComponent({
     SelectBox,
     CmLayout,
     CmItem,
+    DropdownMenu,
     ModalUploading,
   },
   setup() {
