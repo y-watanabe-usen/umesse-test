@@ -137,6 +137,20 @@
       <ModalUploading v-if="isModalUploading" title="音源の合成中">
       </ModalUploading>
     </transition>
+    <ModalDialog v-if="isError" @close="closeErrorModal">
+      <template #header>
+        <ModalHeader title="エラー" @close="closeErrorModal" />
+      </template>
+      <template #contents
+        >{{ errorCode }} <br />
+        {{ errorMessge }}
+      </template>
+      <template #footer>
+        <ModalFooter :noBorder="true">
+          <Button type="rectangle" @click="closeErrorModal">閉じる</Button>
+        </ModalFooter>
+      </template>
+    </ModalDialog>
   </div>
 </template>
 
@@ -163,6 +177,8 @@ import TextArea from "@/components/atoms/TextArea.vue";
 import { useGlobalStore } from "@/store";
 import router from "@/router";
 import ModalUploading from "@/components/organisms/ModalUploading.vue";
+import { UMesseError } from "@/models/UMesseError";
+
 export default defineComponent({
   components: {
     BasicLayout,
@@ -201,6 +217,9 @@ export default defineComponent({
       ),
       isModalAppear: false,
       isModalUploading: false,
+      isError: false,
+      errorCode: "",
+      errorMessge: "",
     });
     // toggle voice recorder.
     const toggleVoiceRecorder = async () => {
@@ -229,6 +248,9 @@ export default defineComponent({
         closeModal();
       } catch (e) {
         console.log(e.message);
+        state.errorCode = e.errorCode;
+        state.errorMessge = e.message;
+        state.isError = true;
       } finally {
         closeModalUploading();
       }
@@ -245,6 +267,9 @@ export default defineComponent({
     const closeModalUploading = () => {
       state.isModalUploading = false;
     };
+    const closeErrorModal = () => {
+      state.isError = false;
+    };
     return {
       ...toRefs(state),
       toggleVoiceRecorder,
@@ -254,6 +279,7 @@ export default defineComponent({
       UPLOAD_RECORDING_STATE,
       openModal,
       closeModal,
+      closeErrorModal,
     };
   },
 });
