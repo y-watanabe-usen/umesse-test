@@ -91,6 +91,13 @@ exports.getResource = async (category, industryCd, sceneCd, sort) => {
   }
   json.sort(sortFunc);
 
+  json = json.map((element) => {
+    element["id"] = element["contentsId"];
+    delete element["contentsId"];
+    element["category"] = category;
+    return element;
+  })
+
   if (!json) throw new InternalServerError("not found");
   return json;
 };

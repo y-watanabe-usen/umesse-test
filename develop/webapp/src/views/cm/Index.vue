@@ -563,24 +563,10 @@ export default defineComponent({
     const playNarration = async (index: number) => {
       const narration = cm.narration(index);
       if (!narration) return;
-      console.log(narration);
       stop();
-      let id: string = "";
-      let category: string = "";
-      if (isNarration(narration)) {
-        id = narration.contentsId;
-        category = Constants.CATEGORY.NARRATION;
-      } else if (isRecording(narration)) {
-        id = narration.recordingId;
-        category = Constants.CATEGORY.RECORDING;
-      } else if (isTts(narration)) {
-        id = narration.ttsId;
-        category = Constants.CATEGORY.TTS;
-      }
-      console.log(id, category);
       const audioBuffer = await UMesseService.resourcesService.getAudioBufferByContentsId(
-        id,
-        category
+        narration.id,
+        narration.category
       );
       audioPlayer.start(audioBuffer);
     };
@@ -589,7 +575,7 @@ export default defineComponent({
       if (!bgm) return;
       stop();
       const audioBuffer = await UMesseService.resourcesService.getAudioBufferByContentsId(
-        bgm.contentsId,
+        bgm.id,
         bgm.category
       );
       audioPlayer.start(audioBuffer);

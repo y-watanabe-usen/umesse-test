@@ -204,69 +204,69 @@ export class Materials {
 export class Narration {
   readonly category = Constants.CATEGORY.NARRATION;
   constructor(
-    public contentsId: string,
+    public id: string,
     public title: string = "",
     public description: string = "",
     public seconds: number = 0,
     public timestamp: string = "",
-    public volume: number = 0
+    public volume: number = 100
   ) { }
 }
 export class Recording {
   readonly category = Constants.CATEGORY.RECORDING;
   constructor(
-    public recordingId: string,
+    public id: string,
     public title: string = "",
     public description: string = "",
     public seconds: number = 0,
     public timestamp: string = "",
-    public volume: number = 0
+    public volume: number = 100
   ) { }
 }
 export class Tts {
   readonly category = Constants.CATEGORY.TTS;
   constructor(
-    public ttsId: string,
+    public id: string,
     public title: string = "",
     public description: string = "",
     public seconds: number = 0,
     public timestamp: string = "",
-    public volume: number = 0
+    public volume: number = 100
   ) { }
 }
 export class OpenChime {
   readonly category = Constants.CATEGORY.CHIME;
   constructor(
-    public contentsId: string = "",
+    public id: string = "",
     public title: string = "",
     public description: string = "",
     public seconds: number = 0,
     public timestamp: string = "",
-    public volume: number = 0
+    public volume: number = 100
   ) { }
 }
 
 export class EndChime {
   readonly category = Constants.CATEGORY.CHIME;
   constructor(
-    public contentsId: string,
+    public id: string,
     public title: string = "",
     public description: string = "",
     public seconds: number = 0,
     public timestamp: string = "",
-    public volume: number = 0
+    public volume: number = 100
   ) { }
 }
 
 export class Bgm {
   readonly category = Constants.CATEGORY.BGM;
   constructor(
-    public contentsId: string,
+    public id: string,
     public title: string = "",
     public description: string = "",
     public seconds: number = 0,
     public timestamp: string = "",
-    public volume: number = 0
+    public volume: number = 50
   ) { }
 }
 

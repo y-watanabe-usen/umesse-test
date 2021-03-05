@@ -10,7 +10,7 @@ class UMesseService {
   private constructor() { }
 
   get resourcesService() {
-    return useResourcesService(UMesseApi.resourcesApi, UMesseApi.recordingApi)
+    return useResourcesService(UMesseApi.resourcesApi, UMesseApi.recordingApi, UMesseApi.ttsApi)
   }
 
   get uploadCmService() {
