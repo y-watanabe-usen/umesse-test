@@ -43,90 +43,6 @@
               :volume="100"
               @togglePlay="playOpenChime"
             >
-              <template #operaions>
-                <button
-                  class="btn btn-link dropdown-toggle p-0"
-                  type="button"
-                  id="dropdownMenuButton"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  <svg
-                    id="メニュー"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="30"
-                    height="6"
-                    viewBox="0 0 30 6"
-                  >
-                    <circle
-                      id="楕円形_2"
-                      data-name="楕円形 2"
-                      cx="3"
-                      cy="3"
-                      r="3"
-                      fill="#578ed9"
-                    />
-                    <circle
-                      id="楕円形_3"
-                      data-name="楕円形 3"
-                      cx="3"
-                      cy="3"
-                      r="3"
-                      transform="translate(12)"
-                      fill="#578ed9"
-                    />
-                    <circle
-                      id="楕円形_4"
-                      data-name="楕円形 4"
-                      cx="3"
-                      cy="3"
-                      r="3"
-                      transform="translate(24)"
-                      fill="#578ed9"
-                    />
-                  </svg>
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <router-link
-                    class="dropdown-item"
-                    :to="{ name: 'CmChime', params: { div: 'open' } }"
-                  >
-                    変更
-                  </router-link>
-                  <a
-                    class="dropdown-item"
-                    href="#"
-                    @click.prevent="clearOpenChime"
-                    >削除</a
-                  >
-                </div>
-              </template>
-            </CmItem>
-            <CmItem
-              v-else
-              title="Openチャイム"
-              :isEmpty="true"
-              size="fixed"
-              @add="$router.push({ name: 'CmChime', params: { div: 'open' } })"
-            />
-          </template>
-          <template #top>
-            <CmItem
-              v-for="(narration, index) in narrations"
-              :key="narration.id"
-              :title="
-                'ナレーション ' +
-                `${index + 1}` +
-                '/' +
-                `${MAX_NARRATION_COUNT}`
-              "
-              size="flexible"
-              :contentTitle="`${narration.title}`"
-              :duration="`${convertNumberToTime(narration.seconds)}`"
-              :volume="100"
-              @togglePlay="playNarration(index)"
-            >
               <template #operations>
                 <button
                   class="btn btn-link dropdown-toggle p-0"
@@ -139,36 +55,93 @@
                   <img src="@/assets/icon_more.svg" />
                 </button>
                 <DropdownMenu
-                  :width="320"
+                  :width="200"
                   :targetWidth="30"
                   :targetHeight="30"
                   direction="down"
                   :params="[
                     {
-                      title: '自分で録音して音声と入れ替える',
-                      action: () => { changeRecording(index) }
-                    },
-                    {
-                      title: '他のナレーションと入れ替える',
-                      action: () => { changeNarration(index) }
-                    },
-                    {
-                      title: '合成音声(テンプレートから)入れ替える',
-                      action: () => { changeVoiceTemplate(index) }
-                    },
-                    {
-                      title: '合成音声(フリー入力から)入れ替える',
-                      action: () => { changeVoiceFree(index) }
+                      title: '変更',
+                      action: () => { $router.push({ name: 'CmChime', params: { div: 'open' } }) }
                     },
                     {
                       title: '削除',
-                      action: () => { clearNarration(index) },
+                      action: () => { clearOpenChime() },
                       isCaution: true,
                     },
                   ]"
                 />
               </template>
             </CmItem>
+            <CmItem
+              v-else
+              title="Openチャイム"
+              :isEmpty="true"
+              size="fixed"
+              @add="$router.push({ name: 'CmChime', params: { div: 'open' } })"
+            />
+          </template>
+          <template #top>
+            <template
+              v-for="(narration, index) in narrations"
+              :key="narration.contentsId"
+            >
+              <CmItem
+                :title="
+                  'ナレーション ' +
+                    `${index + 1}` +
+                    '/' +
+                    `${MAX_NARRATION_COUNT}`
+                "
+                size="flexible"
+                :contentTitle="`${narration.title}`"
+                :duration="`${convertNumberToTime(narration.seconds)}`"
+                :volume="100"
+                @togglePlay="playNarration(index)"
+              >
+                <template #operations>
+                  <button
+                    class="btn btn-link dropdown-toggle p-0"
+                    type="button"
+                    id="dropdownMenuButton"
+                    data-toggle="dropdown"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                  >
+                    <img src="@/assets/icon_more.svg" />
+                  </button>
+                  <DropdownMenu
+                    :width="320"
+                    :targetWidth="30"
+                    :targetHeight="30"
+                    direction="down"
+                    :params="[
+                      {
+                        title: '自分で録音して音声と入れ替える',
+                        action: () => { changeRecording(index) }
+                      },
+                      {
+                        title: '他のナレーションと入れ替える',
+                        action: () => { changeNarration(index) }
+                      },
+                      {
+                        title: '合成音声(テンプレートから)入れ替える',
+                        action: () => { changeVoiceTemplate(index) }
+                      },
+                      {
+                        title: '合成音声(フリー入力から)入れ替える',
+                        action: () => { changeVoiceFree(index) }
+                      },
+                      {
+                        title: '削除',
+                        action: () => { clearNarration(index) },
+                        isCaution: true,
+                      },
+                    ]"
+                  />
+                </template>
+              </CmItem>
+            </template>
             <template v-if="narrations.length < MAX_NARRATION_COUNT">
               <CmItem
                 :title="
@@ -193,7 +166,7 @@
               :volume="50"
               @togglePlay="playBgm"
             >
-              <template #operaions>
+              <template #operations>
                 <button
                   class="btn btn-link dropdown-toggle p-0"
                   type="button"
@@ -202,49 +175,25 @@
                   aria-haspopup="true"
                   aria-expanded="false"
                 >
-                  <svg
-                    id="メニュー"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="30"
-                    height="6"
-                    viewBox="0 0 30 6"
-                  >
-                    <circle
-                      id="楕円形_2"
-                      data-name="楕円形 2"
-                      cx="3"
-                      cy="3"
-                      r="3"
-                      fill="#578ed9"
-                    />
-                    <circle
-                      id="楕円形_3"
-                      data-name="楕円形 3"
-                      cx="3"
-                      cy="3"
-                      r="3"
-                      transform="translate(12)"
-                      fill="#578ed9"
-                    />
-                    <circle
-                      id="楕円形_4"
-                      data-name="楕円形 4"
-                      cx="3"
-                      cy="3"
-                      r="3"
-                      transform="translate(24)"
-                      fill="#578ed9"
-                    />
-                  </svg>
+                  <img src="@/assets/icon_more.svg" />
                 </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <router-link class="dropdown-item" :to="{ name: 'CmBgm' }">
-                    変更
-                  </router-link>
-                  <a class="dropdown-item" href="#" @click.prevent="clearBgm"
-                    >削除</a
-                  >
-                </div>
+                <DropdownMenu
+                  :width="200"
+                  :targetWidth="30"
+                  :targetHeight="30"
+                  direction="down"
+                  :params="[
+                    {
+                      title: '変更',
+                      action: () => { $router.push({ name: 'CmBgm' }) }
+                    },
+                    {
+                      title: '削除',
+                      action: () => { clearBgm() },
+                      isCaution: true,
+                    },
+                  ]"
+                />
               </template>
             </CmItem>
             <CmItem
@@ -265,7 +214,7 @@
               :volume="100"
               @togglePlay="playEndChime"
             >
-              <template #operaions>
+              <template #operations>
                 <button
                   class="btn btn-link dropdown-toggle p-0"
                   type="button"
@@ -274,55 +223,26 @@
                   aria-haspopup="true"
                   aria-expanded="false"
                 >
-                  <svg
-                    id="メニュー"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="30"
-                    height="6"
-                    viewBox="0 0 30 6"
-                  >
-                    <circle
-                      id="楕円形_2"
-                      data-name="楕円形 2"
-                      cx="3"
-                      cy="3"
-                      r="3"
-                      fill="#578ed9"
-                    />
-                    <circle
-                      id="楕円形_3"
-                      data-name="楕円形 3"
-                      cx="3"
-                      cy="3"
-                      r="3"
-                      transform="translate(12)"
-                      fill="#578ed9"
-                    />
-                    <circle
-                      id="楕円形_4"
-                      data-name="楕円形 4"
-                      cx="3"
-                      cy="3"
-                      r="3"
-                      transform="translate(24)"
-                      fill="#578ed9"
-                    />
-                  </svg>
+                  <img src="@/assets/icon_more.svg" />
                 </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <router-link
-                    class="dropdown-item"
-                    :to="{ name: 'CmChime', params: { div: 'end' } }"
-                  >
-                    変更
-                  </router-link>
-                  <a
-                    class="dropdown-item"
-                    href="#"
-                    @click.prevent="clearEndChime"
-                    >削除</a
-                  >
-                </div>
+                <DropdownMenu
+                  :width="200"
+                  :targetWidth="30"
+                  :targetHeight="30"
+                  :offset="-30"
+                  direction="down"
+                  :params="[
+                    {
+                      title: '変更',
+                      action: () => { $router.push({ name: 'CmChime', params: { div: 'end' } }) }
+                    },
+                    {
+                      title: '削除',
+                      action: () => { clearEndChime() },
+                      isCaution: true,
+                    },
+                  ]"
+                />
               </template>
             </CmItem>
             <CmItem
