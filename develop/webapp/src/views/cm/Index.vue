@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div @click="closeAllDropdownMenu">
     <BasicLayout>
       <template #header>
         <Header>
@@ -47,25 +47,29 @@
                 <button
                   class="btn-more"
                   type="button"
+                  @click.stop="toggleOpenChimeDropdown"
                 >
                   <img src="@/assets/icon_more.svg" />
-                  <DropdownMenu
-                    :width="200"
-                    :targetWidth="30"
-                    :targetHeight="30"
-                    direction="down"
-                    :params="[
-                      {
-                        title: '変更',
-                        action: () => { $router.push({ name: 'CmChime', params: { div: 'open' } }) }
-                      },
-                      {
-                        title: '削除',
-                        action: () => { clearOpenChime() },
-                        isCaution: true,
-                      },
-                    ]"
-                  />
+                  <transition>
+                    <DropdownMenu
+                      v-if="isOpenChimeDropdownAppear"
+                      :width="200"
+                      :targetWidth="30"
+                      :targetHeight="30"
+                      direction="down"
+                      :params="[
+                        {
+                          title: '変更',
+                          action: () => { $router.push({ name: 'CmChime', params: { div: 'open' } }) }
+                        },
+                        {
+                          title: '削除',
+                          action: () => { clearOpenChime() },
+                          isCaution: true,
+                        },
+                      ]"
+                    />
+                  </transition>
                 </button>
               </template>
             </CmItem>
@@ -99,37 +103,41 @@
                   <button
                     class="btn-more"
                     type="button"
+                    @click.stop="toggleNarrationDropdown(index)"
                   >
                     <img src="@/assets/icon_more.svg" />
-                    <DropdownMenu
-                      :width="320"
-                      :targetWidth="30"
-                      :targetHeight="30"
-                      direction="down"
-                      :params="[
-                        {
-                          title: '自分で録音して音声と入れ替える',
-                          action: () => { changeRecording(index) }
-                        },
-                        {
-                          title: '他のナレーションと入れ替える',
-                          action: () => { changeNarration(index) }
-                        },
-                        {
-                          title: '合成音声(テンプレートから)入れ替える',
-                          action: () => { changeVoiceTemplate(index) }
-                        },
-                        {
-                          title: '合成音声(フリー入力から)入れ替える',
-                          action: () => { changeVoiceFree(index) }
-                        },
-                        {
-                          title: '削除',
-                          action: () => { clearNarration(index) },
-                          isCaution: true,
-                        },
-                      ]"
-                    />
+                    <transition>
+                      <DropdownMenu
+                        v-if="isNarrationDropdownAppear[index]"
+                        :width="320"
+                        :targetWidth="30"
+                        :targetHeight="30"
+                        direction="down"
+                        :params="[
+                          {
+                            title: '自分で録音して音声と入れ替える',
+                            action: () => { changeRecording(index) }
+                          },
+                          {
+                            title: '他のナレーションと入れ替える',
+                            action: () => { changeNarration(index) }
+                          },
+                          {
+                            title: '合成音声(テンプレートから)入れ替える',
+                            action: () => { changeVoiceTemplate(index) }
+                          },
+                          {
+                            title: '合成音声(フリー入力から)入れ替える',
+                            action: () => { changeVoiceFree(index) }
+                          },
+                          {
+                            title: '削除',
+                            action: () => { clearNarration(index) },
+                            isCaution: true,
+                          },
+                        ]"
+                      />
+                    </transition>
                   </button>
                 </template>
               </CmItem>
@@ -162,25 +170,29 @@
                 <button
                   class="btn-more"
                   type="button"
+                  @click.stop="toggleBgmDropdown"
                 >
                   <img src="@/assets/icon_more.svg" />
-                  <DropdownMenu
-                    :width="200"
-                    :targetWidth="30"
-                    :targetHeight="30"
-                    direction="up"
-                    :params="[
-                      {
-                        title: '変更',
-                        action: () => { $router.push({ name: 'CmBgm' }) }
-                      },
-                      {
-                        title: '削除',
-                        action: () => { clearBgm() },
-                        isCaution: true,
-                      },
-                    ]"
-                  />
+                  <transition>
+                    <DropdownMenu
+                      v-if="isBgmDropdownAppear"
+                      :width="200"
+                      :targetWidth="30"
+                      :targetHeight="30"
+                      direction="up"
+                      :params="[
+                        {
+                          title: '変更',
+                          action: () => { $router.push({ name: 'CmBgm' }) }
+                        },
+                        {
+                          title: '削除',
+                          action: () => { clearBgm() },
+                          isCaution: true,
+                        },
+                      ]"
+                    />
+                  </transition>
                 </button>
               </template>
             </CmItem>
@@ -206,26 +218,30 @@
                 <button
                   class="btn-more"
                   type="button"
+                  @click.stop="toggleEndChimeDropdown"
                 >
                   <img src="@/assets/icon_more.svg" />
-                  <DropdownMenu
-                    :width="200"
-                    :targetWidth="30"
-                    :targetHeight="30"
-                    :offset="-54"
-                    direction="down"
-                    :params="[
-                      {
-                        title: '変更',
-                        action: () => { $router.push({ name: 'CmChime', params: { div: 'end' } }) }
-                      },
-                      {
-                        title: '削除',
-                        action: () => { clearEndChime() },
-                        isCaution: true,
-                      },
-                    ]"
-                  />
+                  <transition>
+                    <DropdownMenu
+                      v-if="isEndChimeDropdownAppear"
+                      :width="200"
+                      :targetWidth="30"
+                      :targetHeight="30"
+                      :offset="-54"
+                      direction="down"
+                      :params="[
+                        {
+                          title: '変更',
+                          action: () => { $router.push({ name: 'CmChime', params: { div: 'end' } }) }
+                        },
+                        {
+                          title: '削除',
+                          action: () => { clearEndChime() },
+                          isCaution: true,
+                        },
+                      ]"
+                    />
+                  </transition>
                 </button>
               </template>
             </CmItem>
@@ -415,6 +431,10 @@ export default defineComponent({
       isSaveModalAppear: false,
       isSavedModalAppear: false,
       isModalUploading: false,
+      isNarrationDropdownAppear: [ false, false, false, false ],
+      isOpenChimeDropdownAppear: false,
+      isEndChimeDropdownAppear: false,
+      isBgmDropdownAppear: false,
     });
 
     const playOpenChime = async () => {
@@ -593,6 +613,44 @@ export default defineComponent({
     const closeModalUploading = () => {
       state.isModalUploading = false;
     };
+    const closeAllDropdownMenu = () => {
+      state.isNarrationDropdownAppear = [ false, false, false, false ];
+      state.isOpenChimeDropdownAppear = false;
+      state.isEndChimeDropdownAppear = false;
+      state.isBgmDropdownAppear = false;
+    }
+    const toggleNarrationDropdown = (index: number) => {
+      if (state.isNarrationDropdownAppear[index]) {
+        closeAllDropdownMenu();
+      } else {
+        closeAllDropdownMenu();
+        state.isNarrationDropdownAppear[index] = true;
+      }
+    }
+    const toggleOpenChimeDropdown = () => {
+      if (state.isOpenChimeDropdownAppear) {
+        closeAllDropdownMenu();
+      } else {
+        closeAllDropdownMenu();
+        state.isOpenChimeDropdownAppear = true;
+      }
+    }
+    const toggleEndChimeDropdown = () => {
+      if (state.isEndChimeDropdownAppear) {
+        closeAllDropdownMenu();
+      } else {
+        closeAllDropdownMenu();
+        state.isEndChimeDropdownAppear = true;
+      }
+    }
+    const toggleBgmDropdown = () => {
+      if (state.isBgmDropdownAppear) {
+        closeAllDropdownMenu();
+      } else {
+        closeAllDropdownMenu();
+        state.isBgmDropdownAppear = true;
+      }
+    }
     return {
       ...toRefs(state),
       clearNarration,
@@ -629,6 +687,11 @@ export default defineComponent({
       playEndChime,
       playBgm,
       toHome,
+      closeAllDropdownMenu,
+      toggleNarrationDropdown,
+      toggleOpenChimeDropdown,
+      toggleEndChimeDropdown,
+      toggleBgmDropdown,
     };
   },
 });
