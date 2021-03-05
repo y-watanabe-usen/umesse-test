@@ -19,15 +19,25 @@
             </SubMenuItem>
           </SubMenu>
         </template>
-        <div>
-          <div v-if="activeAppInformationCd === '01'">
-            <p>U MESSE Ver0000000000</p>
+        <div class="content">
+          <div v-if="activeAppInformationCd === '01'" class="version">
+            <h2>U MESSE Ver0000000000</h2>
           </div>
           <div v-if="activeAppInformationCd === '02'">
-            <p>U MESSE利用規約</p>
+            <h2>U MESSE利用規約</h2>
+            <p>
+              xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br>
+              xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br>
+              xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+            </p>
           </div>
           <div v-if="activeAppInformationCd === '03'">
-            <p>アナウンス発注の利用規約</p>
+            <h2>アナウンス発注の利用規約</h2>
+            <p>
+              xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br>
+              xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br>
+              xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+            </p>
           </div>
         </div>
       </ContentsBase>
@@ -94,8 +104,25 @@ export default defineComponent({
 @import "@/scss/_variables.scss";
 @include fade_animation;
 
-p {
-  font-size: 1.5em;
-  text-align: center;
+.content {
+  overflow: hidden;
+  height: 100%;
+  h2 {
+    font-size: 20px;
+    font-weight: $font_weight_bold;
+    text-align: center;
+    margin: 34px;
+  }
+  p {
+    font-size: 20px;
+    line-height: 1.6em;
+    margin-top: 76px;
+    margin-left: 75px;
+    margin-right: 75px;
+  }
+  .version {
+    @include flex_center;
+    height: 90%;
+  }
 }
 </style>
