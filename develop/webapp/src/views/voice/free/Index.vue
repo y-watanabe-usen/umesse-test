@@ -88,11 +88,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, computed, toRefs, provide } from "vue";
+import { defineComponent, reactive, computed, toRefs } from "vue";
 import { useRouter } from "vue-router";
 import AudioPlayer from "@/utils/AudioPlayer";
-import AudioStore from "@/store/audio";
-import { UPLOAD_TTS_STATE } from "@/services/uploadTtsService";
 import provideTtsStore from "@/store/tts";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
@@ -130,7 +128,6 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const ttsStore = provideTtsStore(); //FIXME: provide name.
-    const audioStore = AudioStore();
     const audioPlayer = AudioPlayer();
     const ttsSpeakers = Constants.TTS_GENDERS;
     const lang = "ja";
@@ -209,7 +206,6 @@ export default defineComponent({
       openModal,
       closeModal,
       stopAndCloseModal,
-      UPLOAD_TTS_STATE,
     };
   },
 });

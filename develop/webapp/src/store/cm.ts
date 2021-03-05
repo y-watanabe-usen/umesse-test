@@ -1,33 +1,22 @@
-import { computed, inject, InjectionKey, provide, reactive, toRefs } from "vue";
+import { inject, InjectionKey, provide, reactive, toRefs } from "vue";
 import { ChimeItem } from "umesseapi/models/chime-item";
 import { NarrationItem } from "umesseapi/models/narration-item";
 import { BgmItem } from "umesseapi/models/bgm-item";
 import { CmItem, RecordingItem, TtsItem } from "umesseapi/models";
-import DisplayCmItem, { Narration, Recording, Tts } from "@/models/DisplayCmItem";
-import Constants from "@/utils/Constants";
+import DisplayCmItem from "@/models/DisplayCmItem";
 import UMesseService from "@/services/UMesseService";
-
-export function isNarration(arg: any): arg is Narration {
-  return arg.contentsId !== undefined;
-}
-export function isRecording(arg: any): arg is Recording {
-  return arg.recordingId !== undefined;
-}
-export function isTts(arg: any): arg is Tts {
-  return arg.ttsId !== undefined;
-}
 
 export const MAX_NARRATION_COUNT = 4;
 
 export default function cmStore() {
-  const service = UMesseService.uploadCmService
+  const service = UMesseService.uploadCmService;
   const state = reactive({
     displayCmItem: new DisplayCmItem(),
     selectedNarrationIndex: null as number | null,
     error: undefined as string | undefined,
   });
 
-  const status = () => service.getStatus()
+  const status = () => service.getStatus();
 
   const create = async (authToken: string) => {
     const response = await service.create(
@@ -36,13 +25,13 @@ export default function cmStore() {
       state.displayCmItem.openChime?.id ?? null,
       state.displayCmItem.endChime?.id ?? null,
       state.displayCmItem.bgm?.id ?? null
-    )
-    console.log(response)
-    state.displayCmItem.id = response.id
-    state.displayCmItem.timestamp = response.timestamp
-    state.displayCmItem.seconds = response.seconds
-    state.displayCmItem.url = response.url!
-  }
+    );
+    console.log(response);
+    state.displayCmItem.id = response.id;
+    state.displayCmItem.timestamp = response.timestamp;
+    state.displayCmItem.seconds = response.seconds;
+    state.displayCmItem.url = response.url ?? "";
+  };
 
   const update = async (
     authToken: string,
@@ -51,48 +40,48 @@ export default function cmStore() {
     sceneCd: string,
     uploadSystem: string
   ) => {
-    const response = await service.update(
+    await service.update(
       authToken,
       state.displayCmItem.id,
       title,
       description,
       sceneCd,
       uploadSystem
-    )
-  }
+    );
+  };
 
   const clearNarration = (index: number) => {
-    state.displayCmItem.clearNarraion(index)
-  }
+    state.displayCmItem.clearNarraion(index);
+  };
   const clearAllNarration = () => {
-    state.displayCmItem.clearAllNaraion()
-  }
+    state.displayCmItem.clearAllNaraion();
+  };
   const clearOpenChime = () => {
-    state.displayCmItem.clearOpenChime()
-  }
+    state.displayCmItem.clearOpenChime();
+  };
   const clearEndChime = () => {
-    state.displayCmItem.clearEndChime()
-  }
+    state.displayCmItem.clearEndChime();
+  };
   const clearBgm = () => {
-    state.displayCmItem.clearBgm()
-  }
+    state.displayCmItem.clearBgm();
+  };
   const clearAll = () => {
-    state.displayCmItem.reset()
-  }
+    state.displayCmItem.reset();
+  };
 
   const selectNarrationIndex = (index: number) => {
-    state.selectedNarrationIndex = index
-  }
+    state.selectedNarrationIndex = index;
+  };
   const unSelectNarrationIndex = () => {
-    state.selectedNarrationIndex = null
-  }
+    state.selectedNarrationIndex = null;
+  };
 
   const setNarration = (narrationItem: NarrationItem | RecordingItem | TtsItem) => {
     if (state.selectedNarrationIndex == null && state.displayCmItem.narrations.length >= MAX_NARRATION_COUNT) {
       // ナレーションがMAX_NARRATION_COUNT数分あるのに、更に末尾に追加しようとしたら何もしない
-      return
+      return;
     }
-    console.log(narrationItem)
+    console.log(narrationItem);
     state.displayCmItem.setNarraion(
       state.selectedNarrationIndex,
       narrationItem.category,
@@ -101,9 +90,9 @@ export default function cmStore() {
       narrationItem.description,
       0, //narrationItem.seconds,
       narrationItem.timestamp,
-    )
+    );
     unSelectNarrationIndex();
-  }
+  };
   const setOpenChime = (chimeItem: ChimeItem) => {
     state.displayCmItem.setOpenChime(
       chimeItem.id,
@@ -111,8 +100,8 @@ export default function cmStore() {
       chimeItem.description,
       chimeItem.seconds,
       chimeItem.timestamp
-    )
-  }
+    );
+  };
   const setEndChime = (chimeItem: ChimeItem) => {
     state.displayCmItem.setEndChime(
       chimeItem.id,
@@ -120,8 +109,8 @@ export default function cmStore() {
       chimeItem.description,
       chimeItem.seconds,
       chimeItem.timestamp
-    )
-  }
+    );
+  };
   const setBgm = (bgmItem: BgmItem) => {
     state.displayCmItem.setBgm(
       bgmItem.id,
@@ -129,31 +118,31 @@ export default function cmStore() {
       bgmItem.description,
       bgmItem.seconds,
       bgmItem.timestamp
-    )
-  }
+    );
+  };
   const setCm = (cmItem: CmItem) => {
-    state.displayCmItem.setCm(cmItem)
-  }
+    state.displayCmItem.setCm(cmItem);
+  };
 
-  const narration = (index: number) => state.displayCmItem.narration(index)
+  const narration = (index: number) => state.displayCmItem.narration(index);
 
   return {
     ...toRefs(state),
     narration,
     get narrations() {
-      return state.displayCmItem.narrations
+      return state.displayCmItem.narrations;
     },
     get openChime() {
-      return state.displayCmItem.openChime
+      return state.displayCmItem.openChime;
     },
     get endChime() {
-      return state.displayCmItem.endChime
+      return state.displayCmItem.endChime;
     },
     get bgm() {
-      return state.displayCmItem.bgm
+      return state.displayCmItem.bgm;
     },
     get url() {
-      return state.displayCmItem.url
+      return state.displayCmItem.url;
     },
     clearNarration,
     clearAllNarration,

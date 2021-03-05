@@ -1,7 +1,11 @@
 <template>
   <div class="sort">
     <p class="label">ソート：</p>
-    <SelectBox :options="options" :modelValue="modelValue" @update:modelValue="onChange" />
+    <SelectBox
+      :options="options"
+      :modelValue="modelValue"
+      @update:modelValue="onChange"
+    />
   </div>
 </template>
 
@@ -23,11 +27,12 @@ export default {
       required: true,
     },
   },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setup(props: any, context: SetupContext) {
     const state = reactive({});
     const onChange = (event: Event) => {
-      context.emit('update:modelValue', event);
-    }
+      context.emit("update:modelValue", event);
+    };
     return {
       state,
       onChange,
@@ -37,7 +42,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/_variables.scss';
+@import "@/scss/_variables.scss";
 
 .sort {
   @include flex_start;

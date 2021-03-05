@@ -5,7 +5,7 @@ import dayjs from "dayjs";
  * @param dateString YYYY-MM-DDTHH:mm:ss+09:00
  * @return YYYY/MM/DD 形式の文字列
  */
-export const convertDatestringToDate = (dateString: string) => {
+export const convertDatestringToDate = (dateString: string): string => {
   return dayjs(dateString).format("YYYY/MM/DD");
 };
 
@@ -14,7 +14,7 @@ export const convertDatestringToDate = (dateString: string) => {
  * @param dateString YYYY-MM-DDTHH:mm:ss+09:00
  * @return YYYY年MM月DD日 形式の文字列
  */
-export const convertDatestringToDateJp = (dateString: string) => {
+export const convertDatestringToDateJp = (dateString: string): string => {
   return dayjs(dateString).format("YYYY年MM月DD日");
 };
 
@@ -23,7 +23,7 @@ export const convertDatestringToDateJp = (dateString: string) => {
  * @param second 秒
  * @return h:m:s 形式の時刻
  */
-export const convertNumberToTime = (second: number) => {
+export const convertNumberToTime = (second: number): string => {
   second = Math.floor(second);
   const h = "" + ((second / 36000) | 0) + ((second / 3600) % 10 | 0);
   const m =

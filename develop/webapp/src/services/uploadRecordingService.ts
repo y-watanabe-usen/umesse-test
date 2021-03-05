@@ -30,20 +30,21 @@ export function useUploadRecordingService(api: UMesseApi.RecordingApi) {
       // TODO: check arguments here.
       state.status = UPLOAD_RECORDING_STATE.UPLOADING;
 
-      var fr = new FileReader();
+      const fr = new FileReader();
 
       fr.onload = function () {
         api
-          .createUserRecording(authToken, file.title!, fr.result as string, file.title, file.description)
+          .createUserRecording(authToken, file.title ?? "", fr.result as string, file.title, file.description)
           .then((value) => {
-            (state.status = UPLOAD_RECORDING_STATE.UPLOADED)
-            resolve(<RecordingItem>value.data)
+            (state.status = UPLOAD_RECORDING_STATE.UPLOADED);
+            resolve(<RecordingItem>value.data);
           })
-          .catch((error) =>
-            reject((state.status = UPLOAD_RECORDING_STATE.ERROR))
-          );
+          .catch((e) => {
+            console.log(e);
+            reject((state.status = UPLOAD_RECORDING_STATE.ERROR));
+          });
       };
-      fr.readAsBinaryString(file.blob!!);
+      if (file.blob) fr.readAsBinaryString(file.blob);
     });
   };
   const reset = () => (state.status = UPLOAD_RECORDING_STATE.NONE);

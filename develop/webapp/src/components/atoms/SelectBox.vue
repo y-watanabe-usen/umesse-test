@@ -1,7 +1,13 @@
 <template>
   <div class="select-box">
     <select :value="modelValue" @change="onChange">
-      <option v-for="option in options" :key="option.value" :value="option.value">{{ option.title }}</option>
+      <option
+        v-for="option in options"
+        :key="option.value"
+        :value="option.value"
+      >
+        {{ option.title }}
+      </option>
     </select>
   </div>
 </template>
@@ -20,13 +26,14 @@ export default {
       required: true,
     },
   },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setup(props: any, context: SetupContext) {
     const state = reactive({});
     const onChange = (event: Event) => {
       if (event.target instanceof HTMLSelectElement) {
-        context.emit('update:modelValue', event.target.value);
+        context.emit("update:modelValue", event.target.value);
       }
-    }
+    };
     return {
       state,
       onChange,
@@ -36,7 +43,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/_variables.scss';
+@import "@/scss/_variables.scss";
 
 .select-box {
   height: 58px;
@@ -51,7 +58,7 @@ export default {
     width: 0;
     height: 0;
     padding: 0;
-    content: '';
+    content: "";
     border-left: 10px solid transparent;
     border-right: 10px solid transparent;
     border-top: 10px solid rgb(95, 95, 95);

@@ -2,7 +2,7 @@
   <header class="header">
     <p class="btn-back"><a href="#" @click.prevent="back">戻る</a></p>
     <div class="title">
-        <slot name="title" />
+      <slot name="title" />
     </div>
     <div class="buttons">
       <slot name="buttons" />
@@ -21,7 +21,7 @@ export default {
     const state = reactive({});
     const back = () => {
       router.go(-1);
-    }
+    };
     return {
       state,
       back,
@@ -31,7 +31,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/_variables.scss';
+@import "@/scss/_variables.scss";
 
 .header {
   height: 80px;
@@ -48,7 +48,7 @@ export default {
       font-weight: $font_weight_bold;
       line-height: 24px;
       &::before {
-        content: '';
+        content: "";
         position: absolute;
         top: 0;
         left: -24px;

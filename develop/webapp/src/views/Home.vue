@@ -1,27 +1,29 @@
 <template>
-  <header>
-    <h2>
-      <img src="@/assets/logo_umesse.svg" />
-      <span v-if="authenticating">Loading...</span>
-      <span v-else> {{ token }} {{ error }} </span>
-    </h2>
-    <p class="title">
-      <router-link :to="{ name: 'Cm' }">店内アナウンスを作成する</router-link>
-    </p>
-    <ul class="nav">
-      <li>
-        <router-link :to="{ name: 'Setting' }">
-          <img src="@/assets/icon_setting.svg" />
-        </router-link>
-      </li>
-    </ul>
-  </header>
-  <MainMenu />
+  <div>
+    <header>
+      <h2>
+        <img src="@/assets/logo_umesse.svg" />
+        <span v-if="authenticating">Loading...</span>
+        <span v-else> {{ token }} {{ error }} </span>
+      </h2>
+      <p class="title">
+        <router-link :to="{ name: 'Cm' }">店内アナウンスを作成する</router-link>
+      </p>
+      <ul class="nav">
+        <li>
+          <router-link :to="{ name: 'Setting' }">
+            <img src="@/assets/icon_setting.svg" />
+          </router-link>
+        </li>
+      </ul>
+    </header>
+    <MainMenu />
+  </div>
 </template>
 
 <script lang="ts">
 import { useGlobalStore } from "@/store";
-import { defineComponent, onMounted, reactive, toRefs } from "vue";
+import { defineComponent, onMounted } from "vue";
 import MainMenu from "@/components/organisms/MainMenu.vue";
 
 export default defineComponent({

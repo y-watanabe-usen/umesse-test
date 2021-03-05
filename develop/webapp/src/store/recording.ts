@@ -9,7 +9,7 @@ import UMesseService from "@/services/UMesseService";
 
 // recording.
 export default function recordingStore() {
-  const { auth, cm } = useGlobalStore();
+  const { auth } = useGlobalStore();
   const state = reactive({
     recordingItems: [] as RecordingItem[],
     error: undefined as string | undefined,
@@ -21,7 +21,7 @@ export default function recordingStore() {
     try {
       const response = await UMesseApi.recordingApi.listUserRecording(token());
       state.recordingItems = response.data;
-      console.log("response.data", response.data)
+      console.log("response.data", response.data);
     } catch (err) {
       state.error = err.message;
     }

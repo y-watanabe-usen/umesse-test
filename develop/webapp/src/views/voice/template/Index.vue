@@ -1,82 +1,84 @@
 <template>
-  <BasicLayout>
-    <template #header>
-      <Header>
-        <template #title>テンプレート選択</template>
-      </Header>
-    </template>
-    <template #contents>
-      <ContentsBase>
-        <template #sub-menu>
-          <SubMenu>
-            <SubMenuItem
-              v-for="templateIndustry in templateIndustries"
-              :key="templateIndustry.cd"
-              :isSelected="templateIndustry.cd == activeTemplateIndustryCd"
-              @click="clickTemplateIndustry(templateIndustry.cd)"
-            >
-              {{ templateIndustry.name }}
-            </SubMenuItem>
-          </SubMenu>
-        </template>
-        <List>
-          <template #header>
-            <ListHeader>
-              <Sort
-                :options="
-                  sorts.map((sort) => {
-                    return { title: sort, value: sort };
-                  })
-                "
-              />
-            </ListHeader>
-          </template>
-          <ListItem v-for="template in templates" :key="template.contentsId">
-            <template #title>
-              <h2>{{ template.title }}</h2>
-            </template>
-            <template #line1>
-              <p>{{ template.manuscript }}</p>
-            </template>
-            <template #line2>
-              <p>
-                約00:00<!-- TODO: 仮の数値 -->／
-                {{ template.description }}
-              </p>
-            </template>
-            <template #operations>
-              <Button
-                type="rectangle"
-                class="btn-select"
-                @click="toVoiceTemplateDetail(template)"
-              >
-                選択<img src="@/assets/icon_select.svg" />
-              </Button>
-            </template>
-          </ListItem>
-        </List>
-      </ContentsBase>
-    </template>
-  </BasicLayout>
-  <!-- modal -->
-  <transition>
-    <ModalDialog v-if="isError" @close="closeErrorModal">
+  <div>
+    <BasicLayout>
       <template #header>
-        <ModalHeader title="エラー" @close="closeErrorModal" />
+        <Header>
+          <template #title>テンプレート選択</template>
+        </Header>
       </template>
       <template #contents>
-        <MessageDialogContents>
-          {{ errorCode }} <br />
-          {{ errorMessge }}
-        </MessageDialogContents>
+        <ContentsBase>
+          <template #sub-menu>
+            <SubMenu>
+              <SubMenuItem
+                v-for="templateIndustry in templateIndustries"
+                :key="templateIndustry.cd"
+                :isSelected="templateIndustry.cd == activeTemplateIndustryCd"
+                @click="clickTemplateIndustry(templateIndustry.cd)"
+              >
+                {{ templateIndustry.name }}
+              </SubMenuItem>
+            </SubMenu>
+          </template>
+          <List>
+            <template #header>
+              <ListHeader>
+                <Sort
+                  :options="
+                    sorts.map((sort) => {
+                      return { title: sort, value: sort };
+                    })
+                  "
+                />
+              </ListHeader>
+            </template>
+            <ListItem v-for="template in templates" :key="template.contentsId">
+              <template #title>
+                <h2>{{ template.title }}</h2>
+              </template>
+              <template #line1>
+                <p>{{ template.manuscript }}</p>
+              </template>
+              <template #line2>
+                <p>
+                  約00:00<!-- TODO: 仮の数値 -->／
+                  {{ template.description }}
+                </p>
+              </template>
+              <template #operations>
+                <Button
+                  type="rectangle"
+                  class="btn-select"
+                  @click="toVoiceTemplateDetail(template)"
+                >
+                  選択<img src="@/assets/icon_select.svg" />
+                </Button>
+              </template>
+            </ListItem>
+          </List>
+        </ContentsBase>
       </template>
-      <template #footer>
-        <ModalFooter :noBorder="true">
-          <Button type="rectangle" @click="closeErrorModal">閉じる</Button>
-        </ModalFooter>
-      </template>
-    </ModalDialog>
-  </transition>
+    </BasicLayout>
+    <!-- modal -->
+    <transition>
+      <ModalDialog v-if="isError" @close="closeErrorModal">
+        <template #header>
+          <ModalHeader title="エラー" @close="closeErrorModal" />
+        </template>
+        <template #contents>
+          <MessageDialogContents>
+            {{ errorCode }} <br />
+            {{ errorMessge }}
+          </MessageDialogContents>
+        </template>
+        <template #footer>
+          <ModalFooter :noBorder="true">
+            <Button type="rectangle" @click="closeErrorModal">閉じる</Button>
+          </ModalFooter>
+        </template>
+      </ModalDialog>
+    </transition>
+  </div>
 </template>
 
 <script lang="ts">
@@ -94,10 +96,8 @@ import ListItem from "@/components/molecules/ListItem.vue";
 import { TemplateItem } from "umesseapi/models";
 import * as Common from "@/utils/Common";
 import UMesseService from "@/services/UMesseService";
-import { provideTtsStore, useTtsStore } from "@/store/tts";
 import router from "@/router";
 import UMesseCache from "@/repository/UMesseCache";
-import { UMesseError } from "@/models/UMesseError";
 import ModalDialog from "@/components/organisms/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
@@ -119,7 +119,6 @@ export default defineComponent({
     ModalFooter,
   },
   setup() {
-    const ttsStore = provideTtsStore();
     const state = reactive({
       templateIndustries: computed(() => Common.getBgmIndustries()),
       activeTemplateIndustryCd: "01",

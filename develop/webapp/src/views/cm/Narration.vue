@@ -1,180 +1,177 @@
 <template>
-  <BasicLayout>
-    <template #header>
-      <Header>
-        <template #title>ナレーション選択</template>
-      </Header>
-    </template>
-    <template #contents>
-      <ContentsBase>
-        <template #sub-menu>
-          <SubMenu>
-            <SubMenuItem
-              v-for="narrationIndustry in narrationIndustries"
-              :key="narrationIndustry.cd"
-              :isSelected="narrationIndustry.cd == activeNarrationIndustryCd"
-              @click="clickNarrationIndustry(narrationIndustry.cd)"
-            >
-              {{ narrationIndustry.name }}
-            </SubMenuItem>
-          </SubMenu>
-        </template>
-        <template v-if="!activeNarrationSceneCd">
-          <List>
-            <ListItem
-              v-for="scene in scenes"
-              :key="scene.cd"
-              @click="clickNarrationScene(scene.cd)"
-            >
-              <template #title>
-                <h2>{{ scene.name }}</h2>
+  <div>
+    <BasicLayout>
+      <template #header>
+        <Header>
+          <template #title>ナレーション選択</template>
+        </Header>
+      </template>
+      <template #contents>
+        <ContentsBase>
+          <template #sub-menu>
+            <SubMenu>
+              <SubMenuItem
+                v-for="narrationIndustry in narrationIndustries"
+                :key="narrationIndustry.cd"
+                :isSelected="narrationIndustry.cd == activeNarrationIndustryCd"
+                @click="clickNarrationIndustry(narrationIndustry.cd)"
+              >
+                {{ narrationIndustry.name }}
+              </SubMenuItem>
+            </SubMenu>
+          </template>
+          <template v-if="!activeNarrationSceneCd">
+            <List>
+              <ListItem
+                v-for="scene in scenes"
+                :key="scene.cd"
+                @click="clickNarrationScene(scene.cd)"
+              >
+                <template #title>
+                  <h2>{{ scene.name }}</h2>
+                </template>
+              </ListItem>
+            </List>
+          </template>
+          <template v-else>
+            <List>
+              <template #header>
+                <ListHeader>
+                  <Sort
+                    v-model="sort"
+                    @update:modelValue="fetchNarration"
+                    :options="
+                      narrationSorts.map((narrationSort) => {
+                        return {
+                          title: narrationSort.name,
+                          value: narrationSort.cd,
+                        };
+                      })
+                    "
+                  />
+                </ListHeader>
               </template>
-            </ListItem>
-          </List>
-        </template>
-        <template v-else>
-          <List>
-            <template #header>
-              <ListHeader>
-                <Sort
-                  v-model="sort"
-                  @update:modelValue="fetchNarration"
-                  :options="
-                    narrationSorts.map((narrationSort) => {
-                      return {
-                        title: narrationSort.name,
-                        value: narrationSort.cd,
-                      };
-                    })
-                  "
-                />
-              </ListHeader>
-            </template>
-            <ListItem
-              v-for="narration in narrations"
-              :key="narration.contentsId"
-            >
-              <template #title>
-                <h2>{{ narration.title }}</h2>
-              </template>
-              <template #line1>
-                <p>{{ narration.description }}</p>
-              </template>
-              <template #line2>
-                <p>
-                  <span class="duration">{{
-                    convertNumberToTime(narration.seconds)
-                  }}</span>
-                  <span class="start"
-                    >放送開始日{{
-                      convertDatestringToDateJp(narration.timestamp)
-                    }}</span
+              <ListItem
+                v-for="narration in narrations"
+                :key="narration.contentsId"
+              >
+                <template #title>
+                  <h2>{{ narration.title }}</h2>
+                </template>
+                <template #line1>
+                  <p>{{ narration.description }}</p>
+                </template>
+                <template #line2>
+                  <p>
+                    <span class="duration">{{
+                      convertNumberToTime(narration.seconds)
+                    }}</span>
+                    <span class="start"
+                      >放送開始日{{
+                        convertDatestringToDateJp(narration.timestamp)
+                      }}</span
+                    >
+                    <span class="end"
+                      >有効期限{{
+                        convertDatestringToDateJp(narration.timestamp)
+                      }}</span
+                    >
+                  </p>
+                </template>
+                <template #operations>
+                  <Button
+                    type="rectangle"
+                    class="btn-document"
+                    @click="selectNarrationAndOpenDocumentModal(narration)"
                   >
-                  <span class="end"
-                    >有効期限{{
-                      convertDatestringToDateJp(narration.timestamp)
-                    }}</span
+                    <img src="@/assets/icon_document.svg" />原稿
+                  </Button>
+                  <Button
+                    type="rectangle"
+                    class="btn-play"
+                    @click="selectNarrationAndOpenPlayModal(narration)"
                   >
-                </p>
-              </template>
-              <template #operations>
-                <Button
-                  type="rectangle"
-                  class="btn-document"
-                  @click="selectNarrationAndOpenDocumentModal(narration)"
-                >
-                  <img src="@/assets/icon_document.svg" />原稿
-                </Button>
-                <Button
-                  type="rectangle"
-                  class="btn-play"
-                  @click="selectNarrationAndOpenPlayModal(narration)"
-                >
-                  <img src="@/assets/icon_play.svg" />試聴
-                </Button>
-                <Button
-                  type="rectangle"
-                  class="btn-select"
-                  @click="setNarration(narration)"
-                >
-                  選択<img src="@/assets/icon_select.svg" />
-                </Button>
-              </template>
-            </ListItem>
-          </List>
+                    <img src="@/assets/icon_play.svg" />試聴
+                  </Button>
+                  <Button
+                    type="rectangle"
+                    class="btn-select"
+                    @click="setNarration(narration)"
+                  >
+                    選択<img src="@/assets/icon_select.svg" />
+                  </Button>
+                </template>
+              </ListItem>
+            </List>
+          </template>
+        </ContentsBase>
+      </template>
+    </BasicLayout>
+    <!-- modal -->
+    <transition>
+      <ModalDialog v-if="isDocumentModalAppear" @close="closeDocumentModal">
+        <template #header>
+          <ModalHeader title="原稿" @close="closeDocumentModal" />
         </template>
-      </ContentsBase>
-    </template>
-  </BasicLayout>
-  <!-- modal -->
-  <transition>
-    <ModalDialog v-if="isDocumentModalAppear" @close="closeDocumentModal">
-      <template #header>
-        <ModalHeader title="原稿" @close="closeDocumentModal" />
-      </template>
-      <template #contents>
-        <TextDialogContents>
-          {{ selectedNarration?.manuscript }}
-        </TextDialogContents>
-      </template>
-      <template #footer>
-        <ModalFooter :noBorder="true">
-          <Button type="rectangle" @click="closeDocumentModal">閉じる</Button>
-        </ModalFooter>
-      </template>
-    </ModalDialog>
-  </transition>
-  <transition>
-    <ModalDialog v-if="isPlayModalAppear" @close="stopAndClosePlayModal">
-      <template #header>
-        <ModalHeader title="試聴" @close="stopAndClosePlayModal" />
-      </template>
-      <template #contents>
-        <PlayDialogContents
-          :isLoading="isDownloading"
-          :isPlaying="isPlaying"
-          :playbackTime="playbackTime"
-          :duration="duration"
-          @play="play(selectedNarration)"
-          @stop="stop"
-        />
-      </template>
-      <template #footer>
-        <ModalFooter :noBorder="true">
-          <Button type="rectangle" @click="stopAndClosePlayModal">終了</Button>
-        </ModalFooter>
-      </template>
-    </ModalDialog>
-  </transition>
-  <transition>
-    <ModalDialog v-if="isError" @close="closeErrorModal">
-      <template #header>
-        <ModalHeader title="エラー" @close="closeErrorModal" />
-      </template>
-      <template #contents>
-        <MessageDialogContents>
-          {{ errorCode }} <br />
-          {{ errorMessge }}
-        </MessageDialogContents>
-      </template>
-      <template #footer>
-        <ModalFooter :noBorder="true">
-          <Button type="rectangle" @click="closeErrorModal">閉じる</Button>
-        </ModalFooter>
-      </template>
-    </ModalDialog>
-  </transition>
+        <template #contents>
+          <TextDialogContents>
+            {{ selectedNarration?.manuscript }}
+          </TextDialogContents>
+        </template>
+        <template #footer>
+          <ModalFooter :noBorder="true">
+            <Button type="rectangle" @click="closeDocumentModal">閉じる</Button>
+          </ModalFooter>
+        </template>
+      </ModalDialog>
+    </transition>
+    <transition>
+      <ModalDialog v-if="isPlayModalAppear" @close="stopAndClosePlayModal">
+        <template #header>
+          <ModalHeader title="試聴" @close="stopAndClosePlayModal" />
+        </template>
+        <template #contents>
+          <PlayDialogContents
+            :isLoading="isDownloading"
+            :isPlaying="isPlaying"
+            :playbackTime="playbackTime"
+            :duration="duration"
+            @play="play(selectedNarration)"
+            @stop="stop"
+          />
+        </template>
+        <template #footer>
+          <ModalFooter :noBorder="true">
+            <Button type="rectangle" @click="stopAndClosePlayModal"
+              >終了</Button
+            >
+          </ModalFooter>
+        </template>
+      </ModalDialog>
+    </transition>
+    <transition>
+      <ModalDialog v-if="isError" @close="closeErrorModal">
+        <template #header>
+          <ModalHeader title="エラー" @close="closeErrorModal" />
+        </template>
+        <template #contents>
+          <MessageDialogContents>
+            {{ errorCode }} <br />
+            {{ errorMessge }}
+          </MessageDialogContents>
+        </template>
+        <template #footer>
+          <ModalFooter :noBorder="true">
+            <Button type="rectangle" @click="closeErrorModal">閉じる</Button>
+          </ModalFooter>
+        </template>
+      </ModalDialog>
+    </transition>
+  </div>
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  computed,
-  ref,
-  onMounted,
-  reactive,
-  toRefs,
-} from "vue";
+import { defineComponent, computed, onMounted, reactive, toRefs } from "vue";
 import AudioStore from "@/store/audio";
 import AudioPlayer from "@/utils/AudioPlayer";
 import * as Common from "@/utils/Common";
@@ -197,14 +194,12 @@ import TextDialogContents from "@/components/molecules/TextDialogContents.vue";
 import { NarrationItem } from "umesseapi/models";
 import { useGlobalStore } from "@/store";
 import router from "@/router";
-import { useRoute } from "vue-router";
 import {
   convertDatestringToDateJp,
   convertNumberToTime,
 } from "@/utils/FormatDate";
 import UMesseService from "@/services/UMesseService";
 import { Scene } from "@/utils/Constants";
-import { UMesseError } from "@/models/UMesseError";
 
 export default defineComponent({
   components: {
@@ -226,7 +221,6 @@ export default defineComponent({
     TextDialogContents,
   },
   setup() {
-    const route = useRoute();
     const audioStore = AudioStore();
     const audioPlayer = AudioPlayer();
     const { auth, cm } = useGlobalStore();

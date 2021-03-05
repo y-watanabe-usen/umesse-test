@@ -1,4 +1,4 @@
-import { reactive, toRefs } from 'vue';
+import { reactive } from 'vue';
 import { AudioPlayerState } from './state';
 
 export default () => {

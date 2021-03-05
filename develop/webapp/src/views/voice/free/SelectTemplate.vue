@@ -1,117 +1,121 @@
 <template>
-  <BasicLayout>
-    <template #header>
-      <Header>
-        <template #title>テンプレート選択</template>
-      </Header>
-    </template>
-    <template #contents>
-      <ContentsBase>
-        <template #sub-menu>
-          <SubMenu>
-            <SubMenuItem
-              v-for="freeTemplateIndustry in freeTemplateIndustries"
-              :key="freeTemplateIndustry.cd"
-              :isSelected="
-                freeTemplateIndustry.cd == activeFreeTemplateIndustryCd
-              "
-              @click="clickFreeTemplateIndustry(freeTemplateIndustry.cd)"
-            >
-              {{ freeTemplateIndustry.name }}
-            </SubMenuItem>
-          </SubMenu>
-        </template>
-        <List>
-          <template #header>
-            <ListHeader>
-              <Sort
-                :options="
-                  sorts.map((sort) => {
-                    return { title: sort, value: sort };
-                  })
+  <div>
+    <BasicLayout>
+      <template #header>
+        <Header>
+          <template #title>テンプレート選択</template>
+        </Header>
+      </template>
+      <template #contents>
+        <ContentsBase>
+          <template #sub-menu>
+            <SubMenu>
+              <SubMenuItem
+                v-for="freeTemplateIndustry in freeTemplateIndustries"
+                :key="freeTemplateIndustry.cd"
+                :isSelected="
+                  freeTemplateIndustry.cd == activeFreeTemplateIndustryCd
                 "
-              />
-            </ListHeader>
+                @click="clickFreeTemplateIndustry(freeTemplateIndustry.cd)"
+              >
+                {{ freeTemplateIndustry.name }}
+              </SubMenuItem>
+            </SubMenu>
           </template>
-          <ListItem v-for="freeItem in freeItems" :key="freeItem.contentsId">
-            <template #title>
-              <h2>{{ freeItem.title }}</h2>
+          <List>
+            <template #header>
+              <ListHeader>
+                <Sort
+                  :options="
+                    sorts.map((sort) => {
+                      return { title: sort, value: sort };
+                    })
+                  "
+                />
+              </ListHeader>
             </template>
-            <template #line1>
-              <p>{{ freeItem.manuscript }}</p>
-            </template>
-            <template #line2>
-              <p>
-                <span class="duration">00:00</span>
-                <span class="start"
-                  >放送開始日{{
-                    convertDatestringToDateJp(freeItem.timestamp)
-                  }}</span
+            <ListItem v-for="freeItem in freeItems" :key="freeItem.contentsId">
+              <template #title>
+                <h2>{{ freeItem.title }}</h2>
+              </template>
+              <template #line1>
+                <p>{{ freeItem.manuscript }}</p>
+              </template>
+              <template #line2>
+                <p>
+                  <span class="duration">00:00</span>
+                  <span class="start"
+                    >放送開始日{{
+                      convertDatestringToDateJp(freeItem.timestamp)
+                    }}</span
+                  >
+                  <span class="end"
+                    >有効期限{{
+                      convertDatestringToDateJp(freeItem.timestamp)
+                    }}</span
+                  >
+                </p>
+              </template>
+              <template #operations>
+                <Button
+                  type="rectangle"
+                  class="btn-document"
+                  @click="
+                    setManuscriptAndOpenDocumentModal(freeItem.manuscript)
+                  "
                 >
-                <span class="end"
-                  >有効期限{{
-                    convertDatestringToDateJp(freeItem.timestamp)
-                  }}</span
+                  <img src="@/assets/icon_document.svg" />原稿
+                </Button>
+                <Button
+                  type="rectangle"
+                  class="btn-select"
+                  @click="selectFreeTemplate(freeItem.manuscript)"
                 >
-              </p>
-            </template>
-            <template #operations>
-              <Button
-                type="rectangle"
-                class="btn-document"
-                @click="setManuscriptAndOpenDocumentModal(freeItem.manuscript)"
-              >
-                <img src="@/assets/icon_document.svg" />原稿
-              </Button>
-              <Button
-                type="rectangle"
-                class="btn-select"
-                @click="selectFreeTemplate(freeItem.manuscript)"
-              >
-                選択<img src="@/assets/icon_select.svg" />
-              </Button>
-            </template>
-          </ListItem>
-        </List>
-      </ContentsBase>
-    </template>
-  </BasicLayout>
-  <!-- modal -->
-  <transition>
-    <ModalDialog v-if="isDocumentModalAppear" @close="closeDocumentModal">
-      <template #header>
-        <ModalHeader title="原稿" @close="closeDocumentModal" />
+                  選択<img src="@/assets/icon_select.svg" />
+                </Button>
+              </template>
+            </ListItem>
+          </List>
+        </ContentsBase>
       </template>
-      <template #contents>
-        <TextDialogContents>
-          {{ manuscript }}
-        </TextDialogContents>
-      </template>
-      <template #footer>
-        <ModalFooter :noBorder="true">
-          <Button type="rectangle" @click="closeDocumentModal">閉じる</Button>
-        </ModalFooter>
-      </template>
-    </ModalDialog>
-  </transition>
-  <transition>
-    <ModalDialog v-if="isError" @close="closeErrorModal">
-      <template #header>
-        <ModalHeader title="エラー" @close="closeErrorModal" />
-      </template>
-      <template #contents>
-        <MessageDialogContents>
-          {{ errorCode }} <br />
-          {{ errorMessge }}
-        </MessageDialogContents>
-      </template>
-      <template #footer>
-        <ModalFooter :noBorder="true">
-          <Button type="rectangle" @click="closeErrorModal">閉じる</Button>
-        </ModalFooter>
-      </template>
-    </ModalDialog>
-  </transition>
+    </BasicLayout>
+    <!-- modal -->
+    <transition>
+      <ModalDialog v-if="isDocumentModalAppear" @close="closeDocumentModal">
+        <template #header>
+          <ModalHeader title="原稿" @close="closeDocumentModal" />
+        </template>
+        <template #contents>
+          <TextDialogContents>
+            {{ manuscript }}
+          </TextDialogContents>
+        </template>
+        <template #footer>
+          <ModalFooter :noBorder="true">
+            <Button type="rectangle" @click="closeDocumentModal">閉じる</Button>
+          </ModalFooter>
+        </template>
+      </ModalDialog>
+    </transition>
+    <transition>
+      <ModalDialog v-if="isError" @close="closeErrorModal">
+        <template #header>
+          <ModalHeader title="エラー" @close="closeErrorModal" />
+        </template>
+        <template #contents>
+          <MessageDialogContents>
+            {{ errorCode }} <br />
+            {{ errorMessge }}
+          </MessageDialogContents>
+        </template>
+        <template #footer>
+          <ModalFooter :noBorder="true">
+            <Button type="rectangle" @click="closeErrorModal">閉じる</Button>
+          </ModalFooter>
+        </template>
+      </ModalDialog>
+    </transition>
+  </div>
 </template>
 
 <script lang="ts">
@@ -136,7 +140,6 @@ import { convertDatestringToDateJp } from "@/utils/FormatDate";
 import router from "@/router";
 import UMesseCache from "@/repository/UMesseCache";
 import UMesseService from "@/services/UMesseService";
-import { UMesseError } from "@/models/UMesseError";
 
 export default defineComponent({
   components: {

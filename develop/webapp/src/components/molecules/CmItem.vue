@@ -5,18 +5,22 @@
     </div>
     <div class="body">
       <template v-if="isEmpty">
-        <button type="button" class="btn-add" @click="$emit('add')"><img src="@/assets/icon_plus.svg"></button>
+        <button type="button" class="btn-add" @click="$emit('add')">
+          <img src="@/assets/icon_plus.svg" />
+        </button>
         <p class="btn-add-title">素材追加</p>
       </template>
       <template v-else>
         <p class="content-title">{{ contentTitle }}</p>
-        <button class="sound" @click="$emit('togglePlay')"><img src="@/assets/icon_sound.svg"></button>
+        <button class="sound" @click="$emit('togglePlay')">
+          <img src="@/assets/icon_sound.svg" />
+        </button>
         <p class="duration">{{ duration }}</p>
       </template>
     </div>
     <div class="footer" v-if="!isEmpty">
       <div class="volume">
-        <img src="@/assets/icon_volume.svg">{{ volume }}%
+        <img src="@/assets/icon_volume.svg" />{{ volume }}%
       </div>
       <div class="operations">
         <slot name="operations" />
@@ -45,18 +49,18 @@ export default {
     },
     contentTitle: {
       type: String,
-      default: '',
+      default: "",
     },
     duration: {
       type: String,
-      default: '',
+      default: "",
     },
     volume: {
       type: Number,
-      default: 0
+      default: 0,
     },
   },
-  setup(props: any) {
+  setup() {
     const state = reactive({});
     return {
       state,
@@ -66,7 +70,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/_variables.scss';
+@import "@/scss/_variables.scss";
 
 .cm-item {
   @include flex_col_start;
@@ -124,7 +128,8 @@ export default {
       background-color: white;
       margin-bottom: 20px;
     }
-    .btn-add-title, .content-title {
+    .btn-add-title,
+    .content-title {
       font-size: 16px;
       font-weight: $font_weight_bold;
       text-align: center;

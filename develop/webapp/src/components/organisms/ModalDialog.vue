@@ -23,15 +23,19 @@ export default {
     closeDisabled: {
       type: Boolean,
       default: false,
-    }
+    },
   },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setup(props: any, context: SetupContext) {
     const state = reactive({});
     const onClick = (event: Event) => {
-      if (event.target === document.querySelector(".modal-dialog") && !props.closeDisabled) {
-        context.emit('close');
+      if (
+        event.target === document.querySelector(".modal-dialog") &&
+        !props.closeDisabled
+      ) {
+        context.emit("close");
       }
-    }
+    };
     return {
       state,
       onClick,
@@ -41,7 +45,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/_variables.scss';
+@import "@/scss/_variables.scss";
 
 .modal-dialog {
   @include flex_center;

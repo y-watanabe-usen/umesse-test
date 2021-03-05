@@ -2,7 +2,12 @@
   <div class="play-dialog-contents">
     <div class="row">
       <template v-if="isLoading">
-        <Button class="btn-play" :isDisabled="true" type="primary" @click="$emit('play')">
+        <Button
+          class="btn-play"
+          :isDisabled="true"
+          type="primary"
+          @click="$emit('play')"
+        >
           <div class="spinner">
             <loading
               color="#fff"
@@ -39,11 +44,7 @@
             {{ convertNumberToTime(duration) }}
           </div>
         </div>
-        <meter
-          min="0"
-          :max="duration"
-          :value="playbackTime"
-        ></meter>
+        <meter min="0" :max="duration" :value="playbackTime"></meter>
       </div>
     </div>
   </div>
@@ -91,7 +92,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/_variables.scss';
+@import "@/scss/_variables.scss";
 
 .play-dialog-contents {
   @include flex_center;
@@ -103,12 +104,14 @@ export default {
   .btn-play,
   .btn-stop {
     width: 88px;
-    img, .spinner {
+    img,
+    .spinner {
       margin-right: 10px;
     }
   }
   .btn-play {
-    img, .spinner {
+    img,
+    .spinner {
       width: 30px;
       height: 23px;
     }

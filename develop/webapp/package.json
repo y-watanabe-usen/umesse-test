@@ -9,7 +9,7 @@
     "serve:staging": "vue-cli-service serve --mode staging --open",
     "serve:production": "vue-cli-service serve --mode production",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "yarn run eslint --ext vue,ts src"
   },
   "dependencies": {
     "@types/dom-mediacapture-record": "^1.0.7",
@@ -41,6 +41,7 @@
     "@vue/compiler-sfc": "^3.0.0-0",
     "eslint": "^7.21.0",
     "eslint-plugin-vue": "^7.7.0",
-    "typescript": "~3.9.3"
+    "typescript": "~3.9.3",
+    "vue-eslint-parser": "^7.6.0"
   }
 }

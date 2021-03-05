@@ -4,7 +4,6 @@ import { CreateUserCmResponseItem } from "@/models/CreateUserCmResponseItem";
 import { UpdateUserCmRequestItem } from "@/models/UpdateUserCmRequestItem";
 import Constants from "@/utils/Constants";
 import * as UMesseApi from "umesseapi";
-import { CmItem } from "umesseapi/models/cm-item";
 import { Recording, Tts } from "@/models/DisplayCmItem";
 
 export enum UPLOAD_CM_STATE {
@@ -32,9 +31,9 @@ export function useUploadCmService(api: UMesseApi.CmApi) {
       if (!v.scene) return false;
       return v.scene.sceneCd == sceneCd;
     });
-    console.log(response)
-    return response
-  }
+    console.log(response);
+    return response;
+  };
   const create = async (
     authToken: string,
     narrations: (Narration | Recording | Tts)[],
@@ -54,18 +53,19 @@ export function useUploadCmService(api: UMesseApi.CmApi) {
         startChimeContentsId,
         endChimeContentsId,
         bgmContentsId
-      )
+      );
       api
         .createUserCm(authToken, requestModel)
         .then((value) => {
-          state.status = UPLOAD_CM_STATE.CREATED
-          resolve(<CreateUserCmResponseItem>value.data)
+          state.status = UPLOAD_CM_STATE.CREATED;
+          resolve(<CreateUserCmResponseItem>value.data);
         })
-        .catch((error) =>
-          reject((state.status = UPLOAD_CM_STATE.ERROR))
-        );
+        .catch((e) => {
+          console.log(e);
+          reject((state.status = UPLOAD_CM_STATE.ERROR));
+        });
     });
-  }
+  };
 
   const update = async (
     authToken: string,
@@ -82,18 +82,19 @@ export function useUploadCmService(api: UMesseApi.CmApi) {
       // TODO: check arguments here.
       state.status = UPLOAD_CM_STATE.UPDATING;
 
-      const requestModel = getUpdateUserCmRequestModel(title, description, sceneCd, uploadSystem)
+      const requestModel = getUpdateUserCmRequestModel(title, description, sceneCd, uploadSystem);
       api
         .updateUserCm(authToken, id, requestModel)
         .then((value) => {
-          console.log(value.data)
-          resolve(state.status = UPLOAD_CM_STATE.UPDATED)
+          console.log(value.data);
+          resolve(state.status = UPLOAD_CM_STATE.UPDATED);
         })
-        .catch((error) => {
-          reject((state.status = UPLOAD_CM_STATE.ERROR))
+        .catch((e) => {
+          console.log(e);
+          reject((state.status = UPLOAD_CM_STATE.ERROR));
         });
     });
-  }
+  };
 
   // deleteは予約語なのでremove
   const remove = async (authToken: string, id: string) => {
@@ -101,15 +102,15 @@ export function useUploadCmService(api: UMesseApi.CmApi) {
       api
         .deleteUserCm(id, authToken)
         .then((value) => {
-          console.log(value.data)
-          resolve(state.status = UPLOAD_CM_STATE.NONE)
+          console.log(value.data);
+          resolve(state.status = UPLOAD_CM_STATE.NONE);
         })
         .catch((error) => {
-          console.log(error)
-          reject((state.status = UPLOAD_CM_STATE.ERROR))
+          console.log(error);
+          reject((state.status = UPLOAD_CM_STATE.ERROR));
         });
     });
-  }
+  };
 
   const getCreateUserCmRequestModel = (
     narrations: (Narration | Recording | Tts)[],
