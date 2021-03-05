@@ -46,8 +46,7 @@ export function useResourcesService(
             })
             .catch((e) => {
               console.log("reject", e);
-              // TODO: Error
-              reject();
+              reject(UMesseErrorFromApiFactory(e));
             });
         });
       } else {
@@ -71,8 +70,7 @@ export function useResourcesService(
             })
             .catch((e) => {
               console.log("reject", e);
-              // TODO: Error
-              reject();
+              reject(UMesseErrorFromApiFactory(e));
             });
         });
       }
@@ -86,6 +84,7 @@ export function useResourcesService(
           resolve(value.data);
         })
         .catch((e) => {
+          console.log("reject", e);
           reject(UMesseErrorFromApiFactory(e));
         });
     });
@@ -100,7 +99,10 @@ export function useResourcesService(
           console.log("listChime", value.data);
           resolve(value.data);
         })
-        .catch((e) => reject(UMesseErrorFromApiFactory(e)));
+        .catch((e) => {
+          console.log("reject", e);
+          reject(UMesseErrorFromApiFactory(e));
+        });
     });
   };
 
@@ -116,7 +118,10 @@ export function useResourcesService(
           console.log("listBgm", value.data);
           resolve(value.data);
         })
-        .catch((e) => reject(UMesseErrorFromApiFactory(e)));
+        .catch((e) => {
+          console.log("reject", e);
+          reject(UMesseErrorFromApiFactory(e));
+        });
     });
   };
 
@@ -132,7 +137,10 @@ export function useResourcesService(
           console.log("listTemplate", value.data);
           resolve(value.data);
         })
-        .catch((e) => reject(UMesseErrorFromApiFactory(e)));
+        .catch((e) => {
+          console.log("reject", e);
+          reject(UMesseErrorFromApiFactory(e));
+        });
     });
   };
 
@@ -148,7 +156,10 @@ export function useResourcesService(
           console.log("listFreeTemplate", value.data);
           resolve(value.data);
         })
-        .catch((e) => reject(UMesseErrorFromApiFactory(e)));
+        .catch((e) => {
+          console.log("reject", e);
+          reject(UMesseErrorFromApiFactory(e));
+        });
     });
   };
 
