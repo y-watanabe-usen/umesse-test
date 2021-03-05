@@ -105,6 +105,20 @@
       </template>
     </ModalDialog>
   </transition>
+  <ModalDialog v-if="isError" @close="closeErrorModal">
+    <template #header>
+      <ModalHeader title="エラー" @close="closeErrorModal" />
+    </template>
+    <template #contents
+      >{{ errorCode }} <br />
+      {{ errorMessge }}
+    </template>
+    <template #footer>
+      <ModalFooter :noBorder="true">
+        <Button type="rectangle" @click="closeErrorModal">閉じる</Button>
+      </ModalFooter>
+    </template>
+  </ModalDialog>
 </template>
 
 <script lang="ts">
@@ -133,6 +147,7 @@ import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
 import UMesseService from "@/services/UMesseService";
+import { UMesseError } from "@/models/UMesseError";
 
 export default defineComponent({
   components: {
@@ -173,6 +188,9 @@ export default defineComponent({
       isPlayModalAppear: false,
       isSaveModalAppear: false,
       isSavedModalAppear: false,
+      isError: false,
+      errorCode: "",
+      errorMessge: "",
     });
 
     const setChime = (chime: ChimeItem) => {
@@ -189,10 +207,16 @@ export default defineComponent({
     };
 
     const fetchChime = async () => {
-      const response = await UMesseService.resourcesService.fetchChime(
-        state.sort
-      );
-      state.chimes = response;
+      try {
+        const response = await UMesseService.resourcesService.fetchChime(
+          state.sort
+        );
+        state.chimes = response;
+      } catch (e) {
+        state.errorCode = e.errorCode;
+        state.errorMessge = e.message;
+        state.isError = true;
+      }
     };
 
     const play = async (chime: ChimeItem) => {
@@ -241,6 +265,10 @@ export default defineComponent({
       fetchChime();
     });
 
+    const closeErrorModal = () => {
+      state.isError = false;
+    };
+
     return {
       ...toRefs(state),
       setChime,
@@ -256,6 +284,7 @@ export default defineComponent({
       selectChimeAndOpenPlayModal,
       stopAndClosePlayModal,
       fetchChime,
+      closeErrorModal,
     };
   },
 });

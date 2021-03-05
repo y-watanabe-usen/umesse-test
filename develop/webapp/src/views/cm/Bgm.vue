@@ -113,6 +113,20 @@
       </template>
     </ModalDialog>
   </transition>
+  <ModalDialog v-if="isError" @close="closeErrorModal">
+    <template #header>
+      <ModalHeader title="エラー" @close="closeErrorModal" />
+    </template>
+    <template #contents
+      >{{ errorCode }} <br />
+      {{ errorMessge }}
+    </template>
+    <template #footer>
+      <ModalFooter :noBorder="true">
+        <Button type="rectangle" @click="closeErrorModal">閉じる</Button>
+      </ModalFooter>
+    </template>
+  </ModalDialog>
 </template>
 
 <script lang="ts">
@@ -142,6 +156,7 @@ import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
 import UMesseService from "@/services/UMesseService";
+import { UMesseError } from "@/models/UMesseError";
 
 export default defineComponent({
   components: {
@@ -184,6 +199,9 @@ export default defineComponent({
       isPlayModalAppear: false,
       isSaveModalAppear: false,
       isSavedModalAppear: false,
+      isError: false,
+      errorCode: "",
+      errorMessge: "",
     });
 
     const setBgm = (bgm: BgmItem) => {
@@ -201,11 +219,17 @@ export default defineComponent({
     };
 
     const fetchBgm = async () => {
-      const response = await UMesseService.resourcesService.fetchBgm(
-        state.activeBgmIndustryCd,
-        state.sort
-      );
-      state.bgms = response;
+      try {
+        const response = await UMesseService.resourcesService.fetchBgm(
+          state.activeBgmIndustryCd,
+          state.sort
+        );
+        state.bgms = response;
+      } catch (e) {
+        state.errorCode = e.errorCode;
+        state.errorMessge = e.message;
+        state.isError = true;
+      }
     };
 
     const play = async (bgm: BgmItem) => {
@@ -254,6 +278,10 @@ export default defineComponent({
       fetchBgm();
     });
 
+    const closeErrorModal = () => {
+      state.isError = false;
+    };
+
     return {
       ...toRefs(state),
       setBgm,
@@ -269,6 +297,7 @@ export default defineComponent({
       closeSavedModal,
       selectBgmAndOpenPlayModal,
       stopAndClosePlayModal,
+      closeErrorModal,
     };
   },
 });
