@@ -232,7 +232,7 @@
     </ModalDialog>
   </transition>
   <transition>
-    <ModalUploading v-if="isModalUploading" title="音源の合成中">
+    <ModalUploading v-if="isModalUploading" :title="titleModalUploading">
     </ModalUploading>
   </transition>
 </template>
@@ -322,6 +322,7 @@ export default defineComponent({
       isRemoveModalAppear: false,
       isRemovedModalAppear: false,
       isModalUploading: false,
+      titleModalUploading: "",
     });
     const clickScene = (sceneCd: string) => {
       state.activeSceneCd = sceneCd;
@@ -419,6 +420,7 @@ export default defineComponent({
     };
     const saveAndOpenSavedModal = async () => {
       try {
+        state.titleModalUploading = "音源の合成中";
         openModalUploading();
         if (!state.selectedCm) return;
         await save(state.selectedCm);
@@ -435,11 +437,21 @@ export default defineComponent({
       }
     };
     const removeAndOpenRemovedModal = async () => {
-      await remove(state.selectedCm?.id);
-      closeRemoveModal();
-      setTimeout(() => {
+      try {
+        state.titleModalUploading = "音源の削除中";
+        openModalUploading();
+        await remove(state.selectedCm?.id);
+        closeModalUploading();
+        closeRemoveModal();
         openRemovedModal();
-      }, 500);
+        // setTimeout(() => {
+        //   openRemovedModal();
+        // }, 500);
+      } catch (e) {
+        console.log(e.message);
+      } finally {
+        closeModalUploading();
+      }
     };
     const toEditCm = (cmItem: CmItem) => {
       console.log(cmItem);
