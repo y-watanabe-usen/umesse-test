@@ -94,6 +94,20 @@
       </template>
     </ModalDialog>
   </transition>
+  <ModalDialog v-if="isError" @close="closeErrorModal">
+    <template #header>
+      <ModalHeader title="エラー" @close="closeErrorModal" />
+    </template>
+    <template #contents
+      >{{ errorCode }} <br />
+      {{ errorMessge }}
+    </template>
+    <template #footer>
+      <ModalFooter :noBorder="true">
+        <Button type="rectangle" @click="closeErrorModal">閉じる</Button>
+      </ModalFooter>
+    </template>
+  </ModalDialog>
 </template>
 
 <script lang="ts">
@@ -118,6 +132,7 @@ import { convertDatestringToDateJp } from "@/utils/FormatDate";
 import router from "@/router";
 import UMesseCache from "@/repository/UMesseCache";
 import UMesseService from "@/services/UMesseService";
+import { UMesseError } from "@/models/UMesseError";
 
 export default defineComponent({
   components: {
@@ -144,6 +159,9 @@ export default defineComponent({
       freeItems: [] as FreeItem[],
       manuscript: "",
       isDocumentModalAppear: false,
+      isError: false,
+      errorCode: "",
+      errorMessge: "",
     });
 
     const clickFreeTemplateIndustry = (freeTemplateIndustryCd: string) => {
@@ -152,10 +170,16 @@ export default defineComponent({
     };
 
     const fetchFreeTemplate = async () => {
-      const response = await UMesseService.resourcesService.fetchFree(
-        state.activeFreeTemplateIndustryCd
-      );
-      state.freeItems = response;
+      try {
+        const response = await UMesseService.resourcesService.fetchFree(
+          state.activeFreeTemplateIndustryCd
+        );
+        state.freeItems = response;
+      } catch (e) {
+        state.errorCode = e.errorCode;
+        state.errorMessge = e.message;
+        state.isError = true;
+      }
     };
 
     const setManuscript = (manuscript: string) => {
@@ -185,6 +209,10 @@ export default defineComponent({
       await fetchFreeTemplate();
     });
 
+    const closeErrorModal = () => {
+      state.isError = false;
+    };
+
     return {
       ...toRefs(state),
       clickFreeTemplateIndustry,
@@ -194,6 +222,7 @@ export default defineComponent({
       closeDocumentModal,
       setManuscriptAndOpenDocumentModal,
       convertDatestringToDateJp,
+      closeErrorModal,
     };
   },
 });
