@@ -75,7 +75,6 @@ export default {
 .cm-item {
   @include flex_col_start;
   height: 286px;
-  overflow: hidden;
   border-radius: 7px;
   box-shadow: $box_shadow_weak;
   margin-left: 4px;
@@ -165,6 +164,8 @@ export default {
     background-color: white;
     padding-left: 15px;
     padding-right: 20px;
+    border-bottom-left-radius: 7px;
+    border-bottom-right-radius: 7px;
     .volume {
       @include flex_start;
       align-items: center;
@@ -174,6 +175,13 @@ export default {
       line-height: 30px;
       img {
         margin-right: 10px;
+      }
+    }
+    .operations {
+      ::v-deep button, img {
+        position: relative;
+        width: 30px;
+        height: 30px;
       }
     }
   }

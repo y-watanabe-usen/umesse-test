@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div @click="closeAllDropdownMenu">
     <BasicLayout>
       <template #header>
         <Header>
@@ -65,56 +65,43 @@
                   <img src="@/assets/icon_play.svg" />試聴
                 </Button>
                 <button
-                  class="btn btn-link dropdown-toggle btn-lg"
+                  class="btn-more"
                   type="button"
-                  id="dropdownMenuButton"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
+                  @click.stop="toggleDropdown(cm.cmId)"
                 >
-                  <svg
-                    width="2.5em"
-                    height="2.5em"
-                    viewBox="0 0 16 16"
-                    class="bi bi-three-dots"
-                    fill="currentColor"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"
+                  <img src="@/assets/icon_more_black.svg" />
+                  <transition>
+                    <DropdownMenu
+                      v-if="dropdownCmId === cm.cmId"
+                      :width="240"
+                      :targetWidth="120"
+                      :targetHeight="30"
+                      :offset="-50"
+                      direction="down"
+                      :params="[
+                        {
+                          title: 'タイトル/説明 編集',
+                          action: () => { selectCmAndOpenSaveModal(cm) }
+                        },
+                        {
+                          title: 'コンテンツ編集',
+                          action: () => { toEditCm(cm) },
+                          isDisabled: disabledEditContentsStatus.includes(cm.status)
+                        },
+                        {
+                          title: 'U MUSICにアップロード',
+                          action: () => {}
+                        },
+                        {
+                          title: '削除',
+                          action: () => { selectCmAndOpenRemoveModal(cm) },
+                          isDisabled: disabledDeleteStatus.includes(cm.status),
+                          isCaution: true
+                        },
+                      ]"
                     />
-                  </svg>
+                  </transition>
                 </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <a
-                    class="dropdown-item"
-                    href="#"
-                    @click.prevent="selectCmAndOpenSaveModal(cm)"
-                    >タイトル/説明 編集</a
-                  >
-                  <a
-                    class="dropdown-item"
-                    :class="
-                      disabledEditContentsStatus.includes(cm.status)
-                        ? 'disabled'
-                        : ''
-                    "
-                    href="#"
-                    @click="toEditCm(cm)"
-                    >コンテンツ編集</a
-                  >
-                  <a class="dropdown-item" href="#">U MUSICにアップロード</a>
-                  <a
-                    class="dropdown-item"
-                    :class="
-                      disabledDeleteStatus.includes(cm.status) ? 'disabled' : ''
-                    "
-                    @click.prevent="selectCmAndOpenRemoveModal(cm)"
-                    href="#"
-                    >削除</a
-                  >
-                </div>
               </template>
             </ListItem>
           </List>
@@ -281,6 +268,7 @@ import { useRouter } from "vue-router";
 import SelectBox from "@/components/atoms/SelectBox.vue";
 import UMesseService from "@/services/UMesseService";
 import ModalUploading from "@/components/organisms/ModalUploading.vue";
+import DropdownMenu from "@/components/molecules/DropdownMenu.vue";
 export default defineComponent({
   components: {
     BasicLayout,
@@ -303,6 +291,7 @@ export default defineComponent({
     TextArea,
     SelectBox,
     ModalUploading,
+    DropdownMenu,
   },
   setup() {
     const router = useRouter();
@@ -332,6 +321,7 @@ export default defineComponent({
       isRemoveModalAppear: false,
       isRemovedModalAppear: false,
       isModalUploading: false,
+      dropdownCmId: "",
       titleModalUploading: "",
     });
     const clickScene = (sceneCd: string) => {
@@ -410,6 +400,7 @@ export default defineComponent({
       openPlayModal();
     };
     const selectCmAndOpenSaveModal = (cm: CmItem) => {
+      closeAllDropdownMenu();
       selectCm(cm);
       state.title = cm.title;
       state.description = cm.description;
@@ -418,6 +409,7 @@ export default defineComponent({
       openSaveModal();
     };
     const selectCmAndOpenRemoveModal = (cm: CmItem) => {
+      closeAllDropdownMenu();
       selectCm(cm);
       openRemoveModal();
     };
@@ -461,6 +453,7 @@ export default defineComponent({
       }
     };
     const toEditCm = (cmItem: CmItem) => {
+      closeAllDropdownMenu();
       console.log(cmItem);
       cm.setCm(cmItem);
       router.push({ name: "Cm" });
@@ -474,6 +467,17 @@ export default defineComponent({
     const closeModalUploading = () => {
       state.isModalUploading = false;
     };
+    const closeAllDropdownMenu = () => {
+      state.dropdownCmId = "";
+    }
+    const toggleDropdown = (cmId: string) => {
+      if (state.dropdownCmId === cmId) {
+        closeAllDropdownMenu();
+      } else {
+        closeAllDropdownMenu();
+        state.dropdownCmId = cmId;
+      }
+    }
     return {
       ...toRefs(state),
       play,
@@ -504,6 +508,8 @@ export default defineComponent({
       fetchCm,
       disabledEditContentsStatus,
       disabledDeleteStatus,
+      closeAllDropdownMenu,
+      toggleDropdown,
     };
   },
 });
@@ -517,5 +523,13 @@ export default defineComponent({
 }
 .dropdown-toggle::after {
   content: none;
+}
+.btn-more {
+  position: relative;
+  height: 30px;
+  img {
+    width: 30px;
+    height: 30px;
+  }
 }
 </style>

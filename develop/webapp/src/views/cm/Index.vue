@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div @click="closeAllDropdownMenu">
     <BasicLayout>
       <template #header>
         <Header>
@@ -43,64 +43,34 @@
               :volume="100"
               @togglePlay="playOpenChime"
             >
-              <template #operaions>
+              <template #operations>
                 <button
-                  class="btn btn-link dropdown-toggle p-0"
+                  class="btn-more"
                   type="button"
-                  id="dropdownMenuButton"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
+                  @click.stop="toggleOpenChimeDropdown"
                 >
-                  <svg
-                    id="メニュー"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="30"
-                    height="6"
-                    viewBox="0 0 30 6"
-                  >
-                    <circle
-                      id="楕円形_2"
-                      data-name="楕円形 2"
-                      cx="3"
-                      cy="3"
-                      r="3"
-                      fill="#578ed9"
+                  <img src="@/assets/icon_more.svg" />
+                  <transition>
+                    <DropdownMenu
+                      v-if="isOpenChimeDropdownAppear"
+                      :width="200"
+                      :targetWidth="30"
+                      :targetHeight="30"
+                      direction="down"
+                      :params="[
+                        {
+                          title: '変更',
+                          action: () => { $router.push({ name: 'CmChime', params: { div: 'open' } }) }
+                        },
+                        {
+                          title: '削除',
+                          action: () => { clearOpenChime() },
+                          isCaution: true,
+                        },
+                      ]"
                     />
-                    <circle
-                      id="楕円形_3"
-                      data-name="楕円形 3"
-                      cx="3"
-                      cy="3"
-                      r="3"
-                      transform="translate(12)"
-                      fill="#578ed9"
-                    />
-                    <circle
-                      id="楕円形_4"
-                      data-name="楕円形 4"
-                      cx="3"
-                      cy="3"
-                      r="3"
-                      transform="translate(24)"
-                      fill="#578ed9"
-                    />
-                  </svg>
+                  </transition>
                 </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <router-link
-                    class="dropdown-item"
-                    :to="{ name: 'CmChime', params: { div: 'open' } }"
-                  >
-                    変更
-                  </router-link>
-                  <a
-                    class="dropdown-item"
-                    href="#"
-                    @click.prevent="clearOpenChime"
-                    >削除</a
-                  >
-                </div>
               </template>
             </CmItem>
             <CmItem
@@ -112,102 +82,66 @@
             />
           </template>
           <template #top>
-            <CmItem
+            <template
               v-for="(narration, index) in narrations"
-              :key="narration.id"
-              :title="
-                'ナレーション ' +
-                `${index + 1}` +
-                '/' +
-                `${MAX_NARRATION_COUNT}`
-              "
-              size="flexible"
-              :contentTitle="`${narration.title}`"
-              :duration="`${convertNumberToTime(narration.seconds)}`"
-              :volume="100"
-              @togglePlay="playNarration(index)"
+              :key="narration.contentsId"
             >
-              <template #operations>
-                <button
-                  class="btn btn-link dropdown-toggle p-0"
-                  type="button"
-                  id="dropdownMenuButton"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  <svg
-                    id="メニュー"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="30"
-                    height="6"
-                    viewBox="0 0 30 6"
+              <CmItem
+                :title="
+                  'ナレーション ' +
+                    `${index + 1}` +
+                    '/' +
+                    `${MAX_NARRATION_COUNT}`
+                "
+                size="flexible"
+                :contentTitle="`${narration.title}`"
+                :duration="`${convertNumberToTime(narration.seconds)}`"
+                :volume="100"
+                @togglePlay="playNarration(index)"
+              >
+                <template #operations>
+                  <button
+                    class="btn-more"
+                    type="button"
+                    @click.stop="toggleNarrationDropdown(index)"
                   >
-                    <circle
-                      id="楕円形_2"
-                      data-name="楕円形 2"
-                      cx="3"
-                      cy="3"
-                      r="3"
-                      fill="#578ed9"
-                    />
-                    <circle
-                      id="楕円形_3"
-                      data-name="楕円形 3"
-                      cx="3"
-                      cy="3"
-                      r="3"
-                      transform="translate(12)"
-                      fill="#578ed9"
-                    />
-                    <circle
-                      id="楕円形_4"
-                      data-name="楕円形 4"
-                      cx="3"
-                      cy="3"
-                      r="3"
-                      transform="translate(24)"
-                      fill="#578ed9"
-                    />
-                  </svg>
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <a
-                    class="dropdown-item"
-                    href="#"
-                    @click="changeRecording(index)"
-                  >
-                    自分で録音して音声と入れ替える</a
-                  >
-                  <a
-                    class="dropdown-item"
-                    href="#"
-                    @click="changeNarration(index)"
-                    >他のナレーションと入れ替える</a
-                  >
-                  <a
-                    class="dropdown-item"
-                    href="#"
-                    @click="changeVoiceTemplate(index)"
-                  >
-                    合成音声(テンプレートから)入れ替える</a
-                  >
-                  <a
-                    class="dropdown-item"
-                    href="#"
-                    @click="changeVoiceFree(index)"
-                  >
-                    合成音声(フリー入力から)入れ替える</a
-                  >
-                  <a
-                    class="dropdown-item"
-                    href="#"
-                    @click="clearNarration(index)"
-                    >削除</a
-                  >
-                </div>
-              </template>
-            </CmItem>
+                    <img src="@/assets/icon_more.svg" />
+                    <transition>
+                      <DropdownMenu
+                        v-if="isNarrationDropdownAppear[index]"
+                        :width="320"
+                        :targetWidth="30"
+                        :targetHeight="30"
+                        direction="down"
+                        :params="[
+                          {
+                            title: '自分で録音して音声と入れ替える',
+                            action: () => { changeRecording(index) }
+                          },
+                          {
+                            title: '他のナレーションと入れ替える',
+                            action: () => { changeNarration(index) }
+                          },
+                          {
+                            title: '合成音声(テンプレートから)入れ替える',
+                            action: () => { changeVoiceTemplate(index) }
+                          },
+                          {
+                            title: '合成音声(フリー入力から)入れ替える',
+                            action: () => { changeVoiceFree(index) }
+                          },
+                          {
+                            title: '削除',
+                            action: () => { clearNarration(index) },
+                            isCaution: true,
+                          },
+                        ]"
+                      />
+                    </transition>
+                  </button>
+                </template>
+              </CmItem>
+            </template>
             <template v-if="narrations.length < MAX_NARRATION_COUNT">
               <CmItem
                 :title="
@@ -232,58 +166,34 @@
               :volume="50"
               @togglePlay="playBgm"
             >
-              <template #operaions>
+              <template #operations>
                 <button
-                  class="btn btn-link dropdown-toggle p-0"
+                  class="btn-more"
                   type="button"
-                  id="dropdownMenuButton"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
+                  @click.stop="toggleBgmDropdown"
                 >
-                  <svg
-                    id="メニュー"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="30"
-                    height="6"
-                    viewBox="0 0 30 6"
-                  >
-                    <circle
-                      id="楕円形_2"
-                      data-name="楕円形 2"
-                      cx="3"
-                      cy="3"
-                      r="3"
-                      fill="#578ed9"
+                  <img src="@/assets/icon_more.svg" />
+                  <transition>
+                    <DropdownMenu
+                      v-if="isBgmDropdownAppear"
+                      :width="200"
+                      :targetWidth="30"
+                      :targetHeight="30"
+                      direction="up"
+                      :params="[
+                        {
+                          title: '変更',
+                          action: () => { $router.push({ name: 'CmBgm' }) }
+                        },
+                        {
+                          title: '削除',
+                          action: () => { clearBgm() },
+                          isCaution: true,
+                        },
+                      ]"
                     />
-                    <circle
-                      id="楕円形_3"
-                      data-name="楕円形 3"
-                      cx="3"
-                      cy="3"
-                      r="3"
-                      transform="translate(12)"
-                      fill="#578ed9"
-                    />
-                    <circle
-                      id="楕円形_4"
-                      data-name="楕円形 4"
-                      cx="3"
-                      cy="3"
-                      r="3"
-                      transform="translate(24)"
-                      fill="#578ed9"
-                    />
-                  </svg>
+                  </transition>
                 </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <router-link class="dropdown-item" :to="{ name: 'CmBgm' }">
-                    変更
-                  </router-link>
-                  <a class="dropdown-item" href="#" @click.prevent="clearBgm"
-                    >削除</a
-                  >
-                </div>
               </template>
             </CmItem>
             <CmItem
@@ -304,64 +214,35 @@
               :volume="100"
               @togglePlay="playEndChime"
             >
-              <template #operaions>
+              <template #operations>
                 <button
-                  class="btn btn-link dropdown-toggle p-0"
+                  class="btn-more"
                   type="button"
-                  id="dropdownMenuButton"
-                  data-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
+                  @click.stop="toggleEndChimeDropdown"
                 >
-                  <svg
-                    id="メニュー"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="30"
-                    height="6"
-                    viewBox="0 0 30 6"
-                  >
-                    <circle
-                      id="楕円形_2"
-                      data-name="楕円形 2"
-                      cx="3"
-                      cy="3"
-                      r="3"
-                      fill="#578ed9"
+                  <img src="@/assets/icon_more.svg" />
+                  <transition>
+                    <DropdownMenu
+                      v-if="isEndChimeDropdownAppear"
+                      :width="200"
+                      :targetWidth="30"
+                      :targetHeight="30"
+                      :offset="-54"
+                      direction="down"
+                      :params="[
+                        {
+                          title: '変更',
+                          action: () => { $router.push({ name: 'CmChime', params: { div: 'end' } }) }
+                        },
+                        {
+                          title: '削除',
+                          action: () => { clearEndChime() },
+                          isCaution: true,
+                        },
+                      ]"
                     />
-                    <circle
-                      id="楕円形_3"
-                      data-name="楕円形 3"
-                      cx="3"
-                      cy="3"
-                      r="3"
-                      transform="translate(12)"
-                      fill="#578ed9"
-                    />
-                    <circle
-                      id="楕円形_4"
-                      data-name="楕円形 4"
-                      cx="3"
-                      cy="3"
-                      r="3"
-                      transform="translate(24)"
-                      fill="#578ed9"
-                    />
-                  </svg>
+                  </transition>
                 </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <router-link
-                    class="dropdown-item"
-                    :to="{ name: 'CmChime', params: { div: 'end' } }"
-                  >
-                    変更
-                  </router-link>
-                  <a
-                    class="dropdown-item"
-                    href="#"
-                    @click.prevent="clearEndChime"
-                    >削除</a
-                  >
-                </div>
               </template>
             </CmItem>
             <CmItem
@@ -499,6 +380,7 @@ import TextArea from "@/components/atoms/TextArea.vue";
 import SelectBox from "@/components/atoms/SelectBox.vue";
 import CmLayout from "@/components/templates/CmLayout.vue";
 import CmItem from "@/components/molecules/CmItem.vue";
+import DropdownMenu from "@/components/molecules/DropdownMenu.vue";
 import { MAX_NARRATION_COUNT } from "@/store/cm";
 import router from "@/router";
 import { ChimeItem } from "umesseapi/models";
@@ -521,6 +403,7 @@ export default defineComponent({
     SelectBox,
     CmLayout,
     CmItem,
+    DropdownMenu,
     ModalUploading,
   },
   setup() {
@@ -548,6 +431,10 @@ export default defineComponent({
       isSaveModalAppear: false,
       isSavedModalAppear: false,
       isModalUploading: false,
+      isNarrationDropdownAppear: [ false, false, false, false ],
+      isOpenChimeDropdownAppear: false,
+      isEndChimeDropdownAppear: false,
+      isBgmDropdownAppear: false,
     });
 
     const playOpenChime = async () => {
@@ -726,6 +613,44 @@ export default defineComponent({
     const closeModalUploading = () => {
       state.isModalUploading = false;
     };
+    const closeAllDropdownMenu = () => {
+      state.isNarrationDropdownAppear = [ false, false, false, false ];
+      state.isOpenChimeDropdownAppear = false;
+      state.isEndChimeDropdownAppear = false;
+      state.isBgmDropdownAppear = false;
+    }
+    const toggleNarrationDropdown = (index: number) => {
+      if (state.isNarrationDropdownAppear[index]) {
+        closeAllDropdownMenu();
+      } else {
+        closeAllDropdownMenu();
+        state.isNarrationDropdownAppear[index] = true;
+      }
+    }
+    const toggleOpenChimeDropdown = () => {
+      if (state.isOpenChimeDropdownAppear) {
+        closeAllDropdownMenu();
+      } else {
+        closeAllDropdownMenu();
+        state.isOpenChimeDropdownAppear = true;
+      }
+    }
+    const toggleEndChimeDropdown = () => {
+      if (state.isEndChimeDropdownAppear) {
+        closeAllDropdownMenu();
+      } else {
+        closeAllDropdownMenu();
+        state.isEndChimeDropdownAppear = true;
+      }
+    }
+    const toggleBgmDropdown = () => {
+      if (state.isBgmDropdownAppear) {
+        closeAllDropdownMenu();
+      } else {
+        closeAllDropdownMenu();
+        state.isBgmDropdownAppear = true;
+      }
+    }
     return {
       ...toRefs(state),
       clearNarration,
@@ -762,6 +687,11 @@ export default defineComponent({
       playEndChime,
       playBgm,
       toHome,
+      closeAllDropdownMenu,
+      toggleNarrationDropdown,
+      toggleOpenChimeDropdown,
+      toggleEndChimeDropdown,
+      toggleBgmDropdown,
     };
   },
 });
