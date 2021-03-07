@@ -4,8 +4,8 @@
       <li
         v-for="param in params"
         :key="param.title"
-        :class="{ caution: param.isCaution }"
-        @click.stop="param.action()"
+        :class="{ caution: param.isCaution, disabled: param.isDisabled }"
+        @click.stop="onClick(param)"
       >
         {{ param.title }}
       </li>
@@ -40,10 +40,6 @@ export default {
       type: Number,
       default: 0,
     },
-    arrowOffset: {
-      type: Number,
-      default: 0,
-    },
     direction: {
       type: String,
       default: "down",
@@ -67,8 +63,14 @@ export default {
         };
       }),
     });
+    const onClick = (param: { action: () => void, isDisabled: boolean | undefined }) => {
+      if (!param.isDisabled) {
+        param.action();
+      }
+    };
     return {
       state,
+      onClick,
     };
   },
 };
@@ -108,6 +110,9 @@ export default {
       &.caution {
         color: rgb(155, 0, 0);
         border-top: 1px solid rgb(141, 141, 141);
+      }
+      &.disabled {
+        opacity: 0.3;
       }
     }
     &::after {
