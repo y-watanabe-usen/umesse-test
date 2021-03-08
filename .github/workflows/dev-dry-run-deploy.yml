@@ -85,4 +85,5 @@ jobs:
       run: |
         yarn install
         yarn lint
+        yarn test
         yarn build --mode development
