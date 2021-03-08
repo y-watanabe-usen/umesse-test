@@ -81,22 +81,30 @@
                       :params="[
                         {
                           title: 'タイトル/説明 編集',
-                          action: () => { selectCmAndOpenSaveModal(cm) }
+                          action: () => {
+                            selectCmAndOpenSaveModal(cm);
+                          },
                         },
                         {
                           title: 'コンテンツ編集',
-                          action: () => { toEditCm(cm) },
-                          isDisabled: disabledEditContentsStatus.includes(cm.status)
+                          action: () => {
+                            toEditCm(cm);
+                          },
+                          isDisabled: disabledEditContentsStatus.includes(
+                            cm.status
+                          ),
                         },
                         {
                           title: 'U MUSICにアップロード',
-                          action: () => {}
+                          action: () => {},
                         },
                         {
                           title: '削除',
-                          action: () => { selectCmAndOpenRemoveModal(cm) },
+                          action: () => {
+                            selectCmAndOpenRemoveModal(cm);
+                          },
                           isDisabled: disabledDeleteStatus.includes(cm.status),
-                          isCaution: true
+                          isCaution: true,
                         },
                       ]"
                     />
@@ -469,7 +477,7 @@ export default defineComponent({
     };
     const closeAllDropdownMenu = () => {
       state.dropdownCmId = "";
-    }
+    };
     const toggleDropdown = (cmId: string) => {
       if (state.dropdownCmId === cmId) {
         closeAllDropdownMenu();
@@ -477,7 +485,7 @@ export default defineComponent({
         closeAllDropdownMenu();
         state.dropdownCmId = cmId;
       }
-    }
+    };
     return {
       ...toRefs(state),
       play,

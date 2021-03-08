@@ -45,6 +45,7 @@ export default {
       default: "down",
     }
   },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setup(props: any) {
     const state = reactive({
       style: computed(() => {
