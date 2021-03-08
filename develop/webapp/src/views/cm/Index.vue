@@ -60,11 +60,18 @@
                       :params="[
                         {
                           title: '変更',
-                          action: () => { $router.push({ name: 'CmChime', params: { div: 'open' } }) }
+                          action: () => {
+                            $router.push({
+                              name: 'CmChime',
+                              params: { div: 'open' },
+                            });
+                          },
                         },
                         {
                           title: '削除',
-                          action: () => { clearOpenChime() },
+                          action: () => {
+                            clearOpenChime();
+                          },
                           isCaution: true,
                         },
                       ]"
@@ -82,66 +89,73 @@
             />
           </template>
           <template #top>
-            <template
+            <CmItem
               v-for="(narration, index) in narrations"
               :key="narration.contentsId"
+              :title="
+                'ナレーション ' +
+                `${index + 1}` +
+                '/' +
+                `${MAX_NARRATION_COUNT}`
+              "
+              size="flexible"
+              :contentTitle="`${narration.title}`"
+              :duration="`${convertNumberToTime(narration.seconds)}`"
+              :volume="100"
+              @togglePlay="playNarration(index)"
             >
-              <CmItem
-                :title="
-                  'ナレーション ' +
-                    `${index + 1}` +
-                    '/' +
-                    `${MAX_NARRATION_COUNT}`
-                "
-                size="flexible"
-                :contentTitle="`${narration.title}`"
-                :duration="`${convertNumberToTime(narration.seconds)}`"
-                :volume="100"
-                @togglePlay="playNarration(index)"
-              >
-                <template #operations>
-                  <button
-                    class="btn-more"
-                    type="button"
-                    @click.stop="toggleNarrationDropdown(index)"
-                  >
-                    <img src="@/assets/icon_more.svg" />
-                    <transition>
-                      <DropdownMenu
-                        v-if="isNarrationDropdownAppear[index]"
-                        :width="320"
-                        :targetWidth="30"
-                        :targetHeight="30"
-                        direction="down"
-                        :params="[
-                          {
-                            title: '自分で録音して音声と入れ替える',
-                            action: () => { changeRecording(index) }
+              <template #operations>
+                <button
+                  class="btn-more"
+                  type="button"
+                  @click.stop="toggleNarrationDropdown(index)"
+                >
+                  <img src="@/assets/icon_more.svg" />
+                  <transition>
+                    <DropdownMenu
+                      v-if="isNarrationDropdownAppear[index]"
+                      :width="320"
+                      :targetWidth="30"
+                      :targetHeight="30"
+                      direction="down"
+                      :params="[
+                        {
+                          title: '自分で録音して音声と入れ替える',
+                          action: () => {
+                            changeRecording(index);
                           },
-                          {
-                            title: '他のナレーションと入れ替える',
-                            action: () => { changeNarration(index) }
+                        },
+                        {
+                          title: '他のナレーションと入れ替える',
+                          action: () => {
+                            changeNarration(index);
                           },
-                          {
-                            title: '合成音声(テンプレートから)入れ替える',
-                            action: () => { changeVoiceTemplate(index) }
+                        },
+                        {
+                          title: '合成音声(テンプレートから)入れ替える',
+                          action: () => {
+                            changeVoiceTemplate(index);
                           },
-                          {
-                            title: '合成音声(フリー入力から)入れ替える',
-                            action: () => { changeVoiceFree(index) }
+                        },
+                        {
+                          title: '合成音声(フリー入力から)入れ替える',
+                          action: () => {
+                            changeVoiceFree(index);
                           },
-                          {
-                            title: '削除',
-                            action: () => { clearNarration(index) },
-                            isCaution: true,
+                        },
+                        {
+                          title: '削除',
+                          action: () => {
+                            clearNarration(index);
                           },
-                        ]"
-                      />
-                    </transition>
-                  </button>
-                </template>
-              </CmItem>
-            </template>
+                          isCaution: true,
+                        },
+                      ]"
+                    />
+                  </transition>
+                </button>
+              </template>
+            </CmItem>
             <template v-if="narrations.length < MAX_NARRATION_COUNT">
               <CmItem
                 :title="
@@ -183,11 +197,15 @@
                       :params="[
                         {
                           title: '変更',
-                          action: () => { $router.push({ name: 'CmBgm' }) }
+                          action: () => {
+                            $router.push({ name: 'CmBgm' });
+                          },
                         },
                         {
                           title: '削除',
-                          action: () => { clearBgm() },
+                          action: () => {
+                            clearBgm();
+                          },
                           isCaution: true,
                         },
                       ]"
@@ -232,11 +250,18 @@
                       :params="[
                         {
                           title: '変更',
-                          action: () => { $router.push({ name: 'CmChime', params: { div: 'end' } }) }
+                          action: () => {
+                            $router.push({
+                              name: 'CmChime',
+                              params: { div: 'end' },
+                            });
+                          },
                         },
                         {
                           title: '削除',
-                          action: () => { clearEndChime() },
+                          action: () => {
+                            clearEndChime();
+                          },
                           isCaution: true,
                         },
                       ]"
@@ -431,7 +456,7 @@ export default defineComponent({
       isSaveModalAppear: false,
       isSavedModalAppear: false,
       isModalUploading: false,
-      isNarrationDropdownAppear: [ false, false, false, false ],
+      isNarrationDropdownAppear: [false, false, false, false],
       isOpenChimeDropdownAppear: false,
       isEndChimeDropdownAppear: false,
       isBgmDropdownAppear: false,
@@ -614,11 +639,11 @@ export default defineComponent({
       state.isModalUploading = false;
     };
     const closeAllDropdownMenu = () => {
-      state.isNarrationDropdownAppear = [ false, false, false, false ];
+      state.isNarrationDropdownAppear = [false, false, false, false];
       state.isOpenChimeDropdownAppear = false;
       state.isEndChimeDropdownAppear = false;
       state.isBgmDropdownAppear = false;
-    }
+    };
     const toggleNarrationDropdown = (index: number) => {
       if (state.isNarrationDropdownAppear[index]) {
         closeAllDropdownMenu();
@@ -626,7 +651,7 @@ export default defineComponent({
         closeAllDropdownMenu();
         state.isNarrationDropdownAppear[index] = true;
       }
-    }
+    };
     const toggleOpenChimeDropdown = () => {
       if (state.isOpenChimeDropdownAppear) {
         closeAllDropdownMenu();
@@ -634,7 +659,7 @@ export default defineComponent({
         closeAllDropdownMenu();
         state.isOpenChimeDropdownAppear = true;
       }
-    }
+    };
     const toggleEndChimeDropdown = () => {
       if (state.isEndChimeDropdownAppear) {
         closeAllDropdownMenu();
@@ -642,7 +667,7 @@ export default defineComponent({
         closeAllDropdownMenu();
         state.isEndChimeDropdownAppear = true;
       }
-    }
+    };
     const toggleBgmDropdown = () => {
       if (state.isBgmDropdownAppear) {
         closeAllDropdownMenu();
@@ -650,7 +675,7 @@ export default defineComponent({
         closeAllDropdownMenu();
         state.isBgmDropdownAppear = true;
       }
-    }
+    };
     return {
       ...toRefs(state),
       clearNarration,
