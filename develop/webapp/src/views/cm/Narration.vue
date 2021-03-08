@@ -353,6 +353,7 @@ export default defineComponent({
       selectNarrationAndOpenPlayModal,
       stopAndClosePlayModal,
       closeErrorModal,
+      fetchNarration,
     };
   },
 });
