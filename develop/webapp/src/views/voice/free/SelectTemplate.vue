@@ -26,9 +26,14 @@
             <template #header>
               <ListHeader>
                 <Sort
+                  v-model="sort"
+                  @update:modelValue="fetchFreeTemplate"
                   :options="
-                    sorts.map((sort) => {
-                      return { title: sort, value: sort };
+                    freeTemplateSorts.map((freeTemplateSort) => {
+                      return {
+                        title: freeTemplateSort.name,
+                        value: freeTemplateSort.cd,
+                      };
                     })
                   "
                 />
@@ -160,9 +165,10 @@ export default defineComponent({
   },
   setup() {
     const state = reactive({
+      sort: 1,
+      freeTemplateSorts: computed(() => Common.getSort()),
       freeTemplateIndustries: computed(() => Common.getBgmIndustries()),
       activeFreeTemplateIndustryCd: "01",
-      sorts: ["名前順", "作成日順", "更新日順"],
       freeItems: [] as FreeItem[],
       manuscript: "",
       isDocumentModalAppear: false,
@@ -179,7 +185,8 @@ export default defineComponent({
     const fetchFreeTemplate = async () => {
       try {
         const response = await UMesseService.resourcesService.fetchFree(
-          state.activeFreeTemplateIndustryCd
+          state.activeFreeTemplateIndustryCd,
+          state.sort
         );
         state.freeItems = response;
       } catch (e) {
@@ -230,6 +237,7 @@ export default defineComponent({
       setManuscriptAndOpenDocumentModal,
       convertDatestringToDateJp,
       closeErrorModal,
+      fetchFreeTemplate,
     };
   },
 });
