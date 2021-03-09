@@ -34,7 +34,7 @@
                 />
               </ListHeader>
             </template>
-            <ListItem v-for="cm in cms" :key="cm.cmId">
+            <ListItem v-for="cm in cms" :key="cm.id">
               <template #title>
                 <h2>{{ cm.title }}</h2>
               </template>
@@ -67,12 +67,12 @@
                 <button
                   class="btn-more"
                   type="button"
-                  @click.stop="toggleDropdown(cm.cmId)"
+                  @click.stop="toggleDropdown(cm.id)"
                 >
                   <img src="@/assets/icon_more_black.svg" />
                   <transition>
                     <DropdownMenu
-                      v-if="dropdownCmId === cm.cmId"
+                      v-if="dropdownCmId === cm.id"
                       :width="240"
                       :targetWidth="120"
                       :targetHeight="30"
