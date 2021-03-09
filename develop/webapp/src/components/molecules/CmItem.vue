@@ -19,8 +19,9 @@
       </template>
     </div>
     <div class="footer" v-if="!isEmpty">
-      <div class="volume">
+      <div class="volume" @click.stop="$emit('toggleSlider')">
         <img src="@/assets/icon_volume.svg" />{{ volume }}%
+        <slot name="volume" />
       </div>
       <div class="operations">
         <slot name="operations" />
@@ -168,6 +169,7 @@ export default {
     border-bottom-right-radius: 7px;
     .volume {
       @include flex_start;
+      position: relative;
       align-items: center;
       color: $color_blue;
       font-size: 19px;
