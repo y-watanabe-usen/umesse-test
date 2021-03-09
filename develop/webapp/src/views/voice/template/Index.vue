@@ -24,9 +24,14 @@
             <template #header>
               <ListHeader>
                 <Sort
+                  v-model="sort"
+                  @update:modelValue="fetchTemplate"
                   :options="
-                    sorts.map((sort) => {
-                      return { title: sort, value: sort };
+                    templateSorts.map((templateSort) => {
+                      return {
+                        title: templateSort.name,
+                        value: templateSort.cd,
+                      };
                     })
                   "
                 />
@@ -120,9 +125,10 @@ export default defineComponent({
   },
   setup() {
     const state = reactive({
+      sort: 1,
+      templateSorts: computed(() => Common.getSort()),
       templateIndustries: computed(() => Common.getBgmIndustries()),
       activeTemplateIndustryCd: "01",
-      sorts: ["名前順", "作成日順", "更新日順"],
       templates: [] as TemplateItem[],
       isError: false,
       errorCode: "",
@@ -137,7 +143,8 @@ export default defineComponent({
     const fetchTemplate = async () => {
       try {
         const response = await UMesseService.resourcesService.fetchTemplate(
-          state.activeTemplateIndustryCd
+          state.activeTemplateIndustryCd,
+          state.sort
         );
         state.templates = response;
       } catch (e) {
@@ -165,6 +172,7 @@ export default defineComponent({
       clickTemplateIndustry,
       toVoiceTemplateDetail,
       closeErrorModal,
+      fetchTemplate,
     };
   },
 });

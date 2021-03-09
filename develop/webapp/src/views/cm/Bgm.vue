@@ -313,6 +313,7 @@ export default defineComponent({
       selectBgmAndOpenPlayModal,
       stopAndClosePlayModal,
       closeErrorModal,
+      fetchBgm,
     };
   },
 });
