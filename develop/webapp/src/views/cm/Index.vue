@@ -1,5 +1,5 @@
 <template>
-  <div @click="closeAllDropdownMenu">
+  <div @click="onClickSomewhere">
     <BasicLayout>
       <template #header>
         <Header>
@@ -40,9 +40,22 @@
               size="fixed"
               :contentTitle="openChime.title"
               :duration="`${convertNumberToTime(openChime.seconds)}`"
-              :volume="100"
+              :volume="openChime.volume"
               @togglePlay="playOpenChime"
+              @toggleSlider="toggleOpenChimeSlider"
             >
+              <template #volume>
+                <transition>
+                  <VolumeSlider
+                    v-show="isOpenChimeSliderAppear"
+                    v-model="openChime.volume"
+                    :width="400"
+                    :targetWidth="76"
+                    :targetHeight="30"
+                    direction="down"
+                  />
+                </transition>
+              </template>
               <template #operations>
                 <button
                   class="btn-more"
@@ -101,9 +114,22 @@
               size="flexible"
               :contentTitle="`${narration.title}`"
               :duration="`${convertNumberToTime(narration.seconds)}`"
-              :volume="100"
+              :volume="narration.volume"
               @togglePlay="playNarration(index)"
+              @toggleSlider="toggleNarrationSlider(index)"
             >
+              <template #volume>
+                <transition>
+                  <VolumeSlider
+                    v-show="isNarrationSliderAppear[index]"
+                    v-model="narration.volume"
+                    :width="400"
+                    :targetWidth="76"
+                    :targetHeight="30"
+                    direction="down"
+                  />
+                </transition>
+              </template>
               <template #operations>
                 <button
                   class="btn-more"
@@ -177,9 +203,22 @@
               size="flexible"
               :contentTitle="bgm.title"
               :duration="`${convertNumberToTime(bgm.seconds)}`"
-              :volume="50"
+              :volume="bgm.volume"
               @togglePlay="playBgm"
+              @toggleSlider="toggleBgmSlider"
             >
+              <template #volume>
+                <transition>
+                  <VolumeSlider
+                    v-show="isBgmSliderAppear"
+                    v-model="bgm.volume"
+                    :width="400"
+                    :targetWidth="76"
+                    :targetHeight="30"
+                    direction="up"
+                  />
+                </transition>
+              </template>
               <template #operations>
                 <button
                   class="btn-more"
@@ -229,9 +268,23 @@
               size="fixed"
               :contentTitle="endChime.title"
               :duration="`${convertNumberToTime(endChime.seconds)}`"
-              :volume="100"
+              :volume="endChime.volume"
               @togglePlay="playEndChime"
+              @toggleSlider="toggleEndChimeSlider"
             >
+              <template #volume>
+                <transition>
+                  <VolumeSlider
+                    v-show="isEndChimeSliderAppear"
+                    v-model="endChime.volume"
+                    :width="400"
+                    :targetWidth="76"
+                    :targetHeight="30"
+                    :offset="-189"
+                    direction="down"
+                  />
+                </transition>
+              </template>
               <template #operations>
                 <button
                   class="btn-more"
@@ -406,6 +459,7 @@ import SelectBox from "@/components/atoms/SelectBox.vue";
 import CmLayout from "@/components/templates/CmLayout.vue";
 import CmItem from "@/components/molecules/CmItem.vue";
 import DropdownMenu from "@/components/molecules/DropdownMenu.vue";
+import VolumeSlider from "@/components/molecules/VolumeSlider.vue";
 import { MAX_NARRATION_COUNT } from "@/store/cm";
 import router from "@/router";
 import { ChimeItem } from "umesseapi/models";
@@ -429,6 +483,7 @@ export default defineComponent({
     CmLayout,
     CmItem,
     DropdownMenu,
+    VolumeSlider,
     ModalUploading,
   },
   setup() {
@@ -460,6 +515,10 @@ export default defineComponent({
       isOpenChimeDropdownAppear: false,
       isEndChimeDropdownAppear: false,
       isBgmDropdownAppear: false,
+      isNarrationSliderAppear: [false, false, false, false],
+      isOpenChimeSliderAppear: false,
+      isEndChimeSliderAppear: false,
+      isBgmSliderAppear: false,
     });
 
     const playOpenChime = async () => {
@@ -645,6 +704,7 @@ export default defineComponent({
       state.isBgmDropdownAppear = false;
     };
     const toggleNarrationDropdown = (index: number) => {
+      closeAllSlider();
       if (state.isNarrationDropdownAppear[index]) {
         closeAllDropdownMenu();
       } else {
@@ -653,6 +713,7 @@ export default defineComponent({
       }
     };
     const toggleOpenChimeDropdown = () => {
+      closeAllSlider();
       if (state.isOpenChimeDropdownAppear) {
         closeAllDropdownMenu();
       } else {
@@ -661,6 +722,7 @@ export default defineComponent({
       }
     };
     const toggleEndChimeDropdown = () => {
+      closeAllSlider();
       if (state.isEndChimeDropdownAppear) {
         closeAllDropdownMenu();
       } else {
@@ -669,12 +731,59 @@ export default defineComponent({
       }
     };
     const toggleBgmDropdown = () => {
+      closeAllSlider();
       if (state.isBgmDropdownAppear) {
         closeAllDropdownMenu();
       } else {
         closeAllDropdownMenu();
         state.isBgmDropdownAppear = true;
       }
+    };
+    const closeAllSlider = () => {
+      state.isNarrationSliderAppear = [false, false, false, false];
+      state.isOpenChimeSliderAppear = false;
+      state.isEndChimeSliderAppear = false;
+      state.isBgmSliderAppear = false;
+    };
+    const toggleNarrationSlider = (index: number) => {
+      closeAllDropdownMenu();
+      if (state.isNarrationSliderAppear[index]) {
+        closeAllSlider();
+      } else {
+        closeAllSlider();
+        state.isNarrationSliderAppear[index] = true;
+      }
+    };
+    const toggleOpenChimeSlider = () => {
+      closeAllDropdownMenu();
+      if (state.isOpenChimeSliderAppear) {
+        closeAllSlider();
+      } else {
+        closeAllSlider();
+        state.isOpenChimeSliderAppear = true;
+      }
+    };
+    const toggleEndChimeSlider = () => {
+      closeAllDropdownMenu();
+      if (state.isEndChimeSliderAppear) {
+        closeAllSlider();
+      } else {
+        closeAllSlider();
+        state.isEndChimeSliderAppear = true;
+      }
+    };
+    const toggleBgmSlider = () => {
+      closeAllDropdownMenu();
+      if (state.isBgmSliderAppear) {
+        closeAllSlider();
+      } else {
+        closeAllSlider();
+        state.isBgmSliderAppear = true;
+      }
+    };
+    const onClickSomewhere = () => {
+      closeAllDropdownMenu();
+      closeAllSlider();
     };
     return {
       ...toRefs(state),
@@ -717,6 +826,12 @@ export default defineComponent({
       toggleOpenChimeDropdown,
       toggleEndChimeDropdown,
       toggleBgmDropdown,
+      closeAllSlider,
+      toggleNarrationSlider,
+      toggleOpenChimeSlider,
+      toggleEndChimeSlider,
+      toggleBgmSlider,
+      onClickSomewhere,
     };
   },
 });
