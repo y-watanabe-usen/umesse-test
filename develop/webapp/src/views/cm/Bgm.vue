@@ -11,12 +11,12 @@
           <template #sub-menu>
             <SubMenu>
               <SubMenuItem
-                v-for="bgmIndustry in bgmIndustries"
-                :key="bgmIndustry.cd"
-                :isSelected="bgmIndustry.cd == activeBgmIndustryCd"
-                @click="clickBgmIndustry(bgmIndustry.cd)"
+                v-for="industry in industries"
+                :key="industry.cd"
+                :isSelected="industry.cd == activeIndustryCd"
+                @click="clickIndustry(industry.cd)"
               >
-                {{ bgmIndustry.name }}
+                {{ industry.name }}
               </SubMenuItem>
             </SubMenu>
           </template>
@@ -27,8 +27,8 @@
                   v-model="sort"
                   @update:modelValue="fetchBgm"
                   :options="
-                    bgmSorts.map((bgmSort) => {
-                      return { title: bgmSort.name, value: bgmSort.cd };
+                    sortList.map((v) => {
+                      return { title: v.name, value: v.cd };
                     })
                   "
                 />
@@ -199,13 +199,13 @@ export default defineComponent({
     const audioStore = AudioStore();
     const audioPlayer = AudioPlayer();
     const { cm } = useGlobalStore();
+    const sortList = Common.getSort();
 
     const state = reactive({
-      activeBgmIndustryCd: "01",
+      activeIndustryCd: "01",
       sort: 1,
-      bgmSorts: computed(() => Common.getSort()),
       bgms: [] as BgmItem[],
-      bgmIndustries: computed(() => Common.getBgmIndustries()),
+      industries: computed(() => Common.getBgmIndustries()),
       selectedBgm: null as BgmItem | null,
       isPlaying: computed(() => audioPlayer.isPlaying()),
       isDownloading: computed(() => audioStore.isDownloading),
@@ -228,15 +228,15 @@ export default defineComponent({
       state.selectedBgm = bgm;
     };
 
-    const clickBgmIndustry = (bgmIndustryCd: string) => {
-      state.activeBgmIndustryCd = bgmIndustryCd;
+    const clickIndustry = (industryCd: string) => {
+      state.activeIndustryCd = industryCd;
       fetchBgm();
     };
 
     const fetchBgm = async () => {
       try {
         const response = await UMesseService.resourcesService.fetchBgm(
-          state.activeBgmIndustryCd,
+          state.activeIndustryCd,
           state.sort
         );
         state.bgms = response;
@@ -280,8 +280,8 @@ export default defineComponent({
       state.isSavedModalAppear = false;
     };
 
-    const selectBgmAndOpenPlayModal = (chime: BgmItem) => {
-      selectBgm(chime);
+    const selectBgmAndOpenPlayModal = (bgm: BgmItem) => {
+      selectBgm(bgm);
       openPlayModal();
     };
     const stopAndClosePlayModal = () => {
@@ -299,9 +299,10 @@ export default defineComponent({
 
     return {
       ...toRefs(state),
+      sortList,
       setBgm,
       selectBgm,
-      clickBgmIndustry,
+      clickIndustry,
       play,
       stop,
       openPlayModal,
