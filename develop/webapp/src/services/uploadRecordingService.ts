@@ -46,7 +46,7 @@ export function useUploadRecordingService(api: UMesseApi.RecordingApi) {
             resolve(<RecordingItem>value.data);
           })
           .catch((e) => {
-            (state.status = UPLOAD_RECORDING_STATE.ERROR)
+            (state.status = UPLOAD_RECORDING_STATE.ERROR);
             console.log("reject", e);
             reject(UMesseErrorFromApiFactory(e));
           });
