@@ -113,22 +113,13 @@
       </ModalDialog>
     </transition>
     <transition>
-      <ModalDialog v-if="isError" @close="closeErrorModal">
-        <template #header>
-          <ModalHeader title="エラー" @close="closeErrorModal" />
-        </template>
-        <template #contents>
-          <MessageDialogContents>
-            {{ errorCode }} <br />
-            {{ errorMessge }}
-          </MessageDialogContents>
-        </template>
-        <template #footer>
-          <ModalFooter :noBorder="true">
-            <Button type="rectangle" @click="closeErrorModal">閉じる</Button>
-          </ModalFooter>
-        </template>
-      </ModalDialog>
+      <ModalError
+        v-if="isError"
+        @close="closeErrorModal"
+        title="エラー"
+        :errorCode="errorCode"
+        :errorMessage="errorMessage"
+      ></ModalError>
     </transition>
   </div>
 </template>
@@ -152,6 +143,7 @@ import ListItem from "@/components/molecules/ListItem.vue";
 import ModalDialog from "@/components/organisms/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
+import ModalError from "@/components/molecules/ModalError.vue";
 import PlayDialogContents from "@/components/molecules/PlayDialogContents.vue";
 import MessageDialogContents from "@/components/molecules/MessageDialogContents.vue";
 import FormGroup from "@/components/molecules/FormGroup.vue";
@@ -172,6 +164,7 @@ export default defineComponent({
     ModalDialog,
     ModalHeader,
     ModalFooter,
+    ModalError,
     PlayDialogContents,
     MessageDialogContents,
     FormGroup,
@@ -201,7 +194,7 @@ export default defineComponent({
       isSavedModalAppear: false,
       isError: false,
       errorCode: "",
-      errorMessge: "",
+      errorMessage: "",
     });
 
     const setChime = (chime: ChimeItem) => {
@@ -225,7 +218,7 @@ export default defineComponent({
         state.chimes = response;
       } catch (e) {
         state.errorCode = e.errorCode;
-        state.errorMessge = e.message;
+        state.errorMessage = e.message;
         state.isError = true;
       }
     };

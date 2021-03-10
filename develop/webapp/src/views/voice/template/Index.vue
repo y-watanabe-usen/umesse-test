@@ -66,22 +66,13 @@
     </BasicLayout>
     <!-- modal -->
     <transition>
-      <ModalDialog v-if="isError" @close="closeErrorModal">
-        <template #header>
-          <ModalHeader title="エラー" @close="closeErrorModal" />
-        </template>
-        <template #contents>
-          <MessageDialogContents>
-            {{ errorCode }} <br />
-            {{ errorMessge }}
-          </MessageDialogContents>
-        </template>
-        <template #footer>
-          <ModalFooter :noBorder="true">
-            <Button type="rectangle" @click="closeErrorModal">閉じる</Button>
-          </ModalFooter>
-        </template>
-      </ModalDialog>
+      <ModalError
+        v-if="isError"
+        @close="closeErrorModal"
+        title="エラー"
+        :errorCode="errorCode"
+        :errorMessage="errorMessage"
+      ></ModalError>
     </transition>
   </div>
 </template>
@@ -103,9 +94,7 @@ import * as Common from "@/utils/Common";
 import UMesseService from "@/services/UMesseService";
 import router from "@/router";
 import UMesseCache from "@/repository/UMesseCache";
-import ModalDialog from "@/components/organisms/ModalDialog.vue";
-import ModalHeader from "@/components/molecules/ModalHeader.vue";
-import ModalFooter from "@/components/molecules/ModalFooter.vue";
+import ModalError from "@/components/molecules/ModalError.vue";
 
 export default defineComponent({
   components: {
@@ -119,9 +108,7 @@ export default defineComponent({
     List,
     ListHeader,
     ListItem,
-    ModalDialog,
-    ModalHeader,
-    ModalFooter,
+    ModalError,
   },
   setup() {
     const sortList = Common.getSort();
@@ -132,7 +119,7 @@ export default defineComponent({
       templates: [] as TemplateItem[],
       isError: false,
       errorCode: "",
-      errorMessge: "",
+      errorMessage: "",
     });
 
     const clickIndustry = (industryCd: string) => {
@@ -149,7 +136,7 @@ export default defineComponent({
         state.templates = response;
       } catch (e) {
         state.errorCode = e.errorCode;
-        state.errorMessge = e.message;
+        state.errorMessage = e.message;
         state.isError = true;
       }
     };

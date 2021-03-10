@@ -101,22 +101,13 @@
       </ModalDialog>
     </transition>
     <transition>
-      <ModalDialog v-if="isError" @close="closeErrorModal">
-        <template #header>
-          <ModalHeader title="エラー" @close="closeErrorModal" />
-        </template>
-        <template #contents>
-          <MessageDialogContents>
-            {{ errorCode }} <br />
-            {{ errorMessge }}
-          </MessageDialogContents>
-        </template>
-        <template #footer>
-          <ModalFooter :noBorder="true">
-            <Button type="rectangle" @click="closeErrorModal">閉じる</Button>
-          </ModalFooter>
-        </template>
-      </ModalDialog>
+      <ModalError
+        v-if="isError"
+        @close="closeErrorModal"
+        title="エラー"
+        :errorCode="errorCode"
+        :errorMessage="errorMessage"
+      ></ModalError>
     </transition>
   </div>
 </template>
@@ -136,6 +127,7 @@ import ListItem from "@/components/molecules/ListItem.vue";
 import ModalDialog from "@/components/organisms/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
+import ModalError from "@/components/molecules/ModalError.vue";
 import TextDialogContents from "@/components/molecules/TextDialogContents.vue";
 import { FreeItem } from "umesseapi/models/free-item";
 import * as Common from "@/utils/Common";
@@ -159,6 +151,7 @@ export default defineComponent({
     ModalDialog,
     ModalHeader,
     ModalFooter,
+    ModalError,
     TextDialogContents,
   },
   setup() {
@@ -172,7 +165,7 @@ export default defineComponent({
       isDocumentModalAppear: false,
       isError: false,
       errorCode: "",
-      errorMessge: "",
+      errorMessage: "",
     });
 
     const clickIndustry = (industryCd: string) => {
@@ -189,7 +182,7 @@ export default defineComponent({
         state.freeItems = response;
       } catch (e) {
         state.errorCode = e.errorCode;
-        state.errorMessge = e.message;
+        state.errorMessage = e.message;
         state.isError = true;
       }
     };
