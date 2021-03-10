@@ -21,7 +21,7 @@
         </template>
         <div class="content">
           <div v-if="activeAppInformationCd === '01'" class="version">
-            <h2>U MESSE Ver0000000000</h2>
+            <h2>U MESSE Ver{{ version }}</h2>
           </div>
           <div v-if="activeAppInformationCd === '02'">
             <h2>U MESSE利用規約</h2>
@@ -74,6 +74,7 @@ export default defineComponent({
   setup() {
     const state = reactive({
       appInformations: computed(() => Common.getSettingAppInformations()),
+      version: computed(() => Common.getVersion()),
       activeAppInformationCd: "01",
       isDocumentModalAppear: false,
       isPlayModalAppear: false,

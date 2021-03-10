@@ -146,6 +146,16 @@ export function isTtsById(id: string): boolean {
   return id.match(`^[0-9a-z]+-t-[0-9a-z]{8}$`) ? true : false;
 }
 
+/**
+ * package.jsonのバージョンを取得
+ * @param
+ * @return Version
+ */
+export function getVersion() {
+  const packageJson = require('@/../../webapp/package.json');
+  return packageJson.version;
+}
+
 function getIndustries(cdList: string[]) {
   const result: Industry[] = [];
   cdList.forEach((v) => {
