@@ -192,43 +192,46 @@
                 "
                 :isEmpty="true"
                 size="flexible"
-                @click.stop="toggleNarrationDropdown(index)"
-              />
-              <transition>
-                <DropdownMenu
-                  v-if="isNarrationDropdownAppear[index]"
-                  :width="320"
-                  :targetWidth="1420"
-                  :targetHeight="300"
-                  direction="down"
-                  :params="[
-                    {
-                      title: '自分で録音して音声と入れ替える',
-                      action: () => {
-                        changeRecording(index);
-                      },
-                    },
-                    {
-                      title: '他のナレーションと入れ替える',
-                      action: () => {
-                        changeNarration(index);
-                      },
-                    },
-                    {
-                      title: '合成音声(テンプレートから)入れ替える',
-                      action: () => {
-                        changeVoiceTemplate(index);
-                      },
-                    },
-                    {
-                      title: '合成音声(フリー入力から)入れ替える',
-                      action: () => {
-                        changeVoiceFree(index);
-                      },
-                    },
-                  ]"
-                />
-              </transition>
+                @add="toggleNarrationDropdown(index)"
+              >
+                <template #dropdownmenu>
+                  <transition>
+                    <DropdownMenu
+                      v-if="isNarrationDropdownAppear[index]"
+                      :width="320"
+                      :targetWidth="100"
+                      :targetHeight="100"
+                      direction="down"
+                      :params="[
+                        {
+                          title: '自分で録音して音声と入れ替える',
+                          action: () => {
+                            changeRecording(index);
+                          },
+                        },
+                        {
+                          title: '他のナレーションと入れ替える',
+                          action: () => {
+                            changeNarration(index);
+                          },
+                        },
+                        {
+                          title: '合成音声(テンプレートから)入れ替える',
+                          action: () => {
+                            changeVoiceTemplate(index);
+                          },
+                        },
+                        {
+                          title: '合成音声(フリー入力から)入れ替える',
+                          action: () => {
+                            changeVoiceFree(index);
+                          },
+                        },
+                      ]"
+                    />
+                  </transition>
+                </template>
+              </CmItem>
             </template>
           </template>
           <template #bottom>
