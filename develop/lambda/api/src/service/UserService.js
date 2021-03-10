@@ -1,5 +1,6 @@
 "use strict";
 
+const { debuglog, errorlog } = require("umesse-lib/constants");
 const { getUser } = require("../../umesse/user");
 const assert = require('assert');
 const { respondWithCode } = require("../utils/writer");
@@ -16,9 +17,10 @@ exports.getUser = function (xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     try {
       const json = await getUser(xUnisCustomerCd);
+      debuglog(json);
       resolve(json);
     } catch (e) {
-      console.log(`error = ${e}`);
+      errorlog(e);
       assert(e instanceof UMesseError);
       reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
     }
