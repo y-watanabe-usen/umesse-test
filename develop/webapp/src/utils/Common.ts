@@ -1,4 +1,5 @@
 import Constants, { Industry, Scene, Sorts, AppInformation } from "@/utils/Constants";
+import PackageJson from '@/../../webapp/package.json';
 
 /**
  * ナレーション選択画面に表示する業種を取得する
@@ -144,6 +145,15 @@ export function isRecordingById(id: string): boolean {
  */
 export function isTtsById(id: string): boolean {
   return id.match(`^[0-9a-z]+-t-[0-9a-z]{8}$`) ? true : false;
+}
+
+/**
+ * package.jsonのバージョンを取得
+ * @param
+ * @return Version
+ */
+export function getVersion() {
+  return PackageJson.version;
 }
 
 function getIndustries(cdList: string[]) {
