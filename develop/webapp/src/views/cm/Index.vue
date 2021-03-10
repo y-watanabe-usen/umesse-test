@@ -384,7 +384,7 @@
             :isPlaying="isPlaying"
             :playbackTime="playbackTime"
             :duration="duration"
-            @play="play(selectedBgm)"
+            @play="playGenerateCm()"
             @stop="stop"
           />
         </template>
@@ -500,7 +500,6 @@ import DropdownMenu from "@/components/molecules/DropdownMenu.vue";
 import VolumeSlider from "@/components/molecules/VolumeSlider.vue";
 import { MAX_NARRATION_COUNT } from "@/store/cm";
 import router from "@/router";
-import { ChimeItem } from "umesseapi/models";
 import UMesseService from "@/services/UMesseService";
 import ModalUploading from "@/components/organisms/ModalUploading.vue";
 
@@ -560,45 +559,40 @@ export default defineComponent({
     });
 
     const playOpenChime = async () => {
-      const chime = cm.openChime;
-      if (!chime) return;
-      playChime(chime);
+      if (!cm.openChime) return;
+      playById(cm.openChime.id, cm.openChime.category);
     };
-
     const playEndChime = async () => {
-      const chime = cm.endChime;
-      if (!chime) return;
-      playChime(chime);
+      if (!cm.endChime) return;
+      playById(cm.endChime.id, cm.endChime.category);
     };
-
-    const playChime = async (chime: ChimeItem) => {
-      stop();
-      const audioBuffer = await UMesseService.resourcesService.getAudioBufferByContentsId(
-        chime.id,
-        chime.category
-      );
-      audioPlayer.start(audioBuffer);
-    };
-
-    const playNarration = async (index: number) => {
+    const playNarration = (index: number) => {
       const narration = cm.narration(index);
       if (!narration) return;
+      playById(narration.id, narration.category);
+    };
+    const playBgm = () => {
+      if (!cm.bgm) return;
+      playById(cm.bgm.id, cm.bgm.category);
+    };
+    const playById = async (id: string, category: string) => {
       stop();
       const audioBuffer = await UMesseService.resourcesService.getAudioBufferByContentsId(
-        narration.id,
-        narration.category
+        id,
+        category
       );
       audioPlayer.start(audioBuffer);
     };
-    const playBgm = async () => {
-      const bgm = cm.bgm;
-      if (!bgm) return;
-      stop();
-      const audioBuffer = await UMesseService.resourcesService.getAudioBufferByContentsId(
-        bgm.id,
-        bgm.category
+
+    const playGenerateCm = async () => {
+      if (!cm.url) return;
+      const audioBuffer = await UMesseService.resourcesService.getAudioBufferByUrl(
+        cm.url
       );
       audioPlayer.start(audioBuffer);
+    };
+    const stop = () => {
+      if (state.isPlaying) audioPlayer.stop();
     };
 
     const clearNarration = (index: number) => {
@@ -632,17 +626,6 @@ export default defineComponent({
       } catch (e) {
         console.log(e);
       }
-    };
-
-    const play = async () => {
-      if (!cm.url) return;
-      const audioBuffer = await UMesseService.resourcesService.getAudioBufferByUrl(
-        cm.url
-      );
-      audioPlayer.start(audioBuffer);
-    };
-    const stop = () => {
-      if (state.isPlaying) audioPlayer.stop();
     };
 
     const openPlayModal = () => {
@@ -681,9 +664,6 @@ export default defineComponent({
         closeModalUploading();
         closeSaveModal();
         openSavedModal();
-        // setTimeout(() => {
-        //   openSavedModal();
-        // }, 5000);
       } catch (e) {
         console.log(e.message);
       } finally {
@@ -695,39 +675,51 @@ export default defineComponent({
 
     const addRecording = () => {
       cm.unSelectNarrationIndex();
-      router.push({ name: "Recording" });
+      toRecoding();
     };
     const addNarration = () => {
       cm.unSelectNarrationIndex();
-      router.push({ name: "Narration" });
+      toNarration();
     };
     const addVoiceTemplate = () => {
       cm.unSelectNarrationIndex();
-      router.push({ name: "VoiceTemplate" });
+      toVoiceTemplate();
     };
     const addVoiceFree = () => {
       cm.unSelectNarrationIndex();
-      router.push({ name: "VoiceFree" });
+      toVoiceFree();
     };
     const changeRecording = (index: number) => {
       cm.selectNarrationIndex(index);
-      router.push({ name: "Recording" });
+      toRecoding();
     };
     const changeNarration = (index: number) => {
       cm.selectNarrationIndex(index);
-      router.push({ name: "Narration" });
+      toNarration();
     };
     const changeVoiceTemplate = (index: number) => {
       cm.selectNarrationIndex(index);
-      router.push({ name: "VoiceTemplate" });
+      toVoiceTemplate();
     };
     const changeVoiceFree = (index: number) => {
       cm.selectNarrationIndex(index);
-      router.push({ name: "VoiceFree" });
+      toVoiceFree();
     };
     const toHome = () => {
       cm.clearAll();
       router.push({ name: "Home" });
+    };
+    const toRecoding = () => {
+      router.push({ name: "Recording" });
+    };
+    const toNarration = () => {
+      router.push({ name: "Narration" });
+    };
+    const toVoiceTemplate = () => {
+      router.push({ name: "VoiceTemplate" });
+    };
+    const toVoiceFree = () => {
+      router.push({ name: "VoiceFree" });
     };
     const openModalUploading = () => {
       state.isModalUploading = true;
@@ -831,7 +823,7 @@ export default defineComponent({
       clearBgm,
       create,
       update,
-      play,
+      playGenerateCm,
       stop,
       openPlayModal,
       closePlayModal,

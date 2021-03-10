@@ -11,14 +11,12 @@
           <template #sub-menu>
             <SubMenu>
               <SubMenuItem
-                v-for="freeTemplateIndustry in freeTemplateIndustries"
-                :key="freeTemplateIndustry.cd"
-                :isSelected="
-                  freeTemplateIndustry.cd == activeFreeTemplateIndustryCd
-                "
-                @click="clickFreeTemplateIndustry(freeTemplateIndustry.cd)"
+                v-for="industry in industries"
+                :key="industry.cd"
+                :isSelected="industry.cd == activeIndustryCd"
+                @click="clickIndustry(industry.cd)"
               >
-                {{ freeTemplateIndustry.name }}
+                {{ industry.name }}
               </SubMenuItem>
             </SubMenu>
           </template>
@@ -29,10 +27,10 @@
                   v-model="sort"
                   @update:modelValue="fetchFreeTemplate"
                   :options="
-                    freeTemplateSorts.map((freeTemplateSort) => {
+                    sortList.map((v) => {
                       return {
-                        title: freeTemplateSort.name,
-                        value: freeTemplateSort.cd,
+                        title: v.name,
+                        value: v.cd,
                       };
                     })
                   "
@@ -124,7 +122,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, reactive, toRefs } from "vue";
+import { defineComponent, onMounted, reactive, toRefs } from "vue";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
 import Header from "@/components/organisms/Header.vue";
@@ -164,11 +162,11 @@ export default defineComponent({
     TextDialogContents,
   },
   setup() {
+    const sortList = Common.getSort();
+    const industries = Common.getBgmIndustries();
     const state = reactive({
       sort: 1,
-      freeTemplateSorts: computed(() => Common.getSort()),
-      freeTemplateIndustries: computed(() => Common.getBgmIndustries()),
-      activeFreeTemplateIndustryCd: "01",
+      activeIndustryCd: "01",
       freeItems: [] as FreeItem[],
       manuscript: "",
       isDocumentModalAppear: false,
@@ -177,15 +175,15 @@ export default defineComponent({
       errorMessge: "",
     });
 
-    const clickFreeTemplateIndustry = (freeTemplateIndustryCd: string) => {
-      state.activeFreeTemplateIndustryCd = freeTemplateIndustryCd;
+    const clickIndustry = (industryCd: string) => {
+      state.activeIndustryCd = industryCd;
       fetchFreeTemplate();
     };
 
     const fetchFreeTemplate = async () => {
       try {
         const response = await UMesseService.resourcesService.fetchFree(
-          state.activeFreeTemplateIndustryCd,
+          state.activeIndustryCd,
           state.sort
         );
         state.freeItems = response;
@@ -229,7 +227,9 @@ export default defineComponent({
 
     return {
       ...toRefs(state),
-      clickFreeTemplateIndustry,
+      sortList,
+      industries,
+      clickIndustry,
       setManuscript,
       selectFreeTemplate,
       openDocumentModal,
