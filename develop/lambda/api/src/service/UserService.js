@@ -1,8 +1,8 @@
 "use strict";
 
-const { debuglog, errorlog } = require("umesse-lib/constants");
+const { debuglog } = require("umesse-lib/constants");
 const { getUser } = require("../../umesse/user");
-const assert = require('assert');
+const assert = require("assert");
 const { respondWithCode } = require("../utils/writer");
 const { UMesseError } = require("umesse-lib/error");
 
@@ -20,9 +20,10 @@ exports.getUser = function (xUnisCustomerCd) {
       debuglog(json);
       resolve(json);
     } catch (e) {
-      errorlog(e);
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
+      reject(
+        respondWithCode(e.statusCode, { code: e.code, message: e.message })
+      );
     }
   });
 };
