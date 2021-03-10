@@ -192,7 +192,7 @@
                 "
                 :isEmpty="true"
                 size="flexible"
-                @click.stop="toggleNarrationDropdown(narrations.length)"
+                @add="toggleNarrationDropdown(narrations.length)"
               >
                 <template #dropdownmenu>
                   <transition>

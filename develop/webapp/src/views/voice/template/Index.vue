@@ -94,7 +94,7 @@ import * as Common from "@/utils/Common";
 import UMesseService from "@/services/UMesseService";
 import router from "@/router";
 import UMesseCache from "@/repository/UMesseCache";
-import ModalError from "@/components/molecules/ModalError.vue";
+import ModalError from "@/components/organisms/ModalError.vue";
 
 export default defineComponent({
   components: {
