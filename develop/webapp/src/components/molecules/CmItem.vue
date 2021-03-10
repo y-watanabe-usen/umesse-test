@@ -7,6 +7,7 @@
       <template v-if="isEmpty">
         <button type="button" class="btn-add" @click="$emit('add')">
           <img src="@/assets/icon_plus.svg" />
+          <slot name="dropdownmenu" />
         </button>
         <p class="btn-add-title">素材追加</p>
       </template>
@@ -154,6 +155,9 @@ export default {
       font-size: 14px;
       text-align: center;
     }
+    .btn-add {
+      position: relative;
+    }
   }
   .footer {
     @include flex_between;
@@ -180,7 +184,8 @@ export default {
       }
     }
     .operations {
-      ::v-deep button, img {
+      ::v-deep button,
+      img {
         position: relative;
         width: 30px;
         height: 30px;
