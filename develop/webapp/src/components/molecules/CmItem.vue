@@ -5,7 +5,7 @@
     </div>
     <div class="body">
       <template v-if="isEmpty">
-        <button type="button" class="btn-add" @add="$emit('add')">
+        <button type="button" class="btn-add" @click="$emit('add')">
           <img src="@/assets/icon_plus.svg" />
           <slot name="dropdownmenu" />
         </button>
