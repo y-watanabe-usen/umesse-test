@@ -192,12 +192,12 @@
                 "
                 :isEmpty="true"
                 size="flexible"
-                @add="toggleNarrationDropdown(index)"
+                @click.stop="toggleNarrationDropdown(narrations.length)"
               >
                 <template #dropdownmenu>
                   <transition>
                     <DropdownMenu
-                      v-if="isNarrationDropdownAppear[index]"
+                      v-if="isNarrationDropdownAppear[narrations.length]"
                       :width="320"
                       :targetWidth="100"
                       :targetHeight="100"
@@ -206,25 +206,25 @@
                         {
                           title: '自分で録音して音声と入れ替える',
                           action: () => {
-                            changeRecording(index);
+                            addRecording();
                           },
                         },
                         {
                           title: '他のナレーションと入れ替える',
                           action: () => {
-                            changeNarration(index);
+                            addNarration();
                           },
                         },
                         {
                           title: '合成音声(テンプレートから)入れ替える',
                           action: () => {
-                            changeVoiceTemplate(index);
+                            addVoiceTemplate();
                           },
                         },
                         {
                           title: '合成音声(フリー入力から)入れ替える',
                           action: () => {
-                            changeVoiceFree(index);
+                            addVoiceFree();
                           },
                         },
                       ]"
