@@ -15,8 +15,8 @@
                   v-model="sort"
                   @update:modelValue="fetchChime"
                   :options="
-                    chimeSorts.map((chimeSort) => {
-                      return { title: chimeSort.name, value: chimeSort.cd };
+                    sortList.map((v) => {
+                      return { title: v.name, value: v.cd };
                     })
                   "
                 />
@@ -184,11 +184,12 @@ export default defineComponent({
     const audioStore = AudioStore();
     const audioPlayer = AudioPlayer();
     const { cm } = useGlobalStore();
+    const sortList = Common.getSort();
+    const isOpenChime = route.params.div == "open";
+    const title = isOpenChime ? "Openチャイム" : "Endチャイム";
 
     const state = reactive({
-      title: route.params.div == "open" ? "Openチャイム" : "Endチャイム",
       sort: 1,
-      chimeSorts: computed(() => Common.getSort()),
       chimes: [] as ChimeItem[],
       selectedChime: null as ChimeItem | null,
       isPlaying: computed(() => audioPlayer.isPlaying()),
@@ -204,7 +205,7 @@ export default defineComponent({
     });
 
     const setChime = (chime: ChimeItem) => {
-      if (route.params.div == "open") {
+      if (isOpenChime) {
         cm.setOpenChime(chime);
       } else {
         cm.setEndChime(chime);
@@ -281,6 +282,8 @@ export default defineComponent({
 
     return {
       ...toRefs(state),
+      sortList,
+      title,
       setChime,
       selectChime,
       play,

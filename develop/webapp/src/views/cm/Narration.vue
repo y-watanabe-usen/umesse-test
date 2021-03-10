@@ -11,21 +11,21 @@
           <template #sub-menu>
             <SubMenu>
               <SubMenuItem
-                v-for="narrationIndustry in narrationIndustries"
-                :key="narrationIndustry.cd"
-                :isSelected="narrationIndustry.cd == activeNarrationIndustryCd"
-                @click="clickNarrationIndustry(narrationIndustry.cd)"
+                v-for="industry in industries"
+                :key="industry.cd"
+                :isSelected="industry.cd == activeIndustryCd"
+                @click="clickIndustry(industry.cd)"
               >
-                {{ narrationIndustry.name }}
+                {{ industry.name }}
               </SubMenuItem>
             </SubMenu>
           </template>
-          <template v-if="!activeNarrationSceneCd">
+          <template v-if="!activeSceneCd">
             <List>
               <ListItem
                 v-for="scene in scenes"
                 :key="scene.cd"
-                @click="clickNarrationScene(scene.cd)"
+                @click="clickScene(scene.cd)"
               >
                 <template #title>
                   <h2>{{ scene.name }}</h2>
@@ -41,7 +41,7 @@
                     v-model="sort"
                     @update:modelValue="fetchNarration"
                     :options="
-                      narrationSorts.map((narrationSort) => {
+                      sortList.map((narrationSort) => {
                         return {
                           title: narrationSort.name,
                           value: narrationSort.cd,
@@ -225,11 +225,12 @@ export default defineComponent({
     const audioPlayer = AudioPlayer();
     const { auth, cm } = useGlobalStore();
     const authToken = <string>auth.getToken();
+    const sortList = Common.getSort();
+    const industries = Common.getNarrationIndustries();
     const state = reactive({
       sort: 1,
-      narrationSorts: computed(() => Common.getSort()),
-      activeNarrationIndustryCd: "01",
-      activeNarrationSceneCd: null as string | null,
+      activeIndustryCd: "01",
+      activeSceneCd: null as string | null,
       narrations: [] as NarrationItem[],
       scenes: [] as Scene[],
       selectedNarration: null as NarrationItem | null,
@@ -237,7 +238,6 @@ export default defineComponent({
       isDownloading: computed(() => audioStore.isDownloading),
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       duration: computed(() => audioPlayer.getDuration()),
-      narrationIndustries: Common.getNarrationIndustries(),
       isDocumentModalAppear: false,
       isPlayModalAppear: false,
       isError: false,
@@ -254,29 +254,29 @@ export default defineComponent({
       state.selectedNarration = narration;
     };
 
-    const clickNarrationIndustry = (narrationIndustryCd: string) => {
-      state.activeNarrationIndustryCd = narrationIndustryCd;
-      state.activeNarrationSceneCd = null;
+    const clickIndustry = (industryCd: string) => {
+      state.activeIndustryCd = industryCd;
+      state.activeSceneCd = null;
       fetchScene();
     };
 
-    const clickNarrationScene = (narrationSceneCd: string) => {
-      state.activeNarrationSceneCd = narrationSceneCd;
+    const clickScene = (sceneCd: string) => {
+      state.activeSceneCd = sceneCd;
       fetchNarration();
     };
 
     const fetchScene = () => {
-      state.scenes = Common.getIndustryScenes(state.activeNarrationIndustryCd);
+      state.scenes = Common.getIndustryScenes(state.activeIndustryCd);
       state.narrations = [];
     };
 
     const fetchNarration = async () => {
-      if (!state.activeNarrationSceneCd) return;
+      if (!state.activeSceneCd) return;
       try {
         const response = await UMesseService.resourcesService.fetchNarration(
           authToken,
-          state.activeNarrationIndustryCd,
-          state.activeNarrationSceneCd,
+          state.activeIndustryCd,
+          state.activeSceneCd,
           state.sort
         );
         state.scenes = [];
@@ -337,12 +337,14 @@ export default defineComponent({
 
     return {
       ...toRefs(state),
+      sortList,
+      industries,
       play,
       stop,
       setNarration,
       selectNarration,
-      clickNarrationIndustry,
-      clickNarrationScene,
+      clickIndustry,
+      clickScene,
       convertDatestringToDateJp,
       convertNumberToTime,
       openDocumentModal,

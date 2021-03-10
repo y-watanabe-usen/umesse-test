@@ -11,12 +11,12 @@
           <template #sub-menu>
             <SubMenu>
               <SubMenuItem
-                v-for="templateIndustry in templateIndustries"
-                :key="templateIndustry.cd"
-                :isSelected="templateIndustry.cd == activeTemplateIndustryCd"
-                @click="clickTemplateIndustry(templateIndustry.cd)"
+                v-for="industry in industries"
+                :key="industry.cd"
+                :isSelected="industry.cd == activeIndustryCd"
+                @click="clickIndustry(industry.cd)"
               >
-                {{ templateIndustry.name }}
+                {{ industry.name }}
               </SubMenuItem>
             </SubMenu>
           </template>
@@ -27,10 +27,10 @@
                   v-model="sort"
                   @update:modelValue="fetchTemplate"
                   :options="
-                    templateSorts.map((templateSort) => {
+                    sortList.map((v) => {
                       return {
-                        title: templateSort.name,
-                        value: templateSort.cd,
+                        title: v.name,
+                        value: v.cd,
                       };
                     })
                   "
@@ -87,7 +87,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, reactive, toRefs } from "vue";
+import { defineComponent, onMounted, reactive, toRefs } from "vue";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
 import Header from "@/components/organisms/Header.vue";
@@ -124,26 +124,26 @@ export default defineComponent({
     ModalFooter,
   },
   setup() {
+    const sortList = Common.getSort();
+    const industries = Common.getBgmIndustries();
     const state = reactive({
       sort: 1,
-      templateSorts: computed(() => Common.getSort()),
-      templateIndustries: computed(() => Common.getBgmIndustries()),
-      activeTemplateIndustryCd: "01",
+      activeIndustryCd: "01",
       templates: [] as TemplateItem[],
       isError: false,
       errorCode: "",
       errorMessge: "",
     });
 
-    const clickTemplateIndustry = (templateIndustryCd: string) => {
-      state.activeTemplateIndustryCd = templateIndustryCd;
+    const clickIndustry = (industryCd: string) => {
+      state.activeIndustryCd = industryCd;
       fetchTemplate();
     };
 
     const fetchTemplate = async () => {
       try {
         const response = await UMesseService.resourcesService.fetchTemplate(
-          state.activeTemplateIndustryCd,
+          state.activeIndustryCd,
           state.sort
         );
         state.templates = response;
@@ -169,7 +169,9 @@ export default defineComponent({
 
     return {
       ...toRefs(state),
-      clickTemplateIndustry,
+      sortList,
+      industries,
+      clickIndustry,
       toVoiceTemplateDetail,
       closeErrorModal,
       fetchTemplate,

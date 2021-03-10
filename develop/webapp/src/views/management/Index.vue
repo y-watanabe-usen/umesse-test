@@ -309,9 +309,9 @@ export default defineComponent({
     const disabledEditContentsStatus = ["11", "12"];
     const disabledDeleteStatus = ["00", "11"];
     const authToken = <string>auth.getToken();
+    const scenes = Common.getManagementScenes();
     const state = reactive({
       activeSceneCd: "001",
-      scenes: computed(() => Common.getManagementScenes()),
       cms: [] as CmItem[],
       sort: 4,
       cmSorts: computed(() => Common.getSort()),
@@ -434,9 +434,6 @@ export default defineComponent({
         closeModalUploading();
         closeSaveModal();
         openSavedModal();
-        // setTimeout(() => {
-        //   openSavedModal();
-        // }, 500);
       } catch (e) {
         console.log(e.message);
       } finally {
@@ -451,9 +448,6 @@ export default defineComponent({
         closeModalUploading();
         closeRemoveModal();
         openRemovedModal();
-        // setTimeout(() => {
-        //   openRemovedModal();
-        // }, 500);
       } catch (e) {
         console.log(e.message);
       } finally {
@@ -488,6 +482,7 @@ export default defineComponent({
     };
     return {
       ...toRefs(state),
+      scenes,
       play,
       stop,
       remove,
