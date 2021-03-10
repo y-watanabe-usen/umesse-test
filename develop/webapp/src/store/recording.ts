@@ -1,11 +1,10 @@
-import {
-  RecordingFile,
-} from "@/services/uploadRecordingService";
+import { RecordingFile } from "@/services/uploadRecordingService";
 import { useGlobalStore } from "@/store";
 import { inject, InjectionKey, provide, reactive, toRefs } from "vue";
 import { RecordingItem } from "umesseapi/models/recording-item";
 import UMesseApi from "@/repository/UMesseApi";
 import UMesseService from "@/services/UMesseService";
+import { UMesseErrorFromApiFactory } from "@/models/UMesseError";
 
 // recording.
 export default function recordingStore() {
@@ -22,8 +21,10 @@ export default function recordingStore() {
       const response = await UMesseApi.recordingApi.listUserRecording(token());
       state.recordingItems = response.data;
       console.log("response.data", response.data);
-    } catch (err) {
-      state.error = err.message;
+    } catch (e) {
+      state.error = e.message;
+      console.log("error", e);
+      throw UMesseErrorFromApiFactory(e);
     }
   };
 
@@ -47,9 +48,17 @@ export default function recordingStore() {
   };
 
   const uploadRecordingData = async (recordingFile: RecordingFile) => {
-    const response = await UMesseService.uploadRecordingService.upload(token(), recordingFile);
-    fetchRecordingData();
-    return response;
+    try {
+      const response = await UMesseService.uploadRecordingService.upload(
+        token(),
+        recordingFile
+      );
+      fetchRecordingData();
+      return response;
+    } catch (e) {
+      console.log("error", e);
+      throw e;
+    }
   };
 
   return {

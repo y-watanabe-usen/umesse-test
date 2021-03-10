@@ -137,6 +137,15 @@
       <ModalUploading v-if="isModalUploading" title="音源の合成中">
       </ModalUploading>
     </transition>
+    <transition>
+      <ModalError
+        v-if="isError"
+        @close="closeErrorModal"
+        title="エラー"
+        :errorCode="errorCode"
+        :errorMessage="errorMessage"
+      ></ModalError>
+    </transition>
   </div>
 </template>
 
@@ -157,12 +166,14 @@ import Button from "@/components/atoms/Button.vue";
 import ModalDialog from "@/components/organisms/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
+import ModalError from "@/components/molecules/ModalError.vue";
 import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
 import { useGlobalStore } from "@/store";
 import router from "@/router";
 import ModalUploading from "@/components/organisms/ModalUploading.vue";
+
 export default defineComponent({
   components: {
     BasicLayout,
@@ -172,6 +183,7 @@ export default defineComponent({
     ModalDialog,
     ModalHeader,
     ModalFooter,
+    ModalError,
     FormGroup,
     TextBox,
     TextArea,
@@ -201,6 +213,9 @@ export default defineComponent({
       ),
       isModalAppear: false,
       isModalUploading: false,
+      isError: false,
+      errorCode: "",
+      errorMessage: "",
     });
     // toggle voice recorder.
     const toggleVoiceRecorder = async () => {
@@ -229,6 +244,9 @@ export default defineComponent({
         closeModal();
       } catch (e) {
         console.log(e.message);
+        state.errorCode = e.errorCode;
+        state.errorMessage = e.message;
+        state.isError = true;
       } finally {
         closeModalUploading();
       }
@@ -245,6 +263,9 @@ export default defineComponent({
     const closeModalUploading = () => {
       state.isModalUploading = false;
     };
+    const closeErrorModal = () => {
+      state.isError = false;
+    };
     return {
       ...toRefs(state),
       toggleVoiceRecorder,
@@ -254,6 +275,7 @@ export default defineComponent({
       UPLOAD_RECORDING_STATE,
       openModal,
       closeModal,
+      closeErrorModal,
     };
   },
 });
