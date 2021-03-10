@@ -173,7 +173,6 @@ import TextArea from "@/components/atoms/TextArea.vue";
 import { useGlobalStore } from "@/store";
 import router from "@/router";
 import ModalUploading from "@/components/organisms/ModalUploading.vue";
-import { UMesseError } from "@/models/UMesseError";
 
 export default defineComponent({
   components: {
