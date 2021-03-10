@@ -137,20 +137,15 @@
       <ModalUploading v-if="isModalUploading" title="音源の合成中">
       </ModalUploading>
     </transition>
-    <ModalDialog v-if="isError" @close="closeErrorModal">
-      <template #header>
-        <ModalHeader title="エラー" @close="closeErrorModal" />
-      </template>
-      <template #contents
-        >{{ errorCode }} <br />
-        {{ errorMessge }}
-      </template>
-      <template #footer>
-        <ModalFooter :noBorder="true">
-          <Button type="rectangle" @click="closeErrorModal">閉じる</Button>
-        </ModalFooter>
-      </template>
-    </ModalDialog>
+    <transition>
+      <ModalError
+        v-if="isError"
+        @close="closeErrorModal"
+        title="エラー"
+        :errorCode="errorCode"
+        :errorMessage="errorMessage"
+      ></ModalError>
+    </transition>
   </div>
 </template>
 
@@ -171,6 +166,7 @@ import Button from "@/components/atoms/Button.vue";
 import ModalDialog from "@/components/organisms/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
+import ModalError from "@/components/molecules/ModalError.vue";
 import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
@@ -188,6 +184,7 @@ export default defineComponent({
     ModalDialog,
     ModalHeader,
     ModalFooter,
+    ModalError,
     FormGroup,
     TextBox,
     TextArea,
@@ -219,7 +216,7 @@ export default defineComponent({
       isModalUploading: false,
       isError: false,
       errorCode: "",
-      errorMessge: "",
+      errorMessage: "",
     });
     // toggle voice recorder.
     const toggleVoiceRecorder = async () => {
@@ -249,7 +246,7 @@ export default defineComponent({
       } catch (e) {
         console.log(e.message);
         state.errorCode = e.errorCode;
-        state.errorMessge = e.message;
+        state.errorMessage = e.message;
         state.isError = true;
       } finally {
         closeModalUploading();
