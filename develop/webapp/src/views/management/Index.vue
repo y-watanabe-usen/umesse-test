@@ -239,6 +239,17 @@
       <ModalUploading v-if="isModalUploading" :title="titleModalUploading">
       </ModalUploading>
     </transition>
+    <transition>
+    <transition>
+      <ModalError
+        v-if="isError"
+        @close="closeErrorModal"
+        title="エラー"
+        :errorCode="errorCode"
+        :errorMessage="errorMessage"
+      ></ModalError>
+    </transition>
+    </transition>
   </div>
 </template>
 
@@ -260,6 +271,7 @@ import ListItem from "@/components/molecules/ListItem.vue";
 import ModalDialog from "@/components/organisms/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
+import ModalError from "@/components/organisms/ModalError.vue";
 import PlayDialogContents from "@/components/molecules/PlayDialogContents.vue";
 import MessageDialogContents from "@/components/molecules/MessageDialogContents.vue";
 import FormGroup from "@/components/molecules/FormGroup.vue";
@@ -292,6 +304,7 @@ export default defineComponent({
     ModalDialog,
     ModalHeader,
     ModalFooter,
+    ModalError,
     PlayDialogContents,
     MessageDialogContents,
     FormGroup,
@@ -331,18 +344,27 @@ export default defineComponent({
       isModalUploading: false,
       dropdownCmId: "",
       titleModalUploading: "",
+      isError: false,
+      errorCode: "",
+      errorMessage: "",
     });
     const clickScene = (sceneCd: string) => {
       state.activeSceneCd = sceneCd;
       fetchCm();
     };
     const fetchCm = async () => {
-      const response = await UMesseService.uploadCmService.fetchCm(
-        authToken,
-        state.activeSceneCd,
-        state.sort
-      );
-      state.cms = response;
+      try {
+        const response = await UMesseService.uploadCmService.fetchCm(
+          authToken,
+          state.activeSceneCd,
+          state.sort
+        );
+        state.cms = response;
+      } catch (e) {
+        state.errorCode = e.errorCode;
+        state.errorMessage = e.message;
+        state.isError = true;
+      }
     };
     const selectCm = (cm: CmItem) => {
       state.selectedCm = cm;
@@ -359,19 +381,32 @@ export default defineComponent({
       if (state.isPlaying) audioPlayer.stop();
     };
     const save = async (cm: CmItem) => {
-      await UMesseService.uploadCmService.update(
-        authToken,
-        cm.id,
-        state.title,
-        state.description,
-        state.scene,
-        cm.productionType
-      );
-      fetchCm();
+      try {
+        await UMesseService.uploadCmService.update(
+          authToken,
+          cm.id,
+          state.title,
+          state.description,
+          state.scene,
+          cm.productionType
+        );
+        fetchCm();
+      } catch (e) {
+        console.log(e);
+        throw e;
+      }
     };
     const remove = async (cmId: string) => {
-      await UMesseService.uploadCmService.remove(authToken, cmId);
-      fetchCm();
+      try {
+        await UMesseService.uploadCmService.remove(
+          authToken,
+          cmId
+        );
+        fetchCm();
+      } catch (e) {
+        console.log(e);
+        throw e;
+      }
     };
     const openPlayModal = () => {
       state.isPlayModalAppear = true;
@@ -436,6 +471,9 @@ export default defineComponent({
         openSavedModal();
       } catch (e) {
         console.log(e.message);
+        state.errorCode = e.errorCode;
+        state.errorMessage = e.message;
+        state.isError = true;
       } finally {
         closeModalUploading();
       }
@@ -449,7 +487,11 @@ export default defineComponent({
         closeRemoveModal();
         openRemovedModal();
       } catch (e) {
+        closeRemoveModal();
         console.log(e.message);
+        state.errorCode = e.errorCode;
+        state.errorMessage = e.message;
+        state.isError = true;
       } finally {
         closeModalUploading();
       }
@@ -479,6 +521,9 @@ export default defineComponent({
         closeAllDropdownMenu();
         state.dropdownCmId = cmId;
       }
+    };
+    const closeErrorModal = () => {
+      state.isError = false;
     };
     return {
       ...toRefs(state),
@@ -513,6 +558,7 @@ export default defineComponent({
       disabledDeleteStatus,
       closeAllDropdownMenu,
       toggleDropdown,
+      closeErrorModal,
     };
   },
 });

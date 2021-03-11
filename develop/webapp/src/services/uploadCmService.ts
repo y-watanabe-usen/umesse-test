@@ -1,10 +1,19 @@
 import { reactive } from "vue";
-import { Bgm, Convert, CreateUserCmRequestItem, EndChime, Narration, StartChime } from "@/models/CreateUserCmRequestItem";
+import {
+  Bgm,
+  Convert,
+  CreateUserCmRequestItem,
+  EndChime,
+  Narration,
+  StartChime,
+} from "@/models/CreateUserCmRequestItem";
 import { CreateUserCmResponseItem } from "@/models/CreateUserCmResponseItem";
 import { UpdateUserCmRequestItem } from "@/models/UpdateUserCmRequestItem";
 import Constants from "@/utils/Constants";
 import * as UMesseApi from "umesseapi";
 import { Recording, Tts } from "@/models/DisplayCmItem";
+import { CmItem } from "umesseapi/models/cm-item";  
+import { UMesseErrorFromApiFactory } from "@/models/UMesseError";
 
 export enum UPLOAD_CM_STATE {
   NONE,
@@ -22,18 +31,31 @@ export function useUploadCmService(api: UMesseApi.CmApi) {
 
   const getStatus = () => state.status;
 
-  const fetchCm = async (authToken: string, sceneCd: string, sort?: number) => {
-    const tmp = await api.listUserCm(
-      authToken,
-      sort
-    );
-    const response = tmp.data.filter((v) => {
-      if (!v.scene) return false;
-      return v.scene.sceneCd == sceneCd;
+  const fetchCm = async (
+    authToken: string,
+    sceneCd: string,
+    sort?: number
+  ): Promise<CmItem[]> => {
+    return new Promise(function(resolve, reject) {
+      api
+        .listUserCm(authToken, sort)
+        .then((tmp) => {
+          const response = tmp.data.filter((v) => {
+            if (!v.scene) return false;
+            return v.scene.sceneCd == sceneCd;
+          });
+          console.log("resolve");
+          console.log("listUserCm", response);
+          resolve(response);
+        })
+        .catch((e) => {
+          console.log("reject", e);
+          reject(UMesseErrorFromApiFactory(e));
+        });
     });
-    console.log(response);
-    return response;
   };
+
+  // 2021.03.05時点で未使用
   const create = async (
     authToken: string,
     narrations: (Narration | Recording | Tts)[],
@@ -41,7 +63,7 @@ export function useUploadCmService(api: UMesseApi.CmApi) {
     endChimeContentsId: string | null,
     bgmContentsId: string | null
   ): Promise<CreateUserCmResponseItem> => {
-    return new Promise(function (resolve, reject) {
+    return new Promise(function(resolve, reject) {
       if (state.status === UPLOAD_CM_STATE.CREATING) {
         return reject(new Error(`state is creating`));
       }
@@ -57,12 +79,15 @@ export function useUploadCmService(api: UMesseApi.CmApi) {
       api
         .createUserCm(authToken, requestModel)
         .then((value) => {
+          console.log("resolve");
+          console.log("createUserCm", value.data);
           state.status = UPLOAD_CM_STATE.CREATED;
           resolve(<CreateUserCmResponseItem>value.data);
         })
         .catch((e) => {
-          console.log(e);
-          reject((state.status = UPLOAD_CM_STATE.ERROR));
+          console.log("reject", e);
+          (state.status = UPLOAD_CM_STATE.ERROR);
+          reject(UMesseErrorFromApiFactory(e));
         });
     });
   };
@@ -75,39 +100,48 @@ export function useUploadCmService(api: UMesseApi.CmApi) {
     sceneCd: string,
     uploadSystem: string
   ) => {
-    return new Promise(function (resolve, reject) {
+    return new Promise(function(resolve, reject) {
       // if (state.status !== UPLOAD_CM_STATE.CREATED) {
       //   return reject(new Error(`state is not created`));
       // }
       // TODO: check arguments here.
       state.status = UPLOAD_CM_STATE.UPDATING;
 
-      const requestModel = getUpdateUserCmRequestModel(title, description, sceneCd, uploadSystem);
+      const requestModel = getUpdateUserCmRequestModel(
+        title,
+        description,
+        sceneCd,
+        uploadSystem
+      );
       api
         .updateUserCm(authToken, id, requestModel)
         .then((value) => {
-          console.log(value.data);
+          console.log("resolve");
+          console.log("updateUserCm", value.data);
           resolve(state.status = UPLOAD_CM_STATE.UPDATED);
         })
         .catch((e) => {
-          console.log(e);
-          reject((state.status = UPLOAD_CM_STATE.ERROR));
+          console.log("reject", e);
+          (state.status = UPLOAD_CM_STATE.ERROR);
+          reject(UMesseErrorFromApiFactory(e));
         });
     });
   };
 
   // deleteは予約語なのでremove
   const remove = async (authToken: string, id: string) => {
-    return new Promise(function (resolve, reject) {
+    return new Promise(function(resolve, reject) {
       api
         .deleteUserCm(id, authToken)
         .then((value) => {
-          console.log(value.data);
+          console.log("resolve");
+          console.log("deleteUserCm", value.data);
           resolve(state.status = UPLOAD_CM_STATE.NONE);
         })
-        .catch((error) => {
-          console.log(error);
-          reject((state.status = UPLOAD_CM_STATE.ERROR));
+        .catch((e) => {
+          console.log("reject", e);
+          (state.status = UPLOAD_CM_STATE.ERROR);
+          reject(UMesseErrorFromApiFactory(e));
         });
     });
   };
@@ -119,10 +153,18 @@ export function useUploadCmService(api: UMesseApi.CmApi) {
     bgmContentsId: string | null
   ) => {
     const startChime: StartChime | undefined = startChimeContentsId
-      ? { id: startChimeContentsId, category: Constants.CATEGORY.CHIME, volume: 50 }
+      ? {
+          id: startChimeContentsId,
+          category: Constants.CATEGORY.CHIME,
+          volume: 50,
+        }
       : undefined;
     const endChime: EndChime | undefined = endChimeContentsId
-      ? { id: endChimeContentsId, category: Constants.CATEGORY.CHIME, volume: 50 }
+      ? {
+          id: endChimeContentsId,
+          category: Constants.CATEGORY.CHIME,
+          volume: 50,
+        }
       : undefined;
     const bgm: Bgm | undefined = bgmContentsId
       ? { id: bgmContentsId, category: Constants.CATEGORY.BGM, volume: 15 }
@@ -162,6 +204,10 @@ export function useUploadCmService(api: UMesseApi.CmApi) {
   };
 
   return {
-    fetchCm, create, update, remove, getStatus,
+    fetchCm,
+    create,
+    update,
+    remove,
+    getStatus,
   };
 }
