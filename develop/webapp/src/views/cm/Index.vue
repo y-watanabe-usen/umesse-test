@@ -512,6 +512,7 @@ import { MAX_NARRATION_COUNT } from "@/store/cm";
 import router from "@/router";
 import UMesseService from "@/services/UMesseService";
 import ModalUploading from "@/components/organisms/ModalUploading.vue";
+import { UMesseError } from "../../models/UMesseError";
 
 export default defineComponent({
   components: {
@@ -661,9 +662,7 @@ export default defineComponent({
         await create();
       } catch (e) {
         closePlayModal();
-        state.errorCode = e.errorCode;
-        state.errorMessage = e.message;
-        state.isError = true;
+        setError(e);
       }
     };
     const stopAndClosePlayModal = () => {
@@ -677,9 +676,7 @@ export default defineComponent({
         closeSaveModal();
         openSavedModal();
       } catch (e) {
-        state.errorCode = e.errorCode;
-        state.errorMessage = e.message;
-        state.isError = true;
+        setError(e);
       } finally {
         closeModalUploading();
       }
@@ -831,6 +828,11 @@ export default defineComponent({
     };
     const closeErrorModal = () => {
       state.isError = false;
+    };
+    const setError = (e: UMesseError) => {
+      state.errorCode = e.errorCode;
+      state.errorMessage = e.message;
+      state.isError = true;
     };
     return {
       ...toRefs(state),

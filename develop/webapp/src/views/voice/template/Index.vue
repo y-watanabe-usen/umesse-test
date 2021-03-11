@@ -94,6 +94,7 @@ import UMesseService from "@/services/UMesseService";
 import router from "@/router";
 import UMesseCache from "@/repository/UMesseCache";
 import ModalError from "@/components/organisms/ModalError.vue";
+import { UMesseError } from "../../../models/UMesseError";
 
 export default defineComponent({
   components: {
@@ -134,9 +135,7 @@ export default defineComponent({
         );
         state.templates = response;
       } catch (e) {
-        state.errorCode = e.errorCode;
-        state.errorMessage = e.message;
-        state.isError = true;
+        setError(e);
       }
     };
 
@@ -153,6 +152,11 @@ export default defineComponent({
       state.isError = false;
     };
 
+    const setError = (e: UMesseError) => {
+      state.errorCode = e.errorCode;
+      state.errorMessage = e.message;
+      state.isError = true;
+    };
     return {
       ...toRefs(state),
       sortList,
