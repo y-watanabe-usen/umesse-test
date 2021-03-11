@@ -57,10 +57,7 @@
                 </p>
               </template>
               <template #operations>
-                <Button
-                  class="btn-play"
-                  @click="selectCmAndOpenPlayModal(cm)"
-                >
+                <Button class="btn-play" @click="selectCmAndOpenPlayModal(cm)">
                   <img src="@/assets/icon_sound.svg" />試聴
                 </Button>
                 <button
@@ -239,15 +236,15 @@
       </ModalUploading>
     </transition>
     <transition>
-    <transition>
-      <ModalError
-        v-if="isError"
-        @close="closeErrorModal"
-        title="エラー"
-        :errorCode="errorCode"
-        :errorMessage="errorMessage"
-      ></ModalError>
-    </transition>
+      <transition>
+        <ModalError
+          v-if="isError"
+          @close="closeErrorModal"
+          title="エラー"
+          :errorCode="errorCode"
+          :errorMessage="errorMessage"
+        ></ModalError>
+      </transition>
     </transition>
   </div>
 </template>
@@ -288,6 +285,7 @@ import SelectBox from "@/components/atoms/SelectBox.vue";
 import UMesseService from "@/services/UMesseService";
 import ModalUploading from "@/components/organisms/ModalUploading.vue";
 import DropdownMenu from "@/components/molecules/DropdownMenu.vue";
+import { UMesseError } from "../../models/UMesseError";
 export default defineComponent({
   components: {
     BasicLayout,
@@ -360,9 +358,7 @@ export default defineComponent({
         );
         state.cms = response;
       } catch (e) {
-        state.errorCode = e.errorCode;
-        state.errorMessage = e.message;
-        state.isError = true;
+        setError(e);
       }
     };
     const selectCm = (cm: CmItem) => {
@@ -380,32 +376,19 @@ export default defineComponent({
       if (state.isPlaying) audioPlayer.stop();
     };
     const save = async (cm: CmItem) => {
-      try {
-        await UMesseService.uploadCmService.update(
-          authToken,
-          cm.id,
-          state.title,
-          state.description,
-          state.scene,
-          cm.productionType
-        );
-        fetchCm();
-      } catch (e) {
-        console.log(e);
-        throw e;
-      }
+      await UMesseService.uploadCmService.update(
+        authToken,
+        cm.id,
+        state.title,
+        state.description,
+        state.scene,
+        cm.productionType
+      );
+      fetchCm();
     };
     const remove = async (cmId: string) => {
-      try {
-        await UMesseService.uploadCmService.remove(
-          authToken,
-          cmId
-        );
-        fetchCm();
-      } catch (e) {
-        console.log(e);
-        throw e;
-      }
+      await UMesseService.uploadCmService.remove(authToken, cmId);
+      fetchCm();
     };
     const openPlayModal = () => {
       state.isPlayModalAppear = true;
@@ -470,9 +453,7 @@ export default defineComponent({
         openSavedModal();
       } catch (e) {
         console.log(e.message);
-        state.errorCode = e.errorCode;
-        state.errorMessage = e.message;
-        state.isError = true;
+        setError(e);
       } finally {
         closeModalUploading();
       }
@@ -488,9 +469,7 @@ export default defineComponent({
       } catch (e) {
         closeRemoveModal();
         console.log(e.message);
-        state.errorCode = e.errorCode;
-        state.errorMessage = e.message;
-        state.isError = true;
+        setError(e);
       } finally {
         closeModalUploading();
       }
@@ -523,6 +502,11 @@ export default defineComponent({
     };
     const closeErrorModal = () => {
       state.isError = false;
+    };
+    const setError = (e: UMesseError) => {
+      state.errorCode = e.errorCode;
+      state.errorMessage = e.message;
+      state.isError = true;
     };
     return {
       ...toRefs(state),

@@ -171,6 +171,7 @@ import TextArea from "@/components/atoms/TextArea.vue";
 import { useGlobalStore } from "@/store";
 import router from "@/router";
 import ModalUploading from "@/components/organisms/ModalUploading.vue";
+import { UMesseError } from "../../models/UMesseError";
 
 export default defineComponent({
   components: {
@@ -241,10 +242,7 @@ export default defineComponent({
         closeModalUploading();
         closeModal();
       } catch (e) {
-        console.log(e.message);
-        state.errorCode = e.errorCode;
-        state.errorMessage = e.message;
-        state.isError = true;
+        setError(e);
       } finally {
         closeModalUploading();
       }
@@ -263,6 +261,11 @@ export default defineComponent({
     };
     const closeErrorModal = () => {
       state.isError = false;
+    };
+    const setError = (e: UMesseError) => {
+      state.errorCode = e.errorCode;
+      state.errorMessage = e.message;
+      state.isError = true;
     };
     return {
       ...toRefs(state),
