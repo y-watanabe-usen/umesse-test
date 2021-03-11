@@ -109,7 +109,7 @@ export default {
     }
     img {
       display: block;
-      height: 30px;
+      height: 26px;
       margin-left: 20px;
       margin-right: 30px;
       flex-shrink: 0;

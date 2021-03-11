@@ -31,14 +31,12 @@
               </template>
               <template #operations>
                 <Button
-                  type="rectangle"
                   class="btn-play"
                   @click="selectChimeAndOpenPlayModal(chime)"
                 >
-                  <img src="@/assets/icon_play.svg" />試聴
+                  <img src="@/assets/icon_sound.svg" />試聴
                 </Button>
                 <Button
-                  type="rectangle"
                   class="btn-select"
                   @click="setChime(chime)"
                 >
@@ -67,8 +65,8 @@
           />
         </template>
         <template #footer>
-          <ModalFooter :noBorder="true">
-            <Button type="rectangle" @click="stopAndClosePlayModal"
+          <ModalFooter>
+            <Button type="secondary" @click="stopAndClosePlayModal"
               >終了</Button
             >
           </ModalFooter>
@@ -106,8 +104,8 @@
           <MessageDialogContents> 保存が完了しました。 </MessageDialogContents>
         </template>
         <template #footer>
-          <ModalFooter :noBorder="true">
-            <Button type="rectangle" @click="closeSavedModal">閉じる</Button>
+          <ModalFooter>
+            <Button type="secondary" @click="closeSavedModal">閉じる</Button>
           </ModalFooter>
         </template>
       </ModalDialog>

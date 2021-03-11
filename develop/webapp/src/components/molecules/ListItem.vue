@@ -35,12 +35,22 @@ export default {
   width: 100%;
   height: 150px;
   border-bottom: 1px solid rgb(240, 240, 240);
+  &.scene {
+    height: 92px;
+    .contents {
+      .wrapper {
+        ::v-deep h2 {
+          margin-bottom: 10px;
+        }
+      }
+    }
+  }
   .contents {
     @include flex_start;
     align-items: center;
-    width: calc(100% - 428px - 68px);
+    width: calc(100% - 440px - 54px);
     padding-left: 34px;
-    padding-right: 34px;
+    padding-right: 20px;
     flex-grow: 1;
     flex-shrink: 1;
     .wrapper {
@@ -80,17 +90,18 @@ export default {
   .operations {
     @include flex_end;
     align-items: center;
-    width: 402px;
+    width: 420px;
     padding-left: 20px;
-    padding-right: 6px;
+    padding-right: 0;
     flex-grow: 0;
     flex-shrink: 0;
     ::v-deep button {
       width: 120px;
       font-size: 16px;
-      margin-right: 14px;
+      margin-right: 20px;
       padding-left: 0;
       padding-right: 0;
+      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.29);
       &.btn-document {
         img {
           width: 22px;
@@ -100,8 +111,7 @@ export default {
       }
       &.btn-play {
         img {
-          width: 30px;
-          height: 23px;
+          height: 26px;
           margin-right: 12px;
         }
       }
@@ -110,6 +120,16 @@ export default {
           width: 10px;
           height: 17px;
           margin-left: 20px;
+        }
+      }
+      &.btn-more {
+        position: relative;
+        height: 30px;
+        width: 80px;
+        box-shadow: none;
+        img {
+          width: 30px;
+          height: 30px;
         }
       }
     }

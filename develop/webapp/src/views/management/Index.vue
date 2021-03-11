@@ -58,11 +58,10 @@
               </template>
               <template #operations>
                 <Button
-                  type="rectangle"
                   class="btn-play"
                   @click="selectCmAndOpenPlayModal(cm)"
                 >
-                  <img src="@/assets/icon_play.svg" />試聴
+                  <img src="@/assets/icon_sound.svg" />試聴
                 </Button>
                 <button
                   class="btn-more"
@@ -74,9 +73,9 @@
                     <DropdownMenu
                       v-if="dropdownCmId === cm.id"
                       :width="240"
-                      :targetWidth="120"
+                      :targetWidth="80"
                       :targetHeight="30"
-                      :offset="-50"
+                      :offset="-70"
                       direction="down"
                       :params="[
                         {
@@ -133,8 +132,8 @@
           />
         </template>
         <template #footer>
-          <ModalFooter :noBorder="true">
-            <Button type="rectangle" @click="stopAndClosePlayModal"
+          <ModalFooter>
+            <Button type="secondary" @click="stopAndClosePlayModal"
               >終了</Button
             >
           </ModalFooter>
@@ -191,8 +190,8 @@
           <MessageDialogContents> 保存が完了しました。 </MessageDialogContents>
         </template>
         <template #footer>
-          <ModalFooter :noBorder="true">
-            <Button type="rectangle" @click="closeSavedModal">閉じる</Button>
+          <ModalFooter>
+            <Button type="secondary" @click="closeSavedModal">閉じる</Button>
           </ModalFooter>
         </template>
       </ModalDialog>
@@ -229,8 +228,8 @@
           <MessageDialogContents> 削除が完了しました。 </MessageDialogContents>
         </template>
         <template #footer>
-          <ModalFooter :noBorder="true">
-            <Button type="rectangle" @click="closeRemovedModal">閉じる</Button>
+          <ModalFooter>
+            <Button type="secondary" @click="closeRemovedModal">閉じる</Button>
           </ModalFooter>
         </template>
       </ModalDialog>
@@ -572,13 +571,5 @@ export default defineComponent({
 }
 .dropdown-toggle::after {
   content: none;
-}
-.btn-more {
-  position: relative;
-  height: 30px;
-  img {
-    width: 30px;
-    height: 30px;
-  }
 }
 </style>

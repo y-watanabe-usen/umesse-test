@@ -79,12 +79,6 @@
               </div>
             </div>
             <div class="rounded maniscript">
-              <div
-                class="alert alert-dark alert-maniscript mx-auto my-3"
-                role="alert"
-              >
-                原稿
-              </div>
               <div class="maniscript-body">
                 {{ text }}
               </div>

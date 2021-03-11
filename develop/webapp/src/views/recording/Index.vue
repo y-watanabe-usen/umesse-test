@@ -28,14 +28,13 @@
                     <h5>-60</h5>
                     <h5>-50</h5>
                     <h5>-40</h5>
-                    <h5>-35</h5>
                     <h5>-30</h5>
-                    <h5>-25</h5>
                     <h5>-20</h5>
                     <h5>-15</h5>
                     <h5>-10</h5>
                     <h5>-5</h5>
                     <h5>0</h5>
+                    <h5>3</h5>
                   </div>
                   <div class="scales">
                     <div class="scale"></div>
@@ -48,11 +47,10 @@
                     <div class="scale"></div>
                     <div class="scale"></div>
                     <div class="scale"></div>
-                    <div class="scale"></div>
                   </div>
                   <meter
-                    min="-100"
-                    max="0"
+                    min="-60"
+                    max="3"
                     low="-10"
                     high="-5"
                     class="volume-meter"
@@ -289,6 +287,7 @@ export default defineComponent({
   height: 100%;
   .contents {
     @include flex_center;
+    width: 1120px;
   }
   .recording {
     cursor: pointer;
@@ -310,7 +309,7 @@ export default defineComponent({
     flex-grow: 1;
     flex-shrink: 1;
     .indicator-area {
-      width: 600px;
+      width: 630px;
       h5 {
         font-size: 16px;
         font-weight: 500;
@@ -321,30 +320,38 @@ export default defineComponent({
       .volume {
         @include flex_start;
         h5 {
-          width: 50px;
+          width: 100px;
           font-size: 17px;
           margin-bottom: 10px;
           flex-grow: 0;
           flex-shrink: 0;
           position: relative;
-          left: -3px;
-          &:nth-child(n + 7) {
-            width: 74px;
+          left: -5px;
+          &:nth-child(n + 5) {
+            width: 50px;
+          }
+          &:nth-child(n + 9) {
+            width: 30px;
           }
         }
       }
       .scales {
         @include flex_start;
-        width: 600px;
+        width: 630px;
         .scale {
+          position: relative;
+          left: -1px;
           width: 2px;
           height: 8px;
           background-color: black;
-          margin-right: 48px;
+          margin-right: 98px;
           flex-grow: 0;
           flex-shrink: 0;
-          &:nth-child(n + 7) {
-            margin-right: 72px;
+          &:nth-child(n + 5) {
+            margin-right: 48px;
+          }
+          &:nth-child(n + 9) {
+            margin-right: 28px;
           }
           &:last-child {
             margin-right: 0;
@@ -352,7 +359,7 @@ export default defineComponent({
         }
       }
       meter {
-        width: 600px;
+        width: 630px;
         margin-top: 8px;
         margin-bottom: 8px;
         &::-webkit-meter-bar {

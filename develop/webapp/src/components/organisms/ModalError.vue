@@ -10,8 +10,8 @@
       </MessageDialogContents>
     </template>
     <template #footer>
-      <ModalFooter :noBorder="true">
-        <Button type="rectangle" @click="$emit('close')">閉じる</Button>
+      <ModalFooter>
+        <Button type="secondary" @click="$emit('close')">閉じる</Button>
       </ModalFooter>
     </template>
   </ModalDialog>

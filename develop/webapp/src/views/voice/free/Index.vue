@@ -31,7 +31,6 @@
                 原稿をコピーする
               </Button>
             </div>
-            <p class="document-title">原稿</p>
             <TextArea
               class="document-text"
               v-model="text"
@@ -254,8 +253,9 @@ export default defineComponent({
 .document-text {
   margin-left: 40px;
   margin-right: 40px;
+  margin-top: 24px;
   width: calc(100% - 130px);
-  height: 452px;
+  height: 454px;
 }
 .play-form-group {
   margin-bottom: 60px;

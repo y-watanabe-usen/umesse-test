@@ -24,16 +24,12 @@
         </Button>
       </template>
       <template v-else>
-        <template v-if="!isPlaying">
-          <Button class="btn-play" type="primary" @click="$emit('play')">
-            <img src="@/assets/icon_play_white.svg" />再生
-          </Button>
-        </template>
-        <template v-else>
-          <Button class="btn-stop" type="primary" @click="$emit('stop')">
-            <img src="@/assets/icon_stop_white.svg" />停止
-          </Button>
-        </template>
+        <Button v-show="!isPlaying" class="btn-play" type="secondary" @click="$emit('play')">
+          <img src="@/assets/icon_sound.svg" />再生
+        </Button>
+        <Button v-show="isPlaying" class="btn-stop" type="secondary" @click="$emit('stop')">
+          <img src="@/assets/icon_stop.svg" />停止
+        </Button>
       </template>
       <div class="meter-wrapper">
         <div class="row">
@@ -104,6 +100,7 @@ export default {
   .btn-play,
   .btn-stop {
     width: 88px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.29);
     img,
     .spinner {
       margin-right: 10px;
@@ -112,8 +109,8 @@ export default {
   .btn-play {
     img,
     .spinner {
-      width: 30px;
-      height: 23px;
+      width: 34px;
+      height: 26px;
     }
     .vld-overlay {
       width: 100%;
@@ -123,8 +120,8 @@ export default {
   }
   .btn-stop {
     img {
-      width: 30px;
-      height: 23px;
+      width: 34px;
+      height: 26px;
     }
   }
   .meter-wrapper {

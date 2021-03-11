@@ -61,7 +61,6 @@
               </template>
               <template #operations>
                 <Button
-                  type="rectangle"
                   class="btn-document"
                   @click="
                     setManuscriptAndOpenDocumentModal(freeItem.manuscript)
@@ -70,7 +69,6 @@
                   <img src="@/assets/icon_document.svg" />原稿
                 </Button>
                 <Button
-                  type="rectangle"
                   class="btn-select"
                   @click="selectFreeTemplate(freeItem.manuscript)"
                 >
@@ -94,8 +92,8 @@
           </TextDialogContents>
         </template>
         <template #footer>
-          <ModalFooter :noBorder="true">
-            <Button type="rectangle" @click="closeDocumentModal">閉じる</Button>
+          <ModalFooter>
+            <Button type="secondary" @click="closeDocumentModal">閉じる</Button>
           </ModalFooter>
         </template>
       </ModalDialog>
