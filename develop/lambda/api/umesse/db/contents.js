@@ -1,5 +1,7 @@
+"use strict";
+
 const { constants, debuglog } = require("umesse-lib/constants");
-const ERROR_CODE = require("umesse-lib/error").ERROR_CODE;
+const { ERROR_CODE, NotFoundError } = require("umesse-lib/error");
 const { dynamodbManager } = require("umesse-lib/utils/dynamodbManager");
 
 module.exports = {
@@ -10,11 +12,13 @@ module.exports = {
         ":category": category,
       },
     };
+    debuglog(JSON.stringify({ options: options }));
+
     let res = await dynamodbManager.scan(
       constants.dynamoDbTable().contents,
       options
     );
-    if (!res || !res.Items.length) throw new Error("not found");
+    if (!res || !res.Items.length) throw new NotFoundError(ERROR_CODE.E0000404);
     return res.Items;
   },
 };

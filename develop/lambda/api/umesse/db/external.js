@@ -1,5 +1,7 @@
+"use strict";
+
 const { constants, debuglog } = require("umesse-lib/constants");
-const ERROR_CODE = require("umesse-lib/error").ERROR_CODE;
+const { ERROR_CODE, NotFoundError } = require("umesse-lib/error");
 const { dynamodbManager } = require("umesse-lib/utils/dynamodbManager");
 
 module.exports = {
@@ -10,24 +12,21 @@ module.exports = {
         ":unisCustomerCd": unisCustomerCd,
       },
     };
+    debuglog(JSON.stringify({ options: options }));
+
     let res = await dynamodbManager.query(
       constants.dynamoDbTable().external,
       options
     );
-    if (!res || !res.Items.length) throw new Error(ERROR_CODE.E0000404);
-
-    let json = res.Items;
-    if (!json) throw new Error(ERROR_CODE.E0000404);
-    return json;
+    if (!res || !res.Items.length) throw new NotFoundError(ERROR_CODE.E0000404);
+    return res.Items;
   },
 
   findById: async function (unisCustomerCd, cmId) {
-    let json = await this.findAll(unisCustomerCd);
-    if (cmId) {
-      json = json.filter((item) => item.cmId === cmId)[0];
-    }
-    if (!json) throw new Error("not found");
-    return json;
+    let res = await this.findAll(unisCustomerCd);
+    res = res.filter((item) => item.cmId === cmId).pop();
+    if (!res) throw new NotFoundError(ERROR_CODE.E0000404);
+    return res;
   },
 
   add: async function (item) {
@@ -36,7 +35,7 @@ module.exports = {
       item,
       {}
     );
-    if (!res) throw new Error("put failed");
+    if (!res) throw new Error(ERROR_CODE.E0000500);
     return res;
   },
 
@@ -62,28 +61,32 @@ module.exports = {
         "contentTime," +
         "sceneCd",
     };
+    debuglog(JSON.stringify({ options: options }));
+
     let res = await dynamodbManager.scan(
       constants.dynamoDbTable().external,
       options
     );
-    if (!res || !res.Items.length) throw new Error("not found");
+    if (!res || !res.Items.length) throw new NotFoundError(ERROR_CODE.E0000404);
     return res.Items;
   },
 
   delete: async function (unisCustomerCd) {
     const key = { unisCustomerCd: unisCustomerCd };
-    res = await dynamodbManager.delete(
+    debuglog(JSON.stringify({ key: key }));
+
+    let res = await dynamodbManager.delete(
       constants.dynamoDbTable().external,
       key,
       {}
     );
-    if (!res) throw new Error("delete failed");
+    if (!res) throw new Error(ERROR_CODE.E0000500);
     return res;
   },
 
   updateErrorData: async function (unisCustomerCd, data) {
     const key = { unisCustomerCd: unisCustomerCd };
-    let options = {
+    const options = {
       UpdateExpression:
         "SET #status = :status, errorCode = :errorCode, errorMessage = :errorMessage, #timestamp = :timestamp",
       ExpressionAttributeNames: {
@@ -93,12 +96,14 @@ module.exports = {
       ExpressionAttributeValues: data,
       ReturnValues: "UPDATED_NEW",
     };
+    debuglog(JSON.stringify({ key: key, options: options }));
+
     let res = await dynamodbManager.update(
       constants.dynamoDbTable().external,
       key,
-      data
+      options
     );
-    if (!res) throw new InternalServerError("update failed");
+    if (!res) throw new Error(ERROR_CODE.E0000500);
     return res;
   },
 };

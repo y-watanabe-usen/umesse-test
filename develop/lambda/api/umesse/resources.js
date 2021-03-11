@@ -176,7 +176,7 @@ exports.getUserResource = async (unisCustomerCd, category, id) => {
 
   let json;
   try {
-    json = await db.User.findCategory(unisCustomerCd, category);
+    json = await db.User.findResource(unisCustomerCd, category);
   } catch (e) {
     errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
@@ -232,7 +232,7 @@ exports.createRecordingResource = async (unisCustomerCd, body) => {
 
   let json;
   try {
-    json = await db.User.updateData(
+    json = await db.User.addResource(
       unisCustomerCd,
       constants.resourceCategory.RECORDING,
       data
@@ -294,7 +294,7 @@ exports.createTtsResource = async (unisCustomerCd, body) => {
       };
 
       try {
-        res = await db.User.updateData(
+        res = await db.User.addResource(
           unisCustomerCd,
           constants.resourceCategory.TTS,
           item
@@ -453,7 +453,7 @@ exports.deleteUserResource = async (unisCustomerCd, category, id) => {
   // DynamoDBのデータ更新
   let res;
   try {
-    res = await db.User.deleteFromCategory(unisCustomerCd, index, category);
+    res = await db.User.deleteFromCategory(unisCustomerCd, category, index);
   } catch (e) {
     errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);

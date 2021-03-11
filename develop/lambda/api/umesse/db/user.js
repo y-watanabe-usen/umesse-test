@@ -1,3 +1,5 @@
+"use strict";
+
 const { constants, debuglog } = require("umesse-lib/constants");
 const { ERROR_CODE, NotFoundError } = require("umesse-lib/error");
 const { dynamodbManager } = require("umesse-lib/utils/dynamodbManager");
@@ -20,7 +22,9 @@ module.exports = {
         "createDate," +
         "renewalDate",
     };
-    const res = await dynamodbManager.get(
+    debuglog(JSON.stringify({ key: key, options: options }));
+
+    let res = await dynamodbManager.get(
       constants.dynamoDbTable().users,
       key,
       options
@@ -34,6 +38,7 @@ module.exports = {
     const options = {
       ProjectionExpression: "cm",
     };
+    debuglog(JSON.stringify({ key: key, options: options }));
 
     let res = await dynamodbManager.get(
       constants.dynamoDbTable().users,
@@ -44,7 +49,7 @@ module.exports = {
     return res.Item.cm;
   },
 
-  findCategory: async function (unisCustomerCd, category) {
+  findResource: async function (unisCustomerCd, category) {
     const key = { unisCustomerCd: unisCustomerCd };
     const options = {
       ProjectionExpression: category,
@@ -57,11 +62,30 @@ module.exports = {
       options
     );
     if (!res || !res.Item) throw new NotFoundError(ERROR_CODE.E0000404);
-
     return res.Item[category];
   },
 
-  updateData: async function (unisCustomerCd, category, data) {
+  addCm: async function (unisCustomerCd, data) {
+    const key = { unisCustomerCd: unisCustomerCd };
+    const options = {
+      UpdateExpression: "SET cm = list_append(cm, :cm)",
+      ExpressionAttributeValues: {
+        ":cm": [data],
+      },
+      ReturnValues: "UPDATED_NEW",
+    };
+    debuglog(JSON.stringify({ key: key, options: options }));
+
+    let res = await dynamodbManager.update(
+      constants.dynamoDbTable().users,
+      key,
+      options
+    );
+    if (!res) throw new Error(ERROR_CODE.E0000500);
+    return res.Attributes.cm.pop();
+  },
+
+  addResource: async function (unisCustomerCd, category, data) {
     const key = { unisCustomerCd: unisCustomerCd };
     const options = {
       UpdateExpression: "SET #category = list_append(#category, :data)",
@@ -81,31 +105,7 @@ module.exports = {
       options
     );
     if (!res) throw new Error(ERROR_CODE.E0000500);
-    let json = res.Attributes[category].pop();
-    return json;
-  },
-
-  addCm: async function (unisCustomerCd, data) {
-    const key = { unisCustomerCd: unisCustomerCd };
-    const options = {
-      UpdateExpression: "SET cm = list_append(cm, :cm)",
-      ExpressionAttributeValues: {
-        ":cm": [data],
-      },
-      ReturnValues: "UPDATED_NEW",
-    };
-    debuglog(JSON.stringify({ key: key, options: options }));
-
-    let res;
-    res = await dynamodbManager.update(
-      constants.dynamoDbTable().users,
-      key,
-      options
-    );
-    if (!res) throw new Error(ERROR_CODE.E0000500);
-
-    let json = res.Attributes.cm.pop();
-    return json;
+    return res.Attributes[category].pop();
   },
 
   updateCm: async function (unisCustomerCd, index, cm) {
@@ -119,17 +119,16 @@ module.exports = {
     };
     debuglog(JSON.stringify({ key: key, options: options }));
 
-    res = await dynamodbManager.update(
+    let res = await dynamodbManager.update(
       constants.dynamoDbTable().users,
       key,
       options
     );
     if (!res) throw new Error(ERROR_CODE.E0000500);
-
     return res.Attributes.cm[index];
   },
 
-  updateResource: async function (unisCustomerCd, category, resource) {
+  updateResource: async function (unisCustomerCd, category, index, resource) {
     const key = { unisCustomerCd: unisCustomerCd };
     const options = {
       UpdateExpression: `SET #category[${index}] = :resource`,
@@ -152,7 +151,7 @@ module.exports = {
     return res.Attributes[category][index];
   },
 
-  deleteFromCategory: async function (unisCustomerCd, index, category) {
+  deleteFromCategory: async function (unisCustomerCd, category, index) {
     const key = { unisCustomerCd: unisCustomerCd };
     const options = {
       UpdateExpression: `REMOVE #category[${index}]`,
@@ -169,7 +168,6 @@ module.exports = {
       options
     );
     if (!res) throw new Error(ERROR_CODE.E0000500);
-    let json = res.Attributes[category];
-    return json;
+    return res.Attributes[category];
   },
 };
