@@ -11,13 +11,13 @@
               >
                 <img
                   v-show="narrations.length === 0"
-                  src="@/assets/icon_play_white.svg"
+                  src="@/assets/icon_sound_white.svg"
                 />
                 <img
                   v-show="narrations.length !== 0"
-                  src="@/assets/icon_play.svg"
+                  src="@/assets/icon_sound.svg"
                 />
-                試聴する
+                試聴
               </Button>
               <p>約2分15秒</p>
             </div>
@@ -886,8 +886,7 @@ export default defineComponent({
     width: 110px;
     margin-left: 5px;
     img {
-      width: 30px;
-      height: 23px;
+      height: 26px;
       margin-right: 16px;
     }
   }
