@@ -622,24 +622,16 @@ export default defineComponent({
       cm.clearBgm();
     };
     const create = async () => {
-      try {
-        await cm.create(authToken);
-      } catch (e) {
-        throw e;
-      }
+      await cm.create(authToken);
     };
     const update = async () => {
-      try {
-        await cm.update(
-          authToken,
-          state.title,
-          state.description,
-          state.scene,
-          state.uploadSystem
-        );
-      } catch (e) {
-        throw e;
-      }
+      await cm.update(
+        authToken,
+        state.title,
+        state.description,
+        state.scene,
+        state.uploadSystem
+      );
     };
 
     const openPlayModal = () => {

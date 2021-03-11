@@ -19,22 +19,18 @@ export default function cmStore() {
   const status = () => service.getStatus();
 
   const create = async (authToken: string) => {
-    try {
-      const response = await service.create(
-        authToken,
-        state.displayCmItem.narrations,
-        state.displayCmItem.openChime?.id ?? null,
-        state.displayCmItem.endChime?.id ?? null,
-        state.displayCmItem.bgm?.id ?? null
-      );
-      console.log(response);
-      state.displayCmItem.id = response.id;
-      state.displayCmItem.timestamp = response.timestamp;
-      state.displayCmItem.seconds = response.seconds;
-      state.displayCmItem.url = response.url ?? "";
-    } catch (e) {
-      throw e;
-    }
+    const response = await service.create(
+      authToken,
+      state.displayCmItem.narrations,
+      state.displayCmItem.openChime?.id ?? null,
+      state.displayCmItem.endChime?.id ?? null,
+      state.displayCmItem.bgm?.id ?? null
+    );
+    console.log(response);
+    state.displayCmItem.id = response.id;
+    state.displayCmItem.timestamp = response.timestamp;
+    state.displayCmItem.seconds = response.seconds;
+    state.displayCmItem.url = response.url ?? "";
   };
 
   const update = async (
@@ -44,18 +40,14 @@ export default function cmStore() {
     sceneCd: string,
     uploadSystem: string
   ) => {
-    try {
-      await service.update(
-        authToken,
-        state.displayCmItem.id,
-        title,
-        description,
-        sceneCd,
-        uploadSystem
-      );
-    } catch (e) {
-      throw e;
-    }
+    await service.update(
+      authToken,
+      state.displayCmItem.id,
+      title,
+      description,
+      sceneCd,
+      uploadSystem
+    );
   };
 
   const clearNarration = (index: number) => {
