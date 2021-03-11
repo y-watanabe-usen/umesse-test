@@ -117,8 +117,8 @@
           </TextDialogContents>
         </template>
         <template #footer>
-          <ModalFooter :noBorder="true">
-            <Button type="rectangle" @click="closeDocumentModal">閉じる</Button>
+          <ModalFooter>
+            <Button type="secondary" @click="closeDocumentModal">閉じる</Button>
           </ModalFooter>
         </template>
       </ModalDialog>
@@ -139,8 +139,8 @@
           />
         </template>
         <template #footer>
-          <ModalFooter :noBorder="true">
-            <Button type="rectangle" @click="stopAndClosePlayModal"
+          <ModalFooter>
+            <Button type="secondary" @click="stopAndClosePlayModal"
               >終了</Button
             >
           </ModalFooter>

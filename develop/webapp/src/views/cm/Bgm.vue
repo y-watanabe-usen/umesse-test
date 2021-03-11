@@ -77,8 +77,8 @@
           />
         </template>
         <template #footer>
-          <ModalFooter :noBorder="true">
-            <Button type="rectangle" @click="stopAndClosePlayModal"
+          <ModalFooter>
+            <Button type="secondary" @click="stopAndClosePlayModal"
               >終了</Button
             >
           </ModalFooter>
@@ -116,8 +116,8 @@
           <MessageDialogContents> 保存が完了しました。 </MessageDialogContents>
         </template>
         <template #footer>
-          <ModalFooter :noBorder="true">
-            <Button type="rectangle" @click="closeSavedModal">閉じる</Button>
+          <ModalFooter>
+            <Button type="secondary" @click="closeSavedModal">閉じる</Button>
           </ModalFooter>
         </template>
       </ModalDialog>

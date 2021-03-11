@@ -92,8 +92,8 @@
           </TextDialogContents>
         </template>
         <template #footer>
-          <ModalFooter :noBorder="true">
-            <Button type="rectangle" @click="closeDocumentModal">閉じる</Button>
+          <ModalFooter>
+            <Button type="secondary" @click="closeDocumentModal">閉じる</Button>
           </ModalFooter>
         </template>
       </ModalDialog>

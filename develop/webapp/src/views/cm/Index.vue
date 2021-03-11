@@ -389,8 +389,8 @@
           />
         </template>
         <template #footer>
-          <ModalFooter :noBorder="true">
-            <Button type="rectangle" @click="stopAndClosePlayModal"
+          <ModalFooter>
+            <Button type="secondary" @click="stopAndClosePlayModal"
               >終了</Button
             >
           </ModalFooter>
@@ -458,7 +458,7 @@
           </MessageDialogContents>
         </template>
         <template #footer>
-          <ModalFooter :noBorder="true">
+          <ModalFooter>
             <Button type="secondary" @click="closeSavedModal"
               >編集の続きをする</Button
             >
