@@ -11,78 +11,52 @@
       </template>
       <template #contents>
         <ContentsBase>
-          <div class="rounded bg-white">
-            <div class="row" style="padding: 0 20px">
-              <div class="col-5">
-                <div class="row" style="height: 100px">
-                  <div class="col-2 m-auto">話者</div>
-                  <div class="col-10 m-auto">
-                    <select class="form-control w-25" v-model="speaker">
-                      <option
-                        v-for="ttsSpeaker in ttsSpeakers"
-                        :key="ttsSpeaker.cd"
-                        :value="ttsSpeaker.cd"
-                      >
-                        {{ ttsSpeaker.name }}
-                      </option>
-                    </select>
-                  </div>
-                </div>
+          <div class="row">
+            <FormGroup title="話者" class="speaker">
+              <SelectBox
+                v-model="speaker"
+                :options="
+                  ttsSpeakers.map((ttsSpeaker) => {
+                    return { title: ttsSpeaker.name, value: ttsSpeaker.cd };
+                  })
+                "
+              />
+            </FormGroup>
+            <FormGroup title="言語設定" class="lang">
+              <div
+                class="form-check form-check-inline"
+                v-for="(ttsLang, i) in ttsLangs"
+                :key="i"
+              >
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  :id="'inlineCheckbox' + `${i + 1}`"
+                  :value="ttsLang"
+                  v-model="langs"
+                />
+                <label
+                  class="form-check-label"
+                  :for="'inlineCheckbox' + `${i + 1}`"
+                  >{{ ttsLang }}</label
+                >
               </div>
-              <div class="col-7">
-                <div class="row" style="height: 100px">
-                  <div class="col-2 m-auto">言語設定</div>
-                  <div class="col-10 m-auto">
-                    <div
-                      class="form-check form-check-inline"
-                      v-for="(ttsLang, i) in ttsLangs"
-                      :key="i"
-                    >
-                      <input
-                        class="form-check-input"
-                        type="checkbox"
-                        :id="'inlineCheckbox' + `${i + 1}`"
-                        :value="ttsLang"
-                        v-model="langs"
-                      />
-                      <label
-                        class="form-check-label"
-                        :for="'inlineCheckbox' + `${i + 1}`"
-                        >{{ ttsLang }}</label
-                      >
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="row" style="padding: 0 20px">
-              <div class="col-5">
-                <div class="row" style="height: 100px">
-                  <div class="col-2 m-auto">1:店名</div>
-                  <div class="col-10 m-auto">
-                    <input
-                      class="form-control"
-                      type="text"
-                      placeholder="カタカナで入力"
-                      v-model="customerName"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div class="col-7">
-                <div class="row" style="height: 100px">
-                  <div class="col-2 m-auto">2:閉店時間</div>
-                  <div class="col-10 m-auto">
-                    <input class="form-control" type="time" v-model="endTime" />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="rounded maniscript">
-              <div class="maniscript-body">
-                {{ text }}
-              </div>
-            </div>
+            </FormGroup>
+          </div>
+          <div class="row border">
+            <FormGroup
+              title="1:店名"
+              description = "※カタカナで入力"
+              class="name"
+            >
+              <TextBox v-model="customerName" />
+            </FormGroup>
+            <FormGroup title="2:閉店時間" class="time">
+              <TimeInput v-model="endTime" />
+            </FormGroup>
+          </div>
+          <div class="maniscript">
+            {{ text }}
           </div>
         </ContentsBase>
       </template>
@@ -105,15 +79,14 @@
             />
           </FormGroup>
           <FormGroup title="">
-            <select class="form-control w-25" v-model="playLang">
-              <option
-                v-for="ttsLang in ttsLangs"
-                :key="ttsLang"
-                :value="ttsLang"
-              >
-                {{ ttsLang }}
-              </option>
-            </select>
+            <SelectBox
+              v-model="playLang"
+              :options="
+                ttsLangs.map((ttsLang) => {
+                  return { title: ttsLang, value: ttsLang };
+                })
+              "
+            />
           </FormGroup>
           <FormGroup title="タイトル" :required="true">
             <TextBox v-model="title" />
@@ -160,6 +133,8 @@ import PlayDialogContents from "@/components/molecules/PlayDialogContents.vue";
 import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
+import SelectBox from "@/components/atoms/SelectBox.vue";
+import TimeInput from "@/components/atoms/TimeInput.vue";
 import { useGlobalStore } from "@/store";
 import { TemplateItem } from "umesseapi/models";
 import Constants from "@/utils/Constants";
@@ -180,6 +155,8 @@ export default defineComponent({
     FormGroup,
     TextBox,
     TextArea,
+    SelectBox,
+    TimeInput,
     ModalUploading,
   },
   setup() {
@@ -294,32 +271,63 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import "@/scss/_variables.scss";
 @include fade_animation;
-.play-form-group {
-  margin-bottom: 60px;
-}
-.info1 {
-  border-bottom: 1px solid #ccc;
-}
-.country {
-  width: 100px;
-  border: 1px solid #ccc;
+.row {
+  @include flex_between;
+  margin-left: 40px;
+  margin-right: 40px;
+  margin-top: 36px;
+  &.border {
+    padding-top: 24px;
+    margin-top: 36px;
+    border-top: 2px solid rgb(198, 198, 198);
+  }
+  .form-group {
+    margin-left: 0;
+    margin-right: 0;
+    margin-bottom: 0;
+    ::v-deep {
+      .title {
+        width: 140px;
+      }
+    }
+    &.speaker {
+      ::v-deep {
+        .input-wrapper {
+          width: 180px;
+        }
+      }
+    }
+    &.name {
+      ::v-deep {
+        .input-wrapper {
+          width: 370px;
+        }
+      }
+    }
+    &.time {
+      ::v-deep {
+        .input-wrapper {
+          width: 140px;
+        }
+      }
+    }
+  }
 }
 .maniscript {
-  margin: 30px;
-  border: 1px solid #ccc;
-}
-.alert-maniscript {
-  text-align: center;
-  padding: 5px;
-  width: 150px;
-  border-radius: 2em;
-}
-.maniscript-body {
-  margin: 20px;
-  font-size: 20px;
+  border: 1px solid rgb(190, 190, 190);
+  border-radius: 6px;
+  margin-left: 40px;
+  margin-right: 40px;
+  margin-top: 54px;
+  padding-left: 24px;
+  padding-right: 24px;
+  padding-top: 14px;
+  padding-bottom: 14px;
+  font-size: 19px;
+  font-weight: $font_weight_bold;
   line-height: 2em;
+  height: 302px;
 }
-
 input[type="checkbox"] {
   -webkit-appearance: checkbox;
 }

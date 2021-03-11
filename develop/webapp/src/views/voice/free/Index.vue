@@ -256,6 +256,7 @@ export default defineComponent({
   margin-top: 24px;
   width: calc(100% - 130px);
   height: 454px;
+  line-height: 2em;
 }
 .play-form-group {
   margin-bottom: 60px;
