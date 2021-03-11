@@ -35,6 +35,16 @@ export default {
   width: 100%;
   height: 150px;
   border-bottom: 1px solid rgb(240, 240, 240);
+  &.scene {
+    height: 92px;
+    .contents {
+      .wrapper {
+        ::v-deep h2 {
+          margin-bottom: 10px;
+        }
+      }
+    }
+  }
   .contents {
     @include flex_start;
     align-items: center;

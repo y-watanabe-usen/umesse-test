@@ -23,6 +23,7 @@
           <template v-if="!activeSceneCd">
             <List>
               <ListItem
+                class="scene"
                 v-for="scene in scenes"
                 :key="scene.cd"
                 @click="clickScene(scene.cd)"
