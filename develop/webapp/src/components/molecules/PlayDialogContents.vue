@@ -111,6 +111,7 @@ export default {
     .spinner {
       width: 34px;
       height: 26px;
+      margin-top: 2px;
     }
     .vld-overlay {
       width: 100%;

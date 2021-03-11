@@ -24,7 +24,7 @@
             </FormGroup>
             <FormGroup title="言語設定" class="lang">
               <div
-                class="form-check form-check-inline"
+                class="lang-check"
                 v-for="(ttsLang, i) in ttsLangs"
                 :key="i"
               >
@@ -36,10 +36,9 @@
                   v-model="langs"
                 />
                 <label
-                  class="form-check-label"
+                  :class="[ttsLang]"
                   :for="'inlineCheckbox' + `${i + 1}`"
-                  >{{ ttsLang }}</label
-                >
+                />
               </div>
             </FormGroup>
           </div>
@@ -272,7 +271,7 @@ export default defineComponent({
 @import "@/scss/_variables.scss";
 @include fade_animation;
 .row {
-  @include flex_between;
+  @include flex_start;
   margin-left: 40px;
   margin-right: 40px;
   margin-top: 36px;
@@ -285,28 +284,41 @@ export default defineComponent({
     margin-left: 0;
     margin-right: 0;
     margin-bottom: 0;
-    ::v-deep {
-      .title {
-        width: 140px;
-      }
-    }
     &.speaker {
       ::v-deep {
+        .title {
+          width: 96px;
+        }
         .input-wrapper {
           width: 180px;
+          margin-right: 310px;
         }
       }
     }
     &.name {
       ::v-deep {
+        .title {
+          width: 96px;
+        }
         .input-wrapper {
           width: 370px;
+          margin-right: 120px;
         }
       }
     }
     &.time {
       ::v-deep {
+        .title {
+          width: 140px;
+        }
         .input-wrapper {
+          width: 150px;
+        }
+      }
+    }
+    &.lang {
+      ::v-deep {
+        .title {
           width: 140px;
         }
       }
@@ -328,7 +340,73 @@ export default defineComponent({
   line-height: 2em;
   height: 302px;
 }
-input[type="checkbox"] {
-  -webkit-appearance: checkbox;
+.lang-check {
+  position: relative;
+  width: 100px;
+  height: 68px;
+  border: 1px solid rgb(175, 175, 175);
+  border-radius: 6px;
+  margin-left: 26px;
+  &:first-child {
+    margin-left: 0;
+  }
+  input[type="checkbox"] {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: -6px;
+    right: -5px;
+    outline: none;
+    border: none;
+    appearance: none;
+    vertical-align: middle;
+    margin: 0;
+    background-color: white;
+    cursor: pointer;
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0px;
+      left: 0px;
+      width: 26px;
+      height: 26px;
+      border: 2px solid rgb(192, 192, 191);
+      border-radius: 3px;
+      box-sizing: content-box;
+    }
+    &:checked {
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 30px;
+        height: 30px;
+        border: none;
+        background-image: url('~@/assets/icon_checked.svg');
+        background-repeat: no-repeat;
+        background-size: 100% 100%;
+      }
+    }
+  }
+  label {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    &.ja {
+      background-image: url('~@/assets/lang_ja.svg');
+    }
+    &.en {
+      background-image: url('~@/assets/lang_en.svg');
+    }
+    &.zh {
+      background-image: url('~@/assets/lang_zh.svg');
+    }
+    &.ko {
+      background-image: url('~@/assets/lang_ko.svg');
+    }
+  }
 }
 </style>
