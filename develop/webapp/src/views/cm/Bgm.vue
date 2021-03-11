@@ -43,14 +43,12 @@
               </template>
               <template #operations>
                 <Button
-                  type="rectangle"
                   class="btn-play"
                   @click="selectBgmAndOpenPlayModal(bgm)"
                 >
-                  <img src="@/assets/icon_play.svg" />試聴
+                  <img src="@/assets/icon_sound.svg" />試聴
                 </Button>
                 <Button
-                  type="rectangle"
                   class="btn-select"
                   @click="setBgm(bgm)"
                 >

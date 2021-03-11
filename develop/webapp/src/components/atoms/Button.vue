@@ -32,7 +32,7 @@ export default {
 button {
   @include flex_center;
   height: 50px;
-  color: $color_blue;
+  color: black;
   font-size: 16px;
   font-weight: $font_weight_bold;
   line-height: 50px;

@@ -61,7 +61,6 @@
               </template>
               <template #operations>
                 <Button
-                  type="rectangle"
                   class="btn-document"
                   @click="
                     setManuscriptAndOpenDocumentModal(freeItem.manuscript)
@@ -70,7 +69,6 @@
                   <img src="@/assets/icon_document.svg" />原稿
                 </Button>
                 <Button
-                  type="rectangle"
                   class="btn-select"
                   @click="selectFreeTemplate(freeItem.manuscript)"
                 >

@@ -52,7 +52,6 @@
               </template>
               <template #operations>
                 <Button
-                  type="rectangle"
                   class="btn-select"
                   @click="toVoiceTemplateDetail(template)"
                 >
