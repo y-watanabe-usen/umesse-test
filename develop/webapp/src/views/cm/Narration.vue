@@ -189,6 +189,7 @@ import {
 } from "@/utils/FormatDate";
 import UMesseService from "@/services/UMesseService";
 import { Scene } from "@/utils/Constants";
+import { UMesseError } from "../../models/UMesseError";
 
 export default defineComponent({
   components: {
@@ -271,9 +272,7 @@ export default defineComponent({
         state.scenes = [];
         state.narrations = response;
       } catch (e) {
-        state.errorCode = e.errorCode;
-        state.errorMessage = e.message;
-        state.isError = true;
+        setError(e);
       }
     };
 
@@ -324,6 +323,11 @@ export default defineComponent({
       fetchScene();
     });
 
+    const setError = (e: UMesseError) => {
+      state.errorCode = e.errorCode;
+      state.errorMessage = e.message;
+      state.isError = true;
+    };
     return {
       ...toRefs(state),
       sortList,

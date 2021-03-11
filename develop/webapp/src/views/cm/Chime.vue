@@ -148,6 +148,7 @@ import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
 import UMesseService from "@/services/UMesseService";
+import { UMesseError } from "../../models/UMesseError";
 
 export default defineComponent({
   components: {
@@ -215,9 +216,7 @@ export default defineComponent({
         );
         state.chimes = response;
       } catch (e) {
-        state.errorCode = e.errorCode;
-        state.errorMessage = e.message;
-        state.isError = true;
+        setError(e);
       }
     };
 
@@ -269,6 +268,12 @@ export default defineComponent({
 
     const closeErrorModal = () => {
       state.isError = false;
+    };
+
+    const setError = (e: UMesseError) => {
+      state.errorCode = e.errorCode;
+      state.errorMessage = e.message;
+      state.isError = true;
     };
 
     return {
