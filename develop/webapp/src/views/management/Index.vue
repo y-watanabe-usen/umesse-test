@@ -240,20 +240,15 @@
       </ModalUploading>
     </transition>
     <transition>
-      <ModalDialog v-if="isError" @close="closeErrorModal">
-        <template #header>
-          <ModalHeader title="エラー" @close="closeErrorModal" />
-        </template>
-        <template #contents
-          >{{ errorCode }} <br />
-          {{ errorMessge }}
-        </template>
-        <template #footer>
-          <ModalFooter :noBorder="true">
-            <Button type="rectangle" @click="closeErrorModal">閉じる</Button>
-          </ModalFooter>
-        </template>
-      </ModalDialog>
+    <transition>
+      <ModalError
+        v-if="isError"
+        @close="closeErrorModal"
+        title="エラー"
+        :errorCode="errorCode"
+        :errorMessage="errorMessage"
+      ></ModalError>
+    </transition>
     </transition>
   </div>
 </template>
@@ -276,6 +271,7 @@ import ListItem from "@/components/molecules/ListItem.vue";
 import ModalDialog from "@/components/organisms/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
+import ModalError from "@/components/organisms/ModalError.vue";
 import PlayDialogContents from "@/components/molecules/PlayDialogContents.vue";
 import MessageDialogContents from "@/components/molecules/MessageDialogContents.vue";
 import FormGroup from "@/components/molecules/FormGroup.vue";
@@ -293,7 +289,6 @@ import SelectBox from "@/components/atoms/SelectBox.vue";
 import UMesseService from "@/services/UMesseService";
 import ModalUploading from "@/components/organisms/ModalUploading.vue";
 import DropdownMenu from "@/components/molecules/DropdownMenu.vue";
-import { UMesseError } from "@/models/UMesseError";
 export default defineComponent({
   components: {
     BasicLayout,
@@ -309,6 +304,7 @@ export default defineComponent({
     ModalDialog,
     ModalHeader,
     ModalFooter,
+    ModalError,
     PlayDialogContents,
     MessageDialogContents,
     FormGroup,
@@ -350,7 +346,7 @@ export default defineComponent({
       titleModalUploading: "",
       isError: false,
       errorCode: "",
-      errorMessge: "",
+      errorMessage: "",
     });
     const clickScene = (sceneCd: string) => {
       state.activeSceneCd = sceneCd;
@@ -366,7 +362,7 @@ export default defineComponent({
         state.cms = response;
       } catch (e) {
         state.errorCode = e.errorCode;
-        state.errorMessge = e.message;
+        state.errorMessage = e.message;
         state.isError = true;
       }
     };
@@ -396,6 +392,7 @@ export default defineComponent({
         );
         fetchCm();
       } catch (e) {
+        console.log(e);
         throw e;
       }
     };
@@ -407,6 +404,7 @@ export default defineComponent({
         );
         fetchCm();
       } catch (e) {
+        console.log(e);
         throw e;
       }
     };
@@ -474,7 +472,7 @@ export default defineComponent({
       } catch (e) {
         console.log(e.message);
         state.errorCode = e.errorCode;
-        state.errorMessge = e.message;
+        state.errorMessage = e.message;
         state.isError = true;
       } finally {
         closeModalUploading();
@@ -492,7 +490,7 @@ export default defineComponent({
         closeRemoveModal();
         console.log(e.message);
         state.errorCode = e.errorCode;
-        state.errorMessge = e.message;
+        state.errorMessage = e.message;
         state.isError = true;
       } finally {
         closeModalUploading();

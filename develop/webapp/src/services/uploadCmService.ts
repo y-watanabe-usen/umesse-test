@@ -12,6 +12,7 @@ import { UpdateUserCmRequestItem } from "@/models/UpdateUserCmRequestItem";
 import Constants from "@/utils/Constants";
 import * as UMesseApi from "umesseapi";
 import { Recording, Tts } from "@/models/DisplayCmItem";
+import { CmItem } from "umesseapi/models/cm-item";  
 import { UMesseErrorFromApiFactory } from "@/models/UMesseError";
 
 export enum UPLOAD_CM_STATE {
