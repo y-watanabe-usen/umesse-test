@@ -38,7 +38,7 @@ export default {
   @include flex_between;
   margin-left: 16px;
   margin-right: 16px;
-  margin-top: 40px;
+  margin-top: 20px;
   .left,
   .right {
     @include flex_center;
