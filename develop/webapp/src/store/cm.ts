@@ -19,18 +19,22 @@ export default function cmStore() {
   const status = () => service.getStatus();
 
   const create = async (authToken: string) => {
-    const response = await service.create(
-      authToken,
-      state.displayCmItem.narrations,
-      state.displayCmItem.openChime?.id ?? null,
-      state.displayCmItem.endChime?.id ?? null,
-      state.displayCmItem.bgm?.id ?? null
-    );
-    console.log(response);
-    state.displayCmItem.id = response.id;
-    state.displayCmItem.timestamp = response.timestamp;
-    state.displayCmItem.seconds = response.seconds;
-    state.displayCmItem.url = response.url ?? "";
+    try {
+      const response = await service.create(
+        authToken,
+        state.displayCmItem.narrations,
+        state.displayCmItem.openChime?.id ?? null,
+        state.displayCmItem.endChime?.id ?? null,
+        state.displayCmItem.bgm?.id ?? null
+      );
+      console.log(response);
+      state.displayCmItem.id = response.id;
+      state.displayCmItem.timestamp = response.timestamp;
+      state.displayCmItem.seconds = response.seconds;
+      state.displayCmItem.url = response.url ?? "";
+    } catch (e) {
+      throw e;
+    }
   };
 
   const update = async (
@@ -40,14 +44,18 @@ export default function cmStore() {
     sceneCd: string,
     uploadSystem: string
   ) => {
-    await service.update(
-      authToken,
-      state.displayCmItem.id,
-      title,
-      description,
-      sceneCd,
-      uploadSystem
-    );
+    try {
+      await service.update(
+        authToken,
+        state.displayCmItem.id,
+        title,
+        description,
+        sceneCd,
+        uploadSystem
+      );
+    } catch (e) {
+      throw e;
+    }
   };
 
   const clearNarration = (index: number) => {
@@ -76,8 +84,13 @@ export default function cmStore() {
     state.selectedNarrationIndex = null;
   };
 
-  const setNarration = (narrationItem: NarrationItem | RecordingItem | TtsItem) => {
-    if (state.selectedNarrationIndex == null && state.displayCmItem.narrations.length >= MAX_NARRATION_COUNT) {
+  const setNarration = (
+    narrationItem: NarrationItem | RecordingItem | TtsItem
+  ) => {
+    if (
+      state.selectedNarrationIndex == null &&
+      state.displayCmItem.narrations.length >= MAX_NARRATION_COUNT
+    ) {
       // ナレーションがMAX_NARRATION_COUNT数分あるのに、更に末尾に追加しようとしたら何もしない
       return;
     }
@@ -89,7 +102,7 @@ export default function cmStore() {
       narrationItem.title,
       narrationItem.description,
       0, //narrationItem.seconds,
-      narrationItem.timestamp,
+      narrationItem.timestamp
     );
     unSelectNarrationIndex();
   };
@@ -164,9 +177,7 @@ export default function cmStore() {
 }
 
 export type CmStore = ReturnType<typeof cmStore>;
-export const CmStoreKey: InjectionKey<CmStore> = Symbol(
-  "CmStore"
-);
+export const CmStoreKey: InjectionKey<CmStore> = Symbol("CmStore");
 export function useCmStore() {
   const store = inject(CmStoreKey);
   if (!store) {
