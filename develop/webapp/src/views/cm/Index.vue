@@ -107,9 +107,9 @@
               :key="narration.contentsId"
               :title="
                 'ナレーション ' +
-                `${index + 1}` +
-                '/' +
-                `${MAX_NARRATION_COUNT}`
+                  `${index + 1}` +
+                  '/' +
+                  `${MAX_NARRATION_COUNT}`
               "
               size="flexible"
               :contentTitle="`${narration.title}`"
@@ -186,9 +186,9 @@
               <CmItem
                 :title="
                   'ナレーション ' +
-                  `${narrations.length + 1}` +
-                  '/' +
-                  `${MAX_NARRATION_COUNT}`
+                    `${narrations.length + 1}` +
+                    '/' +
+                    `${MAX_NARRATION_COUNT}`
                 "
                 :isEmpty="true"
                 size="flexible"
@@ -471,6 +471,15 @@
       <ModalUploading v-if="isModalUploading" title="音源の合成中">
       </ModalUploading>
     </transition>
+    <transition>
+      <ModalError
+        v-if="isError"
+        @close="closeErrorModal"
+        title="エラー"
+        :errorCode="errorCode"
+        :errorMessage="errorMessage"
+      ></ModalError>
+    </transition>
   </div>
 </template>
 
@@ -488,6 +497,7 @@ import Button from "@/components/atoms/Button.vue";
 import ModalDialog from "@/components/organisms/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
+import ModalError from "@/components/organisms/ModalError.vue";
 import PlayDialogContents from "@/components/molecules/PlayDialogContents.vue";
 import MessageDialogContents from "@/components/molecules/MessageDialogContents.vue";
 import FormGroup from "@/components/molecules/FormGroup.vue";
@@ -511,6 +521,7 @@ export default defineComponent({
     ModalDialog,
     ModalHeader,
     ModalFooter,
+    ModalError,
     PlayDialogContents,
     MessageDialogContents,
     FormGroup,
@@ -556,6 +567,9 @@ export default defineComponent({
       isOpenChimeSliderAppear: false,
       isEndChimeSliderAppear: false,
       isBgmSliderAppear: false,
+      isError: false,
+      errorCode: "",
+      errorMessage: "",
     });
 
     const playOpenChime = async () => {
@@ -608,24 +622,16 @@ export default defineComponent({
       cm.clearBgm();
     };
     const create = async () => {
-      try {
-        cm.create(authToken);
-      } catch (e) {
-        console.log(e);
-      }
+      await cm.create(authToken);
     };
     const update = async () => {
-      try {
-        cm.update(
-          authToken,
-          state.title,
-          state.description,
-          state.scene,
-          state.uploadSystem
-        );
-      } catch (e) {
-        console.log(e);
-      }
+      await cm.update(
+        authToken,
+        state.title,
+        state.description,
+        state.scene,
+        state.uploadSystem
+      );
     };
 
     const openPlayModal = () => {
@@ -649,9 +655,16 @@ export default defineComponent({
       state.isSavedModalAppear = false;
     };
 
-    const createAndOpenPlayModal = () => {
-      create();
-      openPlayModal();
+    const createAndOpenPlayModal = async () => {
+      try {
+        openPlayModal();
+        await create();
+      } catch (e) {
+        closePlayModal();
+        state.errorCode = e.errorCode;
+        state.errorMessage = e.message;
+        state.isError = true;
+      }
     };
     const stopAndClosePlayModal = () => {
       stop();
@@ -661,11 +674,12 @@ export default defineComponent({
       try {
         openModalUploading();
         await update();
-        closeModalUploading();
         closeSaveModal();
         openSavedModal();
       } catch (e) {
-        console.log(e.message);
+        state.errorCode = e.errorCode;
+        state.errorMessage = e.message;
+        state.isError = true;
       } finally {
         closeModalUploading();
       }
@@ -815,6 +829,9 @@ export default defineComponent({
       closeAllDropdownMenu();
       closeAllSlider();
     };
+    const closeErrorModal = () => {
+      state.isError = false;
+    };
     return {
       ...toRefs(state),
       clearNarration,
@@ -862,6 +879,7 @@ export default defineComponent({
       toggleEndChimeSlider,
       toggleBgmSlider,
       onClickSomewhere,
+      closeErrorModal,
     };
   },
 });

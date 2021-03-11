@@ -55,7 +55,6 @@ export function useUploadCmService(api: UMesseApi.CmApi) {
     });
   };
 
-  // 2021.03.05時点で未使用
   const create = async (
     authToken: string,
     narrations: (Narration | Recording | Tts)[],
