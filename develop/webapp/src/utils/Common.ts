@@ -156,6 +156,24 @@ export function getVersion() {
   return PackageJson.version;
 }
 
+/**
+ * テキストが全角カナか判定
+ * @param text string
+ * @return bool
+ */
+export function isFullWidthKana(text:string): boolean{
+  return text.match(`^[ァ-ヶー\x20\u3000]*$`) ? true : false;
+}
+
+/**
+ * テキストが空白か判定
+ * @param text string
+ * @return bool
+ */
+ export function isSpace(text:string): boolean{
+  return text.match(`^[\x20|\u3000]+`) ? true : false;
+}
+
 function getIndustries(cdList: string[]) {
   const result: Industry[] = [];
   cdList.forEach((v) => {

@@ -5,7 +5,9 @@
         <Header>
           <template #title>合成音声でナレーションを作成する</template>
           <template #buttons>
-            <Button @click="openModal">確定</Button>
+            <Button :isDisabled="isDisabledConfirm" @click="openModal"
+              >確定</Button
+            >
           </template>
         </Header>
       </template>
@@ -30,6 +32,7 @@
                   :id="'inlineCheckbox' + `${i + 1}`"
                   :value="ttsLang"
                   v-model="langs"
+                  @change="isCheckedLanguege"
                 />
                 <label
                   :class="[ttsLang]"
@@ -44,10 +47,18 @@
               description="※カタカナで入力"
               class="name"
             >
-              <TextBox v-model="customerName" />
+              <TextBox
+                v-model="customerName"
+                :onChangeInput="isCheckedStoreName"
+              />
             </FormGroup>
-            <FormGroup title="2:閉店時間" class="time">
-              <TimeInput v-model="endTime" />
+            <FormGroup
+              title="2:閉店時間"
+              :description="errorMessageEndTime"
+              :isErrorColor="isErrorEndTime"
+              class="time"
+            >
+              <TimeInput v-model="endTime" :onChangeInput="isCheckedEndTime" />
             </FormGroup>
           </div>
           <div class="maniscript">
@@ -77,8 +88,8 @@
             <SelectBox
               v-model="playLang"
               :options="
-                ttsLangs.map((ttsLang) => {
-                  return { title: ttsLang, value: ttsLang };
+                langs.map((lang) => {
+                  return { title: lang, value: lang };
                 })
               "
             />
@@ -134,6 +145,7 @@ import UMesseService from "@/services/UMesseService";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import UMesseCache from "@/repository/UMesseCache";
 import { lang, speaker, TemplateDetailItem } from "@/models/TemplateDetailItem";
+import * as Common from "@/utils/Common";
 export default defineComponent({
   components: {
     BasicLayout,
@@ -194,6 +206,13 @@ export default defineComponent({
       title: template.title,
       description: template.description,
       isLoading: false,
+      errorMessageStoreName: "※カタカナで入力",
+      isErrorStoreName: false,
+      errorMessageEndTime: "",
+      isErrorEndTime: false,
+      errorMessageLanguage: "",
+      isErrorLanguage: false,
+      isDisabledConfirm: true,
     });
     const play = async () => {
       console.log("play");
@@ -243,6 +262,63 @@ export default defineComponent({
     const closeModalLoading = () => {
       state.isLoading = false;
     };
+    const isCheckedStoreName = () => {
+      var res = true;
+      if (!state.customerName || Common.isSpace(state.customerName) || !Common.isFullWidthKana(state.customerName)) {
+        state.errorMessageStoreName = "全角カタカナで入力してください";
+        state.isErrorStoreName = true;
+        res = true;
+      } else {
+        state.errorMessageStoreName = "";
+        state.isErrorStoreName = false;
+        res = false;
+      }
+      state.isDisabledConfirm = isDisabledButtonConfirm();
+      return res;
+    };
+    const isCheckedEndTime = () => {
+      var res = true;
+      if (!state.endTime || checkTime()) {
+        state.errorMessageEndTime = "閉店時間を入力してください";
+        state.isErrorEndTime = true;
+        res = true;
+      } else {
+        state.errorMessageEndTime = "";
+        state.isErrorEndTime = false;
+        res = false;
+      }
+      state.isDisabledConfirm = isDisabledButtonConfirm();
+      return res;
+    };
+    const checkTime = () => {
+      var re = /^(?:--:(?:--|00)|00:--)$/;
+      return re.test(state.endTime);
+    };
+    const isCheckedLanguege = () => {
+      var res = true;
+      if (!state.langs.length) {
+        state.errorMessageLanguage = "言語設定を選択してください";
+        state.isErrorLanguage = true;
+        res = true;
+      } else {
+        state.errorMessageLanguage = "";
+        state.isErrorLanguage = false;
+        res = false;
+      }
+      state.isDisabledConfirm = isDisabledButtonConfirm();
+      return res;
+    };
+    const isDisabledButtonConfirm = () => {
+      if (
+        !state.isErrorLanguage &&
+        !state.isErrorStoreName &&
+        !state.isErrorEndTime
+      ) {
+        return false;
+      } else {
+        return true;
+      }
+    };
     return {
       ...toRefs(state),
       ttsSpeakers,
@@ -255,6 +331,9 @@ export default defineComponent({
       stopAndCloseModal,
       template,
       templateDetails,
+      isCheckedStoreName,
+      isCheckedEndTime,
+      isCheckedLanguege,
     };
   },
 });
@@ -270,7 +349,7 @@ export default defineComponent({
   margin-top: 36px;
   &.border {
     padding-top: 24px;
-    margin-top: 36px;
+    margin-top: 54px;
     border-top: 2px solid rgb(198, 198, 198);
   }
   .form-group {
