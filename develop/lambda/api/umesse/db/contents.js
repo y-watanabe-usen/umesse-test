@@ -14,11 +14,11 @@ module.exports = {
     };
     debuglog(JSON.stringify({ options: options }));
 
-    let res = await dynamodbManager.scan(
+    let ret = await dynamodbManager.scan(
       constants.dynamoDbTable().contents,
       options
     );
-    if (!res || !res.Items.length) throw new NotFoundError(ERROR_CODE.E0000404);
-    return res.Items;
+    if (!ret || !ret.Items.length) throw new NotFoundError(ERROR_CODE.E0000404);
+    return ret.Items;
   },
 };

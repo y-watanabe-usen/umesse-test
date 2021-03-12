@@ -4,15 +4,19 @@ const path = require("path");
 const {
   constants,
   debuglog,
-  errorlog,
   timestamp,
   generateId,
 } = require("umesse-lib/constants");
 const UMesseConverter = require("umesse-lib/converter");
-const { validation } = require("umesse-lib/validation");
+const { checkParams } = require("umesse-lib/validation");
 const { s3Manager } = require("umesse-lib/utils/s3Manager");
 const { sqsManager } = require("umesse-lib/utils/sqsManager");
-const { BadRequestError, InternalServerError } = require("umesse-lib/error");
+const {
+  ERROR_CODE,
+  BadRequestError,
+  NotFoundError,
+  InternalServerError,
+} = require("umesse-lib/error");
 const db = require("./db");
 
 // CM取得（一覧・個別）
@@ -26,23 +30,25 @@ exports.getCm = async (unisCustomerCd, id, sort) => {
   );
 
   // パラメーターチェック
-  const checkParams = validation.checkParams({
+  let params = {
     unisCustomerCd: unisCustomerCd,
-  });
-  if (checkParams) throw new BadRequestError(checkParams);
+  };
+  if (id) params.id = id;
+  if (sort) params.sort = sort;
+  let checkMessages = checkParams(params);
+  if (checkMessages) throw new BadRequestError(checkMessages.join("\n"));
 
   let json;
   try {
     json = await db.User.findCm(unisCustomerCd);
   } catch (e) {
-    errorlog(JSON.stringify(e));
-    throw new InternalServerError(e.message);
+    if (e instanceof NotFoundError) throw e;
+    else throw new InternalServerError(e.message);
   }
   if (id) {
     json = json.filter((item) => item.cmId === id).shift();
+    if (!json) throw new NotFoundError(ERROR_CODE.E0000404);
   }
-
-  if (!json) throw new InternalServerError("not found");
 
   if (!sort) sort = 1;
   let sortFunc;
@@ -93,7 +99,7 @@ exports.getCm = async (unisCustomerCd, id, sort) => {
       delete element["cmId"];
       element["category"] = constants.resourceCategory.CM;
       return element;
-    })
+    });
   }
 
   return json;
@@ -109,14 +115,11 @@ exports.createCm = async (unisCustomerCd, body) => {
   );
 
   // パラメーターチェック
-  const checkParams = validation.checkParams({
+  const errorCodes = checkParams({
     unisCustomerCd: unisCustomerCd,
-    body: body,
+    ...body,
   });
-  if (checkParams) throw new BadRequestError(checkParams);
-  // ナレーションチェック
-  if (!body.materials.narrations || body.materials.narrations.length < 1)
-    throw new BadRequestError("not narration");
+  if (errorCodes) throw new BadRequestError(ERROR_CODE[errorCodes.pop()]);
 
   // ID生成
   const id = generateId(unisCustomerCd, "c");
@@ -177,12 +180,12 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
   );
 
   // パラメーターチェック
-  const checkParams = validation.checkParams({
+  const errorCodes = checkParams({
     unisCustomerCd: unisCustomerCd,
     id: id,
-    body: body,
+    ...body,
   });
-  if (checkParams) throw new BadRequestError(checkParams);
+  if (errorCodes) throw new BadRequestError(ERROR_CODE[errorCodes.pop()]);
 
   // CM一覧から該当CMを取得
   const list = await this.getCm(unisCustomerCd);
@@ -269,7 +272,7 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
   json["id"] = id;
   delete json["cmId"];
   json["category"] = constants.resourceCategory.CM;
-  return json
+  return json;
 };
 
 // CM削除
@@ -282,11 +285,11 @@ exports.deleteCm = async (unisCustomerCd, id) => {
   );
 
   // パラメーターチェック
-  const checkParams = validation.checkParams({
+  const errorCodes = checkParams({
     unisCustomerCd: unisCustomerCd,
     id: id,
   });
-  if (checkParams) throw new BadRequestError(checkParams);
+  if (errorCodes) throw new BadRequestError(ERROR_CODE[errorCodes.pop()]);
 
   // CM一覧から該当CMを取得
   const list = await this.getCm(unisCustomerCd);

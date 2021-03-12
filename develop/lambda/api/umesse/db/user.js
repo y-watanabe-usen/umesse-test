@@ -24,13 +24,13 @@ module.exports = {
     };
     debuglog(JSON.stringify({ key: key, options: options }));
 
-    let res = await dynamodbManager.get(
+    let ret = await dynamodbManager.get(
       constants.dynamoDbTable().users,
       key,
       options
     );
-    if (!res || !res.Item) throw new NotFoundError(ERROR_CODE.E0000404);
-    return res.Item;
+    if (!ret || !ret.Item) throw new NotFoundError(ERROR_CODE.E0000404);
+    return ret.Item;
   },
 
   findCm: async function (unisCustomerCd) {
@@ -40,13 +40,13 @@ module.exports = {
     };
     debuglog(JSON.stringify({ key: key, options: options }));
 
-    let res = await dynamodbManager.get(
+    let ret = await dynamodbManager.get(
       constants.dynamoDbTable().users,
       key,
       options
     );
-    if (!res || !res.Item) throw new NotFoundError(ERROR_CODE.E0000404);
-    return res.Item.cm;
+    if (!ret || !ret.Item) throw new NotFoundError(ERROR_CODE.E0000404);
+    return ret.Item.cm;
   },
 
   findResource: async function (unisCustomerCd, category) {
@@ -56,13 +56,13 @@ module.exports = {
     };
     debuglog(JSON.stringify({ key: key, options: options }));
 
-    let res = await dynamodbManager.get(
+    let ret = await dynamodbManager.get(
       constants.dynamoDbTable().users,
       key,
       options
     );
-    if (!res || !res.Item) throw new NotFoundError(ERROR_CODE.E0000404);
-    return res.Item[category];
+    if (!ret || !ret.Item) throw new NotFoundError(ERROR_CODE.E0000404);
+    return ret.Item[category];
   },
 
   addCm: async function (unisCustomerCd, data) {
@@ -76,13 +76,13 @@ module.exports = {
     };
     debuglog(JSON.stringify({ key: key, options: options }));
 
-    let res = await dynamodbManager.update(
+    let ret = await dynamodbManager.update(
       constants.dynamoDbTable().users,
       key,
       options
     );
-    if (!res) throw new Error(ERROR_CODE.E0000500);
-    return res.Attributes.cm.pop();
+    if (!ret) throw new Error(ERROR_CODE.E0000500);
+    return ret.Attributes.cm.pop();
   },
 
   addResource: async function (unisCustomerCd, category, data) {
@@ -99,13 +99,13 @@ module.exports = {
     };
     debuglog(JSON.stringify({ key: key, options: options }));
 
-    let res = await dynamodbManager.update(
+    let ret = await dynamodbManager.update(
       constants.dynamoDbTable().users,
       key,
       options
     );
-    if (!res) throw new Error(ERROR_CODE.E0000500);
-    return res.Attributes[category].pop();
+    if (!ret) throw new Error(ERROR_CODE.E0000500);
+    return ret.Attributes[category].pop();
   },
 
   updateCm: async function (unisCustomerCd, index, cm) {
@@ -119,13 +119,13 @@ module.exports = {
     };
     debuglog(JSON.stringify({ key: key, options: options }));
 
-    let res = await dynamodbManager.update(
+    let ret = await dynamodbManager.update(
       constants.dynamoDbTable().users,
       key,
       options
     );
-    if (!res) throw new Error(ERROR_CODE.E0000500);
-    return res.Attributes.cm[index];
+    if (!ret) throw new Error(ERROR_CODE.E0000500);
+    return ret.Attributes.cm[index];
   },
 
   updateResource: async function (unisCustomerCd, category, index, resource) {
@@ -142,13 +142,13 @@ module.exports = {
     };
     debuglog(JSON.stringify({ key: key, options: options }));
 
-    let res = await dynamodbManager.update(
+    let ret = await dynamodbManager.update(
       constants.dynamoDbTable().users,
       key,
       options
     );
-    if (!res) throw new Error(ERROR_CODE.E0000500);
-    return res.Attributes[category][index];
+    if (!ret) throw new Error(ERROR_CODE.E0000500);
+    return ret.Attributes[category][index];
   },
 
   deleteFromCategory: async function (unisCustomerCd, category, index) {
@@ -162,12 +162,12 @@ module.exports = {
     };
     debuglog(JSON.stringify({ key: key, options: options }));
 
-    let res = await dynamodbManager.update(
+    let ret = await dynamodbManager.update(
       constants.dynamoDbTable().users,
       key,
       options
     );
-    if (!res) throw new Error(ERROR_CODE.E0000500);
-    return res.Attributes[category];
+    if (!ret) throw new Error(ERROR_CODE.E0000500);
+    return ret.Attributes[category];
   },
 };

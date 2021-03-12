@@ -14,29 +14,29 @@ module.exports = {
     };
     debuglog(JSON.stringify({ options: options }));
 
-    let res = await dynamodbManager.query(
+    let ret = await dynamodbManager.query(
       constants.dynamoDbTable().external,
       options
     );
-    if (!res || !res.Items.length) throw new NotFoundError(ERROR_CODE.E0000404);
-    return res.Items;
+    if (!ret || !ret.Items.length) throw new NotFoundError(ERROR_CODE.E0000404);
+    return ret.Items;
   },
 
   findById: async function (unisCustomerCd, cmId) {
-    let res = await this.findAll(unisCustomerCd);
-    res = res.filter((item) => item.cmId === cmId).pop();
-    if (!res) throw new NotFoundError(ERROR_CODE.E0000404);
-    return res;
+    let ret = await this.findAll(unisCustomerCd);
+    ret = ret.filter((item) => item.cmId === cmId).pop();
+    if (!ret) throw new NotFoundError(ERROR_CODE.E0000404);
+    return ret;
   },
 
   add: async function (item) {
-    let res = await dynamodbManager.put(
+    let ret = await dynamodbManager.put(
       constants.dynamoDbTable().external,
       item,
       {}
     );
-    if (!res) throw new Error(ERROR_CODE.E0000500);
-    return res;
+    if (!ret) throw new Error(ERROR_CODE.E0000500);
+    return ret;
   },
 
   findByUploadSystem: async function (uploadSystem) {
@@ -63,25 +63,25 @@ module.exports = {
     };
     debuglog(JSON.stringify({ options: options }));
 
-    let res = await dynamodbManager.scan(
+    let ret = await dynamodbManager.scan(
       constants.dynamoDbTable().external,
       options
     );
-    if (!res || !res.Items.length) throw new NotFoundError(ERROR_CODE.E0000404);
-    return res.Items;
+    if (!ret || !ret.Items.length) throw new NotFoundError(ERROR_CODE.E0000404);
+    return ret.Items;
   },
 
   delete: async function (unisCustomerCd) {
     const key = { unisCustomerCd: unisCustomerCd };
     debuglog(JSON.stringify({ key: key }));
 
-    let res = await dynamodbManager.delete(
+    let ret = await dynamodbManager.delete(
       constants.dynamoDbTable().external,
       key,
       {}
     );
-    if (!res) throw new Error(ERROR_CODE.E0000500);
-    return res;
+    if (!ret) throw new Error(ERROR_CODE.E0000500);
+    return ret;
   },
 
   updateErrorData: async function (unisCustomerCd, data) {
@@ -98,12 +98,12 @@ module.exports = {
     };
     debuglog(JSON.stringify({ key: key, options: options }));
 
-    let res = await dynamodbManager.update(
+    let ret = await dynamodbManager.update(
       constants.dynamoDbTable().external,
       key,
       options
     );
-    if (!res) throw new Error(ERROR_CODE.E0000500);
-    return res;
+    if (!ret) throw new Error(ERROR_CODE.E0000500);
+    return ret;
   },
 };

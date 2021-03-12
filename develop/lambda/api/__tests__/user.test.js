@@ -35,16 +35,19 @@ describe("ユーザーデータ", () => {
 
   test("[error] ユーザーデータ取得　パラメータチェック", async () => {
     await expect(getUser()).rejects.toThrow(
-      new BadRequestError(ERROR_CODE.E0001001)
+      new BadRequestError(`${ERROR_CODE.E0001001} (E0001001)`)
     );
+
     await expect(getUser("aaaaaaaaaa")).rejects.toThrow(
-      new BadRequestError(ERROR_CODE.E0001002)
+      new BadRequestError(`${ERROR_CODE.E0001010} (E0001010)`)
     );
+
     await expect(getUser("1111")).rejects.toThrow(
-      new BadRequestError(ERROR_CODE.E0001003)
+      new BadRequestError(`${ERROR_CODE.E0001010} (E0001010)`)
     );
+
     await expect(getUser("11111111111")).rejects.toThrow(
-      new BadRequestError(ERROR_CODE.E0001003)
+      new BadRequestError(`${ERROR_CODE.E0001010} (E0001010)`)
     );
   });
 });
