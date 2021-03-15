@@ -60,8 +60,8 @@
                   <span id="avg-level-text"> {{ decibel }} </span> dB
                   <h5 class="title">録音したデータ１</h5>
                   <div class="time" v-if="hasRecordedData">
-                    <p>{{ playbackTimeHms }}</p>
-                    <p>{{ durationHms }}</p>
+                    <p>{{ convertNumberToTime(playbackTime) }}</p>
+                    <p>{{ convertNumberToTime(duration) }}</p>
                   </div>
                   <div class="time" v-else>
                     <p>— : — : —</p>
@@ -156,7 +156,7 @@ import {
   UPLOAD_RECORDING_STATE,
 } from "@/services/uploadRecordingService";
 import provideRecordingStore from "@/store/recording";
-import * as FormatDate from "@/utils/FormatDate";
+import { convertNumberToTime } from "@/utils/FormatDate";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
 import Header from "@/components/organisms/Header.vue";
@@ -203,13 +203,7 @@ export default defineComponent({
         return audioPlayer.getPowerDecibels();
       }),
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
-      playbackTimeHms: computed(() =>
-        FormatDate.convertNumberToTime(audioPlayer.getPlaybackTime())
-      ),
       duration: computed(() => audioPlayer.getDuration()),
-      durationHms: computed(() =>
-        FormatDate.convertNumberToTime(audioPlayer.getDuration())
-      ),
       isModalAppear: false,
       isModalUploading: false,
       isError: false,
@@ -277,6 +271,7 @@ export default defineComponent({
       openModal,
       closeModal,
       closeErrorModal,
+      convertNumberToTime,
     };
   },
 });
