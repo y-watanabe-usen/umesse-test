@@ -107,9 +107,9 @@
               :key="narration.contentsId"
               :title="
                 'ナレーション ' +
-                  `${index + 1}` +
-                  '/' +
-                  `${MAX_NARRATION_COUNT}`
+                `${index + 1}` +
+                '/' +
+                `${MAX_NARRATION_COUNT}`
               "
               size="flexible"
               :contentTitle="`${narration.title}`"
@@ -186,9 +186,9 @@
               <CmItem
                 :title="
                   'ナレーション ' +
-                    `${narrations.length + 1}` +
-                    '/' +
-                    `${MAX_NARRATION_COUNT}`
+                  `${narrations.length + 1}` +
+                  '/' +
+                  `${MAX_NARRATION_COUNT}`
                 "
                 :isEmpty="true"
                 size="flexible"
@@ -477,7 +477,7 @@
         @close="closeErrorModal"
         :errorCode="errorCode"
         :errorMessage="errorMessage"
-      ></ModalErrorDialog>
+      />
     </transition>
   </div>
 </template>

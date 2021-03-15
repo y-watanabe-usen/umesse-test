@@ -36,10 +36,7 @@
                 >
                   <img src="@/assets/icon_sound.svg" />試聴
                 </Button>
-                <Button
-                  class="btn-select"
-                  @click="setChime(chime)"
-                >
+                <Button class="btn-select" @click="setChime(chime)">
                   選択<img src="@/assets/icon_select.svg" />
                 </Button>
               </template>
@@ -116,7 +113,7 @@
         @close="closeErrorModal"
         :errorCode="errorCode"
         :errorMessage="errorMessage"
-      ></ModalErrorDialog>
+      />
     </transition>
   </div>
 </template>

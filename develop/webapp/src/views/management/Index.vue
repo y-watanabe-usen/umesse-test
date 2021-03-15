@@ -242,7 +242,7 @@
           @close="closeErrorModal"
           :errorCode="errorCode"
           :errorMessage="errorMessage"
-        ></ModalErrorDialog>
+        />
       </transition>
     </transition>
   </div>
