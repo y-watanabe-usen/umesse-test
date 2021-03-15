@@ -1,24 +1,33 @@
 import * as Common from "@/utils/Common";
 
-describe("test_isRecordingById", () => {
-  test('success', () => {
-    const id = "123456789-r-6rtlrvac";
-    expect(Common.isRecordingById(id)).toBe(true);
-  });
-
-  test('fail', () => {
-    const id = "123456789-t-6rtlrvac";
-    expect(Common.isRecordingById(id)).toBe(false);
+describe("isRecordingByIdのテスト", () => {
+  const datas = [
+    {
+      id: "123456789-r-6rtlrvac", expected: true,
+    },
+    {
+      id: "123456789-t-6rtlrvac", expected: false,
+    },
+  ];
+  datas.forEach((v) => {
+    test(`引数に${v.id}を渡すと${v.expected}が返ること`, () => {
+      expect(Common.isRecordingById(v.id)).toBe(v.expected);
+    });
   });
 });
 
-describe("test_isTtsById", () => {
-  test('success', () => {
-    const id = "123456789-t-6rtlrvac";
-    expect(Common.isTtsById(id)).toBe(true);
-  });
-  test('fail', () => {
-    const id = "123456789-r-6rtlrvac";
-    expect(Common.isTtsById(id)).toBe(false);
+describe("isTtsByIdのテスト", () => {
+  const datas = [
+    {
+      id: "123456789-r-6rtlrvac", expected: false,
+    },
+    {
+      id: "123456789-t-6rtlrvac", expected: true,
+    },
+  ];
+  datas.forEach((v) => {
+    test(`引数に${v.id}を渡すと${v.expected}が返ること`, () => {
+      expect(Common.isTtsById(v.id)).toBe(v.expected);
+    });
   });
 });
