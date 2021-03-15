@@ -468,10 +468,6 @@
       </ModalDialog>
     </transition>
     <transition>
-      <ModalUploading v-if="isModalUploading" title="音源の合成中">
-      </ModalUploading>
-    </transition>
-    <transition>
       <ModalErrorDialog
         v-if="isErrorModalApper"
         @close="closeErrorModal"
@@ -479,6 +475,7 @@
         :errorMessage="errorMessage"
       />
     </transition>
+    <ModalLoading v-if="isLoading" title="音源の合成中" />
   </div>
 </template>
 
@@ -489,7 +486,7 @@ import AudioStore from "@/store/audio";
 import { useGlobalStore } from "@/store";
 import * as FormatDate from "@/utils/FormatDate";
 import Constants from "@/utils/Constants";
-import { UPLOAD_CM_STATE } from "@/services/uploadCmService";
+import { UPLOAD_CM_STATE } from "@/services/cmService";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import Header from "@/components/organisms/Header.vue";
 import Button from "@/components/atoms/Button.vue";
@@ -510,7 +507,7 @@ import VolumeSlider from "@/components/molecules/VolumeSlider.vue";
 import { MAX_NARRATION_COUNT } from "@/store/cm";
 import router from "@/router";
 import UMesseService from "@/services/UMesseService";
-import ModalUploading from "@/components/organisms/ModalUploading.vue";
+import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { UMesseError } from "../../models/UMesseError";
 
 export default defineComponent({
@@ -532,7 +529,7 @@ export default defineComponent({
     CmItem,
     DropdownMenu,
     VolumeSlider,
-    ModalUploading,
+    ModalLoading,
   },
   setup() {
     const audioStore = AudioStore();
@@ -558,7 +555,7 @@ export default defineComponent({
       isPlayModalAppear: false,
       isSaveModalAppear: false,
       isSavedModalAppear: false,
-      isModalUploading: false,
+      isLoading: false,
       isNarrationDropdownAppear: [false, false, false, false],
       isOpenChimeDropdownAppear: false,
       isEndChimeDropdownAppear: false,
@@ -670,14 +667,14 @@ export default defineComponent({
     };
     const updateAndOpenSavedModal = async () => {
       try {
-        openModalUploading();
+        openModalLoading();
         await update();
         closeSaveModal();
         openSavedModal();
       } catch (e) {
         openErrorModal(e);
       } finally {
-        closeModalUploading();
+        closeModalLoading();
       }
     };
     const convertNumberToTime = (second: number) =>
@@ -731,11 +728,11 @@ export default defineComponent({
     const toVoiceFree = () => {
       router.push({ name: "VoiceFree" });
     };
-    const openModalUploading = () => {
-      state.isModalUploading = true;
+    const openModalLoading = () => {
+      state.isLoading = true;
     };
-    const closeModalUploading = () => {
-      state.isModalUploading = false;
+    const closeModalLoading = () => {
+      state.isLoading = false;
     };
     const closeAllDropdownMenu = () => {
       state.isNarrationDropdownAppear = [false, false, false, false];

@@ -132,10 +132,6 @@
       </ModalDialog>
     </transition>
     <transition>
-      <ModalUploading v-if="isModalUploading" title="音源の合成中">
-      </ModalUploading>
-    </transition>
-    <transition>
       <ModalErrorDialog
         v-if="isErrorModalApper"
         @close="closeErrorModal"
@@ -143,6 +139,7 @@
         :errorMessage="errorMessage"
       />
     </transition>
+    <ModalLoading v-if="isLoading" title="音源の合成中" />
   </div>
 </template>
 
@@ -153,7 +150,7 @@ import AudioPlayer from "@/utils/AudioPlayer";
 import {
   RecordingFile,
   UPLOAD_RECORDING_STATE,
-} from "@/services/uploadRecordingService";
+} from "@/services/recordingService";
 import provideRecordingStore from "@/store/recording";
 import { convertNumberToTime } from "@/utils/FormatDate";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
@@ -169,7 +166,7 @@ import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
 import { useGlobalStore } from "@/store";
 import router from "@/router";
-import ModalUploading from "@/components/organisms/ModalUploading.vue";
+import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { UMesseError } from "../../models/UMesseError";
 
 export default defineComponent({
@@ -185,7 +182,7 @@ export default defineComponent({
     FormGroup,
     TextBox,
     TextArea,
-    ModalUploading,
+    ModalLoading,
   },
   name: "RecordingStart",
   setup() {
@@ -204,7 +201,7 @@ export default defineComponent({
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       duration: computed(() => audioPlayer.getDuration()),
       isModalAppear: false,
-      isModalUploading: false,
+      isLoading: false,
       isErrorModalApper: false,
       errorCode: "",
       errorMessage: "",
@@ -227,17 +224,17 @@ export default defineComponent({
       /// check state.file.
       // state.file.blob = await audioRecorder.getWaveBlob();
       try {
-        openModalUploading();
+        openModalLoading();
         state.file.blob = await audioRecorder.getMp3Blob();
         const response = await recordingStore.uploadRecordingData(state.file);
         cm.setNarration(response);
         router.push({ name: "Cm" });
-        closeModalUploading();
+        closeModalLoading();
         closeModal();
       } catch (e) {
         openErrorModal(e);
       } finally {
-        closeModalUploading();
+        closeModalLoading();
       }
     };
     const openModal = () => {
@@ -246,11 +243,11 @@ export default defineComponent({
     const closeModal = () => {
       state.isModalAppear = false;
     };
-    const openModalUploading = () => {
-      state.isModalUploading = true;
+    const openModalLoading = () => {
+      state.isLoading = true;
     };
-    const closeModalUploading = () => {
-      state.isModalUploading = false;
+    const closeModalLoading = () => {
+      state.isLoading = false;
     };
     const closeErrorModal = () => {
       state.isErrorModalApper = false;

@@ -28,11 +28,11 @@ export default {
   components: {
     Loading,
   },
-  name: "ModalUploading",
+  name: "ModalLoding",
   props: {
     title: {
       type: String,
-      required: true,
+      required: false,
     },
     closeDisabled: {
       type: Boolean,

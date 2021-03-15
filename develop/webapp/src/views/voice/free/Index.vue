@@ -79,10 +79,7 @@
         </template>
       </ModalDialog>
     </transition>
-    <transition>
-      <ModalUploading v-if="isModalUploading" title="音源の合成中">
-      </ModalUploading>
-    </transition>
+    <ModalLoading v-if="isLoading" title="音源の合成中" />
   </div>
 </template>
 
@@ -107,7 +104,7 @@ import { useGlobalStore } from "@/store";
 import Constants from "@/utils/Constants";
 import UMesseCache from "@/repository/UMesseCache";
 import UMesseService from "@/services/UMesseService";
-import ModalUploading from "@/components/organisms/ModalUploading.vue";
+import ModalLoading from "@/components/organisms/ModalLoading.vue";
 export default defineComponent({
   components: {
     BasicLayout,
@@ -122,7 +119,7 @@ export default defineComponent({
     TextBox,
     TextArea,
     SelectBox,
-    ModalUploading,
+    ModalLoading,
   },
   setup() {
     const router = useRouter();
@@ -142,7 +139,7 @@ export default defineComponent({
       isModalAppear: false,
       title: "",
       description: "",
-      isModalUploading: false,
+      isLoading: false,
     });
     // TODO: キャッシュでいいのか
     const cacheKey = "voice/free/selectTemplate";
@@ -165,7 +162,7 @@ export default defineComponent({
     };
 
     const createTts = async () => {
-      openModalUploading();
+      openModalLoading();
       const response = await ttsStore.createTtsData(
         state.title,
         state.description,
@@ -175,7 +172,7 @@ export default defineComponent({
         cm.setNarration(element);
       });
       router.push({ name: "Cm" });
-      closeModalUploading();
+      closeModalLoading();
     };
 
     const openModal = async () => {
@@ -189,12 +186,12 @@ export default defineComponent({
       stop();
       closeModal();
     };
-    const openModalUploading = () => {
-      state.isModalUploading = true;
+    const openModalLoading = () => {
+      state.isLoading = true;
       closeModal();
     };
-    const closeModalUploading = () => {
-      state.isModalUploading = false;
+    const closeModalLoading = () => {
+      state.isLoading = false;
     };
     return {
       ttsSpeakers,

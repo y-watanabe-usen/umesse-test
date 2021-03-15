@@ -232,8 +232,7 @@
       </ModalDialog>
     </transition>
     <transition>
-      <ModalUploading v-if="isModalUploading" :title="titleModalUploading">
-      </ModalUploading>
+      <ModalLoading v-if="isLoading" :title="titleModalLoading" />
     </transition>
     <transition>
       <transition>
@@ -282,7 +281,7 @@ import Constants from "@/utils/Constants";
 import { useRouter } from "vue-router";
 import SelectBox from "@/components/atoms/SelectBox.vue";
 import UMesseService from "@/services/UMesseService";
-import ModalUploading from "@/components/organisms/ModalUploading.vue";
+import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import DropdownMenu from "@/components/molecules/DropdownMenu.vue";
 import { UMesseError } from "../../models/UMesseError";
 export default defineComponent({
@@ -307,7 +306,7 @@ export default defineComponent({
     TextBox,
     TextArea,
     SelectBox,
-    ModalUploading,
+    ModalLoading,
     DropdownMenu,
   },
   setup() {
@@ -337,9 +336,9 @@ export default defineComponent({
       isSavedModalAppear: false,
       isRemoveModalAppear: false,
       isRemovedModalAppear: false,
-      isModalUploading: false,
+      isLoading: false,
       dropdownCmId: "",
-      titleModalUploading: "",
+      titleModalLoading: "",
       isErrorModalApper: false,
       errorCode: "",
       errorMessage: "",
@@ -350,7 +349,7 @@ export default defineComponent({
     };
     const fetchCm = async () => {
       try {
-        const response = await UMesseService.uploadCmService.fetchCm(
+        const response = await UMesseService.cmService.fetchCm(
           authToken,
           state.activeSceneCd,
           state.sort
@@ -375,7 +374,7 @@ export default defineComponent({
       if (state.isPlaying) audioPlayer.stop();
     };
     const save = async (cm: CmItem) => {
-      await UMesseService.uploadCmService.update(
+      await UMesseService.cmService.update(
         authToken,
         cm.id,
         state.title,
@@ -386,7 +385,7 @@ export default defineComponent({
       fetchCm();
     };
     const remove = async (cmId: string) => {
-      await UMesseService.uploadCmService.remove(authToken, cmId);
+      await UMesseService.cmService.remove(authToken, cmId);
       fetchCm();
     };
     const openPlayModal = () => {
@@ -443,26 +442,26 @@ export default defineComponent({
     };
     const saveAndOpenSavedModal = async () => {
       try {
-        state.titleModalUploading = "音源の合成中";
-        openModalUploading();
+        state.titleModalLoading = "音源の合成中";
+        openModalLoading();
         if (!state.selectedCm) return;
         await save(state.selectedCm);
-        closeModalUploading();
+        closeModalLoading();
         closeSaveModal();
         openSavedModal();
       } catch (e) {
         console.log(e.message);
         openErrorModal(e);
       } finally {
-        closeModalUploading();
+        closeModalLoading();
       }
     };
     const removeAndOpenRemovedModal = async () => {
       try {
-        state.titleModalUploading = "音源の削除中";
-        openModalUploading();
+        state.titleModalLoading = "音源の削除中";
+        openModalLoading();
         await remove(state.selectedCm?.id);
-        closeModalUploading();
+        closeModalLoading();
         closeRemoveModal();
         openRemovedModal();
       } catch (e) {
@@ -470,7 +469,7 @@ export default defineComponent({
         console.log(e.message);
         openErrorModal(e);
       } finally {
-        closeModalUploading();
+        closeModalLoading();
       }
     };
     const toEditCm = (cmItem: CmItem) => {
@@ -482,11 +481,11 @@ export default defineComponent({
     onMounted(async () => {
       fetchCm();
     });
-    const openModalUploading = () => {
-      state.isModalUploading = true;
+    const openModalLoading = () => {
+      state.isLoading = true;
     };
-    const closeModalUploading = () => {
-      state.isModalUploading = false;
+    const closeModalLoading = () => {
+      state.isLoading = false;
     };
     const closeAllDropdownMenu = () => {
       state.dropdownCmId = "";

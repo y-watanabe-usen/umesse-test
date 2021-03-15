@@ -9,7 +9,7 @@ import UMesseService from "@/services/UMesseService";
 export const MAX_NARRATION_COUNT = 4;
 
 export default function cmStore() {
-  const service = UMesseService.uploadCmService;
+  const service = UMesseService.cmService;
   const state = reactive({
     displayCmItem: new DisplayCmItem(),
     selectedNarrationIndex: null as number | null,
