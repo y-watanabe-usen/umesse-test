@@ -214,6 +214,7 @@ export default defineComponent({
       if (state.isPlaying) audioPlayer.stop();
     };
     const createTts = async () => {
+      stop();
       openModalUploading();
       const response = await ttsStore.createTtsData(
         state.title,
