@@ -15,7 +15,6 @@ const {
   InternalServerError,
 } = require("umesse-lib/error");
 const db = require("./db");
-const { getCm } = require("./cm");
 
 // 外部連携データ取得（一覧・個別）
 exports.getExternalCm = async (unisCustomerCd, external) => {
@@ -31,8 +30,8 @@ exports.getExternalCm = async (unisCustomerCd, external) => {
     external: external,
   };
   if (unisCustomerCd) params.unisCustomerCd = unisCustomerCd;
-  let checkMessages = checkParams(params);
-  if (checkMessages) throw new BadRequestError(checkMessages.join("\n"));
+  let checkError = checkParams(params);
+  if (checkError) throw new BadRequestError(checkError);
 
   let uploadSystem = constants.cmUploadSystem[external.toUpperCase()];
   let ret;
@@ -84,22 +83,27 @@ exports.completeExternalCm = async (unisCustomerCd, external, body) => {
   );
 
   // パラメーターチェック
-  let checkMessages = checkParams({
+  let checkError = checkParams({
     unisCustomerCd: unisCustomerCd,
     external: external,
     ...body,
   });
-  if (checkMessages) throw new BadRequestError(checkMessages.join("\n"));
+  if (checkError) throw new BadRequestError(checkError);
 
   // CM一覧から該当CMを取得
-  const list = await getCm(unisCustomerCd);
-  if (!list || !list.length) throw new NotFoundError(ERROR_CODE.E0000404);
-  const index = list.findIndex((item) => item.id === body.cmId);
-  if (index < 0) throw new NotFoundError(ERROR_CODE.E0000404);
-  const cm = list[index];
+  let cm, index;
+  try {
+    [cm, index] = await db.User.findCmIndex(unisCustomerCd, body.cmId);
+  } catch (e) {
+    if (e instanceof NotFoundError) throw e;
+    else throw new InternalServerError(e.message);
+  }
 
   // TODO: CMステータス状態によるチェック
+  if (cm.status !== constants.cmStatus.EXTERNAL_UPLOADING)
+    throw new NotFoundError(ERROR_CODE.E0000404);
 
+  // 外部連携データ取得
   let ret = await this.getExternalCm(unisCustomerCd, external);
   ret = ret.unisCustomers.shift();
   if (!ret) throw new NotFoundError(ERROR_CODE.E0000404);
@@ -127,7 +131,7 @@ exports.completeExternalCm = async (unisCustomerCd, external, body) => {
     }
     if (ret.dataProcessType == constants.cmDataProcessType.DELETE) {
       // 連携解除の場合、各連携システム側で制御できないので、CMIDを新たに降りなおす
-      const id = generateId(unisCustomerCd, "c");
+      const id = generateId(unisCustomerCd, constants.resourceCategory.CM);
       const path = `users/${unisCustomerCd}/${constants.resourceCategory.CM}`;
       let res;
       try {
@@ -156,5 +160,6 @@ exports.completeExternalCm = async (unisCustomerCd, external, body) => {
   } catch (e) {
     throw new InternalServerError(e.message);
   }
+
   return body;
 };

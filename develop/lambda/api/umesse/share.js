@@ -1,11 +1,19 @@
 "use strict";
 
-const { constants, debuglog, errorlog, timestamp } = require("umesse-lib/constants");
-const { validation } = require("umesse-lib/validation");
+const {
+  constants,
+  debuglog,
+  timestamp,
+  responseData,
+} = require("umesse-lib/constants");
+const { checkParams } = require("umesse-lib/validation");
 const { s3Manager } = require("umesse-lib/utils/s3Manager");
-const { getCm } = require("./cm");
-const { getUser } = require("./user");
-const { BadRequestError, InternalServerError } = require("umesse-lib/error");
+const {
+  ERROR_CODE,
+  BadRequestError,
+  NotFoundError,
+  InternalServerError,
+} = require("umesse-lib/error");
 const db = require("./db");
 
 // 共有CM取得（一覧・個別）
@@ -18,26 +26,29 @@ exports.getShareCm = async (unisCustomerCd, id) => {
   );
 
   // パラメーターチェック
-  const checkParams = validation.checkParams({
+  let params = {
     unisCustomerCd: unisCustomerCd,
-  });
-  if (checkParams) throw new BadRequestError(checkParams);
+  };
+  if (id) params.id = id;
+  let checkError = checkParams(params);
+  if (checkError) throw new BadRequestError(checkError);
 
-
-  let json;
+  let ret;
   try {
-    json = await db.User.findCm(unisCustomerCd);
+    ret = await db.User.findCm(unisCustomerCd);
   } catch (e) {
-    errorlog(JSON.stringify(e));
-    throw new InternalServerError(e.message);
+    if (e instanceof NotFoundError) throw e;
+    else throw new InternalServerError(e.message);
   }
 
-  json = json.filter((item) => item.status === constants.cmStatus.SHARING);
-  if (id) {
-    json = json.filter((item) => item.cmId === id)[0];
-  }
-  if (!json) throw new InternalServerError("not found");
-  return json;
+  // TODO: CMステータス状態によるチェック
+  ret = ret.filter((item) => item.status === constants.cmStatus.SHARING);
+  if (!ret) throw new NotFoundError(ERROR_CODE.E0000404);
+
+  if (id) ret = ret.filter((item) => item.cmId === id).shift();
+  if (!ret) throw new NotFoundError(ERROR_CODE.E0000404);
+
+  return responseData(ret, constants.resourceCategory.CM);
 };
 
 // 共有CM追加
@@ -50,50 +61,59 @@ exports.createShareCm = async (unisCustomerCd, id) => {
   );
 
   // パラメーターチェック
-  const checkParams = validation.checkParams({
+  let checkError = checkParams({
     unisCustomerCd: unisCustomerCd,
     id: id,
   });
-  if (checkParams) throw new BadRequestError(checkParams);
+  if (checkError) throw new BadRequestError(checkError);
 
   // CM一覧から該当CMを取得
-  const list = await getCm(unisCustomerCd);
-  if (!list || !list.length) throw new InternalServerError("not found");
-  const index = list.findIndex((item) => item.cmId === id);
-  if (index < 0) throw new InternalServerError("not found");
-  const cm = list[index];
-
-  // ユーザー情報取得
-  const user = await getUser(unisCustomerCd);
-  if (!user) throw new InternalServerError("not found");
-
-  // S3上のCMをコピー
-  let res;
+  let cm, index;
   try {
-    res = await s3Manager.copy(
-      constants.s3Bucket().users,
-      `group/${user.customerGroupCd}/cm/${id}.mp3`,
-      `${constants.s3Bucket().users}/users/${unisCustomerCd}/cm/${id}.mp3`
-    );
+    [cm, index] = await db.User.findCmIndex(unisCustomerCd, id);
   } catch (e) {
-    erorrolg(JSON.stringify(e));
-    throw new InternalServerError(e.message);
+    if (e instanceof NotFoundError) throw e;
+    else throw new InternalServerError(e.message);
   }
-  if (!res) throw new InternalServerError("copy failed");
 
   // TODO: CMステータス状態によるチェック
+  if (cm.status !== constants.cmStatus.COMPLETE)
+    throw new NotFoundError(ERROR_CODE.E0000404);
+
+  // ユーザー情報取得
+  let user;
+  try {
+    user = await db.User.find(unisCustomerCd);
+  } catch (e) {
+    if (e instanceof NotFoundError) throw e;
+    else throw new InternalServerError(e.message);
+  }
+
+  // S3上のCMをコピー
+  try {
+    const _ = await s3Manager.copy(
+      constants.s3Bucket().users,
+      `group/${user.customerGroupCd}/${constants.resourceCategory.CM}/${id}.aac`,
+      `${constants.s3Bucket().users}/users/${unisCustomerCd}/${
+        constants.resourceCategory.CM
+      }/${id}.aac`
+    );
+  } catch (e) {
+    throw new InternalServerError(e.message);
+  }
 
   // DynamoDBのデータ更新
   cm.status = constants.cmStatus.SHARING;
   cm.timestamp = timestamp();
 
-
+  let ret;
   try {
-    return await db.User.updateCm(unisCustomerCd, index, cm);
+    ret = await db.User.updateCm(unisCustomerCd, index, cm);
   } catch (e) {
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
+
+  return responseData(ret, constants.resourceCategory.CM);
 };
 
 // 共有CM解除
@@ -106,44 +126,54 @@ exports.deleteShareCm = async (unisCustomerCd, id) => {
   );
 
   // パラメーターチェック
-  const checkParams = validation.checkParams({
+  let checkError = checkParams({
     unisCustomerCd: unisCustomerCd,
     id: id,
   });
-  if (checkParams) throw new BadRequestError(checkParams);
+  if (checkError) throw new BadRequestError(checkError);
 
   // CM一覧から該当CMを取得
-  const list = await this.getCm(unisCustomerCd);
-  if (!list || !list.length) throw new InternalServerError("not found");
-  const index = list.findIndex((item) => item.cmId === id);
-  if (index < 0) throw new InternalServerError("not found");
-  const cm = list[index];
+  let cm, index;
+  try {
+    [cm, index] = await db.User.findCmIndex(unisCustomerCd, id);
+  } catch (e) {
+    if (e instanceof NotFoundError) throw e;
+    else throw new InternalServerError(e.message);
+  }
 
   // TODO: CMステータス状態によるチェック
+  if (cm.status !== constants.cmStatus.SHARING)
+    throw new NotFoundError(ERROR_CODE.E0000404);
 
   // ユーザー情報取得
-  const user = await getUser(unisCustomerCd);
-  if (!user) throw new InternalServerError("not found");
+  let user;
+  try {
+    user = await db.User.find(unisCustomerCd);
+  } catch (e) {
+    if (e instanceof NotFoundError) throw e;
+    else throw new InternalServerError(e.message);
+  }
 
   // DynamoDBのデータ更新
   cm.status = constants.cmStatus.COMPLETE;
   cm.timestamp = timestamp();
 
-  let res;
+  let ret;
   try {
-    res = await db.User.updateCm(unisCustomerCd, index, cm);
+    ret = await db.User.updateCm(unisCustomerCd, index, cm);
   } catch (e) {
-    erorrolg(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
+
   // S3上のCMを削除
   try {
-    await s3Manager.delete(
+    const _ = await s3Manager.delete(
       constants.s3Bucket().users,
-      `group/${user.customerGroupCd}/cm/${id}.mp3`
+      `group/${user.customerGroupCd}/${constants.resourceCategory.CM}/${id}.aac`
     );
   } catch (e) {
-    errorlog(JSON.stringify(e));
+    throw new InternalServerError(e.message);
   }
-  return res;
+
+  return responseData(ret, constants.resourceCategory.CM);
 };

@@ -19,10 +19,10 @@ exports.getUser = async (unisCustomerCd) => {
   );
 
   // パラメーターチェック
-  let checkMessages = checkParams({
+  let checkError = checkParams({
     unisCustomerCd: unisCustomerCd,
   });
-  if (checkMessages) throw new BadRequestError(checkMessages.join("\n"));
+  if (checkError) throw new BadRequestError(checkError);
 
   try {
     return await db.User.find(unisCustomerCd);

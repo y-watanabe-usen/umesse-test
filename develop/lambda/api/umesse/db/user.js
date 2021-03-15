@@ -49,6 +49,13 @@ module.exports = {
     return ret.Item.cm;
   },
 
+  findCmIndex: async function (unisCustomerCd, id) {
+    let ret = await this.findCm(unisCustomerCd);
+    const index = ret.findIndex((item) => item.cmId === id);
+    if (index < 0) throw new NotFoundError(ERROR_CODE.E0000404);
+    return [ret[index], index];
+  },
+
   findResource: async function (unisCustomerCd, category) {
     const key = { unisCustomerCd: unisCustomerCd };
     const options = {

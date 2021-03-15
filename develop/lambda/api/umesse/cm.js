@@ -122,7 +122,7 @@ exports.createCm = async (unisCustomerCd, body) => {
   if (errorCodes) throw new BadRequestError(ERROR_CODE[errorCodes.pop()]);
 
   // ID生成
-  const id = generateId(unisCustomerCd, "c");
+  const id = generateId(unisCustomerCd, constants.resourceCategory.CM);
 
   // CM結合、S3へPUT
   const seconds = await generateCm(unisCustomerCd, id, body.materials);

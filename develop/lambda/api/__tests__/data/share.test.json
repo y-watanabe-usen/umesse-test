@@ -4,6 +4,7 @@
       "PutRequest": {
         "Item": {
           "unisCustomerCd": { "S": "040000000" },
+          "customerGroupCd": { "S": "G040000000" },
           "cm": {
             "L": [
               {

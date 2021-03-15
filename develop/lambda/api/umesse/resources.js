@@ -204,7 +204,7 @@ exports.createRecordingResource = async (unisCustomerCd, body) => {
   if (checkParams) throw new BadRequestError(checkParams);
 
   // ID作成
-  const id = generateId(unisCustomerCd, "r");
+  const id = generateId(unisCustomerCd, constants.resourceCategory.RECORDING);
 
   const binaryData = Buffer.from(body["recordedFile"], "binary");
   // S3へPUT
@@ -267,7 +267,7 @@ exports.createTtsResource = async (unisCustomerCd, body) => {
     if (data.id && data.category) {
       json.push({ id: data.id, category: data.category });
     } else {
-      id = generateId(unisCustomerCd, "t");
+      id = generateId(unisCustomerCd, constants.resourceCategory.TTS);
 
       // S3のオブジェクトリネーム
       let res;
