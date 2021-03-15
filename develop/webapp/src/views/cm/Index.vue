@@ -472,13 +472,12 @@
       </ModalUploading>
     </transition>
     <transition>
-      <ModalError
-        v-if="isError"
+      <ModalErrorDialog
+        v-if="isErrorModalApper"
         @close="closeErrorModal"
-        title="エラー"
         :errorCode="errorCode"
         :errorMessage="errorMessage"
-      ></ModalError>
+      ></ModalErrorDialog>
     </transition>
   </div>
 </template>
@@ -497,7 +496,7 @@ import Button from "@/components/atoms/Button.vue";
 import ModalDialog from "@/components/organisms/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
-import ModalError from "@/components/organisms/ModalError.vue";
+import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
 import PlayDialogContents from "@/components/molecules/PlayDialogContents.vue";
 import MessageDialogContents from "@/components/molecules/MessageDialogContents.vue";
 import FormGroup from "@/components/molecules/FormGroup.vue";
@@ -522,7 +521,7 @@ export default defineComponent({
     ModalDialog,
     ModalHeader,
     ModalFooter,
-    ModalError,
+    ModalErrorDialog,
     PlayDialogContents,
     MessageDialogContents,
     FormGroup,
@@ -568,7 +567,7 @@ export default defineComponent({
       isOpenChimeSliderAppear: false,
       isEndChimeSliderAppear: false,
       isBgmSliderAppear: false,
-      isError: false,
+      isErrorModalApper: false,
       errorCode: "",
       errorMessage: "",
     });
@@ -662,7 +661,7 @@ export default defineComponent({
         await create();
       } catch (e) {
         closePlayModal();
-        setError(e);
+        openErrorModal(e);
       }
     };
     const stopAndClosePlayModal = () => {
@@ -676,7 +675,7 @@ export default defineComponent({
         closeSaveModal();
         openSavedModal();
       } catch (e) {
-        setError(e);
+        openErrorModal(e);
       } finally {
         closeModalUploading();
       }
@@ -827,12 +826,12 @@ export default defineComponent({
       closeAllSlider();
     };
     const closeErrorModal = () => {
-      state.isError = false;
+      state.isErrorModalApper = false;
     };
-    const setError = (e: UMesseError) => {
+    const openErrorModal = (e: UMesseError) => {
       state.errorCode = e.errorCode;
       state.errorMessage = e.message;
-      state.isError = true;
+      state.isErrorModalApper = true;
     };
     return {
       ...toRefs(state),

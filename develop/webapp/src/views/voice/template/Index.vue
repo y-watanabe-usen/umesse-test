@@ -65,13 +65,12 @@
     </BasicLayout>
     <!-- modal -->
     <transition>
-      <ModalError
-        v-if="isError"
+      <ModalErrorDialog
+        v-if="isErrorModalApper"
         @close="closeErrorModal"
-        title="エラー"
         :errorCode="errorCode"
         :errorMessage="errorMessage"
-      ></ModalError>
+      ></ModalErrorDialog>
     </transition>
   </div>
 </template>
@@ -93,7 +92,7 @@ import * as Common from "@/utils/Common";
 import UMesseService from "@/services/UMesseService";
 import router from "@/router";
 import UMesseCache from "@/repository/UMesseCache";
-import ModalError from "@/components/organisms/ModalError.vue";
+import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
 import { UMesseError } from "../../../models/UMesseError";
 
 export default defineComponent({
@@ -108,7 +107,7 @@ export default defineComponent({
     List,
     ListHeader,
     ListItem,
-    ModalError,
+    ModalErrorDialog,
   },
   setup() {
     const sortList = Common.getSort();
@@ -117,7 +116,7 @@ export default defineComponent({
       sort: 1,
       activeIndustryCd: "01",
       templates: [] as TemplateItem[],
-      isError: false,
+      isErrorModalApper: false,
       errorCode: "",
       errorMessage: "",
     });
@@ -135,7 +134,7 @@ export default defineComponent({
         );
         state.templates = response;
       } catch (e) {
-        setError(e);
+        openErrorModal(e);
       }
     };
 
@@ -149,13 +148,13 @@ export default defineComponent({
     });
 
     const closeErrorModal = () => {
-      state.isError = false;
+      state.isErrorModalApper = false;
     };
 
-    const setError = (e: UMesseError) => {
+    const openErrorModal = (e: UMesseError) => {
       state.errorCode = e.errorCode;
       state.errorMessage = e.message;
-      state.isError = true;
+      state.isErrorModalApper = true;
     };
     return {
       ...toRefs(state),

@@ -26,7 +26,7 @@ import ModalFooter from "@/components/molecules/ModalFooter.vue";
 import MessageDialogContents from "@/components/molecules/MessageDialogContents.vue";
 
 export default {
-  name: "ModalError",
+  name: "ModalErrorDialog",
   components: {
     Button,
     ModalDialog,
@@ -35,10 +35,6 @@ export default {
     MessageDialogContents,
   },
   props: {
-    title: {
-      type: String,
-      required: true,
-    },
     errorCode: {
       type: String,
       required: true,
