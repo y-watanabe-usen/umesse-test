@@ -12,7 +12,7 @@ import { UpdateUserCmRequestItem } from "@/models/UpdateUserCmRequestItem";
 import Constants from "@/utils/Constants";
 import * as UMesseApi from "umesseapi";
 import { Recording, Tts } from "@/models/DisplayCmItem";
-import { CmItem } from "umesseapi/models/cm-item";  
+import { CmItem } from "umesseapi/models/cm-item";
 import { UMesseErrorFromApiFactory } from "@/models/UMesseError";
 
 export enum UPLOAD_CM_STATE {
@@ -36,7 +36,7 @@ export function useUploadCmService(api: UMesseApi.CmApi) {
     sceneCd: string,
     sort?: number
   ): Promise<CmItem[]> => {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       api
         .listUserCm(authToken, sort)
         .then((tmp) => {
@@ -62,7 +62,7 @@ export function useUploadCmService(api: UMesseApi.CmApi) {
     endChime: EndChime | null,
     bgm: Bgm | null
   ): Promise<CreateUserCmResponseItem> => {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       if (state.status === UPLOAD_CM_STATE.CREATING) {
         return reject(new Error(`state is creating`));
       }
@@ -99,7 +99,7 @@ export function useUploadCmService(api: UMesseApi.CmApi) {
     sceneCd: string,
     uploadSystem: string
   ) => {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       // if (state.status !== UPLOAD_CM_STATE.CREATED) {
       //   return reject(new Error(`state is not created`));
       // }
@@ -129,7 +129,7 @@ export function useUploadCmService(api: UMesseApi.CmApi) {
 
   // deleteは予約語なのでremove
   const remove = async (authToken: string, id: string) => {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       api
         .deleteUserCm(id, authToken)
         .then((value) => {
@@ -154,16 +154,11 @@ export function useUploadCmService(api: UMesseApi.CmApi) {
     const requestModel: CreateUserCmRequestItem = {
       materials: {
         narrations: narrations,
-        startChime: startChime,
-        endChime: endChime,
-        bgm: bgm,
+        startChime: startChime ?? undefined,
+        endChime: endChime ?? undefined,
+        bgm: bgm ?? undefined,
       },
     };
-
-    startChime ? null : delete requestModel.materials?.startChime;
-    endChime ? null : delete requestModel.materials?.endChime;
-    bgm ? null : delete requestModel.materials?.bgm;
-
     console.log(Convert.createUserCmRequestItemToJson(requestModel));
     return requestModel;
   };
