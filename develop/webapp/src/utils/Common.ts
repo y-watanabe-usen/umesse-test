@@ -174,15 +174,6 @@ export function isFullWidthKana(text:string): boolean{
   return text.match(`^[\x20|\u3000]+`) ? true : false;
 }
 
-/**
- * (開閉店)時間の形式が00:00か判定
- * @param time string
- * @return bool
- */
- export function isOpenCloseTime(time:string): boolean{
-  return time.match(`^(?:--:(?:--|00)|00:--)$`) ? true : false;
-}
-
 function getIndustries(cdList: string[]) {
   const result: Industry[] = [];
   cdList.forEach((v) => {

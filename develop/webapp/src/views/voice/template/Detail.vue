@@ -24,11 +24,7 @@
                 "
               />
             </FormGroup>
-            <FormGroup
-              title="言語設定"
-              class="lang"
-              @change="isCheckedLanguege"
-            >
+            <FormGroup title="言語設定" class="lang">
               <div class="lang-check" v-for="(ttsLang, i) in ttsLangs" :key="i">
                 <input
                   class="form-check-input"
@@ -44,10 +40,9 @@
               </div>
               <div>
                 <p
-                  class="errorMessage"
-                  v-bind:class="{ errorColor: isErrorLanguage }"
+                  class="errorMessage errorLangs"
                 >
-                  {{ errorMessageLanguage }}
+                  {{ errorMessageLangs }}
                 </p>
               </div>
             </FormGroup>
@@ -55,29 +50,23 @@
           <div class="row border">
             <FormGroup
               title="1:店名"
-              description = "※カタカナで入力"
+              description="※カタカナで入力"
               class="name"
             >
               <TextBox v-model="customerName" />
               <div>
                 <p
-                  class="errorMessage"
-                  v-bind:class="{ errorColor: isErrorCustomerName }"
+                  class="errorMessage errorCustomerName"
                 >
                   {{ errorMessageCustomerName }}
                 </p>
               </div>
             </FormGroup>
-            <FormGroup
-              title="2:閉店時間"
-              class="time"
-              @change="isCheckedEndTime"
-            >
+            <FormGroup title="2:閉店時間" class="time">
               <TimeInput v-model="endTime" />
               <div>
                 <p
-                  class="errorMessage widthEndTime"
-                  v-bind:class="{ errorColor: isErrorEndTime }"
+                  class="errorMessage errorEndTime"
                 >
                   {{ errorMessageEndTime }}
                 </p>
@@ -231,21 +220,22 @@ export default defineComponent({
       isLoading: false,
       errorMessageCustomerName: computed(() => {
         const customerName: string = state.customerName;
-        if (!Common.isFullWidthKana(customerName)) {
-          return "カタカナで入力してください。";
-        } else {
-          return "";
-        }
+        return selectErrorMessageCustomerName(customerName);
       }),
       isErrorCustomerName: false,
-      errorMessageEndTime: "",
+      errorMessageEndTime: computed(() => {
+        const endTime: string = state.endTime;
+        return selectErrorMessageEndTime(endTime);
+      }),
       isErrorEndTime: false,
-      errorMessageLanguage: "",
-      isErrorLanguage: false,
+      errorMessageLangs: computed(() => {
+        const langs: string[] = state.langs;
+        return selectErrorMessageLangs(langs);
+      }),
+      isErrorLangs: false,
       isDisabledConfirm: computed(() => {
         const customerName: string = state.customerName;
-        const endTime: string = state.endTime;
-        return customerName == "" || endTime == "";
+        return isDisabledButtonConfirm(customerName);
       }),
     });
     const play = async () => {
@@ -296,55 +286,39 @@ export default defineComponent({
     const closeModalLoading = () => {
       state.isLoading = false;
     };
-    const isCheckedCustomerName = () => {
-      // var res = false;
-      if (
-        !state.customerName ||
-        Common.isSpace(state.customerName) ||
-        !Common.isFullWidthKana(state.customerName)
-      ) {
-        // state.errorMessageCustomerName = "全角カタカナで入力してください";
+    const selectErrorMessageCustomerName = (customerName: string) => {
+      if (!Common.isFullWidthKana(customerName)) {
         state.isErrorCustomerName = true;
-        // res = false;
+        return "全角カタカナで入力してください。";
       } else {
-        // state.errorMessageCustomerName = "";
         state.isErrorCustomerName = false;
-        // res = true;
+        return "";
       }
-      state.isDisabledConfirm = isDisabledButtonConfirm();
-      // return res;
     };
-    const isCheckedEndTime = () => {
-      // var res = false;
-      if (!state.endTime || Common.isOpenCloseTime(state.endTime)) {
-        state.errorMessageEndTime = "閉店時間を入力してください";
+    const selectErrorMessageEndTime = (endTime: string) => {
+      if (!endTime) {
         state.isErrorEndTime = true;
-        // res = false;
+        return "閉店時間を入力してください";
       } else {
-        state.errorMessageEndTime = "";
         state.isErrorEndTime = false;
-        // res = true;
+        return "";
       }
-      state.isDisabledConfirm = isDisabledButtonConfirm();
-      // return res;
     };
-    const isCheckedLanguege = () => {
-      // var res = false;
-      if (!state.langs.length) {
-        state.errorMessageLanguage = "言語設定を選択してください";
-        state.isErrorLanguage = true;
-        // res = false;
+    const selectErrorMessageLangs = (langs: string[]) => {
+      if (!langs.length) {
+        state.isErrorLangs = true;
+        return "言語設定を選択してください";
       } else {
-        state.errorMessageLanguage = "";
-        state.isErrorLanguage = false;
-        // res = true;
+        state.isErrorLangs = false;
+        return "";
       }
-      state.isDisabledConfirm = isDisabledButtonConfirm();
-      // return res;
     };
-    const isDisabledButtonConfirm = () => {
+    const isDisabledButtonConfirm = (customerName: string) => {
+      if (!customerName || Common.isSpace(customerName))
+        state.isErrorCustomerName = true;
+
       if (
-        !state.isErrorLanguage &&
+        !state.isErrorLangs &&
         !state.isErrorCustomerName &&
         !state.isErrorEndTime
       ) {
@@ -365,9 +339,6 @@ export default defineComponent({
       stopAndCloseModal,
       template,
       templateDetails,
-      isCheckedCustomerName,
-      isCheckedEndTime,
-      isCheckedLanguege,
     };
   },
 });
@@ -516,16 +487,21 @@ export default defineComponent({
   }
 }
 .errorMessage {
-  color: rgb(123, 123, 123);
+  color: rgb(255, 0, 0);
   font-size: 16px;
   position: absolute;
   left: 140px;
   bottom: -24px;
-  &.errorColor {
-    color: rgb(255, 0, 0);
+  &.errorLangs {
+    width: 100%;
+    left: 0px;
   }
-  &.widthEndTime {
+  &.errorCustomerName {
+    width: 80%;
+  }
+  &.errorEndTime {
     width: 150%;
+    left: 0px;
   }
 }
 </style>
