@@ -1,21 +1,26 @@
 import UMesseApi from "@/repository/UMesseApi";
-import { useResourcesService } from "@/services/resourcesService";
-import { useUploadCmService } from "@/services/uploadCmService";
-import { useUploadRecordingService } from "@/services/uploadRecordingService";
+import { resourcesService } from "@/services/resourcesService";
+import { cmService } from "@/services/cmService";
+import { recordingService } from "@/services/recordingService";
+import { ttsService } from "@/services/ttsService";
 
 class UMesseService {
   private static _instance: UMesseService;
 
   get resourcesService() {
-    return useResourcesService(UMesseApi.resourcesApi, UMesseApi.recordingApi, UMesseApi.ttsApi);
+    return resourcesService(UMesseApi.resourcesApi, UMesseApi.recordingApi, UMesseApi.ttsApi);
   }
 
-  get uploadCmService() {
-    return useUploadCmService(UMesseApi.cmApi);
+  get cmService() {
+    return cmService(UMesseApi.cmApi);
   }
 
-  get uploadRecordingService() {
-    return useUploadRecordingService(UMesseApi.recordingApi);
+  get recordingService() {
+    return recordingService(UMesseApi.recordingApi);
+  }
+
+  get ttsService() {
+    return ttsService(UMesseApi.ttsApi);
   }
 
   public static get instance() {

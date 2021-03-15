@@ -60,8 +60,8 @@
                   <span id="avg-level-text"> {{ decibel }} </span> dB
                   <h5 class="title">録音したデータ１</h5>
                   <div class="time" v-if="hasRecordedData">
-                    <p>{{ playbackTimeHms }}</p>
-                    <p>{{ durationHms }}</p>
+                    <p>{{ convertNumberToTime(playbackTime) }}</p>
+                    <p>{{ convertNumberToTime(duration) }}</p>
                   </div>
                   <div class="time" v-else>
                     <p>— : — : —</p>
@@ -133,18 +133,14 @@
       </ModalDialog>
     </transition>
     <transition>
-      <ModalUploading v-if="isModalUploading" title="音源の合成中">
-      </ModalUploading>
-    </transition>
-    <transition>
-      <ModalError
-        v-if="isError"
+      <ModalErrorDialog
+        v-if="isErrorModalApper"
         @close="closeErrorModal"
-        title="エラー"
         :errorCode="errorCode"
         :errorMessage="errorMessage"
-      ></ModalError>
+      />
     </transition>
+    <ModalLoading v-if="isLoading" title="音源の合成中" />
   </div>
 </template>
 
@@ -155,9 +151,9 @@ import AudioPlayer from "@/utils/AudioPlayer";
 import {
   RecordingFile,
   UPLOAD_RECORDING_STATE,
-} from "@/services/uploadRecordingService";
+} from "@/services/recordingService";
 import provideRecordingStore from "@/store/recording";
-import * as FormatDate from "@/utils/FormatDate";
+import { convertNumberToTime } from "@/utils/FormatDate";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
 import Header from "@/components/organisms/Header.vue";
@@ -165,13 +161,13 @@ import Button from "@/components/atoms/Button.vue";
 import ModalDialog from "@/components/organisms/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
-import ModalError from "@/components/organisms/ModalError.vue";
+import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
 import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
 import { useGlobalStore } from "@/store";
 import router from "@/router";
-import ModalUploading from "@/components/organisms/ModalUploading.vue";
+import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { UMesseError } from "../../models/UMesseError";
 
 export default defineComponent({
@@ -183,11 +179,11 @@ export default defineComponent({
     ModalDialog,
     ModalHeader,
     ModalFooter,
-    ModalError,
+    ModalErrorDialog,
     FormGroup,
     TextBox,
     TextArea,
-    ModalUploading,
+    ModalLoading,
   },
   name: "RecordingStart",
   setup() {
@@ -205,16 +201,10 @@ export default defineComponent({
       }),
       isPlaying: computed(() => audioPlayer.isPlaying()),
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
-      playbackTimeHms: computed(() =>
-        FormatDate.convertNumberToTime(audioPlayer.getPlaybackTime())
-      ),
       duration: computed(() => audioPlayer.getDuration()),
-      durationHms: computed(() =>
-        FormatDate.convertNumberToTime(audioPlayer.getDuration())
-      ),
       isModalAppear: false,
-      isModalUploading: false,
-      isError: false,
+      isLoading: false,
+      isErrorModalApper: false,
       errorCode: "",
       errorMessage: "",
     });
@@ -239,17 +229,17 @@ export default defineComponent({
       /// check state.file.
       // state.file.blob = await audioRecorder.getWaveBlob();
       try {
-        openModalUploading();
+        openModalLoading();
         state.file.blob = await audioRecorder.getMp3Blob();
         const response = await recordingStore.uploadRecordingData(state.file);
         cm.setNarration(response);
         router.push({ name: "Cm" });
-        closeModalUploading();
+        closeModalLoading();
         closeModal();
       } catch (e) {
-        setError(e);
+        openErrorModal(e);
       } finally {
-        closeModalUploading();
+        closeModalLoading();
       }
     };
     const openModal = () => {
@@ -259,19 +249,19 @@ export default defineComponent({
     const closeModal = () => {
       state.isModalAppear = false;
     };
-    const openModalUploading = () => {
-      state.isModalUploading = true;
+    const openModalLoading = () => {
+      state.isLoading = true;
     };
-    const closeModalUploading = () => {
-      state.isModalUploading = false;
+    const closeModalLoading = () => {
+      state.isLoading = false;
     };
     const closeErrorModal = () => {
-      state.isError = false;
+      state.isErrorModalApper = false;
     };
-    const setError = (e: UMesseError) => {
+    const openErrorModal = (e: UMesseError) => {
       state.errorCode = e.errorCode;
       state.errorMessage = e.message;
-      state.isError = true;
+      state.isErrorModalApper = true;
     };
     return {
       ...toRefs(state),
@@ -284,6 +274,7 @@ export default defineComponent({
       openModal,
       closeModal,
       closeErrorModal,
+      convertNumberToTime,
     };
   },
 });

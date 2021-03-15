@@ -3,8 +3,8 @@ import { inject, InjectionKey, provide, reactive, toRefs } from "vue";
 import { TtsItem } from "umesseapi/models/tts-item";
 import { GenerateUserTtsRequestDetailItem, GenerateUserTtsRequestItem } from "@/models/GenerateUserTtsRequestItem";
 import { CreateUserTtsRequestDetailItem, CreateUserTtsRequestItem } from "@/models/CreateUserTtsRequestItem";
-import UMesseApi from "@/repository/UMesseApi";
 import { TemplateDetailItem } from "@/models/TemplateDetailItem";
+import UMesseService from "@/services/UMesseService";
 
 interface TtsData {
   url: string,
@@ -29,11 +29,10 @@ export default function ttsStore() {
 
   const fetchTtsData = async () => {
     try {
-      const response = await UMesseApi.ttsApi.listUserTts(token());
-      state.ttsItems = response.data;
-      console.log(response.data);
-    } catch (err) {
-      state.error = err.message;
+      const response = await UMesseService.ttsService.fetchData(token());
+      state.ttsItems = response;
+    } catch (e) {
+      // throw new e;
     }
   };
 
@@ -43,17 +42,23 @@ export default function ttsStore() {
   };
 
   const deleteUserTts = async (id: string) => {
-    await UMesseApi.ttsApi.deleteUserTts(id, token());
+    try {
+      await UMesseService.ttsService.remove(token(), id);
+    } catch (e) {
+      // throw new e;
+    }
   };
+
   const updateUserTts = async (
     id: string,
     title: string,
     description: string
   ) => {
-    UMesseApi.ttsApi.updateUserTts(token(), id, {
-      title: title,
-      description: description,
-    });
+    try {
+      await UMesseService.ttsService.update(token(), id, title, description);
+    } catch (e) {
+      // throw new e;
+    }
   };
 
   const hasTtsData = () => (state.ttsDatas.length !== 0);
@@ -103,10 +108,13 @@ export default function ttsStore() {
       };
 
       console.log("generateUserTts", token(), requestModel);
-      const response = await UMesseApi.ttsApi.generateUserTts(
-        token(), requestModel);
-      console.log(response.data.details);
-      state.ttsDatas = response.data.details;
+      try {
+        const response = await UMesseService.ttsService.generate(token(), requestModel);
+        console.log(response);
+        state.ttsDatas = response.details;
+      } catch (e) {
+        // throw new e;
+      }
     } catch (err) {
       console.log(err);
       state.error = err.message;
@@ -135,10 +143,14 @@ export default function ttsStore() {
           speaker: speaker,
         }]
       };
-      const response = await UMesseApi.ttsApi.generateUserTts(
-        token(), requestModel);
-      console.log(response.data);
-      state.ttsDatas = response.data.details;
+      try {
+        const response = await UMesseService.ttsService.generate(
+          token(), requestModel);
+        console.log(response);
+        state.ttsDatas = response.details;
+      } catch (e) {
+        // throw new e;
+      }
     } catch (err) {
       console.log(err);
       state.error = err.message;
@@ -165,9 +177,13 @@ export default function ttsStore() {
         details: details
       };
 
-      const response = await UMesseApi.ttsApi.createUserTts(token(), requestModel);
-      console.log(response);
-      return response.data;
+      try {
+        const response = await UMesseService.ttsService.create(token(), requestModel);
+        console.log(response);
+        return response;
+      } catch (e) {
+        // throw new e;
+      }
     } catch (err) {
       console.log(err);
       state.error = err.message;

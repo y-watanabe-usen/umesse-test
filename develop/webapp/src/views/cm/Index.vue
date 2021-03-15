@@ -107,9 +107,9 @@
               :key="narration.contentsId"
               :title="
                 'ナレーション ' +
-                  `${index + 1}` +
-                  '/' +
-                  `${MAX_NARRATION_COUNT}`
+                `${index + 1}` +
+                '/' +
+                `${MAX_NARRATION_COUNT}`
               "
               size="flexible"
               :contentTitle="`${narration.title}`"
@@ -186,9 +186,9 @@
               <CmItem
                 :title="
                   'ナレーション ' +
-                    `${narrations.length + 1}` +
-                    '/' +
-                    `${MAX_NARRATION_COUNT}`
+                  `${narrations.length + 1}` +
+                  '/' +
+                  `${MAX_NARRATION_COUNT}`
                 "
                 :isEmpty="true"
                 size="flexible"
@@ -468,18 +468,14 @@
       </ModalDialog>
     </transition>
     <transition>
-      <ModalUploading v-if="isModalUploading" title="音源の合成中">
-      </ModalUploading>
-    </transition>
-    <transition>
-      <ModalError
-        v-if="isError"
+      <ModalErrorDialog
+        v-if="isErrorModalApper"
         @close="closeErrorModal"
-        title="エラー"
         :errorCode="errorCode"
         :errorMessage="errorMessage"
-      ></ModalError>
+      />
     </transition>
+    <ModalLoading v-if="isLoading" title="音源の合成中" />
   </div>
 </template>
 
@@ -490,14 +486,14 @@ import AudioStore from "@/store/audio";
 import { useGlobalStore } from "@/store";
 import * as FormatDate from "@/utils/FormatDate";
 import Constants from "@/utils/Constants";
-import { UPLOAD_CM_STATE } from "@/services/uploadCmService";
+import { UPLOAD_CM_STATE } from "@/services/cmService";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import Header from "@/components/organisms/Header.vue";
 import Button from "@/components/atoms/Button.vue";
 import ModalDialog from "@/components/organisms/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
-import ModalError from "@/components/organisms/ModalError.vue";
+import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
 import PlayDialogContents from "@/components/molecules/PlayDialogContents.vue";
 import MessageDialogContents from "@/components/molecules/MessageDialogContents.vue";
 import FormGroup from "@/components/molecules/FormGroup.vue";
@@ -511,7 +507,7 @@ import VolumeSlider from "@/components/molecules/VolumeSlider.vue";
 import { MAX_NARRATION_COUNT } from "@/store/cm";
 import router from "@/router";
 import UMesseService from "@/services/UMesseService";
-import ModalUploading from "@/components/organisms/ModalUploading.vue";
+import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { UMesseError } from "../../models/UMesseError";
 
 export default defineComponent({
@@ -522,7 +518,7 @@ export default defineComponent({
     ModalDialog,
     ModalHeader,
     ModalFooter,
-    ModalError,
+    ModalErrorDialog,
     PlayDialogContents,
     MessageDialogContents,
     FormGroup,
@@ -533,7 +529,7 @@ export default defineComponent({
     CmItem,
     DropdownMenu,
     VolumeSlider,
-    ModalUploading,
+    ModalLoading,
   },
   setup() {
     const audioStore = AudioStore();
@@ -559,7 +555,7 @@ export default defineComponent({
       isPlayModalAppear: false,
       isSaveModalAppear: false,
       isSavedModalAppear: false,
-      isModalUploading: false,
+      isLoading: false,
       isNarrationDropdownAppear: [false, false, false, false],
       isOpenChimeDropdownAppear: false,
       isEndChimeDropdownAppear: false,
@@ -568,7 +564,7 @@ export default defineComponent({
       isOpenChimeSliderAppear: false,
       isEndChimeSliderAppear: false,
       isBgmSliderAppear: false,
-      isError: false,
+      isErrorModalApper: false,
       errorCode: "",
       errorMessage: "",
     });
@@ -662,7 +658,7 @@ export default defineComponent({
         await create();
       } catch (e) {
         closePlayModal();
-        setError(e);
+        openErrorModal(e);
       }
     };
     const stopAndClosePlayModal = () => {
@@ -671,14 +667,14 @@ export default defineComponent({
     };
     const updateAndOpenSavedModal = async () => {
       try {
-        openModalUploading();
+        openModalLoading();
         await update();
         closeSaveModal();
         openSavedModal();
       } catch (e) {
-        setError(e);
+        openErrorModal(e);
       } finally {
-        closeModalUploading();
+        closeModalLoading();
       }
     };
     const convertNumberToTime = (second: number) =>
@@ -732,11 +728,11 @@ export default defineComponent({
     const toVoiceFree = () => {
       router.push({ name: "VoiceFree" });
     };
-    const openModalUploading = () => {
-      state.isModalUploading = true;
+    const openModalLoading = () => {
+      state.isLoading = true;
     };
-    const closeModalUploading = () => {
-      state.isModalUploading = false;
+    const closeModalLoading = () => {
+      state.isLoading = false;
     };
     const closeAllDropdownMenu = () => {
       state.isNarrationDropdownAppear = [false, false, false, false];
@@ -827,12 +823,12 @@ export default defineComponent({
       closeAllSlider();
     };
     const closeErrorModal = () => {
-      state.isError = false;
+      state.isErrorModalApper = false;
     };
-    const setError = (e: UMesseError) => {
+    const openErrorModal = (e: UMesseError) => {
       state.errorCode = e.errorCode;
       state.errorMessage = e.message;
-      state.isError = true;
+      state.isErrorModalApper = true;
     };
     return {
       ...toRefs(state),

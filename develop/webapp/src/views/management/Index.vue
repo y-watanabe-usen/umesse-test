@@ -232,18 +232,16 @@
       </ModalDialog>
     </transition>
     <transition>
-      <ModalUploading v-if="isModalUploading" :title="titleModalUploading">
-      </ModalUploading>
+      <ModalLoading v-if="isLoading" :title="titleModalLoading" />
     </transition>
     <transition>
       <transition>
-        <ModalError
-          v-if="isError"
+        <ModalErrorDialog
+          v-if="isErrorModalApper"
           @close="closeErrorModal"
-          title="エラー"
           :errorCode="errorCode"
           :errorMessage="errorMessage"
-        ></ModalError>
+        />
       </transition>
     </transition>
   </div>
@@ -267,7 +265,7 @@ import ListItem from "@/components/molecules/ListItem.vue";
 import ModalDialog from "@/components/organisms/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
-import ModalError from "@/components/organisms/ModalError.vue";
+import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
 import PlayDialogContents from "@/components/molecules/PlayDialogContents.vue";
 import MessageDialogContents from "@/components/molecules/MessageDialogContents.vue";
 import FormGroup from "@/components/molecules/FormGroup.vue";
@@ -283,7 +281,7 @@ import Constants from "@/utils/Constants";
 import { useRouter } from "vue-router";
 import SelectBox from "@/components/atoms/SelectBox.vue";
 import UMesseService from "@/services/UMesseService";
-import ModalUploading from "@/components/organisms/ModalUploading.vue";
+import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import DropdownMenu from "@/components/molecules/DropdownMenu.vue";
 import { UMesseError } from "../../models/UMesseError";
 export default defineComponent({
@@ -301,14 +299,14 @@ export default defineComponent({
     ModalDialog,
     ModalHeader,
     ModalFooter,
-    ModalError,
+    ModalErrorDialog,
     PlayDialogContents,
     MessageDialogContents,
     FormGroup,
     TextBox,
     TextArea,
     SelectBox,
-    ModalUploading,
+    ModalLoading,
     DropdownMenu,
   },
   setup() {
@@ -338,10 +336,10 @@ export default defineComponent({
       isSavedModalAppear: false,
       isRemoveModalAppear: false,
       isRemovedModalAppear: false,
-      isModalUploading: false,
+      isLoading: false,
       dropdownCmId: "",
-      titleModalUploading: "",
-      isError: false,
+      titleModalLoading: "",
+      isErrorModalApper: false,
       errorCode: "",
       errorMessage: "",
     });
@@ -351,14 +349,14 @@ export default defineComponent({
     };
     const fetchCm = async () => {
       try {
-        const response = await UMesseService.uploadCmService.fetchCm(
+        const response = await UMesseService.cmService.fetchCm(
           authToken,
           state.activeSceneCd,
           state.sort
         );
         state.cms = response;
       } catch (e) {
-        setError(e);
+        openErrorModal(e);
       }
     };
     const selectCm = (cm: CmItem) => {
@@ -376,7 +374,7 @@ export default defineComponent({
       if (state.isPlaying) audioPlayer.stop();
     };
     const save = async (cm: CmItem) => {
-      await UMesseService.uploadCmService.update(
+      await UMesseService.cmService.update(
         authToken,
         cm.id,
         state.title,
@@ -387,7 +385,7 @@ export default defineComponent({
       fetchCm();
     };
     const remove = async (cmId: string) => {
-      await UMesseService.uploadCmService.remove(authToken, cmId);
+      await UMesseService.cmService.remove(authToken, cmId);
       fetchCm();
     };
     const openPlayModal = () => {
@@ -444,34 +442,34 @@ export default defineComponent({
     };
     const saveAndOpenSavedModal = async () => {
       try {
-        state.titleModalUploading = "音源の合成中";
-        openModalUploading();
+        state.titleModalLoading = "音源の合成中";
+        openModalLoading();
         if (!state.selectedCm) return;
         await save(state.selectedCm);
-        closeModalUploading();
+        closeModalLoading();
         closeSaveModal();
         openSavedModal();
       } catch (e) {
         console.log(e.message);
-        setError(e);
+        openErrorModal(e);
       } finally {
-        closeModalUploading();
+        closeModalLoading();
       }
     };
     const removeAndOpenRemovedModal = async () => {
       try {
-        state.titleModalUploading = "音源の削除中";
-        openModalUploading();
+        state.titleModalLoading = "音源の削除中";
+        openModalLoading();
         await remove(state.selectedCm?.id);
-        closeModalUploading();
+        closeModalLoading();
         closeRemoveModal();
         openRemovedModal();
       } catch (e) {
         closeRemoveModal();
         console.log(e.message);
-        setError(e);
+        openErrorModal(e);
       } finally {
-        closeModalUploading();
+        closeModalLoading();
       }
     };
     const toEditCm = (cmItem: CmItem) => {
@@ -483,11 +481,11 @@ export default defineComponent({
     onMounted(async () => {
       fetchCm();
     });
-    const openModalUploading = () => {
-      state.isModalUploading = true;
+    const openModalLoading = () => {
+      state.isLoading = true;
     };
-    const closeModalUploading = () => {
-      state.isModalUploading = false;
+    const closeModalLoading = () => {
+      state.isLoading = false;
     };
     const closeAllDropdownMenu = () => {
       state.dropdownCmId = "";
@@ -501,12 +499,12 @@ export default defineComponent({
       }
     };
     const closeErrorModal = () => {
-      state.isError = false;
+      state.isErrorModalApper = false;
     };
-    const setError = (e: UMesseError) => {
+    const openErrorModal = (e: UMesseError) => {
       state.errorCode = e.errorCode;
       state.errorMessage = e.message;
-      state.isError = true;
+      state.isErrorModalApper = true;
     };
     return {
       ...toRefs(state),

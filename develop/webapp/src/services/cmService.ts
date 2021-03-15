@@ -12,7 +12,7 @@ import { UpdateUserCmRequestItem } from "@/models/UpdateUserCmRequestItem";
 import Constants from "@/utils/Constants";
 import * as UMesseApi from "umesseapi";
 import { Recording, Tts } from "@/models/DisplayCmItem";
-import { CmItem } from "umesseapi/models/cm-item";  
+import { CmItem } from "umesseapi/models/cm-item";
 import { UMesseErrorFromApiFactory } from "@/models/UMesseError";
 
 export enum UPLOAD_CM_STATE {
@@ -24,7 +24,7 @@ export enum UPLOAD_CM_STATE {
   ERROR,
 }
 
-export function useUploadCmService(api: UMesseApi.CmApi) {
+export function cmService(api: UMesseApi.CmApi) {
   const state = reactive({
     status: UPLOAD_CM_STATE.NONE as UPLOAD_CM_STATE,
   });
@@ -36,7 +36,7 @@ export function useUploadCmService(api: UMesseApi.CmApi) {
     sceneCd: string,
     sort?: number
   ): Promise<CmItem[]> => {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       api
         .listUserCm(authToken, sort)
         .then((tmp) => {
@@ -58,11 +58,11 @@ export function useUploadCmService(api: UMesseApi.CmApi) {
   const create = async (
     authToken: string,
     narrations: (Narration | Recording | Tts)[],
-    startChimeContentsId: string | null,
-    endChimeContentsId: string | null,
-    bgmContentsId: string | null
+    startChime: StartChime | null,
+    endChime: EndChime | null,
+    bgm: Bgm | null
   ): Promise<CreateUserCmResponseItem> => {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       if (state.status === UPLOAD_CM_STATE.CREATING) {
         return reject(new Error(`state is creating`));
       }
@@ -71,9 +71,9 @@ export function useUploadCmService(api: UMesseApi.CmApi) {
 
       const requestModel = getCreateUserCmRequestModel(
         narrations,
-        startChimeContentsId,
-        endChimeContentsId,
-        bgmContentsId
+        startChime,
+        endChime,
+        bgm
       );
       api
         .createUserCm(authToken, requestModel)
@@ -99,7 +99,7 @@ export function useUploadCmService(api: UMesseApi.CmApi) {
     sceneCd: string,
     uploadSystem: string
   ) => {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       // if (state.status !== UPLOAD_CM_STATE.CREATED) {
       //   return reject(new Error(`state is not created`));
       // }
@@ -129,7 +129,7 @@ export function useUploadCmService(api: UMesseApi.CmApi) {
 
   // deleteは予約語なのでremove
   const remove = async (authToken: string, id: string) => {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       api
         .deleteUserCm(id, authToken)
         .then((value) => {
@@ -147,33 +147,16 @@ export function useUploadCmService(api: UMesseApi.CmApi) {
 
   const getCreateUserCmRequestModel = (
     narrations: (Narration | Recording | Tts)[],
-    startChimeContentsId: string | null,
-    endChimeContentsId: string | null,
-    bgmContentsId: string | null
+    startChime: StartChime | null,
+    endChime: EndChime | null,
+    bgm: Bgm | null
   ) => {
-    const startChime: StartChime | undefined = startChimeContentsId
-      ? {
-          id: startChimeContentsId,
-          category: Constants.CATEGORY.CHIME,
-          volume: 50,
-        }
-      : undefined;
-    const endChime: EndChime | undefined = endChimeContentsId
-      ? {
-          id: endChimeContentsId,
-          category: Constants.CATEGORY.CHIME,
-          volume: 50,
-        }
-      : undefined;
-    const bgm: Bgm | undefined = bgmContentsId
-      ? { id: bgmContentsId, category: Constants.CATEGORY.BGM, volume: 15 }
-      : undefined;
     const requestModel: CreateUserCmRequestItem = {
       materials: {
         narrations: narrations,
-        startChime: startChime,
-        endChime: endChime,
-        bgm: bgm,
+        startChime: startChime ?? undefined,
+        endChime: endChime ?? undefined,
+        bgm: bgm ?? undefined,
       },
     };
     console.log(Convert.createUserCmRequestItemToJson(requestModel));
