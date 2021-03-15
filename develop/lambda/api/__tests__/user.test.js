@@ -3,12 +3,12 @@
 process.env.environment = "local";
 
 const aws = require("aws-sdk");
-const { getUser } = require("../umesse/user");
 const {
   ERROR_CODE,
   BadRequestError,
   NotFoundError,
 } = require("umesse-lib/error");
+const { getUser } = require("../umesse/user");
 
 // test data
 const json = require("./data/user.test.json");

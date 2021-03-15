@@ -133,8 +133,8 @@ exports.completeExternalCm = async (unisCustomerCd, external, body) => {
       try {
         res = await s3Manager.copy(
           constants.s3Bucket().users,
-          `${path}/${id}.mp3`,
-          `${constants.s3Bucket().users}/${path}/${cm.cmId}.mp3`
+          `${path}/${id}.aac`,
+          `${constants.s3Bucket().users}/${path}/${cm.cmId}.aac`
         );
       } catch (e) {
         throw new InternalServerError(e.message);

@@ -3,12 +3,12 @@
 process.env.environment = "local";
 
 const aws = require("aws-sdk");
-const { getExternalCm, completeExternalCm } = require("../umesse/external");
 const {
   ERROR_CODE,
   BadRequestError,
   NotFoundError,
 } = require("umesse-lib/error");
+const { getExternalCm, completeExternalCm } = require("../umesse/external");
 
 // test data
 const data = {
