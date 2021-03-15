@@ -55,8 +55,8 @@
           <div class="row border">
             <FormGroup
               title="1:店名"
+              description = "※カタカナで入力"
               class="name"
-              @change="isCheckedCustomerName"
             >
               <TextBox v-model="customerName" />
               <div>
@@ -229,7 +229,14 @@ export default defineComponent({
       title: template.title,
       description: template.description,
       isLoading: false,
-      errorMessageCustomerName: "※カタカナで入力",
+      errorMessageCustomerName: computed(() => {
+        const customerName: string = state.customerName;
+        if (!Common.isFullWidthKana(customerName)) {
+          return "カタカナで入力してください。";
+        } else {
+          return "";
+        }
+      }),
       isErrorCustomerName: false,
       errorMessageEndTime: "",
       isErrorEndTime: false,
@@ -296,11 +303,11 @@ export default defineComponent({
         Common.isSpace(state.customerName) ||
         !Common.isFullWidthKana(state.customerName)
       ) {
-        state.errorMessageCustomerName = "全角カタカナで入力してください";
+        // state.errorMessageCustomerName = "全角カタカナで入力してください";
         state.isErrorCustomerName = true;
         // res = false;
       } else {
-        state.errorMessageCustomerName = "";
+        // state.errorMessageCustomerName = "";
         state.isErrorCustomerName = false;
         // res = true;
       }
@@ -512,7 +519,7 @@ export default defineComponent({
   color: rgb(123, 123, 123);
   font-size: 16px;
   position: absolute;
-  left: 0;
+  left: 140px;
   bottom: -24px;
   &.errorColor {
     color: rgb(255, 0, 0);
