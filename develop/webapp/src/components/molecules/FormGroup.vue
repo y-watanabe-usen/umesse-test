@@ -6,7 +6,7 @@
     </p>
     <div class="input-wrapper">
       <slot />
-      <p class="description" v-if="description != ''" v-bind:class="{ errorColor: isErrorColor }">
+      <p class="description" v-if="description != ''">
         {{ description }}
       </p>
     </div>
@@ -30,11 +30,6 @@ export default {
     description: {
       type: String,
       default: "",
-    },
-    isErrorColor: {
-      type: Boolean,
-      default: false,
-      required: false,
     },
   },
   setup() {
@@ -80,15 +75,11 @@ export default {
     flex-shrink: 1;
     position: relative;
     .description {
-      width: 150%;
       color: rgb(123, 123, 123);
       font-size: 16px;
       position: absolute;
       left: 0;
       bottom: -24px;
-    }
-    .errorColor{
-      color: rgb(255, 0, 0);
     }
   }
 }

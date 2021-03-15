@@ -24,7 +24,11 @@
                 "
               />
             </FormGroup>
-            <FormGroup title="言語設定" class="lang">
+            <FormGroup
+              title="言語設定"
+              class="lang"
+              @change="isCheckedLanguege"
+            >
               <div class="lang-check" v-for="(ttsLang, i) in ttsLangs" :key="i">
                 <input
                   class="form-check-input"
@@ -32,33 +36,48 @@
                   :id="'inlineCheckbox' + `${i + 1}`"
                   :value="ttsLang"
                   v-model="langs"
-                  @change="isCheckedLanguege"
                 />
                 <label
                   :class="[ttsLang]"
                   :for="'inlineCheckbox' + `${i + 1}`"
                 />
               </div>
+              <div>
+                <p
+                  class="errorMessage"
+                  v-bind:class="{ errorColor: isErrorLanguage }"
+                >
+                  {{ errorMessageLanguage }}
+                </p>
+              </div>
             </FormGroup>
           </div>
           <div class="row border">
-            <FormGroup
-              title="1:店名"
-              description="※カタカナで入力"
-              class="name"
-            >
-              <TextBox
-                v-model="customerName"
-                :onChangeInput="isCheckedStoreName"
-              />
+            <FormGroup title="1:店名" class="name" @change="isCheckedCustomerName">
+              <TextBox v-model="customerName" />
+              <div>
+                <p
+                  class="errorMessage"
+                  v-bind:class="{ errorColor: isErrorCustomerName }"
+                >
+                  {{ errorMessageCustomerName }}
+                </p>
+              </div>
             </FormGroup>
             <FormGroup
               title="2:閉店時間"
-              :description="errorMessageEndTime"
-              :isErrorColor="isErrorEndTime"
               class="time"
+              @change="isCheckedEndTime"
             >
-              <TimeInput v-model="endTime" :onChangeInput="isCheckedEndTime" />
+              <TimeInput v-model="endTime" />
+              <div>
+                <p
+                  class="errorMessage widthEndTime"
+                  v-bind:class="{ errorColor: isErrorEndTime }"
+                >
+                  {{ errorMessageEndTime }}
+                </p>
+              </div>
             </FormGroup>
           </div>
           <div class="maniscript">
@@ -206,8 +225,8 @@ export default defineComponent({
       title: template.title,
       description: template.description,
       isLoading: false,
-      errorMessageStoreName: "※カタカナで入力",
-      isErrorStoreName: false,
+      errorMessageCustomerName: "※カタカナで入力",
+      isErrorCustomerName: false,
       errorMessageEndTime: "",
       isErrorEndTime: false,
       errorMessageLanguage: "",
@@ -262,56 +281,56 @@ export default defineComponent({
     const closeModalLoading = () => {
       state.isLoading = false;
     };
-    const isCheckedStoreName = () => {
-      var res = true;
-      if (!state.customerName || Common.isSpace(state.customerName) || !Common.isFullWidthKana(state.customerName)) {
-        state.errorMessageStoreName = "全角カタカナで入力してください";
-        state.isErrorStoreName = true;
-        res = true;
+    const isCheckedCustomerName = () => {
+      // var res = false;
+      if (
+        !state.customerName ||
+        Common.isSpace(state.customerName) ||
+        !Common.isFullWidthKana(state.customerName)
+      ) {
+        state.errorMessageCustomerName = "全角カタカナで入力してください";
+        state.isErrorCustomerName = true;
+        // res = false;
       } else {
-        state.errorMessageStoreName = "";
-        state.isErrorStoreName = false;
-        res = false;
+        state.errorMessageCustomerName = "";
+        state.isErrorCustomerName = false;
+        // res = true;
       }
       state.isDisabledConfirm = isDisabledButtonConfirm();
-      return res;
+      // return res;
     };
     const isCheckedEndTime = () => {
-      var res = true;
-      if (!state.endTime || checkTime()) {
+      // var res = false;
+      if (!state.endTime || Common.isOpenCloseTime(state.endTime)) {
         state.errorMessageEndTime = "閉店時間を入力してください";
         state.isErrorEndTime = true;
-        res = true;
+        // res = false;
       } else {
         state.errorMessageEndTime = "";
         state.isErrorEndTime = false;
-        res = false;
+        // res = true;
       }
       state.isDisabledConfirm = isDisabledButtonConfirm();
-      return res;
-    };
-    const checkTime = () => {
-      var re = /^(?:--:(?:--|00)|00:--)$/;
-      return re.test(state.endTime);
+      // return res;
     };
     const isCheckedLanguege = () => {
-      var res = true;
+      // var res = false;
       if (!state.langs.length) {
         state.errorMessageLanguage = "言語設定を選択してください";
         state.isErrorLanguage = true;
-        res = true;
+        // res = false;
       } else {
         state.errorMessageLanguage = "";
         state.isErrorLanguage = false;
-        res = false;
+        // res = true;
       }
       state.isDisabledConfirm = isDisabledButtonConfirm();
-      return res;
+      // return res;
     };
     const isDisabledButtonConfirm = () => {
       if (
         !state.isErrorLanguage &&
-        !state.isErrorStoreName &&
+        !state.isErrorCustomerName &&
         !state.isErrorEndTime
       ) {
         return false;
@@ -331,7 +350,7 @@ export default defineComponent({
       stopAndCloseModal,
       template,
       templateDetails,
-      isCheckedStoreName,
+      isCheckedCustomerName,
       isCheckedEndTime,
       isCheckedLanguege,
     };
@@ -479,6 +498,19 @@ export default defineComponent({
     &.ko {
       background-image: url("~@/assets/lang_ko.svg");
     }
+  }
+}
+.errorMessage {
+  color: rgb(123, 123, 123);
+  font-size: 16px;
+  position: absolute;
+  left: 0;
+  bottom: -24px;
+  &.errorColor {
+    color: rgb(255, 0, 0);
+  }
+  &.widthEndTime {
+    width: 150%;
   }
 }
 </style>

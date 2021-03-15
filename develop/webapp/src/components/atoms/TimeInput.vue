@@ -22,11 +22,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    onChangeInput: {
-      type: Function,
-      required: false,
-      default: null,
-    },
   },
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   setup(props: any, context: SetupContext) {
@@ -34,7 +29,6 @@ export default {
     const onUpdate = (event: Event) => {
       if (event.target instanceof HTMLInputElement) {
         context.emit("update:modelValue", event.target.value);
-        if (!props.onChangeInput()) props.onChangeInput();
       }
     };
     const onChange = (event: Event) => {
