@@ -22,9 +22,9 @@ export default function cmStore() {
     const response = await service.create(
       authToken,
       state.displayCmItem.narrations,
-      state.displayCmItem.openChime?.id ?? null,
-      state.displayCmItem.endChime?.id ?? null,
-      state.displayCmItem.bgm?.id ?? null
+      state.displayCmItem.openChime,
+      state.displayCmItem.endChime,
+      state.displayCmItem.bgm
     );
     console.log(response);
     state.displayCmItem.id = response.id;

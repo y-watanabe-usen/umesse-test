@@ -10,9 +10,9 @@ export interface CreateUserCmRequestItem {
 
 export interface Materials {
   narrations?: Narration[];
-  startChime?: StartChime;
-  endChime?: EndChime;
-  bgm?: Bgm;
+  startChime: StartChime | null,
+  endChime?: EndChime | null;
+  bgm?: Bgm | null;
 }
 
 export interface Bgm {

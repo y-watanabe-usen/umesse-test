@@ -58,9 +58,9 @@ export function useUploadCmService(api: UMesseApi.CmApi) {
   const create = async (
     authToken: string,
     narrations: (Narration | Recording | Tts)[],
-    startChimeContentsId: string | null,
-    endChimeContentsId: string | null,
-    bgmContentsId: string | null
+    startChime: StartChime | null,
+    endChime: EndChime | null,
+    bgm: Bgm | null
   ): Promise<CreateUserCmResponseItem> => {
     return new Promise(function(resolve, reject) {
       if (state.status === UPLOAD_CM_STATE.CREATING) {
@@ -71,9 +71,9 @@ export function useUploadCmService(api: UMesseApi.CmApi) {
 
       const requestModel = getCreateUserCmRequestModel(
         narrations,
-        startChimeContentsId,
-        endChimeContentsId,
-        bgmContentsId
+        startChime,
+        endChime,
+        bgm
       );
       api
         .createUserCm(authToken, requestModel)
@@ -147,27 +147,10 @@ export function useUploadCmService(api: UMesseApi.CmApi) {
 
   const getCreateUserCmRequestModel = (
     narrations: (Narration | Recording | Tts)[],
-    startChimeContentsId: string | null,
-    endChimeContentsId: string | null,
-    bgmContentsId: string | null
+    startChime: StartChime | null,
+    endChime: EndChime | null,
+    bgm: Bgm | null
   ) => {
-    const startChime: StartChime | undefined = startChimeContentsId
-      ? {
-          id: startChimeContentsId,
-          category: Constants.CATEGORY.CHIME,
-          volume: 50,
-        }
-      : undefined;
-    const endChime: EndChime | undefined = endChimeContentsId
-      ? {
-          id: endChimeContentsId,
-          category: Constants.CATEGORY.CHIME,
-          volume: 50,
-        }
-      : undefined;
-    const bgm: Bgm | undefined = bgmContentsId
-      ? { id: bgmContentsId, category: Constants.CATEGORY.BGM, volume: 15 }
-      : undefined;
     const requestModel: CreateUserCmRequestItem = {
       materials: {
         narrations: narrations,
@@ -176,6 +159,11 @@ export function useUploadCmService(api: UMesseApi.CmApi) {
         bgm: bgm,
       },
     };
+
+    startChime ? null : delete requestModel.materials?.startChime;
+    endChime ? null : delete requestModel.materials?.endChime;
+    bgm ? null : delete requestModel.materials?.bgm;
+
     console.log(Convert.createUserCmRequestItemToJson(requestModel));
     return requestModel;
   };
