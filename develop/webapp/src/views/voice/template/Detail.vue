@@ -53,7 +53,11 @@
             </FormGroup>
           </div>
           <div class="row border">
-            <FormGroup title="1:店名" class="name" @change="isCheckedCustomerName">
+            <FormGroup
+              title="1:店名"
+              class="name"
+              @change="isCheckedCustomerName"
+            >
               <TextBox v-model="customerName" />
               <div>
                 <p
@@ -231,7 +235,11 @@ export default defineComponent({
       isErrorEndTime: false,
       errorMessageLanguage: "",
       isErrorLanguage: false,
-      isDisabledConfirm: true,
+      isDisabledConfirm: computed(() => {
+        const customerName: string = state.customerName;
+        const endTime: string = state.endTime;
+        return customerName == "" || endTime == "";
+      }),
     });
     const play = async () => {
       console.log("play");
