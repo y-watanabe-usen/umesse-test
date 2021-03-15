@@ -99,13 +99,12 @@
       </ModalDialog>
     </transition>
     <transition>
-      <ModalError
-        v-if="isError"
+      <ModalErrorDialog
+        v-if="isErrorModalApper"
         @close="closeErrorModal"
-        title="エラー"
         :errorCode="errorCode"
         :errorMessage="errorMessage"
-      ></ModalError>
+      />
     </transition>
   </div>
 </template>
@@ -125,7 +124,7 @@ import ListItem from "@/components/molecules/ListItem.vue";
 import ModalDialog from "@/components/organisms/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
-import ModalError from "@/components/organisms/ModalError.vue";
+import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
 import TextDialogContents from "@/components/molecules/TextDialogContents.vue";
 import { FreeItem } from "umesseapi/models/free-item";
 import * as Common from "@/utils/Common";
@@ -150,7 +149,7 @@ export default defineComponent({
     ModalDialog,
     ModalHeader,
     ModalFooter,
-    ModalError,
+    ModalErrorDialog,
     TextDialogContents,
   },
   setup() {
@@ -162,7 +161,7 @@ export default defineComponent({
       freeItems: [] as FreeItem[],
       manuscript: "",
       isDocumentModalAppear: false,
-      isError: false,
+      isErrorModalApper: false,
       errorCode: "",
       errorMessage: "",
     });
@@ -180,7 +179,7 @@ export default defineComponent({
         );
         state.freeItems = response;
       } catch (e) {
-        setError(e);
+        openErrorModal(e);
       }
     };
 
@@ -212,13 +211,13 @@ export default defineComponent({
     });
 
     const closeErrorModal = () => {
-      state.isError = false;
+      state.isErrorModalApper = false;
     };
 
-    const setError = (e: UMesseError) => {
+    const openErrorModal = (e: UMesseError) => {
       state.errorCode = e.errorCode;
       state.errorMessage = e.message;
-      state.isError = true;
+      state.isErrorModalApper = true;
     };
     return {
       ...toRefs(state),

@@ -136,13 +136,12 @@
       </ModalUploading>
     </transition>
     <transition>
-      <ModalError
-        v-if="isError"
+      <ModalErrorDialog
+        v-if="isErrorModalApper"
         @close="closeErrorModal"
-        title="エラー"
         :errorCode="errorCode"
         :errorMessage="errorMessage"
-      ></ModalError>
+      />
     </transition>
   </div>
 </template>
@@ -164,7 +163,7 @@ import Button from "@/components/atoms/Button.vue";
 import ModalDialog from "@/components/organisms/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
-import ModalError from "@/components/organisms/ModalError.vue";
+import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
 import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
@@ -182,7 +181,7 @@ export default defineComponent({
     ModalDialog,
     ModalHeader,
     ModalFooter,
-    ModalError,
+    ModalErrorDialog,
     FormGroup,
     TextBox,
     TextArea,
@@ -206,7 +205,7 @@ export default defineComponent({
       duration: computed(() => audioPlayer.getDuration()),
       isModalAppear: false,
       isModalUploading: false,
-      isError: false,
+      isErrorModalApper: false,
       errorCode: "",
       errorMessage: "",
     });
@@ -236,7 +235,7 @@ export default defineComponent({
         closeModalUploading();
         closeModal();
       } catch (e) {
-        setError(e);
+        openErrorModal(e);
       } finally {
         closeModalUploading();
       }
@@ -254,12 +253,12 @@ export default defineComponent({
       state.isModalUploading = false;
     };
     const closeErrorModal = () => {
-      state.isError = false;
+      state.isErrorModalApper = false;
     };
-    const setError = (e: UMesseError) => {
+    const openErrorModal = (e: UMesseError) => {
       state.errorCode = e.errorCode;
       state.errorMessage = e.message;
-      state.isError = true;
+      state.isErrorModalApper = true;
     };
     return {
       ...toRefs(state),

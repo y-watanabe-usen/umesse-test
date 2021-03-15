@@ -92,10 +92,7 @@
                   >
                     <img src="@/assets/icon_sound.svg" />試聴
                   </Button>
-                  <Button
-                    class="btn-select"
-                    @click="setNarration(narration)"
-                  >
+                  <Button class="btn-select" @click="setNarration(narration)">
                     選択<img src="@/assets/icon_select.svg" />
                   </Button>
                 </template>
@@ -148,13 +145,12 @@
       </ModalDialog>
     </transition>
     <transition>
-      <ModalError
-        v-if="isError"
+      <ModalErrorDialog
+        v-if="isErrorModalApper"
         @close="closeErrorModal"
-        title="エラー"
         :errorCode="errorCode"
         :errorMessage="errorMessage"
-      ></ModalError>
+      />
     </transition>
   </div>
 </template>
@@ -177,7 +173,7 @@ import ListItem from "@/components/molecules/ListItem.vue";
 import ModalDialog from "@/components/organisms/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
-import ModalError from "@/components/organisms/ModalError.vue";
+import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
 import PlayDialogContents from "@/components/molecules/PlayDialogContents.vue";
 import TextDialogContents from "@/components/molecules/TextDialogContents.vue";
 import { NarrationItem } from "umesseapi/models";
@@ -206,7 +202,7 @@ export default defineComponent({
     ModalDialog,
     ModalHeader,
     ModalFooter,
-    ModalError,
+    ModalErrorDialog,
     PlayDialogContents,
     TextDialogContents,
   },
@@ -230,7 +226,7 @@ export default defineComponent({
       duration: computed(() => audioPlayer.getDuration()),
       isDocumentModalAppear: false,
       isPlayModalAppear: false,
-      isError: false,
+      isErrorModalApper: false,
       errorCode: "",
       errorMessage: "",
     });
@@ -272,7 +268,7 @@ export default defineComponent({
         state.scenes = [];
         state.narrations = response;
       } catch (e) {
-        setError(e);
+        openErrorModal(e);
       }
     };
 
@@ -316,17 +312,17 @@ export default defineComponent({
     };
 
     const closeErrorModal = () => {
-      state.isError = false;
+      state.isErrorModalApper = false;
     };
 
     onMounted(async () => {
       fetchScene();
     });
 
-    const setError = (e: UMesseError) => {
+    const openErrorModal = (e: UMesseError) => {
       state.errorCode = e.errorCode;
       state.errorMessage = e.message;
-      state.isError = true;
+      state.isErrorModalApper = true;
     };
     return {
       ...toRefs(state),
