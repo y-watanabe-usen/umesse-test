@@ -1,4 +1,4 @@
-import { RecordingFile } from "@/services/uploadRecordingService";
+import { RecordingFile } from "@/services/recordingService";
 import { useGlobalStore } from "@/store";
 import { inject, InjectionKey, provide, reactive, toRefs } from "vue";
 import { RecordingItem } from "umesseapi/models/recording-item";
@@ -49,7 +49,7 @@ export default function recordingStore() {
 
   const uploadRecordingData = async (recordingFile: RecordingFile) => {
     try {
-      const response = await UMesseService.uploadRecordingService.upload(
+      const response = await UMesseService.recordingService.upload(
         token(),
         recordingFile
       );

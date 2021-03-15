@@ -23,11 +23,7 @@
               />
             </FormGroup>
             <FormGroup title="言語設定" class="lang">
-              <div
-                class="lang-check"
-                v-for="(ttsLang, i) in ttsLangs"
-                :key="i"
-              >
+              <div class="lang-check" v-for="(ttsLang, i) in ttsLangs" :key="i">
                 <input
                   class="form-check-input"
                   type="checkbox"
@@ -45,7 +41,7 @@
           <div class="row border">
             <FormGroup
               title="1:店名"
-              description = "※カタカナで入力"
+              description="※カタカナで入力"
               class="name"
             >
               <TextBox v-model="customerName" />
@@ -109,10 +105,7 @@
         </template>
       </ModalDialog>
     </transition>
-    <transition>
-      <ModalUploading v-if="isModalUploading" title="音源の合成中">
-      </ModalUploading>
-    </transition>
+    <ModalLoading v-if="isLoading" title="音源の合成中" />
   </div>
 </template>
 
@@ -138,7 +131,7 @@ import { useGlobalStore } from "@/store";
 import { TemplateItem } from "umesseapi/models";
 import Constants from "@/utils/Constants";
 import UMesseService from "@/services/UMesseService";
-import ModalUploading from "@/components/organisms/ModalUploading.vue";
+import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import UMesseCache from "@/repository/UMesseCache";
 import { lang, speaker, TemplateDetailItem } from "@/models/TemplateDetailItem";
 export default defineComponent({
@@ -156,7 +149,7 @@ export default defineComponent({
     TextArea,
     SelectBox,
     TimeInput,
-    ModalUploading,
+    ModalLoading,
   },
   setup() {
     const router = useRouter();
@@ -200,7 +193,7 @@ export default defineComponent({
       playLang: "ja",
       title: template.title,
       description: template.description,
-      isModalUploading: false,
+      isLoading: false,
     });
     const play = async () => {
       console.log("play");
@@ -214,7 +207,7 @@ export default defineComponent({
       if (state.isPlaying) audioPlayer.stop();
     };
     const createTts = async () => {
-      openModalUploading();
+      openModalLoading();
       const response = await ttsStore.createTtsData(
         state.title,
         state.description,
@@ -224,7 +217,7 @@ export default defineComponent({
         cm.setNarration(element);
       });
       router.push({ name: "Cm" });
-      closeModalUploading();
+      closeModalLoading();
     };
 
     const openModal = async () => {
@@ -244,11 +237,11 @@ export default defineComponent({
       stop();
       closeModal();
     };
-    const openModalUploading = () => {
-      state.isModalUploading = true;
+    const openModalLoading = () => {
+      state.isLoading = true;
     };
-    const closeModalUploading = () => {
-      state.isModalUploading = false;
+    const closeModalLoading = () => {
+      state.isLoading = false;
     };
     return {
       ...toRefs(state),
@@ -364,7 +357,7 @@ export default defineComponent({
     background-color: white;
     cursor: pointer;
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       top: 0px;
       left: 0px;
@@ -376,14 +369,14 @@ export default defineComponent({
     }
     &:checked {
       &::before {
-        content: '';
+        content: "";
         position: absolute;
         top: 0px;
         left: 0px;
         width: 30px;
         height: 30px;
         border: none;
-        background-image: url('~@/assets/icon_checked.svg');
+        background-image: url("~@/assets/icon_checked.svg");
         background-repeat: no-repeat;
         background-size: 100% 100%;
       }
@@ -396,16 +389,16 @@ export default defineComponent({
     background-size: 100% 100%;
     background-repeat: no-repeat;
     &.ja {
-      background-image: url('~@/assets/lang_ja.svg');
+      background-image: url("~@/assets/lang_ja.svg");
     }
     &.en {
-      background-image: url('~@/assets/lang_en.svg');
+      background-image: url("~@/assets/lang_en.svg");
     }
     &.zh {
-      background-image: url('~@/assets/lang_zh.svg');
+      background-image: url("~@/assets/lang_zh.svg");
     }
     &.ko {
-      background-image: url('~@/assets/lang_ko.svg');
+      background-image: url("~@/assets/lang_ko.svg");
     }
   }
 }

@@ -16,7 +16,7 @@ export enum UPLOAD_RECORDING_STATE {
   ERROR,
 }
 
-export function useUploadRecordingService(api: UMesseApi.RecordingApi) {
+export function recordingService(api: UMesseApi.RecordingApi) {
   const state = reactive({
     status: UPLOAD_RECORDING_STATE.NONE as UPLOAD_RECORDING_STATE,
   });

@@ -24,7 +24,7 @@ export enum UPLOAD_CM_STATE {
   ERROR,
 }
 
-export function useUploadCmService(api: UMesseApi.CmApi) {
+export function cmService(api: UMesseApi.CmApi) {
   const state = reactive({
     status: UPLOAD_CM_STATE.NONE as UPLOAD_CM_STATE,
   });

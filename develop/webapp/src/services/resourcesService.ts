@@ -11,7 +11,7 @@ import {
 import AudioStore from "@/store/audio";
 import { UMesseErrorFromApiFactory } from "@/models/UMesseError";
 
-export function useResourcesService(
+export function resourcesService(
   resourcesApi: UMesseApi.ResourcesApi,
   recordingApi: UMesseApi.RecordingApi,
   ttsApi: UMesseApi.TtsApi

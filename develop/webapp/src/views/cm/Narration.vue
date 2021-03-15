@@ -152,6 +152,7 @@
         :errorMessage="errorMessage"
       />
     </transition>
+    <ModalLoading v-if="isLoading" title="" />
   </div>
 </template>
 
@@ -186,6 +187,7 @@ import {
 import UMesseService from "@/services/UMesseService";
 import { Scene } from "@/utils/Constants";
 import { UMesseError } from "../../models/UMesseError";
+import ModalLoading from "@/components/organisms/ModalLoading.vue";
 
 export default defineComponent({
   components: {
@@ -203,6 +205,7 @@ export default defineComponent({
     ModalHeader,
     ModalFooter,
     ModalErrorDialog,
+    ModalLoading,
     PlayDialogContents,
     TextDialogContents,
   },
@@ -229,6 +232,7 @@ export default defineComponent({
       isErrorModalApper: false,
       errorCode: "",
       errorMessage: "",
+      isLoading: false,
     });
 
     const setNarration = (narration: NarrationItem) => {
@@ -259,6 +263,7 @@ export default defineComponent({
     const fetchNarration = async () => {
       if (!state.activeSceneCd) return;
       try {
+        state.isLoading = true;
         const response = await UMesseService.resourcesService.fetchNarration(
           authToken,
           state.activeIndustryCd,
@@ -269,6 +274,8 @@ export default defineComponent({
         state.narrations = response;
       } catch (e) {
         openErrorModal(e);
+      } finally {
+        state.isLoading = false;
       }
     };
 
