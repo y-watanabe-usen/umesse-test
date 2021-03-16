@@ -77,6 +77,7 @@
                     <button
                       class="btn-play"
                       :disabled="!hasRecordedData"
+                      :isPlaying="isPlaying"
                       @click="play"
                     >
                       <img src="@/assets/icon_play.svg" />再生
@@ -198,6 +199,7 @@ export default defineComponent({
         if (audioPlayer.getPowerDecibels() === -Infinity) return -100;
         return audioPlayer.getPowerDecibels();
       }),
+      isPlaying: computed(() => audioPlayer.isPlaying()),
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       duration: computed(() => audioPlayer.getDuration()),
       isModalAppear: false,
@@ -219,6 +221,9 @@ export default defineComponent({
       const audioBuffer = await audioRecorder.getAudioBuffer();
       if (audioBuffer) audioPlayer.start(audioBuffer);
     };
+    const stop = () => {
+      if (state.isPlaying) audioPlayer.stop();
+    };
     const deleteRecordedData = () => audioRecorder.reset();
     const uploadRecordingFile = async () => {
       /// check state.file.
@@ -238,6 +243,7 @@ export default defineComponent({
       }
     };
     const openModal = () => {
+      stop();
       state.isModalAppear = true;
     };
     const closeModal = () => {
@@ -261,6 +267,7 @@ export default defineComponent({
       ...toRefs(state),
       toggleVoiceRecorder,
       play,
+      stop,
       deleteRecordedData,
       uploadRecordingFile,
       UPLOAD_RECORDING_STATE,

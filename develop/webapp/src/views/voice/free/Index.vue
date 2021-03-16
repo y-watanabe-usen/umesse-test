@@ -162,6 +162,7 @@ export default defineComponent({
     };
 
     const createTts = async () => {
+      stop();
       openModalLoading();
       const response = await ttsStore.createTtsData(
         state.title,
