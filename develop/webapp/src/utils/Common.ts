@@ -171,7 +171,7 @@ export function isFullWidthKana(text:string): boolean{
  * @return bool
  */
  export function isSpace(text:string): boolean{
-  return text.match(`^[\x20|\u3000]+`) ? true : false;
+  return text.trim() == "" ? true : false;
 }
 
 function getIndustries(cdList: string[]) {
