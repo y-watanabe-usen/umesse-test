@@ -11,9 +11,6 @@ export default () => {
     duration: 0,
   });
 
-  const getPowerDecibels = () => {
-    return state.powerDecibels;
-  };
   const getPlaybackTime = () => {
     return state.playbackTime;
   };
@@ -26,7 +23,6 @@ export default () => {
   const context = new window.AudioContext();
   const analyser: AnalyserNode = context.createAnalyser();
   analyser.fftSize = 2048;
-  const sampleBuffer = new Float32Array(analyser.fftSize);
   let timer: number | undefined;
   let source: AudioBufferSourceNode;
 
@@ -52,7 +48,6 @@ export default () => {
     state.playbackTime = 0;
     state.playing = true;
     timer = setInterval(() => {
-      updateAnalyser();
       updatePlaybackTime();
     }, 100);
   };
@@ -61,19 +56,11 @@ export default () => {
     state.playing = false;
   };
 
-  const updateAnalyser = () => {
-    analyser.getFloatTimeDomainData(sampleBuffer);
-    let sumOfSquares = 0;
-    for (const x of sampleBuffer) {
-      sumOfSquares += x ** 2;
-    }
-    state.powerDecibels = Math.round(10 * Math.log10(sumOfSquares / sampleBuffer.length));
-  };
 
   const updatePlaybackTime = () => {
     state.playbackTime = context.currentTime - state.startedTime;
   };
   return {
-    start, stop, getPowerDecibels, getPlaybackTime, getDuration, isPlaying,
+    start, stop, getPlaybackTime, getDuration, isPlaying,
   };
 };

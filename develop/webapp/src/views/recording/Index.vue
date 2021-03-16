@@ -196,8 +196,9 @@ export default defineComponent({
       isRecording: computed(() => audioRecorder.isRecording()),
       hasRecordedData: computed(() => audioRecorder.hasRecording()),
       decibel: computed(() => {
-        if (audioPlayer.getPowerDecibels() === -Infinity) return -100;
-        return audioPlayer.getPowerDecibels();
+        if (audioRecorder.getPowerDecibels() === -Infinity) return -100;
+        console.log(audioRecorder.getPowerDecibels());
+        return audioRecorder.getPowerDecibels();
       }),
       isPlaying: computed(() => audioPlayer.isPlaying()),
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
