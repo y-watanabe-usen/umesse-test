@@ -29,7 +29,7 @@ exports.getShareCm = async (unisCustomerCd, id) => {
   let params = {
     unisCustomerCd: unisCustomerCd,
   };
-  if (id) params.id = id;
+  if (id) params.cmId = id;
   let checkError = checkParams(params);
   if (checkError) throw new BadRequestError(checkError);
 
@@ -63,7 +63,7 @@ exports.createShareCm = async (unisCustomerCd, id) => {
   // パラメーターチェック
   let checkError = checkParams({
     unisCustomerCd: unisCustomerCd,
-    id: id,
+    cmId: id,
   });
   if (checkError) throw new BadRequestError(checkError);
 
@@ -128,7 +128,7 @@ exports.deleteShareCm = async (unisCustomerCd, id) => {
   // パラメーターチェック
   let checkError = checkParams({
     unisCustomerCd: unisCustomerCd,
-    id: id,
+    cmId: id,
   });
   if (checkError) throw new BadRequestError(checkError);
 

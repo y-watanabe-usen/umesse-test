@@ -66,11 +66,11 @@ describe("共有CMデータ取得", () => {
     );
 
     await expect(getShareCm("9999999999", "aaaa")).rejects.toThrow(
-      new BadRequestError(`${ERROR_CODE.E0001020} (E0001020)`)
+      new BadRequestError(`${ERROR_CODE.E0001210} (E0001210)`)
     );
 
     await expect(getShareCm("9999999999", "9999999999-c")).rejects.toThrow(
-      new BadRequestError(`${ERROR_CODE.E0001020} (E0001020)`)
+      new BadRequestError(`${ERROR_CODE.E0001210} (E0001210)`)
     );
   });
 });
@@ -138,11 +138,11 @@ describe("共有CMデータ追加", () => {
     ).rejects.toThrow(new BadRequestError(`${ERROR_CODE.E0001010} (E0001010)`));
 
     await expect(createShareCm("9999999999", "aaaa")).rejects.toThrow(
-      new BadRequestError(`${ERROR_CODE.E0001020} (E0001020)`)
+      new BadRequestError(`${ERROR_CODE.E0001210} (E0001210)`)
     );
 
     await expect(createShareCm("9999999999", "9999999999-c")).rejects.toThrow(
-      new BadRequestError(`${ERROR_CODE.E0001020} (E0001020)`)
+      new BadRequestError(`${ERROR_CODE.E0001210} (E0001210)`)
     );
   });
 });
@@ -210,11 +210,11 @@ describe("共有CMデータ解除", () => {
     ).rejects.toThrow(new BadRequestError(`${ERROR_CODE.E0001010} (E0001010)`));
 
     await expect(deleteShareCm("9999999999", "aaaa")).rejects.toThrow(
-      new BadRequestError(`${ERROR_CODE.E0001020} (E0001020)`)
+      new BadRequestError(`${ERROR_CODE.E0001210} (E0001210)`)
     );
 
     await expect(deleteShareCm("9999999999", "9999999999-c")).rejects.toThrow(
-      new BadRequestError(`${ERROR_CODE.E0001020} (E0001020)`)
+      new BadRequestError(`${ERROR_CODE.E0001210} (E0001210)`)
     );
   });
 });
