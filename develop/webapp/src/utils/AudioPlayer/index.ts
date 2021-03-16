@@ -36,7 +36,7 @@ export default () => {
     state.startedTime = context.currentTime;
 
     source.onended = () => {
-      state.playbackTime = state.duration;
+      state.playbackTime = 0;
       source.stop();
       source.disconnect(analyser);
       analyser.disconnect(context.destination);
@@ -53,7 +53,6 @@ export default () => {
   };
   const stop = () => {
     source.stop();
-    state.playing = false;
   };
 
 

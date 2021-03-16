@@ -78,7 +78,7 @@
                       class="btn-play"
                       :disabled="!hasRecordedData"
                       :isPlaying="isPlaying"
-                      @click="play"
+                      @click="toggleVoicePlayer"
                     >
                       <img src="@/assets/icon_play.svg" />再生
                     </button>
@@ -197,7 +197,6 @@ export default defineComponent({
       hasRecordedData: computed(() => audioRecorder.hasRecording()),
       decibel: computed(() => {
         if (audioRecorder.getPowerDecibels() === -Infinity) return -100;
-        console.log(audioRecorder.getPowerDecibels());
         return audioRecorder.getPowerDecibels();
       }),
       isPlaying: computed(() => audioPlayer.isPlaying()),
@@ -217,14 +216,17 @@ export default defineComponent({
         audioRecorder.start();
       }
     };
-    // playback a recorded data.
-    const play = async () => {
-      const audioBuffer = await audioRecorder.getAudioBuffer();
-      if (audioBuffer) audioPlayer.start(audioBuffer);
+
+    // toggle voice player.
+    const toggleVoicePlayer = async () => {
+      if (state.isPlaying) {
+        audioPlayer.stop();
+      } else {
+        const audioBuffer = await audioRecorder.getAudioBuffer();
+        if (audioBuffer) audioPlayer.start(audioBuffer);
+      }
     };
-    const stop = () => {
-      if (state.isPlaying) audioPlayer.stop();
-    };
+
     const deleteRecordedData = () => audioRecorder.reset();
     const uploadRecordingFile = async () => {
       /// check state.file.
@@ -267,8 +269,7 @@ export default defineComponent({
     return {
       ...toRefs(state),
       toggleVoiceRecorder,
-      play,
-      stop,
+      toggleVoicePlayer,
       deleteRecordedData,
       uploadRecordingFile,
       UPLOAD_RECORDING_STATE,

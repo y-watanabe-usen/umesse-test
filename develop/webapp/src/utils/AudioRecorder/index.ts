@@ -105,7 +105,6 @@ export default () => {
   for (const x of sampleBuffer) {
     sumOfSquares += x ** 2;
   }
-  console.log(sumOfSquares);
    state.powerDecibels = Math.round(10 * Math.log10(sumOfSquares / sampleBuffer.length));
 };
 
