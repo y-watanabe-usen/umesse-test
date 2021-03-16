@@ -56,7 +56,7 @@ export default () => {
     state.recording = true;
   };
   const stop = async () => {
-    mediaRecorder?.stop()
+    mediaRecorder?.stop();
   };
   const reset = () => state.chunks = [];
 
