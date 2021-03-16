@@ -6,7 +6,9 @@
     </p>
     <div class="input-wrapper">
       <slot />
-      <p class="description" v-if="description != ''">{{ description }}</p>
+      <p class="description" v-if="description != ''">
+        {{ description }}
+      </p>
     </div>
   </div>
 </template>
