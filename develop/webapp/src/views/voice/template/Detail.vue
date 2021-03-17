@@ -157,7 +157,8 @@ import UMesseService from "@/services/UMesseService";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import UMesseCache from "@/repository/UMesseCache";
 import { lang, speaker, TemplateDetailItem } from "@/models/TemplateDetailItem";
-import * as Common from "@/utils/Common";
+import validator from "@/utils/validator";
+
 export default defineComponent({
   components: {
     BasicLayout,
@@ -288,7 +289,7 @@ export default defineComponent({
       state.isLoading = false;
     };
     const selectErrorMessageCustomerName = (customerName: string) => {
-      if (!Common.isFullWidthKana(customerName)) {
+      if (!validator.isFullWidthKana(customerName)) {
         state.isErrorCustomerName = true;
         return "全角カタカナで入力してください。";
       } else {
@@ -315,7 +316,7 @@ export default defineComponent({
       }
     };
     const isDisabledButtonConfirm = (customerName: string) => {
-      if (!customerName || Common.isSpace(customerName))
+      if (!customerName || validator.isEmpty(customerName))
         state.isErrorCustomerName = true;
 
       if (
