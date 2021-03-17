@@ -7,7 +7,8 @@ export class AudioRepository {
     this.axios = axios;
   }
 
-  async download(url: string) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async download(url: string): Promise<any> {
     try {
       const response = await this.axios
         .get(url, {
@@ -16,7 +17,7 @@ export class AudioRepository {
           },
           responseType: "arraybuffer",
         });
-      return await this.ctx.decodeAudioData(response.data);
+      return response;
     } catch (error) {
       console.log("error");
     }

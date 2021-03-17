@@ -1,6 +1,5 @@
 import { reactive } from 'vue';
-import axios from "axios";
-import { audioRepository } from '@/repository/api';
+import { audioService } from '@/services';
 
 export interface audioState {
   isDownloading: boolean,
@@ -15,8 +14,6 @@ export default function audioStore() {
     audioBuffer: undefined,
   });
 
-  const ctx = new AudioContext();
-
   return {
     get audioBuffer() {
       return state.audioBuffer;
@@ -28,7 +25,7 @@ export default function audioStore() {
     async download(signedUrl: string) {
       state.isDownloading = true;
       try {
-        state.audioBuffer = await audioRepository.download(signedUrl);
+        state.audioBuffer = await audioService.download(signedUrl);
       } catch (error) {
         console.log("error");
       }
