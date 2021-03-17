@@ -49,6 +49,9 @@ export default {
   margin-left: 75px;
   margin-right: 75px;
   margin-bottom: 26px;
+  p {
+    caret-color: transparent;
+  }
   .title {
     width: 110px;
     height: 60px;

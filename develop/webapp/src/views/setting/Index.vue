@@ -102,6 +102,7 @@ export default defineComponent({
 .content {
   overflow: hidden;
   height: 100%;
+  caret-color: transparent;
   h2 {
     font-size: 20px;
     font-weight: $font_weight_bold;

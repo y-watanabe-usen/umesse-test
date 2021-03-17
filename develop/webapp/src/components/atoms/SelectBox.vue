@@ -51,6 +51,7 @@ export default {
   border: 1px solid rgb(190, 190, 190);
   border-radius: 6px;
   position: relative;
+  caret-color: transparent;
   &::before {
     position: absolute;
     top: 36px;

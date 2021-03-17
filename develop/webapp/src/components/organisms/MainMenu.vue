@@ -69,6 +69,7 @@ export default {
   flex-flow: row wrap;
   padding-left: 30px;
   padding-right: 30px;
+  caret-color: transparent;
   .main-menu-item {
     width: calc((100% - 60px) / 4);
     &.is-wide {

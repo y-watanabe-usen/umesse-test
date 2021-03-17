@@ -58,6 +58,7 @@ header {
     min-width: 210px;
     color: white;
     line-height: 32px;
+    caret-color: transparent;
     img {
       height: 32px;
       width: 184px;
@@ -79,6 +80,7 @@ header {
     li {
       width: 40px;
       height: 40px;
+      caret-color: transparent;
       a,
       img {
         display: block;

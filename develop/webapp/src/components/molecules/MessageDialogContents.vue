@@ -22,6 +22,7 @@ export default {
 @import "@/scss/_variables.scss";
 
 .message-dialog-contents {
+  caret-color: transparent;
   p {
     font-size: 19px;
     font-weight: $font_weight_bold;

@@ -28,6 +28,7 @@ export default {
     margin-left: 42px;
     margin-right: 42px;
     line-height: 1.7em;
+    caret-color: transparent;
   }
 }
 </style>

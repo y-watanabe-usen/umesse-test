@@ -40,6 +40,7 @@ export default {
   border-bottom: 1px solid rgb(229, 229, 229);
   display: block;
   padding: 0;
+  caret-color: transparent;
   .title {
     color: black;
     font-size: 16px;

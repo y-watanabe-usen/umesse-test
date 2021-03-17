@@ -32,6 +32,7 @@ export default {
 .sub-menu-item {
   height: 82px;
   padding: 5px;
+  caret-color: transparent;
   .base {
     @include flex_start;
     align-items: center;

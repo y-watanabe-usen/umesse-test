@@ -39,6 +39,7 @@ export default {
   margin-left: 16px;
   margin-right: 16px;
   margin-top: 20px;
+  caret-color: transparent;
   .left,
   .right {
     @include flex_center;
