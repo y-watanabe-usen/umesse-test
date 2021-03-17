@@ -3,7 +3,7 @@ import * as FormatDate from "@/utils/FormatDate";
 describe("convertDatestringToDateのテスト", () => {
   const datas = [
     {
-      dateString: "2021-01-01T01:01:01+09:00",
+      dateString: "2021-01-01T09:00:00+09:00",
       expected: "2021/01/01",
     },
     {
@@ -25,7 +25,7 @@ describe("convertDatestringToDateのテスト", () => {
 describe("convertDatestringToDateJpのテスト", () => {
   const datas = [
     {
-      dateString: "2021-01-01T01:01:01+09:00",
+      dateString: "2021-01-01T09:00:00+09:00",
       expected: "2021年01月01日",
     },
     {
