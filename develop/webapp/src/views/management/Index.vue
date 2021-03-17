@@ -231,9 +231,7 @@
         </template>
       </ModalDialog>
     </transition>
-    <transition>
-      <ModalLoading v-if="isLoading" :title="titleModalLoading" />
-    </transition>
+    <ModalLoading v-if="isLoading" :title="titleModalLoading" />
     <transition>
       <transition>
         <ModalErrorDialog
@@ -349,6 +347,7 @@ export default defineComponent({
     };
     const fetchCm = async () => {
       try {
+        openModalLoading("");
         const response = await cmService.fetchCm(
           authToken,
           state.activeSceneCd,
@@ -357,6 +356,8 @@ export default defineComponent({
         state.cms = response;
       } catch (e) {
         openErrorModal(e);
+      } finally {
+        closeModalLoading();
       }
     };
     const selectCm = (cm: CmItem) => {
@@ -442,8 +443,7 @@ export default defineComponent({
     };
     const saveAndOpenSavedModal = async () => {
       try {
-        state.titleModalLoading = "音源の合成中";
-        openModalLoading();
+        openModalLoading("音源の合成中");
         if (!state.selectedCm) return;
         await save(state.selectedCm);
         closeModalLoading();
@@ -458,8 +458,7 @@ export default defineComponent({
     };
     const removeAndOpenRemovedModal = async () => {
       try {
-        state.titleModalLoading = "音源の削除中";
-        openModalLoading();
+        openModalLoading("音源の削除中");
         await remove(state.selectedCm?.id);
         closeModalLoading();
         closeRemoveModal();
@@ -481,7 +480,8 @@ export default defineComponent({
     onMounted(async () => {
       fetchCm();
     });
-    const openModalLoading = () => {
+    const openModalLoading = (title: string) => {
+      state.titleModalLoading = title;
       state.isLoading = true;
     };
     const closeModalLoading = () => {
