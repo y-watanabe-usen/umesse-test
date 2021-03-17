@@ -115,6 +115,7 @@
         :errorMessage="errorMessage"
       />
     </transition>
+    <ModalLoading v-if="isLoading" title="" />
   </div>
 </template>
 
@@ -145,6 +146,7 @@ import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
 import { UMesseError } from "../../models/UMesseError";
 import { resourcesService } from "@/services";
+import ModalLoading from "@/components/organisms/ModalLoading.vue";
 
 export default defineComponent({
   components: {
@@ -165,6 +167,7 @@ export default defineComponent({
     FormGroup,
     TextBox,
     TextArea,
+    ModalLoading,
   },
   setup() {
     const router = useRouter();
@@ -190,6 +193,7 @@ export default defineComponent({
       isErrorModalApper: false,
       errorCode: "",
       errorMessage: "",
+      isLoading: false,
     });
 
     const setChime = (chime: ChimeItem) => {
@@ -207,12 +211,15 @@ export default defineComponent({
 
     const fetchChime = async () => {
       try {
+        openModalLoading();
         const response = await resourcesService.fetchChime(
           state.sort
         );
         state.chimes = response;
       } catch (e) {
         openErrorModal(e);
+      } finally {
+        closeModalLoading();
       }
     };
 
@@ -270,6 +277,14 @@ export default defineComponent({
       state.errorCode = e.errorCode;
       state.errorMessage = e.message;
       state.isErrorModalApper = true;
+    };
+
+    const openModalLoading = () => {
+      state.isLoading = true;
+    };
+
+    const closeModalLoading = () => {
+      state.isLoading = false;
     };
 
     return {

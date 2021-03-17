@@ -106,6 +106,7 @@
         :errorMessage="errorMessage"
       />
     </transition>
+    <ModalLoading v-if="isLoading" title="" />
   </div>
 </template>
 
@@ -133,6 +134,7 @@ import router from "@/router";
 import UMesseCache from "@/repository/UMesseCache";
 import { UMesseError } from "../../../models/UMesseError";
 import { resourcesService } from "@/services";
+import ModalLoading from "@/components/organisms/ModalLoading.vue";
 
 export default defineComponent({
   components: {
@@ -151,6 +153,7 @@ export default defineComponent({
     ModalFooter,
     ModalErrorDialog,
     TextDialogContents,
+    ModalLoading,
   },
   setup() {
     const sortList = Common.getSort();
@@ -164,6 +167,7 @@ export default defineComponent({
       isErrorModalApper: false,
       errorCode: "",
       errorMessage: "",
+      isLoading: false,
     });
 
     const clickIndustry = (industryCd: string) => {
@@ -173,6 +177,7 @@ export default defineComponent({
 
     const fetchFreeTemplate = async () => {
       try {
+        openModalLoading();
         const response = await resourcesService.fetchFree(
           state.activeIndustryCd,
           state.sort
@@ -180,6 +185,8 @@ export default defineComponent({
         state.freeItems = response;
       } catch (e) {
         openErrorModal(e);
+      } finally {
+        closeModalLoading();
       }
     };
 
@@ -218,6 +225,14 @@ export default defineComponent({
       state.errorCode = e.errorCode;
       state.errorMessage = e.message;
       state.isErrorModalApper = true;
+    };
+
+    const openModalLoading = () => {
+      state.isLoading = true;
+    };
+
+    const closeModalLoading = () => {
+      state.isLoading = false;
     };
     return {
       ...toRefs(state),

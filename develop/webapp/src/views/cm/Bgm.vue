@@ -127,6 +127,7 @@
         :errorMessage="errorMessage"
       />
     </transition>
+    <ModalLoading v-if="isLoading" title="" />
   </div>
 </template>
 
@@ -159,6 +160,7 @@ import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
 import { UMesseError } from "../../models/UMesseError";
 import { resourcesService } from "@/services";
+import ModalLoading from "@/components/organisms/ModalLoading.vue";
 
 export default defineComponent({
   components: {
@@ -181,6 +183,7 @@ export default defineComponent({
     TextBox,
     TextArea,
     ModalErrorDialog,
+    ModalLoading,
   },
   setup() {
     const router = useRouter();
@@ -205,6 +208,7 @@ export default defineComponent({
       isErrorModalApper: false,
       errorCode: "",
       errorMessage: "",
+      isLoading: false,
     });
 
     const setBgm = (bgm: BgmItem) => {
@@ -223,6 +227,7 @@ export default defineComponent({
 
     const fetchBgm = async () => {
       try {
+        openModalLoading();
         const response = await resourcesService.fetchBgm(
           state.activeIndustryCd,
           state.sort
@@ -230,6 +235,8 @@ export default defineComponent({
         state.bgms = response;
       } catch (e) {
         openErrorModal(e);
+      } finally {
+        closeModalLoading();
       }
     };
 
@@ -289,6 +296,13 @@ export default defineComponent({
       state.isErrorModalApper = true;
     };
 
+    const openModalLoading = () => {
+      state.isLoading = true;
+    };
+
+    const closeModalLoading = () => {
+      state.isLoading = false;
+    };
     return {
       ...toRefs(state),
       sortList,
