@@ -150,7 +150,7 @@ import Constants from "@/utils/Constants";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { lang, speaker, TemplateDetailItem } from "@/models/TemplateDetailItem";
 import validator from "@/utils/validator";
-import { audioService, resourcesService } from "@/services";
+import { audioService } from "@/services";
 import { freeCache } from "@/repository/cache";
 
 export default defineComponent({

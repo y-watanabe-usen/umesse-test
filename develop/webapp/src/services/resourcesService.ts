@@ -7,16 +7,13 @@ import {
   NarrationItem,
   TemplateItem,
 } from "umesseapi/models";
-import AudioStore from "@/store/audio";
 import { UMesseErrorFromApiFactory } from "@/models/UMesseError";
-import { audioCache } from "@/repository/cache";
 
 export function useResourcesService(
   resourcesApi: UMesseApi.ResourcesApi,
   recordingApi: UMesseApi.RecordingApi,
   ttsApi: UMesseApi.TtsApi
 ) {
-  const audioStore = AudioStore();
 
   const fetchNarration = async (
     authToken: string,

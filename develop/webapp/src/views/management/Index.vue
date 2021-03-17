@@ -281,7 +281,7 @@ import SelectBox from "@/components/atoms/SelectBox.vue";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import DropdownMenu from "@/components/molecules/DropdownMenu.vue";
 import { UMesseError } from "../../models/UMesseError";
-import { audioService, cmService, resourcesService } from "@/services";
+import { audioService, cmService } from "@/services";
 export default defineComponent({
   components: {
     BasicLayout,
