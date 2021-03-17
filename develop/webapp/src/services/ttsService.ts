@@ -4,7 +4,7 @@ import { GenerateUserTtsRequestItem } from "@/models/GenerateUserTtsRequestItem"
 import { CreateUserTtsRequestItem } from "@/models/CreateUserTtsRequestItem";
 import { GenerateTtsItem, TtsItem } from "umesseapi/models";
 
-export function ttsService(
+export function useTtsService(
   ttsApi: UMesseApi.TtsApi
 ) {
 

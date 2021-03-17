@@ -157,8 +157,8 @@ import MessageDialogContents from "@/components/molecules/MessageDialogContents.
 import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
-import UMesseService from "@/services/UMesseService";
 import { UMesseError } from "../../models/UMesseError";
+import { resourcesService } from "@/services";
 
 export default defineComponent({
   components: {
@@ -223,7 +223,7 @@ export default defineComponent({
 
     const fetchBgm = async () => {
       try {
-        const response = await UMesseService.resourcesService.fetchBgm(
+        const response = await resourcesService.fetchBgm(
           state.activeIndustryCd,
           state.sort
         );
@@ -234,7 +234,7 @@ export default defineComponent({
     };
 
     const play = async (bgm: BgmItem) => {
-      const audioBuffer = await UMesseService.resourcesService.getAudioBufferByContentsId(
+      const audioBuffer = await resourcesService.getAudioBufferByContentsId(
         bgm.id,
         bgm.category
       );

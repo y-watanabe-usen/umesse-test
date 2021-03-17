@@ -4,12 +4,12 @@ import { NarrationItem } from "umesseapi/models/narration-item";
 import { BgmItem } from "umesseapi/models/bgm-item";
 import { CmItem, RecordingItem, TtsItem } from "umesseapi/models";
 import DisplayCmItem from "@/models/DisplayCmItem";
-import UMesseService from "@/services/UMesseService";
+import { cmService } from "@/services";
 
 export const MAX_NARRATION_COUNT = 4;
 
 export default function cmStore() {
-  const service = UMesseService.cmService;
+  const service = cmService;
   const state = reactive({
     displayCmItem: new DisplayCmItem(),
     selectedNarrationIndex: null as number | null,

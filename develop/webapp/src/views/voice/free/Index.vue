@@ -103,8 +103,8 @@ import SelectBox from "@/components/atoms/SelectBox.vue";
 import { useGlobalStore } from "@/store";
 import Constants from "@/utils/Constants";
 import UMesseCache from "@/repository/UMesseCache";
-import UMesseService from "@/services/UMesseService";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
+import { resourcesService } from "@/services";
 export default defineComponent({
   components: {
     BasicLayout,
@@ -152,7 +152,7 @@ export default defineComponent({
     const play = async () => {
       console.log("play");
       const data = await ttsStore.getTtsData(lang);
-      const audioBuffer = await UMesseService.resourcesService.getAudioBufferByUrl(
+      const audioBuffer = await resourcesService.getAudioBufferByUrl(
         <string>data?.url
       );
       audioPlayer.start(audioBuffer);

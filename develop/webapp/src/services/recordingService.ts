@@ -16,18 +16,39 @@ export enum UPLOAD_RECORDING_STATE {
   ERROR,
 }
 
-export function recordingService(api: UMesseApi.RecordingApi) {
+export function useRecordingService(api: UMesseApi.RecordingApi) {
   const state = reactive({
     status: UPLOAD_RECORDING_STATE.NONE as UPLOAD_RECORDING_STATE,
   });
 
   const getStatus = () => state.status;
 
+  const fetch = async (authToken: string) => {
+    try {
+      const response = await api.listUserRecording(authToken);
+      return response.data;
+    } catch (e) {
+      throw UMesseErrorFromApiFactory(e);
+    }
+  };
+
+  const update = async (authToken: string, id: string, title: string, description: string) => {
+    try {
+      const response = await api.updateUserRecording(authToken, id, {
+        title: title,
+        description: description,
+      });
+      return response.data;
+    } catch (e) {
+      throw UMesseErrorFromApiFactory(e);
+    }
+  };
+
   const upload = async (
     authToken: string,
     file: RecordingFile
   ): Promise<RecordingItem> => {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       if (state.status === UPLOAD_RECORDING_STATE.UPLOADING) {
         return reject(new Error(`state is uploading`));
       }
@@ -36,7 +57,7 @@ export function recordingService(api: UMesseApi.RecordingApi) {
 
       const fr = new FileReader();
 
-      fr.onload = function() {
+      fr.onload = function () {
         api
           .createUserRecording(authToken, file.title ?? "", fr.result as string, file.title, file.description)
           .then((value) => {
@@ -54,9 +75,23 @@ export function recordingService(api: UMesseApi.RecordingApi) {
       if (file.blob) fr.readAsBinaryString(file.blob);
     });
   };
+
+  const remove = async (authToken: string, id: string) => {
+    try {
+      const response = await api.deleteUserRecording(id, authToken);
+      return response.data;
+    } catch (e) {
+      throw UMesseErrorFromApiFactory(e);
+    }
+  };
+
   const reset = () => (state.status = UPLOAD_RECORDING_STATE.NONE);
+
   return {
+    fetch,
+    update,
     upload,
+    remove,
     reset,
     getStatus,
   };

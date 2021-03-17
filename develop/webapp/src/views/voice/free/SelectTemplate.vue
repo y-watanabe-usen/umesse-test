@@ -131,8 +131,8 @@ import * as Common from "@/utils/Common";
 import { convertDatestringToDateJp } from "@/utils/FormatDate";
 import router from "@/router";
 import UMesseCache from "@/repository/UMesseCache";
-import UMesseService from "@/services/UMesseService";
 import { UMesseError } from "../../../models/UMesseError";
+import { resourcesService } from "@/services";
 
 export default defineComponent({
   components: {
@@ -173,7 +173,7 @@ export default defineComponent({
 
     const fetchFreeTemplate = async () => {
       try {
-        const response = await UMesseService.resourcesService.fetchFree(
+        const response = await resourcesService.fetchFree(
           state.activeIndustryCd,
           state.sort
         );
