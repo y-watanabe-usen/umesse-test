@@ -154,10 +154,10 @@ import { useGlobalStore } from "@/store";
 import { TemplateItem } from "umesseapi/models";
 import Constants from "@/utils/Constants";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
-import UMesseCache from "@/repository/UMesseCache";
 import { lang, speaker, TemplateDetailItem } from "@/models/TemplateDetailItem";
 import validator from "@/utils/validator";
 import { resourcesService } from "@/services";
+import { freeCache } from "@/repository/cache";
 
 export default defineComponent({
   components: {
@@ -183,7 +183,7 @@ export default defineComponent({
     const ttsSpeakers = Constants.TTS_GENDERS;
     const { cm } = useGlobalStore();
 
-    const template = <TemplateItem>UMesseCache.freeCache.get("voice/template");
+    const template = <TemplateItem>freeCache.get("voice/template");
     let templateDetails: TemplateDetailItem[] = [];
     let ttsLangs: string[] = [];
     template.details.forEach(

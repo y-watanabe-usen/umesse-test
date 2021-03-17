@@ -1,5 +1,6 @@
 import { reactive } from 'vue';
 import axios from "axios";
+import { audioRepository } from '@/repository/api';
 
 export interface audioState {
   isDownloading: boolean,
@@ -27,14 +28,7 @@ export default function audioStore() {
     async download(signedUrl: string) {
       state.isDownloading = true;
       try {
-        const response = await axios
-          .get(signedUrl, {
-            headers: {
-              "accept": "audio/mpeg",
-            },
-            responseType: "arraybuffer",
-          });
-        state.audioBuffer = await ctx.decodeAudioData(response.data);
+        state.audioBuffer = await audioRepository.download(signedUrl);
       } catch (error) {
         console.log("error");
       }

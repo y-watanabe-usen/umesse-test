@@ -2,7 +2,7 @@ import { useResourcesService } from "./resourcesService";
 import { useRecordingService } from "./recordingService";
 import { useCmService } from "./cmService";
 import { useTtsService } from "./ttsService";
-import { cmRepository, recordingRepository, resourcesRepository, ttsRepository } from "@/repository";
+import { cmRepository, recordingRepository, resourcesRepository, ttsRepository } from "@/repository/api";
 
 const resourcesService = useResourcesService(resourcesRepository, recordingRepository, ttsRepository);
 const recordingService = useRecordingService(recordingRepository);

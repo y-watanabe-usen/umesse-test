@@ -1,4 +1,4 @@
-import { authRepository } from '@/repository';
+import { authRepository } from '@/repository/api';
 import { reactive, toRefs } from 'vue';
 
 export interface authState {

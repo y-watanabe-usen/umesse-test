@@ -1,6 +1,5 @@
 import Constants from "@/utils/Constants";
 import * as UMesseApi from "umesseapi";
-import UMesseCache from "@/repository/UMesseCache";
 import {
   BgmItem,
   ChimeItem,
@@ -10,6 +9,7 @@ import {
 } from "umesseapi/models";
 import AudioStore from "@/store/audio";
 import { UMesseErrorFromApiFactory } from "@/models/UMesseError";
+import { audioCache } from "@/repository/cache";
 
 export function useResourcesService(
   resourcesApi: UMesseApi.ResourcesApi,
@@ -168,8 +168,8 @@ export function useResourcesService(
     category: string
   ) => {
     const cacheKey = `${category}/${contentsId}`;
-    if (UMesseCache.audioCache.has(cacheKey)) {
-      return <AudioBuffer>UMesseCache.audioCache.get(cacheKey);
+    if (audioCache.has(cacheKey)) {
+      return <AudioBuffer>audioCache.get(cacheKey);
     }
     const response = await resourcesApi.getSignedUrl(contentsId, category);
     return await getAudioBuffer(response.data.url, cacheKey);
@@ -177,15 +177,15 @@ export function useResourcesService(
 
   const getAudioBufferByUrl = async (url: string) => {
     const cacheKey = url;
-    if (UMesseCache.audioCache.has(cacheKey)) {
-      return <AudioBuffer>UMesseCache.audioCache.get(cacheKey);
+    if (audioCache.has(cacheKey)) {
+      return <AudioBuffer>audioCache.get(cacheKey);
     }
     return await getAudioBuffer(url, cacheKey);
   };
 
   const getAudioBuffer = async (url: string, cacheKey: string) => {
     await audioStore.download(url);
-    UMesseCache.audioCache.set(cacheKey, audioStore.audioBuffer);
+    audioCache.set(cacheKey, audioStore.audioBuffer);
     return <AudioBuffer>audioStore.audioBuffer;
   };
 

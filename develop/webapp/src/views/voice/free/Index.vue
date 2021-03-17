@@ -102,9 +102,9 @@ import TextArea from "@/components/atoms/TextArea.vue";
 import SelectBox from "@/components/atoms/SelectBox.vue";
 import { useGlobalStore } from "@/store";
 import Constants from "@/utils/Constants";
-import UMesseCache from "@/repository/UMesseCache";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { resourcesService } from "@/services";
+import { freeCache } from "@/repository/cache";
 export default defineComponent({
   components: {
     BasicLayout,
@@ -143,9 +143,9 @@ export default defineComponent({
     });
     // TODO: キャッシュでいいのか
     const cacheKey = "voice/free/selectTemplate";
-    if (UMesseCache.freeCache.has(cacheKey)) {
-      state.text = <string>UMesseCache.freeCache.get(cacheKey);
-      UMesseCache.freeCache.del(cacheKey);
+    if (freeCache.has(cacheKey)) {
+      state.text = <string>freeCache.get(cacheKey);
+      freeCache.del(cacheKey);
     } else {
       state.text = "おはよう";
     }

@@ -1,5 +1,5 @@
 import { UMesseError } from "@/models/UMesseError";
-import axios from "@/repository/axiosInstance";
+import axios from "@/repository/api/axiosInstance";
 import { useCmService } from "@/services/cmService";
 import * as umesseapi from "umesseapi";
 
