@@ -159,8 +159,8 @@ import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
 import { UMesseError } from "../../models/UMesseError";
-import { resourcesService } from "@/services";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
+import { audioService, resourcesService } from "@/services";
 
 export default defineComponent({
   components: {
@@ -241,10 +241,7 @@ export default defineComponent({
     };
 
     const play = async (bgm: BgmItem) => {
-      const audioBuffer = await resourcesService.getAudioBufferByContentsId(
-        bgm.id,
-        bgm.category
-      );
+      const audioBuffer = await audioService.getAudioById(bgm.id, bgm.category);
       audioPlayer.start(audioBuffer);
     };
 

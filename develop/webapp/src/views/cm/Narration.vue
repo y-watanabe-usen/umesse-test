@@ -187,7 +187,7 @@ import {
 import { Scene } from "@/utils/Constants";
 import { UMesseError } from "../../models/UMesseError";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
-import { resourcesService } from "@/services";
+import { audioService, resourcesService } from "@/services";
 
 export default defineComponent({
   components: {
@@ -280,7 +280,7 @@ export default defineComponent({
     };
 
     const play = async (narration: NarrationItem) => {
-      const audioBuffer = await resourcesService.getAudioBufferByContentsId(
+      const audioBuffer = await audioService.getAudioById(
         narration.id,
         narration.category
       );

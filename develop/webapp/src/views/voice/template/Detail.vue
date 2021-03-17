@@ -39,9 +39,7 @@
                 />
               </div>
               <div>
-                <p
-                  class="errorMessage errorLangs"
-                >
+                <p class="errorMessage errorLangs">
                   {{ errorMessageLangs }}
                 </p>
               </div>
@@ -55,9 +53,7 @@
             >
               <TextBox v-model="customerName" />
               <div>
-                <p
-                  class="errorMessage errorCustomerName"
-                >
+                <p class="errorMessage errorCustomerName">
                   {{ errorMessageCustomerName }}
                 </p>
               </div>
@@ -65,9 +61,7 @@
             <FormGroup title="2:閉店時間" class="time">
               <TimeInput v-model="endTime" />
               <div>
-                <p
-                  class="errorMessage errorEndTime"
-                >
+                <p class="errorMessage errorEndTime">
                   {{ errorMessageEndTime }}
                 </p>
               </div>
@@ -156,7 +150,7 @@ import Constants from "@/utils/Constants";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { lang, speaker, TemplateDetailItem } from "@/models/TemplateDetailItem";
 import validator from "@/utils/validator";
-import { resourcesService } from "@/services";
+import { audioService, resourcesService } from "@/services";
 import { freeCache } from "@/repository/cache";
 
 export default defineComponent({
@@ -242,9 +236,7 @@ export default defineComponent({
     const play = async () => {
       console.log("play");
       const data = await ttsStore.getTtsData(state.playLang);
-      const audioBuffer = await resourcesService.getAudioBufferByUrl(
-        <string>data?.url
-      );
+      const audioBuffer = await audioService.getAudioByUrl(<string>data?.url);
       audioPlayer.start(audioBuffer);
     };
     const stop = () => {

@@ -604,7 +604,7 @@ import { MAX_NARRATION_COUNT } from "@/store/cm";
 import router from "@/router";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { UMesseError } from "../../models/UMesseError";
-import { resourcesService } from "@/services";
+import { audioService, resourcesService } from "@/services";
 
 export default defineComponent({
   components: {
@@ -690,7 +690,7 @@ export default defineComponent({
     };
     const playById = async (id: string, category: string) => {
       stop();
-      const audioBuffer = await resourcesService.getAudioBufferByContentsId(
+      const audioBuffer = await audioService.getAudioById(
         id,
         category
       );
@@ -699,7 +699,7 @@ export default defineComponent({
 
     const playGenerateCm = async () => {
       if (!cm.url) return;
-      const audioBuffer = await resourcesService.getAudioBufferByUrl(cm.url);
+      const audioBuffer = await audioService.getAudioByUrl(cm.url);
       audioPlayer.start(audioBuffer);
     };
     const stop = () => {

@@ -281,7 +281,7 @@ import SelectBox from "@/components/atoms/SelectBox.vue";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import DropdownMenu from "@/components/molecules/DropdownMenu.vue";
 import { UMesseError } from "../../models/UMesseError";
-import { cmService, resourcesService } from "@/services";
+import { audioService, cmService, resourcesService } from "@/services";
 export default defineComponent({
   components: {
     BasicLayout,
@@ -365,7 +365,7 @@ export default defineComponent({
     };
     const play = async (cm: CmItem) => {
       if (state.isPlaying) return;
-      const audioBuffer = await resourcesService.getAudioBufferByContentsId(
+      const audioBuffer = await audioService.getAudioById(
         cm.id,
         Constants.CATEGORY.CM
       );

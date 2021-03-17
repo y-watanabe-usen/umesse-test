@@ -145,8 +145,8 @@ import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
 import { UMesseError } from "../../models/UMesseError";
-import { resourcesService } from "@/services";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
+import { audioService, resourcesService } from "@/services";
 
 export default defineComponent({
   components: {
@@ -212,9 +212,7 @@ export default defineComponent({
     const fetchChime = async () => {
       try {
         openModalLoading();
-        const response = await resourcesService.fetchChime(
-          state.sort
-        );
+        const response = await resourcesService.fetchChime(state.sort);
         state.chimes = response;
       } catch (e) {
         openErrorModal(e);
@@ -224,7 +222,7 @@ export default defineComponent({
     };
 
     const play = async (chime: ChimeItem) => {
-      const audioBuffer = await resourcesService.getAudioBufferByContentsId(
+      const audioBuffer = await audioService.getAudioById(
         chime.id,
         chime.category
       );

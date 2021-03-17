@@ -25,7 +25,7 @@ export default function audioStore() {
     async download(signedUrl: string) {
       state.isDownloading = true;
       try {
-        state.audioBuffer = await audioService.download(signedUrl);
+        state.audioBuffer = await audioService.getAudioByUrl(signedUrl);
       } catch (error) {
         console.log("error");
       }
