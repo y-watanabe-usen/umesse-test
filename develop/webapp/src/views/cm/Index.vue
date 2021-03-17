@@ -19,7 +19,7 @@
                 />
                 試聴
               </Button>
-              <p>約2分15秒</p>
+              <p>{{ convertNumberToTime(cmTime) }}</p>
             </div>
           </template>
           <template #buttons>
@@ -537,6 +537,7 @@ export default defineComponent({
     const { auth, cm } = useGlobalStore();
     const authToken = <string>auth.getToken();
     const state = reactive({
+      cmTime: computed(() => cm.secounds),
       openChime: computed(() => cm.openChime),
       narrations: computed(() => cm.narrations),
       bgm: computed(() => cm.bgm),
