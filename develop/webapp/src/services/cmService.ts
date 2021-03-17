@@ -14,6 +14,7 @@ import * as UMesseApi from "umesseapi";
 import { Recording, Tts } from "@/models/DisplayCmItem";
 import { CmItem } from "umesseapi/models/cm-item";
 import { UMesseErrorFromApiFactory } from "@/models/UMesseError";
+import UMesseCache from "@/repository/UMesseCache";
 
 export enum UPLOAD_CM_STATE {
   NONE,
@@ -75,19 +76,28 @@ export function useCmService(api: UMesseApi.CmApi) {
         endChime,
         bgm
       );
-      api
-        .createUserCm(authToken, requestModel)
-        .then((value) => {
-          console.log("resolve");
-          console.log("createUserCm", value.data);
-          state.status = UPLOAD_CM_STATE.CREATED;
-          resolve(<CreateUserCmResponseItem>value.data);
-        })
-        .catch((e) => {
-          console.log("reject", e);
-          (state.status = UPLOAD_CM_STATE.ERROR);
-          reject(UMesseErrorFromApiFactory(e));
-        });
+      
+      const cacheKey = Convert.createUserCmRequestItemToJson(requestModel);
+
+      if (UMesseCache.freeCache.has(cacheKey)) {
+        state.status = UPLOAD_CM_STATE.CREATED;
+        resolve(<CreateUserCmResponseItem>UMesseCache.freeCache.get(cacheKey));
+      } else {
+        api
+          .createUserCm(authToken, requestModel)
+          .then((value) => {
+            UMesseCache.freeCache.set(cacheKey, <CreateUserCmResponseItem>value.data);
+            console.log("resolve");
+            console.log("createUserCm", value.data);
+            state.status = UPLOAD_CM_STATE.CREATED;
+            resolve(<CreateUserCmResponseItem>value.data);
+          })
+          .catch((e) => {
+            console.log("reject", e);
+            (state.status = UPLOAD_CM_STATE.ERROR);
+            reject(UMesseErrorFromApiFactory(e));
+          });
+      } 
     });
   };
 
