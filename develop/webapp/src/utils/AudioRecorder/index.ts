@@ -7,15 +7,26 @@ export default () => {
   const state = reactive<AudioRecorderState>({
     recording: false,
     chunks: new Array<Blob>(),
+    powerDecibels: -100,
   });
   let mediaRecorder: MediaRecorder | undefined;
+  let timer: number | undefined;
 
   const isRecording = () => state.recording;
   const hasRecording = () => (state.chunks.length !== 0);
+  const context = new window.AudioContext();
+  const analyser: AnalyserNode = context.createAnalyser();
+  analyser.fftSize = 2048;
+  const sampleBuffer = new Float32Array(analyser.fftSize);
+
+  const getPowerDecibels = () => {
+    return state.powerDecibels;
+  };
 
   const start = async () => {
     if (state.recording) { throw new Error(`recording state = ${state.recording}.`); }
     reset();
+    //マイクから音声の取得を行う
     const stream: MediaStream = await navigator.mediaDevices.getUserMedia({
       audio: {
         autoGainControl: true,
@@ -25,17 +36,28 @@ export default () => {
         sampleRate: 44100,
       }
     });
+    const input  = context.createMediaStreamSource(stream);
+    analyser.connect(context.destination);
+    input.connect(analyser);
+    //取得した音声の録音
     mediaRecorder = new MediaRecorder(stream);
     mediaRecorder.onstop = () => {
+      clearInterval(timer);
+      analyser.disconnect(context.destination);
       state.recording = false;
+      state.powerDecibels = -100;
       stream.getTracks().forEach((track) => track.stop());
     };
     mediaRecorder.ondataavailable = (e: BlobEvent) => state.chunks.push(e.data);
     mediaRecorder.start();
-
+    timer = setInterval(() => {
+      updateAnalyser();
+    }, 100);
     state.recording = true;
   };
-  const stop = async () => mediaRecorder?.stop();
+  const stop = async () => {
+    mediaRecorder?.stop();
+  };
   const reset = () => state.chunks = [];
 
 
@@ -77,8 +99,17 @@ export default () => {
     return undefined;
   };
 
+  const updateAnalyser = () => {
+  analyser.getFloatTimeDomainData(sampleBuffer);
+  let sumOfSquares = 0;
+  for (const x of sampleBuffer) {
+    sumOfSquares += x ** 2;
+  }
+   state.powerDecibels = Math.round(10 * Math.log10(sumOfSquares / sampleBuffer.length));
+};
+
   return {
     start, stop, reset, isRecording, hasRecording,
-    getWaveBlob, getMp3Blob, getAudioBuffer,
+    getWaveBlob, getMp3Blob, getAudioBuffer,getPowerDecibels
   };
 };
