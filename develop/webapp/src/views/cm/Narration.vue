@@ -158,7 +158,6 @@
 
 <script lang="ts">
 import { defineComponent, computed, onMounted, reactive, toRefs } from "vue";
-import AudioStore from "@/store/audio";
 import AudioPlayer from "@/utils/AudioPlayer";
 import * as Common from "@/utils/Common";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
@@ -210,7 +209,6 @@ export default defineComponent({
     TextDialogContents,
   },
   setup() {
-    const audioStore = AudioStore();
     const audioPlayer = AudioPlayer();
     const { auth, cm } = useGlobalStore();
     const authToken = <string>auth.getToken();
@@ -224,7 +222,7 @@ export default defineComponent({
       scenes: [] as Scene[],
       selectedNarration: null as NarrationItem | null,
       isPlaying: computed(() => audioPlayer.isPlaying()),
-      isDownloading: computed(() => audioStore.isDownloading),
+      isDownloading: false,
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       duration: computed(() => audioPlayer.getDuration()),
       isDocumentModalAppear: false,
@@ -280,11 +278,18 @@ export default defineComponent({
     };
 
     const play = async (narration: NarrationItem) => {
-      const audioBuffer = await audioService.getAudioById(
-        narration.id,
-        narration.category
-      );
-      audioPlayer.start(audioBuffer);
+      try {
+        state.isDownloading = true;
+        const audioBuffer = await audioService.getAudioById(
+          narration.id,
+          narration.category
+        );
+        audioPlayer.start(audioBuffer);
+      } catch (e) {
+        openErrorModal(e);
+      } finally {
+        state.isDownloading = false;
+      }
     };
 
     const stop = () => {

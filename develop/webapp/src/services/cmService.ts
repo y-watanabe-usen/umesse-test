@@ -14,7 +14,7 @@ import * as UMesseApi from "umesseapi";
 import { Recording, Tts } from "@/models/DisplayCmItem";
 import { CmItem } from "umesseapi/models/cm-item";
 import { UMesseErrorFromApiFactory } from "@/models/UMesseError";
-import UMesseCache from "@/repository/UMesseCache";
+import { freeCache } from "@/repository/cache";
 
 export enum UPLOAD_CM_STATE {
   NONE,
@@ -79,14 +79,14 @@ export function useCmService(api: UMesseApi.CmApi) {
       
       const cacheKey = Convert.createUserCmRequestItemToJson(requestModel);
 
-      if (UMesseCache.freeCache.has(cacheKey)) {
+      if (freeCache.has(cacheKey)) {
         state.status = UPLOAD_CM_STATE.CREATED;
-        resolve(<CreateUserCmResponseItem>UMesseCache.freeCache.get(cacheKey));
+        resolve(<CreateUserCmResponseItem>freeCache.get(cacheKey));
       } else {
         api
           .createUserCm(authToken, requestModel)
           .then((value) => {
-            UMesseCache.freeCache.set(cacheKey, <CreateUserCmResponseItem>value.data);
+            freeCache.set(cacheKey, <CreateUserCmResponseItem>value.data);
             console.log("resolve");
             console.log("createUserCm", value.data);
             state.status = UPLOAD_CM_STATE.CREATED;

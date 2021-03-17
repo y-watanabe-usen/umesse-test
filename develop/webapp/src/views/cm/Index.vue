@@ -578,7 +578,6 @@
 <script lang="ts">
 import { defineComponent, computed, reactive, toRefs } from "vue";
 import AudioPlayer from "@/utils/AudioPlayer";
-import AudioStore from "@/store/audio";
 import { useGlobalStore } from "@/store";
 import * as FormatDate from "@/utils/FormatDate";
 import Constants from "@/utils/Constants";
@@ -628,7 +627,6 @@ export default defineComponent({
     ModalLoading,
   },
   setup() {
-    const audioStore = AudioStore();
     const audioPlayer = AudioPlayer();
     const { auth, cm } = useGlobalStore();
     const authToken = <string>auth.getToken();
@@ -639,7 +637,7 @@ export default defineComponent({
       bgm: computed(() => cm.bgm),
       endChime: computed(() => cm.endChime),
       isPlaying: computed(() => audioPlayer.isPlaying()),
-      isDownloading: computed(() => audioStore.isDownloading),
+      isDownloading: false,
       isCreating: computed(() => cm.status() == UPLOAD_CM_STATE.CREATING),
       isUpdating: computed(() => cm.status() == UPLOAD_CM_STATE.UPDATING),
       status: computed(() => cm.status()),
@@ -690,14 +688,28 @@ export default defineComponent({
     };
     const playById = async (id: string, category: string) => {
       stop();
-      const audioBuffer = await audioService.getAudioById(id, category);
-      audioPlayer.start(audioBuffer);
+      try {
+        state.isDownloading = true;
+        const audioBuffer = await audioService.getAudioById(id, category);
+        audioPlayer.start(audioBuffer);
+      } catch (e) {
+        openErrorModal(e);
+      } finally {
+        state.isDownloading = false;
+      }
     };
 
     const playGenerateCm = async () => {
       if (!cm.url) return;
-      const audioBuffer = await audioService.getAudioByUrl(cm.url);
-      audioPlayer.start(audioBuffer);
+      try {
+        state.isDownloading = true;
+        const audioBuffer = await audioService.getAudioByUrl(cm.url);
+        audioPlayer.start(audioBuffer);
+      } catch (e) {
+        openErrorModal(e);
+      } finally {
+        state.isDownloading = false;
+      }
     };
     const stop = () => {
       if (state.isPlaying) audioPlayer.stop();

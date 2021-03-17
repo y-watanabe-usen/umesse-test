@@ -248,7 +248,6 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted, reactive, toRefs } from "vue";
 import AudioPlayer from "@/utils/AudioPlayer";
-import AudioStore from "@/store/audio";
 import * as Common from "@/utils/Common";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
@@ -310,7 +309,6 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const audioPlayer = AudioPlayer();
-    const audioStore = AudioStore();
     const { auth, cm } = useGlobalStore();
     const disabledEditContentsStatus = ["11", "12"];
     const disabledDeleteStatus = ["00", "11"];
@@ -322,7 +320,7 @@ export default defineComponent({
       sort: 4,
       cmSorts: computed(() => Common.getSort()),
       isPlaying: computed(() => audioPlayer.isPlaying()),
-      isDownloading: computed(() => audioStore.isDownloading),
+      isDownloading: false,
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       duration: computed(() => audioPlayer.getDuration()),
       selectedCm: null as CmItem | null,
@@ -365,11 +363,18 @@ export default defineComponent({
     };
     const play = async (cm: CmItem) => {
       if (state.isPlaying) return;
-      const audioBuffer = await audioService.getAudioById(
-        cm.id,
-        Constants.CATEGORY.CM
-      );
-      audioPlayer.start(audioBuffer);
+      try {
+        state.isDownloading = true;
+        const audioBuffer = await audioService.getAudioById(
+          cm.id,
+          Constants.CATEGORY.CM
+        );
+        audioPlayer.start(audioBuffer);
+      } catch (e) {
+        openErrorModal(e);
+      } finally {
+        state.isDownloading = false;
+      }
     };
     const stop = () => {
       if (state.isPlaying) audioPlayer.stop();
