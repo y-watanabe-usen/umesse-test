@@ -18,4 +18,7 @@ module.exports = {
       "tsconfig": "<rootDir>/tsconfig.json"
     }
   },
+  "transformIgnorePatterns": [
+    "node_modules/(?!@ngrx|(?!deck.gl)|ng-dynamic)"
+  ],
 };

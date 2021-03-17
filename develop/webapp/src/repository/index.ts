@@ -1,16 +1,17 @@
 import * as umesseapi from "umesseapi";
 import { config } from "@/repository/UMesseApiConfiguration";
+import axios from "@/repository/axiosInstance";
 
-const pingRepository = new umesseapi.PingApi(config);
-const authRepository = new umesseapi.AuthApi(config);
-const userRepository = new umesseapi.UserApi(config);
-const cmRepository = new umesseapi.CmApi(config);
-const recordingRepository = new umesseapi.RecordingApi(config);
-const ttsRepository = new umesseapi.TtsApi(config);
-const uploadRepository = new umesseapi.UploadApi(config);
-const shareRepository = new umesseapi.ShareApi(config);
-const resourcesRepository = new umesseapi.ResourcesApi(config);
-const externalRepository = new umesseapi.ExternalApi(config);
+const pingRepository = new umesseapi.PingApi(config, config.basePath, axios);
+const authRepository = new umesseapi.AuthApi(config, config.basePath, axios);
+const userRepository = new umesseapi.UserApi(config, config.basePath, axios);
+const cmRepository = new umesseapi.CmApi(config, config.basePath, axios);
+const recordingRepository = new umesseapi.RecordingApi(config, config.basePath, axios);
+const ttsRepository = new umesseapi.TtsApi(config, config.basePath, axios);
+const uploadRepository = new umesseapi.UploadApi(config, config.basePath, axios);
+const shareRepository = new umesseapi.ShareApi(config, config.basePath, axios);
+const resourcesRepository = new umesseapi.ResourcesApi(config, config.basePath, axios);
+const externalRepository = new umesseapi.ExternalApi(config, config.basePath, axios);
 
 export {
   pingRepository,
