@@ -35,6 +35,7 @@ export default {
 
 .header {
   height: 80px;
+  caret-color: transparent;
   .btn-back {
     position: absolute;
     top: 28px;

@@ -32,6 +32,7 @@ export default {
   padding: 0;
   height: 100px;
   border-top: 1px solid rgb(229, 229, 229);
+  caret-color: transparent;
   &.no-border {
     border-top: none;
   }

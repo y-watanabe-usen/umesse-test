@@ -418,6 +418,7 @@ export default defineComponent({
   font-weight: $font_weight_bold;
   line-height: 2em;
   height: 302px;
+  caret-color: transparent;
 }
 .lang-check {
   position: relative;
@@ -494,6 +495,7 @@ export default defineComponent({
   position: absolute;
   left: 140px;
   bottom: -24px;
+  caret-color: transparent;
   &.errorLangs {
     width: 100%;
     left: 0px;

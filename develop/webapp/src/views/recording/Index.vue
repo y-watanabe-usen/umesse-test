@@ -288,6 +288,7 @@ export default defineComponent({
 .center {
   @include flex_center;
   height: 100%;
+  caret-color: transparent;
   .contents {
     @include flex_center;
     width: 1120px;

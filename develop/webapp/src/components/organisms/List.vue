@@ -34,6 +34,7 @@ export default {
     flex-grow: 0;
     flex-shrink: 0;
   }
+  caret-color: transparent;
   ul {
     width: 100%;
     height: 100%;

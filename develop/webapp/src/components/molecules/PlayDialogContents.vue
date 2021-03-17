@@ -92,6 +92,7 @@ export default {
 
 .play-dialog-contents {
   @include flex_center;
+  caret-color: transparent;
   .row {
     @include flex_between;
     margin-left: 0;
