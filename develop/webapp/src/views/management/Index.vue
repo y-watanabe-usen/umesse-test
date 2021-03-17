@@ -280,10 +280,10 @@ import {
 import Constants from "@/utils/Constants";
 import { useRouter } from "vue-router";
 import SelectBox from "@/components/atoms/SelectBox.vue";
-import UMesseService from "@/services/UMesseService";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import DropdownMenu from "@/components/molecules/DropdownMenu.vue";
 import { UMesseError } from "../../models/UMesseError";
+import { cmService, resourcesService } from "@/services";
 export default defineComponent({
   components: {
     BasicLayout,
@@ -349,7 +349,7 @@ export default defineComponent({
     };
     const fetchCm = async () => {
       try {
-        const response = await UMesseService.cmService.fetchCm(
+        const response = await cmService.fetchCm(
           authToken,
           state.activeSceneCd,
           state.sort
@@ -364,7 +364,7 @@ export default defineComponent({
     };
     const play = async (cm: CmItem) => {
       if (state.isPlaying) return;
-      const audioBuffer = await UMesseService.resourcesService.getAudioBufferByContentsId(
+      const audioBuffer = await resourcesService.getAudioBufferByContentsId(
         cm.id,
         Constants.CATEGORY.CM
       );
@@ -374,7 +374,7 @@ export default defineComponent({
       if (state.isPlaying) audioPlayer.stop();
     };
     const save = async (cm: CmItem) => {
-      await UMesseService.cmService.update(
+      await cmService.update(
         authToken,
         cm.id,
         state.title,
@@ -385,7 +385,7 @@ export default defineComponent({
       fetchCm();
     };
     const remove = async (cmId: string) => {
-      await UMesseService.cmService.remove(authToken, cmId);
+      await cmService.remove(authToken, cmId);
       fetchCm();
     };
     const openPlayModal = () => {

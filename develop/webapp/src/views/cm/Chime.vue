@@ -143,8 +143,8 @@ import MessageDialogContents from "@/components/molecules/MessageDialogContents.
 import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
-import UMesseService from "@/services/UMesseService";
 import { UMesseError } from "../../models/UMesseError";
+import { resourcesService } from "@/services";
 
 export default defineComponent({
   components: {
@@ -207,7 +207,7 @@ export default defineComponent({
 
     const fetchChime = async () => {
       try {
-        const response = await UMesseService.resourcesService.fetchChime(
+        const response = await resourcesService.fetchChime(
           state.sort
         );
         state.chimes = response;
@@ -217,7 +217,7 @@ export default defineComponent({
     };
 
     const play = async (chime: ChimeItem) => {
-      const audioBuffer = await UMesseService.resourcesService.getAudioBufferByContentsId(
+      const audioBuffer = await resourcesService.getAudioBufferByContentsId(
         chime.id,
         chime.category
       );

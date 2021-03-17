@@ -506,9 +506,9 @@ import DropdownMenu from "@/components/molecules/DropdownMenu.vue";
 import VolumeSlider from "@/components/molecules/VolumeSlider.vue";
 import { MAX_NARRATION_COUNT } from "@/store/cm";
 import router from "@/router";
-import UMesseService from "@/services/UMesseService";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { UMesseError } from "../../models/UMesseError";
+import { resourcesService } from "@/services";
 
 export default defineComponent({
   components: {
@@ -589,7 +589,7 @@ export default defineComponent({
     };
     const playById = async (id: string, category: string) => {
       stop();
-      const audioBuffer = await UMesseService.resourcesService.getAudioBufferByContentsId(
+      const audioBuffer = await resourcesService.getAudioBufferByContentsId(
         id,
         category
       );
@@ -598,9 +598,7 @@ export default defineComponent({
 
     const playGenerateCm = async () => {
       if (!cm.url) return;
-      const audioBuffer = await UMesseService.resourcesService.getAudioBufferByUrl(
-        cm.url
-      );
+      const audioBuffer = await resourcesService.getAudioBufferByUrl(cm.url);
       audioPlayer.start(audioBuffer);
     };
     const stop = () => {

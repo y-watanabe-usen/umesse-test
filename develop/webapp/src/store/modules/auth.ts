@@ -1,5 +1,5 @@
+import { authRepository } from '@/repository';
 import { reactive, toRefs } from 'vue';
-import UMesseApi from '@/repository/UMesseApi';
 
 export interface authState {
     token: string | undefined,
@@ -28,7 +28,7 @@ export default function authStore() {
         console.log(`requestAuthorization`);
         state.authenticating = true;
         try {
-            const response = await UMesseApi.authApi.auth();
+            const response = await authRepository.auth();
             state.token = response.data.token;
         } catch (e) {
             state.error = e.message;

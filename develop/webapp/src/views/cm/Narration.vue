@@ -184,10 +184,10 @@ import {
   convertDatestringToDateJp,
   convertNumberToTime,
 } from "@/utils/FormatDate";
-import UMesseService from "@/services/UMesseService";
 import { Scene } from "@/utils/Constants";
 import { UMesseError } from "../../models/UMesseError";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
+import { resourcesService } from "@/services";
 
 export default defineComponent({
   components: {
@@ -264,7 +264,7 @@ export default defineComponent({
       if (!state.activeSceneCd) return;
       try {
         state.isLoading = true;
-        const response = await UMesseService.resourcesService.fetchNarration(
+        const response = await resourcesService.fetchNarration(
           authToken,
           state.activeIndustryCd,
           state.activeSceneCd,
@@ -280,7 +280,7 @@ export default defineComponent({
     };
 
     const play = async (narration: NarrationItem) => {
-      const audioBuffer = await UMesseService.resourcesService.getAudioBufferByContentsId(
+      const audioBuffer = await resourcesService.getAudioBufferByContentsId(
         narration.id,
         narration.category
       );

@@ -89,11 +89,11 @@ import ListHeader from "@/components/molecules/ListHeader.vue";
 import ListItem from "@/components/molecules/ListItem.vue";
 import { TemplateItem } from "umesseapi/models";
 import * as Common from "@/utils/Common";
-import UMesseService from "@/services/UMesseService";
 import router from "@/router";
 import UMesseCache from "@/repository/UMesseCache";
 import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
 import { UMesseError } from "../../../models/UMesseError";
+import { resourcesService } from "@/services";
 
 export default defineComponent({
   components: {
@@ -128,7 +128,7 @@ export default defineComponent({
 
     const fetchTemplate = async () => {
       try {
-        const response = await UMesseService.resourcesService.fetchTemplate(
+        const response = await resourcesService.fetchTemplate(
           state.activeIndustryCd,
           state.sort
         );

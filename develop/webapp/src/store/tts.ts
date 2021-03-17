@@ -4,7 +4,7 @@ import { TtsItem } from "umesseapi/models/tts-item";
 import { GenerateUserTtsRequestDetailItem, GenerateUserTtsRequestItem } from "@/models/GenerateUserTtsRequestItem";
 import { CreateUserTtsRequestDetailItem, CreateUserTtsRequestItem } from "@/models/CreateUserTtsRequestItem";
 import { TemplateDetailItem } from "@/models/TemplateDetailItem";
-import UMesseService from "@/services/UMesseService";
+import { ttsService } from "@/services";
 
 interface TtsData {
   url: string,
@@ -29,7 +29,7 @@ export default function ttsStore() {
 
   const fetchTtsData = async () => {
     try {
-      const response = await UMesseService.ttsService.fetchData(token());
+      const response = await ttsService.fetchData(token());
       state.ttsItems = response;
     } catch (e) {
       // throw new e;
@@ -43,7 +43,7 @@ export default function ttsStore() {
 
   const deleteUserTts = async (id: string) => {
     try {
-      await UMesseService.ttsService.remove(token(), id);
+      await ttsService.remove(token(), id);
     } catch (e) {
       // throw new e;
     }
@@ -55,7 +55,7 @@ export default function ttsStore() {
     description: string
   ) => {
     try {
-      await UMesseService.ttsService.update(token(), id, title, description);
+      await ttsService.update(token(), id, title, description);
     } catch (e) {
       // throw new e;
     }
@@ -109,7 +109,7 @@ export default function ttsStore() {
 
       console.log("generateUserTts", token(), requestModel);
       try {
-        const response = await UMesseService.ttsService.generate(token(), requestModel);
+        const response = await ttsService.generate(token(), requestModel);
         console.log(response);
         state.ttsDatas = response.details;
       } catch (e) {
@@ -144,7 +144,7 @@ export default function ttsStore() {
         }]
       };
       try {
-        const response = await UMesseService.ttsService.generate(
+        const response = await ttsService.generate(
           token(), requestModel);
         console.log(response);
         state.ttsDatas = response.details;
@@ -178,7 +178,7 @@ export default function ttsStore() {
       };
 
       try {
-        const response = await UMesseService.ttsService.create(token(), requestModel);
+        const response = await ttsService.create(token(), requestModel);
         console.log(response);
         return response;
       } catch (e) {
