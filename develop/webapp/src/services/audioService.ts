@@ -6,10 +6,9 @@ import { ResourcesApi } from "umesseapi";
 export function useAudioService(
   audioRepository: AudioRepository,
   resourcesRepository: ResourcesApi,
-  audioCache: AudioCache
+  audioCache: AudioCache,
+  audioContext: AudioContext,
 ) {
-
-  const ctx = new AudioContext();
 
   const getById = async (id: string, category: string) => {
     const cacheKey = `audioService/downloadById/${category}/${id}`;
@@ -18,7 +17,7 @@ export function useAudioService(
     try {
       const resourcesRepositoryResponse = await resourcesRepository.getSignedUrl(id, category);
       const audioRepositoryResponse = await audioRepository.download(resourcesRepositoryResponse.data.url);
-      const audio = await ctx.decodeAudioData(audioRepositoryResponse.data);
+      const audio = await audioContext.decodeAudioData(audioRepositoryResponse.data);
       audioCache.set(cacheKey, audio);
       return audio;
     } catch (e) {
@@ -32,7 +31,7 @@ export function useAudioService(
     if (cacheData) return cacheData;
     try {
       const audioRepositoryResponse = await audioRepository.download(url);
-      const audio = await ctx.decodeAudioData(audioRepositoryResponse.data);
+      const audio = await audioContext.decodeAudioData(audioRepositoryResponse.data);
       audioCache.set(cacheKey, audio);
       return audio;
     } catch (e) {

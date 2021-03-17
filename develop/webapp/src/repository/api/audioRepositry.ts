@@ -1,7 +1,6 @@
 import { AxiosInstance } from "axios";
 
 export class AudioRepository {
-  readonly ctx = new AudioContext();
 
   constructor(private axios: AxiosInstance) {
     this.axios = axios;

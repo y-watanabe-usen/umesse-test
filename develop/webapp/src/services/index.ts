@@ -6,10 +6,11 @@ import { audioRepository, cmRepository, recordingRepository, resourcesRepository
 import { useAudioService } from "./audioService";
 import { audioCache } from "@/repository/cache";
 
+const audioContext = new AudioContext();
 const resourcesService = useResourcesService(resourcesRepository, recordingRepository, ttsRepository);
 const recordingService = useRecordingService(recordingRepository);
 const cmService = useCmService(cmRepository);
 const ttsService = useTtsService(ttsRepository);
-const audioService = useAudioService(audioRepository, resourcesRepository, audioCache);
+const audioService = useAudioService(audioRepository, resourcesRepository, audioCache, audioContext);
 
 export { resourcesService, recordingService, cmService, ttsService, audioService };
