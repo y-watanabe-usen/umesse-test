@@ -149,6 +149,9 @@ export default function cmStore() {
     get url() {
       return state.displayCmItem.url;
     },
+    get secounds() {
+      return state.displayCmItem.seconds;
+    },
     clearNarration,
     clearAllNarration,
     clearOpenChime,
