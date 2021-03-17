@@ -145,14 +145,14 @@ export default defineComponent({
     const cacheKey = "voice/free/selectTemplate";
     if (freeCache.has(cacheKey)) {
       state.text = <string>freeCache.get(cacheKey);
-      freeCache.del(cacheKey);
+      freeCache.remove(cacheKey);
     } else {
       state.text = "おはよう";
     }
     const play = async () => {
       console.log("play");
       const data = await ttsStore.getTtsData(lang);
-      const audioBuffer = await audioService.getAudioByUrl(<string>data?.url);
+      const audioBuffer = await audioService.getByUrl(<string>data?.url);
       audioPlayer.start(audioBuffer);
     };
     const stop = () => {

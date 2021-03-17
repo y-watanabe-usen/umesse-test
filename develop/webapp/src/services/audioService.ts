@@ -1,21 +1,20 @@
 import { UMesseErrorFromApiFactory } from "@/models/UMesseError";
 import { AudioRepository } from "@/repository/api/audioRepositry";
-import LRUCache from "lru-cache";
+import { AudioCache } from "@/repository/cache/audioCache";
 import { ResourcesApi } from "umesseapi";
 
 export function useAudioService(
   audioRepository: AudioRepository,
   resourcesRepository: ResourcesApi,
-  audioCache: LRUCache<unknown, unknown>
+  audioCache: AudioCache
 ) {
 
   const ctx = new AudioContext();
 
-  const getAudioById = async (id: string, category: string) => {
+  const getById = async (id: string, category: string) => {
     const cacheKey = `audioService/downloadById/${category}/${id}`;
-    if (audioCache.has(cacheKey)) {
-      return <AudioBuffer>audioCache.get(cacheKey);
-    }
+    const cacheData = audioCache.get(cacheKey);
+    if (cacheData) return cacheData;
     try {
       const resourcesRepositoryResponse = await resourcesRepository.getSignedUrl(id, category);
       const audioRepositoryResponse = await audioRepository.download(resourcesRepositoryResponse.data.url);
@@ -27,11 +26,10 @@ export function useAudioService(
     }
   };
 
-  const getAudioByUrl = async (url: string) => {
-    const cacheKey = `audioService/downloadById/${url}`;
-    if (audioCache.has(cacheKey)) {
-      return <AudioBuffer>audioCache.get(cacheKey);
-    }
+  const getByUrl = async (url: string) => {
+    const cacheKey = `audioService/getAudioByUrl/${url}`;
+    const cacheData = audioCache.get(cacheKey);
+    if (cacheData) return cacheData;
     try {
       const audioRepositoryResponse = await audioRepository.download(url);
       const audio = await ctx.decodeAudioData(audioRepositoryResponse.data);
@@ -43,7 +41,7 @@ export function useAudioService(
   };
 
   return {
-    getAudioById,
-    getAudioByUrl,
+    getById,
+    getByUrl,
   };
 }

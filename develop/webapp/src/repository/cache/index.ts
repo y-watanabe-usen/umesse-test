@@ -1,13 +1,7 @@
-import LRUCache from "lru-cache";
+import { AudioCache } from "./audioCache";
+import { FreeCache } from "./freeCache";
 
-const audioCache = new LRUCache({
-  max: 50,
-  maxAge: 1000 * 60 * 5 // 5分
-});
-
-const freeCache = new LRUCache({
-  max: 50,
-  maxAge: 1000 * 60 * 60 // 60分
-});
+const audioCache = new AudioCache();
+const freeCache = new FreeCache();
 
 export { audioCache, freeCache };

@@ -365,7 +365,7 @@ export default defineComponent({
       if (state.isPlaying) return;
       try {
         state.isDownloading = true;
-        const audioBuffer = await audioService.getAudioById(
+        const audioBuffer = await audioService.getById(
           cm.id,
           Constants.CATEGORY.CM
         );

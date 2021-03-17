@@ -222,7 +222,7 @@ export default defineComponent({
     const play = async (chime: ChimeItem) => {
       try {
         state.isDownloading = true;
-        const audioBuffer = await audioService.getAudioById(
+        const audioBuffer = await audioService.getById(
           chime.id,
           chime.category
         );

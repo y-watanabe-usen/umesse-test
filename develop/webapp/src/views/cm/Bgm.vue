@@ -241,7 +241,7 @@ export default defineComponent({
     const play = async (bgm: BgmItem) => {
       try {
         state.isDownloading = true;
-        const audioBuffer = await audioService.getAudioById(
+        const audioBuffer = await audioService.getById(
           bgm.id,
           bgm.category
         );

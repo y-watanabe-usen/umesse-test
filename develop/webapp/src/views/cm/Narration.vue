@@ -280,7 +280,7 @@ export default defineComponent({
     const play = async (narration: NarrationItem) => {
       try {
         state.isDownloading = true;
-        const audioBuffer = await audioService.getAudioById(
+        const audioBuffer = await audioService.getById(
           narration.id,
           narration.category
         );

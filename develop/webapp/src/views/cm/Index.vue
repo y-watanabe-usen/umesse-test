@@ -690,7 +690,7 @@ export default defineComponent({
       stop();
       try {
         state.isDownloading = true;
-        const audioBuffer = await audioService.getAudioById(id, category);
+        const audioBuffer = await audioService.getById(id, category);
         audioPlayer.start(audioBuffer);
       } catch (e) {
         openErrorModal(e);
@@ -703,7 +703,7 @@ export default defineComponent({
       if (!cm.url) return;
       try {
         state.isDownloading = true;
-        const audioBuffer = await audioService.getAudioByUrl(cm.url);
+        const audioBuffer = await audioService.getByUrl(cm.url);
         audioPlayer.start(audioBuffer);
       } catch (e) {
         openErrorModal(e);
