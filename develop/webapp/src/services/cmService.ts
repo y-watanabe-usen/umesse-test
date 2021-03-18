@@ -76,7 +76,7 @@ export function useCmService(api: UMesseApi.CmApi) {
         endChime,
         bgm
       );
-      
+
       const cacheKey = Convert.createUserCmRequestItemToJson(requestModel);
 
       if (freeCache.has(cacheKey)) {
@@ -97,7 +97,7 @@ export function useCmService(api: UMesseApi.CmApi) {
             (state.status = UPLOAD_CM_STATE.ERROR);
             reject(UMesseErrorFromApiFactory(e));
           });
-      } 
+      }
     });
   };
 
@@ -108,7 +108,7 @@ export function useCmService(api: UMesseApi.CmApi) {
     description: string | null,
     sceneCd: string,
     uploadSystem: string
-  ) => {
+  ): Promise<CmItem> => {
     return new Promise(function (resolve, reject) {
       // if (state.status !== UPLOAD_CM_STATE.CREATED) {
       //   return reject(new Error(`state is not created`));
@@ -127,7 +127,8 @@ export function useCmService(api: UMesseApi.CmApi) {
         .then((value) => {
           console.log("resolve");
           console.log("updateUserCm", value.data);
-          resolve(state.status = UPLOAD_CM_STATE.UPDATED);
+          state.status = UPLOAD_CM_STATE.UPDATED;
+          resolve(value.data);
         })
         .catch((e) => {
           console.log("reject", e);
@@ -138,14 +139,15 @@ export function useCmService(api: UMesseApi.CmApi) {
   };
 
   // deleteは予約語なのでremove
-  const remove = async (authToken: string, id: string) => {
+  const remove = async (authToken: string, id: string): Promise<CmItem> => {
     return new Promise(function (resolve, reject) {
       api
         .deleteUserCm(id, authToken)
         .then((value) => {
           console.log("resolve");
           console.log("deleteUserCm", value.data);
-          resolve(state.status = UPLOAD_CM_STATE.NONE);
+          state.status = UPLOAD_CM_STATE.NONE;
+          resolve(value.data);
         })
         .catch((e) => {
           console.log("reject", e);

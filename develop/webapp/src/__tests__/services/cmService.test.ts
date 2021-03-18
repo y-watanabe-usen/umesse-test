@@ -4,12 +4,12 @@ import { useCmService } from "@/services/cmService";
 import { ERROR_CODE, ERROR_PATTERN } from "@/utils/Constants";
 import * as umesseapi from "umesseapi";
 
-describe("fetchCmのテスト", () => {
+describe("fetchのテスト", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  test(`正常系の場合、CmItem[]が返る`, async () => {
+  test(`正常終了の場合、CmItem[]が返ること`, async () => {
     const responseJson = [
       {
         "endDate": "9999-12-31T14:59:59.000Z",
@@ -113,5 +113,52 @@ describe("fetchCmのテスト", () => {
     const cmService = useCmService(cmRepository);
 
     await expect(cmService.fetch("token", "001")).rejects.toThrowError(expoectedError);
+  });
+});
+
+// TODO: 以下テスト作成
+describe("createのテスト", () => {
+  test(`正常終了の場合、CreateUserCmResponseItemが返ること`, async () => {
+    expect(true).toBe(true);
+  });
+
+  test(`キャッシュがある場合、キャッシュの中身が返ること`, async () => {
+    expect(true).toBe(true);
+  });
+
+  test(`想定外の値が返却された場合、UMesseErrorがthrowされること`, async () => {
+    expect(true).toBe(true);
+  });
+
+  test(`エラーの場合、UMesseErrorがthrowされること`, async () => {
+    expect(true).toBe(true);
+  });
+});
+
+describe("updateのテスト", () => {
+  test(`正常終了の場合、CmItemが返ること`, async () => {
+    expect(true).toBe(true);
+  });
+
+  test(`想定外の値が返却された場合、UMesseErrorがthrowされること`, async () => {
+    expect(true).toBe(true);
+  });
+
+  test(`エラーの場合、UMesseErrorがthrowされること`, async () => {
+    expect(true).toBe(true);
+  });
+});
+
+describe("removeのテスト", () => {
+  test(`正常終了の場合、CmItemが返ること`, async () => {
+    expect(true).toBe(true);
+  });
+
+  test(`想定外の値が返却された場合、UMesseErrorがthrowされること`, async () => {
+    expect(true).toBe(true);
+  });
+
+  test(`エラーの場合、UMesseErrorがthrowされること`, async () => {
+    expect(true).toBe(true);
   });
 });

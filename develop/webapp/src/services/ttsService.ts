@@ -8,7 +8,7 @@ export function useTtsService(
   ttsApi: UMesseApi.TtsApi
 ) {
 
-  const fetchData = async (authToken: string): Promise<TtsItem[]> => {
+  const fetch = async (authToken: string): Promise<TtsItem[]> => {
     return new Promise(function (resolve, reject) {
       ttsApi
         .listUserTts(authToken)
@@ -87,7 +87,7 @@ export function useTtsService(
   };
 
   return {
-    fetchData,
+    fetch,
     generate,
     create,
     update,

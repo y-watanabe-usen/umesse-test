@@ -32,7 +32,7 @@ describe("getByIdのテスト", () => {
   const category = "bgm";
   const cacheKey = `audioService/getById/${category}/${id}`;
 
-  test(`正常系の場合、AudioBufferがキャッシュにセットされ返ること`, async () => {
+  test(`正常終了の場合、AudioBufferがキャッシュにセットされ返ること`, async () => {
     jest.spyOn(axios, 'request').mockResolvedValue({ data: { url: "https://example.com" } });
     jest.spyOn(axios, 'get').mockResolvedValue({ data: "DownloadedAudioFile" });
 
@@ -84,7 +84,7 @@ describe("getByUrlのテスト", () => {
   const url = "https://example.com";
   const cacheKey = `audioService/getByUrl/${url}`;
 
-  test(`正常系の場合、AudioBufferがキャッシュにセットされ返ること`, async () => {
+  test(`正常終了の場合、AudioBufferがキャッシュにセットされ返ること`, async () => {
     jest.spyOn(axios, 'get').mockResolvedValue({ data: "DownloadedAudioFile" });
 
     const response = await audioService.getByUrl(url);
