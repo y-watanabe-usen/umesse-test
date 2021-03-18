@@ -1,4 +1,4 @@
-import { AxiosInstance } from "axios";
+import { AxiosInstance, AxiosResponse } from "axios";
 
 export class AudioRepository {
 
@@ -7,9 +7,9 @@ export class AudioRepository {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  async download(url: string): Promise<any> {
+  async download(url: string): Promise<AxiosResponse<ArrayBuffer>> {
     const response = await this.axios
-      .get(url, {
+      .get<ArrayBuffer>(url, {
         headers: {
           "accept": "audio/mpeg",
         },
