@@ -32,7 +32,7 @@ export function useCmService(api: UMesseApi.CmApi) {
 
   const getStatus = () => state.status;
 
-  const fetchCm = async (
+  const fetch = async (
     authToken: string,
     sceneCd: string,
     sort?: number
@@ -196,7 +196,7 @@ export function useCmService(api: UMesseApi.CmApi) {
   };
 
   return {
-    fetchCm,
+    fetch,
     create,
     update,
     remove,

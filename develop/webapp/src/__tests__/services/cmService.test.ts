@@ -85,7 +85,7 @@ describe("fetchCmのテスト", () => {
     const cmRepository = new umesseapi.CmApi(undefined, "", axios);
     const cmService = useCmService(cmRepository);
 
-    const response = await cmService.fetchCm("token", "001");
+    const response = await cmService.fetch("token", "001");
 
     expect(response.length).toBe(2);
     expect(response[0].id).toBe("123456789-c-v2qvc913");
@@ -101,7 +101,7 @@ describe("fetchCmのテスト", () => {
     const cmRepository = new umesseapi.CmApi(undefined, "", axios);
     const cmService = useCmService(cmRepository);
 
-    await expect(cmService.fetchCm("token", "001")).rejects.toThrowError(expoectedError);
+    await expect(cmService.fetch("token", "001")).rejects.toThrowError(expoectedError);
   });
 
   test(`エラーの場合、UMesseErrorがthrowされること`, async () => {
@@ -112,6 +112,6 @@ describe("fetchCmのテスト", () => {
     const cmRepository = new umesseapi.CmApi(undefined, "", axios);
     const cmService = useCmService(cmRepository);
 
-    await expect(cmService.fetchCm("token", "001")).rejects.toThrowError(expoectedError);
+    await expect(cmService.fetch("token", "001")).rejects.toThrowError(expoectedError);
   });
 });

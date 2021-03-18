@@ -346,7 +346,7 @@ export default defineComponent({
     const fetchCm = async () => {
       try {
         openModalLoading("");
-        const response = await cmService.fetchCm(
+        const response = await cmService.fetch(
           authToken,
           state.activeSceneCd,
           state.sort
