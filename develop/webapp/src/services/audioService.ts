@@ -11,7 +11,7 @@ export function useAudioService(
 ) {
 
   const getById = async (id: string, category: string) => {
-    const cacheKey = `audioService/downloadById/${category}/${id}`;
+    const cacheKey = `audioService/getById/${category}/${id}`;
     const cacheData = audioCache.get(cacheKey);
     if (cacheData) return cacheData;
     try {
@@ -26,7 +26,7 @@ export function useAudioService(
   };
 
   const getByUrl = async (url: string) => {
-    const cacheKey = `audioService/getAudioByUrl/${url}`;
+    const cacheKey = `audioService/getByUrl/${url}`;
     const cacheData = audioCache.get(cacheKey);
     if (cacheData) return cacheData;
     try {
