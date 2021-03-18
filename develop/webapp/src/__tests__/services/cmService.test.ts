@@ -1,6 +1,7 @@
 import { UMesseError } from "@/models/UMesseError";
 import axios from "@/repository/api/axiosInstance";
 import { useCmService } from "@/services/cmService";
+import { ERROR_CODE, ERROR_PATTERN } from "@/utils/Constants";
 import * as umesseapi from "umesseapi";
 
 describe("fetchCmのテスト", () => {
@@ -92,11 +93,13 @@ describe("fetchCmのテスト", () => {
   });
 
   test(`エラーの場合、UMesseErrorがthrowされる`, async () => {
-    jest.spyOn(axios, 'request').mockRejectedValue({data: ""});
+    const expoectedError = new UMesseError(ERROR_CODE.A3999, ERROR_PATTERN.A3999, "");
+
+    jest.spyOn(axios, 'request').mockRejectedValue({ response: { status: 500 } });
 
     const cmRepository = new umesseapi.CmApi(undefined, "", axios);
     const cmService = useCmService(cmRepository);
 
-    await expect(cmService.fetchCm("token", "001")).rejects.toThrowError(UMesseError);
+    await expect(cmService.fetchCm("token", "001")).rejects.toThrowError(expoectedError);
   });
 });
