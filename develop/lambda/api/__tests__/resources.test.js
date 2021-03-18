@@ -1,11 +1,14 @@
 "use strict";
 
-const fs = require("fs");
-
-// process.env.debug = true;
 process.env.environment = "local";
 
+const fs = require("fs");
 const aws = require("aws-sdk");
+const {
+  ERROR_CODE,
+  BadRequestError,
+  NotFoundError,
+} = require("umesse-lib/error");
 const {
   getSignedUrl,
   getResource,
@@ -13,56 +16,47 @@ const {
   createRecordingResource,
   createTtsResource,
   generateTtsResource,
+  updateUserResource,
   deleteUserResource,
 } = require("../umesse/resources");
-const { BadRequestError, InternalServerError } = require("umesse-lib/error");
 
 // test data
 const json = require("./data/resources.test.json");
 const data = aws.DynamoDB.Converter.unmarshall(
   json["umesse-users"][0].PutRequest.Item
 );
-const bgmData = {
-  contentsId: "サンプル01",
-  category: "bgm",
-  title: "サンプル01",
-  description: "BGM・サンプル01",
-  seconds: 60,
-  industry: [
-    {
-      industryCd: "01",
-      industryName: "業種01",
-    },
-  ],
-  scene: [
-    {
-      sceneCd: "01",
-      sceneName: "シーン01",
-    },
-  ],
-  timestamp: "2019-09-01T09:00:00+09:00",
-};
-const narrationData = {
-  contentsId: "サンプル05",
-  category: "narration",
-  title: "サンプル05",
-  description: "ナレーション・サンプル05",
-  manuscript: "あいうえお",
-  seconds: 60,
-  industry: [
-    {
-      industryCd: "05",
-      industryName: "業種05",
-    },
-  ],
-  scene: [
-    {
-      sceneCd: "05",
-      sceneName: "シーン05",
-    },
-  ],
-  timestamp: "2019-09-01T09:00:00+09:00",
-};
+data.cm.map((item) => {
+  if (item.id) return item;
+  item.id = item.cmId;
+  delete item.cmId;
+  item.category = "cm";
+  return item;
+});
+data.recording.map((item) => {
+  if (item.id) return item;
+  item.id = item.recordingId;
+  delete item.recordingId;
+  item.category = "recording";
+  return item;
+});
+data.tts.map((item) => {
+  if (item.id) return item;
+  item.id = item.ttsId;
+  delete item.ttsId;
+  item.category = "tts";
+  return item;
+});
+
+let contentsData = [];
+json["umesse-contents"].forEach((item) => {
+  contentsData.push(aws.DynamoDB.Converter.unmarshall(item.PutRequest.Item));
+});
+contentsData.map((item) => {
+  if (item.id) return item;
+  item.id = item.contentsId;
+  delete item.contentsId;
+  return item;
+});
 
 console.error = jest.fn();
 beforeAll(() => {
@@ -72,19 +66,26 @@ beforeAll(() => {
 // 署名付きデータ取得
 describe("署名付きデータ取得", () => {
   test("[success] 署名付きURLデータ取得", async () => {
-    const response = await getSignedUrl(data.cm[0].cmId, "cm");
-    expect(response).toEqual({ url: expect.anything() });
+    await expect(getSignedUrl(data.cm[0].id, "cm")).resolves.toEqual({
+      url: expect.anything(),
+    });
   });
 
-  test("[error] 署名付きURLデータ取得　データ存在しない", async () => {
-    await expect(getSignedUrl(data.cm[0].cmId, "none")).rejects.toThrow(
-      new InternalServerError("unknown category")
+  test("[error] 署名付きURLデータ取得　パラメーターチェック", async () => {
+    await expect(getSignedUrl()).rejects.toThrow(
+      new BadRequestError(`${ERROR_CODE.E0001001} (E0001001)`)
     );
-  });
 
-  test("[error] 署名付きURLデータ取得　データ存在しない", async () => {
+    await expect(getSignedUrl("aaaaaaaaaa")).rejects.toThrow(
+      new BadRequestError(`${ERROR_CODE.E0001001} (E0001001)`)
+    );
+
     await expect(getSignedUrl("", "cm")).rejects.toThrow(
-      new BadRequestError("params failed")
+      new BadRequestError(`${ERROR_CODE.E0001210} (E0001210)`)
+    );
+
+    await expect(getSignedUrl("aaaaaaaaaa", "none")).rejects.toThrow(
+      new BadRequestError(`${ERROR_CODE.E0001030} (E0001030)`)
     );
   });
 });
@@ -92,71 +93,129 @@ describe("署名付きデータ取得", () => {
 // USEN素材データ取得
 describe("USEN素材データ取得", () => {
   test("[success] BGMデータ取得", async () => {
-    const response = await getResource(
-      "bgm",
-      bgmData.industry[0].industryCd,
-      bgmData.scene[0].sceneCd
-    );
-    expect(response).toEqual([bgmData]);
+    await expect(
+      getResource(
+        contentsData[0].category,
+        contentsData[0].industry[0].industryCd,
+        contentsData[0].scene[0].sceneCd
+      )
+    ).resolves.toEqual([contentsData[0]]);
   });
 
   test("[success] ナレーションデータ取得", async () => {
-    const response = await getResource(
-      "narration",
-      narrationData.industry[0].industryCd,
-      narrationData.scene[0].sceneCd
+    await expect(
+      getResource(
+        contentsData[3].category,
+        contentsData[3].industry[0].industryCd,
+        contentsData[3].scene[0].sceneCd
+      )
+    ).resolves.toEqual([contentsData[3]]);
+  });
+
+  test("[error] USEN素材データ取得　パラメーターチェック", async () => {
+    await expect(getResource()).rejects.toThrow(
+      new BadRequestError(`${ERROR_CODE.E0001001} (E0001001)`)
     );
-    expect(response).toEqual([narrationData]);
+
+    await expect(getResource("none")).rejects.toThrow(
+      new BadRequestError(`${ERROR_CODE.E0001030} (E0001030)`)
+    );
   });
 });
 
 // ユーザー音声データ取得
 describe("ユーザー音声データ取得", () => {
   test("[success] 録音音声データ取得", async () => {
-    const response = await getUserResource(
-      data.unisCustomerCd,
-      "recording",
-      data.recording[0].recordingId
-    );
-    expect(response).toEqual(data.recording[0]);
+    await expect(
+      getUserResource(data.unisCustomerCd, "recording", data.recording[0].id)
+    ).resolves.toEqual(data.recording[0]);
   });
 
   test("[success] 合成音声データ取得", async () => {
-    const response = await getUserResource(
-      data.unisCustomerCd,
-      "tts",
-      data.tts[2].ttsId
-    );
-    expect(response).toEqual(data.tts[2]);
+    await expect(
+      getUserResource(data.unisCustomerCd, "tts", data.tts[2].id)
+    ).resolves.toEqual(data.tts[2]);
   });
 
   test("[error] ユーザー音声データ取得　データ存在しない", async () => {
     await expect(
-      getUserResource(data.unisCustomerCd, "recording", "999999999")
-    ).rejects.toThrow(new InternalServerError("not found"));
+      getUserResource(data.unisCustomerCd, "recording", "999999999-r-99999999")
+    ).rejects.toThrow(new NotFoundError(ERROR_CODE.E0000404));
   });
 
-  test("[error] ユーザー音声データ取得　パラメータなし", async () => {
-    await expect(getUserResource("")).rejects.toThrow(
-      new BadRequestError("params failed")
+  test("[error] ユーザー音声データ取得　パラメータチェック", async () => {
+    await expect(getUserResource()).rejects.toThrow(
+      new BadRequestError(`${ERROR_CODE.E0001001} (E0001001)`)
     );
+
+    await expect(getUserResource("aaaaaaaaaa")).rejects.toThrow(
+      new BadRequestError(
+        [
+          `${ERROR_CODE.E0001001} (E0001001)`,
+          `${ERROR_CODE.E0001010} (E0001010)`,
+        ].join("\n")
+      )
+    );
+
+    await expect(getUserResource("1111")).rejects.toThrow(
+      new BadRequestError(
+        [
+          `${ERROR_CODE.E0001001} (E0001001)`,
+          `${ERROR_CODE.E0001010} (E0001010)`,
+        ].join("\n")
+      )
+    );
+
+    await expect(getUserResource("11111111111")).rejects.toThrow(
+      new BadRequestError(
+        [
+          `${ERROR_CODE.E0001001} (E0001001)`,
+          `${ERROR_CODE.E0001010} (E0001010)`,
+        ].join("\n")
+      )
+    );
+
+    await expect(getUserResource("9999999999")).rejects.toThrow(
+      new BadRequestError(`${ERROR_CODE.E0001001} (E0001001)`)
+    );
+
+    await expect(getUserResource("9999999999", "none")).rejects.toThrow(
+      new BadRequestError(`${ERROR_CODE.E0001030} (E0001030)`)
+    );
+
+    await expect(
+      getUserResource("9999999999", "recording", "aaaaaaaaaa")
+    ).rejects.toThrow(new BadRequestError(`${ERROR_CODE.E0001220} (E0001220)`));
+
+    await expect(
+      getUserResource("9999999999", "recording", "9999999999-t-99999999")
+    ).rejects.toThrow(new BadRequestError(`${ERROR_CODE.E0001220} (E0001220)`));
+
+    await expect(
+      getUserResource("9999999999", "tts", "aaaaaaaaaa")
+    ).rejects.toThrow(new BadRequestError(`${ERROR_CODE.E0001230} (E0001230)`));
+
+    await expect(
+      getUserResource("9999999999", "tts", "9999999999-r-99999999")
+    ).rejects.toThrow(new BadRequestError(`${ERROR_CODE.E0001230} (E0001230)`));
   });
 });
 
 // ユーザー音声作成
-describe("ユーザー音声作成", () => {
+describe("録音音声新規登録", () => {
   test("[success] 録音音声新規登録", async () => {
-    const file = fs.readFileSync(
-      "../../../sample_data/s3/umesse-users/users/123456789/recording/123456789-r-12345678.mp3"
-    );
+    const file = fs.readFileSync("./__tests__/data/050000000-r-00000003.mp3");
     const body = {
       recordedFile: file,
       title: "録音テスト04",
       description: "録音テスト04",
     };
-    const response = await createRecordingResource(data.unisCustomerCd, body);
-    expect(response).toEqual({
+
+    await expect(
+      createRecordingResource(data.unisCustomerCd, body)
+    ).resolves.toEqual({
       id: expect.stringMatching(`^${data.unisCustomerCd}-r-[0-9a-z]{8}$`),
+      category: "recording",
       title: body.title,
       description: body.description,
       startDate: expect.anything(),
@@ -164,17 +223,74 @@ describe("ユーザー音声作成", () => {
     });
   });
 
-  test("[success] 録音音声データ削除", async () => {
-    const response = await deleteUserResource(
-      data.unisCustomerCd,
-      "recording",
-      data.recording[0].recordingId
+  test("[error] 録音音声新規登録　パラメータチェック", async () => {
+    const file = fs.readFileSync("./__tests__/data/050000000-r-00000003.mp3");
+
+    await expect(createRecordingResource()).rejects.toThrow(
+      new BadRequestError(`${ERROR_CODE.E0001001} (E0001001)`)
     );
-    expect(response).toEqual([
+
+    await expect(createRecordingResource("aaaaaaaaaa")).rejects.toThrow(
+      new BadRequestError(
+        [
+          `${ERROR_CODE.E0001001} (E0001001)`,
+          `${ERROR_CODE.E0001010} (E0001010)`,
+        ].join("\n")
+      )
+    );
+
+    await expect(createRecordingResource("1111")).rejects.toThrow(
+      new BadRequestError(
+        [
+          `${ERROR_CODE.E0001001} (E0001001)`,
+          `${ERROR_CODE.E0001010} (E0001010)`,
+        ].join("\n")
+      )
+    );
+
+    await expect(createRecordingResource("11111111111")).rejects.toThrow(
+      new BadRequestError(
+        [
+          `${ERROR_CODE.E0001001} (E0001001)`,
+          `${ERROR_CODE.E0001010} (E0001010)`,
+        ].join("\n")
+      )
+    );
+
+    await expect(
+      createRecordingResource("9999999999", {
+        title: "test",
+        description: "test",
+      })
+    ).rejects.toThrow(new BadRequestError(`${ERROR_CODE.E0001001} (E0001001)`));
+
+    await expect(
+      createRecordingResource("9999999999", {
+        recordedFile: file,
+        description: "test",
+      })
+    ).rejects.toThrow(new BadRequestError(`${ERROR_CODE.E0001001} (E0001001)`));
+
+    await expect(
+      createRecordingResource("9999999999", {
+        recordedFile: "test",
+        title: "test",
+        description: "test",
+      })
+    ).rejects.toThrow(new BadRequestError(`${ERROR_CODE.E0001150} (E0001150)`));
+  });
+});
+
+describe("録音音声データ削除", () => {
+  test("[success] 録音音声データ削除", async () => {
+    await expect(
+      deleteUserResource(data.unisCustomerCd, "recording", data.recording[0].id)
+    ).resolves.toEqual([
       data.recording[1],
       data.recording[2],
       {
         id: expect.stringMatching(`^${data.unisCustomerCd}-r-[0-9a-z]{8}$`),
+        category: "recording",
         title: "録音テスト04",
         description: "録音テスト04",
         startDate: expect.anything(),
@@ -182,102 +298,168 @@ describe("ユーザー音声作成", () => {
       },
     ]);
   });
+
+  test("[error] 録音音声データ削除　データ存在しない", async () => {
+    await expect(
+      getUserResource(data.unisCustomerCd, "recording", "999999999-r-99999999")
+    ).rejects.toThrow(new NotFoundError(ERROR_CODE.E0000404));
+  });
+
+  test("[error] 録音音声データ削除　パラメータチェック", async () => {
+    await expect(deleteUserResource()).rejects.toThrow(
+      new BadRequestError(`${ERROR_CODE.E0001001} (E0001001)`)
+    );
+
+    await expect(deleteUserResource("aaaaaaaaaa")).rejects.toThrow(
+      new BadRequestError(
+        [
+          `${ERROR_CODE.E0001001} (E0001001)`,
+          `${ERROR_CODE.E0001010} (E0001010)`,
+        ].join("\n")
+      )
+    );
+
+    await expect(deleteUserResource("1111")).rejects.toThrow(
+      new BadRequestError(
+        [
+          `${ERROR_CODE.E0001001} (E0001001)`,
+          `${ERROR_CODE.E0001010} (E0001010)`,
+        ].join("\n")
+      )
+    );
+
+    await expect(deleteUserResource("11111111111")).rejects.toThrow(
+      new BadRequestError(
+        [
+          `${ERROR_CODE.E0001001} (E0001001)`,
+          `${ERROR_CODE.E0001010} (E0001010)`,
+        ].join("\n")
+      )
+    );
+
+    await expect(deleteUserResource("9999999999")).rejects.toThrow(
+      new BadRequestError(`${ERROR_CODE.E0001001} (E0001001)`)
+    );
+
+    await expect(deleteUserResource("9999999999", "none")).rejects.toThrow(
+      new BadRequestError(`${ERROR_CODE.E0001030} (E0001030)`)
+    );
+
+    await expect(
+      deleteUserResource("9999999999", "recording", "aaaaaaaaaa")
+    ).rejects.toThrow(new BadRequestError(`${ERROR_CODE.E0001220} (E0001220)`));
+
+    await expect(
+      deleteUserResource("9999999999", "recording", "9999999999-r")
+    ).rejects.toThrow(new BadRequestError(`${ERROR_CODE.E0001220} (E0001220)`));
+  });
 });
 
 // TTS音声作成
-describe("TTS音声作成", () => {
-  test("[success] TTS音声新規生成", async () => {
-    const body = {
-      id: "サンプル01",
-      category: "template",
-      details: [
-        {
-          text: "こんにちは",
-          speaker: "1",
-          lang: "ja",
-        },
-        {
-          text: "hello",
-          speaker: "0",
-          lang: "en",
-        },
-        {
-          text: "test",
-          speaker: "0",
-          lang: "zh",
-          id: "サンプル01",
-          category: "narration",
-        },
-      ],
-    };
-    const response = await generateTtsResource(data.unisCustomerCd, body);
-    expect(response).toEqual({
-      id: "サンプル01",
-      category: "template",
-      details: [
-        {
-          url: expect.anything(),
-          lang: "ja",
-        },
-        {
-          url: expect.anything(),
-          lang: "en",
-        },
-        {
-          url: expect.anything(),
-          lang: "zh",
-        },
-      ],
-    });
-  });
+// describe("TTS音声作成", () => {
+//   test("[success] TTS音声新規生成", async () => {
+//     const mock = jest.mock();
 
-  test("[success] TTS音声新規登録", async () => {
-    const body = {
-      id: "サンプル01",
-      category: "template",
-      details: [
-        {
-          title: "TTSテスト",
-          description: "TTSテスト",
-          lang: "ja",
-        },
-        {
-          title: "TTSテスト",
-          description: "TTテスト",
-          lang: "en",
-        },
-        {
-          title: "TTSテスト",
-          description: "TTテスト",
-          lang: "zh",
-          id: "サンプル01",
-          category: "narration",
-        },
-      ],
-    };
-    const response = await createTtsResource(data.unisCustomerCd, body);
-    expect(response).toEqual([
-      {
-        id: expect.stringMatching(`^${data.unisCustomerCd}-t-[0-9a-z]{8}$`),
-        category: "tts",
-        title: `${body.details[0].title}(${body.details[0].lang})`,
-        description: body.details[0].description,
-        startDate: expect.anything(),
-        timestamp: expect.anything(),
-      },
-      {
-        id: expect.stringMatching(`^${data.unisCustomerCd}-t-[0-9a-z]{8}$`),
-        category: "tts",
-        title: `${body.details[1].title}(${body.details[1].lang})`,
-        description: body.details[1].description,
-        startDate: expect.anything(),
-        timestamp: expect.anything(),
-      },
-      {
-        id: body.details[2].id,
-        category: body.details[2].category,
-      },
-    ]);
-  });
-});
-// FIXME: error test
+//     const test = mock
+//       .spyOn(generateTtsResource, "requestTts")
+//       .mockReturnValue("test");
+//     console.log(test);
+//     expect(test).toHaveBeenCalled();
+
+//     const body = {
+//       id: "サンプル01",
+//       category: "template",
+//       details: [
+//         {
+//           text: "こんにちは",
+//           speaker: "1",
+//           lang: "ja",
+//         },
+//         {
+//           text: "hello",
+//           speaker: "0",
+//           lang: "en",
+//         },
+//         {
+//           text: "test",
+//           speaker: "0",
+//           lang: "zh",
+//           id: "サンプル01",
+//           category: "narration",
+//         },
+//       ],
+//     };
+//     // await expect(
+//     //   generateTtsResource(data.unisCustomerCd, body)
+//     // ).resolves.toEqual({
+//     //   id: "サンプル01",
+//     //   category: "template",
+//     //   details: [
+//     //     {
+//     //       url: expect.anything(),
+//     //       lang: "jp",
+//     //     },
+//     //     {
+//     //       url: expect.anything(),
+//     //       lang: "en",
+//     //     },
+//     //     {
+//     //       url: expect.anything(),
+//     //       lang: "cn",
+//     //     },
+//     //   ],
+//     // });
+//   });
+// });
+
+// describe("TTS音声新規登録", () => {
+//   test("[success] TTS音声新規登録", async () => {
+//     const body = {
+//       id: "サンプル01",
+//       category: "template",
+//       details: [
+//         {
+//           title: "TTSテスト",
+//           description: "TTSテスト",
+//           lang: "jp",
+//         },
+//         {
+//           title: "TTSテスト",
+//           description: "TTテスト",
+//           lang: "en",
+//         },
+//         {
+//           title: "TTSテスト",
+//           description: "TTテスト",
+//           lang: "cn",
+//           id: "サンプル01",
+//           category: "narration",
+//         },
+//       ],
+//     };
+//     await expect(createTtsResource(data.unisCustomerCd, body)).resolves.toEqual(
+//       [
+//         {
+//           id: expect.stringMatching(`^${data.unisCustomerCd}-t-[0-9a-z]{8}$`),
+//           category: "tts",
+//           title: `${body.details[0].title}(${body.details[0].lang})`,
+//           description: body.details[0].description,
+//           startDate: expect.anything(),
+//           timestamp: expect.anything(),
+//         },
+//         {
+//           id: expect.stringMatching(`^${data.unisCustomerCd}-t-[0-9a-z]{8}$`),
+//           category: "tts",
+//           title: `${body.details[1].title}(${body.details[1].lang})`,
+//           description: body.details[1].description,
+//           startDate: expect.anything(),
+//           timestamp: expect.anything(),
+//         },
+//         {
+//           id: body.details[2].id,
+//           category: body.details[2].category,
+//         },
+//       ]
+//     );
+//   });
+// });
