@@ -8,17 +8,13 @@ export class AudioRepository {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async download(url: string): Promise<any> {
-    try {
-      const response = await this.axios
-        .get(url, {
-          headers: {
-            "accept": "audio/mpeg",
-          },
-          responseType: "arraybuffer",
-        });
-      return response;
-    } catch (error) {
-      console.log("error");
-    }
+    const response = await this.axios
+      .get(url, {
+        headers: {
+          "accept": "audio/mpeg",
+        },
+        responseType: "arraybuffer",
+      });
+    return response;
   }
 }

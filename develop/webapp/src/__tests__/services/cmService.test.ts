@@ -92,7 +92,7 @@ describe("fetchCmのテスト", () => {
     expect(response[1].id).toBe("123456789-c-5ml6xdvj");
   });
 
-  test(`想定外の値が返却された場合、UMesseErrorがthrowされる`, async () => {
+  test(`想定外の値が返却された場合、UMesseErrorがthrowされること`, async () => {
     const responseJson = "aaaaaaaaaaaaaa";
     const expoectedError = new UMesseError(ERROR_CODE.A0001, ERROR_PATTERN.A0001, "");
 
@@ -104,7 +104,7 @@ describe("fetchCmのテスト", () => {
     await expect(cmService.fetchCm("token", "001")).rejects.toThrowError(expoectedError);
   });
 
-  test(`エラーの場合、UMesseErrorがthrowされる`, async () => {
+  test(`エラーの場合、UMesseErrorがthrowされること`, async () => {
     const expoectedError = new UMesseError(ERROR_CODE.A3999, ERROR_PATTERN.A3999, "");
 
     jest.spyOn(axios, 'request').mockRejectedValue({ response: { status: 500 } });

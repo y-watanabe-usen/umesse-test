@@ -25,4 +25,8 @@ export class AudioCache {
   remove(key: string) {
     this.cache.del(key);
   }
+
+  removeAll() {
+    this.cache.reset();
+  }
 }
