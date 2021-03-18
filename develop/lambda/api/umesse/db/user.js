@@ -72,6 +72,13 @@ module.exports = {
     return ret.Item[category];
   },
 
+  findResourceIndex: async function (unisCustomerCd, category, id) {
+    let ret = await this.findResource(unisCustomerCd, category);
+    const index = ret.findIndex((item) => item[`${category}Id`] === id);
+    if (index < 0) throw new NotFoundError(ERROR_CODE.E0000404);
+    return [ret[index], index];
+  },
+
   addCm: async function (unisCustomerCd, data) {
     const key = { unisCustomerCd: unisCustomerCd };
     const options = {

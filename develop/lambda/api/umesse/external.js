@@ -83,11 +83,14 @@ exports.completeExternalCm = async (unisCustomerCd, external, body) => {
   );
 
   // パラメーターチェック
-  let checkError = checkParams({
-    unisCustomerCd: unisCustomerCd,
-    external: external,
-    ...body,
-  });
+  let checkError = checkParams(
+    {
+      unisCustomerCd: unisCustomerCd,
+      external: external,
+      ...body,
+    },
+    ["dataProcessType", "cmId"]
+  );
   if (checkError) throw new BadRequestError(checkError);
 
   // CM一覧から該当CMを取得

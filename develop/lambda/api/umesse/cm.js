@@ -64,10 +64,13 @@ exports.createCm = async (unisCustomerCd, body) => {
   );
 
   // パラメーターチェック
-  let checkError = checkParams({
-    unisCustomerCd: unisCustomerCd,
-    ...body,
-  });
+  let checkError = checkParams(
+    {
+      unisCustomerCd: unisCustomerCd,
+      ...body,
+    },
+    ["materials"]
+  );
   if (checkError) throw new BadRequestError(checkError);
 
   // ID生成
@@ -123,11 +126,14 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
   );
 
   // パラメーターチェック
-  let checkError = checkParams({
-    unisCustomerCd: unisCustomerCd,
-    cmId: id,
-    ...body,
-  });
+  let checkError = checkParams(
+    {
+      unisCustomerCd: unisCustomerCd,
+      cmId: id,
+      ...body,
+    },
+    ["title"]
+  );
   if (checkError) throw new BadRequestError(checkError);
 
   // CM一覧から該当CMを取得

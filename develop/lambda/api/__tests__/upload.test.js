@@ -135,22 +135,53 @@ describe("外部連携CMデータ追加", () => {
 
     await expect(
       createUploadCm("aaaaaaaaaa", "9999999999-c-99999999")
-    ).rejects.toThrow(new BadRequestError(`${ERROR_CODE.E0001010} (E0001010)`));
+    ).rejects.toThrow(
+      new BadRequestError(
+        [
+          `${ERROR_CODE.E0001001} (E0001001)`,
+          `${ERROR_CODE.E0001010} (E0001010)`,
+        ].join("\n")
+      )
+    );
 
     await expect(
       createUploadCm("1111", "9999999999-c-99999999")
-    ).rejects.toThrow(new BadRequestError(`${ERROR_CODE.E0001010} (E0001010)`));
+    ).rejects.toThrow(
+      new BadRequestError(
+        [
+          `${ERROR_CODE.E0001001} (E0001001)`,
+          `${ERROR_CODE.E0001010} (E0001010)`,
+        ].join("\n")
+      )
+    );
 
     await expect(
       createUploadCm("11111111111", "9999999999-c-99999999")
-    ).rejects.toThrow(new BadRequestError(`${ERROR_CODE.E0001010} (E0001010)`));
+    ).rejects.toThrow(
+      new BadRequestError(
+        [
+          `${ERROR_CODE.E0001001} (E0001001)`,
+          `${ERROR_CODE.E0001010} (E0001010)`,
+        ].join("\n")
+      )
+    );
 
     await expect(createUploadCm("9999999999", "aaaa")).rejects.toThrow(
-      new BadRequestError(`${ERROR_CODE.E0001210} (E0001210)`)
+      new BadRequestError(
+        [
+          `${ERROR_CODE.E0001001} (E0001001)`,
+          `${ERROR_CODE.E0001210} (E0001210)`,
+        ].join("\n")
+      )
     );
 
     await expect(createUploadCm("9999999999", "9999999999-c")).rejects.toThrow(
-      new BadRequestError(`${ERROR_CODE.E0001210} (E0001210)`)
+      new BadRequestError(
+        [
+          `${ERROR_CODE.E0001001} (E0001001)`,
+          `${ERROR_CODE.E0001210} (E0001210)`,
+        ].join("\n")
+      )
     );
   });
 });

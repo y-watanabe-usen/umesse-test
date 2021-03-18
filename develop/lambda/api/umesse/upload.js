@@ -66,11 +66,14 @@ exports.createUploadCm = async (unisCustomerCd, id, body) => {
   );
 
   // パラメーターチェック
-  let checkError = checkParams({
-    unisCustomerCd: unisCustomerCd,
-    cmId: id,
-    ...body,
-  });
+  let checkError = checkParams(
+    {
+      unisCustomerCd: unisCustomerCd,
+      cmId: id,
+      ...body,
+    },
+    ["uploadSystem"]
+  );
   if (checkError) throw new BadRequestError(checkError);
 
   // CM一覧から該当CMを取得

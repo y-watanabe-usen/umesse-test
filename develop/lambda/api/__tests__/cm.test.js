@@ -105,15 +105,34 @@ describe("CM新規作成", () => {
     );
 
     await expect(createCm("aaaaaaaaaa")).rejects.toThrow(
-      new BadRequestError(`${ERROR_CODE.E0001010} (E0001010)`)
+      new BadRequestError(
+        [
+          `${ERROR_CODE.E0001001} (E0001001)`,
+          `${ERROR_CODE.E0001010} (E0001010)`,
+        ].join("\n")
+      )
     );
 
     await expect(createCm("1111")).rejects.toThrow(
-      new BadRequestError(`${ERROR_CODE.E0001010} (E0001010)`)
+      new BadRequestError(
+        [
+          `${ERROR_CODE.E0001001} (E0001001)`,
+          `${ERROR_CODE.E0001010} (E0001010)`,
+        ].join("\n")
+      )
     );
 
     await expect(createCm("11111111111")).rejects.toThrow(
-      new BadRequestError(`${ERROR_CODE.E0001010} (E0001010)`)
+      new BadRequestError(
+        [
+          `${ERROR_CODE.E0001001} (E0001001)`,
+          `${ERROR_CODE.E0001010} (E0001010)`,
+        ].join("\n")
+      )
+    );
+
+    await expect(createCm("9999999999")).rejects.toThrow(
+      new BadRequestError(`${ERROR_CODE.E0001001} (E0001001)`)
     );
 
     await expect(createCm("9999999999", { materials: {} })).rejects.toThrow(
@@ -306,22 +325,51 @@ describe("CMデータ更新", () => {
 
     await expect(
       updateCm("aaaaaaaaaa", "9999999999-c-99999999")
-    ).rejects.toThrow(new BadRequestError(`${ERROR_CODE.E0001010} (E0001010)`));
+    ).rejects.toThrow(
+      new BadRequestError(
+        [
+          `${ERROR_CODE.E0001001} (E0001001)`,
+          `${ERROR_CODE.E0001010} (E0001010)`,
+        ].join("\n")
+      )
+    );
 
     await expect(updateCm("1111", "9999999999-c-99999999")).rejects.toThrow(
-      new BadRequestError(`${ERROR_CODE.E0001010} (E0001010)`)
+      new BadRequestError(
+        [
+          `${ERROR_CODE.E0001001} (E0001001)`,
+          `${ERROR_CODE.E0001010} (E0001010)`,
+        ].join("\n")
+      )
     );
 
     await expect(
       updateCm("11111111111", "9999999999-c-99999999")
-    ).rejects.toThrow(new BadRequestError(`${ERROR_CODE.E0001010} (E0001010)`));
+    ).rejects.toThrow(
+      new BadRequestError(
+        [
+          `${ERROR_CODE.E0001001} (E0001001)`,
+          `${ERROR_CODE.E0001010} (E0001010)`,
+        ].join("\n")
+      )
+    );
 
     await expect(updateCm("9999999999", "aaaa")).rejects.toThrow(
-      new BadRequestError(`${ERROR_CODE.E0001210} (E0001210)`)
+      new BadRequestError(
+        [
+          `${ERROR_CODE.E0001001} (E0001001)`,
+          `${ERROR_CODE.E0001210} (E0001210)`,
+        ].join("\n")
+      )
     );
 
     await expect(updateCm("9999999999", "9999999999-c")).rejects.toThrow(
-      new BadRequestError(`${ERROR_CODE.E0001210} (E0001210)`)
+      new BadRequestError(
+        [
+          `${ERROR_CODE.E0001001} (E0001001)`,
+          `${ERROR_CODE.E0001210} (E0001210)`,
+        ].join("\n")
+      )
     );
 
     await expect(

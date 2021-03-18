@@ -107,24 +107,28 @@ describe("外部連携CMデータ連携完了", () => {
   test("[error] 外部連携CMデータ連携完了　データ存在しない", async () => {
     await expect(
       completeExternalCm("999999999", "ssence", {
+        dataProcessType: "01",
         cmId: "999999999-c-12345678",
       })
     ).rejects.toThrow(new NotFoundError(ERROR_CODE.E0000404));
 
     await expect(
       completeExternalCm("060000000", "ssence", {
+        dataProcessType: "01",
         cmId: "060000001-c-00000001",
       })
     ).rejects.toThrow(new NotFoundError(ERROR_CODE.E0000404));
 
     await expect(
       completeExternalCm("060000001", "center", {
+        dataProcessType: "01",
         cmId: "060000001-c-00000001",
       })
     ).rejects.toThrow(new NotFoundError(ERROR_CODE.E0000404));
 
     await expect(
       completeExternalCm("060000002", "center", {
+        dataProcessType: "01",
         cmId: "060000002-c-00000001",
       })
     ).rejects.toThrow(new NotFoundError(ERROR_CODE.E0000404));
@@ -140,23 +144,48 @@ describe("外部連携CMデータ連携完了", () => {
     );
 
     await expect(completeExternalCm("aaaaaaaaaa", "center")).rejects.toThrow(
-      new BadRequestError(`${ERROR_CODE.E0001010} (E0001010)`)
+      new BadRequestError(
+        [
+          `${ERROR_CODE.E0001001} (E0001001)`,
+          `${ERROR_CODE.E0001010} (E0001010)`,
+        ].join("\n")
+      )
     );
 
     await expect(completeExternalCm("1111", "center")).rejects.toThrow(
-      new BadRequestError(`${ERROR_CODE.E0001010} (E0001010)`)
+      new BadRequestError(
+        [
+          `${ERROR_CODE.E0001001} (E0001001)`,
+          `${ERROR_CODE.E0001010} (E0001010)`,
+        ].join("\n")
+      )
     );
 
     await expect(completeExternalCm("11111111111", "center")).rejects.toThrow(
-      new BadRequestError(`${ERROR_CODE.E0001010} (E0001010)`)
+      new BadRequestError(
+        [
+          `${ERROR_CODE.E0001001} (E0001001)`,
+          `${ERROR_CODE.E0001010} (E0001010)`,
+        ].join("\n")
+      )
     );
 
     await expect(completeExternalCm("999999999", "aenter")).rejects.toThrow(
-      new BadRequestError(`${ERROR_CODE.E0001170} (E0001170)`)
+      new BadRequestError(
+        [
+          `${ERROR_CODE.E0001001} (E0001001)`,
+          `${ERROR_CODE.E0001170} (E0001170)`,
+        ].join("\n")
+      )
     );
 
     await expect(completeExternalCm("999999999", "asence")).rejects.toThrow(
-      new BadRequestError(`${ERROR_CODE.E0001170} (E0001170)`)
+      new BadRequestError(
+        [
+          `${ERROR_CODE.E0001001} (E0001001)`,
+          `${ERROR_CODE.E0001170} (E0001170)`,
+        ].join("\n")
+      )
     );
 
     await expect(
