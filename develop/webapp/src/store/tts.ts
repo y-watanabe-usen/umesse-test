@@ -102,8 +102,8 @@ export default function ttsStore() {
       });
       const requestModel: GenerateUserTtsRequestItem = {
         // idとcategoryは後々のバージョンアップで使う予定
-        id: "",
-        category: "",
+        id: "dummy",
+        category: "template",
         details: details
       };
 
@@ -135,8 +135,8 @@ export default function ttsStore() {
       state.generating = true;
       const requestModel: GenerateUserTtsRequestItem = {
         // idとcategoryは後々のバージョンアップで使う予定
-        id: "",
-        category: "",
+        id: "dummy",
+        category: "free",
         details: [{
           text: text,
           lang: "ja",
@@ -172,8 +172,8 @@ export default function ttsStore() {
       });
       const requestModel: CreateUserTtsRequestItem = {
         // idとcategoryは後々のバージョンアップで使う予定
-        id: "",
-        category: "",
+        id: "dummy",
+        category: "template",
         details: details
       };
 
