@@ -325,7 +325,7 @@ exports.generateTtsResource = async (unisCustomerCd, body) => {
     } else {
       const postData = querystring.stringify({
         text: data.text,
-        speaker: constants.ttsSpeakers[data.lang][data.speaker],
+        speaker: constants.ttsSpeakers[data.lang][parseInt(data.speaker)],
         pitch: "105",
         speed: "95",
         format: "mp3",
@@ -377,14 +377,17 @@ exports.updateUserResource = async (unisCustomerCd, category, id, body) => {
   );
 
   // パラメーターチェック
-  let checkError = checkParams(
-    {
-      unisCustomerCd: unisCustomerCd,
-      category: category,
-      ...body,
-    },
-    ["title"]
-  );
+  let params = {
+    unisCustomerCd: unisCustomerCd,
+    category: category,
+    ...body,
+  };
+  switch (category) {
+    case constants.resourceCategory.RECORDING:
+    case constants.resourceCategory.TTS:
+      params[`${category}Id`] = id;
+  }
+  let checkError = checkParams(params, ["title"]);
   if (checkError) throw new BadRequestError(checkError);
 
   // 音声一覧から該当音声を取得
@@ -490,7 +493,6 @@ function requestTts(options, postData) {
         if (response.statusCode == 200) {
           resolve(Buffer.concat(data));
         } else {
-          console.log(`${response.statusMessage}: ${data}`);
           reject(`${response.statusMessage}: ${data}`);
         }
       });
