@@ -101,9 +101,11 @@ exports.getSignedUrl = async (id, category) => {
       path = `users/${id.split("-")[0]}/${category}/${id}.mp3`;
       break;
 
-    case constants.resourceCategory.API:
+    case constants.resourceCategory.LANG:
       bucket = constants.s3Bucket().users;
-      path = `users/${id.split("-")[0]}/${category}/${id.split("-")[1]}.mp3`;
+      path = `users/${id.split("-")[0]}/${constants.resourceCategory.TTS}/${
+        id.split("-")[1]
+      }.mp3`;
       break;
 
     case constants.resourceCategory.BGM:
@@ -139,10 +141,12 @@ exports.getUserResource = async (unisCustomerCd, category, id) => {
     unisCustomerCd: unisCustomerCd,
     category: category,
   };
-  switch (category) {
-    case constants.resourceCategory.RECORDING:
-    case constants.resourceCategory.TTS:
-      params[`${category}Id`] = id;
+  if (id) {
+    switch (category) {
+      case constants.resourceCategory.RECORDING:
+      case constants.resourceCategory.TTS:
+        params[`${category}Id`] = id;
+    }
   }
   let checkError = checkParams(params);
   if (checkError) throw new BadRequestError(checkError);
@@ -352,13 +356,10 @@ exports.generateTtsResource = async (unisCustomerCd, body) => {
       } catch (e) {
         throw new InternalServerError(e.message);
       }
+      id = `${unisCustomerCd}-${data.lang}`;
     }
 
-    const signedId = `${unisCustomerCd}-${data.lang}`;
-    const url = await this.getSignedUrl(
-      signedId,
-      constants.resourceCategory.API
-    );
+    const url = await this.getSignedUrl(id, constants.resourceCategory.LANG);
     json.details.push({ url: url.url, lang: data.lang });
   }
 
