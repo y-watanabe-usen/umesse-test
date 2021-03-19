@@ -1,6 +1,5 @@
 import Constants from "@/utils/Constants";
 import * as UMesseApi from "umesseapi";
-import UMesseCache from "@/repository/UMesseCache";
 import {
   BgmItem,
   ChimeItem,
@@ -8,7 +7,6 @@ import {
   NarrationItem,
   TemplateItem,
 } from "umesseapi/models";
-import AudioStore from "@/store/audio";
 import { UMesseErrorFromApiFactory } from "@/models/UMesseError";
 
 export function useResourcesService(
@@ -16,7 +14,6 @@ export function useResourcesService(
   recordingApi: UMesseApi.RecordingApi,
   ttsApi: UMesseApi.TtsApi
 ) {
-  const audioStore = AudioStore();
 
   const fetchNarration = async (
     authToken: string,
@@ -28,7 +25,7 @@ export function useResourcesService(
     if (industryCd == "02") {
       // ユーザー作成音声は別のAPIからデータ取得
       if (sceneCd == "901") {
-        return new Promise(function(resolve, reject) {
+        return new Promise(function (resolve, reject) {
           recordingApi
             .listUserRecording(authToken)
             .then((value) => {
@@ -50,7 +47,7 @@ export function useResourcesService(
             });
         });
       } else {
-        return new Promise(function(resolve, reject) {
+        return new Promise(function (resolve, reject) {
           ttsApi
             .listUserTts(authToken)
             .then((value) => {
@@ -75,7 +72,7 @@ export function useResourcesService(
         });
       }
     }
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       resourcesApi
         .listNarration(industryCd, sceneCd, sort)
         .then((value) => {
@@ -91,7 +88,7 @@ export function useResourcesService(
   };
 
   const fetchChime = async (sort?: number): Promise<ChimeItem[]> => {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       resourcesApi
         .listChime(sort)
         .then((value) => {
@@ -110,7 +107,7 @@ export function useResourcesService(
     industryCd: string,
     sort?: number
   ): Promise<BgmItem[]> => {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       resourcesApi
         .listBgm(industryCd, sort)
         .then((value) => {
@@ -129,7 +126,7 @@ export function useResourcesService(
     industryCd: string,
     sort?: number
   ): Promise<TemplateItem[]> => {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       resourcesApi
         .listTemplate(industryCd, undefined, sort)
         .then((value) => {
@@ -148,7 +145,7 @@ export function useResourcesService(
     industryCd: string,
     sort?: number
   ): Promise<FreeItem[]> => {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       resourcesApi
         .listFree(industryCd, undefined, sort)
         .then((value) => {
@@ -163,39 +160,11 @@ export function useResourcesService(
     });
   };
 
-  const getAudioBufferByContentsId = async (
-    contentsId: string,
-    category: string
-  ) => {
-    const cacheKey = `${category}/${contentsId}`;
-    if (UMesseCache.audioCache.has(cacheKey)) {
-      return <AudioBuffer>UMesseCache.audioCache.get(cacheKey);
-    }
-    const response = await resourcesApi.getSignedUrl(contentsId, category);
-    return await getAudioBuffer(response.data.url, cacheKey);
-  };
-
-  const getAudioBufferByUrl = async (url: string) => {
-    const cacheKey = url;
-    if (UMesseCache.audioCache.has(cacheKey)) {
-      return <AudioBuffer>UMesseCache.audioCache.get(cacheKey);
-    }
-    return await getAudioBuffer(url, cacheKey);
-  };
-
-  const getAudioBuffer = async (url: string, cacheKey: string) => {
-    await audioStore.download(url);
-    UMesseCache.audioCache.set(cacheKey, audioStore.audioBuffer);
-    return <AudioBuffer>audioStore.audioBuffer;
-  };
-
   return {
     fetchNarration,
     fetchChime,
     fetchBgm,
     fetchTemplate,
     fetchFree,
-    getAudioBufferByContentsId,
-    getAudioBufferByUrl,
   };
 }

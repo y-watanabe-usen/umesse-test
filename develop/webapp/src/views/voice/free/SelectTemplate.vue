@@ -131,10 +131,10 @@ import { FreeItem } from "umesseapi/models/free-item";
 import * as Common from "@/utils/Common";
 import { convertDatestringToDateJp } from "@/utils/FormatDate";
 import router from "@/router";
-import UMesseCache from "@/repository/UMesseCache";
 import { UMesseError } from "../../../models/UMesseError";
 import { resourcesService } from "@/services";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
+import { freeCache } from "@/repository/cache";
 
 export default defineComponent({
   components: {
@@ -197,7 +197,7 @@ export default defineComponent({
     const selectFreeTemplate = (manuscript: string) => {
       // TODO: キャッシュに入れるでいいのか
       const cacheKey = "voice/free/selectTemplate";
-      UMesseCache.freeCache.set(cacheKey, manuscript);
+      freeCache.set(cacheKey, manuscript);
       router.push({ name: "VoiceFree" });
     };
 

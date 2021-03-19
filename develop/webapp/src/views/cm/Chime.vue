@@ -122,7 +122,6 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted, reactive, toRefs } from "vue";
 import AudioPlayer from "@/utils/AudioPlayer";
-import AudioStore from "@/store/audio";
 import { ChimeItem } from "umesseapi/models";
 import { useGlobalStore } from "@/store";
 import { useRoute, useRouter } from "vue-router";
@@ -145,8 +144,8 @@ import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
 import { UMesseError } from "../../models/UMesseError";
-import { resourcesService } from "@/services";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
+import { audioService, resourcesService } from "@/services";
 
 export default defineComponent({
   components: {
@@ -172,7 +171,6 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const route = useRoute();
-    const audioStore = AudioStore();
     const audioPlayer = AudioPlayer();
     const { cm } = useGlobalStore();
     const sortList = Common.getSort();
@@ -184,7 +182,7 @@ export default defineComponent({
       chimes: [] as ChimeItem[],
       selectedChime: null as ChimeItem | null,
       isPlaying: computed(() => audioPlayer.isPlaying()),
-      isDownloading: computed(() => audioStore.isDownloading),
+      isDownloading: false,
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       duration: computed(() => audioPlayer.getDuration()),
       isPlayModalAppear: false,
@@ -212,9 +210,7 @@ export default defineComponent({
     const fetchChime = async () => {
       try {
         openModalLoading();
-        const response = await resourcesService.fetchChime(
-          state.sort
-        );
+        const response = await resourcesService.fetchChime(state.sort);
         state.chimes = response;
       } catch (e) {
         openErrorModal(e);
@@ -224,11 +220,18 @@ export default defineComponent({
     };
 
     const play = async (chime: ChimeItem) => {
-      const audioBuffer = await resourcesService.getAudioBufferByContentsId(
-        chime.id,
-        chime.category
-      );
-      audioPlayer.start(audioBuffer);
+      try {
+        state.isDownloading = true;
+        const audioBuffer = await audioService.getById(
+          chime.id,
+          chime.category
+        );
+        audioPlayer.start(audioBuffer);
+      } catch (e) {
+        openErrorModal(e);
+      } finally {
+        state.isDownloading = false;
+      }
     };
 
     const stop = () => {

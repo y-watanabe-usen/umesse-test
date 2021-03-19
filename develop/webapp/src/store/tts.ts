@@ -29,7 +29,7 @@ export default function ttsStore() {
 
   const fetchTtsData = async () => {
     try {
-      const response = await ttsService.fetchData(token());
+      const response = await ttsService.fetch(token());
       state.ttsItems = response;
     } catch (e) {
       // throw new e;

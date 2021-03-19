@@ -134,7 +134,6 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted, reactive, toRefs } from "vue";
 import AudioPlayer from "@/utils/AudioPlayer";
-import AudioStore from "@/store/audio";
 import { BgmItem } from "umesseapi/models";
 import { useGlobalStore } from "@/store";
 import { useRouter } from "vue-router";
@@ -159,8 +158,8 @@ import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
 import { UMesseError } from "../../models/UMesseError";
-import { resourcesService } from "@/services";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
+import { audioService, resourcesService } from "@/services";
 
 export default defineComponent({
   components: {
@@ -187,7 +186,6 @@ export default defineComponent({
   },
   setup() {
     const router = useRouter();
-    const audioStore = AudioStore();
     const audioPlayer = AudioPlayer();
     const { cm } = useGlobalStore();
     const sortList = Common.getSort();
@@ -199,7 +197,7 @@ export default defineComponent({
       industries: computed(() => Common.getBgmIndustries()),
       selectedBgm: null as BgmItem | null,
       isPlaying: computed(() => audioPlayer.isPlaying()),
-      isDownloading: computed(() => audioStore.isDownloading),
+      isDownloading: false,
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       duration: computed(() => audioPlayer.getDuration()),
       isPlayModalAppear: false,
@@ -241,11 +239,18 @@ export default defineComponent({
     };
 
     const play = async (bgm: BgmItem) => {
-      const audioBuffer = await resourcesService.getAudioBufferByContentsId(
-        bgm.id,
-        bgm.category
-      );
-      audioPlayer.start(audioBuffer);
+      try {
+        state.isDownloading = true;
+        const audioBuffer = await audioService.getById(
+          bgm.id,
+          bgm.category
+        );
+        audioPlayer.start(audioBuffer);
+      } catch (e) {
+        openErrorModal(e);
+      } finally {
+        state.isDownloading = false;
+      }
     };
 
     const stop = () => {

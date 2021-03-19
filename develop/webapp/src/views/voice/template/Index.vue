@@ -91,11 +91,11 @@ import ListItem from "@/components/molecules/ListItem.vue";
 import { TemplateItem } from "umesseapi/models";
 import * as Common from "@/utils/Common";
 import router from "@/router";
-import UMesseCache from "@/repository/UMesseCache";
 import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
 import { UMesseError } from "../../../models/UMesseError";
 import { resourcesService } from "@/services";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
+import { freeCache } from "@/repository/cache";
 
 export default defineComponent({
   components: {
@@ -147,7 +147,7 @@ export default defineComponent({
 
     const toVoiceTemplateDetail = (templateItem: TemplateItem) => {
       // TODO: キャッシュでいいのか
-      UMesseCache.freeCache.set("voice/template", templateItem);
+      freeCache.set("voice/template", templateItem);
       router.push({ name: "VoiceTemplateDetail" });
     };
     onMounted(async () => {

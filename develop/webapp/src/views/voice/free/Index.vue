@@ -102,9 +102,9 @@ import TextArea from "@/components/atoms/TextArea.vue";
 import SelectBox from "@/components/atoms/SelectBox.vue";
 import { useGlobalStore } from "@/store";
 import Constants from "@/utils/Constants";
-import UMesseCache from "@/repository/UMesseCache";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
-import { resourcesService } from "@/services";
+import { freeCache } from "@/repository/cache";
+import { audioService } from "@/services";
 export default defineComponent({
   components: {
     BasicLayout,
@@ -143,18 +143,16 @@ export default defineComponent({
     });
     // TODO: キャッシュでいいのか
     const cacheKey = "voice/free/selectTemplate";
-    if (UMesseCache.freeCache.has(cacheKey)) {
-      state.text = <string>UMesseCache.freeCache.get(cacheKey);
-      UMesseCache.freeCache.del(cacheKey);
+    if (freeCache.has(cacheKey)) {
+      state.text = <string>freeCache.get(cacheKey);
+      freeCache.remove(cacheKey);
     } else {
       state.text = "おはよう";
     }
     const play = async () => {
       console.log("play");
       const data = await ttsStore.getTtsData(lang);
-      const audioBuffer = await resourcesService.getAudioBufferByUrl(
-        <string>data?.url
-      );
+      const audioBuffer = await audioService.getByUrl(<string>data?.url);
       audioPlayer.start(audioBuffer);
     };
     const stop = () => {
