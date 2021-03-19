@@ -1,4 +1,3 @@
-import { reactive } from "vue";
 import {
   Bgm,
   Convert,
@@ -16,21 +15,7 @@ import { CmItem } from "umesseapi/models/cm-item";
 import { UMesseErrorFromApiFactory } from "@/models/UMesseError";
 import { freeCache } from "@/repository/cache";
 
-export enum UPLOAD_CM_STATE {
-  NONE,
-  CREATING,
-  CREATED,
-  UPDATING,
-  UPDATED,
-  ERROR,
-}
-
 export function useCmService(api: UMesseApi.CmApi) {
-  const state = reactive({
-    status: UPLOAD_CM_STATE.NONE as UPLOAD_CM_STATE,
-  });
-
-  const getStatus = () => state.status;
 
   const fetch = async (
     authToken: string,
@@ -64,12 +49,6 @@ export function useCmService(api: UMesseApi.CmApi) {
     bgm: Bgm | null
   ): Promise<CreateUserCmResponseItem> => {
     return new Promise(function (resolve, reject) {
-      if (state.status === UPLOAD_CM_STATE.CREATING) {
-        return reject(new Error(`state is creating`));
-      }
-      // TODO: check arguments here.
-      state.status = UPLOAD_CM_STATE.CREATING;
-
       const requestModel = getCreateUserCmRequestModel(
         narrations,
         startChime,
@@ -78,26 +57,21 @@ export function useCmService(api: UMesseApi.CmApi) {
       );
 
       const cacheKey = Convert.createUserCmRequestItemToJson(requestModel);
+      const cacheValue = freeCache.get(cacheKey);
+      if (cacheValue) return <CreateUserCmResponseItem>cacheValue;
 
-      if (freeCache.has(cacheKey)) {
-        state.status = UPLOAD_CM_STATE.CREATED;
-        resolve(<CreateUserCmResponseItem>freeCache.get(cacheKey));
-      } else {
-        api
-          .createUserCm(authToken, requestModel)
-          .then((value) => {
-            freeCache.set(cacheKey, <CreateUserCmResponseItem>value.data);
-            console.log("resolve");
-            console.log("createUserCm", value.data);
-            state.status = UPLOAD_CM_STATE.CREATED;
-            resolve(<CreateUserCmResponseItem>value.data);
-          })
-          .catch((e) => {
-            console.log("reject", e);
-            (state.status = UPLOAD_CM_STATE.ERROR);
-            reject(UMesseErrorFromApiFactory(e));
-          });
-      }
+      api
+        .createUserCm(authToken, requestModel)
+        .then((value) => {
+          freeCache.set(cacheKey, <CreateUserCmResponseItem>value.data);
+          console.log("resolve");
+          console.log("createUserCm", value.data);
+          resolve(<CreateUserCmResponseItem>value.data);
+        })
+        .catch((e) => {
+          console.log("reject", e);
+          reject(UMesseErrorFromApiFactory(e));
+        });
     });
   };
 
@@ -110,12 +84,6 @@ export function useCmService(api: UMesseApi.CmApi) {
     uploadSystem: string
   ): Promise<CmItem> => {
     return new Promise(function (resolve, reject) {
-      // if (state.status !== UPLOAD_CM_STATE.CREATED) {
-      //   return reject(new Error(`state is not created`));
-      // }
-      // TODO: check arguments here.
-      state.status = UPLOAD_CM_STATE.UPDATING;
-
       const requestModel = getUpdateUserCmRequestModel(
         title,
         description,
@@ -127,12 +95,10 @@ export function useCmService(api: UMesseApi.CmApi) {
         .then((value) => {
           console.log("resolve");
           console.log("updateUserCm", value.data);
-          state.status = UPLOAD_CM_STATE.UPDATED;
           resolve(value.data);
         })
         .catch((e) => {
           console.log("reject", e);
-          (state.status = UPLOAD_CM_STATE.ERROR);
           reject(UMesseErrorFromApiFactory(e));
         });
     });
@@ -146,12 +112,10 @@ export function useCmService(api: UMesseApi.CmApi) {
         .then((value) => {
           console.log("resolve");
           console.log("deleteUserCm", value.data);
-          state.status = UPLOAD_CM_STATE.NONE;
           resolve(value.data);
         })
         .catch((e) => {
           console.log("reject", e);
-          (state.status = UPLOAD_CM_STATE.ERROR);
           reject(UMesseErrorFromApiFactory(e));
         });
     });
@@ -202,6 +166,5 @@ export function useCmService(api: UMesseApi.CmApi) {
     create,
     update,
     remove,
-    getStatus,
   };
 }

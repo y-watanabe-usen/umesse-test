@@ -5,32 +5,55 @@ import { BgmItem } from "umesseapi/models/bgm-item";
 import { CmItem, RecordingItem, TtsItem } from "umesseapi/models";
 import DisplayCmItem from "@/models/DisplayCmItem";
 import { cmService } from "@/services";
+import { UMesseError } from "@/models/UMesseError";
+import { ERROR_CODE, ERROR_PATTERN } from "@/utils/Constants";
 
 export const MAX_NARRATION_COUNT = 4;
+
+export enum UPLOAD_CM_STATE {
+  NONE,
+  CREATING,
+  CREATED,
+  UPDATING,
+  UPDATED,
+  ERROR,
+}
 
 export default function cmStore() {
   const service = cmService;
   const state = reactive({
     displayCmItem: new DisplayCmItem(),
     selectedNarrationIndex: null as number | null,
+    status: UPLOAD_CM_STATE.NONE as UPLOAD_CM_STATE,
     error: undefined as string | undefined,
   });
 
-  const status = () => service.getStatus();
+  const status = () => state.status;
 
   const create = async (authToken: string) => {
-    const response = await service.create(
-      authToken,
-      state.displayCmItem.narrations,
-      state.displayCmItem.openChime,
-      state.displayCmItem.endChime,
-      state.displayCmItem.bgm
-    );
-    console.log(response);
-    state.displayCmItem.id = response.id;
-    state.displayCmItem.timestamp = response.timestamp;
-    state.displayCmItem.seconds = response.seconds;
-    state.displayCmItem.url = response.url ?? "";
+    try {
+      if (state.status === UPLOAD_CM_STATE.CREATING) {
+        throw new UMesseError(ERROR_CODE.A0001, ERROR_PATTERN.A0001, "");
+      }
+      // TODO: check arguments here.
+      state.status = UPLOAD_CM_STATE.CREATING;
+      const response = await service.create(
+        authToken,
+        state.displayCmItem.narrations,
+        state.displayCmItem.openChime,
+        state.displayCmItem.endChime,
+        state.displayCmItem.bgm
+      );
+      console.log(response);
+      state.displayCmItem.id = response.id;
+      state.displayCmItem.timestamp = response.timestamp;
+      state.displayCmItem.seconds = response.seconds;
+      state.displayCmItem.url = response.url ?? "";
+      state.status = UPLOAD_CM_STATE.CREATED;
+    } catch (e) {
+      state.status = UPLOAD_CM_STATE.ERROR;
+      throw e;
+    }
   };
 
   const update = async (
@@ -40,14 +63,21 @@ export default function cmStore() {
     sceneCd: string,
     uploadSystem: string
   ) => {
-    await service.update(
-      authToken,
-      state.displayCmItem.id,
-      title,
-      description,
-      sceneCd,
-      uploadSystem
-    );
+    try {
+      state.status = UPLOAD_CM_STATE.UPDATING;
+      await service.update(
+        authToken,
+        state.displayCmItem.id,
+        title,
+        description,
+        sceneCd,
+        uploadSystem
+      );
+      state.status = UPLOAD_CM_STATE.UPDATED;
+    } catch (e) {
+      state.status = UPLOAD_CM_STATE.ERROR;
+      throw e;
+    }
   };
 
   const clearNarration = (index: number) => {
@@ -127,6 +157,7 @@ export default function cmStore() {
   };
   const setCm = (cmItem: CmItem) => {
     state.displayCmItem.setCm(cmItem);
+    state.status = UPLOAD_CM_STATE.NONE;
   };
 
   const narration = (index: number) => state.displayCmItem.narration(index);

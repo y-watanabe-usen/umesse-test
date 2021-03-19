@@ -150,7 +150,6 @@ import AudioRecorder from "@/utils/AudioRecorder";
 import AudioPlayer from "@/utils/AudioPlayer";
 import {
   RecordingFile,
-  UPLOAD_RECORDING_STATE,
 } from "@/services/recordingService";
 import provideRecordingStore from "@/store/recording";
 import { convertNumberToTime } from "@/utils/FormatDate";
@@ -169,6 +168,7 @@ import { useGlobalStore } from "@/store";
 import router from "@/router";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { UMesseError } from "../../models/UMesseError";
+import { UPLOAD_RECORDING_STATE } from "@/store/recording";
 
 export default defineComponent({
   components: {
