@@ -340,8 +340,10 @@ export default defineComponent({
       errorMessage: "",
     });
     const clickScene = (sceneCd: string) => {
-      state.activeSceneCd = sceneCd;
-      fetchCm();
+      if (state.activeSceneCd !== sceneCd) {
+        state.activeSceneCd = sceneCd;
+        fetchCm();
+      }
     };
     const fetchCm = async () => {
       try {

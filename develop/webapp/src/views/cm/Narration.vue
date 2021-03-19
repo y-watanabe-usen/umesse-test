@@ -243,9 +243,11 @@ export default defineComponent({
     };
 
     const clickIndustry = (industryCd: string) => {
-      state.activeIndustryCd = industryCd;
-      state.activeSceneCd = null;
-      fetchScene();
+      if ((state.activeIndustryCd !== industryCd) || state.activeIndustryCd === industryCd && state.narrations) {
+        state.activeIndustryCd = industryCd;
+        state.activeSceneCd = null;
+        fetchScene();
+      }
     };
 
     const clickScene = (sceneCd: string) => {
