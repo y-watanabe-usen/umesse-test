@@ -41,8 +41,8 @@
               :contentTitle="openChime.title"
               :duration="`${convertNumberToTime(openChime.seconds)}`"
               :volume="openChime.volume"
-              @togglePlay="playOpenChime"
               @toggleSlider="toggleOpenChimeSlider"
+              @click="openPlayOpenChimeModal"
             >
               <template #volume>
                 <transition>
@@ -115,8 +115,8 @@
               :contentTitle="`${narration.title}`"
               :duration="`${convertNumberToTime(narration.seconds)}`"
               :volume="narration.volume"
-              @togglePlay="playNarration(index)"
               @toggleSlider="toggleNarrationSlider(index)"
+              @click="openPlayNarrationModal(index)"
             >
               <template #volume>
                 <transition>
@@ -242,8 +242,8 @@
               :contentTitle="bgm.title"
               :duration="`${convertNumberToTime(bgm.seconds)}`"
               :volume="bgm.volume"
-              @togglePlay="playBgm"
               @toggleSlider="toggleBgmSlider"
+              @click="openPlayBgmModal"
             >
               <template #volume>
                 <transition>
@@ -307,8 +307,8 @@
               :contentTitle="endChime.title"
               :duration="`${convertNumberToTime(endChime.seconds)}`"
               :volume="endChime.volume"
-              @togglePlay="playEndChime"
               @toggleSlider="toggleEndChimeSlider"
+              @click="openPlayEndChimeModal"
             >
               <template #volume>
                 <transition>
@@ -391,6 +391,102 @@
         <template #footer>
           <ModalFooter>
             <Button type="secondary" @click="stopAndClosePlayModal"
+              >終了</Button
+            >
+          </ModalFooter>
+        </template>
+      </ModalDialog>
+    </transition>
+    <transition>
+      <ModalDialog v-if="isPlayOpenChimeModalAppear" @close="stopAndClosePlayOpenChimeModal">
+        <template #header>
+          <ModalHeader title="試聴" @close="stopAndClosePlayOpenChimeModal" />
+        </template>
+        <template #contents>
+          <PlayDialogContents
+            :isLoading="isDownloading || isCreating"
+            :isPlaying="isPlaying"
+            :playbackTime="playbackTime"
+            :duration="duration"
+            @play="playOpenChime()"
+            @stop="stop"
+          />
+        </template>
+        <template #footer>
+          <ModalFooter>
+            <Button type="secondary" @click="stopAndClosePlayOpenChimeModal"
+              >終了</Button
+            >
+          </ModalFooter>
+        </template>
+      </ModalDialog>
+    </transition>
+    <transition>
+      <ModalDialog v-if="isPlayNarrationModalAppear" @close="stopAndClosePlayNarrationModal">
+        <template #header>
+          <ModalHeader title="試聴" @close="stopAndClosePlayNarrationModal" />
+        </template>
+        <template #contents>
+          <PlayDialogContents
+            :isLoading="isDownloading || isCreating"
+            :isPlaying="isPlaying"
+            :playbackTime="playbackTime"
+            :duration="duration"
+            @play="playNarration()"
+            @stop="stop"
+          />
+        </template>
+        <template #footer>
+          <ModalFooter>
+            <Button type="secondary" @click="stopAndClosePlayNarrationModal"
+              >終了</Button
+            >
+          </ModalFooter>
+        </template>
+      </ModalDialog>
+    </transition>
+    <transition>
+      <ModalDialog v-if="isPlayBgmModalAppear" @close="stopAndClosePlayBgmModal">
+        <template #header>
+          <ModalHeader title="試聴" @close="stopAndClosePlayBgmModal" />
+        </template>
+        <template #contents>
+          <PlayDialogContents
+            :isLoading="isDownloading || isCreating"
+            :isPlaying="isPlaying"
+            :playbackTime="playbackTime"
+            :duration="duration"
+            @play="playBgm()"
+            @stop="stop"
+          />
+        </template>
+        <template #footer>
+          <ModalFooter>
+            <Button type="secondary" @click="stopAndClosePlayBgmModal"
+              >終了</Button
+            >
+          </ModalFooter>
+        </template>
+      </ModalDialog>
+    </transition>
+    <transition>
+      <ModalDialog v-if="isPlayEndChimeModalAppear" @close="stopAndClosePlayEndChimeModal">
+        <template #header>
+          <ModalHeader title="試聴" @close="stopAndClosePlayEndChimeModal" />
+        </template>
+        <template #contents>
+          <PlayDialogContents
+            :isLoading="isDownloading || isCreating"
+            :isPlaying="isPlaying"
+            :playbackTime="playbackTime"
+            :duration="duration"
+            @play="playEndChime()"
+            @stop="stop"
+          />
+        </template>
+        <template #footer>
+          <ModalFooter>
+            <Button type="secondary" @click="stopAndClosePlayEndChimeModal"
               >終了</Button
             >
           </ModalFooter>
@@ -554,6 +650,10 @@ export default defineComponent({
       scene: "001",
       uploadSystem: "01",
       isPlayModalAppear: false,
+      isPlayOpenChimeModalAppear: false,
+      isPlayNarrationModalAppear: false,
+      isPlayBgmModalAppear: false,
+      isPlayEndChimeModalAppear: false,
       isSaveModalAppear: false,
       isSavedModalAppear: false,
       isLoading: false,
@@ -568,6 +668,7 @@ export default defineComponent({
       isErrorModalApper: false,
       errorCode: "",
       errorMessage: "",
+      narrationIndex: 0,
     });
 
     const playOpenChime = async () => {
@@ -578,8 +679,8 @@ export default defineComponent({
       if (!cm.endChime) return;
       playById(cm.endChime.id, cm.endChime.category);
     };
-    const playNarration = (index: number) => {
-      const narration = cm.narration(index);
+    const playNarration = () => {
+      const narration = cm.narration(state.narrationIndex);
       if (!narration) return;
       playById(narration.id, narration.category);
     };
@@ -651,6 +752,35 @@ export default defineComponent({
       state.isSavedModalAppear = false;
     };
 
+    const openPlayOpenChimeModal = () => {
+      state.isPlayOpenChimeModalAppear = true;
+    };
+    const closePlayOpenChimeModal = () => {
+      state.isPlayOpenChimeModalAppear = false;
+    };
+
+    const openPlayNarrationModal = (index: number) => {
+      state.isPlayNarrationModalAppear = true;
+      state.narrationIndex = index;
+    };
+    const closePlayNarrationModal = () => {
+      state.isPlayNarrationModalAppear = false;
+    };
+
+    const openPlayBgmModal = () => {
+      state.isPlayBgmModalAppear = true;
+    };
+    const closePlayBgmModal = () => {
+      state.isPlayBgmModalAppear = false;
+    };
+
+    const openPlayEndChimeModal = () => {
+      state.isPlayEndChimeModalAppear = true;
+    };
+    const closePlayEndChimeModal = () => {
+      state.isPlayEndChimeModalAppear = false;
+    };
+
     const createAndOpenPlayModal = async () => {
       try {
         openPlayModal();
@@ -675,6 +805,22 @@ export default defineComponent({
       } finally {
         closeModalLoading();
       }
+    };
+    const stopAndClosePlayOpenChimeModal = () => {
+      stop();
+      closePlayOpenChimeModal();
+    };
+    const stopAndClosePlayNarrationModal = () => {
+      stop();
+      closePlayNarrationModal();
+    };
+    const stopAndClosePlayBgmModal = () => {
+      stop();
+      closePlayBgmModal();
+    };
+    const stopAndClosePlayEndChimeModal = () => {
+      stop();
+      closePlayEndChimeModal();
     };
     const convertNumberToTime = (second: number) =>
       FormatDate.convertNumberToTime(second);
@@ -848,6 +994,18 @@ export default defineComponent({
       createAndOpenPlayModal,
       stopAndClosePlayModal,
       updateAndOpenSavedModal,
+      openPlayOpenChimeModal,
+      openPlayNarrationModal,
+      openPlayBgmModal,
+      openPlayEndChimeModal,
+      closePlayOpenChimeModal,
+      closePlayNarrationModal,
+      closePlayBgmModal,
+      closePlayEndChimeModal,
+      stopAndClosePlayOpenChimeModal,
+      stopAndClosePlayNarrationModal,
+      stopAndClosePlayBgmModal,
+      stopAndClosePlayEndChimeModal,
       Constants,
       convertNumberToTime,
       addRecording,
