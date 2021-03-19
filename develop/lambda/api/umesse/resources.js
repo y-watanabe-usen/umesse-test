@@ -5,13 +5,18 @@ const querystring = require("querystring");
 const {
   constants,
   debuglog,
-  errorlog,
   timestamp,
   generateId,
+  responseData,
 } = require("umesse-lib/constants");
-const { validation } = require("umesse-lib/validation");
+const { checkParams } = require("umesse-lib/validation");
+const {
+  ERROR_CODE,
+  BadRequestError,
+  NotFoundError,
+  InternalServerError,
+} = require("umesse-lib/error");
 const { s3Manager } = require("umesse-lib/utils/s3Manager");
-const { BadRequestError, InternalServerError } = require("umesse-lib/error");
 const db = require("./db");
 
 exports.getResource = async (category, industryCd, sceneCd, sort) => {
@@ -20,86 +25,40 @@ exports.getResource = async (category, industryCd, sceneCd, sort) => {
       category: category,
       industryCd: industryCd,
       sceneCd: sceneCd,
-      sceneCd: sort,
+      sort: sort,
     })}`
   );
 
   // パラメーターチェック
-  const checkParams = validation.checkParams({
+  let params = {
     category: category,
-  });
-  if (checkParams) throw new BadRequestError(checkParams);
+  };
+  if (industryCd) params.industryCd = industryCd;
+  if (sceneCd) params.sceneCd = sceneCd;
+  if (sort) params.sort = sort;
+  let checkError = checkParams(params);
+  if (checkError) throw new BadRequestError(checkError);
 
-  let json;
+  let ret;
   try {
-    json = await db.Contents.findByCategory(category);
+    ret = await db.Contents.findByCategory(category);
   } catch (e) {
-    errorlog(JSON.stringify(e));
-    throw new InternalServerError(e.message);
+    if (e instanceof NotFoundError) throw e;
+    else throw new InternalServerError(e.message);
   }
 
   if (industryCd) {
-    json = json.filter((item) =>
+    ret = ret.filter((item) =>
       item.industry.some((el) => el.industryCd === industryCd)
     );
+    if (!ret) throw new NotFoundError(ERROR_CODE.E0000404);
   }
   if (sceneCd) {
-    json = json.filter((item) =>
-      item.scene.some((el) => el.sceneCd === sceneCd)
-    );
+    ret = ret.filter((item) => item.scene.some((el) => el.sceneCd === sceneCd));
+    if (!ret) throw new NotFoundError(ERROR_CODE.E0000404);
   }
 
-  if (!sort) sort = 1;
-  let sortFunc;
-  switch (sort) {
-    case constants.sort.TITLE_ASC:
-      sortFunc = (a, b) => {
-        if (a.title < b.title) return -1;
-        if (a.title > b.title) return 1;
-        return 0;
-      };
-      break;
-    case constants.sort.TITLE_DESC:
-      // titleの降順でソート
-      sortFunc = (a, b) => {
-        if (a.title > b.title) return -1;
-        if (a.title < b.title) return 1;
-        return 0;
-      };
-      break;
-    case constants.sort.TIMESTAMP_ASC:
-      sortFunc = (a, b) => {
-        if (a.timestamp < b.timestamp) return -1;
-        if (a.timestamp > b.timestamp) return 1;
-        return 0;
-      };
-      break;
-    case constants.sort.TIMESTAMP_DESC:
-      sortFunc = (a, b) => {
-        if (a.timestamp > b.timestamp) return -1;
-        if (a.timestamp < b.timestamp) return 1;
-        return 0;
-      };
-      break;
-    default:
-      // titleの昇順でソート
-      sortFunc = (a, b) => {
-        if (a.title < b.title) return -1;
-        if (a.title > b.title) return 1;
-        return 0;
-      };
-  }
-  json.sort(sortFunc);
-
-  json = json.map((element) => {
-    element["id"] = element["contentsId"];
-    delete element["contentsId"];
-    element["category"] = category;
-    return element;
-  })
-
-  if (!json) throw new InternalServerError("not found");
-  return json;
+  return responseData(ret, category, sort);
 };
 
 // 署名付きURL取得
@@ -107,54 +66,62 @@ exports.getSignedUrl = async (id, category) => {
   debuglog(
     `[getSignedUrl] ${JSON.stringify({
       id: id,
+      category: category,
     })}`
   );
 
   // パラメーターチェック
-  const checkParams = validation.checkParams({
-    id: id,
+  let params = {
     category: category,
-  });
-  if (checkParams) throw new BadRequestError(checkParams);
+  };
+  switch (category) {
+    case constants.resourceCategory.CM:
+    case constants.resourceCategory.RECORDING:
+    case constants.resourceCategory.TTS:
+      params[`${category}Id`] = id;
+      break;
+    default:
+      params.id = id;
+      break;
+  }
+  let checkError = checkParams(params);
+  if (checkError) throw new BadRequestError(checkError);
 
   let bucket = "";
   let path = "";
   switch (category) {
     case constants.resourceCategory.CM:
       bucket = constants.s3Bucket().users;
-      path = `users/${id.split("-")[0]}/${category}/${id}.mp3`;
+      path = `users/${id.split("-")[0]}/${category}/${id}.aac`;
       break;
+
     case constants.resourceCategory.RECORDING:
-      bucket = constants.s3Bucket().users;
-      path = `users/${id.split("-")[0]}/${category}/${id}.mp3`;
-      break;
     case constants.resourceCategory.TTS:
       bucket = constants.s3Bucket().users;
-      if (id.split("-").length == 3) {
-        path = `users/${id.split("-")[0]}/${category}/${id}.mp3`;
-      } else {
-        path = `users/${id.split("-")[0]}/${category}/${id.split("-")[1]}.mp3`;
-      }
+      path = `users/${id.split("-")[0]}/${category}/${id}.mp3`;
       break;
+
+    case constants.resourceCategory.API:
+      bucket = constants.s3Bucket().users;
+      path = `users/${id.split("-")[0]}/${category}/${id.split("-")[1]}.mp3`;
+      break;
+
     case constants.resourceCategory.BGM:
     case constants.resourceCategory.CHIME:
     case constants.resourceCategory.NARRATION:
       bucket = constants.s3Bucket().contents;
       path = `${category}/${id}.mp3`;
       break;
-    default:
-      throw new InternalServerError("unknown category");
   }
 
-  let res;
+  let ret;
   try {
-    res = await s3Manager.getSignedUrl(bucket, path);
+    ret = await s3Manager.getSignedUrl(bucket, path);
   } catch (e) {
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
-  if (!res) throw InternalServerError("getSignedUrl failed");
-  return { url: res };
+
+  return { url: ret };
 };
 
 // ユーザー作成の音声取得（一覧・個別）
@@ -168,25 +135,32 @@ exports.getUserResource = async (unisCustomerCd, category, id) => {
   );
 
   // パラメーターチェック
-  const checkParams = validation.checkParams({
+  let params = {
     unisCustomerCd: unisCustomerCd,
     category: category,
-  });
-  if (checkParams) throw new BadRequestError(checkParams);
+  };
+  switch (category) {
+    case constants.resourceCategory.RECORDING:
+    case constants.resourceCategory.TTS:
+      params[`${category}Id`] = id;
+  }
+  let checkError = checkParams(params);
+  if (checkError) throw new BadRequestError(checkError);
 
-  let json;
+  let ret;
   try {
-    json = await db.User.findCategory(unisCustomerCd, category);
+    ret = await db.User.findResource(unisCustomerCd, category);
   } catch (e) {
-    errorlog(JSON.stringify(e));
-    throw new InternalServerError(e.message);
+    if (e instanceof NotFoundError) throw e;
+    else throw new InternalServerError(e.message);
   }
 
   if (id) {
-    json = json.filter((item) => item[`${category}Id`] === id)[0];
+    ret = ret.filter((item) => item[`${category}Id`] === id).shift();
+    if (!ret) throw new NotFoundError(ERROR_CODE.E0000404);
   }
-  if (!json) throw new InternalServerError("not found");
-  return json;
+
+  return responseData(ret, category);
 };
 
 // ユーザー作成の録音音声新規作成
@@ -194,55 +168,56 @@ exports.createRecordingResource = async (unisCustomerCd, body) => {
   debuglog(
     `[createRecordingResource] ${JSON.stringify({
       unisCustomerCd: unisCustomerCd,
+      body: body,
     })}`
   );
 
   // パラメーターチェック
-  const checkParams = validation.checkParams({
-    unisCustomerCd: unisCustomerCd,
-  });
-  if (checkParams) throw new BadRequestError(checkParams);
+  let checkError = checkParams(
+    {
+      unisCustomerCd: unisCustomerCd,
+      ...body,
+    },
+    ["recordedFile", "title"]
+  );
+  if (checkError) throw new BadRequestError(checkError);
 
   // ID作成
-  const id = generateId(unisCustomerCd, "r");
+  const id = generateId(unisCustomerCd, constants.resourceCategory.RECORDING);
 
-  const binaryData = Buffer.from(body["recordedFile"], "binary");
+  const binaryData = Buffer.from(body.recordedFile, "binary");
   // S3へPUT
-  let res;
+  let ret;
   try {
-    res = await s3Manager.put(
+    ret = await s3Manager.put(
       constants.s3Bucket().users,
       `users/${unisCustomerCd}/${constants.resourceCategory.RECORDING}/${id}.mp3`,
       binaryData
     );
   } catch (e) {
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
-  if (!res) throw new InternalServerError("put failed");
 
   // DynamoDBのデータ更新
   const data = {
-    id: id,
-    title: body["title"],
-    description: body["description"],
+    recordingId: id,
+    title: body.title,
+    description: body.description,
     startDate: timestamp(),
     timestamp: timestamp(),
   };
 
-  let json;
   try {
-    json = await db.User.updateData(
+    ret = await db.User.addResource(
       unisCustomerCd,
       constants.resourceCategory.RECORDING,
       data
     );
   } catch (e) {
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
-  json["category"] = constants.resourceCategory.RECORDING
-  return json;
+
+  return responseData(ret, constants.resourceCategory.RECORDING);
 };
 
 // ユーザー作成の合成音声新規作成
@@ -255,56 +230,55 @@ exports.createTtsResource = async (unisCustomerCd, body) => {
   );
 
   // パラメーターチェック
-  const checkParams = validation.checkParams({
-    unisCustomerCd: unisCustomerCd,
-  });
-  if (checkParams) throw new BadRequestError(checkParams);
+  let checkError = checkParams(
+    {
+      unisCustomerCd: unisCustomerCd,
+      ...body,
+    },
+    ["id", "category", "details"]
+  );
+  if (checkError) throw new BadRequestError(checkError);
 
   let json = [];
   for (const data of body.details) {
-    let id = "";
-
     if (data.id && data.category) {
       json.push({ id: data.id, category: data.category });
     } else {
-      id = generateId(unisCustomerCd, "t");
+      const id = generateId(unisCustomerCd, constants.resourceCategory.TTS);
 
       // S3のオブジェクトリネーム
-      let res;
+      let ret;
       try {
-        res = await s3Manager.copy(
+        ret = await s3Manager.copy(
           constants.s3Bucket().users,
-          `users/${unisCustomerCd}/tts/${id}.mp3`,
-          `${constants.s3Bucket().users}/users/${unisCustomerCd}/tts/${data.lang
-          }.mp3`
+          `users/${unisCustomerCd}/${constants.resourceCategory.TTS}/${id}.mp3`,
+          `${constants.s3Bucket().users}/users/${unisCustomerCd}/${
+            constants.resourceCategory.TTS
+          }/${data.lang}.mp3`
         );
       } catch (e) {
-        errorlog(JSON.stringify(e));
         throw new InternalServerError(e.message);
       }
-      if (!res) throw new InternalServerError("put failed");
 
       // DynamoDBのデータ更新
       const item = {
-        id: id,
-        title: `${data.title}(${data.lang})`,
+        ttsId: id,
+        title: `${data.title} (${data.lang})`,
         description: data.description,
         startDate: timestamp(),
         timestamp: timestamp(),
       };
 
       try {
-        res = await db.User.updateData(
+        ret = await db.User.addResource(
           unisCustomerCd,
           constants.resourceCategory.TTS,
           item
         );
-        res.category = "tts";
-        json.push(res);
       } catch (e) {
-        errorlog(JSON.stringify(e));
         throw new InternalServerError(e.message);
       }
+      json.push(responseData(ret, constants.resourceCategory.TTS));
     }
   }
 
@@ -321,10 +295,14 @@ exports.generateTtsResource = async (unisCustomerCd, body) => {
   );
 
   // パラメーターチェック
-  const checkParams = validation.checkParams({
-    unisCustomerCd: unisCustomerCd,
-  });
-  if (checkParams) throw new BadRequestError(checkParams);
+  let checkError = checkParams(
+    {
+      unisCustomerCd: unisCustomerCd,
+      ...body,
+    },
+    ["id", "category", "details"]
+  );
+  if (checkError) throw new BadRequestError(checkError);
 
   const options = {
     host: constants.ttsConfig().host,
@@ -347,7 +325,7 @@ exports.generateTtsResource = async (unisCustomerCd, body) => {
     } else {
       const postData = querystring.stringify({
         text: data.text,
-        speaker: constants.ttsSpeakers[data.lang][data.speaker],
+        speaker: constants.ttsSpeakers[data.lang][parseInt(data.speaker)],
         pitch: "105",
         speed: "95",
         format: "mp3",
@@ -367,19 +345,20 @@ exports.generateTtsResource = async (unisCustomerCd, body) => {
       }
 
       // S3へPUT
-      id = `users/${unisCustomerCd}/tts/${data.lang}.mp3`;
-      let res;
+      id = `users/${unisCustomerCd}/${constants.resourceCategory.TTS}/${data.lang}.mp3`;
+      let ret;
       try {
-        res = await s3Manager.put(constants.s3Bucket().users, id, binaryData);
+        ret = await s3Manager.put(constants.s3Bucket().users, id, binaryData);
       } catch (e) {
-        errorlog(JSON.stringify(e));
         throw new InternalServerError(e.message);
       }
-      if (!res) throw new InternalServerError("put failed");
     }
 
     const signedId = `${unisCustomerCd}-${data.lang}`;
-    const url = await this.getSignedUrl(signedId, constants.resourceCategory.TTS);
+    const url = await this.getSignedUrl(
+      signedId,
+      constants.resourceCategory.API
+    );
     json.details.push({ url: url.url, lang: data.lang });
   }
 
@@ -398,19 +377,31 @@ exports.updateUserResource = async (unisCustomerCd, category, id, body) => {
   );
 
   // パラメーターチェック
-  const checkParams = validation.checkParams({
+  let params = {
     unisCustomerCd: unisCustomerCd,
     category: category,
-    body: body,
-  });
-  if (checkParams) throw new BadRequestError(checkParams);
+    ...body,
+  };
+  switch (category) {
+    case constants.resourceCategory.RECORDING:
+    case constants.resourceCategory.TTS:
+      params[`${category}Id`] = id;
+  }
+  let checkError = checkParams(params, ["title"]);
+  if (checkError) throw new BadRequestError(checkError);
 
   // 音声一覧から該当音声を取得
-  const list = await this.getUserResource(unisCustomerCd, category);
-  if (!list || !list.length) throw new InternalServerError("not found");
-  const index = list.findIndex((item) => item[`${category}Id`] === id);
-  if (index < 0) throw new InternalServerError("not found");
-  const resource = list[index];
+  let resource, index;
+  try {
+    [resource, index] = await db.User.findResourceIndex(
+      unisCustomerCd,
+      category,
+      id
+    );
+  } catch (e) {
+    if (e instanceof NotFoundError) throw e;
+    else throw new InternalServerError(e.message);
+  }
 
   // DynamoDBのデータ更新
   Object.keys(body).map((key) => {
@@ -418,12 +409,19 @@ exports.updateUserResource = async (unisCustomerCd, category, id, body) => {
   });
   resource.timestamp = timestamp();
 
+  let ret;
   try {
-    return await db.User.updateResource(unisCustomerCd, category, resource);
+    ret = await db.User.updateResource(
+      unisCustomerCd,
+      category,
+      index,
+      resource
+    );
   } catch (e) {
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
+
+  return responseData(ret, category);
 };
 
 // ユーザー作成の音声削除
@@ -437,37 +435,50 @@ exports.deleteUserResource = async (unisCustomerCd, category, id) => {
   );
 
   // パラメーターチェック
-  const checkParams = validation.checkParams({
+  let params = {
     unisCustomerCd: unisCustomerCd,
     category: category,
-  });
-  if (checkParams) throw new BadRequestError(checkParams);
+  };
+  switch (category) {
+    case constants.resourceCategory.RECORDING:
+    case constants.resourceCategory.TTS:
+      params[`${category}Id`] = id;
+  }
+  let checkError = checkParams(params);
+  if (checkError) throw new BadRequestError(checkError);
 
   // 音声一覧から該当音声を取得
-  const list = await this.getUserResource(unisCustomerCd, category);
-  if (!list || !list.length) throw new InternalServerError("not found");
-  const index = list.findIndex((item) => item[`${category}Id`] === id);
-  if (index < 0) throw new InternalServerError("not found");
-  //const resource = list[index];
+  let resource, index;
+  try {
+    [resource, index] = await db.User.findResourceIndex(
+      unisCustomerCd,
+      category,
+      id
+    );
+  } catch (e) {
+    if (e instanceof NotFoundError) throw e;
+    else throw new InternalServerError(e.message);
+  }
 
   // DynamoDBのデータ更新
-  let res;
+  let ret;
   try {
-    res = await db.User.deleteFromCategory(unisCustomerCd, index, category);
+    ret = await db.User.deleteFromCategory(unisCustomerCd, category, index);
   } catch (e) {
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
+
   // S3上の録音音声を削除
   try {
-    await s3Manager.delete(
+    const _ = await s3Manager.delete(
       constants.s3Bucket().users,
       `users/${unisCustomerCd}/${category}/${id}.mp3`
     );
   } catch (e) {
-    errorlog(JSON.stringify(e));
+    throw new InternalServerError(e.message);
   }
-  return res;
+
+  return responseData(ret, category);
 };
 
 // TTSリクエスト
@@ -482,7 +493,6 @@ function requestTts(options, postData) {
         if (response.statusCode == 200) {
           resolve(Buffer.concat(data));
         } else {
-          console.log(`${response.statusMessage}: ${data}`);
           reject(`${response.statusMessage}: ${data}`);
         }
       });

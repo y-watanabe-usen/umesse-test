@@ -2,10 +2,24 @@
 
 const { execSync } = require("child_process");
 const fs = require("fs");
-const { constants, debuglog, timestamp } = require("umesse-lib/constants");
-const { validation } = require("umesse-lib/validation");
-const { dynamodbManager } = require("umesse-lib/utils/dynamodbManager");
+const assert = require("assert");
+const {
+  constants,
+  debuglog,
+  errorlog,
+  timestamp,
+} = require("umesse-lib/constants");
+const UMesseConverter = require("umesse-lib/converter");
+const { checkParams } = require("umesse-lib/validation");
+const {
+  ERROR_CODE,
+  AppError,
+  BadRequestError,
+  NotFoundError,
+  InternalServerError,
+} = require("umesse-lib/error");
 const { s3Manager } = require("umesse-lib/utils/s3Manager");
+const { dynamodbManager } = require("umesse-lib/utils/dynamodbManager");
 
 exports.handler = async (event, context) => {
   debuglog(
@@ -15,69 +29,77 @@ exports.handler = async (event, context) => {
     })}`
   );
 
+  const body = JSON.parse(event.Records[0].body);
+  const unisCustomerCd = body.unisCustomerCd;
+  const id = body.id;
+  const category = body.category;
+
+  // パラメーターチェック
+  let checkError = checkParams({
+    unisCustomerCd: unisCustomerCd,
+    cmId: id,
+    category: category,
+  });
+  if (checkError) return errorResponse(new BadRequestError(checkError));
+
+  // CMデータ取得
+  const key = { unisCustomerCd: unisCustomerCd };
+  let options = {
+    ProjectionExpression: "cm",
+  };
+  debuglog(JSON.stringify({ key: key, options: options }));
+
+  let ret;
   try {
-    const body = JSON.parse(event.Records[0].body);
-
-    // TODO: body message check
-    const unisCustomerCd = body.unisCustomerCd;
-    const id = body.id;
-    const category = body.category;
-    // パラメーターチェック
-    const checkParams = validation.checkParams({
-      unisCustomerCd: unisCustomerCd,
-      id: id,
-      category: category,
-    });
-    if (checkParams) throw checkParams;
-
-    // CMデータ取得
-    const key = { unisCustomerCd: unisCustomerCd };
-    let options = {
-      ProjectionExpression: "cm",
-    };
-    debuglog(JSON.stringify({ key: key, options: options }));
-
-    let res = await dynamodbManager.get(
+    ret = await dynamodbManager.get(
       constants.dynamoDbTable().users,
       key,
       options
     );
-    if (!res || !res.Item) throw "not found";
-    const list = res.Item.cm;
-    if (!list) throw "not found";
-    const index = list.findIndex((item) => item.cmId === id);
-    if (index < 0) throw "not found";
-    const cm = list[index];
+  } catch (e) {
+    errorlog(JSON.stringify(e));
+    return errorResponse(new InternalServerError(e.message));
+  }
+  if (!ret || !ret.Item)
+    return errorResponse(new NotFoundError(ERROR_CODE.E0000404));
 
-    // CMステータスの確認
-    if (cm.status != constants.cmStatus.CONVERT)
-      throw "音圧調整/エンコードができません";
+  // CM一覧から該当CMを取得
+  const list = ret.Item.cm;
+  if (!list) return errorResponse(new NotFoundError(ERROR_CODE.E0000404));
+  const index = list.findIndex((item) => item.cmId === id);
+  if (index < 0) return errorResponse(new NotFoundError(ERROR_CODE.E0000404));
+  const cm = list[index];
 
-    // CMコンバート処理
-    res = await convertCm(unisCustomerCd, id);
-    if (res) throw res;
+  // CMステータスの確認
+  if (cm.status !== constants.cmStatus.CONVERT)
+    return errorResponse(new NotFoundError(ERROR_CODE.E0000404));
 
-    // DynamoDbデータ更新
-    // CMステータスを完了へ変更(03 → 02)
-    cm.status = constants.cmStatus.COMPLETE;
-    cm.timestamp = timestamp();
-    options = {
-      UpdateExpression: `SET cm[${index}] = :cm`,
-      ExpressionAttributeValues: {
-        ":cm": cm,
-      },
-      ReturnValues: "UPDATED_NEW",
-    };
-    debuglog(JSON.stringify({ key: key, options: options }));
+  // CMコンバート処理
+  try {
+    ret = await convertCm(unisCustomerCd, id);
+    if (ret) {
+      errorlog(JSON.stringify(ret));
+      return errorResponse(new InternalServerError(ret));
+    }
+  } catch (e) {
+    errorlog(JSON.stringify(e));
+    return errorResponse(new InternalServerError(e));
+  }
 
-    res = await dynamodbManager.update(
-      constants.dynamoDbTable().users,
+  // 外部連携データ取得
+  try {
+    ret = await dynamodbManager.get(
+      constants.dynamoDbTable().external,
       key,
-      options
+      {}
     );
-    if (!res) throw "update failed";
+  } catch (e) {
+    errorlog(JSON.stringify(e));
+    return errorResponse(new InternalServerError(e.message));
+  }
 
-    // 外部連携データがある場合、データ更新
+  // 対象外部連携データがある場合、データ更新
+  if (ret && ret.Item && ret.Item.status === "0" && ret.Item.cmId === cm.cmId) {
     options = {
       UpdateExpression: "SET #status = :status, #timestamp = :timestamp",
       ConditionExpression: "cmId = :cmId",
@@ -94,21 +116,44 @@ exports.handler = async (event, context) => {
     };
     debuglog(JSON.stringify({ key: key, options: options }));
 
-    res = await dynamodbManager.update(
-      constants.dynamoDbTable().external,
+    try {
+      ret = await dynamodbManager.update(
+        constants.dynamoDbTable().external,
+        key,
+        options
+      );
+    } catch (e) {
+      errorlog(JSON.stringify(e));
+      return errorResponse(new InternalServerError(e.message));
+    }
+    cm.status = constants.cmStatus.EXTERNAL_UPLOADING;
+  } else {
+    cm.status = constants.cmStatus.COMPLETE;
+  }
+
+  // DynamoDbデータ更新
+  cm.timestamp = timestamp();
+  options = {
+    UpdateExpression: `SET cm[${index}] = :cm`,
+    ExpressionAttributeValues: {
+      ":cm": cm,
+    },
+    ReturnValues: "UPDATED_NEW",
+  };
+  debuglog(JSON.stringify({ key: key, options: options }));
+
+  try {
+    ret = await dynamodbManager.update(
+      constants.dynamoDbTable().users,
       key,
       options
     );
-    if (!res) throw "update failed";
-
-    return { message: "complete" };
   } catch (e) {
-    // TODO: 該当のCMステータスをエラーに変更
-
-    // error handler
-    console.log(e);
-    return { message: e };
+    errorlog(JSON.stringify(e));
+    return errorResponse(new InternalServerError(e.message));
   }
+
+  return { code: "200", message: "complete" };
 };
 
 // CM音圧調整処理
@@ -120,13 +165,13 @@ function convertCm(unisCustomerCd, id) {
     try {
       execSync(`mkdir -p ${workDir} && rm -f ${workDir}/*`);
 
-      let res = await s3Manager.get(
+      let ret = await s3Manager.get(
         constants.s3Bucket().users,
         `users/${unisCustomerCd}/cm/${id}.mp3`
       );
-      if (!res || !res.Body) throw "getObject failed";
+      if (!ret || !ret.Body) throw "getObject failed";
 
-      fs.writeFileSync(`${workDir}/${id}.mp3`, res.Body);
+      fs.writeFileSync(`${workDir}/${id}.mp3`, ret.Body);
 
       let command = "";
       let data = "";
@@ -141,8 +186,8 @@ function convertCm(unisCustomerCd, id) {
       command = `${ffmpeg} -i ${workDir}/tmp_1.wav \
         -af loudnorm=I=-24.0:LRA=+20.0:tp=-2.0:print_format=json -f null - 2>&1 | tail -12`;
       console.log(command);
-      res = execSync(command);
-      data = JSON.parse(res.toString());
+      ret = execSync(command);
+      data = JSON.parse(ret.toString());
 
       // 3. ラウドネス調整 + 音圧調整
       command = `${ffmpeg} -y -i ${workDir}/tmp_1.wav \
@@ -155,8 +200,8 @@ function convertCm(unisCustomerCd, id) {
       command = `${ffmpeg} -i ${workDir}/tmp_2.wav \
         -af loudnorm=I=-12.0:LRA=+10.0:tp=-2.0:print_format=json -f null - 2>&1 | tail -12`;
       debuglog(command);
-      res = execSync(command);
-      data = JSON.parse(res.toString());
+      ret = execSync(command);
+      data = JSON.parse(ret.toString());
 
       // 5. ラウドネス調整 + HE-AACv2化
       command = `${ffmpeg} -y -i ${workDir}/tmp_2.wav \
@@ -175,12 +220,12 @@ function convertCm(unisCustomerCd, id) {
       fileStream.on("error", (e) => {
         throw e;
       });
-      res = await s3Manager.put(
+      ret = await s3Manager.put(
         constants.s3Bucket().users,
         `users/${unisCustomerCd}/cm/${id}.aac`,
         fileStream
       );
-      if (!res) throw "putObject failed";
+      if (!ret) throw "putObject failed";
 
       // FIXME: エンコード前の音源は削除するか検討（一旦コメントアウト）
       // await s3Manager.delete(
@@ -191,8 +236,16 @@ function convertCm(unisCustomerCd, id) {
       debuglog("converter complete");
       resolve();
     } catch (e) {
-      console.log(e);
+      errorlog(e);
       reject("converter failed");
     }
   });
+}
+
+function errorResponse(e) {
+  assert(e instanceof AppError);
+  return {
+    code: e.statusCode,
+    message: e.message,
+  };
 }

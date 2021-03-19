@@ -57,9 +57,9 @@
 cd localstack
 docker-compose up -d
 cd ../develop/lambda/api
-npm run build # windowsだとエラーになるので右記コマンドを実行する npm pack ../layer/nodejs/node_modules/umesse-lib/ && npm install --no-save umesse-lib-0.0.1.tgz
+npm run build
 cd ../develop/lambda/converter
-npm run build # windowsだとエラーになるので右記コマンドを実行する npm pack ../layer/nodejs/node_modules/umesse-lib/ && npm install --no-save umesse-lib-0.0.1.tgz
+npm run build
 cd ../../../deploy/local
 terraform init
 terraform plan

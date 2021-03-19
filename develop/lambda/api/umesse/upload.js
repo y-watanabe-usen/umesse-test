@@ -1,9 +1,18 @@
 "use strict";
 
-const { constants, debuglog, timestamp, errorlog } = require("umesse-lib/constants");
-const { validation } = require("umesse-lib/validation");
-const { getCm } = require("./cm");
-const { BadRequestError, InternalServerError } = require("umesse-lib/error");
+const {
+  constants,
+  debuglog,
+  timestamp,
+  responseData,
+} = require("umesse-lib/constants");
+const { checkParams } = require("umesse-lib/validation");
+const {
+  ERROR_CODE,
+  BadRequestError,
+  NotFoundError,
+  InternalServerError,
+} = require("umesse-lib/error");
 const db = require("./db");
 
 // 外部連携データ取得（一覧・個別）
@@ -16,20 +25,37 @@ exports.getUploadCm = async (unisCustomerCd, id) => {
   );
 
   // パラメーターチェック
-  const checkParams = validation.checkParams({
+  let params = {
     unisCustomerCd: unisCustomerCd,
-  });
-  if (checkParams) throw new BadRequestError(checkParams);
+  };
+  if (id) params.cmId = id;
+  let checkError = checkParams(params);
+  if (checkError) throw new BadRequestError(checkError);
 
+  let ret;
   try {
-    return await db.External.findById(unisCustomerCd, id);
+    ret = await db.User.findCm(unisCustomerCd);
   } catch (e) {
-    console.error(e.message);
-    throw new InternalServerError(e.message);
+    if (e instanceof NotFoundError) throw e;
+    else throw new InternalServerError(e.message);
   }
+
+  // TODO: CMステータス状態によるチェック
+  ret = ret.filter(
+    (item) =>
+      item.status === constants.cmStatus.EXTERNAL_UPLOADING ||
+      item.status === constants.cmStatus.EXTERNAL_COMPLETE ||
+      item.status === constants.cmStatus.EXTERNAL_ERROR
+  );
+  if (!ret) throw new NotFoundError(ERROR_CODE.E0000404);
+
+  if (id) ret = ret.filter((item) => item.cmId === id).shift();
+  if (!ret) throw new NotFoundError(ERROR_CODE.E0000404);
+
+  return responseData(ret, constants.resourceCategory.CM);
 };
 
-// CM外部連携
+// CM外部連携登録
 exports.createUploadCm = async (unisCustomerCd, id, body) => {
   debuglog(
     `[createUploadCm] ${JSON.stringify({
@@ -40,27 +66,34 @@ exports.createUploadCm = async (unisCustomerCd, id, body) => {
   );
 
   // パラメーターチェック
-  const checkParams = validation.checkParams({
-    unisCustomerCd: unisCustomerCd,
-    id: id,
-    body: body,
-  });
-  if (checkParams) throw new BadRequestError(checkParams);
+  let checkError = checkParams(
+    {
+      unisCustomerCd: unisCustomerCd,
+      cmId: id,
+      ...body,
+    },
+    ["uploadSystem"]
+  );
+  if (checkError) throw new BadRequestError(checkError);
 
   // CM一覧から該当CMを取得
-  const list = await getCm(unisCustomerCd);
-  if (!list || !list.length) throw new InternalServerError("not found");
-  const index = list.findIndex((item) => item.id === id);
-  if (index < 0) throw new InternalServerError("not found");
-  const cm = list[index];
+  let cm, index;
+  try {
+    [cm, index] = await db.User.findCmIndex(unisCustomerCd, id);
+  } catch (e) {
+    if (e instanceof NotFoundError) throw e;
+    else throw new InternalServerError(e.message);
+  }
 
   // TODO: CMステータス状態によるチェック
+  if (cm.status !== constants.cmStatus.COMPLETE)
+    throw new NotFoundError(ERROR_CODE.E0000404);
 
   // 連携用のデータ追加
   const item = {
     unisCustomerCd: unisCustomerCd,
-    dataProcessType: "01",
-    id: id,
+    dataProcessType: constants.cmDataProcessType.ADD,
+    cmId: id,
     cmName: cm.title,
     cmCommentManuscript: cm.description,
     startDatetime: cm.startDate,
@@ -72,11 +105,9 @@ exports.createUploadCm = async (unisCustomerCd, id, body) => {
     status: "1",
     timestamp: timestamp(),
   };
-
   try {
     const _ = await db.External.add(item);
   } catch (e) {
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
 
@@ -85,12 +116,14 @@ exports.createUploadCm = async (unisCustomerCd, id, body) => {
   cm.status = constants.cmStatus.EXTERNAL_UPLOADING;
   cm.timestamp = timestamp();
 
+  let ret;
   try {
-    return await db.User.updateCm(unisCustomerCd, index, cm);
+    ret = await db.User.updateCm(unisCustomerCd, index, cm);
   } catch (e) {
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
+
+  return responseData(ret, constants.resourceCategory.CM);
 };
 
 // CM外部連携解除
@@ -103,39 +136,30 @@ exports.deleteUploadCm = async (unisCustomerCd, id) => {
   );
 
   // パラメーターチェック
-  const checkParams = validation.checkParams({
+  let checkError = checkParams({
     unisCustomerCd: unisCustomerCd,
-    id: id,
-    body: body,
+    cmId: id,
   });
-  if (checkParams) throw new BadRequestError(checkParams);
+  if (checkError) throw new BadRequestError(checkError);
 
   // CM一覧から該当CMを取得
-  const list = await getCm(unisCustomerCd);
-  if (!list || !list.length) throw new InternalServerError("not found");
-  const index = list.findIndex((item) => item.id === id);
-  if (index < 0) throw new InternalServerError("not found");
-  const cm = list[index];
+  let cm, index;
+  try {
+    [cm, index] = await db.User.findCmIndex(unisCustomerCd, id);
+  } catch (e) {
+    if (e instanceof NotFoundError) throw e;
+    else throw new InternalServerError(e.message);
+  }
 
   // TODO: CMステータス状態によるチェック
-
-  // DynamoDBのデータ更新
-  cm.status = constants.cmStatus.EXTERNAL_UPLOADING;
-  cm.timestamp = timestamp();
-
-  let res;
-  try {
-    res = await db.User.updateCm(unisCustomerCd, index, cm);
-  } catch (e) {
-    errorlog(JSON.stringify(e));
-    throw new InternalServerError(e.message);
-  }
+  if (cm.status !== constants.cmStatus.EXTERNAL_COMPLETE)
+    throw new NotFoundError(ERROR_CODE.E0000404);
 
   // 連携用のデータ追加
   const item = {
     unisCustomerCd: unisCustomerCd,
-    dataProcessType: "03",
-    id: id,
+    dataProcessType: constants.cmDataProcessType.DELETE,
+    cmId: id,
     endDateTime: timestamp(),
     uploadSystem: cm.uploadSystem,
     status: "1",
@@ -144,8 +168,19 @@ exports.deleteUploadCm = async (unisCustomerCd, id) => {
   try {
     const _ = await db.External.add(item);
   } catch (e) {
-    errorlog(JSON.stringify(e));
+    throw new InternalServerError(e.message);
   }
-  return res;
 
+  // DynamoDBのデータ更新
+  cm.status = constants.cmStatus.EXTERNAL_UPLOADING;
+  cm.timestamp = timestamp();
+
+  let ret;
+  try {
+    ret = await db.User.updateCm(unisCustomerCd, index, cm);
+  } catch (e) {
+    throw new InternalServerError(e.message);
+  }
+
+  return responseData(ret, constants.resourceCategory.CM);
 };
