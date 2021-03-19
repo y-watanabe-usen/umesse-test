@@ -1,9 +1,9 @@
 "use strict";
 
-// process.env.debug = true;
 process.env.environment = "local";
 
 const aws = require("aws-sdk");
+const { ERROR_CODE } = require("umesse-lib/error");
 const { constants } = require("umesse-lib/constants");
 const { dynamodbManager } = require("umesse-lib/utils/dynamodbManager");
 const { handler } = require("../lambda");
@@ -17,11 +17,11 @@ const externalData = aws.DynamoDB.Converter.unmarshall(
   json["umesse-external"][0].PutRequest.Item
 );
 
+console.error = jest.fn();
 beforeAll(() => {
   jest.setTimeout(1000 * 30); // 30 sec
 });
 
-// TODO: draft
 describe("convert", () => {
   test("[success] 音圧調整/エンコード", async () => {
     const event = {
@@ -35,29 +35,31 @@ describe("convert", () => {
         },
       ],
     };
-    const response = await handler(event);
-    expect(response).toEqual({ message: "complete" });
+    await expect(handler(event)).resolves.toEqual({
+      code: "200",
+      message: "complete",
+    });
 
-    let res = "";
+    let ret = "";
     // CMステータスの確認
-    res = await dynamodbManager.get(
+    ret = await dynamodbManager.get(
       constants.dynamoDbTable().users,
       { unisCustomerCd: cmData.unisCustomerCd },
       { ProjectionExpression: "cm" }
     );
-    expect(res.Item.cm[0]).toEqual({
+    expect(ret.Item.cm[0]).toEqual({
       ...cmData.cm[0],
-      status: "02",
+      status: "11",
       timestamp: expect.anything(),
     });
 
     // 外部連携ステータスの確認
-    res = await dynamodbManager.get(
+    ret = await dynamodbManager.get(
       constants.dynamoDbTable().external,
       { unisCustomerCd: externalData.unisCustomerCd },
       {}
     );
-    expect(res.Item).toEqual({
+    expect(ret.Item).toEqual({
       ...externalData,
       status: "1",
       timestamp: expect.anything(),
@@ -76,8 +78,10 @@ describe("convert", () => {
         },
       ],
     };
-    const response = await handler(event);
-    expect(response).toEqual({ message: "not found" });
+    await expect(handler(event)).resolves.toEqual({
+      code: 404,
+      message: ERROR_CODE.E0000404,
+    });
   });
 
   test("[error] 音圧調整/エンコード　CMデータ存在しない", async () => {
@@ -86,14 +90,16 @@ describe("convert", () => {
         {
           body: JSON.stringify({
             unisCustomerCd: cmData.unisCustomerCd,
-            id: "999999999",
+            id: "999999999-c-99999999",
             category: "cm",
           }),
         },
       ],
     };
-    const response = await handler(event);
-    expect(response).toEqual({ message: "not found" });
+    await expect(handler(event)).resolves.toEqual({
+      code: 404,
+      message: ERROR_CODE.E0000404,
+    });
   });
 
   test("[error] 音圧調整/エンコード　CMステータスエラー", async () => {
@@ -108,8 +114,10 @@ describe("convert", () => {
         },
       ],
     };
-    const response = await handler(event);
-    expect(response).toEqual({ message: "音圧調整/エンコードができません" });
+    await expect(handler(event)).resolves.toEqual({
+      code: 404,
+      message: ERROR_CODE.E0000404,
+    });
   });
 
   test("[error] 音圧調整/エンコード　S3にCMが存在しない", async () => {
@@ -124,9 +132,133 @@ describe("convert", () => {
         },
       ],
     };
-    const response = await handler(event);
-    expect(response).toEqual({ message: "converter failed" });
+    await expect(handler(event)).resolves.toEqual({
+      code: 500,
+      message: "converter failed",
+    });
+  });
+
+  test("[error] 音圧調整/エンコード　パラメーターチェック", async () => {
+    await expect(
+      handler({
+        Records: [
+          {
+            body: JSON.stringify({}),
+          },
+        ],
+      })
+    ).resolves.toEqual({
+      code: 400,
+      message: `${ERROR_CODE.E0001001} (E0001001)`,
+    });
+
+    await expect(
+      handler({
+        Records: [
+          {
+            body: JSON.stringify({
+              unisCustomerCd: "aaaaaaaaaa",
+            }),
+          },
+        ],
+      })
+    ).resolves.toEqual({
+      code: 400,
+      message: [
+        `${ERROR_CODE.E0001001} (E0001001)`,
+        `${ERROR_CODE.E0001010} (E0001010)`,
+      ].join("\n"),
+    });
+
+    await expect(
+      handler({
+        Records: [
+          {
+            body: JSON.stringify({
+              unisCustomerCd: "1111",
+            }),
+          },
+        ],
+      })
+    ).resolves.toEqual({
+      code: 400,
+      message: [
+        `${ERROR_CODE.E0001001} (E0001001)`,
+        `${ERROR_CODE.E0001010} (E0001010)`,
+      ].join("\n"),
+    });
+
+    await expect(
+      handler({
+        Records: [
+          {
+            body: JSON.stringify({
+              unisCustomerCd: "11111111111",
+            }),
+          },
+        ],
+      })
+    ).resolves.toEqual({
+      code: 400,
+      message: [
+        `${ERROR_CODE.E0001001} (E0001001)`,
+        `${ERROR_CODE.E0001010} (E0001010)`,
+      ].join("\n"),
+    });
+
+    await expect(
+      handler({
+        Records: [
+          {
+            body: JSON.stringify({
+              unisCustomerCd: "9999999999",
+              id: "aaaa",
+            }),
+          },
+        ],
+      })
+    ).resolves.toEqual({
+      code: 400,
+      message: [
+        `${ERROR_CODE.E0001001} (E0001001)`,
+        `${ERROR_CODE.E0001210} (E0001210)`,
+      ].join("\n"),
+    });
+
+    await expect(
+      handler({
+        Records: [
+          {
+            body: JSON.stringify({
+              unisCustomerCd: "9999999999",
+              id: "9999999999-c",
+            }),
+          },
+        ],
+      })
+    ).resolves.toEqual({
+      code: 400,
+      message: [
+        `${ERROR_CODE.E0001001} (E0001001)`,
+        `${ERROR_CODE.E0001210} (E0001210)`,
+      ].join("\n"),
+    });
+
+    await expect(
+      handler({
+        Records: [
+          {
+            body: JSON.stringify({
+              unisCustomerCd: "9999999999",
+              id: "9999999999-c-99999999",
+              category: "none",
+            }),
+          },
+        ],
+      })
+    ).resolves.toEqual({
+      code: 400,
+      message: `${ERROR_CODE.E0001030} (E0001030)`,
+    });
   });
 });
-
-// FIXME: error test
