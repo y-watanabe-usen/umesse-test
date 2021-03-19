@@ -219,8 +219,10 @@ export default defineComponent({
     };
 
     const clickIndustry = (industryCd: string) => {
-      state.activeIndustryCd = industryCd;
-      fetchBgm();
+      if (state.activeIndustryCd !== industryCd) {
+        state.activeIndustryCd = industryCd;
+        fetchBgm();
+      }
     };
 
     const fetchBgm = async () => {
