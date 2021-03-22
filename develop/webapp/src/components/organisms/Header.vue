@@ -16,11 +16,23 @@ import { useRouter } from "vue-router";
 
 export default {
   name: "Header",
-  setup() {
+  props: {
+    clickBack: {
+      type: Function,
+      default: null,
+      required: false,
+    },
+  },
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  setup(props: any) {
     const router = useRouter();
     const state = reactive({});
     const back = () => {
-      router.go(-1);
+      if (props.clickBack) {
+        props.clickBack();
+      } else {
+        router.go(-1);
+      }
     };
     return {
       state,

@@ -2,7 +2,7 @@
   <div>
     <BasicLayout>
       <template #header>
-        <Header>
+        <Header :back="activeSceneCd ? clickBack : null">
           <template #title>ナレーション選択</template>
         </Header>
       </template>
@@ -243,7 +243,10 @@ export default defineComponent({
     };
 
     const clickIndustry = (industryCd: string) => {
-      if ((state.activeIndustryCd !== industryCd) || state.activeIndustryCd === industryCd && state.narrations) {
+      if (
+        state.activeIndustryCd !== industryCd ||
+        (state.activeIndustryCd === industryCd && state.narrations)
+      ) {
         state.activeIndustryCd = industryCd;
         state.activeSceneCd = null;
         fetchScene();
@@ -253,6 +256,11 @@ export default defineComponent({
     const clickScene = (sceneCd: string) => {
       state.activeSceneCd = sceneCd;
       fetchNarration();
+    };
+
+    const clickBack = () => {
+      state.activeSceneCd = null;
+      state.narrations = [];
     };
 
     const fetchScene = () => {
@@ -270,7 +278,6 @@ export default defineComponent({
           state.activeSceneCd,
           state.sort
         );
-        state.scenes = [];
         state.narrations = response;
       } catch (e) {
         openErrorModal(e);
@@ -359,6 +366,7 @@ export default defineComponent({
       stopAndClosePlayModal,
       closeErrorModal,
       fetchNarration,
+      clickBack,
     };
   },
 });
