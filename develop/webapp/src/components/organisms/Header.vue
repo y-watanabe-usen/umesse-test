@@ -28,7 +28,7 @@ export default {
     const router = useRouter();
     const state = reactive({});
     const back = () => {
-      if (props.baclickBackck) {
+      if (props.clickBack) {
         props.clickBack();
       } else {
         router.go(-1);
