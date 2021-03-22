@@ -2,7 +2,7 @@
   <div>
     <BasicLayout>
       <template #header>
-        <Header :back="activeSceneCd ? clickBack : null">
+        <Header :clickBack="activeSceneCd ? clickBack : null">
           <template #title>ナレーション選択</template>
         </Header>
       </template>
