@@ -1,6 +1,8 @@
-# dynamodb data put（仮）
+# dynamodb data put
+
+https://drive.google.com/drive/u/1/folders/1qkjYI80C-0_WQFxZkWIy4Aq2GcYhdn5N
 
 ```bash
-sh csvToDynamodbJson.sh dev-umesse-contents.csv
-aws --profile umesse dynamodb batch-write-item --request-items file://./dynamodb-umesse-00.json
+npm install
+node put.js dev-umesse-contents umesse-contents.csv
 ```
