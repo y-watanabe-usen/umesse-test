@@ -6,6 +6,9 @@
         <span v-if="authenticating">Loading...</span>
         <span v-else> {{ token }} {{ error }} </span>
       </h2>
+      <p class="title">
+        店内CMを作成する
+      </p>
       <ul class="nav">
         <li>
           <router-link :to="{ name: 'Setting' }">
@@ -63,12 +66,10 @@ header {
     }
   }
   .title {
-    a {
-      color: white;
-      font-size: 23px;
-      font-weight: $font_weight_bold;
-      line-height: 40px;
-    }
+    color: white;
+    font-size: 23px;
+    font-weight: $font_weight_bold;
+    line-height: 40px;
   }
   .nav {
     @include flex_end;

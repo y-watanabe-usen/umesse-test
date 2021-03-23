@@ -52,7 +52,6 @@
 import {
   defineComponent,
   computed,
-  onMounted,
   reactive,
   toRefs,
 } from "vue";
@@ -77,17 +76,14 @@ export default defineComponent({
     SubMenuItem,
   },
   setup() {
+    const { auth } = useGlobalStore();
+
     const state = reactive({
       appInformations: computed(() => Common.getSettingAppInformations()),
       version: computed(() => Common.getVersion()),
       activeAppInformationCd: "01",
       isDocumentModalAppear: false,
       isPlayModalAppear: false,
-    });
-
-    const { auth } = useGlobalStore();
-      onMounted(() => {
-      auth.requestAuth();
     });
 
     const clickAppInformation = (appInformationCd: string) => {
