@@ -48,7 +48,7 @@
           <div class="row border">
             <FormGroup
               v-if="ttsComponents.find((v) => v == TtsComponents.customerName)"
-              title="1:店名"
+              title="店名"
               description="※カタカナで入力"
               class="name"
             >
@@ -61,10 +61,10 @@
             </FormGroup>
             <FormGroup
               v-if="ttsComponents.find((v) => v == TtsComponents.time)"
-              title="2:閉店時間"
+              title="時間"
               class="time"
             >
-              <TimeInput v-model="endTime" />
+              <TimeInput v-model="time" />
               <div>
                 <p class="errorMessage errorEndTime">
                   {{ errorMessageEndTime }}
@@ -73,43 +73,50 @@
             </FormGroup>
             <FormGroup
               v-if="ttsComponents.find((v) => v == TtsComponents.percentage)"
-              title="3:パーセンテージ"
+              title="パーセンテージ"
+              class="percentage"
             >
               <Percentage v-model="percentage" />
             </FormGroup>
             <FormGroup
-              v-if="ttsComponents.find((v) => v == TtsComponents.number)"
-              title="4:個数"
+              v-if="ttsComponents.find((v) => v == TtsComponents.count)"
+              title="個数"
+              class="count"
             >
               <Count v-model="count" />
             </FormGroup>
             <FormGroup
               v-if="ttsComponents.find((v) => v == TtsComponents.endYearDate)"
-              title="5:年末の日付"
+              title="年末の日付"
+              class="end-year-date"
             >
               <EndYearDate v-model="endYearDate" />
             </FormGroup>
             <FormGroup
               v-if="ttsComponents.find((v) => v == TtsComponents.newYearDate)"
-              title="6:年始の日付"
+              title="年始の日付"
+              class="new-year-date"
             >
               <NewYearDate v-model="newYearDate" />
             </FormGroup>
             <FormGroup
               v-if="ttsComponents.find((v) => v == TtsComponents.age)"
-              title="7:年齢"
+              title="年齢"
+              class="age"
             >
               <Age v-model="age" />
             </FormGroup>
             <FormGroup
               v-if="ttsComponents.find((v) => v == TtsComponents.minutes)"
-              title="8:分"
+              title="分"
+              class="minutes"
             >
               <Minutes v-model="minutes" />
             </FormGroup>
             <FormGroup
               v-if="ttsComponents.find((v) => v == TtsComponents.point)"
-              title="9:ポイント倍率"
+              title="ポイント倍率"
+              class="point"
             >
               <Point v-model="point" />
             </FormGroup>
@@ -211,12 +218,12 @@ const TtsComponents = {
   customerName: "${customerName}",
   time: "${time}",
   percentage: "${percentage}",
-  number: "${number}",
-  date1: "${date1}",
-  date2: "${date2}",
+  count: "${number}",
+  endYearDate: "${date1}",
+  newYearDate: "${date2}",
   age: "${age}",
   minutes: "${minutes}",
-  point: "${point}",
+  point: "${points}",
 } as const;
 // type ComponentList = typeof ComponentList[keyof typeof ComponentList];
 
@@ -271,24 +278,24 @@ export default defineComponent({
       isCreating: computed(() => ttsStore.isCreating()),
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       duration: computed(() => audioPlayer.getDuration()),
-      customerName: "",
-      endTime: "21:00",
-      percentage: 1,
-      count: 1,
-      endYearDate: "",
-      newYearDate: "",
-      age: 16,
-      minutes: 1,
-      point: 1,
+      customerName: "テンポメイ",
+      time: "21:00",
+      percentage: 10,
+      count: 3,
+      endYearDate: "12/30",
+      newYearDate: "1/3",
+      age: 18,
+      minutes: 10,
+      point: 3,
       isModalAppear: false,
       text: computed(() => {
         const text: string = template.manuscript
           .replaceAll(TtsComponents.customerName, state.customerName)
-          .replaceAll(TtsComponents.time, state.endTime)
+          .replaceAll(TtsComponents.time, state.time)
           .replaceAll(TtsComponents.percentage, state.percentage)
-          .replaceAll(TtsComponents.number, state.count)
-          .replaceAll(TtsComponents.date1, state.endYearDate)
-          .replaceAll(TtsComponents.date2, state.newYearDate)
+          .replaceAll(TtsComponents.count, state.count)
+          .replaceAll(TtsComponents.endYearDate, state.endYearDate)
+          .replaceAll(TtsComponents.newYearDate, state.newYearDate)
           .replaceAll(TtsComponents.age, state.age)
           .replaceAll(TtsComponents.minutes, state.minutes)
           .replaceAll(TtsComponents.point, state.point);
@@ -306,8 +313,8 @@ export default defineComponent({
       }),
       isErrorCustomerName: false,
       errorMessageEndTime: computed(() => {
-        const endTime: string = state.endTime;
-        return selectErrorMessageEndTime(endTime);
+        const time: string = state.time;
+        return selectErrorMessageEndTime(time);
       }),
       isErrorEndTime: false,
       errorMessageLangs: computed(() => {
@@ -349,7 +356,7 @@ export default defineComponent({
       await ttsStore.generateTtsDataFromTemplate(
         templateDetails,
         state.customerName,
-        state.endTime,
+        state.time,
         state.percentage,
         state.count,
         state.endYearDate,
@@ -427,12 +434,12 @@ export default defineComponent({
         ttsComponents.push(TtsComponents.time);
       if (text.indexOf(TtsComponents.percentage) != -1)
         ttsComponents.push(TtsComponents.percentage);
-      if (text.indexOf(TtsComponents.number) != -1)
-        ttsComponents.push(TtsComponents.number);
-      if (text.indexOf(TtsComponents.date1) != -1)
-        ttsComponents.push(TtsComponents.date1);
-      if (text.indexOf(TtsComponents.date2) != -1)
-        ttsComponents.push(TtsComponents.date2);
+      if (text.indexOf(TtsComponents.count) != -1)
+        ttsComponents.push(TtsComponents.count);
+      if (text.indexOf(TtsComponents.endYearDate) != -1)
+        ttsComponents.push(TtsComponents.endYearDate);
+      if (text.indexOf(TtsComponents.newYearDate) != -1)
+        ttsComponents.push(TtsComponents.newYearDate);
       if (text.indexOf(TtsComponents.age) != -1)
         ttsComponents.push(TtsComponents.age);
       if (text.indexOf(TtsComponents.minutes) != -1)
@@ -505,7 +512,78 @@ export default defineComponent({
     &.time {
       ::v-deep {
         .title {
-          width: 140px;
+          width: 96px;
+        }
+        .input-wrapper {
+          width: 150px;
+          margin-right: 120px;
+        }
+      }
+    }
+    &.percentage {
+      ::v-deep {
+        .title {
+          width: 200px;
+        }
+        .input-wrapper {
+          width: 150px;
+        }
+      }
+    }
+    &.count {
+      ::v-deep {
+        .title {
+          width: 96px;
+        }
+        .input-wrapper {
+          width: 150px;
+        }
+      }
+    }
+    &.end-year-date {
+      ::v-deep {
+        .title {
+          width: 150px;
+        }
+        .input-wrapper {
+          width: 150px;
+        }
+      }
+    }
+    &.new-year-date {
+      ::v-deep {
+        .title {
+          width: 150px;
+        }
+        .input-wrapper {
+          width: 150px;
+        }
+      }
+    }
+    &.age {
+      ::v-deep {
+        .title {
+          width: 96px;
+        }
+        .input-wrapper {
+          width: 150px;
+        }
+      }
+    }
+    &.minutes {
+      ::v-deep {
+        .title {
+          width: 96px;
+        }
+        .input-wrapper {
+          width: 150px;
+        }
+      }
+    }
+    &.point {
+      ::v-deep {
+        .title {
+          width: 150px;
         }
         .input-wrapper {
           width: 150px;

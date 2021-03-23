@@ -50,14 +50,6 @@ export default {
 .end-year-date {
   @include flex_start;
   align-items: center;
-  margin-top: 9px;
-  .label {
-    color: black;
-    font-size: 16px;
-    font-weight: $font_weight_bold;
-    line-height: 58px;
-    flex-grow: 0;
-    flex-shrink: 0;
-  }
+  width: 120px;
 }
 </style>

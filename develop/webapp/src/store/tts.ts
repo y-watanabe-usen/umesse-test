@@ -109,7 +109,7 @@ export default function ttsStore() {
             .replaceAll("${date2}", newYearDate)
             .replaceAll("${age}", age + "")
             .replaceAll("${minutes}", minutes + "")
-            .replaceAll("${point}", point + ""),
+            .replaceAll("${points}", point + ""),
           lang: v,
           speaker: speaker,
         });

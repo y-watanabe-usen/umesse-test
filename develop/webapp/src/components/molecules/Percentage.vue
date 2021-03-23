@@ -51,8 +51,9 @@ export default {
 .percentage {
   @include flex_start;
   align-items: center;
-  margin-top: 9px;
+  width: 120px;
   .label {
+    margin-left: 5px;
     color: black;
     font-size: 16px;
     font-weight: $font_weight_bold;
