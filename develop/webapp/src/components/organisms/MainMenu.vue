@@ -11,14 +11,14 @@
       <template #icon><img src="@/assets/icon_home_narration.svg" /></template>
       <template #title>ナレーション素材から作成</template>
       <template #description
-        >弊社が提供する音声素材から、<br />店内CMを作成します。</template
+        >USENが提供する音声素材から、<br />店内CMを作成します。</template
       >
     </MainMenuItem>
     <MainMenuItem to="VoiceTemplate">
       <template #icon><img src="@/assets/icon_home_template.svg" /></template>
       <template #title>音声合成テンプレートから作成</template>
       <template #description
-        >よく使われる文言のテンプレート<br />をカスタマイズして作成します。</template
+        >よく使われる文言のテンプレートを<br />カスタマイズして作成します。</template
       >
     </MainMenuItem>
     <MainMenuItem to="VoiceFree">

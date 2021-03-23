@@ -158,13 +158,13 @@
                           },
                         },
                         {
-                          title: '合成音声(テンプレートから)入れ替える',
+                          title: '音声合成(テンプレートから)入れ替える',
                           action: () => {
                             changeVoiceTemplate(index);
                           },
                         },
                         {
-                          title: '合成音声(フリー入力から)入れ替える',
+                          title: '音声合成(フリー入力から)入れ替える',
                           action: () => {
                             changeVoiceFree(index);
                           },
@@ -216,13 +216,13 @@
                           },
                         },
                         {
-                          title: '合成音声(テンプレートから)入れ替える',
+                          title: '音声合成(テンプレートから)入れ替える',
                           action: () => {
                             addVoiceTemplate();
                           },
                         },
                         {
-                          title: '合成音声(フリー入力から)入れ替える',
+                          title: '音声合成(フリー入力から)入れ替える',
                           action: () => {
                             addVoiceFree();
                           },

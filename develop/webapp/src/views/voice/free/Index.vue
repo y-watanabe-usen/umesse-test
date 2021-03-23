@@ -3,7 +3,7 @@
     <BasicLayout>
       <template #header>
         <Header>
-          <template #title>合成音声でナレーションを作成する</template>
+          <template #title>音声合成でナレーションを作成する</template>
           <template #buttons>
             <Button
               :disabled="!text"
