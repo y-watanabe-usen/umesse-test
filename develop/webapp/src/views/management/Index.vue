@@ -3,7 +3,7 @@
     <BasicLayout>
       <template #header>
         <Header>
-          <template #title>店内アナウンスの管理</template>
+          <template #title>店内CMの管理</template>
         </Header>
       </template>
       <template #contents>
