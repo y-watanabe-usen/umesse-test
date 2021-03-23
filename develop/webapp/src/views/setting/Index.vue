@@ -39,6 +39,9 @@
               xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
             </p>
           </div>
+          <div v-if="activeAppInformationCd === '04'">
+            <h2>お客様ID：{{ token }}</h2>
+          </div>
         </div>
       </ContentsBase>
     </template>
@@ -49,9 +52,11 @@
 import {
   defineComponent,
   computed,
+  onMounted,
   reactive,
   toRefs,
 } from "vue";
+import { useGlobalStore } from "@/store";
 import * as Common from "@/utils/Common";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
@@ -80,12 +85,18 @@ export default defineComponent({
       isPlayModalAppear: false,
     });
 
+    const { auth } = useGlobalStore();
+      onMounted(() => {
+      auth.requestAuth();
+    });
+
     const clickAppInformation = (appInformationCd: string) => {
       state.activeAppInformationCd = appInformationCd;
     };
 
     return {
       ...toRefs(state),
+      ...auth,
       stop,
       clickAppInformation,
       convertDatestringToDateJp,

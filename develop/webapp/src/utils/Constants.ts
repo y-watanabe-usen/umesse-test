@@ -139,6 +139,7 @@ export default class Constants {
     { cd: "01", name: "バージョン" },
     { cd: "02", name: "U MESSE利用規約" },
     { cd: "03", name: "アナウンス発注の利用規約" },
+    { cd: "04", name: "お客様情報" },
   ]
 
   public static readonly CATEGORY = {
