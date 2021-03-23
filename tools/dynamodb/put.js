@@ -1,10 +1,16 @@
 "use strict";
 
-process.env.AWS_PROFILE = "umeses";
 const fs = require("fs");
 const csv = require("csv");
 const aws = require("aws-sdk");
-aws.config.update({ region: "ap-northeast-1" });
+const credentials = new aws.SharedIniFileCredentials({
+  profile: "umesse",
+});
+aws.config.update({
+  region: "ap-northeast-1",
+  credentials: credentials, // aws
+  // endpoint: "http://localhost:4566", // local
+});
 const dynamodb = new aws.DynamoDB.DocumentClient();
 
 if (!process.argv[2] || !process.argv[3]) {
@@ -54,12 +60,27 @@ parser.on("readable", () => {
       });
     });
 
-    // dynamodb put
-    let params = {
+    // params set
+    let params;
+    let title = data.title;
+
+    switch (data.lang) {
+      case "EN":
+        title = `${title} (英語)`;
+        break;
+      case "CH":
+        title = `${title} (中国語)`;
+        break;
+      case "KR":
+        title = `${title} (韓国語)`;
+        break;
+    }
+
+    params = {
       Item: {
         contentsId: contentsId,
         category: data.category,
-        title: data.title,
+        title: title,
         description: data.description,
         manuscript: data.manuscript,
         seconds: data.seconds,
@@ -70,8 +91,47 @@ parser.on("readable", () => {
       TableName: table,
     };
 
-    console.log(`\n[${contentsId}] ===================================`);
+    // if category template
+    if (data.category === "template") {
+      let details = [];
+      if (data.jp) {
+        details.push({ text: data.jp, lang: "ja", speaker: "0" });
+        details.push({ text: data.jp, lang: "ja", speaker: "1" });
+      }
+      if (data.en) {
+        details.push({ text: data.en, lang: "en", speaker: "0" });
+        details.push({ text: data.en, lang: "en", speaker: "1" });
+      }
+      if (data.ch) {
+        details.push({ text: data.ch, lang: "zh", speaker: "0" });
+        details.push({ text: data.ch, lang: "zh", speaker: "1" });
+      }
+      if (data.kr) {
+        details.push({ text: data.kr, lang: "ko", speaker: "0" });
+        details.push({ text: data.kr, lang: "ko", speaker: "1" });
+      }
+
+      params = {
+        Item: {
+          contentsId: `T${contentsId}`,
+          category: data.category,
+          title: data.title,
+          description: data.description,
+          manuscript: data.manuscript,
+          details: details,
+          seconds: data.seconds,
+          industry: industry,
+          scene: scene,
+          timestamp: "2021-04-01T10:00:00+09:00",
+        },
+        TableName: table,
+      };
+    }
+
+    console.log(`\n[T${contentsId}] ===================================`);
     console.log(JSON.stringify(params));
+
+    // dynamodb put
     dynamodb.put(params, (err, data) => {
       if (err) console.error(JSON.stringify(err, null, 2));
     });
@@ -79,7 +139,7 @@ parser.on("readable", () => {
 });
 
 parser.on("error", (e) => {
-  console.log(e);
+  console.error(e);
 });
 
 parser.on("end", () => {
