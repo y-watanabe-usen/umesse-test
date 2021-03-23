@@ -47,6 +47,7 @@
           </div>
           <div class="row border">
             <FormGroup
+              v-if="ttsComponents.find((v) => v == TtsComponents.customerName)"
               title="1:店名"
               description="※カタカナで入力"
               class="name"
@@ -58,13 +59,59 @@
                 </p>
               </div>
             </FormGroup>
-            <FormGroup title="2:閉店時間" class="time">
+            <FormGroup
+              v-if="ttsComponents.find((v) => v == TtsComponents.time)"
+              title="2:閉店時間"
+              class="time"
+            >
               <TimeInput v-model="endTime" />
               <div>
                 <p class="errorMessage errorEndTime">
                   {{ errorMessageEndTime }}
                 </p>
               </div>
+            </FormGroup>
+            <FormGroup
+              v-if="ttsComponents.find((v) => v == TtsComponents.percentage)"
+              title="3:パーセンテージ"
+            >
+              <Percentage v-model="percentage" />
+            </FormGroup>
+            <FormGroup
+              v-if="ttsComponents.find((v) => v == TtsComponents.number)"
+              title="4:個数"
+            >
+              <Count v-model="count" />
+            </FormGroup>
+            <FormGroup
+              v-if="ttsComponents.find((v) => v == TtsComponents.endYearDate)"
+              title="5:年末の日付"
+            >
+              <EndYearDate v-model="endYearDate" />
+            </FormGroup>
+            <FormGroup
+              v-if="ttsComponents.find((v) => v == TtsComponents.newYearDate)"
+              title="6:年始の日付"
+            >
+              <NewYearDate v-model="newYearDate" />
+            </FormGroup>
+            <FormGroup
+              v-if="ttsComponents.find((v) => v == TtsComponents.age)"
+              title="7:年齢"
+            >
+              <Age v-model="age" />
+            </FormGroup>
+            <FormGroup
+              v-if="ttsComponents.find((v) => v == TtsComponents.minutes)"
+              title="8:分"
+            >
+              <Minutes v-model="minutes" />
+            </FormGroup>
+            <FormGroup
+              v-if="ttsComponents.find((v) => v == TtsComponents.point)"
+              title="9:ポイント倍率"
+            >
+              <Point v-model="point" />
             </FormGroup>
           </div>
           <div class="maniscript">
@@ -152,6 +199,26 @@ import { lang, speaker, TemplateDetailItem } from "@/models/TemplateDetailItem";
 import validator from "@/utils/validator";
 import { audioService } from "@/services";
 import { freeCache } from "@/repository/cache";
+import Percentage from "@/components/molecules/Percentage.vue";
+import Count from "@/components/molecules/Count.vue";
+import EndYearDate from "@/components/molecules/EndYearDate.vue";
+import NewYearDate from "@/components/molecules/NewYearDate.vue";
+import Age from "@/components/molecules/Age.vue";
+import Minutes from "@/components/molecules/Minutes.vue";
+import Point from "@/components/molecules/Point.vue";
+
+const TtsComponents = {
+  customerName: "${customerName}",
+  time: "${time}",
+  percentage: "${percentage}",
+  number: "${number}",
+  date1: "${date1}",
+  date2: "${date2}",
+  age: "${age}",
+  minutes: "${minutes}",
+  point: "${point}",
+} as const;
+// type ComponentList = typeof ComponentList[keyof typeof ComponentList];
 
 export default defineComponent({
   components: {
@@ -169,6 +236,13 @@ export default defineComponent({
     SelectBox,
     TimeInput,
     ModalLoading,
+    Percentage,
+    Count,
+    EndYearDate,
+    NewYearDate,
+    Age,
+    Minutes,
+    Point,
   },
   setup() {
     const router = useRouter();
@@ -191,7 +265,6 @@ export default defineComponent({
           ttsLangs.push(element.lang);
       }
     );
-
     const state = reactive({
       isPlaying: computed(() => audioPlayer.isPlaying()),
       isGenerating: computed(() => ttsStore.isGenerating()),
@@ -200,11 +273,25 @@ export default defineComponent({
       duration: computed(() => audioPlayer.getDuration()),
       customerName: "",
       endTime: "21:00",
+      percentage: 1,
+      count: 1,
+      endYearDate: "",
+      newYearDate: "",
+      age: 16,
+      minutes: 1,
+      point: 1,
       isModalAppear: false,
       text: computed(() => {
         const text: string = template.manuscript
-          .replace("{customerName}", state.customerName)
-          .replace("{endTime}", state.endTime);
+          .replaceAll(TtsComponents.customerName, state.customerName)
+          .replaceAll(TtsComponents.time, state.endTime)
+          .replaceAll(TtsComponents.percentage, state.percentage)
+          .replaceAll(TtsComponents.number, state.count)
+          .replaceAll(TtsComponents.date1, state.endYearDate)
+          .replaceAll(TtsComponents.date2, state.newYearDate)
+          .replaceAll(TtsComponents.age, state.age)
+          .replaceAll(TtsComponents.minutes, state.minutes)
+          .replaceAll(TtsComponents.point, state.point);
         return text;
       }),
       speaker: "1", // 女性
@@ -263,6 +350,13 @@ export default defineComponent({
         templateDetails,
         state.customerName,
         state.endTime,
+        state.percentage,
+        state.count,
+        state.endYearDate,
+        state.newYearDate,
+        state.age,
+        state.minutes,
+        state.point,
         state.speaker,
         state.langs
       );
@@ -308,19 +402,48 @@ export default defineComponent({
       }
     };
     const isDisabledButtonConfirm = (customerName: string) => {
-      if (!customerName || validator.isEmpty(customerName))
-        state.isErrorCustomerName = true;
+      console.log(customerName);
+      return false;
+      // if (!customerName || validator.isEmpty(customerName))
+      //   state.isErrorCustomerName = true;
 
-      if (
-        !state.isErrorLangs &&
-        !state.isErrorCustomerName &&
-        !state.isErrorEndTime
-      ) {
-        return false;
-      } else {
-        return true;
-      }
+      // if (
+      //   !state.isErrorLangs &&
+      //   !state.isErrorCustomerName &&
+      //   !state.isErrorEndTime
+      // ) {
+      //   return false;
+      // } else {
+      //   return true;
+      // }
     };
+
+    const findComponents = (text: string) => {
+      // TODO: もっと良い方法がありそう
+      let ttsComponents: typeof TtsComponents[keyof typeof TtsComponents][] = [];
+      if (text.indexOf(TtsComponents.customerName) != -1)
+        ttsComponents.push(TtsComponents.customerName);
+      if (text.indexOf(TtsComponents.time) != -1)
+        ttsComponents.push(TtsComponents.time);
+      if (text.indexOf(TtsComponents.percentage) != -1)
+        ttsComponents.push(TtsComponents.percentage);
+      if (text.indexOf(TtsComponents.number) != -1)
+        ttsComponents.push(TtsComponents.number);
+      if (text.indexOf(TtsComponents.date1) != -1)
+        ttsComponents.push(TtsComponents.date1);
+      if (text.indexOf(TtsComponents.date2) != -1)
+        ttsComponents.push(TtsComponents.date2);
+      if (text.indexOf(TtsComponents.age) != -1)
+        ttsComponents.push(TtsComponents.age);
+      if (text.indexOf(TtsComponents.minutes) != -1)
+        ttsComponents.push(TtsComponents.minutes);
+      if (text.indexOf(TtsComponents.point) != -1)
+        ttsComponents.push(TtsComponents.point);
+      console.log(ttsComponents);
+      return ttsComponents;
+    };
+    const ttsComponents = findComponents(template.manuscript);
+
     return {
       ...toRefs(state),
       ttsSpeakers,
@@ -333,6 +456,8 @@ export default defineComponent({
       stopAndCloseModal,
       template,
       templateDetails,
+      TtsComponents,
+      ttsComponents,
     };
   },
 });

@@ -76,6 +76,13 @@ export default function ttsStore() {
     templateDetails: TemplateDetailItem[],
     customerName: string,
     endTime: string,
+    percentage: number,
+    count: number,
+    endYearDate: string,
+    newYearDate: string,
+    age: number,
+    minutes: number,
+    point: number,
     speaker: string,
     langs: string[]
   ) => {
@@ -94,8 +101,15 @@ export default function ttsStore() {
         if (!templateDetail) return;
         details.push({
           text: templateDetail.text
-            .replace("{customerName}", customerName)
-            .replace("{endTime}", endTime),
+            .replaceAll("${customerName}", customerName)
+            .replaceAll("${time}", endTime)
+            .replaceAll("${percentage}", percentage + "")
+            .replaceAll("${number}", count + "")
+            .replaceAll("${date1}", endYearDate)
+            .replaceAll("${date2}", newYearDate)
+            .replaceAll("${age}", age + "")
+            .replaceAll("${minutes}", minutes + "")
+            .replaceAll("${point}", point + ""),
           lang: v,
           speaker: speaker,
         });

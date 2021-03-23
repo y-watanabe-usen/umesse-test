@@ -156,6 +156,13 @@ export function getVersion() {
   return PackageJson.version;
 }
 
+/**
+ * fromからtoまでの要素を持つ配列を作成
+ * @param
+ * @return number[]
+ */
+ export const range = (from: number, to: number) => ([...Array(to - from)].map((_, i) => (from + i)));
+
 function getIndustries(cdList: string[]) {
   const result: Industry[] = [];
   cdList.forEach((v) => {
