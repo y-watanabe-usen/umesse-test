@@ -5,7 +5,12 @@
         <Header>
           <template #title>音声合成でナレーションを作成する</template>
           <template #buttons>
-            <Button @click="openModal">確定</Button>
+            <Button
+              :disabled="!text"
+              @click="openModal"
+            >
+              確定
+            </Button>
           </template>
         </Header>
       </template>

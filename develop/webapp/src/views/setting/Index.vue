@@ -39,6 +39,9 @@
               xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
             </p>
           </div>
+          <div v-if="activeAppInformationCd === '04'">
+            <h2>お客様ID：{{ token }}</h2>
+          </div>
         </div>
       </ContentsBase>
     </template>
@@ -52,6 +55,7 @@ import {
   reactive,
   toRefs,
 } from "vue";
+import { useGlobalStore } from "@/store";
 import * as Common from "@/utils/Common";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
@@ -72,6 +76,8 @@ export default defineComponent({
     SubMenuItem,
   },
   setup() {
+    const { auth } = useGlobalStore();
+
     const state = reactive({
       appInformations: computed(() => Common.getSettingAppInformations()),
       version: computed(() => Common.getVersion()),
@@ -86,6 +92,7 @@ export default defineComponent({
 
     return {
       ...toRefs(state),
+      ...auth,
       stop,
       clickAppInformation,
       convertDatestringToDateJp,
