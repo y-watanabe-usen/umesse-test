@@ -5,6 +5,10 @@ import { ERROR_CODE, ERROR_PATTERN } from "@/utils/Constants";
 import * as umesseapi from "umesseapi";
 
 describe("fetchNarrationのテスト", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   test(`正常終了の場合、NarrationItem[]が返ること`, async () => {
     const responseJson = [
       {
@@ -361,6 +365,10 @@ describe("fetchNarrationのテスト", () => {
 });
 
 describe("fetchChimeのテスト", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   test(`正常終了の場合、ChimeItem[]が返ること`, async () => {
     const responseJson = [
       {
@@ -470,6 +478,10 @@ describe("fetchChimeのテスト", () => {
 });
 
 describe("fetchBgmのテスト", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   test(`正常終了の場合、BgmItem[]が返ること`, async () => {
     const responseJson = [
       {
@@ -580,6 +592,10 @@ describe("fetchBgmのテスト", () => {
 });
 
 describe("fetchTemplateのテスト", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   test(`正常終了の場合、TemplateItem[]が返ること`, async () => {
     const responseJson = [
       {
@@ -723,6 +739,10 @@ describe("fetchTemplateのテスト", () => {
 });
 
 describe("fetchFreeのテスト", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   test(`正常終了の場合、FreeItem[]が返ること`, async () => {
     const responseJson = [
       {

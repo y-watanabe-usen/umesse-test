@@ -254,6 +254,10 @@ describe("uploadのテスト", () => {
 });
 
 describe("removeのテスト", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   test(`正常終了の場合、RecordingItemが返ること`, async () => {
     const responseJson = {
       id: "123456789-c-v2qvc913",
