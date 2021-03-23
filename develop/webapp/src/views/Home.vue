@@ -7,7 +7,7 @@
         <span v-else> {{ token }} {{ error }} </span>
       </h2>
       <p class="title">
-        <router-link :to="{ name: 'Cm' }">店内アナウンスを作成する</router-link>
+        <router-link :to="{ name: 'Cm' }">店内CMを作成する</router-link>
       </p>
       <ul class="nav">
         <li>
