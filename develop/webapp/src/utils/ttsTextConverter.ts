@@ -1,10 +1,22 @@
+const ConverterType = {
+  customerName: "\\${customerName}",
+  time: "\\${time}",
+  percentage: "\\${percentage}",
+  count: "\\${number}",
+  endYearDate: "\\${date1}",
+  newYearDate: "\\${date2}",
+  age: "\\${age}",
+  minutes: "\\${minutes}",
+  point: "\\${points}",
+} as const;
+
 /**
  * 時刻を各国の形式に変換
  * @param timeString string 00:00
  * @param lang string ja|en|zh|ko
  * @return string
  */
-const time = (timeString: string, lang: string) => {
+const convertTime = (timeString: string, lang: string) => {
   let result = "";
   const time = timeString.split(":");
   if (lang == "ja") {
@@ -57,7 +69,7 @@ const time = (timeString: string, lang: string) => {
  * @param lang string ja|en|zh|ko
  * @return number
  */
-const percentage = (percentage: number, lang: string) => {
+const convertPercentage = (percentage: number, lang: string) => {
   if (lang == "ja" || lang == "en" || lang == "ko") {
     return percentage;
   }
@@ -70,8 +82,8 @@ const percentage = (percentage: number, lang: string) => {
  * @param lang string ja|en|zh|ko
  * @return number
  */
-const endYearDate = (dateString: string, lang: string) => {
-  return date(dateString, lang);
+const convertEndYearDate = (dateString: string, lang: string) => {
+  return convertDate(dateString, lang);
 };
 
 /**
@@ -80,8 +92,8 @@ const endYearDate = (dateString: string, lang: string) => {
  * @param lang string ja|en|zh|ko
  * @return number
  */
- const newYearDate = (dateString: string, lang: string) => {
-  return date(dateString, lang);
+const convertNewYearDate = (dateString: string, lang: string) => {
+  return convertDate(dateString, lang);
 };
 
 /**
@@ -90,7 +102,7 @@ const endYearDate = (dateString: string, lang: string) => {
  * @param lang string ja|en|zh|ko
  * @return number
  */
- const date = (dateString: string, lang: string) => {
+const convertDate = (dateString: string, lang: string) => {
   const date = dateString.split("/");
   if (lang == "ja" || lang == "zh" || lang == "ko") {
     return date[1];
@@ -106,11 +118,38 @@ const endYearDate = (dateString: string, lang: string) => {
   return `${date[1]}${suffix}`;
 };
 
+const convertManuscript = (
+  manuscript: string,
+  lang: string,
+  customerName: string,
+  time: string,
+  percentage: number,
+  count: number,
+  endYearDate: string,
+  newYearDate: string,
+  age: number,
+  minutes: number,
+  point: number,
+) => {
+  return manuscript
+    .replace(new RegExp(ConverterType.customerName, "g"), customerName)
+    .replace(new RegExp(ConverterType.time, "g"), convertTime(time, lang))
+    .replace(new RegExp(ConverterType.percentage, "g"), convertPercentage(percentage, lang) + "")
+    .replace(new RegExp(ConverterType.count, "g"), count + "")
+    .replace(new RegExp(ConverterType.endYearDate, "g"), convertEndYearDate(endYearDate, lang))
+    .replace(new RegExp(ConverterType.newYearDate, "g"), convertNewYearDate(newYearDate, lang))
+    .replace(new RegExp(ConverterType.age, "g"), age + "")
+    .replace(new RegExp(ConverterType.minutes, "g"), minutes + "")
+    .replace(new RegExp(ConverterType.minutes, "g"), minutes + "")
+    .replace(new RegExp(ConverterType.point, "g"), point + "");
+};
+
 const converter = {
-  time,
-  percentage,
-  endYearDate,
-  newYearDate,
+  convertTime,
+  convertPercentage,
+  convertEndYearDate,
+  convertNewYearDate,
+  convertManuscript,
 };
 
 export default converter;
