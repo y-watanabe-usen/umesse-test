@@ -51,8 +51,66 @@ const time = (timeString: string, lang: string) => {
   return result;
 };
 
+/**
+ * パーセンテージを各国の形式に変換
+ * @param percentage number
+ * @param lang string ja|en|zh|ko
+ * @return number
+ */
+const percentage = (percentage: number, lang: string) => {
+  if (lang == "ja" || lang == "en" || lang == "ko") {
+    return percentage;
+  }
+  return (100 - percentage) / 10;
+};
+
+/**
+ * 年末の日付を各国の形式に変換
+ * @param dateString string 12/1-31
+ * @param lang string ja|en|zh|ko
+ * @return number
+ */
+const endYearDate = (dateString: string, lang: string) => {
+  return date(dateString, lang);
+};
+
+/**
+ * 年始の日付を各国の形式に変換
+ * @param dateString string 1/1-31
+ * @param lang string ja|en|zh|ko
+ * @return number
+ */
+ const newYearDate = (dateString: string, lang: string) => {
+  return date(dateString, lang);
+};
+
+/**
+ * 日付を各国の形式に変換
+ * @param dateString string MM/DD
+ * @param lang string ja|en|zh|ko
+ * @return number
+ */
+ const date = (dateString: string, lang: string) => {
+  const date = dateString.split("/");
+  if (lang == "ja" || lang == "zh" || lang == "ko") {
+    return date[1];
+  }
+  let suffix = "th";
+  if (date[1] == "1") {
+    suffix = "st";
+  } else if (date[1] == "2") {
+    suffix = "nd";
+  } else if (date[1] == "3") {
+    suffix = "rd";
+  }
+  return `${date[1]}${suffix}`;
+};
+
 const converter = {
   time,
+  percentage,
+  endYearDate,
+  newYearDate,
 };
 
 export default converter;
