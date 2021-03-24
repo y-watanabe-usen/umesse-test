@@ -44,19 +44,19 @@ export const UMesseErrorFromAuthFactory = (e: any) => {
   const status = e.response && e.response.status ? e.response.status : 999;
   switch (status) {
     case 400: // リクエストエラー
-      code = ERROR_CODE.A3002;
+      code = ERROR_CODE.A4001;
       break;
     case 401: // 認証エラー
-      code = ERROR_CODE.A3001;
+      code = ERROR_CODE.A4001;
       break;
     case 403: // 認証エラー
-      code = ERROR_CODE.A3001;
+      code = ERROR_CODE.A4001;
       break;
     case 404: // Not Found
-      code = ERROR_CODE.A3000;
+      code = ERROR_CODE.A4000;
       break;
     case 500: // Internal Server Error
-      code = ERROR_CODE.A3999;
+      code = ERROR_CODE.A4999;
       break;
     default:
       // 予期せぬエラー

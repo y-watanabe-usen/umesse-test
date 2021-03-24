@@ -41,8 +41,8 @@ describe("authのテスト", () => {
 
   test(`エラーの場合、UMesseErrorがthrowされること`, async () => {
     const expoectedError = new UMesseError(
-      ERROR_CODE.A3999,
-      ERROR_PATTERN.A3999,
+      ERROR_CODE.A4999,
+      ERROR_PATTERN.A4999,
       ""
     );
 
@@ -107,8 +107,8 @@ describe("getInfoのテスト", () => {
 
   test(`エラーの場合、UMesseErrorがthrowされること`, async () => {
     const expoectedError = new UMesseError(
-      ERROR_CODE.A3999,
-      ERROR_PATTERN.A3999,
+      ERROR_CODE.A4999,
+      ERROR_PATTERN.A4999,
       ""
     );
 
