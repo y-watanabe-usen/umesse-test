@@ -5,6 +5,8 @@ import { GenerateUserTtsRequestDetailItem, GenerateUserTtsRequestItem } from "@/
 import { CreateUserTtsRequestDetailItem, CreateUserTtsRequestItem } from "@/models/CreateUserTtsRequestItem";
 import { TemplateDetailItem } from "@/models/TemplateDetailItem";
 import { ttsService } from "@/services";
+import ttsTextConverter from "@/utils/ttsTextConverter";
+import Constants from "@/utils/Constants";
 
 interface TtsData {
   url: string,
@@ -74,10 +76,17 @@ export default function ttsStore() {
 
   const generateTtsDataFromTemplate = async (
     templateDetails: TemplateDetailItem[],
+    langs: string[],
+    speaker: string,
     customerName: string,
     endTime: string,
-    speaker: string,
-    langs: string[]
+    percentage: number,
+    count: number,
+    endYearDate: string,
+    newYearDate: string,
+    age: number,
+    minutes: number,
+    point: number
   ) => {
     if (hasTtsData()) {
       resetTtsData();
@@ -86,16 +95,24 @@ export default function ttsStore() {
     try {
       state.generating = true;
 
-      // TODO: lang毎の変換処理
-
       const details: GenerateUserTtsRequestDetailItem[] = [];
       langs.forEach((v) => {
         const templateDetail = templateDetails.find(vv => (vv.lang == v && vv.speaker == speaker));
         if (!templateDetail) return;
         details.push({
-          text: templateDetail.text
-            .replace("{customerName}", customerName)
-            .replace("{endTime}", endTime),
+          text: ttsTextConverter.convertManuscript(
+            templateDetail.text,
+            v,
+            customerName,
+            endTime,
+            percentage,
+            count,
+            endYearDate,
+            newYearDate,
+            age,
+            minutes,
+            point,
+          ),
           lang: v,
           speaker: speaker,
         });
@@ -103,7 +120,7 @@ export default function ttsStore() {
       const requestModel: GenerateUserTtsRequestItem = {
         // idとcategoryは後々のバージョンアップで使う予定
         id: "dummy",
-        category: "template",
+        category: Constants.CATEGORY.TEMPLATE,
         details: details
       };
 
@@ -136,7 +153,7 @@ export default function ttsStore() {
       const requestModel: GenerateUserTtsRequestItem = {
         // idとcategoryは後々のバージョンアップで使う予定
         id: "dummy",
-        category: "free",
+        category: Constants.CATEGORY.FREE,
         details: [{
           text: text,
           lang: "ja",
@@ -173,7 +190,7 @@ export default function ttsStore() {
       const requestModel: CreateUserTtsRequestItem = {
         // idとcategoryは後々のバージョンアップで使う予定
         id: "dummy",
-        category: "template",
+        category: Constants.CATEGORY.TEMPLATE,
         details: details
       };
 

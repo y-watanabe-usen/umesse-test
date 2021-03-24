@@ -47,7 +47,8 @@
           </div>
           <div class="row border">
             <FormGroup
-              title="1:店名"
+              v-if="ttsComponents.find((v) => v == ConverterType.customerName)"
+              title="店名"
               description="※カタカナで入力"
               class="name"
             >
@@ -58,13 +59,66 @@
                 </p>
               </div>
             </FormGroup>
-            <FormGroup title="2:閉店時間" class="time">
-              <TimeInput v-model="endTime" />
+            <FormGroup
+              v-if="ttsComponents.find((v) => v == ConverterType.time)"
+              title="時間"
+              class="time"
+            >
+              <TimeInput v-model="time" />
               <div>
                 <p class="errorMessage errorEndTime">
                   {{ errorMessageEndTime }}
                 </p>
               </div>
+            </FormGroup>
+            <FormGroup
+              v-if="ttsComponents.find((v) => v == ConverterType.percentage)"
+              title="パーセンテージ"
+              class="percentage"
+            >
+              <Percentage v-model="percentage" />
+            </FormGroup>
+            <FormGroup
+              v-if="ttsComponents.find((v) => v == ConverterType.count)"
+              title="個数"
+              class="count"
+            >
+              <Count v-model="count" />
+            </FormGroup>
+            <FormGroup
+              v-if="ttsComponents.find((v) => v == ConverterType.endYearDate)"
+              title="年末の日付"
+              class="end-year-date"
+            >
+              <EndYearDate v-model="endYearDate" />
+            </FormGroup>
+            <FormGroup
+              v-if="ttsComponents.find((v) => v == ConverterType.newYearDate)"
+              title="年始の日付"
+              class="new-year-date"
+            >
+              <NewYearDate v-model="newYearDate" />
+            </FormGroup>
+            <FormGroup
+              v-if="ttsComponents.find((v) => v == ConverterType.age)"
+              title="年齢"
+              class="age"
+            >
+              <Age v-model="age" />
+            </FormGroup>
+            <FormGroup
+              v-if="ttsComponents.find((v) => v == ConverterType.minutes)"
+              title="分"
+              class="minutes"
+            >
+              <Minutes v-model="minutes" />
+            </FormGroup>
+            <FormGroup
+              v-if="ttsComponents.find((v) => v == ConverterType.point)"
+              title="ポイント倍率"
+              class="point"
+            >
+              <Point v-model="point" />
             </FormGroup>
           </div>
           <div class="maniscript">
@@ -152,6 +206,14 @@ import { lang, speaker, TemplateDetailItem } from "@/models/TemplateDetailItem";
 import validator from "@/utils/validator";
 import { audioService } from "@/services";
 import { freeCache } from "@/repository/cache";
+import Percentage from "@/components/molecules/Percentage.vue";
+import Count from "@/components/molecules/Count.vue";
+import EndYearDate from "@/components/molecules/EndYearDate.vue";
+import NewYearDate from "@/components/molecules/NewYearDate.vue";
+import Age from "@/components/molecules/Age.vue";
+import Minutes from "@/components/molecules/Minutes.vue";
+import Point from "@/components/molecules/Point.vue";
+import ttsTextConverter, { ConverterType } from "@/utils/ttsTextConverter";
 
 export default defineComponent({
   components: {
@@ -169,6 +231,13 @@ export default defineComponent({
     SelectBox,
     TimeInput,
     ModalLoading,
+    Percentage,
+    Count,
+    EndYearDate,
+    NewYearDate,
+    Age,
+    Minutes,
+    Point,
   },
   setup() {
     const router = useRouter();
@@ -191,20 +260,36 @@ export default defineComponent({
           ttsLangs.push(element.lang);
       }
     );
-
     const state = reactive({
       isPlaying: computed(() => audioPlayer.isPlaying()),
       isGenerating: computed(() => ttsStore.isGenerating()),
       isCreating: computed(() => ttsStore.isCreating()),
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       duration: computed(() => audioPlayer.getDuration()),
-      customerName: "",
-      endTime: "21:00",
+      customerName: "テンポメイ",
+      time: "21:00",
+      percentage: 10,
+      count: 3,
+      endYearDate: "12/30",
+      newYearDate: "1/3",
+      age: 18,
+      minutes: 10,
+      point: 3,
       isModalAppear: false,
       text: computed(() => {
-        const text: string = template.manuscript
-          .replace("{customerName}", state.customerName)
-          .replace("{endTime}", state.endTime);
+        const text: string = ttsTextConverter.convertManuscript(
+          template.manuscript,
+          "ja",
+          state.customerName,
+          state.time,
+          state.percentage,
+          state.count,
+          state.endYearDate,
+          state.newYearDate,
+          state.age,
+          state.minutes,
+          state.point
+        );
         return text;
       }),
       speaker: "1", // 女性
@@ -219,8 +304,8 @@ export default defineComponent({
       }),
       isErrorCustomerName: false,
       errorMessageEndTime: computed(() => {
-        const endTime: string = state.endTime;
-        return selectErrorMessageEndTime(endTime);
+        const time: string = state.time;
+        return selectErrorMessageEndTime(time);
       }),
       isErrorEndTime: false,
       errorMessageLangs: computed(() => {
@@ -261,10 +346,17 @@ export default defineComponent({
       state.isModalAppear = true;
       await ttsStore.generateTtsDataFromTemplate(
         templateDetails,
-        state.customerName,
-        state.endTime,
+        state.langs,
         state.speaker,
-        state.langs
+        state.customerName,
+        state.time,
+        state.percentage,
+        state.count,
+        state.endYearDate,
+        state.newYearDate,
+        state.age,
+        state.minutes,
+        state.point
       );
     };
     const closeModal = () => {
@@ -308,19 +400,48 @@ export default defineComponent({
       }
     };
     const isDisabledButtonConfirm = (customerName: string) => {
-      if (!customerName || validator.isEmpty(customerName))
-        state.isErrorCustomerName = true;
+      console.log(customerName);
+      return false;
+      // if (!customerName || validator.isEmpty(customerName))
+      //   state.isErrorCustomerName = true;
 
-      if (
-        !state.isErrorLangs &&
-        !state.isErrorCustomerName &&
-        !state.isErrorEndTime
-      ) {
-        return false;
-      } else {
-        return true;
-      }
+      // if (
+      //   !state.isErrorLangs &&
+      //   !state.isErrorCustomerName &&
+      //   !state.isErrorEndTime
+      // ) {
+      //   return false;
+      // } else {
+      //   return true;
+      // }
     };
+
+    const findComponents = (text: string) => {
+      // TODO: もっと良い方法がありそう
+      let ttsComponents: ConverterType[] = [];
+      if (text.indexOf(ConverterType.customerName) != -1)
+        ttsComponents.push(ConverterType.customerName);
+      if (text.indexOf(ConverterType.time) != -1)
+        ttsComponents.push(ConverterType.time);
+      if (text.indexOf(ConverterType.percentage) != -1)
+        ttsComponents.push(ConverterType.percentage);
+      if (text.indexOf(ConverterType.count) != -1)
+        ttsComponents.push(ConverterType.count);
+      if (text.indexOf(ConverterType.endYearDate) != -1)
+        ttsComponents.push(ConverterType.endYearDate);
+      if (text.indexOf(ConverterType.newYearDate) != -1)
+        ttsComponents.push(ConverterType.newYearDate);
+      if (text.indexOf(ConverterType.age) != -1)
+        ttsComponents.push(ConverterType.age);
+      if (text.indexOf(ConverterType.minutes) != -1)
+        ttsComponents.push(ConverterType.minutes);
+      if (text.indexOf(ConverterType.point) != -1)
+        ttsComponents.push(ConverterType.point);
+      console.log(ttsComponents);
+      return ttsComponents;
+    };
+    const ttsComponents = findComponents(template.manuscript);
+
     return {
       ...toRefs(state),
       ttsSpeakers,
@@ -333,6 +454,8 @@ export default defineComponent({
       stopAndCloseModal,
       template,
       templateDetails,
+      ttsComponents,
+      ConverterType,
     };
   },
 });
@@ -380,7 +503,78 @@ export default defineComponent({
     &.time {
       ::v-deep {
         .title {
-          width: 140px;
+          width: 96px;
+        }
+        .input-wrapper {
+          width: 150px;
+          margin-right: 120px;
+        }
+      }
+    }
+    &.percentage {
+      ::v-deep {
+        .title {
+          width: 200px;
+        }
+        .input-wrapper {
+          width: 150px;
+        }
+      }
+    }
+    &.count {
+      ::v-deep {
+        .title {
+          width: 96px;
+        }
+        .input-wrapper {
+          width: 150px;
+        }
+      }
+    }
+    &.end-year-date {
+      ::v-deep {
+        .title {
+          width: 150px;
+        }
+        .input-wrapper {
+          width: 150px;
+        }
+      }
+    }
+    &.new-year-date {
+      ::v-deep {
+        .title {
+          width: 150px;
+        }
+        .input-wrapper {
+          width: 150px;
+        }
+      }
+    }
+    &.age {
+      ::v-deep {
+        .title {
+          width: 96px;
+        }
+        .input-wrapper {
+          width: 150px;
+        }
+      }
+    }
+    &.minutes {
+      ::v-deep {
+        .title {
+          width: 96px;
+        }
+        .input-wrapper {
+          width: 150px;
+        }
+      }
+    }
+    &.point {
+      ::v-deep {
+        .title {
+          width: 150px;
         }
         .input-wrapper {
           width: 150px;
