@@ -47,7 +47,7 @@
           </div>
           <div class="row border">
             <FormGroup
-              v-if="ttsComponents.find((v) => v == TtsComponents.customerName)"
+              v-if="ttsComponents.find((v) => v == ConverterType.customerName)"
               title="店名"
               description="※カタカナで入力"
               class="name"
@@ -60,7 +60,7 @@
               </div>
             </FormGroup>
             <FormGroup
-              v-if="ttsComponents.find((v) => v == TtsComponents.time)"
+              v-if="ttsComponents.find((v) => v == ConverterType.time)"
               title="時間"
               class="time"
             >
@@ -72,49 +72,49 @@
               </div>
             </FormGroup>
             <FormGroup
-              v-if="ttsComponents.find((v) => v == TtsComponents.percentage)"
+              v-if="ttsComponents.find((v) => v == ConverterType.percentage)"
               title="パーセンテージ"
               class="percentage"
             >
               <Percentage v-model="percentage" />
             </FormGroup>
             <FormGroup
-              v-if="ttsComponents.find((v) => v == TtsComponents.count)"
+              v-if="ttsComponents.find((v) => v == ConverterType.count)"
               title="個数"
               class="count"
             >
               <Count v-model="count" />
             </FormGroup>
             <FormGroup
-              v-if="ttsComponents.find((v) => v == TtsComponents.endYearDate)"
+              v-if="ttsComponents.find((v) => v == ConverterType.endYearDate)"
               title="年末の日付"
               class="end-year-date"
             >
               <EndYearDate v-model="endYearDate" />
             </FormGroup>
             <FormGroup
-              v-if="ttsComponents.find((v) => v == TtsComponents.newYearDate)"
+              v-if="ttsComponents.find((v) => v == ConverterType.newYearDate)"
               title="年始の日付"
               class="new-year-date"
             >
               <NewYearDate v-model="newYearDate" />
             </FormGroup>
             <FormGroup
-              v-if="ttsComponents.find((v) => v == TtsComponents.age)"
+              v-if="ttsComponents.find((v) => v == ConverterType.age)"
               title="年齢"
               class="age"
             >
               <Age v-model="age" />
             </FormGroup>
             <FormGroup
-              v-if="ttsComponents.find((v) => v == TtsComponents.minutes)"
+              v-if="ttsComponents.find((v) => v == ConverterType.minutes)"
               title="分"
               class="minutes"
             >
               <Minutes v-model="minutes" />
             </FormGroup>
             <FormGroup
-              v-if="ttsComponents.find((v) => v == TtsComponents.point)"
+              v-if="ttsComponents.find((v) => v == ConverterType.point)"
               title="ポイント倍率"
               class="point"
             >
@@ -213,19 +213,7 @@ import NewYearDate from "@/components/molecules/NewYearDate.vue";
 import Age from "@/components/molecules/Age.vue";
 import Minutes from "@/components/molecules/Minutes.vue";
 import Point from "@/components/molecules/Point.vue";
-
-const TtsComponents = {
-  customerName: "${customerName}",
-  time: "${time}",
-  percentage: "${percentage}",
-  count: "${number}",
-  endYearDate: "${date1}",
-  newYearDate: "${date2}",
-  age: "${age}",
-  minutes: "${minutes}",
-  point: "${points}",
-} as const;
-// type ComponentList = typeof ComponentList[keyof typeof ComponentList];
+import ttsTextConverter, { ConverterType } from "@/utils/ttsTextConverter";
 
 export default defineComponent({
   components: {
@@ -289,16 +277,19 @@ export default defineComponent({
       point: 3,
       isModalAppear: false,
       text: computed(() => {
-        const text: string = template.manuscript
-          .replaceAll(TtsComponents.customerName, state.customerName)
-          .replaceAll(TtsComponents.time, state.time)
-          .replaceAll(TtsComponents.percentage, state.percentage)
-          .replaceAll(TtsComponents.count, state.count)
-          .replaceAll(TtsComponents.endYearDate, state.endYearDate)
-          .replaceAll(TtsComponents.newYearDate, state.newYearDate)
-          .replaceAll(TtsComponents.age, state.age)
-          .replaceAll(TtsComponents.minutes, state.minutes)
-          .replaceAll(TtsComponents.point, state.point);
+        const text: string = ttsTextConverter.convertManuscript(
+          template.manuscript,
+          "ja",
+          state.customerName,
+          state.time,
+          state.percentage,
+          state.count,
+          state.endYearDate,
+          state.newYearDate,
+          state.age,
+          state.minutes,
+          state.point
+        );
         return text;
       }),
       speaker: "1", // 女性
@@ -355,6 +346,8 @@ export default defineComponent({
       state.isModalAppear = true;
       await ttsStore.generateTtsDataFromTemplate(
         templateDetails,
+        state.langs,
+        state.speaker,
         state.customerName,
         state.time,
         state.percentage,
@@ -363,9 +356,7 @@ export default defineComponent({
         state.newYearDate,
         state.age,
         state.minutes,
-        state.point,
-        state.speaker,
-        state.langs
+        state.point
       );
     };
     const closeModal = () => {
@@ -427,25 +418,25 @@ export default defineComponent({
 
     const findComponents = (text: string) => {
       // TODO: もっと良い方法がありそう
-      let ttsComponents: typeof TtsComponents[keyof typeof TtsComponents][] = [];
-      if (text.indexOf(TtsComponents.customerName) != -1)
-        ttsComponents.push(TtsComponents.customerName);
-      if (text.indexOf(TtsComponents.time) != -1)
-        ttsComponents.push(TtsComponents.time);
-      if (text.indexOf(TtsComponents.percentage) != -1)
-        ttsComponents.push(TtsComponents.percentage);
-      if (text.indexOf(TtsComponents.count) != -1)
-        ttsComponents.push(TtsComponents.count);
-      if (text.indexOf(TtsComponents.endYearDate) != -1)
-        ttsComponents.push(TtsComponents.endYearDate);
-      if (text.indexOf(TtsComponents.newYearDate) != -1)
-        ttsComponents.push(TtsComponents.newYearDate);
-      if (text.indexOf(TtsComponents.age) != -1)
-        ttsComponents.push(TtsComponents.age);
-      if (text.indexOf(TtsComponents.minutes) != -1)
-        ttsComponents.push(TtsComponents.minutes);
-      if (text.indexOf(TtsComponents.point) != -1)
-        ttsComponents.push(TtsComponents.point);
+      let ttsComponents: ConverterType[] = [];
+      if (text.indexOf(ConverterType.customerName) != -1)
+        ttsComponents.push(ConverterType.customerName);
+      if (text.indexOf(ConverterType.time) != -1)
+        ttsComponents.push(ConverterType.time);
+      if (text.indexOf(ConverterType.percentage) != -1)
+        ttsComponents.push(ConverterType.percentage);
+      if (text.indexOf(ConverterType.count) != -1)
+        ttsComponents.push(ConverterType.count);
+      if (text.indexOf(ConverterType.endYearDate) != -1)
+        ttsComponents.push(ConverterType.endYearDate);
+      if (text.indexOf(ConverterType.newYearDate) != -1)
+        ttsComponents.push(ConverterType.newYearDate);
+      if (text.indexOf(ConverterType.age) != -1)
+        ttsComponents.push(ConverterType.age);
+      if (text.indexOf(ConverterType.minutes) != -1)
+        ttsComponents.push(ConverterType.minutes);
+      if (text.indexOf(ConverterType.point) != -1)
+        ttsComponents.push(ConverterType.point);
       console.log(ttsComponents);
       return ttsComponents;
     };
@@ -463,8 +454,8 @@ export default defineComponent({
       stopAndCloseModal,
       template,
       templateDetails,
-      TtsComponents,
       ttsComponents,
+      ConverterType,
     };
   },
 });

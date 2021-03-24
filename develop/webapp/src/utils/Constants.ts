@@ -150,6 +150,7 @@ export default class Constants {
     CHIME: "chime",
     NARRATION: "narration",
     TEMPLATE: "template",
+    FREE: "free",
   } as const
 
   public static readonly TTS_LANGS = ["ja", "en", "zh", "ko"]

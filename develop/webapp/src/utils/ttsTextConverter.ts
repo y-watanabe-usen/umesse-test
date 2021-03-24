@@ -1,14 +1,15 @@
-const ConverterType = {
-  customerName: "\\${customerName}",
-  time: "\\${time}",
-  percentage: "\\${percentage}",
-  count: "\\${number}",
-  endYearDate: "\\${date1}",
-  newYearDate: "\\${date2}",
-  age: "\\${age}",
-  minutes: "\\${minutes}",
-  point: "\\${points}",
+export const ConverterType = {
+  customerName: "${customerName}",
+  time: "${time}",
+  percentage: "${percentage}",
+  count: "${number}",
+  endYearDate: "${date1}",
+  newYearDate: "${date2}",
+  age: "${age}",
+  minutes: "${minutes}",
+  point: "${points}",
 } as const;
+export type ConverterType = typeof ConverterType[keyof typeof ConverterType];
 
 /**
  * 時刻を各国の形式に変換
@@ -132,16 +133,16 @@ const convertManuscript = (
   point: number,
 ) => {
   return manuscript
-    .replace(new RegExp(ConverterType.customerName, "g"), customerName)
-    .replace(new RegExp(ConverterType.time, "g"), convertTime(time, lang))
-    .replace(new RegExp(ConverterType.percentage, "g"), convertPercentage(percentage, lang) + "")
-    .replace(new RegExp(ConverterType.count, "g"), count + "")
-    .replace(new RegExp(ConverterType.endYearDate, "g"), convertEndYearDate(endYearDate, lang))
-    .replace(new RegExp(ConverterType.newYearDate, "g"), convertNewYearDate(newYearDate, lang))
-    .replace(new RegExp(ConverterType.age, "g"), age + "")
-    .replace(new RegExp(ConverterType.minutes, "g"), minutes + "")
-    .replace(new RegExp(ConverterType.minutes, "g"), minutes + "")
-    .replace(new RegExp(ConverterType.point, "g"), point + "");
+    .replace(new RegExp(`\\${ConverterType.customerName}`, "g"), customerName)
+    .replace(new RegExp(`\\${ConverterType.time}`, "g"), convertTime(time, lang))
+    .replace(new RegExp(`\\${ConverterType.percentage}`, "g"), convertPercentage(percentage, lang) + "")
+    .replace(new RegExp(`\\${ConverterType.count}`, "g"), count + "")
+    .replace(new RegExp(`\\${ConverterType.endYearDate}`, "g"), convertEndYearDate(endYearDate, lang))
+    .replace(new RegExp(`\\${ConverterType.newYearDate}`, "g"), convertNewYearDate(newYearDate, lang))
+    .replace(new RegExp(`\\${ConverterType.age}`, "g"), age + "")
+    .replace(new RegExp(`\\${ConverterType.minutes}`, "g"), minutes + "")
+    .replace(new RegExp(`\\${ConverterType.minutes}`, "g"), minutes + "")
+    .replace(new RegExp(`\\${ConverterType.point}`, "g"), point + "");
 };
 
 const converter = {
