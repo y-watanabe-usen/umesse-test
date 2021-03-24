@@ -82,14 +82,14 @@ describe("getManagementScenesのテスト", () => {
 });
 
 describe("getSettingAppInformationsのテスト", () => {
-  const expected = [ { cd: "01", name: "バージョン" }, { cd: "02", name: "U MESSE利用規約" }, { cd: "03", name: "アナウンス発注の利用規約" }, { cd: "04", name: "お客様情報" },];
-    test(`全設定項目が返ること`, () => {
-      expect(Common.getSettingAppInformations()).toEqual(expected);
-    });
+  const expected = [{ cd: "01", name: "バージョン" }, { cd: "02", name: "U MESSE利用規約" }, { cd: "03", name: "アナウンス発注の利用規約" }, { cd: "04", name: "お客様情報" },];
+  test(`全設定項目が返ること`, () => {
+    expect(Common.getSettingAppInformations()).toEqual(expected);
+  });
 });
 
 describe("getSortのテスト", () => {
-  const expected = [{ cd: 1, name: '名前昇順' }, { cd: 2, name: '名前降順' }, { cd: 3, name: '日時昇順' }, { cd: 4, name: '日時降順' }, ];
+  const expected = [{ cd: 1, name: '名前昇順' }, { cd: 2, name: '名前降順' }, { cd: 3, name: '日時昇順' }, { cd: 4, name: '日時降順' },];
   test(`1, 2, 3, 4に紐づく並び替えが返ること`, () => {
     expect(Common.getSort()).toEqual(expected);
   });
@@ -132,3 +132,16 @@ describe("getVersionのテスト", () => {
     expect(Common.getVersion()).toMatch(/^[0-9].[0-9].[0-9]$/);
   });
 });
+
+describe("rangeのテスト", () => {
+  const datas = [
+    { from: 1, to: 5, expected: [1, 2, 3, 4] },
+    { from: 16, to: 21, expected: [16, 17, 18, 19, 20] },
+  ];
+  datas.forEach((v) => {
+    test(`引数に(${v.from}, ${v.to})を渡すと${v.expected}が返ること`, () => {
+      expect(Common.range(v.from, v.to)).toStrictEqual(v.expected);
+    });
+  });
+});
+
