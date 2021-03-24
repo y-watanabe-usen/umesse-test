@@ -3,13 +3,14 @@
 const fs = require("fs");
 const csv = require("csv");
 const aws = require("aws-sdk");
-const credentials = new aws.SharedIniFileCredentials({
-  profile: "umesse",
-});
 aws.config.update({
   region: "ap-northeast-1",
-  credentials: credentials, // aws
-  // endpoint: "http://localhost:4566", // local
+  // aws
+  credentials: new aws.SharedIniFileCredentials({
+    profile: "umesse",
+  }),
+  // localstack
+  // endpoint: "http://localhost:4566",
 });
 const dynamodb = new aws.DynamoDB.DocumentClient();
 
