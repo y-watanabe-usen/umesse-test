@@ -2,7 +2,7 @@
 
 HERE=$(cd $(dirname $0);pwd)
 HOME_DIR=$HERE/..
-LOCALSTACK_DIR=$HOME_DIR/localsatck
+LOCALSTACK_DIR=$HOME_DIR/localstack
 DEPLOY_LOCAL_DIR=$HOME_DIR/deploy/local
 LAMBDA_API_DIR=$HOME_DIR/develop/lambda/api
 LAMBDA_CONVERTER_DIR=$HOME_DIR/develop/lambda/converter
