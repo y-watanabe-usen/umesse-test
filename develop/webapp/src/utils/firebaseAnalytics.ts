@@ -1,27 +1,15 @@
 import firebase from "firebase";
-import Constants from "./Constants";
-
-// const settings = { timestampsInSnapshots: true };
+import Constants from "@/utils/Constants";
 
 const config = {
-  // apiKey: process.env.VUE_APP_API_KEY,
-  // authDomain: process.env.VUE_APP_AUTH_DOMAIN,
-  // databaseURL: process.env.VUE_APP_DATABASE_URL,
-  // projectId: process.env.VUE_APP_PROJECT_ID,
-  // storageBucket: process.env.VUE_APP_STORAGE_BUCKET,
-  // messagingSenderId: process.env.VUE_APP_MESSAGING_SENDER_ID,
-  // appId: process.env.VUE_APP_AP_ID,
-  // measurementId: process.env.VUE_APP_MEASUREMENT_ID
-  apiKey: "AIzaSyCNT_F6BiuITsI_RgJZUq93Se-g80G_1I4",
-  authDomain: "umesse-a79a1.firebaseapp.com",
-  projectId: "umesse-a79a1",
-  storageBucket: "umesse-a79a1.appspot.com",
-  messagingSenderId: "489365036439",
-  appId: "1:489365036439:web:117dfe92f2c099860b38d2",
-  measurementId: "G-GYKXYCBYGJ"
+  apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
+  authDomain: process.env.VUE_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.VUE_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.VUE_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.VUE_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.VUE_APP_FIREBASE_APP_ID,
+  measurementId: process.env.VUE_APP_FIREBASE_MEASUREMENT_ID
 };
-
-console.log(config); // 参照出来ているかの確認用
 
 firebase.initializeApp(config);
 
