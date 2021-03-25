@@ -96,6 +96,7 @@ import { UMesseError } from "../../../models/UMesseError";
 import { resourcesService } from "@/services";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { freeCache } from "@/repository/cache";
+import analytics from "@/utils/firebaseAnalytics";
 
 export default defineComponent({
   components: {
@@ -150,6 +151,7 @@ export default defineComponent({
     const toVoiceTemplateDetail = (templateItem: TemplateItem) => {
       // TODO: キャッシュでいいのか
       freeCache.set("voice/template", templateItem);
+      analytics.selectTemplate(templateItem.id);
       router.push({ name: "VoiceTemplateDetail" });
     };
     onMounted(async () => {

@@ -70,7 +70,7 @@
                 </Button>
                 <Button
                   class="btn-select"
-                  @click="selectFreeTemplate(freeItem.manuscript)"
+                  @click="selectFreeTemplate(freeItem)"
                 >
                   選択<img src="@/assets/icon_select.svg" />
                 </Button>
@@ -135,6 +135,7 @@ import { UMesseError } from "../../../models/UMesseError";
 import { resourcesService } from "@/services";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { freeCache } from "@/repository/cache";
+import analytics from "@/utils/firebaseAnalytics";
 
 export default defineComponent({
   components: {
@@ -196,10 +197,11 @@ export default defineComponent({
       state.manuscript = manuscript;
     };
 
-    const selectFreeTemplate = (manuscript: string) => {
+    const selectFreeTemplate = (free: FreeItem) => {
       // TODO: キャッシュに入れるでいいのか
       const cacheKey = "voice/free/selectTemplate";
-      freeCache.set(cacheKey, manuscript);
+      freeCache.set(cacheKey, free.manuscript);
+      analytics.selectFree(free.id);
       router.push({ name: "VoiceFree" });
     };
 

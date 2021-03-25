@@ -1,4 +1,5 @@
 import { userService } from '@/services';
+import analytics from '@/utils/firebaseAnalytics';
 import { User } from 'umesseapi/models';
 import { reactive, toRefs } from 'vue';
 
@@ -36,6 +37,7 @@ export default function authStore() {
     try {
       state.token = await userService.auth(unisCustomerCd);
       state.user = await userService.getInfo(state.token);
+      analytics.setUserId(state.user.unisCustomerCd);
     } catch (e) {
       state.error = e.message;
     } finally {

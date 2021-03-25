@@ -146,6 +146,7 @@ import TextArea from "@/components/atoms/TextArea.vue";
 import { UMesseError } from "../../models/UMesseError";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { audioService, resourcesService } from "@/services";
+import analytics from "@/utils/firebaseAnalytics";
 
 export default defineComponent({
   components: {
@@ -196,8 +197,10 @@ export default defineComponent({
 
     const setChime = (chime: ChimeItem) => {
       if (isOpenChime) {
+        analytics.selectOpenChime(chime.id);
         cm.setOpenChime(chime);
       } else {
+        analytics.selectEndChime(chime.id);
         cm.setEndChime(chime);
       }
       router.push({ name: "Cm" });
