@@ -37,7 +37,7 @@ resource "aws_lambda_function" "umesse_api_function" {
   runtime          = "nodejs12.x"
   filename         = data.archive_file.umesse_api_file.output_path
   source_code_hash = data.archive_file.umesse_api_file.output_base64sha256
-  memory_size      = "128"
+  memory_size      = "256"
   timeout          = "30"
   layers           = [aws_lambda_layer_version.umesse_layer.arn]
 
@@ -61,8 +61,8 @@ resource "aws_lambda_function" "umesse_converter_function" {
   runtime          = "nodejs12.x"
   filename         = data.archive_file.umesse_converter_file.output_path
   source_code_hash = data.archive_file.umesse_converter_file.output_base64sha256
-  memory_size      = "128"
-  timeout          = "180"
+  memory_size      = "256"
+  timeout          = "60"
   layers           = [aws_lambda_layer_version.umesse_layer.arn]
 
   environment {
