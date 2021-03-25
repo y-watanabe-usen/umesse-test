@@ -76,11 +76,20 @@
                   <div class="buttons">
                     <button
                       class="btn-play"
+                      :class="{ 'btn-stop': isPlaying }"
                       :disabled="!hasRecordedData"
                       :isPlaying="isPlaying"
                       @click="toggleVoicePlayer"
                     >
-                      <img src="@/assets/icon_play.svg" />再生
+                      <span v-if="isPlaying === false">
+                        <img src="@/assets/icon_play.svg" />再生
+                      </span>
+                      <span v-else>
+                        <img
+                          src="@/assets/icon_stop.svg"
+                          class="icon-stop"
+                        />停止
+                      </span>
                     </button>
                     <button
                       class="btn-delete"
@@ -148,9 +157,7 @@
 import { defineComponent, reactive, computed, toRefs } from "vue";
 import AudioRecorder from "@/utils/AudioRecorder";
 import AudioPlayer from "@/utils/AudioPlayer";
-import {
-  RecordingFile,
-} from "@/services/recordingService";
+import { RecordingFile } from "@/services/recordingService";
 import provideRecordingStore from "@/store/recording";
 import { convertNumberToTime } from "@/utils/FormatDate";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
@@ -432,6 +439,13 @@ export default defineComponent({
           }
           &.btn-delete {
             border: 3px solid rgb(152, 46, 46);
+          }
+          &.btn-stop {
+            border: 3px solid rgb(0, 0, 0);
+            .icon-stop {
+              width: 33px;
+              height: 22px;
+            }
           }
           &:disabled {
             opacity: 0.3;
