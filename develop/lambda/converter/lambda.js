@@ -30,9 +30,9 @@ exports.handler = async (event, context) => {
   );
 
   const body = JSON.parse(event.Records[0].body);
-  const unisCustomerCd = body.unisCustomerCd;
-  const id = body.id;
-  const category = body.category;
+  const unisCustomerCd = body.MessageBody.unisCustomerCd;
+  const id = body.MessageBody.id;
+  const category = body.MessageBody.category;
 
   // パラメーターチェック
   let checkError = checkParams({
