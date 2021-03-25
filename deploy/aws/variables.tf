@@ -10,9 +10,9 @@ variable "name" {
 variable "domain" {
   type = map(string)
   default = {
-    dev-umesse ="dev.umesse.usen.com",
-    stg-umesse ="stg.umesse.usen.com",
-    umesse ="umesse.usen.com",
+    dev-umesse ="web-dev.umesse.usen.com",
+    stg-umesse ="web-stg.umesse.usen.com",
+    umesse ="web.umesse.usen.com",
   }
 }
 
