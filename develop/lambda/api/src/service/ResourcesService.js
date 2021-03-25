@@ -81,7 +81,7 @@ exports.listFree = function (industryCd, sceneCd, sort) {
   return new Promise(async function (resolve, reject) {
     try {
       const json = await getResource(
-        constants.resourceCategory.BGM,
+        constants.resourceCategory.NARRATION,
         industryCd,
         sceneCd,
         sort
