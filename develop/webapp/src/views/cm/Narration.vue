@@ -64,15 +64,23 @@
                 </template>
                 <template #line2>
                   <p>
-                    <span class="duration">{{
-                      convertNumberToTime(narration.seconds)
-                    }}</span>
-                    <span class="start"
+                    <span
+                      v-if="narration.seconds"
+                      class="duration"
+                      >{{
+                        convertNumberToTime(narration.seconds)
+                      }}</span
+                    >
+                    <span
+                      v-if="narration.timestamp"
+                      class="start"
                       >放送開始日{{
                         convertDatestringToDateJp(narration.timestamp)
                       }}</span
                     >
-                    <span class="end"
+                    <span
+                      v-if="narration.timestamp"
+                      class="end"
                       >有効期限{{
                         convertDatestringToDateJp(narration.timestamp)
                       }}</span
@@ -81,6 +89,7 @@
                 </template>
                 <template #operations>
                   <Button
+                    v-if="narration.manuscript"
                     class="btn-document"
                     @click="selectNarrationAndOpenDocumentModal(narration)"
                   >
