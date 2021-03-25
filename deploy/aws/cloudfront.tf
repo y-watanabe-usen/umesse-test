@@ -56,7 +56,7 @@ resource "aws_cloudfront_distribution" "umesse" {
   aliases = [lookup(var.domain, each.key)]
 
   viewer_certificate {
-    acm_certificate_arn            = "arn:aws:acm:us-east-1:***:certificate/477e12af-18ff-4ff5-9779-2d144c96f12e"
+    acm_certificate_arn            = "arn:aws:acm:*:***:certificate/477e12af-18ff-4ff5-9779-2d144c96f12e"
     cloudfront_default_certificate = false
     minimum_protocol_version       = "TLSv1.2_2019"
     ssl_support_method             = "sni-only"
