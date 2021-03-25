@@ -58,6 +58,7 @@ contentsData.map((item) => {
   return item;
 });
 
+console.warn = jest.fn();
 console.error = jest.fn();
 beforeAll(() => {
   jest.setTimeout(1000 * 30); // 30 sec

@@ -16,6 +16,7 @@ const data = aws.DynamoDB.Converter.unmarshall(
   json["umesse-users"][0].PutRequest.Item
 );
 
+console.warn = jest.fn();
 console.error = jest.fn();
 beforeAll(() => {
   jest.setTimeout(1000 * 30); // 30 sec

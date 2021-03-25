@@ -10,7 +10,8 @@ const QUEUE_URL = "http://localhost:4566/000000000000/umesseConverterQueue";
 const params = {
   MessageBody: JSON.stringify({
     unisCustomerCd: "123456789",
-    cmId: "123456789-c-99999999",
+    id: "123456789-c-99999999",
+    category: "cm",
   }),
   QueueUrl: QUEUE_URL,
   DelaySeconds: 0,
