@@ -47,7 +47,7 @@
           </div>
           <div class="row border">
             <FormGroup
-              v-if="ttsComponents.find((v) => v == ConverterType.customerName)"
+              v-if="isVisibleCustomerName"
               title="店名"
               description="※カタカナで入力"
               class="name"
@@ -59,11 +59,7 @@
                 </p>
               </div>
             </FormGroup>
-            <FormGroup
-              v-if="ttsComponents.find((v) => v == ConverterType.time)"
-              title="時間"
-              class="time"
-            >
+            <FormGroup v-if="isVisibleTime" title="時間" class="time">
               <TimeInput v-model="time" />
               <div>
                 <p class="errorMessage errorEndTime">
@@ -72,52 +68,36 @@
               </div>
             </FormGroup>
             <FormGroup
-              v-if="ttsComponents.find((v) => v == ConverterType.percentage)"
+              v-if="isVisiblePercentage"
               title="パーセンテージ"
               class="percentage"
             >
               <Percentage v-model="percentage" />
             </FormGroup>
-            <FormGroup
-              v-if="ttsComponents.find((v) => v == ConverterType.count)"
-              title="個数"
-              class="count"
-            >
+            <FormGroup v-if="isVisibleCount" title="個数" class="count">
               <Count v-model="count" />
             </FormGroup>
             <FormGroup
-              v-if="ttsComponents.find((v) => v == ConverterType.endYearDate)"
+              v-if="isVisibleEndYearDate"
               title="年末の日付"
               class="end-year-date"
             >
               <EndYearDate v-model="endYearDate" />
             </FormGroup>
             <FormGroup
-              v-if="ttsComponents.find((v) => v == ConverterType.newYearDate)"
+              v-if="isVisibleNewYearDate"
               title="年始の日付"
               class="new-year-date"
             >
               <NewYearDate v-model="newYearDate" />
             </FormGroup>
-            <FormGroup
-              v-if="ttsComponents.find((v) => v == ConverterType.age)"
-              title="年齢"
-              class="age"
-            >
+            <FormGroup v-if="isVisibleAge" title="年齢" class="age">
               <Age v-model="age" />
             </FormGroup>
-            <FormGroup
-              v-if="ttsComponents.find((v) => v == ConverterType.minutes)"
-              title="分"
-              class="minutes"
-            >
+            <FormGroup v-if="isVisibleMinutes" title="分" class="minutes">
               <Minutes v-model="minutes" />
             </FormGroup>
-            <FormGroup
-              v-if="ttsComponents.find((v) => v == ConverterType.point)"
-              title="ポイント倍率"
-              class="point"
-            >
+            <FormGroup v-if="isVisiblePoint" title="ポイント倍率" class="point">
               <Point v-model="point" />
             </FormGroup>
           </div>
@@ -260,6 +240,24 @@ export default defineComponent({
           ttsLangs.push(element.lang);
       }
     );
+
+    const isVisibleCustomerName =
+      template.manuscript.indexOf(ConverterType.customerName) != -1;
+    const isVisibleTime = template.manuscript.indexOf(ConverterType.time) != -1;
+    const isVisiblePercentage =
+      template.manuscript.indexOf(ConverterType.percentage) != -1;
+    const isVisibleCount =
+      template.manuscript.indexOf(ConverterType.count) != -1;
+    const isVisibleEndYearDate =
+      template.manuscript.indexOf(ConverterType.endYearDate) != -1;
+    const isVisibleNewYearDate =
+      template.manuscript.indexOf(ConverterType.newYearDate) != -1;
+    const isVisibleAge = template.manuscript.indexOf(ConverterType.age) != -1;
+    const isVisibleMinutes =
+      template.manuscript.indexOf(ConverterType.minutes) != -1;
+    const isVisiblePoint =
+      template.manuscript.indexOf(ConverterType.point) != -1;
+
     const state = reactive({
       isPlaying: computed(() => audioPlayer.isPlaying()),
       isGenerating: computed(() => ttsStore.isGenerating()),
@@ -416,32 +414,6 @@ export default defineComponent({
       // }
     };
 
-    const findComponents = (text: string) => {
-      // TODO: もっと良い方法がありそう
-      let ttsComponents: ConverterType[] = [];
-      if (text.indexOf(ConverterType.customerName) != -1)
-        ttsComponents.push(ConverterType.customerName);
-      if (text.indexOf(ConverterType.time) != -1)
-        ttsComponents.push(ConverterType.time);
-      if (text.indexOf(ConverterType.percentage) != -1)
-        ttsComponents.push(ConverterType.percentage);
-      if (text.indexOf(ConverterType.count) != -1)
-        ttsComponents.push(ConverterType.count);
-      if (text.indexOf(ConverterType.endYearDate) != -1)
-        ttsComponents.push(ConverterType.endYearDate);
-      if (text.indexOf(ConverterType.newYearDate) != -1)
-        ttsComponents.push(ConverterType.newYearDate);
-      if (text.indexOf(ConverterType.age) != -1)
-        ttsComponents.push(ConverterType.age);
-      if (text.indexOf(ConverterType.minutes) != -1)
-        ttsComponents.push(ConverterType.minutes);
-      if (text.indexOf(ConverterType.point) != -1)
-        ttsComponents.push(ConverterType.point);
-      console.log(ttsComponents);
-      return ttsComponents;
-    };
-    const ttsComponents = findComponents(template.manuscript);
-
     return {
       ...toRefs(state),
       ttsSpeakers,
@@ -454,8 +426,16 @@ export default defineComponent({
       stopAndCloseModal,
       template,
       templateDetails,
-      ttsComponents,
       ConverterType,
+      isVisibleCustomerName,
+      isVisibleTime,
+      isVisiblePercentage,
+      isVisibleCount,
+      isVisibleEndYearDate,
+      isVisibleNewYearDate,
+      isVisibleAge,
+      isVisibleMinutes,
+      isVisiblePoint,
     };
   },
 });
