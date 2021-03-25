@@ -2,7 +2,7 @@
   <div @click="onClickSomewhere">
     <BasicLayout>
       <template #header>
-        <Header>
+        <Header :clickBack="openConfirmBackHomeModal">
           <template #title>
             <div class="header-info">
               <Button
@@ -107,9 +107,9 @@
               :key="narration.contentsId"
               :title="
                 'ナレーション ' +
-                `${index + 1}` +
-                '/' +
-                `${MAX_NARRATION_COUNT}`
+                  `${index + 1}` +
+                  '/' +
+                  `${MAX_NARRATION_COUNT}`
               "
               size="flexible"
               :contentTitle="`${narration.title}`"
@@ -186,9 +186,9 @@
               <CmItem
                 :title="
                   'ナレーション ' +
-                  `${narrations.length + 1}` +
-                  '/' +
-                  `${MAX_NARRATION_COUNT}`
+                    `${narrations.length + 1}` +
+                    '/' +
+                    `${MAX_NARRATION_COUNT}`
                 "
                 :isEmpty="true"
                 size="flexible"
@@ -398,7 +398,10 @@
       </ModalDialog>
     </transition>
     <transition>
-      <ModalDialog v-if="isPlayOpenChimeModalAppear" @close="stopAndClosePlayOpenChimeModal">
+      <ModalDialog
+        v-if="isPlayOpenChimeModalAppear"
+        @close="stopAndClosePlayOpenChimeModal"
+      >
         <template #header>
           <ModalHeader title="試聴" @close="stopAndClosePlayOpenChimeModal" />
         </template>
@@ -422,7 +425,10 @@
       </ModalDialog>
     </transition>
     <transition>
-      <ModalDialog v-if="isPlayNarrationModalAppear" @close="stopAndClosePlayNarrationModal">
+      <ModalDialog
+        v-if="isPlayNarrationModalAppear"
+        @close="stopAndClosePlayNarrationModal"
+      >
         <template #header>
           <ModalHeader title="試聴" @close="stopAndClosePlayNarrationModal" />
         </template>
@@ -446,7 +452,10 @@
       </ModalDialog>
     </transition>
     <transition>
-      <ModalDialog v-if="isPlayBgmModalAppear" @close="stopAndClosePlayBgmModal">
+      <ModalDialog
+        v-if="isPlayBgmModalAppear"
+        @close="stopAndClosePlayBgmModal"
+      >
         <template #header>
           <ModalHeader title="試聴" @close="stopAndClosePlayBgmModal" />
         </template>
@@ -470,7 +479,10 @@
       </ModalDialog>
     </transition>
     <transition>
-      <ModalDialog v-if="isPlayEndChimeModalAppear" @close="stopAndClosePlayEndChimeModal">
+      <ModalDialog
+        v-if="isPlayEndChimeModalAppear"
+        @close="stopAndClosePlayEndChimeModal"
+      >
         <template #header>
           <ModalHeader title="試聴" @close="stopAndClosePlayEndChimeModal" />
         </template>
@@ -521,7 +533,6 @@
           </FormGroup>
           <FormGroup
             title="アップロード先"
-            description="あとで、管理画面からアップロード先を変更することが出来ます。"
           >
             <SelectBox
               v-model="uploadSystem"
@@ -572,6 +583,27 @@
       />
     </transition>
     <ModalLoading v-if="isLoading" title="音源の合成中" />
+
+    <transition>
+      <ModalDialog
+        v-if="isConfirmBackHomeModalAppear"
+        @close="closeConfirmBackHomeModal"
+      >
+        <template #contents>
+          <MessageDialogContents>
+            ホーム画面へ戻ります。作成中のCMは保存されませんが、よろしいでしょうか？
+          </MessageDialogContents>
+        </template>
+        <template #footer>
+          <ModalFooter>
+            <Button type="secondary" @click="closeConfirmBackHomeModal"
+              >キャンセル</Button
+            >
+            <Button type="primary" @click="toHome">ホーム画面へ戻る</Button>
+          </ModalFooter>
+        </template>
+      </ModalDialog>
+    </transition>
   </div>
 </template>
 
@@ -666,6 +698,7 @@ export default defineComponent({
       errorCode: "",
       errorMessage: "",
       narrationIndex: 0,
+      isConfirmBackHomeModalAppear: false,
     });
 
     const playOpenChime = async () => {
@@ -983,6 +1016,12 @@ export default defineComponent({
       state.errorMessage = e.message;
       state.isErrorModalApper = true;
     };
+    const openConfirmBackHomeModal = () => {
+      state.isConfirmBackHomeModalAppear = true;
+    };
+    const closeConfirmBackHomeModal = () => {
+      state.isConfirmBackHomeModalAppear = false;
+    };
     return {
       ...toRefs(state),
       clearNarration,
@@ -1043,6 +1082,8 @@ export default defineComponent({
       toggleBgmSlider,
       onClickSomewhere,
       closeErrorModal,
+      openConfirmBackHomeModal,
+      closeConfirmBackHomeModal,
     };
   },
 });
