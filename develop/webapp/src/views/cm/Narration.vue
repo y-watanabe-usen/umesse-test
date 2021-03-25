@@ -187,6 +187,7 @@ import { Scene } from "@/utils/Constants";
 import { UMesseError } from "../../models/UMesseError";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { audioService, resourcesService } from "@/services";
+import analytics from "@/utils/firebaseAnalytics";
 
 export default defineComponent({
   components: {
@@ -235,6 +236,7 @@ export default defineComponent({
 
     const setNarration = (narration: NarrationItem) => {
       cm.setNarration(narration);
+      analytics.selectNarration(narration.id);
       router.push({ name: "Cm" });
     };
 

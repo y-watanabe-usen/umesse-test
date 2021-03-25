@@ -160,6 +160,7 @@ import TextArea from "@/components/atoms/TextArea.vue";
 import { UMesseError } from "../../models/UMesseError";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { audioService, resourcesService } from "@/services";
+import analytics from "@/utils/firebaseAnalytics";
 
 export default defineComponent({
   components: {
@@ -211,6 +212,7 @@ export default defineComponent({
 
     const setBgm = (bgm: BgmItem) => {
       cm.setBgm(bgm);
+      analytics.selectBgm(bgm.id);
       router.push({ name: "Cm" });
     };
 
@@ -243,10 +245,7 @@ export default defineComponent({
     const play = async (bgm: BgmItem) => {
       try {
         state.isDownloading = true;
-        const audioBuffer = await audioService.getById(
-          bgm.id,
-          bgm.category
-        );
+        const audioBuffer = await audioService.getById(bgm.id, bgm.category);
         audioPlayer.start(audioBuffer);
       } catch (e) {
         openErrorModal(e);
