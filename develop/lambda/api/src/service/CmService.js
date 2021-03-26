@@ -11,7 +11,7 @@ const { getCm, createCm, updateCm, deleteCm } = require("../../umesse/cm");
  *
  * body Object CMデータ作成リクエストBody (optional)
  * xUnisCustomerCd String UNIS顧客CD
- * returns CmItem
+ * returns CreateCmItem
  **/
 exports.createUserCm = function (body, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
