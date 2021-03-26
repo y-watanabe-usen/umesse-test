@@ -8,7 +8,6 @@ import PackageJson from '@/../../webapp/package.json';
  */
 export function getNarrationIndustries() {
   const getCdList = [
-    "01",
     "02",
     "10",
     "20",
