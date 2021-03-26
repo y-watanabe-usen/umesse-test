@@ -89,7 +89,7 @@ export default defineComponent({
   },
   setup() {
     const { auth } = useGlobalStore();
-    const authUser = <any>auth.getUserInfo();
+    const authUser = auth.getUserInfo();
 
     const state = reactive({
       appInformations: computed(() => Common.getSettingAppInformations()),
