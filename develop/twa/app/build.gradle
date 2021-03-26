@@ -148,7 +148,7 @@ android {
             dimension "umesse"
             getIsDefault().set(true)
 
-            def hostName = "umesse:webapp@d18uzobsytsled.cloudfront.net"
+            def hostName = "umesse:webapp@web-dev.umesse.usen.com"
 
             // The URL that will be used when launching the TWA from the Android Launcher
             resValue "string", "launchUrl", 'https://' + hostName + twaManifest.launchUrl
@@ -174,7 +174,7 @@ android {
         stg {
             dimension "umesse"
 
-            def hostName = "umesse:webapp@d2zfj684wewt96.cloudfront.net"
+            def hostName = "umesse:webapp@web-stg.umesse.usen.com"
 
             // The URL that will be used when launching the TWA from the Android Launcher
             resValue "string", "launchUrl", 'https://' + hostName + twaManifest.launchUrl
@@ -200,7 +200,7 @@ android {
         prod {
             dimension "umesse"
 
-            def hostName = "umesse:webapp@d1zbxts7cn9e4r.cloudfront.net"
+            def hostName = "umesse:webapp@web.umesse.usen.com"
 
             // The URL that will be used when launching the TWA from the Android Launcher
             resValue "string", "launchUrl", 'https://' + hostName + twaManifest.launchUrl
