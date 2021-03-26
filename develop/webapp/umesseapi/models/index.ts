@@ -7,6 +7,7 @@ export * from './cm-material-list-item-bgm';
 export * from './cm-material-list-item-end-chime';
 export * from './cm-material-list-item-narrations';
 export * from './cm-material-list-item-start-chime';
+export * from './create-cm-item';
 export * from './external-complete-item';
 export * from './external-item';
 export * from './external-items';

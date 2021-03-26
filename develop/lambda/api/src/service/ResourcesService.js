@@ -53,7 +53,7 @@ exports.listBgm = function (industryCd, sort) {
  * Open/Endチャイム
  * 開始/終了チャイムを一覧で取得する
  *
- * sort Integer (optional)
+ * sort Integer ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順) (optional)
  * returns List
  **/
 exports.listChime = function (sort) {

@@ -57,7 +57,7 @@ exports.deleteUserTts = function (id, xUnisCustomerCd) {
  * TTSデータ生成
  * 合成音声を生成する
  *
- * body List TTS作成リクエストBody (optional)
+ * body Object TTS作成リクエストBody (optional)
  * xUnisCustomerCd String UNIS顧客CD
  * returns GenerateTtsItem
  **/

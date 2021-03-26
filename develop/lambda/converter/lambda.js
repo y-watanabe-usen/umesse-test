@@ -231,7 +231,7 @@ function convertCm(unisCustomerCd, id) {
       });
       ret = await s3Manager.put(
         constants.s3Bucket().users,
-        `users/${unisCustomerCd}/cm/${id}.aac`,
+        `users/${unisCustomerCd}/${constants.resourceCategory.CM}/${id}.aac`,
         fileStream
       );
       if (!ret) throw "putObject failed";

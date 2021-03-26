@@ -38,7 +38,9 @@ describe("CMデータ取得", () => {
   });
 
   test("[success] CMデータ一覧取得", async () => {
-    await expect(getCm(data.unisCustomerCd)).resolves.toEqual(data.cm);
+    await expect(getCm(data.unisCustomerCd)).resolves.toEqual(
+      data.cm.filter((v) => v.status !== "00")
+    );
   });
 
   test("[error] CMデータ取得　CMデータ存在しない", async () => {
@@ -91,6 +93,26 @@ describe("CM新規作成", () => {
     await expect(createCm(data.unisCustomerCd, body)).resolves.toEqual({
       id: expect.stringMatching(`^${data.unisCustomerCd}-c-[0-9a-z]{8}$`),
       category: "cm",
+      seconds: expect.anything(),
+      productionType: "02",
+      status: "01",
+      ...body,
+      url: expect.anything(),
+      timestamp: expect.anything(),
+    });
+  });
+
+  test("[success] CM新規作成 更新", async () => {
+    const body = {
+      id: data.cm[0].id,
+      materials: {
+        narrations: [{ id: "サンプル03", category: "narration", volume: 300 }],
+        startChime: { id: "サンプル01", category: "chime", volume: 50 },
+        endChime: { id: "サンプル02", category: "chime", volume: 50 },
+      },
+    };
+    await expect(createCm(data.unisCustomerCd, body)).resolves.toEqual({
+      ...data.cm[0],
       seconds: expect.anything(),
       productionType: "02",
       status: "01",
