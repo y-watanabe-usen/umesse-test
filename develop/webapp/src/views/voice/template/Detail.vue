@@ -195,6 +195,7 @@ import Minutes from "@/components/molecules/Minutes.vue";
 import Point from "@/components/molecules/Point.vue";
 import ttsTextConverter, { ConverterType } from "@/utils/ttsTextConverter";
 import * as Common from "@/utils/Common";
+import { NarrationItem } from "umesseapi/models";
 
 export default defineComponent({
   components: {
@@ -265,6 +266,7 @@ export default defineComponent({
       isCreating: computed(() => ttsStore.isCreating()),
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       duration: computed(() => audioPlayer.getDuration()),
+      narrations: computed(() => cm.narrations),
       customerName: "テンポメイ",
       time: "21:00",
       percentage: 10,
@@ -309,7 +311,8 @@ export default defineComponent({
       isErrorEndTime: false,
       errorMessageLangs: computed(() => {
         const langs: string[] = state.langs;
-        return selectErrorMessageLangs(langs);
+        const narrations: NarrationItem[] = state.narrations;
+        return selectErrorMessageLangs(langs, narrations);
       }),
       isErrorLangs: false,
       isDisabledConfirm: computed(() => {
@@ -389,30 +392,36 @@ export default defineComponent({
         return "";
       }
     };
-    const selectErrorMessageLangs = (langs: string[]) => {
+    const selectErrorMessageLangs = (langs: string[], narrations: NarrationItem[]) => {
+      if (narrations.length === 4 && langs.length === 1) {
+        state.isErrorLangs = false;
+        return "";
+      }
+
       if (!langs.length) {
         state.isErrorLangs = true;
         return "言語設定を選択してください";
+      } else if ((langs.length + narrations.length) > 4) {
+        state.isErrorLangs = true;
+        return `既に${narrations.length}つのナレーションが設定されています。`;
       } else {
         state.isErrorLangs = false;
         return "";
       }
     };
     const isDisabledButtonConfirm = (customerName: string) => {
-      console.log(customerName);
-      return false;
-      // if (!customerName || validator.isEmpty(customerName))
-      //   state.isErrorCustomerName = true;
+      if (!customerName || validator.isEmpty(customerName))
+        state.isErrorCustomerName = true;
 
-      // if (
-      //   !state.isErrorLangs &&
-      //   !state.isErrorCustomerName &&
-      //   !state.isErrorEndTime
-      // ) {
-      //   return false;
-      // } else {
-      //   return true;
-      // }
+      if (
+        !state.isErrorLangs &&
+        !state.isErrorCustomerName &&
+        !state.isErrorEndTime
+      ) {
+        return false;
+      } else {
+        return true;
+      }
     };
     const getLangsTitle = (langs: string[]) => {
       return Common.getLangs(langs);
