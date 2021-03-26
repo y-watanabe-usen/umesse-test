@@ -4,6 +4,7 @@ const path = require("path");
 const {
   constants,
   debuglog,
+  errorlog,
   timestamp,
   generateId,
   responseData,
@@ -44,7 +45,8 @@ exports.getCm = async (unisCustomerCd, id, sort) => {
     ret = await db.User.findCm(unisCustomerCd);
   } catch (e) {
     if (e instanceof NotFoundError) throw e;
-    else throw new InternalServerError(e.message);
+    errorlog(JSON.stringify(e));
+    throw new InternalServerError(e.message);
   }
   if (id) {
     ret = ret.filter((item) => item.cmId === id).shift();
@@ -74,11 +76,19 @@ exports.createCm = async (unisCustomerCd, body) => {
   if (checkError) throw new BadRequestError(checkError);
 
   // ID生成
-  let id;
+  let id = generateId(unisCustomerCd, constants.resourceCategory.CM);
+
+  // CMIDが存在している場合は更新する
+  let cm, index;
   if (body.id) {
     id = body.id;
-  } else {
-    id = generateId(unisCustomerCd, constants.resourceCategory.CM);
+    try {
+      [cm, index] = await db.User.findCmIndex(unisCustomerCd, id);
+    } catch (e) {
+      if (e instanceof NotFoundError) throw e;
+      errorlog(JSON.stringify(e));
+      throw new InternalServerError(e.message);
+    }
   }
 
   // CM結合、S3へPUT
@@ -93,27 +103,47 @@ exports.createCm = async (unisCustomerCd, body) => {
       `users/${unisCustomerCd}/${constants.resourceCategory.CM}/${id}.mp3`
     );
   } catch (e) {
+    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
 
   // DynamoDBのデータ更新
-  const data = {
-    cmId: id,
-    materials: body.materials,
-    productionType:
+  let ret;
+  if (cm) {
+    // 更新の場合
+    cm.materials = body.materials;
+    cm.productionType =
       "bgm" in body.materials
         ? constants.cmProductionType.MUSIC
-        : constants.cmProductionType.NONE,
-    seconds: seconds,
-    status: constants.cmStatus.CREATING,
-    timestamp: timestamp(),
-  };
+        : constants.cmProductionType.NONE;
+    cm.seconds = seconds;
+    cm.status = constants.cmStatus.CREATING;
+    cm.timestamp = timestamp();
+    try {
+      ret = await db.User.updateCm(unisCustomerCd, index, cm);
+    } catch (e) {
+      throw new InternalServerError(e.message);
+    }
+  } else {
+    // 新規の場合
+    const data = {
+      cmId: id,
+      materials: body.materials,
+      productionType:
+        "bgm" in body.materials
+          ? constants.cmProductionType.MUSIC
+          : constants.cmProductionType.NONE,
+      seconds: seconds,
+      status: constants.cmStatus.CREATING,
+      timestamp: timestamp(),
+    };
 
-  let ret;
-  try {
-    ret = await db.User.addCm(unisCustomerCd, data);
-  } catch (e) {
-    throw new InternalServerError(e.message);
+    try {
+      ret = await db.User.addCm(unisCustomerCd, data);
+    } catch (e) {
+      errorlog(JSON.stringify(e));
+      throw new InternalServerError(e.message);
+    }
   }
 
   ret.url = url;
@@ -147,7 +177,8 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
     [cm, index] = await db.User.findCmIndex(unisCustomerCd, id);
   } catch (e) {
     if (e instanceof NotFoundError) throw e;
-    else throw new InternalServerError(e.message);
+    errorlog(JSON.stringify(e));
+    throw new InternalServerError(e.message);
   }
 
   // TODO: CMステータス状態によるチェック
@@ -173,6 +204,7 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
       try {
         const _ = await sqsManager.send(params);
       } catch (e) {
+        errorlog(JSON.stringify(e));
         throw new InternalServerError(e.message);
       }
     }
@@ -199,7 +231,7 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
       startDatetime: cm.startDate,
       endDatetime: cm.endDate,
       productionType: cm.productionType,
-      contentTime: cm.seconds,
+      contentTime: cm.seconds * 1000, // millisecond
       sceneCd: sceneCd,
       uploadSystem: body.uploadSystem,
       status: status,
@@ -209,6 +241,7 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
     try {
       const _ = await db.External.add(item);
     } catch (e) {
+      errorlog(JSON.stringify(e));
       throw new InternalServerError(e.message);
     }
   }
@@ -223,6 +256,7 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
   try {
     ret = await db.User.updateCm(unisCustomerCd, index, cm);
   } catch (e) {
+    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
 
@@ -251,7 +285,8 @@ exports.deleteCm = async (unisCustomerCd, id) => {
     [cm, index] = await db.User.findCmIndex(unisCustomerCd, id);
   } catch (e) {
     if (e instanceof NotFoundError) throw e;
-    else throw new InternalServerError(e.message);
+    errorlog(JSON.stringify(e));
+    throw new InternalServerError(e.message);
   }
 
   // TODO: CMステータス状態によるチェック
@@ -266,6 +301,7 @@ exports.deleteCm = async (unisCustomerCd, id) => {
   try {
     ret = await db.User.updateCm(unisCustomerCd, index, cm);
   } catch (e) {
+    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
 
@@ -276,6 +312,7 @@ exports.deleteCm = async (unisCustomerCd, id) => {
       `users/${unisCustomerCd}/${constants.resourceCategory.CM}/${id}.aac`
     );
   } catch (e) {
+    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
 
@@ -315,6 +352,7 @@ async function generateCm(unisCustomerCd, id, materials) {
     debuglog("generate complete");
     return Math.trunc(seconds);
   } catch (e) {
+    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
 }
