@@ -5,6 +5,7 @@
 //   const CreateUserCmRequestItem = Convert.toCreateUserCmRequestItem(json);
 
 export interface CreateUserCmRequestItem {
+  id?: string;
   materials?: Materials;
 }
 

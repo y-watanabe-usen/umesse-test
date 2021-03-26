@@ -46,14 +46,16 @@ export function useCmService(api: UMesseApi.CmApi) {
     narrations: (Narration | Recording | Tts)[],
     startChime: StartChime | null,
     endChime: EndChime | null,
-    bgm: Bgm | null
+    bgm: Bgm | null,
+    id?: string
   ): Promise<CreateUserCmResponseItem> => {
     return new Promise(function (resolve, reject) {
       const requestModel = getCreateUserCmRequestModel(
         narrations,
         startChime,
         endChime,
-        bgm
+        bgm,
+        id
       );
 
       const cacheKey = Convert.createUserCmRequestItemToJson(requestModel);
@@ -125,9 +127,11 @@ export function useCmService(api: UMesseApi.CmApi) {
     narrations: (Narration | Recording | Tts)[],
     startChime: StartChime | null,
     endChime: EndChime | null,
-    bgm: Bgm | null
+    bgm: Bgm | null,
+    id?: string
   ) => {
     const requestModel: CreateUserCmRequestItem = {
+      id: id ?? undefined,
       materials: {
         narrations: narrations,
         startChime: startChime ?? undefined,
