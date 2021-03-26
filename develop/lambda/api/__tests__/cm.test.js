@@ -38,7 +38,9 @@ describe("CMデータ取得", () => {
   });
 
   test("[success] CMデータ一覧取得", async () => {
-    await expect(getCm(data.unisCustomerCd)).resolves.toEqual(data.cm);
+    await expect(getCm(data.unisCustomerCd)).resolves.toEqual(
+      data.cm.filter((v) => v.status !== "00")
+    );
   });
 
   test("[error] CMデータ取得　CMデータ存在しない", async () => {

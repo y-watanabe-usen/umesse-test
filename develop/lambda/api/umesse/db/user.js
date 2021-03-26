@@ -46,7 +46,10 @@ module.exports = {
       options
     );
     if (!ret || !ret.Item) throw new NotFoundError(ERROR_CODE.E0000404);
-    return ret.Item.cm;
+    ret = ret.Item.cm.filter(
+      (item) => item.status !== constants.cmStatus.DELETE
+    );
+    return ret;
   },
 
   findCmIndex: async function (unisCustomerCd, id) {
