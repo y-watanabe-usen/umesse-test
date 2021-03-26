@@ -41,6 +41,18 @@
           </div>
           <div v-if="activeAppInformationCd === '04'">
             <h2>お客様ID：{{ token }}</h2>
+            <h4>contractStatusName:{{ authUser.contractStatusName }}</h4>
+            <h4>contractStatusCd:{{ authUser.contractStatusCd }}</h4>
+            <h4>customerGroupName: {{ authUser.customerGroupName }}</h4>
+            <h4>contractCd: {{ authUser.contractCd }}</h4>
+            <h4>customerNameKana:{{ authUser.customerNameKana }}</h4>
+            <h4>unisCustomerCd:{{ authUser.unisCustomerCd }}</h4>
+            <h4>serviceCd:{{ authUser.serviceCd }}</h4>
+            <h4>renewalDate:{{ authUser.renewalDate }}</h4>
+            <h4>serviceName:{{ authUser.serviceName }}</h4>
+            <h4>customerGroupCd:{{ authUser.customerGroupCd }}</h4>
+            <h4>customerName:{{ authUser.customerName }}</h4>
+            <h4>createDate:{{ authUser.createDate }}</h4>
           </div>
         </div>
       </ContentsBase>
@@ -77,6 +89,7 @@ export default defineComponent({
   },
   setup() {
     const { auth } = useGlobalStore();
+    const authUser = <any>auth.getUserInfo();
 
     const state = reactive({
       appInformations: computed(() => Common.getSettingAppInformations()),
@@ -97,6 +110,7 @@ export default defineComponent({
       clickAppInformation,
       convertDatestringToDateJp,
       convertNumberToTime,
+      authUser,
     };
   },
 });
