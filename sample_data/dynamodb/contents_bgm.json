@@ -12,8 +12,8 @@
             "L": [
               {
                 "M": {
-                  "industryCd": { "S": "01" },
-                  "industryName": { "S": "業種01" }
+                  "industryCd": { "S": "10" },
+                  "industryName": { "S": "業種10" }
                 }
               }
             ]
@@ -44,8 +44,8 @@
             "L": [
               {
                 "M": {
-                  "industryCd": { "S": "02" },
-                  "industryName": { "S": "業種02" }
+                  "industryCd": { "S": "10" },
+                  "industryName": { "S": "業種10" }
                 }
               }
             ]
@@ -76,8 +76,8 @@
             "L": [
               {
                 "M": {
-                  "industryCd": { "S": "03" },
-                  "industryName": { "S": "業種03" }
+                  "industryCd": { "S": "10" },
+                  "industryName": { "S": "業種10" }
                 }
               }
             ]
@@ -108,8 +108,8 @@
             "L": [
               {
                 "M": {
-                  "industryCd": { "S": "04" },
-                  "industryName": { "S": "業種04" }
+                  "industryCd": { "S": "10" },
+                  "industryName": { "S": "業種10" }
                 }
               }
             ]
@@ -140,8 +140,8 @@
             "L": [
               {
                 "M": {
-                  "industryCd": { "S": "05" },
-                  "industryName": { "S": "業種05" }
+                  "industryCd": { "S": "10" },
+                  "industryName": { "S": "業種10" }
                 }
               }
             ]
@@ -172,8 +172,8 @@
             "L": [
               {
                 "M": {
-                  "industryCd": { "S": "06" },
-                  "industryName": { "S": "業種06" }
+                  "industryCd": { "S": "20" },
+                  "industryName": { "S": "業種20" }
                 }
               }
             ]
@@ -204,8 +204,8 @@
             "L": [
               {
                 "M": {
-                  "industryCd": { "S": "07" },
-                  "industryName": { "S": "業種07" }
+                  "industryCd": { "S": "30" },
+                  "industryName": { "S": "業種30" }
                 }
               }
             ]
@@ -236,8 +236,8 @@
             "L": [
               {
                 "M": {
-                  "industryCd": { "S": "08" },
-                  "industryName": { "S": "業種08" }
+                  "industryCd": { "S": "31" },
+                  "industryName": { "S": "業種31" }
                 }
               }
             ]
@@ -268,8 +268,8 @@
             "L": [
               {
                 "M": {
-                  "industryCd": { "S": "09" },
-                  "industryName": { "S": "業種09" }
+                  "industryCd": { "S": "40" },
+                  "industryName": { "S": "業種40" }
                 }
               }
             ]
@@ -300,8 +300,8 @@
             "L": [
               {
                 "M": {
-                  "industryCd": { "S": "10" },
-                  "industryName": { "S": "業種10" }
+                  "industryCd": { "S": "50" },
+                  "industryName": { "S": "業種50" }
                 }
               }
             ]
