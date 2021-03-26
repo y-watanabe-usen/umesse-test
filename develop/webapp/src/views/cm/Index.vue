@@ -107,9 +107,9 @@
               :key="narration.contentsId"
               :title="
                 'ナレーション ' +
-                  `${index + 1}` +
-                  '/' +
-                  `${MAX_NARRATION_COUNT}`
+                `${index + 1}` +
+                '/' +
+                `${MAX_NARRATION_COUNT}`
               "
               size="flexible"
               :contentTitle="`${narration.title}`"
@@ -186,9 +186,9 @@
               <CmItem
                 :title="
                   'ナレーション ' +
-                    `${narrations.length + 1}` +
-                    '/' +
-                    `${MAX_NARRATION_COUNT}`
+                  `${narrations.length + 1}` +
+                  '/' +
+                  `${MAX_NARRATION_COUNT}`
                 "
                 :isEmpty="true"
                 size="flexible"
@@ -531,9 +531,7 @@
               "
             />
           </FormGroup>
-          <FormGroup
-            title="アップロード先"
-          >
+          <FormGroup title="アップロード先">
             <SelectBox
               v-model="uploadSystem"
               :options="
@@ -674,8 +672,8 @@ export default defineComponent({
       status: computed(() => cm.status()),
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       duration: computed(() => audioPlayer.getDuration()),
-      title: "",
-      description: "",
+      title: cm.title,
+      description: cm.description,
       scene: "001",
       uploadSystem: "01",
       isPlayModalAppear: false,

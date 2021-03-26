@@ -42,7 +42,8 @@ export default function cmStore() {
         state.displayCmItem.narrations,
         state.displayCmItem.openChime,
         state.displayCmItem.endChime,
-        state.displayCmItem.bgm
+        state.displayCmItem.bgm,
+        state.displayCmItem.id
       );
       console.log(response);
       state.displayCmItem.id = response.id;
@@ -182,6 +183,12 @@ export default function cmStore() {
     },
     get secounds() {
       return state.displayCmItem.seconds;
+    },
+    get title() {
+      return state.displayCmItem.title;
+    },
+    get description() {
+      return state.displayCmItem.description;
     },
     clearNarration,
     clearAllNarration,
