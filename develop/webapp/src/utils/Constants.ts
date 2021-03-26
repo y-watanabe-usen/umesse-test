@@ -50,7 +50,7 @@ export default class Constants {
     { cd: '50', name: 'オフィス／事務所／教育機関向け', sort: 8 },
     { cd: '51', name: '金融機関向け', sort: 9 },
     { cd: '90', name: '施設向け', sort: 10 },
-    { cd: '99', name: '全業種のシーン一覧', sort: 11 },
+    { cd: '99', name: '全業種', sort: 11 },
   ]
 
   public static readonly SCENES: Scene[] = [

@@ -115,10 +115,10 @@ export default defineComponent({
   },
   setup() {
     const sortList = Common.getSort();
-    const industries = Common.getBgmIndustries();
+    const industries = Common.getTemplateIndustries();
     const state = reactive({
       sort: 1,
-      activeIndustryCd: "01",
+      activeIndustryCd: "10",
       templates: [] as TemplateItem[],
       isErrorModalApper: false,
       errorCode: "",

@@ -192,7 +192,7 @@ export default defineComponent({
     const sortList = Common.getSort();
 
     const state = reactive({
-      activeIndustryCd: "01",
+      activeIndustryCd: "10",
       sort: 1,
       bgms: [] as BgmItem[],
       industries: computed(() => Common.getBgmIndustries()),

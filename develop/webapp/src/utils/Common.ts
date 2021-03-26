@@ -76,7 +76,7 @@ export function getIndustryScenes(industryCd: string) {
  * @return Industry[]
  */
 export function getBgmIndustries() {
-  const getCdList = ["01", "10", "20", "30", "31", "40", "50", "51", "90"];
+  const getCdList = ["10", "20", "30", "31", "40", "50", "51", "90", "99"];
   return getIndustries(getCdList);
 }
 
@@ -86,7 +86,7 @@ export function getBgmIndustries() {
  * @return Industry[]
  */
 export function getTemplateIndustries() {
-  const getCdList = ["01", "10", "20", "30", "31", "40", "50", "51", "90"];
+  const getCdList = ["10", "20", "30", "31", "40", "50", "51", "90", "99"];
   return getIndustries(getCdList);
 }
 
@@ -96,7 +96,7 @@ export function getTemplateIndustries() {
  * @return Industry[]
  */
 export function getFreeTemplateIndustries() {
-  const getCdList = ["01", "10", "20", "30", "31", "40", "50", "51", "90"];
+  const getCdList = ["10", "20", "30", "31", "40", "50", "51", "90", "99"];
   return getIndustries(getCdList);
 }
 
@@ -160,7 +160,7 @@ export function getVersion() {
  * @param
  * @return number[]
  */
- export const range = (from: number, to: number) => ([...Array(to - from)].map((_, i) => (from + i)));
+export const range = (from: number, to: number) => ([...Array(to - from)].map((_, i) => (from + i)));
 
 function getIndustries(cdList: string[]) {
   const result: Industry[] = [];

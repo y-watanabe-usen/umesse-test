@@ -36,7 +36,7 @@
             "L": [
               {
                 "M": {
-                  "industryCd": { "S": "01" },
+                  "industryCd": { "S": "10" },
                   "industryName": { "S": "業種01" }
                 }
               }
@@ -146,7 +146,7 @@
             "L": [
               {
                 "M": {
-                  "industryCd": { "S": "01" },
+                  "industryCd": { "S": "10" },
                   "industryName": { "S": "業種01" }
                 }
               }
@@ -256,7 +256,7 @@
             "L": [
               {
                 "M": {
-                  "industryCd": { "S": "01" },
+                  "industryCd": { "S": "10" },
                   "industryName": { "S": "業種01" }
                 }
               }
@@ -366,7 +366,7 @@
             "L": [
               {
                 "M": {
-                  "industryCd": { "S": "01" },
+                  "industryCd": { "S": "10" },
                   "industryName": { "S": "業種01" }
                 }
               }
@@ -476,7 +476,7 @@
             "L": [
               {
                 "M": {
-                  "industryCd": { "S": "01" },
+                  "industryCd": { "S": "10" },
                   "industryName": { "S": "業種01" }
                 }
               }
@@ -586,7 +586,7 @@
             "L": [
               {
                 "M": {
-                  "industryCd": { "S": "01" },
+                  "industryCd": { "S": "10" },
                   "industryName": { "S": "業種01" }
                 }
               }
@@ -696,7 +696,7 @@
             "L": [
               {
                 "M": {
-                  "industryCd": { "S": "01" },
+                  "industryCd": { "S": "10" },
                   "industryName": { "S": "業種01" }
                 }
               }
@@ -806,7 +806,7 @@
             "L": [
               {
                 "M": {
-                  "industryCd": { "S": "01" },
+                  "industryCd": { "S": "10" },
                   "industryName": { "S": "業種01" }
                 }
               }
@@ -916,7 +916,7 @@
             "L": [
               {
                 "M": {
-                  "industryCd": { "S": "01" },
+                  "industryCd": { "S": "10" },
                   "industryName": { "S": "業種01" }
                 }
               }
@@ -972,7 +972,7 @@
             "L": [
               {
                 "M": {
-                  "industryCd": { "S": "01" },
+                  "industryCd": { "S": "10" },
                   "industryName": { "S": "業種01" }
                 }
               }

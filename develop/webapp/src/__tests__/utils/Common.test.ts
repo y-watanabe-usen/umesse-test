@@ -54,22 +54,22 @@ describe("getIndustryScenesのテスト", () => {
 });
 
 describe("getBgmIndustriesのテスト", () => {
-  const expected = [{ cd: '01', name: '新着おすすめ', sort: 1 }, { cd: '10', name: '飲食店向け', sort: 3 }, { cd: '20', name: 'サービス業向け', sort: 4 }, { cd: '30', name: '小売店向け', sort: 5 }, { cd: '31', name: 'スーパー／ドラッグ／量販店向け', sort: 6 }, { cd: '40', name: '医療／福祉向け', sort: 7 }, { cd: '50', name: 'オフィス／事務所／教育機関向け', sort: 8 }, { cd: '51', name: '金融機関向け', sort: 9 }, { cd: '90', name: '施設向け', sort: 10 },];
-  test(`01, 10, 20 ,30 ,31 ,40 ,50, 51, 90に紐づく業種一覧が返ること`, () => {
+  const expected = [{ cd: '10', name: '飲食店向け', sort: 3 }, { cd: '20', name: 'サービス業向け', sort: 4 }, { cd: '30', name: '小売店向け', sort: 5 }, { cd: '31', name: 'スーパー／ドラッグ／量販店向け', sort: 6 }, { cd: '40', name: '医療／福祉向け', sort: 7 }, { cd: '50', name: 'オフィス／事務所／教育機関向け', sort: 8 }, { cd: '51', name: '金融機関向け', sort: 9 }, { cd: '90', name: '施設向け', sort: 10 }, { cd: '99', name: '全業種', sort: 11 },];
+  test(`10, 20 ,30 ,31 ,40 ,50, 51, 90, 99に紐づく業種一覧が返ること`, () => {
     expect(Common.getBgmIndustries()).toEqual(expected);
   });
 });
 
 describe("getTemplateIndustriesのテスト", () => {
-  const expected = [{ cd: '01', name: '新着おすすめ', sort: 1 }, { cd: '10', name: '飲食店向け', sort: 3 }, { cd: '20', name: 'サービス業向け', sort: 4 }, { cd: '30', name: '小売店向け', sort: 5 }, { cd: '31', name: 'スーパー／ドラッグ／量販店向け', sort: 6 }, { cd: '40', name: '医療／福祉向け', sort: 7 }, { cd: '50', name: 'オフィス／事務所／教育機関向け', sort: 8 }, { cd: '51', name: '金融機関向け', sort: 9 }, { cd: '90', name: '施設向け', sort: 10 },];
-  test(`01, 10, 20, 30, 31, 40, 50, 51, 90に紐づく業種一覧が返ること`, () => {
+  const expected = [{ cd: '10', name: '飲食店向け', sort: 3 }, { cd: '20', name: 'サービス業向け', sort: 4 }, { cd: '30', name: '小売店向け', sort: 5 }, { cd: '31', name: 'スーパー／ドラッグ／量販店向け', sort: 6 }, { cd: '40', name: '医療／福祉向け', sort: 7 }, { cd: '50', name: 'オフィス／事務所／教育機関向け', sort: 8 }, { cd: '51', name: '金融機関向け', sort: 9 }, { cd: '90', name: '施設向け', sort: 10 }, { cd: '99', name: '全業種', sort: 11 },];
+  test(`10, 20, 30, 31, 40, 50, 51, 90, 99に紐づく業種一覧が返ること`, () => {
     expect(Common.getTemplateIndustries()).toEqual(expected);
   });
 });
 
 describe("getFreeTemplateIndustriesのテスト", () => {
-  const expected = [{ cd: '01', name: '新着おすすめ', sort: 1 }, { cd: '10', name: '飲食店向け', sort: 3 }, { cd: '20', name: 'サービス業向け', sort: 4 }, { cd: '30', name: '小売店向け', sort: 5 }, { cd: '31', name: 'スーパー／ドラッグ／量販店向け', sort: 6 }, { cd: '40', name: '医療／福祉向け', sort: 7 }, { cd: '50', name: 'オフィス／事務所／教育機関向け', sort: 8 }, { cd: '51', name: '金融機関向け', sort: 9 }, { cd: '90', name: '施設向け', sort: 10 },];
-  test(`01, 10, 20, 30, 31, 40, 50, 51, 90に紐づく業種一覧が返ること`, () => {
+  const expected = [{ cd: '10', name: '飲食店向け', sort: 3 }, { cd: '20', name: 'サービス業向け', sort: 4 }, { cd: '30', name: '小売店向け', sort: 5 }, { cd: '31', name: 'スーパー／ドラッグ／量販店向け', sort: 6 }, { cd: '40', name: '医療／福祉向け', sort: 7 }, { cd: '50', name: 'オフィス／事務所／教育機関向け', sort: 8 }, { cd: '51', name: '金融機関向け', sort: 9 }, { cd: '90', name: '施設向け', sort: 10 }, { cd: '99', name: '全業種', sort: 11 },];
+  test(`10, 20, 30, 31, 40, 50, 51, 90, 99に紐づく業種一覧が返ること`, () => {
     expect(Common.getFreeTemplateIndustries()).toEqual(expected);
   });
 });

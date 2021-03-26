@@ -158,10 +158,10 @@ export default defineComponent({
   },
   setup() {
     const sortList = Common.getSort();
-    const industries = Common.getBgmIndustries();
+    const industries = Common.getFreeTemplateIndustries();
     const state = reactive({
       sort: 1,
-      activeIndustryCd: "01",
+      activeIndustryCd: "10",
       freeItems: [] as FreeItem[],
       manuscript: "",
       isDocumentModalAppear: false,
