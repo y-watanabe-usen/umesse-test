@@ -10,7 +10,7 @@ exports.auth = function (body) {
   return new Promise(function (resolve, reject) {
     var examples = {};
     examples["application/json"] = {
-      token: body.unisCustomerCd,
+      token: "123456789",
     };
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
