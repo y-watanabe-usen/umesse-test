@@ -59,7 +59,7 @@ export default class Constants {
     { cd: '003', name: '効果ＢＧＭ' },
     { cd: '004', name: '開店' },
     { cd: '005', name: '閉店' },
-    { cd: '006', name: 'エスカレーター' },
+    // { cd: '006', name: 'エスカレーター' },
     { cd: '007', name: '案内' },
     { cd: '008', name: '年末営業告知' },
     { cd: '009', name: '年始営業告知' },
@@ -106,7 +106,7 @@ export default class Constants {
     { cd: '050', name: '営業開始案内' },
     { cd: '051', name: '営業終了案内' },
     { cd: '052', name: 'コロナ関連' },
-    { cd: '053', name: '誕生日演出' },
+    // { cd: '053', name: '誕生日演出' },
     { cd: '901', name: '録音' },
     { cd: '902', name: '音声合成' },
   ]
