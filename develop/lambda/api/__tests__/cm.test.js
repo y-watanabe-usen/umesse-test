@@ -100,6 +100,26 @@ describe("CM新規作成", () => {
     });
   });
 
+  test("[success] CM新規作成 更新", async () => {
+    const body = {
+      id: data.cm[0].id,
+      materials: {
+        narrations: [{ id: "サンプル03", category: "narration", volume: 300 }],
+        startChime: { id: "サンプル01", category: "chime", volume: 50 },
+        endChime: { id: "サンプル02", category: "chime", volume: 50 },
+      },
+    };
+    await expect(createCm(data.unisCustomerCd, body)).resolves.toEqual({
+      ...data.cm[0],
+      seconds: expect.anything(),
+      productionType: "02",
+      status: "01",
+      ...body,
+      url: expect.anything(),
+      timestamp: expect.anything(),
+    });
+  });
+
   test("[error] CM新規作成　パラメータチェック", async () => {
     await expect(createCm()).rejects.toThrow(
       new BadRequestError(`${ERROR_CODE.E0001001} (E0001001)`)
