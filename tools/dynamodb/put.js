@@ -36,10 +36,17 @@ parser.on("readable", () => {
       contentsId = `${data.contentsId}_${data.lang}`;
     }
 
+    let seconds;
     let industry = [];
     let scene = [];
     let cdList;
     let nameList;
+
+    // seconds
+    if (data.seconds) {
+      let secondList = data.seconds.split(":");
+      seconds = parseInt(secondList[0]) * 60 + parseInt(secondList[1]);
+    }
 
     // industry
     cdList = [...new Set(data.industryCd.split("-"))];
@@ -84,7 +91,7 @@ parser.on("readable", () => {
         title: title,
         description: data.description,
         manuscript: data.manuscript,
-        seconds: data.seconds,
+        seconds: seconds,
         industry: industry,
         scene: scene,
         timestamp: "2021-04-01T10:00:00+09:00",
@@ -120,7 +127,6 @@ parser.on("readable", () => {
           description: data.description,
           manuscript: data.manuscript,
           details: details,
-          seconds: data.seconds,
           industry: industry,
           scene: scene,
           timestamp: "2021-04-01T10:00:00+09:00",
