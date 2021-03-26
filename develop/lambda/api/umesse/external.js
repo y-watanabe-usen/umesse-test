@@ -61,6 +61,7 @@ exports.getExternalCm = async (unisCustomerCd, external) => {
           constants.s3Bucket().users,
           `users/${item.unisCustomerCd}/${constants.resourceCategory.CM}/${item.cmId}.aac`
         );
+        item.fileName = `${item.cmId}.aac`;
       }
       delete item.unisCustomerCd;
       meta.push(item);
