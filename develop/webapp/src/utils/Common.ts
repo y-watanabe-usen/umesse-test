@@ -1,5 +1,11 @@
-import Constants, { Industry, Scene, Sorts, AppInformation } from "@/utils/Constants";
-import PackageJson from '@/../../webapp/package.json';
+import Constants, {
+  Industry,
+  Scene,
+  Sorts,
+  AppInformation,
+  TtsLangs,
+} from "@/utils/Constants";
+import PackageJson from "@/../../webapp/package.json";
 
 /**
  * ナレーション選択画面に表示する業種を取得する
@@ -7,17 +13,7 @@ import PackageJson from '@/../../webapp/package.json';
  * @return Industry[]
  */
 export function getNarrationIndustries() {
-  const getCdList = [
-    "02",
-    "10",
-    "20",
-    "30",
-    "31",
-    "40",
-    "50",
-    "51",
-    "90",
-  ];
+  const getCdList = ["02", "10", "20", "30", "31", "40", "50", "51", "90"];
   return getIndustries(getCdList);
 }
 
@@ -440,14 +436,30 @@ export function getVersion() {
  * @param
  * @return number[]
  */
-export const range = (from: number, to: number) => ([...Array(to - from)].map((_, i) => (from + i)));
+export const range = (from: number, to: number) =>
+  [...Array(to - from)].map((_, i) => from + i);
+
+/**
+ * 音声合成テンプレート画面の保存モーダルに表示する各言語のCD,と名称を取得する
+ * @param langList string[]
+ * @return TtsLangs[]
+ */
+export function getLangs(langList?: string[]) {
+  if (!langList) return Constants.TTS_LANGS;
+  const result: TtsLangs[] = [];
+  langList.forEach((v) => {
+    const lang = Constants.TTS_LANGS.find((vv) => vv.cd == v);
+    if (lang) result.push(lang);
+  });
+
+  return result;
+}
 
 function getIndustries(cdList: string[]) {
   const result: Industry[] = [];
   cdList.forEach((v) => {
     const industry = Constants.INDUSTORIES.find((vv) => vv.cd == v);
     if (industry) result.push(industry);
-
   });
   // TODO: sort
 

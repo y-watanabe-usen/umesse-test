@@ -128,8 +128,8 @@
             <SelectBox
               v-model="playLang"
               :options="
-                langs.map((lang) => {
-                  return { title: lang, value: lang };
+                getLangsTitle(langs).map((lang) => {
+                  return { title: lang.name, value: lang.cd };
                 })
               "
             />
@@ -194,6 +194,7 @@ import Age from "@/components/molecules/Age.vue";
 import Minutes from "@/components/molecules/Minutes.vue";
 import Point from "@/components/molecules/Point.vue";
 import ttsTextConverter, { ConverterType } from "@/utils/ttsTextConverter";
+import * as Common from "@/utils/Common";
 
 export default defineComponent({
   components: {
@@ -413,6 +414,9 @@ export default defineComponent({
       //   return true;
       // }
     };
+    const getLangsTitle = (langs: string[]) => {
+      return Common.getLangs(langs);
+    };
 
     return {
       ...toRefs(state),
@@ -436,6 +440,7 @@ export default defineComponent({
       isVisibleAge,
       isVisibleMinutes,
       isVisiblePoint,
+      getLangsTitle,
     };
   },
 });
