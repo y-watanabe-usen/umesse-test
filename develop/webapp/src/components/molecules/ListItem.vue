@@ -84,6 +84,29 @@ export default {
           display: inline-block;
           margin-right: 20px;
         }
+        .status {
+          display: inline-block;
+          margin-right: 20px;
+          margin-left: 14px;
+          font-weight: $font_weight_bold;
+          height: 30px;
+          line-height: 30px;
+          padding-left: 20px;
+          padding-right: 20px;
+          border-radius: 15px;
+          &.comp {
+            color: rgb(47, 118, 178);
+            background-color: rgb(232, 244, 253);
+          }
+          &.busy {
+            color: rgb(45, 172, 34);
+            background-color: rgb(222, 239, 220);
+          }
+          &.error {
+            color: rgb(186, 48, 48);
+            background-color: rgb(255, 229, 229);
+          }
+        }
       }
     }
   }
