@@ -49,10 +49,12 @@
                   <span class="start">{{
                     convertDatestringToDate(cm.timestamp)
                   }}</span>
-                  <span class="end"
-                    >ステータス：{{
-                      Constants.CM_STATUS.find((v) => v.cd == cm.status).name
-                    }}</span
+                  <span
+                    class="status"
+                    :class="getStatusClass(cm.status)"
+                  >{{
+                    Constants.CM_STATUS.find((v) => v.cd == cm.status).name
+                  }}</span
                   >
                 </p>
               </template>
@@ -513,6 +515,22 @@ export default defineComponent({
       state.errorMessage = e.message;
       state.isErrorModalApper = true;
     };
+    const getStatusClass = (cd: string) => {
+      switch (cd) {
+        case "00":  // CM削除
+        case "09":  // CMエラー
+        case "19":  // 外部システムアップロードエラー
+          return ["error"];
+        case "01":  // CM作成中
+        case "03":  // CMエンコード中
+        case "04":  // CM共有中
+        case "11":  // 外部システムアップロード中
+          return ["busy"];
+        case "02":  // CM作成完了
+        case "12":  // 外部システムアップロード完了
+          return ["comp"];
+      }
+    };
     return {
       ...toRefs(state),
       scenes,
@@ -547,6 +565,7 @@ export default defineComponent({
       closeAllDropdownMenu,
       toggleDropdown,
       closeErrorModal,
+      getStatusClass,
     };
   },
 });
