@@ -1,8 +1,8 @@
 import * as Common from "@/utils/Common";
 
 describe("getNarrationIndustriesのテスト", () => {
-  const expected = [{ cd: '01', name: '新着おすすめ', sort: 1 }, { cd: '02', name: 'ユーザー作成音声', sort: 2 }, { cd: '10', name: '飲食店向け', sort: 3 }, { cd: '20', name: 'サービス業向け', sort: 4 }, { cd: '30', name: '小売店向け', sort: 5 }, { cd: '31', name: 'スーパー／ドラッグ／量販店向け', sort: 6 }, { cd: '40', name: '医療／福祉向け', sort: 7 }, { cd: '50', name: 'オフィス／事務所／教育機関向け', sort: 8 }, { cd: '51', name: '金融機関向け', sort: 9 }, { cd: '90', name: '施設向け', sort: 10 },];
-  test(`指定（01, 02, 10, 20, 30, 31, 40, 50, 51, 90）の業種一覧が返ること`, () => {
+  const expected = [{ cd: '02', name: 'ユーザー作成音声', sort: 2 }, { cd: '10', name: '飲食店向け', sort: 3 }, { cd: '20', name: 'サービス業向け', sort: 4 }, { cd: '30', name: '小売店向け', sort: 5 }, { cd: '31', name: 'スーパー／ドラッグ／量販店向け', sort: 6 }, { cd: '40', name: '医療／福祉向け', sort: 7 }, { cd: '50', name: 'オフィス／事務所／教育機関向け', sort: 8 }, { cd: '51', name: '金融機関向け', sort: 9 }, { cd: '90', name: '施設向け', sort: 10 },];
+  test(`指定（02, 10, 20, 30, 31, 40, 50, 51, 90）の業種一覧が返ること`, () => {
     expect(Common.getNarrationIndustries()).toEqual(expected);
   });
 });

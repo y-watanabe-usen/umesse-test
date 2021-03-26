@@ -152,7 +152,7 @@ export default defineComponent({
       state.text = <string>freeCache.get(cacheKey);
       freeCache.remove(cacheKey);
     } else {
-      state.text = "おはよう";
+      state.text = "";
     }
     const play = async () => {
       console.log("play");
