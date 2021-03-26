@@ -451,7 +451,7 @@ export default defineComponent({
   margin-top: 36px;
   &.border {
     padding-top: 24px;
-    margin-top: 54px;
+    margin-top: 26px;
     border-top: 2px solid rgb(198, 198, 198);
   }
   .form-group {
@@ -465,7 +465,7 @@ export default defineComponent({
         }
         .input-wrapper {
           width: 180px;
-          margin-right: 310px;
+          margin-right: 260px;
         }
       }
     }
@@ -476,7 +476,7 @@ export default defineComponent({
         }
         .input-wrapper {
           width: 370px;
-          margin-right: 120px;
+          margin-right: 70px;
         }
       }
     }
