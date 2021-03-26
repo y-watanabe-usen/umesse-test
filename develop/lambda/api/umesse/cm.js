@@ -74,7 +74,12 @@ exports.createCm = async (unisCustomerCd, body) => {
   if (checkError) throw new BadRequestError(checkError);
 
   // ID生成
-  const id = generateId(unisCustomerCd, constants.resourceCategory.CM);
+  let id;
+  if (body.id) {
+    id = body.id;
+  } else {
+    id = generateId(unisCustomerCd, constants.resourceCategory.CM);
+  }
 
   // CM結合、S3へPUT
   const seconds = await generateCm(unisCustomerCd, id, body.materials);
@@ -308,7 +313,7 @@ async function generateCm(unisCustomerCd, id, materials) {
     );
     if (!res) throw new InternalServerError(ERROR_CODE.E0000500);
     debuglog("generate complete");
-    return seconds;
+    return Math.trunc(seconds);
   } catch (e) {
     throw new InternalServerError(e.message);
   }

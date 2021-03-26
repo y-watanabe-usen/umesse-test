@@ -1,5 +1,4 @@
-'use strict';
-
+"use strict";
 
 /**
  * 端末認証
@@ -7,17 +6,16 @@
  * body Object 認証リクエストBody (optional)
  * returns Auth
  **/
-exports.auth = function(body) {
-  return new Promise(function(resolve, reject) {
+exports.auth = function (body) {
+  return new Promise(function (resolve, reject) {
     var examples = {};
-    examples['application/json'] = {
-  "token" : "123456789"
-};
+    examples["application/json"] = {
+      token: body.unisCustomerCd,
+    };
     if (Object.keys(examples).length > 0) {
       resolve(examples[Object.keys(examples)[0]]);
     } else {
       resolve();
     }
   });
-}
-
+};
