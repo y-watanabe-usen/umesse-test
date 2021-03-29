@@ -5,6 +5,20 @@ const { ERROR_CODE, NotFoundError } = require("umesse-lib/error");
 const { dynamodbManager } = require("umesse-lib/utils/dynamodbManager");
 
 module.exports = {
+  find: async function (unisCustomerCd) {
+    const key = { unisCustomerCd: unisCustomerCd };
+    debuglog(JSON.stringify({ key: key }));
+
+    let ret = await dynamodbManager.get(
+      constants.dynamoDbTable().external,
+      key,
+      {}
+    );
+    if (!ret || !ret.Item) return;
+    if (ret.Item.status === "9") return;
+    return ret.Item;
+  },
+
   findAll: async function (unisCustomerCd) {
     const options = {
       KeyConditionExpression: "unisCustomerCd = :unisCustomerCd",
