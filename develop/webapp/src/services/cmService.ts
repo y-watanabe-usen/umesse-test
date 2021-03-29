@@ -13,16 +13,15 @@ import * as UMesseApi from "umesseapi";
 import { Recording, Tts } from "@/models/DisplayCmItem";
 import { CmItem } from "umesseapi/models/cm-item";
 import { UMesseErrorFromApiFactory } from "@/models/UMesseError";
-import { freeCache } from "@/repository/cache";
+import { FreeCache } from "@/repository/cache/freeCache";
 
-export function useCmService(api: UMesseApi.CmApi) {
-
+export function useCmService(api: UMesseApi.CmApi, freeCache: FreeCache) {
   const fetch = async (
     authToken: string,
     sceneCd: string,
     sort?: number
   ): Promise<CmItem[]> => {
-    return new Promise(function (resolve, reject) {
+    return new Promise(function(resolve, reject) {
       api
         .listUserCm(authToken, sort)
         .then((tmp) => {
@@ -49,7 +48,7 @@ export function useCmService(api: UMesseApi.CmApi) {
     bgm: Bgm | null,
     id?: string
   ): Promise<CreateUserCmResponseItem> => {
-    return new Promise(function (resolve, reject) {
+    return new Promise(function(resolve, reject) {
       const requestModel = getCreateUserCmRequestModel(
         narrations,
         startChime,
@@ -85,7 +84,7 @@ export function useCmService(api: UMesseApi.CmApi) {
     sceneCd: string,
     uploadSystem: string
   ): Promise<CmItem> => {
-    return new Promise(function (resolve, reject) {
+    return new Promise(function(resolve, reject) {
       const requestModel = getUpdateUserCmRequestModel(
         title,
         description,
@@ -108,7 +107,7 @@ export function useCmService(api: UMesseApi.CmApi) {
 
   // deleteは予約語なのでremove
   const remove = async (authToken: string, id: string): Promise<CmItem> => {
-    return new Promise(function (resolve, reject) {
+    return new Promise(function(resolve, reject) {
       api
         .deleteUserCm(id, authToken)
         .then((value) => {

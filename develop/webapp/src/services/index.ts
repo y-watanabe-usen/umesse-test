@@ -4,7 +4,7 @@ import { useCmService } from "./cmService";
 import { useTtsService } from "./ttsService";
 import { audioRepository, authRepository, cmRepository, recordingRepository, resourcesRepository, ttsRepository, userRepository } from "@/repository/api";
 import { useAudioService } from "./audioService";
-import { audioCache } from "@/repository/cache";
+import { audioCache, freeCache } from "@/repository/cache";
 import { useUserService } from "./userService";
 
 const audioContext = new AudioContext();
@@ -13,7 +13,7 @@ const fileReader = new FileReader();
 const userService = useUserService(authRepository, userRepository);
 const resourcesService = useResourcesService(resourcesRepository, recordingRepository, ttsRepository);
 const recordingService = useRecordingService(recordingRepository, fileReader);
-const cmService = useCmService(cmRepository);
+const cmService = useCmService(cmRepository, freeCache);
 const ttsService = useTtsService(ttsRepository);
 const audioService = useAudioService(audioRepository, resourcesRepository, audioCache, audioContext);
 

@@ -3,6 +3,18 @@ import axios from "@/repository/api/axiosInstance";
 import { useCmService } from "@/services/cmService";
 import { ERROR_CODE, ERROR_PATTERN } from "@/utils/Constants";
 import * as umesseapi from "umesseapi";
+import { FreeCache } from "@/repository/cache/freeCache";
+
+import {
+  Convert,
+  CreateUserCmRequestItem,
+  Narration,
+} from "@/models/CreateUserCmRequestItem";
+import { Recording } from "@/models/DisplayCmItem";
+
+const freeCache = new FreeCache();
+const cmRepository = new umesseapi.CmApi(undefined, "", axios);
+const cmService = useCmService(cmRepository, freeCache);
 
 describe("fetchのテスト", () => {
   beforeEach(() => {
@@ -82,8 +94,6 @@ describe("fetchのテスト", () => {
       },
     ];
     jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
-    const cmRepository = new umesseapi.CmApi(undefined, "", axios);
-    const cmService = useCmService(cmRepository);
 
     const response = await cmService.fetch("token", "001");
 
@@ -102,9 +112,6 @@ describe("fetchのテスト", () => {
 
     jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
 
-    const cmRepository = new umesseapi.CmApi(undefined, "", axios);
-    const cmService = useCmService(cmRepository);
-
     await expect(cmService.fetch("token", "001")).rejects.toThrowError(
       expoectedError
     );
@@ -121,35 +128,153 @@ describe("fetchのテスト", () => {
       .spyOn(axios, "request")
       .mockRejectedValue({ response: { status: 500 } });
 
-    const cmRepository = new umesseapi.CmApi(undefined, "", axios);
-    const cmService = useCmService(cmRepository);
-
     await expect(cmService.fetch("token", "001")).rejects.toThrowError(
       expoectedError
     );
   });
 });
 
-// 他テスト作成後追加する
 describe("createのテスト", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    freeCache.removeAll();
   });
 
   test(`正常終了の場合、CreateUserCmResponseItemが返ること`, async () => {
-    expect(true).toBe(true);
+    const responseJson = { url: "https://example.com" };
+    jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
+
+    const response = await cmService.create(
+      "token",
+      [
+        <Recording>{
+          id: "123456789-r-sbutlilf",
+          title: "test",
+          description: "",
+          seconds: 0,
+          timestamp: "2021-03-29T15:20:27.499+09:00",
+          volume: 100,
+          category: "recording",
+        },
+      ],
+      null,
+      null,
+      null,
+      "123456789-r-x9vu7ezm"
+    );
+
+    expect(response.url).toBe("https://example.com");
   });
 
   test(`キャッシュがある場合、キャッシュの中身が返ること`, async () => {
-    expect(true).toBe(true);
+    const responseJson = {
+      url: "https://example.com",
+    };
+
+    const requestModel: CreateUserCmRequestItem = {
+      id: "123456789-r-x9vu7ezm",
+      materials: {
+        narrations: [
+          <Narration>{
+            id: "123456789-r-sbutlilf",
+            volume: 100,
+            category: "recording",
+          },
+        ],
+        startChime: undefined,
+        endChime: undefined,
+        bgm: undefined,
+      },
+    };
+    const cacheKey = Convert.createUserCmRequestItemToJson(requestModel);
+    freeCache.set(cacheKey, responseJson);
+
+    const response = await cmService.create(
+      "token",
+      [
+        <Recording>{
+          id: "123456789-r-sbutlilf",
+          title: "test",
+          description: "",
+          seconds: 0,
+          timestamp: "2021-03-29T15:20:27.499+09:00",
+          volume: 100,
+          category: "recording",
+        },
+      ],
+      null,
+      null,
+      null,
+      "001"
+    );
+
+    expect(freeCache.get(cacheKey)).toEqual({ url: "https://example.com" });
+    expect(response.url).toBe("https://example.com");
   });
 
   test(`想定外の値が返却された場合、UMesseErrorがthrowされること`, async () => {
-    expect(true).toBe(true);
+    jest
+      .spyOn(axios, "request")
+      .mockRejectedValue({ data: "aaaaaaaaaaaaaaaaa" });
+    const expoectedError = new UMesseError(
+      ERROR_CODE.A0001,
+      ERROR_PATTERN.A0001,
+      ""
+    );
+
+    await expect(
+      cmService.create(
+        "token",
+        [
+          <Recording>{
+            id: "123456789-r-sbutlilf",
+            title: "test",
+            description: "",
+            seconds: 0,
+            timestamp: "2021-03-29T15:20:27.499+09:00",
+            volume: 100,
+            category: "recording",
+          },
+        ],
+        null,
+        null,
+        null,
+        "001"
+      )
+    ).rejects.toThrowError(expoectedError);
   });
 
   test(`エラーの場合、UMesseErrorがthrowされること`, async () => {
-    expect(true).toBe(true);
+    const expoectedError = new UMesseError(
+      ERROR_CODE.A3999,
+      ERROR_PATTERN.A3999,
+      ""
+    );
+
+    jest
+      .spyOn(axios, "request")
+      .mockRejectedValue({ response: { status: 500 } });
+
+    await expect(
+      cmService.create(
+        "token",
+        [
+          <Recording>{
+            id: "123456789-r-sbutlilf",
+            title: "test",
+            description: "",
+            seconds: 0,
+            timestamp: "2021-03-29T15:20:27.499+09:00",
+            volume: 100,
+            category: "recording",
+          },
+        ],
+        null,
+        null,
+        null,
+        "001"
+      )
+    ).rejects.toThrowError(expoectedError);
   });
 });
 
@@ -190,8 +315,6 @@ describe("updateのテスト", () => {
       timestamp: "2021-03-17T13:29:32.195+09:00",
     };
     jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
-    const cmRepository = new umesseapi.CmApi(undefined, "", axios);
-    const cmService = useCmService(cmRepository);
 
     const response = await cmService.update(
       "token",
@@ -216,9 +339,6 @@ describe("updateのテスト", () => {
 
     jest.spyOn(axios, "request").mockRejectedValue({ data: responseJson });
 
-    const cmRepository = new umesseapi.CmApi(undefined, "", axios);
-    const cmService = useCmService(cmRepository);
-
     await expect(
       cmService.update("token", "001", "タイトル", "説明", "001", "02")
     ).rejects.toThrowError(expoectedError);
@@ -234,9 +354,6 @@ describe("updateのテスト", () => {
     jest
       .spyOn(axios, "request")
       .mockRejectedValue({ response: { status: 500 } });
-
-    const cmRepository = new umesseapi.CmApi(undefined, "", axios);
-    const cmService = useCmService(cmRepository);
 
     await expect(
       cmService.update("token", "001", "タイトル", "説明", "001", "02")
@@ -281,8 +398,6 @@ describe("removeのテスト", () => {
       timestamp: "2021-03-17T13:29:32.195+09:00",
     };
     jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
-    const cmRepository = new umesseapi.CmApi(undefined, "", axios);
-    const cmService = useCmService(cmRepository);
 
     const response = await cmService.remove("token", "001");
 
@@ -300,9 +415,6 @@ describe("removeのテスト", () => {
 
     jest.spyOn(axios, "request").mockRejectedValue({ data: responseJson });
 
-    const cmRepository = new umesseapi.CmApi(undefined, "", axios);
-    const cmService = useCmService(cmRepository);
-
     await expect(cmService.remove("token", "001")).rejects.toThrowError(
       expoectedError
     );
@@ -318,9 +430,6 @@ describe("removeのテスト", () => {
     jest
       .spyOn(axios, "request")
       .mockRejectedValue({ response: { status: 500 } });
-
-    const cmRepository = new umesseapi.CmApi(undefined, "", axios);
-    const cmService = useCmService(cmRepository);
 
     await expect(cmService.remove("token", "001")).rejects.toThrowError(
       expoectedError
