@@ -2,7 +2,7 @@ import { UMesseError } from "@/models/UMesseError";
 import axios from "@/repository/api/axiosInstance";
 import {
   useRecordingService,
-  // RecordingFile,
+  RecordingFile,
 } from "@/services/recordingService";
 import { ERROR_CODE, ERROR_PATTERN } from "@/utils/Constants";
 import * as umesseapi from "umesseapi";
@@ -37,7 +37,11 @@ describe("fetchのテスト", () => {
       "",
       axios
     );
-    const recordingService = useRecordingService(recordingRepository);
+    const fileReader = new FileReader();
+    const recordingService = useRecordingService(
+      recordingRepository,
+      fileReader
+    );
 
     const response = await recordingService.fetch("authToken");
 
@@ -61,7 +65,11 @@ describe("fetchのテスト", () => {
       "",
       axios
     );
-    const recordingService = useRecordingService(recordingRepository);
+    const fileReader = new FileReader();
+    const recordingService = useRecordingService(
+      recordingRepository,
+      fileReader
+    );
 
     await expect(recordingService.fetch("authToken")).rejects.toThrowError(
       expoectedError
@@ -83,7 +91,11 @@ describe("fetchのテスト", () => {
       "",
       axios
     );
-    const recordingService = useRecordingService(recordingRepository);
+    const fileReader = new FileReader();
+    const recordingService = useRecordingService(
+      recordingRepository,
+      fileReader
+    );
 
     await expect(recordingService.fetch("authToken")).rejects.toThrowError(
       expoectedError
@@ -111,7 +123,11 @@ describe("updateのテスト", () => {
       "",
       axios
     );
-    const recordingService = useRecordingService(recordingRepository);
+    const fileReader = new FileReader();
+    const recordingService = useRecordingService(
+      recordingRepository,
+      fileReader
+    );
 
     const response = await recordingService.update(
       "authToken",
@@ -138,7 +154,11 @@ describe("updateのテスト", () => {
       "",
       axios
     );
-    const recordingService = useRecordingService(recordingRepository);
+    const fileReader = new FileReader();
+    const recordingService = useRecordingService(
+      recordingRepository,
+      fileReader
+    );
 
     await expect(
       recordingService.update("authToken", "001", "title", "description")
@@ -160,7 +180,11 @@ describe("updateのテスト", () => {
       "",
       axios
     );
-    const recordingService = useRecordingService(recordingRepository);
+    const fileReader = new FileReader();
+    const recordingService = useRecordingService(
+      recordingRepository,
+      fileReader
+    );
 
     await expect(
       recordingService.update("authToken", "001", "title", "description")
@@ -174,83 +198,108 @@ describe("uploadのテスト", () => {
     jest.clearAllMocks();
   });
 
-  // test(`正常終了の場合、RecordingItemが返ること`, async () => {
-  //   const responseJson = {
-  //     id: "123456789-c-v2qvc913",
-  //     category: "recording",
-  //     title: "recording1",
-  //     description: "description1",
-  //     startDate: "2019-09-01T00:00:00.000Z",
-  //     timestamp: "2021-03-17T13:29:32.195+09:00",
-  //   };
-  //   jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
-  //   const recordingRepository = new umesseapi.RecordingApi(
-  //     undefined,
-  //     "",
-  //     axios
-  //   );
-  //   const recordingService = useRecordingService(recordingRepository);
+  test(`正常終了の場合、RecordingItemが返ること`, async () => {
+    const responseJson = {
+      id: "123456789-c-v2qvc913",
+      category: "recording",
+      title: "recording1",
+      description: "description1",
+      startDate: "2019-09-01T00:00:00.000Z",
+      timestamp: "2021-03-17T13:29:32.195+09:00",
+    };
+    jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
+    const recordingRepository = new umesseapi.RecordingApi(
+      undefined,
+      "",
+      axios
+    );
+    const fileReader = new FileReader();
+    fileReader.onload = function() {
+      responseJson;
+    };
+    fileReader.readAsBinaryString(new Blob());
+    const recordingService = useRecordingService(
+      recordingRepository,
+      fileReader
+    );
 
-  //   const response = await recordingService.upload("authToken", <RecordingFile>{
-  //     title: "title",
-  //     description: "description",
-  //     blob: undefined,
-  //   });
+    const response = await recordingService.upload("authToken", <RecordingFile>{
+      title: "title",
+      description: "description",
+      blob: undefined,
+    });
 
-  //   expect(response.id).toBe("123456789-c-v2qvc913");
-  //   expect(response.category).toBe("recording");
-  // });
+    expect(response.id).toBe("123456789-c-v2qvc913");
+    expect(response.category).toBe("recording");
+    expect(response.title).toBe("recording1");
+  });
 
-  // test(`想定外の値が返却された場合、UMesseErrorがthrowされること`, async () => {
-  //   const responseJson = "aaaaaaaaaaaaaa";
-  //   const expoectedError = new UMesseError(
-  //     ERROR_CODE.A0001,
-  //     ERROR_PATTERN.A0001,
-  //     ""
-  //   );
+  test(`想定外の値が返却された場合、UMesseErrorがthrowされること`, async () => {
+    const responseJson = "aaaaaaaaaaaaaa";
+    const expoectedError = new UMesseError(
+      ERROR_CODE.A0001,
+      ERROR_PATTERN.A0001,
+      ""
+    );
 
-  //   jest.spyOn(axios, "request").mockRejectedValue({ data: responseJson });
-  //   const recordingRepository = new umesseapi.RecordingApi(
-  //     undefined,
-  //     "",
-  //     axios
-  //   );
-  //   const recordingService = useRecordingService(recordingRepository);
+    jest.spyOn(axios, "request").mockRejectedValue({ data: responseJson });
+    const recordingRepository = new umesseapi.RecordingApi(
+      undefined,
+      "",
+      axios
+    );
+    const fileReader = new FileReader();
+    fileReader.onload = function() {
+      expoectedError;
+    };
+    fileReader.readAsBinaryString(new Blob());
+    const recordingService = useRecordingService(
+      recordingRepository,
+      fileReader
+    );
 
-  //   await expect(
-  //     recordingService.upload("authToken", <RecordingFile>{
-  //       title: "title",
-  //       description: "description",
-  //       blob: undefined,
-  //     })
-  //   ).rejects.toThrowError(expoectedError);
-  // });
+    await expect(
+      recordingService.upload("authToken", <RecordingFile>{
+        title: "title",
+        description: "description",
+        blob: undefined,
+      })
+    ).rejects.toThrowError(expoectedError);
+  });
 
-  // test(`エラーの場合、UMesseErrorがthrowされること`, async () => {
-  //   const expoectedError = new UMesseError(
-  //     ERROR_CODE.A3999,
-  //     ERROR_PATTERN.A3999,
-  //     ""
-  //   );
+  test(`エラーの場合、UMesseErrorがthrowされること`, async () => {
+    const expoectedError = new UMesseError(
+      ERROR_CODE.A3999,
+      ERROR_PATTERN.A3999,
+      ""
+    );
 
-  //   jest
-  //     .spyOn(axios, "request")
-  //     .mockRejectedValue({ response: { status: 500 } });
-  //   const recordingRepository = new umesseapi.RecordingApi(
-  //     undefined,
-  //     "",
-  //     axios
-  //   );
-  //   const recordingService = useRecordingService(recordingRepository);
+    jest
+      .spyOn(axios, "request")
+      .mockRejectedValue({ response: { status: 500 } });
+    const recordingRepository = new umesseapi.RecordingApi(
+      undefined,
+      "",
+      axios
+    );
+    const fileReader = new FileReader();
+    fileReader.onload = function() {
+      expoectedError;
+    };
+    fileReader.readAsBinaryString(new Blob());
+    const recordingService = useRecordingService(
+      recordingRepository,
+      fileReader
+    );
 
-  //   await expect(
-  //     recordingService.upload("authToken", <RecordingFile>{
-  //       title: "title",
-  //       description: "description",
-  //       blob: undefined,
-  //     })
-  //   ).rejects.toThrowError(expoectedError);
-  // });
+    await expect(
+      recordingService.upload("authToken", <RecordingFile>{
+        title: "title",
+        description: "description",
+        blob: undefined,
+      })
+    ).rejects.toThrowError(expoectedError);
+  });
 });
 
 describe("removeのテスト", () => {
@@ -273,7 +322,11 @@ describe("removeのテスト", () => {
       "",
       axios
     );
-    const recordingService = useRecordingService(recordingRepository);
+    const fileReader = new FileReader();
+    const recordingService = useRecordingService(
+      recordingRepository,
+      fileReader
+    );
     const response = await recordingService.remove("authToken", "001");
     expect(response.id).toBe("123456789-c-v2qvc913");
     expect(response.category).toBe("recording");
@@ -292,7 +345,11 @@ describe("removeのテスト", () => {
       "",
       axios
     );
-    const recordingService = useRecordingService(recordingRepository);
+    const fileReader = new FileReader();
+    const recordingService = useRecordingService(
+      recordingRepository,
+      fileReader
+    );
     await expect(
       recordingService.remove("authToken", "001")
     ).rejects.toThrowError(expoectedError);
@@ -312,7 +369,11 @@ describe("removeのテスト", () => {
       "",
       axios
     );
-    const recordingService = useRecordingService(recordingRepository);
+    const fileReader = new FileReader();
+    const recordingService = useRecordingService(
+      recordingRepository,
+      fileReader
+    );
     await expect(
       recordingService.remove("authToken", "001")
     ).rejects.toThrowError(expoectedError);
