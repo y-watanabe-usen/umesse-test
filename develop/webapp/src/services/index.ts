@@ -8,10 +8,11 @@ import { audioCache } from "@/repository/cache";
 import { useUserService } from "./userService";
 
 const audioContext = new AudioContext();
+const fileReader = new FileReader();
 
 const userService = useUserService(authRepository, userRepository);
 const resourcesService = useResourcesService(resourcesRepository, recordingRepository, ttsRepository);
-const recordingService = useRecordingService(recordingRepository);
+const recordingService = useRecordingService(recordingRepository, fileReader);
 const cmService = useCmService(cmRepository);
 const ttsService = useTtsService(ttsRepository);
 const audioService = useAudioService(audioRepository, resourcesRepository, audioCache, audioContext);

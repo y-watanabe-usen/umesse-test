@@ -8,8 +8,10 @@ export interface RecordingFile {
   blob: Blob | undefined;
 }
 
-export function useRecordingService(api: UMesseApi.RecordingApi) {
-
+export function useRecordingService(
+  api: UMesseApi.RecordingApi,
+  fileReader: FileReader
+) {
   const fetch = async (authToken: string) => {
     try {
       const response = await api.listUserRecording(authToken);
@@ -23,13 +25,16 @@ export function useRecordingService(api: UMesseApi.RecordingApi) {
     authToken: string,
     file: RecordingFile
   ): Promise<RecordingItem> => {
-    return new Promise(function (resolve, reject) {
-
-      const fr = new FileReader();
-
-      fr.onload = function () {
+    return new Promise(function(resolve, reject) {
+      fileReader.onload = function() {
         api
-          .createUserRecording(authToken, file.title ?? "", fr.result as string, file.title, file.description)
+          .createUserRecording(
+            authToken,
+            file.title ?? "",
+            fileReader.result as string,
+            file.title,
+            file.description
+          )
           .then((value) => {
             console.log("resolve");
             console.log("createUserRecording", <RecordingItem>value.data);
@@ -40,11 +45,16 @@ export function useRecordingService(api: UMesseApi.RecordingApi) {
             reject(UMesseErrorFromApiFactory(e));
           });
       };
-      if (file.blob) fr.readAsBinaryString(file.blob);
+      if (file.blob) fileReader.readAsBinaryString(file.blob);
     });
   };
 
-  const update = async (authToken: string, id: string, title: string, description: string) => {
+  const update = async (
+    authToken: string,
+    id: string,
+    title: string,
+    description: string
+  ) => {
     try {
       const response = await api.updateUserRecording(authToken, id, {
         title: title,
