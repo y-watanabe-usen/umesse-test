@@ -236,11 +236,10 @@ function convertCm(unisCustomerCd, id) {
       );
       if (!ret) throw "putObject failed";
 
-      // FIXME: エンコード前の音源は削除するか検討（一旦コメントアウト）
-      // await s3Manager.delete(
-      //   constants.s3Bucket().users,
-      //   `users/${unisCustomerCd}/cm/${id}.mp3`
-      // );
+      const _ = await s3Manager.delete(
+        constants.s3Bucket().users,
+        `users/${unisCustomerCd}/${constants.resourceCategory.CM}/${id}.mp3`
+      );
 
       debuglog("converter complete");
       resolve();

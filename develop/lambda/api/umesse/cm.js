@@ -195,6 +195,10 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
   }
 
   let dataProcessType;
+  let startDatetime;
+  let endDatetime;
+  let productionType;
+  let contentTime;
   let sceneCd;
   let status = constants.cmStatus.COMPLETE;
   // CM作成中の場合
@@ -222,12 +226,15 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
 
     cm.status = constants.cmStatus.CONVERT;
     dataProcessType = constants.cmDataProcessType.ADD;
+    startDatetime = body.startDate;
+    endDatetime = body.endDate;
+    productionType = cm.productionType;
+    contentTime = cm.seconds * 1000; // millisecond
     sceneCd = body.scene.sceneCd;
     status = "0";
   } else if (cm.status !== constants.cmStatus.CREATING && body.uploadSystem) {
     cm.status = constants.cmStatus.EXTERNAL_UPLOADING;
     dataProcessType = constants.cmDataProcessType.UPDATE;
-    sceneCd = cm.scene.sceneCd;
     status = "1";
   }
 
@@ -237,12 +244,12 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
       unisCustomerCd: unisCustomerCd,
       dataProcessType: dataProcessType,
       cmId: id,
-      cmName: cm.title,
-      cmCommentManuscript: cm.description,
-      startDatetime: cm.startDate,
-      endDatetime: cm.endDate,
-      productionType: cm.productionType,
-      contentTime: cm.seconds * 1000, // millisecond
+      cmName: body.title,
+      cmCommentManuscript: body.description,
+      startDatetime: startDatetime,
+      endDatetime: endDatetime,
+      productionType: productionType,
+      contentTime: contentTime,
       sceneCd: sceneCd,
       uploadSystem: body.uploadSystem,
       status: status,
