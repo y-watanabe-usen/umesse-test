@@ -609,7 +609,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, reactive, toRefs } from "vue";
+import {
+  defineComponent,
+  computed,
+  reactive,
+  toRefs,
+  onMounted,
+  onUnmounted,
+} from "vue";
 import AudioPlayer from "@/utils/AudioPlayer";
 import { useGlobalStore } from "@/store";
 import * as FormatDate from "@/utils/FormatDate";
@@ -665,10 +672,10 @@ export default defineComponent({
     const { auth, cm } = useGlobalStore();
     const authToken = <string>auth.getToken();
     const authUser = <User>auth.getUserInfo();
-    const uploadSystemArray = 
-        authUser.serviceCd === Constants.SERVICE_CD_UMUSIC
-          ? Common.getUploadSystemUmusic()
-          : Common.getUploadSystemSsence();
+    const uploadSystemArray =
+      authUser.serviceCd === Constants.SERVICE_CD_UMUSIC
+        ? Common.getUploadSystemUmusic()
+        : Common.getUploadSystemSsence();
     const state = reactive({
       cmTime: computed(() => cm.secounds),
       openChime: computed(() => cm.openChime),
@@ -685,7 +692,8 @@ export default defineComponent({
       title: cm.title,
       description: cm.description,
       scene: "001",
-      uploadSystem: authUser.serviceCd === Constants.SERVICE_CD_UMUSIC ? "01" : "02",
+      uploadSystem:
+        authUser.serviceCd === Constants.SERVICE_CD_UMUSIC ? "01" : "02",
       isPlayModalAppear: false,
       isPlayOpenChimeModalAppear: false,
       isPlayNarrationModalAppear: false,
@@ -1031,6 +1039,19 @@ export default defineComponent({
     const closeConfirmBackHomeModal = () => {
       state.isConfirmBackHomeModalAppear = false;
     };
+
+    const handleBackButton = () => {
+      openConfirmBackHomeModal();
+      history.go(1);
+    };
+    onMounted(() => {
+      history.pushState(null, "", location.href);
+      window.addEventListener("popstate", handleBackButton);
+    });
+    onUnmounted(() => {
+      window.removeEventListener("popstate", handleBackButton);
+    });
+
     return {
       ...toRefs(state),
       clearNarration,
