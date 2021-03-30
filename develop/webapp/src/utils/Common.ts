@@ -498,3 +498,21 @@ function getAppInformation(cdList?: string[]) {
 
   return result;
 }
+
+export function getUploadSystemUmusic() {
+  const getSystemUmusic = [
+    { cd: '01', name: 'U MUSIC' },
+    { cd: '99', name: "アップロードしない" },
+  ];
+
+  return getSystemUmusic;
+}
+
+export function getUploadSystemSsence() {
+  const getSystemSsense = [
+    { cd: '02', name: "S'sence" },
+    { cd: '99', name: "アップロードしない" },
+  ];
+
+  return getSystemSsense;
+}
