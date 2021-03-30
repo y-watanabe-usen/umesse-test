@@ -4,6 +4,9 @@ import { useTtsService } from "@/services/ttsService";
 import { ERROR_CODE, ERROR_PATTERN } from "@/utils/Constants";
 import * as umesseapi from "umesseapi";
 
+const ttsRepository = new umesseapi.TtsApi(undefined, "", axios);
+const ttsService = useTtsService(ttsRepository);
+
 describe("fetchのテスト", () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -29,8 +32,6 @@ describe("fetchのテスト", () => {
       },
     ];
     jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
-    const ttsRepository = new umesseapi.TtsApi(undefined, "", axios);
-    const ttsService = useTtsService(ttsRepository);
 
     const response = await ttsService.fetch("token");
 
@@ -48,8 +49,6 @@ describe("fetchのテスト", () => {
     );
 
     jest.spyOn(axios, "request").mockRejectedValue({ data: responseJson });
-    const ttsRepository = new umesseapi.TtsApi(undefined, "", axios);
-    const ttsService = useTtsService(ttsRepository);
 
     await expect(ttsService.fetch("token")).rejects.toThrowError(
       expoectedError
@@ -66,8 +65,6 @@ describe("fetchのテスト", () => {
     jest
       .spyOn(axios, "request")
       .mockRejectedValue({ response: { status: 500 } });
-    const ttsRepository = new umesseapi.TtsApi(undefined, "", axios);
-    const ttsService = useTtsService(ttsRepository);
 
     await expect(ttsService.fetch("token")).rejects.toThrowError(
       expoectedError
@@ -96,8 +93,6 @@ describe("generateのテスト", () => {
       ],
     };
     jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
-    const ttsRepository = new umesseapi.TtsApi(undefined, "", axios);
-    const ttsService = useTtsService(ttsRepository);
 
     const response = await ttsService.generate("token", {
       id: "サンプル01",
@@ -131,8 +126,6 @@ describe("generateのテスト", () => {
     );
 
     jest.spyOn(axios, "request").mockRejectedValue({ data: responseJson });
-    const ttsRepository = new umesseapi.TtsApi(undefined, "", axios);
-    const ttsService = useTtsService(ttsRepository);
 
     await expect(
       ttsService.generate("token", {
@@ -166,8 +159,6 @@ describe("generateのテスト", () => {
     jest
       .spyOn(axios, "request")
       .mockRejectedValue({ response: { status: 500 } });
-    const ttsRepository = new umesseapi.TtsApi(undefined, "", axios);
-    const ttsService = useTtsService(ttsRepository);
 
     await expect(
       ttsService.generate("token", {
@@ -217,8 +208,6 @@ describe("createのテスト", () => {
       },
     ];
     jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
-    const ttsRepository = new umesseapi.TtsApi(undefined, "", axios);
-    const ttsService = useTtsService(ttsRepository);
 
     const response = await ttsService.create("token", {
       id: "サンプル01",
@@ -251,8 +240,6 @@ describe("createのテスト", () => {
     );
 
     jest.spyOn(axios, "request").mockRejectedValue({ data: responseJson });
-    const ttsRepository = new umesseapi.TtsApi(undefined, "", axios);
-    const ttsService = useTtsService(ttsRepository);
 
     await expect(
       ttsService.create("token", {
@@ -284,8 +271,6 @@ describe("createのテスト", () => {
     jest
       .spyOn(axios, "request")
       .mockRejectedValue({ response: { status: 500 } });
-    const ttsRepository = new umesseapi.TtsApi(undefined, "", axios);
-    const ttsService = useTtsService(ttsRepository);
 
     await expect(
       ttsService.create("token", {
@@ -323,8 +308,6 @@ describe("updateのテスト", () => {
       timestamp: "2019-09-01T09:00:00+09:00",
     };
     jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
-    const ttsRepository = new umesseapi.TtsApi(undefined, "", axios);
-    const ttsService = useTtsService(ttsRepository);
 
     const response = await ttsService.update(
       "token",
@@ -345,8 +328,6 @@ describe("updateのテスト", () => {
     );
 
     jest.spyOn(axios, "request").mockRejectedValue({ data: responseJson });
-    const ttsRepository = new umesseapi.TtsApi(undefined, "", axios);
-    const ttsService = useTtsService(ttsRepository);
 
     await expect(
       ttsService.update("token", "001", "サンプル", "説明")
@@ -363,8 +344,6 @@ describe("updateのテスト", () => {
     jest
       .spyOn(axios, "request")
       .mockRejectedValue({ response: { status: 500 } });
-    const ttsRepository = new umesseapi.TtsApi(undefined, "", axios);
-    const ttsService = useTtsService(ttsRepository);
 
     await expect(
       ttsService.update("token", "001", "サンプル", "説明")
@@ -387,8 +366,6 @@ describe("removeのテスト", () => {
       timestamp: "2019-09-01T09:00:00+09:00",
     };
     jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
-    const ttsRepository = new umesseapi.TtsApi(undefined, "", axios);
-    const ttsService = useTtsService(ttsRepository);
 
     const response = await ttsService.remove("token", "001");
 
@@ -404,8 +381,6 @@ describe("removeのテスト", () => {
     );
 
     jest.spyOn(axios, "request").mockRejectedValue({ data: responseJson });
-    const ttsRepository = new umesseapi.TtsApi(undefined, "", axios);
-    const ttsService = useTtsService(ttsRepository);
 
     await expect(ttsService.remove("token", "001")).rejects.toThrowError(
       expoectedError
@@ -422,8 +397,6 @@ describe("removeのテスト", () => {
     jest
       .spyOn(axios, "request")
       .mockRejectedValue({ response: { status: 500 } });
-    const ttsRepository = new umesseapi.TtsApi(undefined, "", axios);
-    const ttsService = useTtsService(ttsRepository);
 
     await expect(ttsService.remove("token", "001")).rejects.toThrowError(
       expoectedError

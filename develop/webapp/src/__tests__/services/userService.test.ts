@@ -4,6 +4,10 @@ import { useUserService } from "@/services/userService";
 import { ERROR_CODE, ERROR_PATTERN } from "@/utils/Constants";
 import * as umesseapi from "umesseapi";
 
+const authRepository = new umesseapi.AuthApi(undefined, "", axios);
+const userRepository = new umesseapi.UserApi(undefined, "", axios);
+const userService = useUserService(authRepository, userRepository);
+
 describe("authのテスト", () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -14,9 +18,6 @@ describe("authのテスト", () => {
       token: "123456789",
     };
     jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
-    const authRepository = new umesseapi.AuthApi(undefined, "", axios);
-    const userRepository = new umesseapi.UserApi(undefined, "", axios);
-    const userService = useUserService(authRepository, userRepository);
 
     const response = await userService.auth("1111");
 
@@ -32,9 +33,6 @@ describe("authのテスト", () => {
     );
 
     jest.spyOn(axios, "request").mockRejectedValue({ data: responseJson });
-    const authRepository = new umesseapi.AuthApi(undefined, "", axios);
-    const userRepository = new umesseapi.UserApi(undefined, "", axios);
-    const userService = useUserService(authRepository, userRepository);
 
     await expect(userService.auth("1111")).rejects.toThrowError(expoectedError);
   });
@@ -49,9 +47,6 @@ describe("authのテスト", () => {
     jest
       .spyOn(axios, "request")
       .mockRejectedValue({ response: { status: 500 } });
-    const authRepository = new umesseapi.AuthApi(undefined, "", axios);
-    const userRepository = new umesseapi.UserApi(undefined, "", axios);
-    const userService = useUserService(authRepository, userRepository);
 
     await expect(userService.auth("1111")).rejects.toThrowError(expoectedError);
   });
@@ -78,9 +73,6 @@ describe("getInfoのテスト", () => {
       unisCustomerCd: "123456789",
     };
     jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
-    const authRepository = new umesseapi.AuthApi(undefined, "", axios);
-    const userRepository = new umesseapi.UserApi(undefined, "", axios);
-    const userService = useUserService(authRepository, userRepository);
 
     const response = await userService.getInfo("authToken");
 
@@ -96,9 +88,6 @@ describe("getInfoのテスト", () => {
     );
 
     jest.spyOn(axios, "request").mockRejectedValue({ data: responseJson });
-    const authRepository = new umesseapi.AuthApi(undefined, "", axios);
-    const userRepository = new umesseapi.UserApi(undefined, "", axios);
-    const userService = useUserService(authRepository, userRepository);
 
     await expect(userService.getInfo("authToken")).rejects.toThrowError(
       expoectedError
@@ -115,9 +104,6 @@ describe("getInfoのテスト", () => {
     jest
       .spyOn(axios, "request")
       .mockRejectedValue({ response: { status: 500 } });
-    const authRepository = new umesseapi.AuthApi(undefined, "", axios);
-    const userRepository = new umesseapi.UserApi(undefined, "", axios);
-    const userService = useUserService(authRepository, userRepository);
 
     await expect(userService.getInfo("authToken")).rejects.toThrowError(
       expoectedError
