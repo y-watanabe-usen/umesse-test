@@ -182,6 +182,17 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
   }
 
   // TODO: CMステータス状態によるチェック
+  if (body.uploadSystem) {
+    // 既に連携データがある場合はエラー
+    let external;
+    try {
+      external = await db.External.find(unisCustomerCd);
+    } catch (e) {
+      errorlog(JSON.stringify(e));
+      throw new InternalServerError(e.message);
+    }
+    if (external) throw new BadRequestError(ERROR_CODE.E0400010);
+  }
 
   let dataProcessType;
   let sceneCd;

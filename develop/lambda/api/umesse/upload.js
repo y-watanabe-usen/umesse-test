@@ -92,6 +92,16 @@ exports.createUploadCm = async (unisCustomerCd, id, body) => {
   if (cm.status !== constants.cmStatus.COMPLETE)
     throw new NotFoundError(ERROR_CODE.E0000404);
 
+  // 既に連携データがある場合はエラー
+  let external;
+  try {
+    external = await db.External.find(unisCustomerCd);
+  } catch (e) {
+    errorlog(JSON.stringify(e));
+    throw new InternalServerError(e.message);
+  }
+  if (external) throw new BadRequestError(ERROR_CODE.E0400010);
+
   // 連携用のデータ追加
   const item = {
     unisCustomerCd: unisCustomerCd,

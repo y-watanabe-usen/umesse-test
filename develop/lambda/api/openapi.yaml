@@ -1052,6 +1052,13 @@ paths:
           schema:
             type: string
             example: "center: センター, ssence: S'sence"
+        - name: lastdate
+          in: query
+          description: 最終取得日時
+          schema:
+            type: string
+            format: date-time
+            example: "2021-03-29T12:34:56+09:00"
       responses:
         200:
           description: successful response
@@ -1092,6 +1099,13 @@ paths:
           schema:
             type: string
             example: "123456789"
+        - name: lastdate
+          in: query
+          description: 最終取得日時
+          schema:
+            type: string
+            format: date-time
+            example: "2021-03-29T12:34:56+09:00"
       responses:
         200:
           description: successful response
