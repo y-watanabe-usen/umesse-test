@@ -4,6 +4,7 @@ import Constants, {
   Sorts,
   AppInformation,
   TtsLangs,
+  UploadSystem,
 } from "@/utils/Constants";
 import PackageJson from "@/../../webapp/package.json";
 
@@ -422,6 +423,25 @@ export function getLangs(langList?: string[]) {
   return result;
 }
 
+/**
+ * CMアップロード先のCD,と名称を取得する
+ * @param serviceCd string
+ * @return UploadSystem[]
+ */
+export function getUploadSystemService(serviceCd: string) {
+  let getCdList: string[] = [];
+
+  if (serviceCd === Constants.SERVICE_CD_UMUSIC) {
+    getCdList = ["01", "99"];
+  } else if (serviceCd === Constants.SERVICE_CD_SSENSE) {
+    getCdList = ["02", "99"];
+  } else {
+    getCdList = [];
+  }
+
+  return getUploadDestination(getCdList);
+}
+
 function getIndustries(cdList: string[]) {
   const result: Industry[] = [];
   cdList.forEach((v) => {
@@ -466,20 +486,14 @@ function getAppInformation(cdList?: string[]) {
   return result;
 }
 
-export function getUploadSystemUmusic() {
-  const getSystemUmusic = [
-    { cd: '01', name: 'U MUSIC' },
-    { cd: '99', name: "アップロードしない" },
-  ];
+function getUploadDestination(cdList: string[]) {
+  const result: UploadSystem[] = [];
+  if (!cdList) return result;
+  cdList.forEach((v) => {
+    const uploadSystem = Constants.UPLOAD_SYSTEMS.find((vv) => vv.cd == v);
+    if (uploadSystem) result.push(uploadSystem);
+  });
+  console.log(result);
 
-  return getSystemUmusic;
-}
-
-export function getUploadSystemSsence() {
-  const getSystemSsense = [
-    { cd: '02', name: "S'sence" },
-    { cd: '99', name: "アップロードしない" },
-  ];
-
-  return getSystemSsense;
+  return result;
 }
