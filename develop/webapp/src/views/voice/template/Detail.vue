@@ -196,6 +196,7 @@ import Point from "@/components/molecules/Point.vue";
 import ttsTextConverter, { ConverterType } from "@/utils/ttsTextConverter";
 import * as Common from "@/utils/Common";
 import { NarrationItem } from "umesseapi/models";
+import { MAX_NARRATION_COUNT } from "@/store/cm";
 
 export default defineComponent({
   components: {
@@ -392,8 +393,11 @@ export default defineComponent({
         return "";
       }
     };
-    const selectErrorMessageLangs = (langs: string[], narrations: NarrationItem[]) => {
-      if (narrations.length === 4 && langs.length === 1) {
+    const selectErrorMessageLangs = (
+      langs: string[],
+      narrations: NarrationItem[]
+    ) => {
+      if (narrations.length === MAX_NARRATION_COUNT && langs.length === 1) {
         state.isErrorLangs = false;
         return "";
       }
@@ -401,9 +405,11 @@ export default defineComponent({
       if (!langs.length) {
         state.isErrorLangs = true;
         return "言語設定を選択してください";
-      } else if ((langs.length + narrations.length) > 4) {
+      }
+
+      if (langs.length + narrations.length > MAX_NARRATION_COUNT) {
         state.isErrorLangs = true;
-        return `既に${narrations.length}つのナレーションが設定されています。`;
+        return "選択可能なナレーション数を超えています。";
       } else {
         state.isErrorLangs = false;
         return "";
