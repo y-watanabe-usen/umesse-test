@@ -747,6 +747,7 @@ export default defineComponent({
 
     const clearNarration = (index: number) => {
       cm.clearNarration(index);
+      closeAllDropdownMenu();
     };
     const clearOpenChime = () => {
       cm.clearOpenChime();
