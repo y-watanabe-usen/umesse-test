@@ -4,6 +4,15 @@ import { useResourcesService } from "@/services/resourcesService";
 import { ERROR_CODE, ERROR_PATTERN } from "@/utils/Constants";
 import * as umesseapi from "umesseapi";
 
+const resourcesRepository = new umesseapi.ResourcesApi(undefined, "", axios);
+const recordingRepository = new umesseapi.RecordingApi(undefined, "", axios);
+const ttsRepository = new umesseapi.TtsApi(undefined, "", axios);
+const resourcesService = useResourcesService(
+  resourcesRepository,
+  recordingRepository,
+  ttsRepository
+);
+
 describe("fetchNarrationのテスト", () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -35,22 +44,6 @@ describe("fetchNarrationのテスト", () => {
       },
     ];
     jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
-    const resourcesRepository = new umesseapi.ResourcesApi(
-      undefined,
-      "",
-      axios
-    );
-    const recordingRepository = new umesseapi.RecordingApi(
-      undefined,
-      "",
-      axios
-    );
-    const ttsRepository = new umesseapi.TtsApi(undefined, "", axios);
-    const resourcesService = useResourcesService(
-      resourcesRepository,
-      recordingRepository,
-      ttsRepository
-    );
 
     const response = await resourcesService.fetchNarration(
       "authToken",
@@ -90,22 +83,6 @@ describe("fetchNarrationのテスト", () => {
       },
     ];
     jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
-    const resourcesRepository = new umesseapi.ResourcesApi(
-      undefined,
-      "",
-      axios
-    );
-    const recordingRepository = new umesseapi.RecordingApi(
-      undefined,
-      "",
-      axios
-    );
-    const ttsRepository = new umesseapi.TtsApi(undefined, "", axios);
-    const resourcesService = useResourcesService(
-      resourcesRepository,
-      recordingRepository,
-      ttsRepository
-    );
 
     const response = await resourcesService.fetchNarration(
       "authToken",
@@ -145,22 +122,6 @@ describe("fetchNarrationのテスト", () => {
       },
     ];
     jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
-    const resourcesRepository = new umesseapi.ResourcesApi(
-      undefined,
-      "",
-      axios
-    );
-    const recordingRepository = new umesseapi.RecordingApi(
-      undefined,
-      "",
-      axios
-    );
-    const ttsRepository = new umesseapi.TtsApi(undefined, "", axios);
-    const resourcesService = useResourcesService(
-      resourcesRepository,
-      recordingRepository,
-      ttsRepository
-    );
 
     const response = await resourcesService.fetchNarration(
       "authToken",
@@ -183,22 +144,6 @@ describe("fetchNarrationのテスト", () => {
     );
 
     jest.spyOn(axios, "request").mockRejectedValue({ data: responseJson });
-    const resourcesRepository = new umesseapi.ResourcesApi(
-      undefined,
-      "",
-      axios
-    );
-    const recordingRepository = new umesseapi.RecordingApi(
-      undefined,
-      "",
-      axios
-    );
-    const ttsRepository = new umesseapi.TtsApi(undefined, "", axios);
-    const resourcesService = useResourcesService(
-      resourcesRepository,
-      recordingRepository,
-      ttsRepository
-    );
 
     await expect(
       resourcesService.fetchNarration("authToken", "01", "901", 1)
@@ -214,22 +159,6 @@ describe("fetchNarrationのテスト", () => {
     );
 
     jest.spyOn(axios, "request").mockRejectedValue({ data: responseJson });
-    const resourcesRepository = new umesseapi.ResourcesApi(
-      undefined,
-      "",
-      axios
-    );
-    const recordingRepository = new umesseapi.RecordingApi(
-      undefined,
-      "",
-      axios
-    );
-    const ttsRepository = new umesseapi.TtsApi(undefined, "", axios);
-    const resourcesService = useResourcesService(
-      resourcesRepository,
-      recordingRepository,
-      ttsRepository
-    );
 
     await expect(
       resourcesService.fetchNarration("authToken", "02", "901", 1)
@@ -245,22 +174,6 @@ describe("fetchNarrationのテスト", () => {
     );
 
     jest.spyOn(axios, "request").mockRejectedValue({ data: responseJson });
-    const resourcesRepository = new umesseapi.ResourcesApi(
-      undefined,
-      "",
-      axios
-    );
-    const recordingRepository = new umesseapi.RecordingApi(
-      undefined,
-      "",
-      axios
-    );
-    const ttsRepository = new umesseapi.TtsApi(undefined, "", axios);
-    const resourcesService = useResourcesService(
-      resourcesRepository,
-      recordingRepository,
-      ttsRepository
-    );
 
     await expect(
       resourcesService.fetchNarration("authToken", "02", "902", 1)
@@ -277,22 +190,6 @@ describe("fetchNarrationのテスト", () => {
     jest
       .spyOn(axios, "request")
       .mockRejectedValue({ response: { status: 500 } });
-    const resourcesRepository = new umesseapi.ResourcesApi(
-      undefined,
-      "",
-      axios
-    );
-    const recordingRepository = new umesseapi.RecordingApi(
-      undefined,
-      "",
-      axios
-    );
-    const ttsRepository = new umesseapi.TtsApi(undefined, "", axios);
-    const resourcesService = useResourcesService(
-      resourcesRepository,
-      recordingRepository,
-      ttsRepository
-    );
 
     await expect(
       resourcesService.fetchNarration("authToken", "01", "901", 1)
@@ -309,22 +206,6 @@ describe("fetchNarrationのテスト", () => {
     jest
       .spyOn(axios, "request")
       .mockRejectedValue({ response: { status: 500 } });
-    const resourcesRepository = new umesseapi.ResourcesApi(
-      undefined,
-      "",
-      axios
-    );
-    const recordingRepository = new umesseapi.RecordingApi(
-      undefined,
-      "",
-      axios
-    );
-    const ttsRepository = new umesseapi.TtsApi(undefined, "", axios);
-    const resourcesService = useResourcesService(
-      resourcesRepository,
-      recordingRepository,
-      ttsRepository
-    );
 
     await expect(
       resourcesService.fetchNarration("authToken", "02", "901", 1)
@@ -341,22 +222,6 @@ describe("fetchNarrationのテスト", () => {
     jest
       .spyOn(axios, "request")
       .mockRejectedValue({ response: { status: 500 } });
-    const resourcesRepository = new umesseapi.ResourcesApi(
-      undefined,
-      "",
-      axios
-    );
-    const recordingRepository = new umesseapi.RecordingApi(
-      undefined,
-      "",
-      axios
-    );
-    const ttsRepository = new umesseapi.TtsApi(undefined, "", axios);
-    const resourcesService = useResourcesService(
-      resourcesRepository,
-      recordingRepository,
-      ttsRepository
-    );
 
     await expect(
       resourcesService.fetchNarration("authToken", "02", "902", 1)
@@ -389,22 +254,6 @@ describe("fetchChimeのテスト", () => {
       },
     ];
     jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
-    const resourcesRepository = new umesseapi.ResourcesApi(
-      undefined,
-      "",
-      axios
-    );
-    const recordingRepository = new umesseapi.RecordingApi(
-      undefined,
-      "",
-      axios
-    );
-    const ttsRepository = new umesseapi.TtsApi(undefined, "", axios);
-    const resourcesService = useResourcesService(
-      resourcesRepository,
-      recordingRepository,
-      ttsRepository
-    );
 
     const response = await resourcesService.fetchChime(1);
 
@@ -422,22 +271,6 @@ describe("fetchChimeのテスト", () => {
     );
 
     jest.spyOn(axios, "request").mockRejectedValue({ data: responseJson });
-    const resourcesRepository = new umesseapi.ResourcesApi(
-      undefined,
-      "",
-      axios
-    );
-    const recordingRepository = new umesseapi.RecordingApi(
-      undefined,
-      "",
-      axios
-    );
-    const ttsRepository = new umesseapi.TtsApi(undefined, "", axios);
-    const resourcesService = useResourcesService(
-      resourcesRepository,
-      recordingRepository,
-      ttsRepository
-    );
 
     await expect(resourcesService.fetchChime(1)).rejects.toThrowError(
       expoectedError
@@ -454,22 +287,6 @@ describe("fetchChimeのテスト", () => {
     jest
       .spyOn(axios, "request")
       .mockRejectedValue({ response: { status: 500 } });
-    const resourcesRepository = new umesseapi.ResourcesApi(
-      undefined,
-      "",
-      axios
-    );
-    const recordingRepository = new umesseapi.RecordingApi(
-      undefined,
-      "",
-      axios
-    );
-    const ttsRepository = new umesseapi.TtsApi(undefined, "", axios);
-    const resourcesService = useResourcesService(
-      resourcesRepository,
-      recordingRepository,
-      ttsRepository
-    );
 
     await expect(resourcesService.fetchChime(1)).rejects.toThrowError(
       expoectedError
@@ -503,22 +320,6 @@ describe("fetchBgmのテスト", () => {
       },
     ];
     jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
-    const resourcesRepository = new umesseapi.ResourcesApi(
-      undefined,
-      "",
-      axios
-    );
-    const recordingRepository = new umesseapi.RecordingApi(
-      undefined,
-      "",
-      axios
-    );
-    const ttsRepository = new umesseapi.TtsApi(undefined, "", axios);
-    const resourcesService = useResourcesService(
-      resourcesRepository,
-      recordingRepository,
-      ttsRepository
-    );
 
     const response = await resourcesService.fetchBgm("01", 1);
 
@@ -536,22 +337,6 @@ describe("fetchBgmのテスト", () => {
     );
 
     jest.spyOn(axios, "request").mockRejectedValue({ data: responseJson });
-    const resourcesRepository = new umesseapi.ResourcesApi(
-      undefined,
-      "",
-      axios
-    );
-    const recordingRepository = new umesseapi.RecordingApi(
-      undefined,
-      "",
-      axios
-    );
-    const ttsRepository = new umesseapi.TtsApi(undefined, "", axios);
-    const resourcesService = useResourcesService(
-      resourcesRepository,
-      recordingRepository,
-      ttsRepository
-    );
 
     await expect(resourcesService.fetchBgm("01", 1)).rejects.toThrowError(
       expoectedError
@@ -568,22 +353,6 @@ describe("fetchBgmのテスト", () => {
     jest
       .spyOn(axios, "request")
       .mockRejectedValue({ response: { status: 500 } });
-    const resourcesRepository = new umesseapi.ResourcesApi(
-      undefined,
-      "",
-      axios
-    );
-    const recordingRepository = new umesseapi.RecordingApi(
-      undefined,
-      "",
-      axios
-    );
-    const ttsRepository = new umesseapi.TtsApi(undefined, "", axios);
-    const resourcesService = useResourcesService(
-      resourcesRepository,
-      recordingRepository,
-      ttsRepository
-    );
 
     await expect(resourcesService.fetchBgm("01", 1)).rejects.toThrowError(
       expoectedError
@@ -650,22 +419,6 @@ describe("fetchTemplateのテスト", () => {
       },
     ];
     jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
-    const resourcesRepository = new umesseapi.ResourcesApi(
-      undefined,
-      "",
-      axios
-    );
-    const recordingRepository = new umesseapi.RecordingApi(
-      undefined,
-      "",
-      axios
-    );
-    const ttsRepository = new umesseapi.TtsApi(undefined, "", axios);
-    const resourcesService = useResourcesService(
-      resourcesRepository,
-      recordingRepository,
-      ttsRepository
-    );
 
     const response = await resourcesService.fetchTemplate("01", 1);
 
@@ -683,22 +436,6 @@ describe("fetchTemplateのテスト", () => {
     );
 
     jest.spyOn(axios, "request").mockRejectedValue({ data: responseJson });
-    const resourcesRepository = new umesseapi.ResourcesApi(
-      undefined,
-      "",
-      axios
-    );
-    const recordingRepository = new umesseapi.RecordingApi(
-      undefined,
-      "",
-      axios
-    );
-    const ttsRepository = new umesseapi.TtsApi(undefined, "", axios);
-    const resourcesService = useResourcesService(
-      resourcesRepository,
-      recordingRepository,
-      ttsRepository
-    );
 
     await expect(resourcesService.fetchTemplate("01", 1)).rejects.toThrowError(
       expoectedError
@@ -715,22 +452,6 @@ describe("fetchTemplateのテスト", () => {
     jest
       .spyOn(axios, "request")
       .mockRejectedValue({ response: { status: 500 } });
-    const resourcesRepository = new umesseapi.ResourcesApi(
-      undefined,
-      "",
-      axios
-    );
-    const recordingRepository = new umesseapi.RecordingApi(
-      undefined,
-      "",
-      axios
-    );
-    const ttsRepository = new umesseapi.TtsApi(undefined, "", axios);
-    const resourcesService = useResourcesService(
-      resourcesRepository,
-      recordingRepository,
-      ttsRepository
-    );
 
     await expect(resourcesService.fetchTemplate("01", 1)).rejects.toThrowError(
       expoectedError
@@ -767,22 +488,6 @@ describe("fetchFreeのテスト", () => {
       },
     ];
     jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
-    const resourcesRepository = new umesseapi.ResourcesApi(
-      undefined,
-      "",
-      axios
-    );
-    const recordingRepository = new umesseapi.RecordingApi(
-      undefined,
-      "",
-      axios
-    );
-    const ttsRepository = new umesseapi.TtsApi(undefined, "", axios);
-    const resourcesService = useResourcesService(
-      resourcesRepository,
-      recordingRepository,
-      ttsRepository
-    );
 
     const response = await resourcesService.fetchFree("01", 1);
 
@@ -800,22 +505,6 @@ describe("fetchFreeのテスト", () => {
     );
 
     jest.spyOn(axios, "request").mockRejectedValue({ data: responseJson });
-    const resourcesRepository = new umesseapi.ResourcesApi(
-      undefined,
-      "",
-      axios
-    );
-    const recordingRepository = new umesseapi.RecordingApi(
-      undefined,
-      "",
-      axios
-    );
-    const ttsRepository = new umesseapi.TtsApi(undefined, "", axios);
-    const resourcesService = useResourcesService(
-      resourcesRepository,
-      recordingRepository,
-      ttsRepository
-    );
 
     await expect(resourcesService.fetchFree("01", 1)).rejects.toThrowError(
       expoectedError
@@ -832,22 +521,6 @@ describe("fetchFreeのテスト", () => {
     jest
       .spyOn(axios, "request")
       .mockRejectedValue({ response: { status: 500 } });
-    const resourcesRepository = new umesseapi.ResourcesApi(
-      undefined,
-      "",
-      axios
-    );
-    const recordingRepository = new umesseapi.RecordingApi(
-      undefined,
-      "",
-      axios
-    );
-    const ttsRepository = new umesseapi.TtsApi(undefined, "", axios);
-    const resourcesService = useResourcesService(
-      resourcesRepository,
-      recordingRepository,
-      ttsRepository
-    );
 
     await expect(resourcesService.fetchFree("01", 1)).rejects.toThrowError(
       expoectedError
