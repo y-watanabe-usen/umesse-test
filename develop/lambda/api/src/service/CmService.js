@@ -1,8 +1,9 @@
 "use strict";
-const assert = require('assert');
-const { respondWithCode } = require("../utils/writer");
-const { UMesseError } = require("umesse-lib/error");
 
+const assert = require("assert");
+const { respondWithCode } = require("../utils/writer");
+const { UMesseError, InternalServerError } = require("umesse-lib/error");
+const { debuglog, errorlog } = require("umesse-lib/constants");
 const { getCm, createCm, updateCm, deleteCm } = require("../../umesse/cm");
 
 /**
@@ -17,10 +18,15 @@ exports.createUserCm = function (body, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     try {
       const json = await createCm(xUnisCustomerCd, body);
+      debuglog(JSON.stringify(json));
       resolve(json);
     } catch (e) {
+      debuglog(JSON.stringify(e));
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
+      if (e instanceof InternalServerError) errorlog(JSON.stringify(e));
+      reject(
+        respondWithCode(e.statusCode, { code: e.code, message: e.message })
+      );
     }
   });
 };
@@ -37,10 +43,15 @@ exports.deleteUserCm = function (id, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     try {
       const json = await deleteCm(xUnisCustomerCd, id);
+      debuglog(JSON.stringify(json));
       resolve(json);
     } catch (e) {
+      debuglog(JSON.stringify(e));
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
+      if (e instanceof InternalServerError) errorlog(JSON.stringify(e));
+      reject(
+        respondWithCode(e.statusCode, { code: e.code, message: e.message })
+      );
     }
   });
 };
@@ -57,10 +68,15 @@ exports.getUserCm = function (id, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     try {
       const json = await getCm(xUnisCustomerCd, id);
+      debuglog(JSON.stringify(json));
       resolve(json);
     } catch (e) {
+      debuglog(JSON.stringify(e));
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
+      if (e instanceof InternalServerError) errorlog(JSON.stringify(e));
+      reject(
+        respondWithCode(e.statusCode, { code: e.code, message: e.message })
+      );
     }
   });
 };
@@ -77,10 +93,15 @@ exports.listUserCm = function (sort, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     try {
       const json = await getCm(xUnisCustomerCd, "", sort);
+      debuglog(JSON.stringify(json));
       resolve(json);
     } catch (e) {
+      debuglog(JSON.stringify(e));
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
+      if (e instanceof InternalServerError) errorlog(JSON.stringify(e));
+      reject(
+        respondWithCode(e.statusCode, { code: e.code, message: e.message })
+      );
     }
   });
 };
@@ -98,11 +119,15 @@ exports.updateUserCm = function (body, id, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     try {
       const json = await updateCm(xUnisCustomerCd, id, body);
+      debuglog(JSON.stringify(json));
       resolve(json);
     } catch (e) {
-      console.log(e);
+      debuglog(JSON.stringify(e));
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
+      if (e instanceof InternalServerError) errorlog(JSON.stringify(e));
+      reject(
+        respondWithCode(e.statusCode, { code: e.code, message: e.message })
+      );
     }
   });
 };

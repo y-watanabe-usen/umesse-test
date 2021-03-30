@@ -3,7 +3,6 @@
 const {
   constants,
   debuglog,
-  errorlog,
   timestamp,
   generateId,
 } = require("umesse-lib/constants");
@@ -40,7 +39,6 @@ exports.getExternalCm = async (unisCustomerCd, external) => {
     ret = await db.External.findByUploadSystem(uploadSystem);
   } catch (e) {
     if (e instanceof NotFoundError) throw e;
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
 
@@ -102,7 +100,6 @@ exports.completeExternalCm = async (unisCustomerCd, external, body) => {
     [cm, index] = await db.User.findCmIndex(unisCustomerCd, body.cmId);
   } catch (e) {
     if (e instanceof NotFoundError) throw e;
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
 
@@ -126,7 +123,6 @@ exports.completeExternalCm = async (unisCustomerCd, external, body) => {
     try {
       const _ = await db.External.updateErrorData(unisCustomerCd, data);
     } catch (e) {
-      errorlog(JSON.stringify(e));
       throw new InternalServerError(e.message);
     }
     cm.status = constants.cmStatus.EXTERNAL_ERROR;
@@ -135,7 +131,6 @@ exports.completeExternalCm = async (unisCustomerCd, external, body) => {
     try {
       const _ = await db.External.delete(unisCustomerCd);
     } catch (e) {
-      errorlog(JSON.stringify(e));
       throw new InternalServerError(e.message);
     }
     if (ret.dataProcessType == constants.cmDataProcessType.DELETE) {
@@ -150,7 +145,6 @@ exports.completeExternalCm = async (unisCustomerCd, external, body) => {
           `${constants.s3Bucket().users}/${path}/${cm.cmId}.aac`
         );
       } catch (e) {
-        errorlog(JSON.stringify(e));
         throw new InternalServerError(e.message);
       }
       if (!res) throw new InternalServerError(ERROR_CODE.E0000500);
@@ -168,7 +162,6 @@ exports.completeExternalCm = async (unisCustomerCd, external, body) => {
   try {
     const _ = await db.User.updateCm(unisCustomerCd, index, cm);
   } catch (e) {
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
 

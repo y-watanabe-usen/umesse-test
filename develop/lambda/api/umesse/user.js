@@ -1,9 +1,8 @@
 "use strict";
 
-const { debuglog, errorlog } = require("umesse-lib/constants");
+const { debuglog } = require("umesse-lib/constants");
 const { checkParams } = require("umesse-lib/validation");
 const {
-  ERROR_CODE,
   BadRequestError,
   NotFoundError,
   InternalServerError,
@@ -28,7 +27,6 @@ exports.getUser = async (unisCustomerCd) => {
     return await db.User.find(unisCustomerCd);
   } catch (e) {
     if (e instanceof NotFoundError) throw e;
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
 };

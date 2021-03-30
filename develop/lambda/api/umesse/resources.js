@@ -5,7 +5,6 @@ const querystring = require("querystring");
 const {
   constants,
   debuglog,
-  errorlog,
   timestamp,
   generateId,
   responseData,
@@ -45,7 +44,6 @@ exports.getResource = async (category, industryCd, sceneCd, sort) => {
     ret = await db.Contents.findByCategory(category);
   } catch (e) {
     if (e instanceof NotFoundError) throw e;
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
 
@@ -122,7 +120,6 @@ exports.getSignedUrl = async (id, category) => {
   try {
     ret = await s3Manager.getSignedUrl(bucket, path);
   } catch (e) {
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
 
@@ -159,7 +156,6 @@ exports.getUserResource = async (unisCustomerCd, category, id) => {
     ret = await db.User.findResource(unisCustomerCd, category);
   } catch (e) {
     if (e instanceof NotFoundError) throw e;
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
 
@@ -203,7 +199,6 @@ exports.createRecordingResource = async (unisCustomerCd, body) => {
       binaryData
     );
   } catch (e) {
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
 
@@ -223,7 +218,6 @@ exports.createRecordingResource = async (unisCustomerCd, body) => {
       data
     );
   } catch (e) {
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
 
@@ -267,7 +261,6 @@ exports.createTtsResource = async (unisCustomerCd, body) => {
           }/${data.lang}.mp3`
         );
       } catch (e) {
-        errorlog(JSON.stringify(e));
         throw new InternalServerError(e.message);
       }
 
@@ -287,7 +280,6 @@ exports.createTtsResource = async (unisCustomerCd, body) => {
           item
         );
       } catch (e) {
-        errorlog(JSON.stringify(e));
         throw new InternalServerError(e.message);
       }
       json.push(responseData(ret, constants.resourceCategory.TTS));
@@ -353,7 +345,6 @@ exports.generateTtsResource = async (unisCustomerCd, body) => {
       try {
         binaryData = await requestTts(options, postData);
       } catch (e) {
-        errorlog(JSON.stringify(e));
         throw new InternalServerError(e.message);
       }
 
@@ -363,7 +354,6 @@ exports.generateTtsResource = async (unisCustomerCd, body) => {
       try {
         ret = await s3Manager.put(constants.s3Bucket().users, id, binaryData);
       } catch (e) {
-        errorlog(JSON.stringify(e));
         throw new InternalServerError(e.message);
       }
       id = `${unisCustomerCd}-${data.lang}`;
@@ -411,7 +401,6 @@ exports.updateUserResource = async (unisCustomerCd, category, id, body) => {
     );
   } catch (e) {
     if (e instanceof NotFoundError) throw e;
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
 
@@ -430,7 +419,6 @@ exports.updateUserResource = async (unisCustomerCd, category, id, body) => {
       resource
     );
   } catch (e) {
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
 
@@ -470,7 +458,6 @@ exports.deleteUserResource = async (unisCustomerCd, category, id) => {
     );
   } catch (e) {
     if (e instanceof NotFoundError) throw e;
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
 
@@ -479,7 +466,6 @@ exports.deleteUserResource = async (unisCustomerCd, category, id) => {
   try {
     ret = await db.User.deleteFromCategory(unisCustomerCd, category, index);
   } catch (e) {
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
 
@@ -490,7 +476,6 @@ exports.deleteUserResource = async (unisCustomerCd, category, id) => {
       `users/${unisCustomerCd}/${category}/${id}.mp3`
     );
   } catch (e) {
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
 

@@ -3,7 +3,6 @@
 const {
   constants,
   debuglog,
-  errorlog,
   timestamp,
   responseData,
 } = require("umesse-lib/constants");
@@ -39,7 +38,6 @@ exports.getShareCm = async (unisCustomerCd, id) => {
     ret = await db.User.findCm(unisCustomerCd);
   } catch (e) {
     if (e instanceof NotFoundError) throw e;
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
 
@@ -75,7 +73,6 @@ exports.createShareCm = async (unisCustomerCd, id) => {
     [cm, index] = await db.User.findCmIndex(unisCustomerCd, id);
   } catch (e) {
     if (e instanceof NotFoundError) throw e;
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
 
@@ -89,7 +86,6 @@ exports.createShareCm = async (unisCustomerCd, id) => {
     user = await db.User.find(unisCustomerCd);
   } catch (e) {
     if (e instanceof NotFoundError) throw e;
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
 
@@ -103,7 +99,6 @@ exports.createShareCm = async (unisCustomerCd, id) => {
       }/${id}.aac`
     );
   } catch (e) {
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
 
@@ -115,7 +110,6 @@ exports.createShareCm = async (unisCustomerCd, id) => {
   try {
     ret = await db.User.updateCm(unisCustomerCd, index, cm);
   } catch (e) {
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
 
@@ -144,7 +138,6 @@ exports.deleteShareCm = async (unisCustomerCd, id) => {
     [cm, index] = await db.User.findCmIndex(unisCustomerCd, id);
   } catch (e) {
     if (e instanceof NotFoundError) throw e;
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
 
@@ -158,7 +151,6 @@ exports.deleteShareCm = async (unisCustomerCd, id) => {
     user = await db.User.find(unisCustomerCd);
   } catch (e) {
     if (e instanceof NotFoundError) throw e;
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
 
@@ -170,7 +162,6 @@ exports.deleteShareCm = async (unisCustomerCd, id) => {
   try {
     ret = await db.User.updateCm(unisCustomerCd, index, cm);
   } catch (e) {
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
 
@@ -181,7 +172,6 @@ exports.deleteShareCm = async (unisCustomerCd, id) => {
       `group/${user.customerGroupCd}/${constants.resourceCategory.CM}/${id}.aac`
     );
   } catch (e) {
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
 

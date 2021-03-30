@@ -18,6 +18,7 @@ module.exports = {
       constants.dynamoDbTable().contents,
       options
     );
+    debuglog(JSON.stringify(ret));
     if (!ret || !ret.Items.length) throw new NotFoundError(ERROR_CODE.E0000404);
     return ret.Items;
   },
