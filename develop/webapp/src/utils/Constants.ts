@@ -127,7 +127,11 @@ export default class Constants {
   public static readonly UPLOAD_SYSTEMS: UploadSystem[] = [
     { cd: "01", name: "U MUSIC" },
     { cd: "02", name: "S'sence" },
+    { cd: '99', name: "アップロードしない" },
   ];
+
+  public static readonly SERVICE_CD_UMUSIC:string = 'U01';
+  public static readonly SERVICE_CD_SSENSE:string = 'U21';
 
   public static readonly CM_STATUS: CmStatus[] = [
     { cd: "00", status: "DELETE", name: "CM削除" },

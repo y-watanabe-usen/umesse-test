@@ -535,8 +535,11 @@
             <SelectBox
               v-model="uploadSystem"
               :options="
-                Constants.UPLOAD_SYSTEMS.map((uploadSystem) => {
-                  return { title: uploadSystem.name, value: uploadSystem.cd };
+                uploadSystemArray.map((uploadSystemArray) => {
+                  return {
+                    title: uploadSystemArray.name,
+                    value: uploadSystemArray.cd,
+                  };
                 })
               "
             />
@@ -633,6 +636,8 @@ import router from "@/router";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { UMesseError } from "../../models/UMesseError";
 import { audioService } from "@/services";
+import * as Common from "@/utils/Common";
+import { User } from "umesseapi/models";
 
 export default defineComponent({
   components: {
@@ -659,6 +664,11 @@ export default defineComponent({
     const audioPlayer = AudioPlayer();
     const { auth, cm } = useGlobalStore();
     const authToken = <string>auth.getToken();
+    const authUser = <User>auth.getUserInfo();
+    const uploadSystemArray = 
+        authUser.serviceCd === Constants.SERVICE_CD_UMUSIC
+          ? Common.getUploadSystemUmusic()
+          : Common.getUploadSystemSsence();
     const state = reactive({
       cmTime: computed(() => cm.secounds),
       openChime: computed(() => cm.openChime),
@@ -675,7 +685,7 @@ export default defineComponent({
       title: cm.title,
       description: cm.description,
       scene: "001",
-      uploadSystem: "01",
+      uploadSystem: authUser.serviceCd === Constants.SERVICE_CD_UMUSIC ? "01" : "02",
       isPlayModalAppear: false,
       isPlayOpenChimeModalAppear: false,
       isPlayNarrationModalAppear: false,
@@ -1083,6 +1093,8 @@ export default defineComponent({
       closeErrorModal,
       openConfirmBackHomeModal,
       closeConfirmBackHomeModal,
+      authUser,
+      uploadSystemArray,
     };
   },
 });
