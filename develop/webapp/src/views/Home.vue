@@ -6,9 +6,7 @@
         <span v-if="authenticating">Loading...</span>
         <span v-else> {{ token }} {{ error }} </span>
       </h2>
-      <p class="title">
-        店内CMを作成する
-      </p>
+      <p class="title">店内CMを作成する</p>
       <ul class="nav">
         <li>
           <router-link :to="{ name: 'Setting' }">
