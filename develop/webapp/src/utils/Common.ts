@@ -26,17 +26,11 @@ export function getNarrationIndustries() {
 export function getIndustryScenes(industryCd: string) {
   let getCdList: string[] = [];
   switch (industryCd) {
-    case "01":
-      getCdList = ["001"];
-      break;
     case "02":
       getCdList = ["901", "902"];
       break;
     case "10":
       getCdList = [
-        "001",
-        "002",
-        "003",
         "004",
         "005",
         "007",
@@ -58,9 +52,6 @@ export function getIndustryScenes(industryCd: string) {
       break;
     case "20":
       getCdList = [
-        "001",
-        "002",
-        "003",
         "004",
         "005",
         "007",
@@ -80,9 +71,6 @@ export function getIndustryScenes(industryCd: string) {
       break;
     case "30":
       getCdList = [
-        "001",
-        "002",
-        "003",
         "004",
         "005",
         "007",
@@ -106,9 +94,6 @@ export function getIndustryScenes(industryCd: string) {
       break;
     case "31":
       getCdList = [
-        "001",
-        "002",
-        "003",
         "004",
         "005",
         "007",
@@ -131,9 +116,6 @@ export function getIndustryScenes(industryCd: string) {
       break;
     case "40":
       getCdList = [
-        "001",
-        "002",
-        "003",
         "007",
         "008",
         "009",
@@ -164,9 +146,6 @@ export function getIndustryScenes(industryCd: string) {
       break;
     case "50":
       getCdList = [
-        "001",
-        "002",
-        "003",
         "007",
         "011",
         "015",
@@ -188,9 +167,6 @@ export function getIndustryScenes(industryCd: string) {
       break;
     case "51":
       getCdList = [
-        "001",
-        "002",
-        "003",
         "004",
         "007",
         "008",
@@ -209,9 +185,6 @@ export function getIndustryScenes(industryCd: string) {
       break;
     case "90":
       getCdList = [
-        "001",
-        "002",
-        "003",
         "004",
         "005",
         "007",
@@ -238,9 +211,6 @@ export function getIndustryScenes(industryCd: string) {
       break;
     case "99":
       getCdList = [
-        "001",
-        "002",
-        "003",
         "004",
         "005",
         "007",
@@ -291,9 +261,6 @@ export function getIndustryScenes(industryCd: string) {
       break;
     default:
       getCdList = [
-        "001",
-        "002",
-        "003",
         "004",
         "005",
         "007",
