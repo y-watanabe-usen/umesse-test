@@ -632,7 +632,7 @@ import CmItem from "@/components/molecules/CmItem.vue";
 import DropdownMenu from "@/components/molecules/DropdownMenu.vue";
 import VolumeSlider from "@/components/molecules/VolumeSlider.vue";
 import { MAX_NARRATION_COUNT, UPLOAD_CM_STATE } from "@/store/cm";
-import router from "@/router";
+import { onBeforeRouteLeave, useRouter } from "vue-router";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { UMesseError } from "../../models/UMesseError";
 import { audioService } from "@/services";
@@ -661,6 +661,7 @@ export default defineComponent({
     ModalLoading,
   },
   setup() {
+    const router = useRouter();
     const audioPlayer = AudioPlayer();
     const { auth, cm } = useGlobalStore();
     const authToken = <string>auth.getToken();
@@ -1031,6 +1032,16 @@ export default defineComponent({
     const closeConfirmBackHomeModal = () => {
       state.isConfirmBackHomeModalAppear = false;
     };
+
+    onBeforeRouteLeave((to, from, next) => {
+      if (from.name == "Cm" && to.name == "Home") {
+        next(true);
+      } else {
+        openConfirmBackHomeModal();
+        next(false);
+      }
+    });
+
     return {
       ...toRefs(state),
       clearNarration,
