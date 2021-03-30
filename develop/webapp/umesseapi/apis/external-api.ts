@@ -81,11 +81,11 @@ export const ExternalApiAxiosParamCreator = function (configuration?: Configurat
          * @summary CM外部連携情報取得（外部システム専用）
          * @param {string} external 外部システム区分
          * @param {string} unisCustomerCd UNIS顧客CD
-         * @param {Date} [lastdate] 最終取得日時
+         * @param {string} [lastdate] 最終取得日時
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getExternalCm: async (external: string, unisCustomerCd: string, lastdate?: Date, options: any = {}): Promise<RequestArgs> => {
+        getExternalCm: async (external: string, unisCustomerCd: string, lastdate?: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'external' is not null or undefined
             if (external === null || external === undefined) {
                 throw new RequiredError('external','Required parameter external was null or undefined when calling getExternalCm.');
@@ -108,9 +108,7 @@ export const ExternalApiAxiosParamCreator = function (configuration?: Configurat
             const localVarQueryParameter = {} as any;
 
             if (lastdate !== undefined) {
-                localVarQueryParameter['lastdate'] = (lastdate as any instanceof Date) ?
-                    (lastdate as any).toISOString() :
-                    lastdate;
+                localVarQueryParameter['lastdate'] = lastdate;
             }
 
             const query = new URLSearchParams(localVarUrlObj.search);
@@ -133,11 +131,11 @@ export const ExternalApiAxiosParamCreator = function (configuration?: Configurat
          * 外部連携するCMの情報を一覧で取得する
          * @summary CM外部連携情報一覧取得（外部システム専用）
          * @param {string} external 外部システム区分
-         * @param {Date} [lastdate] 最終取得日時
+         * @param {string} [lastdate] 最終取得日時
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listExternalCm: async (external: string, lastdate?: Date, options: any = {}): Promise<RequestArgs> => {
+        listExternalCm: async (external: string, lastdate?: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'external' is not null or undefined
             if (external === null || external === undefined) {
                 throw new RequiredError('external','Required parameter external was null or undefined when calling listExternalCm.');
@@ -155,9 +153,7 @@ export const ExternalApiAxiosParamCreator = function (configuration?: Configurat
             const localVarQueryParameter = {} as any;
 
             if (lastdate !== undefined) {
-                localVarQueryParameter['lastdate'] = (lastdate as any instanceof Date) ?
-                    (lastdate as any).toISOString() :
-                    lastdate;
+                localVarQueryParameter['lastdate'] = lastdate;
             }
 
             const query = new URLSearchParams(localVarUrlObj.search);
@@ -206,11 +202,11 @@ export const ExternalApiFp = function(configuration?: Configuration) {
          * @summary CM外部連携情報取得（外部システム専用）
          * @param {string} external 外部システム区分
          * @param {string} unisCustomerCd UNIS顧客CD
-         * @param {Date} [lastdate] 最終取得日時
+         * @param {string} [lastdate] 最終取得日時
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getExternalCm(external: string, unisCustomerCd: string, lastdate?: Date, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalItem>> {
+        async getExternalCm(external: string, unisCustomerCd: string, lastdate?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalItem>> {
             const localVarAxiosArgs = await ExternalApiAxiosParamCreator(configuration).getExternalCm(external, unisCustomerCd, lastdate, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
@@ -221,11 +217,11 @@ export const ExternalApiFp = function(configuration?: Configuration) {
          * 外部連携するCMの情報を一覧で取得する
          * @summary CM外部連携情報一覧取得（外部システム専用）
          * @param {string} external 外部システム区分
-         * @param {Date} [lastdate] 最終取得日時
+         * @param {string} [lastdate] 最終取得日時
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listExternalCm(external: string, lastdate?: Date, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalItems>> {
+        async listExternalCm(external: string, lastdate?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<ExternalItems>> {
             const localVarAxiosArgs = await ExternalApiAxiosParamCreator(configuration).listExternalCm(external, lastdate, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
@@ -258,22 +254,22 @@ export const ExternalApiFactory = function (configuration?: Configuration, baseP
          * @summary CM外部連携情報取得（外部システム専用）
          * @param {string} external 外部システム区分
          * @param {string} unisCustomerCd UNIS顧客CD
-         * @param {Date} [lastdate] 最終取得日時
+         * @param {string} [lastdate] 最終取得日時
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getExternalCm(external: string, unisCustomerCd: string, lastdate?: Date, options?: any): AxiosPromise<ExternalItem> {
+        getExternalCm(external: string, unisCustomerCd: string, lastdate?: string, options?: any): AxiosPromise<ExternalItem> {
             return ExternalApiFp(configuration).getExternalCm(external, unisCustomerCd, lastdate, options).then((request) => request(axios, basePath));
         },
         /**
          * 外部連携するCMの情報を一覧で取得する
          * @summary CM外部連携情報一覧取得（外部システム専用）
          * @param {string} external 外部システム区分
-         * @param {Date} [lastdate] 最終取得日時
+         * @param {string} [lastdate] 最終取得日時
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listExternalCm(external: string, lastdate?: Date, options?: any): AxiosPromise<ExternalItems> {
+        listExternalCm(external: string, lastdate?: string, options?: any): AxiosPromise<ExternalItems> {
             return ExternalApiFp(configuration).listExternalCm(external, lastdate, options).then((request) => request(axios, basePath));
         },
     };
@@ -304,24 +300,24 @@ export class ExternalApi extends BaseAPI {
      * @summary CM外部連携情報取得（外部システム専用）
      * @param {string} external 外部システム区分
      * @param {string} unisCustomerCd UNIS顧客CD
-     * @param {Date} [lastdate] 最終取得日時
+     * @param {string} [lastdate] 最終取得日時
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ExternalApi
      */
-    public getExternalCm(external: string, unisCustomerCd: string, lastdate?: Date, options?: any) {
+    public getExternalCm(external: string, unisCustomerCd: string, lastdate?: string, options?: any) {
         return ExternalApiFp(this.configuration).getExternalCm(external, unisCustomerCd, lastdate, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * 外部連携するCMの情報を一覧で取得する
      * @summary CM外部連携情報一覧取得（外部システム専用）
      * @param {string} external 外部システム区分
-     * @param {Date} [lastdate] 最終取得日時
+     * @param {string} [lastdate] 最終取得日時
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ExternalApi
      */
-    public listExternalCm(external: string, lastdate?: Date, options?: any) {
+    public listExternalCm(external: string, lastdate?: string, options?: any) {
         return ExternalApiFp(this.configuration).listExternalCm(external, lastdate, options).then((request) => request(this.axios, this.basePath));
     }
 }

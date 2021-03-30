@@ -1057,7 +1057,6 @@ paths:
           description: 最終取得日時
           schema:
             type: string
-            format: date-time
             example: "2021-03-29T12:34:56+09:00"
       responses:
         200:
@@ -1104,7 +1103,6 @@ paths:
           description: 最終取得日時
           schema:
             type: string
-            format: date-time
             example: "2021-03-29T12:34:56+09:00"
       responses:
         200:
