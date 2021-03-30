@@ -1,9 +1,10 @@
 "use strict";
 
-const { getExternalCm, completeExternalCm } = require("../../umesse/external");
-const assert = require('assert');
+const assert = require("assert");
 const { respondWithCode } = require("../utils/writer");
-const { UMesseError } = require("umesse-lib/error");
+const { UMesseError, InternalServerError } = require("umesse-lib/error");
+const { debuglog, errorlog } = require("umesse-lib/constants");
+const { getExternalCm, completeExternalCm } = require("../../umesse/external");
 
 /**
  * CM外部連携完了（外部システム専用）
@@ -18,10 +19,15 @@ exports.completeExternalCm = function (body, external, unisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     try {
       const json = await completeExternalCm(unisCustomerCd, external, body);
+      debuglog(JSON.stringify(json));
       resolve(json);
     } catch (e) {
+      debuglog(JSON.stringify(e));
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
+      if (e instanceof InternalServerError) errorlog(JSON.stringify(e));
+      reject(
+        respondWithCode(e.statusCode, { code: e.code, message: e.message })
+      );
     }
   });
 };
@@ -38,10 +44,15 @@ exports.getExternalCm = function (external, unisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     try {
       const json = await getExternalCm(unisCustomerCd, external);
+      debuglog(JSON.stringify(json));
       resolve(json);
     } catch (e) {
+      debuglog(JSON.stringify(e));
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
+      if (e instanceof InternalServerError) errorlog(JSON.stringify(e));
+      reject(
+        respondWithCode(e.statusCode, { code: e.code, message: e.message })
+      );
     }
   });
 };
@@ -57,10 +68,15 @@ exports.listExternalCm = function (external) {
   return new Promise(async function (resolve, reject) {
     try {
       const json = await getExternalCm("", external);
+      debuglog(JSON.stringify(json));
       resolve(json);
     } catch (e) {
+      debuglog(JSON.stringify(e));
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
+      if (e instanceof InternalServerError) errorlog(JSON.stringify(e));
+      reject(
+        respondWithCode(e.statusCode, { code: e.code, message: e.message })
+      );
     }
   });
 };

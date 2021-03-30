@@ -1,15 +1,15 @@
 "use strict";
 
+const assert = require("assert");
+const { respondWithCode } = require("../utils/writer");
+const { UMesseError, InternalServerError } = require("umesse-lib/error");
+const { constants, debuglog, errorlog } = require("umesse-lib/constants");
 const {
   getUserResource,
   createRecordingResource,
   updateUserResource,
   deleteUserResource,
 } = require("../../umesse/resources");
-const assert = require('assert');
-const { respondWithCode } = require("../utils/writer");
-const { UMesseError } = require("umesse-lib/error");
-const category = "recording";
 
 /**
  * 録音データ登録
@@ -23,10 +23,15 @@ exports.createUserRecording = function (body, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     try {
       const json = await createRecordingResource(xUnisCustomerCd, body);
+      debuglog(JSON.stringify(json));
       resolve(json);
     } catch (e) {
+      debuglog(JSON.stringify(e));
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
+      if (e instanceof InternalServerError) errorlog(JSON.stringify(e));
+      reject(
+        respondWithCode(e.statusCode, { code: e.code, message: e.message })
+      );
     }
   });
 };
@@ -44,13 +49,18 @@ exports.deleteUserRecording = function (id, xUnisCustomerCd) {
     try {
       const json = await deleteUserResource(
         xUnisCustomerCd,
-        category,
+        constants.resourceCategory.RECORDING,
         id
       );
+      debuglog(JSON.stringify(json));
       resolve(json);
     } catch (e) {
+      debuglog(JSON.stringify(e));
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
+      if (e instanceof InternalServerError) errorlog(JSON.stringify(e));
+      reject(
+        respondWithCode(e.statusCode, { code: e.code, message: e.message })
+      );
     }
   });
 };
@@ -66,11 +76,20 @@ exports.deleteUserRecording = function (id, xUnisCustomerCd) {
 exports.getUserRecording = function (id, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     try {
-      const json = await getUserResource(xUnisCustomerCd, category, id);
+      const json = await getUserResource(
+        xUnisCustomerCd,
+        constants.resourceCategory.RECORDING,
+        id
+      );
+      debuglog(JSON.stringify(json));
       resolve(json);
     } catch (e) {
+      debuglog(JSON.stringify(e));
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
+      if (e instanceof InternalServerError) errorlog(JSON.stringify(e));
+      reject(
+        respondWithCode(e.statusCode, { code: e.code, message: e.message })
+      );
     }
   });
 };
@@ -85,11 +104,19 @@ exports.getUserRecording = function (id, xUnisCustomerCd) {
 exports.listUserRecording = function (xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     try {
-      const json = await getUserResource(xUnisCustomerCd, category);
+      const json = await getUserResource(
+        xUnisCustomerCd,
+        constants.resourceCategory.RECORDING
+      );
+      debuglog(JSON.stringify(json));
       resolve(json);
     } catch (e) {
+      debuglog(JSON.stringify(e));
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
+      if (e instanceof InternalServerError) errorlog(JSON.stringify(e));
+      reject(
+        respondWithCode(e.statusCode, { code: e.code, message: e.message })
+      );
     }
   });
 };
@@ -108,14 +135,19 @@ exports.updateUserRecording = function (body, id, xUnisCustomerCd) {
     try {
       const json = await updateUserResource(
         xUnisCustomerCd,
-        category,
+        constants.resourceCategory.RECORDING,
         id,
         body
       );
+      debuglog(JSON.stringify(json));
       resolve(json);
     } catch (e) {
+      debuglog(JSON.stringify(e));
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
+      if (e instanceof InternalServerError) errorlog(JSON.stringify(e));
+      reject(
+        respondWithCode(e.statusCode, { code: e.code, message: e.message })
+      );
     }
   });
 };

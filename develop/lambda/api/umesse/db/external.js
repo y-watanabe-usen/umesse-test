@@ -14,6 +14,7 @@ module.exports = {
       key,
       {}
     );
+    debuglog(JSON.stringify(ret));
     if (!ret || !ret.Item) return;
     if (ret.Item.status === "9") return;
     return ret.Item;
@@ -32,6 +33,7 @@ module.exports = {
       constants.dynamoDbTable().external,
       options
     );
+    debuglog(JSON.stringify(ret));
     if (!ret || !ret.Items.length) throw new NotFoundError(ERROR_CODE.E0000404);
     return ret.Items;
   },
@@ -42,6 +44,7 @@ module.exports = {
       item,
       {}
     );
+    debuglog(JSON.stringify(ret));
     if (!ret) throw new Error(ERROR_CODE.E0000500);
     return ret;
   },
@@ -74,6 +77,7 @@ module.exports = {
       constants.dynamoDbTable().external,
       options
     );
+    debuglog(JSON.stringify(ret));
     if (!ret || !ret.Items.length) throw new NotFoundError(ERROR_CODE.E0000404);
     return ret.Items;
   },
@@ -87,6 +91,7 @@ module.exports = {
       key,
       {}
     );
+    debuglog(JSON.stringify(ret));
     if (!ret) throw new Error(ERROR_CODE.E0000500);
     return ret;
   },
@@ -110,6 +115,7 @@ module.exports = {
       key,
       options
     );
+    debuglog(JSON.stringify(ret));
     if (!ret) throw new Error(ERROR_CODE.E0000500);
     return ret;
   },

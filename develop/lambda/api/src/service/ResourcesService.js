@@ -1,13 +1,10 @@
 "use strict";
 
-const { constants } = require("umesse-lib/constants");
-const {
-  getResource,
-  getSignedUrl,
-} = require("../../umesse/resources");
-const assert = require('assert');
+const assert = require("assert");
 const { respondWithCode } = require("../utils/writer");
-const { UMesseError } = require("umesse-lib/error");
+const { UMesseError, InternalServerError } = require("umesse-lib/error");
+const { constants, debuglog, errorlog } = require("umesse-lib/constants");
+const { getResource, getSignedUrl } = require("../../umesse/resources");
 
 /**
  * S3オブジェクトの署名付きURLの取得
@@ -21,10 +18,15 @@ exports.getSignedUrl = function (id, category) {
   return new Promise(async function (resolve, reject) {
     try {
       const json = await getSignedUrl(id, category);
+      debuglog(JSON.stringify(json));
       resolve(json);
     } catch (e) {
+      debuglog(JSON.stringify(e));
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
+      if (e instanceof InternalServerError) errorlog(JSON.stringify(e));
+      reject(
+        respondWithCode(e.statusCode, { code: e.code, message: e.message })
+      );
     }
   });
 };
@@ -40,11 +42,21 @@ exports.getSignedUrl = function (id, category) {
 exports.listBgm = function (industryCd, sort) {
   return new Promise(async function (resolve, reject) {
     try {
-      const json = await getResource(constants.resourceCategory.BGM, industryCd, "", sort);
+      const json = await getResource(
+        constants.resourceCategory.BGM,
+        industryCd,
+        "",
+        sort
+      );
+      debuglog(JSON.stringify(json));
       resolve(json);
     } catch (e) {
+      debuglog(JSON.stringify(e));
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
+      if (e instanceof InternalServerError) errorlog(JSON.stringify(e));
+      reject(
+        respondWithCode(e.statusCode, { code: e.code, message: e.message })
+      );
     }
   });
 };
@@ -59,11 +71,21 @@ exports.listBgm = function (industryCd, sort) {
 exports.listChime = function (sort) {
   return new Promise(async function (resolve, reject) {
     try {
-      const json = await getResource(constants.resourceCategory.CHIME, "", "", sort);
+      const json = await getResource(
+        constants.resourceCategory.CHIME,
+        "",
+        "",
+        sort
+      );
+      debuglog(JSON.stringify(json));
       resolve(json);
     } catch (e) {
+      debuglog(JSON.stringify(e));
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
+      if (e instanceof InternalServerError) errorlog(JSON.stringify(e));
+      reject(
+        respondWithCode(e.statusCode, { code: e.code, message: e.message })
+      );
     }
   });
 };
@@ -86,10 +108,15 @@ exports.listFree = function (industryCd, sceneCd, sort) {
         sceneCd,
         sort
       );
+      debuglog(JSON.stringify(json));
       resolve(json);
     } catch (e) {
+      debuglog(JSON.stringify(e));
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
+      if (e instanceof InternalServerError) errorlog(JSON.stringify(e));
+      reject(
+        respondWithCode(e.statusCode, { code: e.code, message: e.message })
+      );
     }
   });
 };
@@ -112,12 +139,16 @@ exports.listNarration = function (industryCd, sceneCd, sort) {
         sceneCd,
         sort
       );
+      debuglog(JSON.stringify(json));
       resolve(json);
     } catch (e) {
+      debuglog(JSON.stringify(e));
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
+      if (e instanceof InternalServerError) errorlog(JSON.stringify(e));
+      reject(
+        respondWithCode(e.statusCode, { code: e.code, message: e.message })
+      );
     }
-
   });
 };
 
@@ -139,10 +170,15 @@ exports.listTemplate = function (industryCd, sceneCd, sort) {
         sceneCd,
         sort
       );
+      debuglog(JSON.stringify(json));
       resolve(json);
     } catch (e) {
+      debuglog(JSON.stringify(e));
       assert(e instanceof UMesseError);
-      reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
+      if (e instanceof InternalServerError) errorlog(JSON.stringify(e));
+      reject(
+        respondWithCode(e.statusCode, { code: e.code, message: e.message })
+      );
     }
   });
 };

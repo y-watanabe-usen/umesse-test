@@ -29,6 +29,7 @@ module.exports = {
       key,
       options
     );
+    debuglog(JSON.stringify(ret));
     if (!ret || !ret.Item) throw new NotFoundError(ERROR_CODE.E0000404);
     return ret.Item;
   },
@@ -45,6 +46,7 @@ module.exports = {
       key,
       options
     );
+    debuglog(JSON.stringify(ret));
     if (!ret || !ret.Item) throw new NotFoundError(ERROR_CODE.E0000404);
     ret = ret.Item.cm.filter(
       (item) => item.status !== constants.cmStatus.DELETE
@@ -54,6 +56,7 @@ module.exports = {
 
   findCmIndex: async function (unisCustomerCd, id) {
     let ret = await this.findCm(unisCustomerCd);
+    debuglog(JSON.stringify(ret));
     const index = ret.findIndex((item) => item.cmId === id);
     if (index < 0) throw new NotFoundError(ERROR_CODE.E0000404);
     return [ret[index], index];
@@ -71,12 +74,14 @@ module.exports = {
       key,
       options
     );
+    debuglog(JSON.stringify(ret));
     if (!ret || !ret.Item) throw new NotFoundError(ERROR_CODE.E0000404);
     return ret.Item[category];
   },
 
   findResourceIndex: async function (unisCustomerCd, category, id) {
     let ret = await this.findResource(unisCustomerCd, category);
+    debuglog(JSON.stringify(ret));
     const index = ret.findIndex((item) => item[`${category}Id`] === id);
     if (index < 0) throw new NotFoundError(ERROR_CODE.E0000404);
     return [ret[index], index];
@@ -98,6 +103,7 @@ module.exports = {
       key,
       options
     );
+    debuglog(JSON.stringify(ret));
     if (!ret) throw new Error(ERROR_CODE.E0000500);
     return ret.Attributes.cm.pop();
   },
@@ -121,6 +127,7 @@ module.exports = {
       key,
       options
     );
+    debuglog(JSON.stringify(ret));
     if (!ret) throw new Error(ERROR_CODE.E0000500);
     return ret.Attributes[category].pop();
   },
@@ -141,6 +148,7 @@ module.exports = {
       key,
       options
     );
+    debuglog(JSON.stringify(ret));
     if (!ret) throw new Error(ERROR_CODE.E0000500);
     return ret.Attributes.cm[index];
   },
@@ -164,6 +172,7 @@ module.exports = {
       key,
       options
     );
+    debuglog(JSON.stringify(ret));
     if (!ret) throw new Error(ERROR_CODE.E0000500);
     return ret.Attributes[category][index];
   },
@@ -184,6 +193,7 @@ module.exports = {
       key,
       options
     );
+    debuglog(JSON.stringify(ret));
     if (!ret) throw new Error(ERROR_CODE.E0000500);
     return ret.Attributes[category];
   },

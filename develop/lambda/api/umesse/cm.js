@@ -4,7 +4,6 @@ const path = require("path");
 const {
   constants,
   debuglog,
-  errorlog,
   timestamp,
   generateId,
   responseData,
@@ -45,7 +44,6 @@ exports.getCm = async (unisCustomerCd, id, sort) => {
     ret = await db.User.findCm(unisCustomerCd);
   } catch (e) {
     if (e instanceof NotFoundError) throw e;
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
   if (id) {
@@ -86,7 +84,6 @@ exports.createCm = async (unisCustomerCd, body) => {
       [cm, index] = await db.User.findCmIndex(unisCustomerCd, id);
     } catch (e) {
       if (e instanceof NotFoundError) throw e;
-      errorlog(JSON.stringify(e));
       throw new InternalServerError(e.message);
     }
   }
@@ -103,7 +100,6 @@ exports.createCm = async (unisCustomerCd, body) => {
       `users/${unisCustomerCd}/${constants.resourceCategory.CM}/${id}.mp3`
     );
   } catch (e) {
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
 
@@ -141,7 +137,6 @@ exports.createCm = async (unisCustomerCd, body) => {
     try {
       ret = await db.User.addCm(unisCustomerCd, data);
     } catch (e) {
-      errorlog(JSON.stringify(e));
       throw new InternalServerError(e.message);
     }
   }
@@ -177,7 +172,6 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
     [cm, index] = await db.User.findCmIndex(unisCustomerCd, id);
   } catch (e) {
     if (e instanceof NotFoundError) throw e;
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
 
@@ -188,7 +182,6 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
     try {
       external = await db.External.find(unisCustomerCd);
     } catch (e) {
-      errorlog(JSON.stringify(e));
       throw new InternalServerError(e.message);
     }
     if (external) throw new BadRequestError(ERROR_CODE.E0400010);
@@ -219,7 +212,6 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
       try {
         const _ = await sqsManager.send(params);
       } catch (e) {
-        errorlog(JSON.stringify(e));
         throw new InternalServerError(e.message);
       }
     }
@@ -259,7 +251,6 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
     try {
       const _ = await db.External.add(item);
     } catch (e) {
-      errorlog(JSON.stringify(e));
       throw new InternalServerError(e.message);
     }
   }
@@ -274,7 +265,6 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
   try {
     ret = await db.User.updateCm(unisCustomerCd, index, cm);
   } catch (e) {
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
 
@@ -303,7 +293,6 @@ exports.deleteCm = async (unisCustomerCd, id) => {
     [cm, index] = await db.User.findCmIndex(unisCustomerCd, id);
   } catch (e) {
     if (e instanceof NotFoundError) throw e;
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
 
@@ -319,7 +308,6 @@ exports.deleteCm = async (unisCustomerCd, id) => {
   try {
     ret = await db.User.updateCm(unisCustomerCd, index, cm);
   } catch (e) {
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
 
@@ -330,7 +318,6 @@ exports.deleteCm = async (unisCustomerCd, id) => {
       `users/${unisCustomerCd}/${constants.resourceCategory.CM}/${id}.aac`
     );
   } catch (e) {
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
 
@@ -370,7 +357,6 @@ async function generateCm(unisCustomerCd, id, materials) {
     debuglog("generate complete");
     return Math.trunc(seconds);
   } catch (e) {
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
 }

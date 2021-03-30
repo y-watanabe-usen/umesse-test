@@ -3,7 +3,6 @@
 const {
   constants,
   debuglog,
-  errorlog,
   timestamp,
   responseData,
 } = require("umesse-lib/constants");
@@ -38,7 +37,6 @@ exports.getUploadCm = async (unisCustomerCd, id) => {
     ret = await db.User.findCm(unisCustomerCd);
   } catch (e) {
     if (e instanceof NotFoundError) throw e;
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
 
@@ -84,7 +82,6 @@ exports.createUploadCm = async (unisCustomerCd, id, body) => {
     [cm, index] = await db.User.findCmIndex(unisCustomerCd, id);
   } catch (e) {
     if (e instanceof NotFoundError) throw e;
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
 
@@ -97,7 +94,6 @@ exports.createUploadCm = async (unisCustomerCd, id, body) => {
   try {
     external = await db.External.find(unisCustomerCd);
   } catch (e) {
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
   if (external) throw new BadRequestError(ERROR_CODE.E0400010);
@@ -121,7 +117,6 @@ exports.createUploadCm = async (unisCustomerCd, id, body) => {
   try {
     const _ = await db.External.add(item);
   } catch (e) {
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
 
@@ -134,7 +129,6 @@ exports.createUploadCm = async (unisCustomerCd, id, body) => {
   try {
     ret = await db.User.updateCm(unisCustomerCd, index, cm);
   } catch (e) {
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
 
@@ -163,7 +157,6 @@ exports.deleteUploadCm = async (unisCustomerCd, id) => {
     [cm, index] = await db.User.findCmIndex(unisCustomerCd, id);
   } catch (e) {
     if (e instanceof NotFoundError) throw e;
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
 
@@ -184,7 +177,6 @@ exports.deleteUploadCm = async (unisCustomerCd, id) => {
   try {
     const _ = await db.External.add(item);
   } catch (e) {
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
 
@@ -196,7 +188,6 @@ exports.deleteUploadCm = async (unisCustomerCd, id) => {
   try {
     ret = await db.User.updateCm(unisCustomerCd, index, cm);
   } catch (e) {
-    errorlog(JSON.stringify(e));
     throw new InternalServerError(e.message);
   }
 
