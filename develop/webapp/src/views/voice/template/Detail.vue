@@ -392,7 +392,10 @@ export default defineComponent({
         return "";
       }
     };
-    const selectErrorMessageLangs = (langs: string[], narrations: NarrationItem[]) => {
+    const selectErrorMessageLangs = (
+      langs: string[],
+      narrations: NarrationItem[]
+    ) => {
       if (narrations.length === 4 && langs.length === 1) {
         state.isErrorLangs = false;
         return "";
@@ -401,7 +404,13 @@ export default defineComponent({
       if (!langs.length) {
         state.isErrorLangs = true;
         return "言語設定を選択してください";
-      } else if ((langs.length + narrations.length) > 4) {
+      }
+
+      if (langs.length + narrations.length > 4) {
+        if (narrations.length === 4) {
+          state.isErrorLangs = true;
+          return `一つだけ選択してください。`;
+        }
         state.isErrorLangs = true;
         return `既に${narrations.length}つのナレーションが設定されています。`;
       } else {
