@@ -100,6 +100,7 @@ exports.updateUserCm = function (body, id, xUnisCustomerCd) {
       const json = await updateCm(xUnisCustomerCd, id, body);
       resolve(json);
     } catch (e) {
+      console.log(e);
       assert(e instanceof UMesseError);
       reject(respondWithCode(e.statusCode, { code: e.code, message: e.message }))
     }
