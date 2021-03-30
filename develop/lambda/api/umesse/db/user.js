@@ -150,7 +150,7 @@ module.exports = {
     );
     debuglog(JSON.stringify(ret));
     if (!ret) throw new Error(ERROR_CODE.E0000500);
-    return ret.Attributes.cm[index];
+    return ret.Attributes.cm.pop();
   },
 
   updateResource: async function (unisCustomerCd, category, index, resource) {
@@ -174,7 +174,7 @@ module.exports = {
     );
     debuglog(JSON.stringify(ret));
     if (!ret) throw new Error(ERROR_CODE.E0000500);
-    return ret.Attributes[category][index];
+    return ret.Attributes[category].pop();
   },
 
   deleteFromCategory: async function (unisCustomerCd, category, index) {
