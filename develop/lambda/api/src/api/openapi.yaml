@@ -1796,7 +1796,6 @@ paths:
         explode: true
         schema:
           type: string
-          format: date-time
           example: 2021-03-29T12:34:56+09:00
       responses:
         "200":
@@ -1862,7 +1861,6 @@ paths:
         explode: true
         schema:
           type: string
-          format: date-time
           example: 2021-03-29T12:34:56+09:00
       responses:
         "200":

@@ -13,7 +13,7 @@ module.exports.completeExternalCm = function completeExternalCm (req, res, next,
     });
 };
 
-module.exports.getExternalCm = function getExternalCm (req, res, next, external, unisCustomerCd, lastdate) {
+module.exports.getExternalCm = function getExternalCm (req, res, next, lastdate, external, unisCustomerCd) {
   External.getExternalCm(external, unisCustomerCd)
     .then(function (response) {
       utils.writeJson(res, response);
@@ -23,7 +23,7 @@ module.exports.getExternalCm = function getExternalCm (req, res, next, external,
     });
 };
 
-module.exports.listExternalCm = function listExternalCm (req, res, next, external, lastdate) {
+module.exports.listExternalCm = function listExternalCm (req, res, next, lastdate, external) {
   External.listExternalCm(external)
     .then(function (response) {
       utils.writeJson(res, response);
