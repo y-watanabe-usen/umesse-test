@@ -525,7 +525,7 @@
             <SelectBox
               v-model="scene"
               :options="
-                Constants.SCENES.map((scene) => {
+                industryScenesList.map((scene) => {
                   return { title: scene.name, value: scene.cd };
                 })
               "
@@ -673,9 +673,11 @@ export default defineComponent({
     const authToken = <string>auth.getToken();
     const authUser = <User>auth.getUserInfo();
     const uploadSystemArray =
-      authUser.serviceCd === Constants.SERVICE_CD_UMUSIC
-        ? Common.getUploadSystemUmusic()
-        : Common.getUploadSystemSsence();
+        authUser.serviceCd === Constants.SERVICE_CD_UMUSIC
+          ? Common.getUploadSystemUmusic()
+          : Common.getUploadSystemSsence();
+    const industryScenesCd = "99";
+    const industryScenesList = Common.getIndustryScenes(industryScenesCd);
     const state = reactive({
       cmTime: computed(() => cm.secounds),
       openChime: computed(() => cm.openChime),
@@ -691,9 +693,8 @@ export default defineComponent({
       duration: computed(() => audioPlayer.getDuration()),
       title: cm.title,
       description: cm.description,
-      scene: "001",
-      uploadSystem:
-        authUser.serviceCd === Constants.SERVICE_CD_UMUSIC ? "01" : "02",
+      scene: "004",
+      uploadSystem: authUser.serviceCd === Constants.SERVICE_CD_UMUSIC ? "01" : "02",
       isPlayModalAppear: false,
       isPlayOpenChimeModalAppear: false,
       isPlayNarrationModalAppear: false,
@@ -1116,6 +1117,7 @@ export default defineComponent({
       closeConfirmBackHomeModal,
       authUser,
       uploadSystemArray,
+      industryScenesList,
     };
   },
 });
