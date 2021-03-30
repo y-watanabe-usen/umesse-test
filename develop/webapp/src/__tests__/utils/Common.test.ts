@@ -20,10 +20,6 @@ describe("getNarrationIndustriesのテスト", () => {
 describe("getIndustryScenesのテスト", () => {
   const datas = [
     {
-      industryCd: "01",
-      expected: [{ cd: "001", name: "チャイム" }],
-    },
-    {
       industryCd: "02",
       expected: [
         { cd: "901", name: "録音" },
@@ -33,9 +29,6 @@ describe("getIndustryScenesのテスト", () => {
     {
       industryCd: "10",
       expected: [
-        { cd: "001", name: "チャイム" },
-        { cd: "002", name: "ブザー" },
-        { cd: "003", name: "効果ＢＧＭ" },
         { cd: "004", name: "開店" },
         { cd: "005", name: "閉店" },
         { cd: "007", name: "案内" },
@@ -58,9 +51,6 @@ describe("getIndustryScenesのテスト", () => {
     {
       industryCd: "20",
       expected: [
-        { cd: "001", name: "チャイム" },
-        { cd: "002", name: "ブザー" },
-        { cd: "003", name: "効果ＢＧＭ" },
         { cd: "004", name: "開店" },
         { cd: "005", name: "閉店" },
         { cd: "007", name: "案内" },
@@ -81,9 +71,6 @@ describe("getIndustryScenesのテスト", () => {
     {
       industryCd: "30",
       expected: [
-        { cd: "001", name: "チャイム" },
-        { cd: "002", name: "ブザー" },
-        { cd: "003", name: "効果ＢＧＭ" },
         { cd: "004", name: "開店" },
         { cd: "005", name: "閉店" },
         { cd: "007", name: "案内" },
@@ -108,9 +95,6 @@ describe("getIndustryScenesのテスト", () => {
     {
       industryCd: "31",
       expected: [
-        { cd: "001", name: "チャイム" },
-        { cd: "002", name: "ブザー" },
-        { cd: "003", name: "効果ＢＧＭ" },
         { cd: "004", name: "開店" },
         { cd: "005", name: "閉店" },
         { cd: "007", name: "案内" },
@@ -134,9 +118,6 @@ describe("getIndustryScenesのテスト", () => {
     {
       industryCd: "40",
       expected: [
-        { cd: "001", name: "チャイム" },
-        { cd: "002", name: "ブザー" },
-        { cd: "003", name: "効果ＢＧＭ" },
         { cd: "007", name: "案内" },
         { cd: "008", name: "年末営業告知" },
         { cd: "009", name: "年始営業告知" },
@@ -168,9 +149,6 @@ describe("getIndustryScenesのテスト", () => {
     {
       industryCd: "50",
       expected: [
-        { cd: "001", name: "チャイム" },
-        { cd: "002", name: "ブザー" },
-        { cd: "003", name: "効果ＢＧＭ" },
         { cd: "007", name: "案内" },
         { cd: "011", name: "時報" },
         { cd: "015", name: "注意・禁止" },
@@ -193,9 +171,6 @@ describe("getIndustryScenesのテスト", () => {
     {
       industryCd: "51",
       expected: [
-        { cd: "001", name: "チャイム" },
-        { cd: "002", name: "ブザー" },
-        { cd: "003", name: "効果ＢＧＭ" },
         { cd: "004", name: "開店" },
         { cd: "007", name: "案内" },
         { cd: "008", name: "年末営業告知" },
@@ -215,9 +190,6 @@ describe("getIndustryScenesのテスト", () => {
     {
       industryCd: "90",
       expected: [
-        { cd: "001", name: "チャイム" },
-        { cd: "002", name: "ブザー" },
-        { cd: "003", name: "効果ＢＧＭ" },
         { cd: "004", name: "開店" },
         { cd: "005", name: "閉店" },
         { cd: "007", name: "案内" },
@@ -245,9 +217,6 @@ describe("getIndustryScenesのテスト", () => {
     {
       industryCd: "99",
       expected: [
-        { cd: "001", name: "チャイム" },
-        { cd: "002", name: "ブザー" },
-        { cd: "003", name: "効果ＢＧＭ" },
         { cd: "004", name: "開店" },
         { cd: "005", name: "閉店" },
         { cd: "007", name: "案内" },
@@ -299,9 +268,6 @@ describe("getIndustryScenesのテスト", () => {
     {
       industryCd: "03",
       expected: [
-        { cd: "001", name: "チャイム" },
-        { cd: "002", name: "ブザー" },
-        { cd: "003", name: "効果ＢＧＭ" },
         { cd: "004", name: "開店" },
         { cd: "005", name: "閉店" },
         { cd: "007", name: "案内" },

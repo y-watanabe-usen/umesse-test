@@ -226,7 +226,7 @@ export default defineComponent({
     const industries = Common.getNarrationIndustries();
     const state = reactive({
       sort: 1,
-      activeIndustryCd: "01",
+      activeIndustryCd: "02",
       activeSceneCd: null as string | null,
       narrations: [] as NarrationItem[],
       scenes: [] as Scene[],
