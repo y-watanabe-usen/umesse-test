@@ -21,7 +21,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/cm',
     name: 'Cm',
-    component: Cm,
+    component: Cm
   },
   {
     path: '/cm/chime/:div',
