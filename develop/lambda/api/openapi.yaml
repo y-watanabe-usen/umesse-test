@@ -1309,11 +1309,9 @@ components:
           description: CM区分(音楽系:BGMあり, 素ナレ:BGMなし)
           example: "01: 音楽系, 02: 素ナレ"
         industry:
-          items:
-            $ref: "#/components/schemas/IndustryItem"
+          $ref: "#/components/schemas/IndustryItem"
         scene:
-          items:
-            $ref: "#/components/schemas/SceneItem"
+          $ref: "#/components/schemas/SceneItem"
         materials:
           items:
             $ref: "#/components/schemas/CmMaterialListItem"

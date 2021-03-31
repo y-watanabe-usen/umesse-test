@@ -2197,13 +2197,9 @@ components:
           description: "CM区分(音楽系:BGMあり, 素ナレ:BGMなし)"
           example: "01: 音楽系, 02: 素ナレ"
         industry:
-          type: array
-          items:
-            $ref: '#/components/schemas/IndustryItem'
+          $ref: '#/components/schemas/IndustryItem'
         scene:
-          type: array
-          items:
-            $ref: '#/components/schemas/SceneItem'
+          $ref: '#/components/schemas/SceneItem'
         materials:
           type: array
           items:
@@ -2221,15 +2217,11 @@ components:
         productionType: "01: 音楽系, 02: 素ナレ"
         description: タイムセールサンプル１
         industry:
-        - industryName: 業種名
-          industryCd: "01"
-        - industryName: 業種名
+          industryName: 業種名
           industryCd: "01"
         title: タイムセール
         scene:
-        - sceneCd: "01"
-          sceneName: シーン名
-        - sceneCd: "01"
+          sceneCd: "01"
           sceneName: シーン名
         seconds: 540
         materials:
@@ -2964,15 +2956,11 @@ components:
           productionType: "01: 音楽系, 02: 素ナレ"
           description: タイムセールサンプル１
           industry:
-          - industryName: 業種名
-            industryCd: "01"
-          - industryName: 業種名
+            industryName: 業種名
             industryCd: "01"
           title: タイムセール
           scene:
-          - sceneCd: "01"
-            sceneName: シーン名
-          - sceneCd: "01"
+            sceneCd: "01"
             sceneName: シーン名
           seconds: 540
           materials:
@@ -3024,15 +3012,11 @@ components:
           productionType: "01: 音楽系, 02: 素ナレ"
           description: タイムセールサンプル１
           industry:
-          - industryName: 業種名
-            industryCd: "01"
-          - industryName: 業種名
+            industryName: 業種名
             industryCd: "01"
           title: タイムセール
           scene:
-          - sceneCd: "01"
-            sceneName: シーン名
-          - sceneCd: "01"
+            sceneCd: "01"
             sceneName: シーン名
           seconds: 540
           materials:
