@@ -101,9 +101,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/CmItem"
+                $ref: "#/components/schemas/CmListItem"
         400:
           $ref: "#/components/responses/BadRequest"
         401:
@@ -1259,6 +1257,23 @@ components:
           type: string
           description: 更新日
           example: "2019-09-01T09:00:00+9:00"
+    CmListItem:
+      type: array
+      items:
+        properties:
+          sceneCd:
+            type: string
+            description: シーンCD
+            example: "01"
+          sceneName:
+            type: string
+            description: シーン名
+            example: "シーン名"
+          details:
+            type: array
+            items:
+              type: object
+              $ref: "#/components/schemas/CmItem"        
     CmItem:
       properties:
         id:
@@ -1945,4 +1960,7 @@ components:
             $ref: "#/components/schemas/Error"
     Unexpected:
       description: Unexpected error.
-
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"

@@ -57,6 +57,10 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
       x-swagger-router-controller: Auth
   /user:
     get:
@@ -104,6 +108,10 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
       x-swagger-router-controller: User
   /user/cm:
     get:
@@ -137,10 +145,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/CmItem'
-                x-content-type: application/json
+                $ref: '#/components/schemas/CmListItem'
         "400":
           description: Bad request. Response invalid.
           content:
@@ -163,6 +168,10 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
       x-swagger-router-controller: Cm
     post:
       tags:
@@ -211,6 +220,10 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
       x-swagger-router-controller: Cm
   /user/cm/{id}:
     get:
@@ -267,6 +280,10 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
       x-swagger-router-controller: Cm
     post:
       tags:
@@ -324,6 +341,10 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
       x-swagger-router-controller: Cm
     delete:
       tags:
@@ -379,6 +400,10 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
       x-swagger-router-controller: Cm
   /user/recording:
     get:
@@ -429,6 +454,10 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
       x-swagger-router-controller: Recording
     post:
       tags:
@@ -484,6 +513,10 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
       x-swagger-router-controller: Recording
   /user/recording/{id}:
     get:
@@ -540,6 +573,10 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
       x-swagger-router-controller: Recording
     post:
       tags:
@@ -597,6 +634,10 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
       x-swagger-router-controller: Recording
     delete:
       tags:
@@ -652,6 +693,10 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
       x-swagger-router-controller: Recording
   /user/tts:
     get:
@@ -702,6 +747,10 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
       x-swagger-router-controller: Tts
     post:
       tags:
@@ -753,6 +802,10 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
       x-swagger-router-controller: Tts
   /user/tts/generate:
     post:
@@ -802,6 +855,10 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
       x-swagger-router-controller: Tts
   /user/tts/{id}:
     get:
@@ -858,6 +915,10 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
       x-swagger-router-controller: Tts
     post:
       tags:
@@ -915,6 +976,10 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
       x-swagger-router-controller: Tts
     delete:
       tags:
@@ -970,6 +1035,10 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
       x-swagger-router-controller: Tts
   /upload/cm:
     get:
@@ -1017,6 +1086,10 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
       x-swagger-router-controller: Upload
   /upload/cm/{id}:
     get:
@@ -1073,6 +1146,10 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
       x-swagger-router-controller: Upload
     post:
       tags:
@@ -1130,6 +1207,10 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
       x-swagger-router-controller: Upload
     delete:
       tags:
@@ -1185,6 +1266,10 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
       x-swagger-router-controller: Upload
   /share/cm:
     get:
@@ -1235,6 +1320,10 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
       x-swagger-router-controller: Share
   /share/cm/{id}:
     get:
@@ -1291,6 +1380,10 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
       x-swagger-router-controller: Share
     post:
       tags:
@@ -1346,6 +1439,10 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
       x-swagger-router-controller: Share
     delete:
       tags:
@@ -1401,6 +1498,10 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
       x-swagger-router-controller: Share
   /bgm:
     get:
@@ -1460,6 +1561,10 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
       x-swagger-router-controller: Resources
   /narration:
     get:
@@ -1528,6 +1633,10 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
       x-swagger-router-controller: Resources
   /chime:
     get:
@@ -1578,6 +1687,10 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
       x-swagger-router-controller: Resources
   /free:
     get:
@@ -1646,6 +1759,10 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
       x-swagger-router-controller: Resources
   /template:
     get:
@@ -1714,6 +1831,10 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
       x-swagger-router-controller: Resources
   /signedUrl:
     get:
@@ -1770,6 +1891,10 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
       x-swagger-router-controller: Resources
   /{external}/cm:
     get:
@@ -1826,6 +1951,10 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
       x-swagger-router-controller: External
   /{external}/cm/{unisCustomerCd}:
     get:
@@ -1891,6 +2020,10 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
       x-swagger-router-controller: External
     post:
       tags:
@@ -1948,6 +2081,10 @@ paths:
                 $ref: '#/components/schemas/Error'
         "5XX":
           description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
       x-swagger-router-controller: External
 components:
   schemas:
@@ -2021,6 +2158,10 @@ components:
         customerName: カフェUSEN
         customerGroupCd: "1234567"
         createDate: 2019-09-01T09:00:00+9:00
+    CmListItem:
+      type: array
+      items:
+        $ref: '#/components/schemas/CmListItem_inner'
     CmItem:
       properties:
         id:
@@ -2801,6 +2942,144 @@ components:
           example: https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx
       example:
         url: https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx
+    CmListItem_inner:
+      properties:
+        sceneCd:
+          type: string
+          description: シーンCD
+          example: "01"
+        sceneName:
+          type: string
+          description: シーン名
+          example: シーン名
+        details:
+          type: array
+          items:
+            $ref: '#/components/schemas/CmItem'
+      example:
+        sceneCd: "01"
+        sceneName: シーン名
+        details:
+        - endDate: 9999-12-31T23:59:59+09:00
+          productionType: "01: 音楽系, 02: 素ナレ"
+          description: タイムセールサンプル１
+          industry:
+          - industryName: 業種名
+            industryCd: "01"
+          - industryName: 業種名
+            industryCd: "01"
+          title: タイムセール
+          scene:
+          - sceneCd: "01"
+            sceneName: シーン名
+          - sceneCd: "01"
+            sceneName: シーン名
+          seconds: 540
+          materials:
+          - startChime:
+              volume: 50
+              id: サンプル01
+              category: chime
+            narrations:
+            - volume: 150
+              id: サンプル01
+              category: narration
+            - volume: 150
+              id: サンプル01
+              category: narration
+            endChime:
+              volume: 50
+              id: サンプル02
+              category: chime
+            bgm:
+              volume: 50
+              id: サンプル01
+              category: bgm
+          - startChime:
+              volume: 50
+              id: サンプル01
+              category: chime
+            narrations:
+            - volume: 150
+              id: サンプル01
+              category: narration
+            - volume: 150
+              id: サンプル01
+              category: narration
+            endChime:
+              volume: 50
+              id: サンプル02
+              category: chime
+            bgm:
+              volume: 50
+              id: サンプル01
+              category: bgm
+          id: 123456789-c-12345678
+          category: cm
+          startDate: 2019-09-01T09:00:00+9:00
+          status: "00:CM削除, 01: CM作成中, 02: CM作成完了, 09: CM作成エラー, 11: 外部システム連携中, 12:\
+            \ 外部システム連携完了, 19: 外部システム連携エラー"
+          timestamp: 2019-09-01T09:00:00+9:00
+        - endDate: 9999-12-31T23:59:59+09:00
+          productionType: "01: 音楽系, 02: 素ナレ"
+          description: タイムセールサンプル１
+          industry:
+          - industryName: 業種名
+            industryCd: "01"
+          - industryName: 業種名
+            industryCd: "01"
+          title: タイムセール
+          scene:
+          - sceneCd: "01"
+            sceneName: シーン名
+          - sceneCd: "01"
+            sceneName: シーン名
+          seconds: 540
+          materials:
+          - startChime:
+              volume: 50
+              id: サンプル01
+              category: chime
+            narrations:
+            - volume: 150
+              id: サンプル01
+              category: narration
+            - volume: 150
+              id: サンプル01
+              category: narration
+            endChime:
+              volume: 50
+              id: サンプル02
+              category: chime
+            bgm:
+              volume: 50
+              id: サンプル01
+              category: bgm
+          - startChime:
+              volume: 50
+              id: サンプル01
+              category: chime
+            narrations:
+            - volume: 150
+              id: サンプル01
+              category: narration
+            - volume: 150
+              id: サンプル01
+              category: narration
+            endChime:
+              volume: 50
+              id: サンプル02
+              category: chime
+            bgm:
+              volume: 50
+              id: サンプル01
+              category: bgm
+          id: 123456789-c-12345678
+          category: cm
+          startDate: 2019-09-01T09:00:00+9:00
+          status: "00:CM削除, 01: CM作成中, 02: CM作成完了, 09: CM作成エラー, 11: 外部システム連携中, 12:\
+            \ 外部システム連携完了, 19: 外部システム連携エラー"
+          timestamp: 2019-09-01T09:00:00+9:00
     CmMaterialListItem_narrations:
       properties:
         id:
@@ -2971,6 +3250,10 @@ components:
             $ref: '#/components/schemas/Error'
     Unexpected:
       description: Unexpected error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   parameters:
     Token:
       name: x-token
