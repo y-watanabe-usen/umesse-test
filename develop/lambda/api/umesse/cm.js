@@ -51,7 +51,31 @@ exports.getCm = async (unisCustomerCd, id, sort) => {
     if (!ret) throw new NotFoundError(ERROR_CODE.E0000404);
   }
 
-  return responseData(ret, constants.resourceCategory.CM, sort);
+  let data = responseData(ret, constants.resourceCategory.CM, sort);
+  // レスポンスデータ成形
+  if (Array.isArray(data)) {
+    const scenes = Array.from(
+      new Set(
+        data.map((item) => {
+          if (!item.scene) item.scene = { sceneCd: "999", sceneName: "作成中" };
+          return item.scene.sceneCd;
+        })
+      )
+    ).sort();
+
+    let res = [];
+    for (const sceneCd of scenes) {
+      const details = data.filter((item) => item.scene.sceneCd === sceneCd);
+      res.push({
+        sceneCd: sceneCd,
+        sceneName: details[0].scene.sceneName,
+        details: details,
+      });
+    }
+    data = res;
+  }
+
+  return data;
 };
 
 // CM新規作成（結合処理）

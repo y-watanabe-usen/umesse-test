@@ -83,15 +83,21 @@ describe("外部連携CMデータ", () => {
 
 // 外部連携CMデータ追加
 describe("外部連携CMデータ追加", () => {
-  test("[success] 外部連携CMデータ追加", async () => {
+  // test("[success] 外部連携CMデータ追加", async () => {
+  //   await expect(
+  //     createUploadCm(data.unisCustomerCd, data.cm[1].id, { uploadSystem: "01" })
+  //   ).resolves.toEqual({
+  //     ...data.cm[1],
+  //     uploadSystem: "01",
+  //     status: "11",
+  //     timestamp: expect.anything(),
+  //   });
+  // });
+
+  test("[error] 外部連携CMデータ追加　重複", async () => {
     await expect(
       createUploadCm(data.unisCustomerCd, data.cm[1].id, { uploadSystem: "01" })
-    ).resolves.toEqual({
-      ...data.cm[1],
-      uploadSystem: "01",
-      status: "11",
-      timestamp: expect.anything(),
-    });
+    ).rejects.toThrow(new BadRequestError(ERROR_CODE.E0400010));
   });
 
   test("[error] 外部連携CMデータ追加　データ存在しない", async () => {

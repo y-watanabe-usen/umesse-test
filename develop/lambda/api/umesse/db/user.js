@@ -150,6 +150,9 @@ module.exports = {
     );
     debuglog(JSON.stringify(ret));
     if (!ret) throw new Error(ERROR_CODE.E0000500);
+
+    // localstack だとReturnValues: "UPDATED_NEW"が動かないので下記分岐
+    if (ret.Attributes.cm[index]) return ret.Attributes.cm[index];
     return ret.Attributes.cm.pop();
   },
 
@@ -174,6 +177,9 @@ module.exports = {
     );
     debuglog(JSON.stringify(ret));
     if (!ret) throw new Error(ERROR_CODE.E0000500);
+
+    // localstack だとReturnValues: "UPDATED_NEW"が動かないので下記分岐
+    if (ret.Attributes[category][index]) return ret.Attributes[category][index];
     return ret.Attributes[category].pop();
   },
 

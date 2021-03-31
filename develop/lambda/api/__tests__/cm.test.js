@@ -38,9 +38,21 @@ describe("CMデータ取得", () => {
   });
 
   test("[success] CMデータ一覧取得", async () => {
-    await expect(getCm(data.unisCustomerCd)).resolves.toEqual(
-      data.cm.filter((v) => v.status !== "00")
-    );
+    await expect(getCm(data.unisCustomerCd)).resolves.toEqual([
+      {
+        sceneCd: data.cm[0].scene.sceneCd,
+        sceneName: data.cm[0].scene.sceneName,
+        details: [data.cm[0], data.cm[1]],
+      },
+      {
+        sceneCd: "999",
+        sceneName: "作成中",
+        details: [
+          { ...data.cm[2], scene: { sceneCd: "999", sceneName: "作成中" } },
+          { ...data.cm[3], scene: { sceneCd: "999", sceneName: "作成中" } },
+        ],
+      },
+    ]);
   });
 
   test("[error] CMデータ取得　CMデータ存在しない", async () => {
@@ -297,7 +309,33 @@ describe("CMデータ更新", () => {
     });
   });
 
-  test("[success] CMデータ更新　コンバート＋外部連携", async () => {
+  // test("[success] CMデータ更新　コンバート＋外部連携", async () => {
+  //   const body = {
+  //     title: "テスト",
+  //     description: "テスト",
+  //     startDate: "2019-09-01T09:00:00+9:00",
+  //     endDate: "9999-12-31T23:59:59+09:00",
+  //     industry: {
+  //       industryCd: "01",
+  //       industryName: "業種名",
+  //     },
+  //     scene: {
+  //       sceneCd: "01",
+  //       sceneName: "シーン01",
+  //     },
+  //     uploadSystem: "01",
+  //   };
+  //   await expect(
+  //     updateCm(data.unisCustomerCd, data.cm[3].id, body)
+  //   ).resolves.toEqual({
+  //     ...data.cm[3],
+  //     ...body,
+  //     status: "03",
+  //     timestamp: expect.anything(),
+  //   });
+  // });
+
+  test("[error] CMデータ更新　外部連携　重複", async () => {
     const body = {
       title: "テスト",
       description: "テスト",
@@ -315,12 +353,7 @@ describe("CMデータ更新", () => {
     };
     await expect(
       updateCm(data.unisCustomerCd, data.cm[3].id, body)
-    ).resolves.toEqual({
-      ...data.cm[3],
-      ...body,
-      status: "03",
-      timestamp: expect.anything(),
-    });
+    ).rejects.toThrow(new BadRequestError(ERROR_CODE.E0400010));
   });
 
   test("[error] CMデータ更新　CMデータ存在しない", async () => {
