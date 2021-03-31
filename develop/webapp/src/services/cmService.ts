@@ -159,7 +159,7 @@ export function useCmService(api: UMesseApi.CmApi, freeCache: FreeCache) {
         sceneCd: sceneCd,
         sceneName: Constants.SCENES.find((v) => v.cd == sceneCd)?.name,
       },
-      uploadSystem: uploadSystem,
+      uploadSystem: (uploadSystem != Constants.UPLOAD_SYSTEMS[2].cd ? uploadSystem : undefined) ,
     };
     return requestModel;
   };
