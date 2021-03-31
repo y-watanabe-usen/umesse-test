@@ -154,7 +154,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, computed, toRefs } from "vue";
+import { defineComponent, reactive, computed, toRefs, onUnmounted } from "vue";
 import AudioRecorder from "@/utils/AudioRecorder";
 import AudioPlayer from "@/utils/AudioPlayer";
 import { RecordingFile } from "@/services/recordingService";
@@ -215,6 +215,13 @@ export default defineComponent({
       errorCode: "",
       errorMessage: "",
     });
+
+    onUnmounted(()=>{
+      if (audioRecorder.isRecording()) {
+        audioRecorder.stop();
+      }
+    });
+
     // toggle voice recorder.
     const toggleVoiceRecorder = async () => {
       if (audioRecorder.isRecording()) {
