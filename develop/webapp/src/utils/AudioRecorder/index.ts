@@ -14,10 +14,13 @@ export default () => {
 
   const isRecording = () => state.recording;
   const hasRecording = () => (state.chunks.length !== 0);
+
+  
   const context = new window.AudioContext();
   const analyser: AnalyserNode = context.createAnalyser();
   analyser.fftSize = 2048;
   const sampleBuffer = new Float32Array(analyser.fftSize);
+
 
   const getPowerDecibels = () => {
     return state.powerDecibels;
@@ -36,14 +39,13 @@ export default () => {
         sampleRate: 44100,
       }
     });
-    const input  = context.createMediaStreamSource(stream);
-    analyser.connect(context.destination);
-    input.connect(analyser);
+    const sourceAudioNode = context.createMediaStreamSource(stream);
+    sourceAudioNode.connect(analyser);
     //取得した音声の録音
     mediaRecorder = new MediaRecorder(stream);
     mediaRecorder.onstop = () => {
       clearInterval(timer);
-      analyser.disconnect(context.destination);
+      sourceAudioNode.disconnect(analyser);
       state.recording = false;
       state.powerDecibels = -100;
       stream.getTracks().forEach((track) => track.stop());
