@@ -148,7 +148,7 @@
             >
             <Button
               type="primary"
-              :isDisabled="title === undefined || title === '' || isCreating"
+              :isDisabled="title === undefined || title === '' || isCreating || isGenerating"
               @click="createTts"
               >保存して作成を続ける</Button
             >
