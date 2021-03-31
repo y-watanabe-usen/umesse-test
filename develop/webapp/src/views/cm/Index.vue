@@ -672,10 +672,7 @@ export default defineComponent({
     const { auth, cm } = useGlobalStore();
     const authToken = <string>auth.getToken();
     const authUser = <User>auth.getUserInfo();
-    const uploadSystemArray =
-        authUser.serviceCd === Constants.SERVICE_CD_UMUSIC
-          ? Common.getUploadSystemUmusic()
-          : Common.getUploadSystemSsence();
+    const uploadSystemArray = Common.getUploadSystemService(authUser.serviceCd);
     const industryScenesCd = "99";
     const industryScenesList = Common.getIndustryScenes(industryScenesCd);
     const state = reactive({

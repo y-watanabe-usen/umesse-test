@@ -616,3 +616,28 @@ describe("getLangsのテスト", () => {
     });
   });
 });
+
+describe("getUploadSystemServiceのテスト", () => {
+  const datas = [
+    {
+      cd: "U01",
+      expected: [
+        { cd: "01", name: "U MUSIC" },
+        { cd: "99", name: "アップロードしない" },
+      ],
+    },
+    {
+      cd: "U21",
+      expected: [
+        { cd: "02", name: "S'sence" },
+        { cd: "99", name: "アップロードしない" },
+      ],
+    },
+    { cd: "U22", expected: [] },
+  ];
+  datas.forEach((v) => {
+    test(`引数に(${v.cd})を渡すと${v.cd}に紐づくアップロード先情報が返ること`, () => {
+      expect(Common.getUploadSystemService(v.cd)).toStrictEqual(v.expected);
+    });
+  });
+});
