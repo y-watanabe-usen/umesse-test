@@ -1,5 +1,6 @@
 import { UMesseError } from "@/models/UMesseError";
 import axios from "@/repository/api/axiosInstance";
+import { freeCache } from "@/repository/cache";
 import { useTtsService } from "@/services/ttsService";
 import { ERROR_CODE, ERROR_PATTERN } from "@/utils/Constants";
 import * as umesseapi from "umesseapi";
@@ -78,6 +79,7 @@ describe("fetchのテスト", () => {
 describe("generateのテスト", () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    freeCache.removeAll();
   });
 
   test(`正常終了の場合、GenerateTtsItemが返ること`, async () => {
