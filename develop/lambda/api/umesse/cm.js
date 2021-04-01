@@ -158,7 +158,6 @@ exports.createCm = async (unisCustomerCd, body) => {
         "bgm" in body.materials
           ? constants.cmProductionType.MUSIC
           : constants.cmProductionType.NONE,
-      seconds: seconds,
       status: constants.cmStatus.GENERATE,
       timestamp: timestamp(),
     };

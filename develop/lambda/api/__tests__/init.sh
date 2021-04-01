@@ -9,6 +9,9 @@ $AWSCLI s3 cp $HERE/data/040000000-c-00000002.aac s3://umesse-users/users/040000
 $AWSCLI s3 cp $HERE/data/ja.mp3 s3://umesse-users/users/050000000/tts/
 $AWSCLI s3 cp $HERE/data/en.mp3 s3://umesse-users/users/050000000/tts/
 
+# dynamodb external table clear
+node $HERE/clear.js
+
 # dynamodb test data
 $AWSCLI dynamodb batch-write-item --request-items file://$HERE/data/user.test.json
 $AWSCLI dynamodb batch-write-item --request-items file://$HERE/data/cm.test.json

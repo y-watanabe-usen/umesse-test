@@ -105,11 +105,9 @@ describe("CM新規作成", () => {
     await expect(createCm(data.unisCustomerCd, body)).resolves.toEqual({
       id: expect.stringMatching(`^${data.unisCustomerCd}-c-[0-9a-z]{8}$`),
       category: "cm",
-      seconds: expect.anything(),
       productionType: "02",
-      status: "01",
+      status: "05",
       ...body,
-      url: expect.anything(),
       timestamp: expect.anything(),
     });
   });
@@ -125,11 +123,9 @@ describe("CM新規作成", () => {
     };
     await expect(createCm(data.unisCustomerCd, body)).resolves.toEqual({
       ...data.cm[0],
-      seconds: expect.anything(),
       productionType: "02",
-      status: "01",
+      status: "05",
       ...body,
-      url: expect.anything(),
       timestamp: expect.anything(),
     });
   });
@@ -309,31 +305,31 @@ describe("CMデータ更新", () => {
     });
   });
 
-  // test("[success] CMデータ更新　コンバート＋外部連携", async () => {
-  //   const body = {
-  //     title: "テスト",
-  //     description: "テスト",
-  //     startDate: "2019-09-01T09:00:00+9:00",
-  //     endDate: "9999-12-31T23:59:59+09:00",
-  //     industry: {
-  //       industryCd: "01",
-  //       industryName: "業種名",
-  //     },
-  //     scene: {
-  //       sceneCd: "01",
-  //       sceneName: "シーン01",
-  //     },
-  //     uploadSystem: "01",
-  //   };
-  //   await expect(
-  //     updateCm(data.unisCustomerCd, data.cm[3].id, body)
-  //   ).resolves.toEqual({
-  //     ...data.cm[3],
-  //     ...body,
-  //     status: "03",
-  //     timestamp: expect.anything(),
-  //   });
-  // });
+  test("[success] CMデータ更新　コンバート＋外部連携", async () => {
+    const body = {
+      title: "テスト",
+      description: "テスト",
+      startDate: "2019-09-01T09:00:00+9:00",
+      endDate: "9999-12-31T23:59:59+09:00",
+      industry: {
+        industryCd: "01",
+        industryName: "業種名",
+      },
+      scene: {
+        sceneCd: "01",
+        sceneName: "シーン01",
+      },
+      uploadSystem: "01",
+    };
+    await expect(
+      updateCm(data.unisCustomerCd, data.cm[3].id, body)
+    ).resolves.toEqual({
+      ...data.cm[3],
+      ...body,
+      status: "03",
+      timestamp: expect.anything(),
+    });
+  });
 
   test("[error] CMデータ更新　外部連携　重複", async () => {
     const body = {
