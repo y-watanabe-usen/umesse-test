@@ -8,30 +8,39 @@ import {
 } from "@/models/CreateUserCmRequestItem";
 import { CreateUserCmResponseItem } from "@/models/CreateUserCmResponseItem";
 import { UpdateUserCmRequestItem } from "@/models/UpdateUserCmRequestItem";
-import Constants from "@/utils/Constants";
+import Constants, { Scene } from "@/utils/Constants";
 import * as UMesseApi from "umesseapi";
 import { Recording, Tts } from "@/models/DisplayCmItem";
 import { CmItem } from "umesseapi/models/cm-item";
 import { UMesseErrorFromApiFactory } from "@/models/UMesseError";
 import { FreeCache } from "@/repository/cache/freeCache";
+import { CmListItemInner } from "umesseapi/models";
 
 export function useCmService(api: UMesseApi.CmApi, freeCache: FreeCache) {
   const fetch = async (
     authToken: string,
-    sceneCd: string,
     sort?: number
-  ): Promise<CmItem[]> => {
-    return new Promise(function(resolve, reject) {
+  ): Promise<[Scene[], CmItem[]]> => {
+    return new Promise(function (resolve, reject) {
       api
         .listUserCm(authToken, sort)
-        .then((tmp) => {
-          const response = tmp.data.filter((v) => {
-            if (!v.scene) return false;
-            return v.scene.sceneCd == sceneCd;
+        .then((response) => {
+          const scenes: Scene[] = [];
+          const cms: CmItem[] = [];
+          response.data.forEach((scene: CmListItemInner) => {
+            scenes.push({ cd: scene.sceneCd, name: scene.sceneName });
+            scene.details.forEach((cm: CmItem) => {
+              cms.push(cm);
+            });
           });
-          console.log("resolve");
-          console.log("listUserCm", response);
-          resolve(response);
+          resolve([scenes, cms]);
+          // const response = tmp.data.filter((v) => {
+          //   if (!v.scene) return false;
+          //   return v.scene.sceneCd == sceneCd;
+          // });
+          // console.log("resolve");
+          // console.log("listUserCm", response);
+          // resolve(response);
         })
         .catch((e) => {
           console.log("reject", e);
@@ -48,7 +57,7 @@ export function useCmService(api: UMesseApi.CmApi, freeCache: FreeCache) {
     bgm: Bgm | null,
     id?: string
   ): Promise<CreateUserCmResponseItem> => {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       const requestModel = getCreateUserCmRequestModel(
         narrations,
         startChime,
@@ -84,7 +93,7 @@ export function useCmService(api: UMesseApi.CmApi, freeCache: FreeCache) {
     sceneCd: string,
     uploadSystem: string
   ): Promise<CmItem> => {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       const requestModel = getUpdateUserCmRequestModel(
         title,
         description,
@@ -107,7 +116,7 @@ export function useCmService(api: UMesseApi.CmApi, freeCache: FreeCache) {
 
   // deleteは予約語なのでremove
   const remove = async (authToken: string, id: string): Promise<CmItem> => {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       api
         .deleteUserCm(id, authToken)
         .then((value) => {
@@ -159,7 +168,7 @@ export function useCmService(api: UMesseApi.CmApi, freeCache: FreeCache) {
         sceneCd: sceneCd,
         sceneName: Constants.SCENES.find((v) => v.cd == sceneCd)?.name,
       },
-      uploadSystem: (uploadSystem != Constants.UPLOAD_SYSTEMS[2].cd ? uploadSystem : undefined) ,
+      uploadSystem: (uploadSystem != Constants.UPLOAD_SYSTEMS[2].cd ? uploadSystem : undefined),
     };
     return requestModel;
   };
