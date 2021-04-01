@@ -1,6 +1,6 @@
 "use strict";
 
-process.env.environment = "local";
+process.env.environment = "localstack";
 
 const fs = require("fs");
 const aws = require("aws-sdk");

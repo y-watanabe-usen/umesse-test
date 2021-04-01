@@ -28,7 +28,7 @@ exports.handler = async (event, context) => {
     })}`
   );
 
-  const body = JSON.parse(JSON.parse(event.Records[0].body).MessageBody);
+  const body = JSON.parse(event.Records[0].body);
   const unisCustomerCd = body.unisCustomerCd;
   const id = body.id;
   const category = body.category;

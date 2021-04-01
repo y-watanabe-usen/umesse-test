@@ -13,7 +13,7 @@
     "build": "npm pack ../layer/nodejs/node_modules/umesse-lib/ && npm install --no-save umesse-lib-0.0.1.tgz && rm umesse-lib-0.0.1.tgz",
     "build:prod": "npm install --production",
     "pretest": "sh ./__tests__/init.sh",
-    "test": "PATH=$PATH:../layer/bin jest -i --coverage"
+    "test": "npm run build && PATH=$PATH:../layer/bin jest -i --coverage"
   },
   "jest": {
     "verbose": false,

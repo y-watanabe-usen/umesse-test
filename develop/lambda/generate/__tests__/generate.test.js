@@ -1,6 +1,6 @@
 "use strict";
 
-process.env.environment = "local";
+process.env.environment = "localstack";
 
 const aws = require("aws-sdk");
 const { ERROR_CODE } = require("umesse-lib/error");
@@ -27,18 +27,16 @@ describe("convert", () => {
       Records: [
         {
           body: JSON.stringify({
-            MessageBody: JSON.stringify({
-              unisCustomerCd: data.unisCustomerCd,
-              id: data.cm[0].cmId,
-              category: "cm",
-              materials: {
-                narrations: [
-                  { id: "サンプル03", category: "narration", volume: 300 },
-                ],
-                startChime: { id: "サンプル01", category: "chime", volume: 50 },
-                endChime: { id: "サンプル02", category: "chime", volume: 50 },
-              },
-            }),
+            unisCustomerCd: data.unisCustomerCd,
+            id: data.cm[0].cmId,
+            category: "cm",
+            materials: {
+              narrations: [
+                { id: "サンプル03", category: "narration", volume: 300 },
+              ],
+              startChime: { id: "サンプル01", category: "chime", volume: 50 },
+              endChime: { id: "サンプル02", category: "chime", volume: 50 },
+            },
           }),
         },
       ],
@@ -75,18 +73,16 @@ describe("convert", () => {
       Records: [
         {
           body: JSON.stringify({
-            MessageBody: JSON.stringify({
-              unisCustomerCd: "999999999",
-              id: data.cm[1].cmId,
-              category: "cm",
-              materials: {
-                narrations: [
-                  { id: "サンプル03", category: "narration", volume: 300 },
-                ],
-                startChime: { id: "サンプル01", category: "chime", volume: 50 },
-                endChime: { id: "サンプル02", category: "chime", volume: 50 },
-              },
-            }),
+            unisCustomerCd: "999999999",
+            id: data.cm[1].cmId,
+            category: "cm",
+            materials: {
+              narrations: [
+                { id: "サンプル03", category: "narration", volume: 300 },
+              ],
+              startChime: { id: "サンプル01", category: "chime", volume: 50 },
+              endChime: { id: "サンプル02", category: "chime", volume: 50 },
+            },
           }),
         },
       ],
@@ -102,18 +98,16 @@ describe("convert", () => {
       Records: [
         {
           body: JSON.stringify({
-            MessageBody: JSON.stringify({
-              unisCustomerCd: data.unisCustomerCd,
-              id: "999999999-c-99999999",
-              category: "cm",
-              materials: {
-                narrations: [
-                  { id: "サンプル03", category: "narration", volume: 300 },
-                ],
-                startChime: { id: "サンプル01", category: "chime", volume: 50 },
-                endChime: { id: "サンプル02", category: "chime", volume: 50 },
-              },
-            }),
+            unisCustomerCd: data.unisCustomerCd,
+            id: "999999999-c-99999999",
+            category: "cm",
+            materials: {
+              narrations: [
+                { id: "サンプル03", category: "narration", volume: 300 },
+              ],
+              startChime: { id: "サンプル01", category: "chime", volume: 50 },
+              endChime: { id: "サンプル02", category: "chime", volume: 50 },
+            },
           }),
         },
       ],
@@ -129,18 +123,16 @@ describe("convert", () => {
       Records: [
         {
           body: JSON.stringify({
-            MessageBody: JSON.stringify({
-              unisCustomerCd: data.unisCustomerCd,
-              id: data.cm[1].cmId,
-              category: "cm",
-              materials: {
-                narrations: [
-                  { id: "サンプル03", category: "narration", volume: 300 },
-                ],
-                startChime: { id: "サンプル01", category: "chime", volume: 50 },
-                endChime: { id: "サンプル02", category: "chime", volume: 50 },
-              },
-            }),
+            unisCustomerCd: data.unisCustomerCd,
+            id: data.cm[1].cmId,
+            category: "cm",
+            materials: {
+              narrations: [
+                { id: "サンプル03", category: "narration", volume: 300 },
+              ],
+              startChime: { id: "サンプル01", category: "chime", volume: 50 },
+              endChime: { id: "サンプル02", category: "chime", volume: 50 },
+            },
           }),
         },
       ],
@@ -156,7 +148,7 @@ describe("convert", () => {
       handler({
         Records: [
           {
-            body: JSON.stringify({ MessageBody: JSON.stringify({}) }),
+            body: JSON.stringify({}),
           },
         ],
       })
@@ -170,9 +162,7 @@ describe("convert", () => {
         Records: [
           {
             body: JSON.stringify({
-              MessageBody: JSON.stringify({
-                unisCustomerCd: "aaaaaaaaaa",
-              }),
+              unisCustomerCd: "aaaaaaaaaa",
             }),
           },
         ],
@@ -190,9 +180,7 @@ describe("convert", () => {
         Records: [
           {
             body: JSON.stringify({
-              MessageBody: JSON.stringify({
-                unisCustomerCd: "1111",
-              }),
+              unisCustomerCd: "1111",
             }),
           },
         ],
@@ -210,9 +198,7 @@ describe("convert", () => {
         Records: [
           {
             body: JSON.stringify({
-              MessageBody: JSON.stringify({
-                unisCustomerCd: "11111111111",
-              }),
+              unisCustomerCd: "11111111111",
             }),
           },
         ],
@@ -230,10 +216,8 @@ describe("convert", () => {
         Records: [
           {
             body: JSON.stringify({
-              MessageBody: JSON.stringify({
-                unisCustomerCd: "9999999999",
-                id: "aaaa",
-              }),
+              unisCustomerCd: "9999999999",
+              id: "aaaa",
             }),
           },
         ],
@@ -251,10 +235,8 @@ describe("convert", () => {
         Records: [
           {
             body: JSON.stringify({
-              MessageBody: JSON.stringify({
-                unisCustomerCd: "9999999999",
-                id: "9999999999-c",
-              }),
+              unisCustomerCd: "9999999999",
+              id: "9999999999-c",
             }),
           },
         ],
@@ -272,11 +254,9 @@ describe("convert", () => {
         Records: [
           {
             body: JSON.stringify({
-              MessageBody: JSON.stringify({
-                unisCustomerCd: "9999999999",
-                id: "9999999999-c-99999999",
-                category: "none",
-              }),
+              unisCustomerCd: "9999999999",
+              id: "9999999999-c-99999999",
+              category: "none",
             }),
           },
         ],

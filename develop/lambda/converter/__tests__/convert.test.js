@@ -1,6 +1,6 @@
 "use strict";
 
-process.env.environment = "local";
+process.env.environment = "localstack";
 
 const aws = require("aws-sdk");
 const { ERROR_CODE } = require("umesse-lib/error");
@@ -30,11 +30,9 @@ describe("convert", () => {
       Records: [
         {
           body: JSON.stringify({
-            MessageBody: JSON.stringify({
-              unisCustomerCd: cmData.unisCustomerCd,
-              id: cmData.cm[0].cmId,
-              category: "cm",
-            }),
+            unisCustomerCd: cmData.unisCustomerCd,
+            id: cmData.cm[0].cmId,
+            category: "cm",
           }),
         },
       ],
@@ -82,11 +80,9 @@ describe("convert", () => {
       Records: [
         {
           body: JSON.stringify({
-            MessageBody: JSON.stringify({
-              unisCustomerCd: "999999999",
-              id: cmData.cm[1].cmId,
-              category: "cm",
-            }),
+            unisCustomerCd: "999999999",
+            id: cmData.cm[1].cmId,
+            category: "cm",
           }),
         },
       ],
@@ -102,11 +98,9 @@ describe("convert", () => {
       Records: [
         {
           body: JSON.stringify({
-            MessageBody: JSON.stringify({
-              unisCustomerCd: cmData.unisCustomerCd,
-              id: "999999999-c-99999999",
-              category: "cm",
-            }),
+            unisCustomerCd: cmData.unisCustomerCd,
+            id: "999999999-c-99999999",
+            category: "cm",
           }),
         },
       ],
@@ -122,11 +116,9 @@ describe("convert", () => {
       Records: [
         {
           body: JSON.stringify({
-            MessageBody: JSON.stringify({
-              unisCustomerCd: cmData.unisCustomerCd,
-              id: cmData.cm[1].cmId,
-              category: "cm",
-            }),
+            unisCustomerCd: cmData.unisCustomerCd,
+            id: cmData.cm[1].cmId,
+            category: "cm",
           }),
         },
       ],
@@ -142,11 +134,9 @@ describe("convert", () => {
       Records: [
         {
           body: JSON.stringify({
-            MessageBody: JSON.stringify({
-              unisCustomerCd: cmData.unisCustomerCd,
-              id: cmData.cm[2].cmId,
-              category: "cm",
-            }),
+            unisCustomerCd: cmData.unisCustomerCd,
+            id: cmData.cm[2].cmId,
+            category: "cm",
           }),
         },
       ],
@@ -176,9 +166,7 @@ describe("convert", () => {
         Records: [
           {
             body: JSON.stringify({
-              MessageBody: JSON.stringify({
-                unisCustomerCd: "aaaaaaaaaa",
-              }),
+              unisCustomerCd: "aaaaaaaaaa",
             }),
           },
         ],
@@ -196,9 +184,7 @@ describe("convert", () => {
         Records: [
           {
             body: JSON.stringify({
-              MessageBody: JSON.stringify({
-                unisCustomerCd: "1111",
-              }),
+              unisCustomerCd: "1111",
             }),
           },
         ],
@@ -216,9 +202,7 @@ describe("convert", () => {
         Records: [
           {
             body: JSON.stringify({
-              MessageBody: JSON.stringify({
-                unisCustomerCd: "11111111111",
-              }),
+              unisCustomerCd: "11111111111",
             }),
           },
         ],
@@ -236,10 +220,8 @@ describe("convert", () => {
         Records: [
           {
             body: JSON.stringify({
-              MessageBody: JSON.stringify({
-                unisCustomerCd: "9999999999",
-                id: "aaaa",
-              }),
+              unisCustomerCd: "9999999999",
+              id: "aaaa",
             }),
           },
         ],
@@ -257,10 +239,8 @@ describe("convert", () => {
         Records: [
           {
             body: JSON.stringify({
-              MessageBody: JSON.stringify({
-                unisCustomerCd: "9999999999",
-                id: "9999999999-c",
-              }),
+              unisCustomerCd: "9999999999",
+              id: "9999999999-c",
             }),
           },
         ],
@@ -278,11 +258,9 @@ describe("convert", () => {
         Records: [
           {
             body: JSON.stringify({
-              MessageBody: JSON.stringify({
-                unisCustomerCd: "9999999999",
-                id: "9999999999-c-99999999",
-                category: "none",
-              }),
+              unisCustomerCd: "9999999999",
+              id: "9999999999-c-99999999",
+              category: "none",
             }),
           },
         ],

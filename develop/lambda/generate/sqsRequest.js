@@ -10,8 +10,13 @@ const QUEUE_URL = "http://localhost:4566/000000000000/umesseGenerateQueue";
 const params = {
   MessageBody: JSON.stringify({
     unisCustomerCd: "123456789",
-    id: "123456789-c-99999999",
+    id: "123456789-c-88888888",
     category: "cm",
+    materials: {
+      narrations: [{ id: "サンプル03", category: "narration", volume: 300 }],
+      startChime: { id: "サンプル01", category: "chime", volume: 50 },
+      endChime: { id: "サンプル02", category: "chime", volume: 50 },
+    },
   }),
   QueueUrl: QUEUE_URL,
   DelaySeconds: 0,

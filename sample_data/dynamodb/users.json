@@ -166,6 +166,64 @@
                   "status": { "S": "03" },
                   "timestamp": { "S": "2019-09-01T09:00:00+09:00" }
                 }
+              },
+              {
+                "M": {
+                  "cmId": { "S": "123456789-c-88888888" },
+                  "productionType": { "S": "01" },
+                  "materials": {
+                    "M": {
+                      "narrations": {
+                        "L": [
+                          {
+                            "M": {
+                              "id": { "S": "サンプル01" },
+                              "category": { "S": "narration" },
+                              "volume": { "N": "150" }
+                            }
+                          },
+                          {
+                            "M": {
+                              "id": { "S": "サンプル02" },
+                              "category": { "S": "narration" },
+                              "volume": { "N": "150" }
+                            }
+                          },
+                          {
+                            "M": {
+                              "id": { "S": "サンプル03" },
+                              "category": { "S": "narration" },
+                              "volume": { "N": "150" }
+                            }
+                          }
+                        ]
+                      },
+                      "startChime": {
+                        "M": {
+                          "id": { "S": "サンプル01" },
+                          "category": { "S": "chime" },
+                          "volume": { "N": "50" }
+                        }
+                      },
+                      "endChime": {
+                        "M": {
+                          "id": { "S": "サンプル02" },
+                          "category": { "S": "chime" },
+                          "volume": { "N": "50" }
+                        }
+                      },
+                      "bgm": {
+                        "M": {
+                          "id": { "S": "サンプル01" },
+                          "category": { "S": "bgm" },
+                          "volume": { "N": "50" }
+                        }
+                      }
+                    }
+                  },
+                  "status": { "S": "05" },
+                  "timestamp": { "S": "2019-09-01T09:00:00+09:00" }
+                }
               }
             ]
           },

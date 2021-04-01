@@ -110,23 +110,22 @@ exports.createCm = async (unisCustomerCd, body) => {
     }
   }
 
-  // CM結合、S3へPUT
-  // SQS send
-  const params = {
-    MessageBody: JSON.stringify({
+  // FIXME: ローカル環境だとここでエラーになって先の検証が出来ないので、一旦ローカル環境では動かないようにしてる
+  if (process.env.environment !== "local") {
+    // CM結合、S3へPUT
+    // SQS send
+    const messageBody = {
       unisCustomerCd: unisCustomerCd,
       id: id,
       category: constants.resourceCategory.CM,
       materials: body.materials,
-    }),
-    QueueUrl: constants.sqsQueueUrl(constants.sqsType.GENERATE),
-    DelaySeconds: 0,
-  };
+    };
 
-  // FIXME: ローカル環境だとここでエラーになって先の検証が出来ないので、一旦ローカル環境では動かないようにしてる
-  if (process.env.environment !== "local") {
     try {
-      const _ = await sqsManager.send(params);
+      const _ = await sqsManager.send(
+        messageBody,
+        constants.sqsGenerateQueueUrl()
+      );
     } catch (e) {
       throw new InternalServerError(e.message);
     }
@@ -220,23 +219,23 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
   let contentTime;
   let sceneCd;
   let status = constants.cmStatus.COMPLETE;
+
   // CM作成中の場合
   if (cm.status === constants.cmStatus.CREATING) {
-    // SQS send
-    const params = {
-      MessageBody: JSON.stringify({
-        unisCustomerCd: unisCustomerCd,
-        id: id,
-        category: constants.resourceCategory.CM,
-      }),
-      QueueUrl: constants.sqsQueueUrl(constants.sqsType.CONVERTER),
-      DelaySeconds: 0,
-    };
-
     // FIXME: ローカル環境だとここでエラーになって先の検証が出来ないので、一旦ローカル環境では動かないようにしてる
     if (process.env.environment !== "local") {
       try {
-        const _ = await sqsManager.send(params);
+        // SQS send
+        const messageBody = {
+          unisCustomerCd: unisCustomerCd,
+          id: id,
+          category: constants.resourceCategory.CM,
+        };
+
+        const _ = await sqsManager.send(
+          messageBody,
+          constants.sqsConverterQueueUrl()
+        );
       } catch (e) {
         throw new InternalServerError(e.message);
       }

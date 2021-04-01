@@ -1,6 +1,6 @@
 "use strict";
 
-process.env.environment = "local";
+process.env.environment = "localstack";
 
 const { constants } = require("umesse-lib/constants");
 const { dynamodbManager } = require("umesse-lib/utils/dynamodbManager");
