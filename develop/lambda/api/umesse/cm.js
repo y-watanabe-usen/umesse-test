@@ -113,18 +113,24 @@ exports.createCm = async (unisCustomerCd, body) => {
   }
 
   // CM結合、S3へPUT
-  const seconds = await generateCm(unisCustomerCd, id, body.materials);
-  if (!seconds) throw new InternalServerError(ERROR_CODE.E0000500);
+  // SQS send
+  const params = {
+    MessageBody: JSON.stringify({
+      unisCustomerCd: unisCustomerCd,
+      id: id,
+      category: constants.resourceCategory.CM,
+    }),
+    QueueUrl: constants.sqsQueueUrl(constants.sqsType.GENERATE),
+    DelaySeconds: 0,
+  };
 
-  // 署名付きURLの発行
-  let url;
-  try {
-    url = await s3Manager.getSignedUrl(
-      constants.s3Bucket().users,
-      `users/${unisCustomerCd}/${constants.resourceCategory.CM}/${id}.mp3`
-    );
-  } catch (e) {
-    throw new InternalServerError(e.message);
+  // FIXME: ローカル環境だとここでエラーになって先の検証が出来ないので、一旦ローカル環境では動かないようにしてる
+  if (process.env.environment !== "local") {
+    try {
+      const _ = await sqsManager.send(params);
+    } catch (e) {
+      throw new InternalServerError(e.message);
+    }
   }
 
   // DynamoDBのデータ更新
@@ -136,8 +142,7 @@ exports.createCm = async (unisCustomerCd, body) => {
       "bgm" in body.materials
         ? constants.cmProductionType.MUSIC
         : constants.cmProductionType.NONE;
-    cm.seconds = seconds;
-    cm.status = constants.cmStatus.CREATING;
+    cm.status = constants.cmStatus.GENERATE;
     cm.timestamp = timestamp();
     try {
       ret = await db.User.updateCm(unisCustomerCd, index, cm);
@@ -154,7 +159,7 @@ exports.createCm = async (unisCustomerCd, body) => {
           ? constants.cmProductionType.MUSIC
           : constants.cmProductionType.NONE,
       seconds: seconds,
-      status: constants.cmStatus.CREATING,
+      status: constants.cmStatus.GENERATE,
       timestamp: timestamp(),
     };
 
@@ -165,7 +170,6 @@ exports.createCm = async (unisCustomerCd, body) => {
     }
   }
 
-  ret.url = url;
   return responseData(ret, constants.resourceCategory.CM);
 };
 
