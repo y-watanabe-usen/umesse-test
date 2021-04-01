@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div @click="closeAllDropdownMenu">
     <BasicLayout>
       <template #header>
         <Header :clickBack="activeSceneCd ? clickBack : null">
@@ -89,13 +89,6 @@
                 </template>
                 <template #operations>
                   <Button
-                    v-if="narration.manuscript"
-                    class="btn-document"
-                    @click="selectNarrationAndOpenDocumentModal(narration)"
-                  >
-                    <img src="@/assets/icon_document.svg" />原稿
-                  </Button>
-                  <Button
                     class="btn-play"
                     @click="selectNarrationAndOpenPlayModal(narration)"
                   >
@@ -104,6 +97,61 @@
                   <Button class="btn-select" @click="setNarration(narration)">
                     選択<img src="@/assets/icon_select.svg" />
                   </Button>
+                  <button
+                    class="btn-more"
+                    type="button"
+                    @click.stop="toggleDropdown(narration.id)"
+                  >
+                    <img src="@/assets/icon_more_black.svg" />
+                    <transition>
+                      <template v-if="dropdownNarrationId === narration.id">
+                        <DropdownMenu
+                          v-if="narration.manuscript"
+                          :width="240"
+                          :targetWidth="80"
+                          :targetHeight="30"
+                          :offset="-70"
+                          direction="down"
+                          :params="[
+                            {
+                              title: '原稿',
+                              action: () => {
+                                selectNarrationAndOpenDocumentModal(narration)
+                              },
+                            },
+                            {
+                              title: 'タイトル/説明 編集',
+                              action: () => {},
+                            },
+                            {
+                              title: '削除',
+                              action: () => {},
+                              isCaution: true,
+                            },
+                          ]"
+                        />
+                        <DropdownMenu
+                          v-else
+                          :width="240"
+                          :targetWidth="80"
+                          :targetHeight="30"
+                          :offset="-70"
+                          direction="down"
+                          :params="[
+                            {
+                              title: 'タイトル/説明 編集',
+                              action: () => {},
+                            },
+                            {
+                              title: '削除',
+                              action: () => {},
+                              isCaution: true,
+                            },
+                          ]"
+                        />
+                      </template>
+                    </transition>
+                  </button>
                 </template>
               </ListItem>
             </List>
@@ -185,6 +233,7 @@ import ModalFooter from "@/components/molecules/ModalFooter.vue";
 import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
 import PlayDialogContents from "@/components/molecules/PlayDialogContents.vue";
 import TextDialogContents from "@/components/molecules/TextDialogContents.vue";
+import DropdownMenu from "@/components/molecules/DropdownMenu.vue";
 import { NarrationItem } from "umesseapi/models";
 import { useGlobalStore } from "@/store";
 import router from "@/router";
@@ -217,6 +266,7 @@ export default defineComponent({
     ModalLoading,
     PlayDialogContents,
     TextDialogContents,
+    DropdownMenu,
   },
   setup() {
     const audioPlayer = AudioPlayer();
@@ -241,6 +291,7 @@ export default defineComponent({
       errorCode: "",
       errorMessage: "",
       isLoading: false,
+      dropdownNarrationId: "",
     });
 
     const setNarration = (narration: NarrationItem) => {
@@ -332,6 +383,7 @@ export default defineComponent({
 
     const selectNarrationAndOpenDocumentModal = (narration: NarrationItem) => {
       selectNarration(narration);
+      closeAllDropdownMenu();
       openDocumentModal();
     };
     const selectNarrationAndOpenPlayModal = (narration: NarrationItem) => {
@@ -345,6 +397,19 @@ export default defineComponent({
 
     const closeErrorModal = () => {
       state.isErrorModalApper = false;
+    };
+
+    const closeAllDropdownMenu = () => {
+      state.dropdownNarrationId = "";
+    };
+
+    const toggleDropdown = (narrationId: string) => {
+      if (state.dropdownNarrationId === narrationId) {
+        closeAllDropdownMenu();
+      } else {
+        closeAllDropdownMenu();
+        state.dropdownNarrationId = narrationId;
+      }
     };
 
     onMounted(async () => {
@@ -378,6 +443,8 @@ export default defineComponent({
       closeErrorModal,
       fetchNarration,
       clickBack,
+      closeAllDropdownMenu,
+      toggleDropdown,
     };
   },
 });

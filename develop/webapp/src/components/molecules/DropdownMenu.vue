@@ -7,7 +7,7 @@
         :class="{ caution: param.isCaution, disabled: param.isDisabled }"
         @click.stop="onClick(param)"
       >
-        {{ param.title }}
+        <span>{{ param.title }}</span>
       </li>
     </ul>
     <div class="arrow" :style="state.arrowStyle"></div>
@@ -94,9 +94,6 @@ export default {
     border-radius: 8px;
     margin-bottom: 0;
     li {
-      font-size: 16px;
-      font-weight: $font_weight_bold;
-      line-height: 60px;
       height: 60px;
       border-top: 1px solid rgb(232, 232, 232);
       margin-left: 10px;
@@ -109,11 +106,18 @@ export default {
         border-top: none;
       }
       &.caution {
-        color: rgb(155, 0, 0);
         border-top: 1px solid rgb(141, 141, 141);
+        span {
+          color: rgb(155, 0, 0);
+        }
       }
-      &.disabled {
+      &.disabled > * {
         opacity: 0.3;
+      }
+      span {
+        font-size: 16px;
+        font-weight: $font_weight_bold;
+        line-height: 60px;
       }
     }
     &::after {
