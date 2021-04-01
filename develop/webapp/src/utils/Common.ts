@@ -20,7 +20,6 @@ export function getNarrationIndustries() {
 
 /**
  * 業種に紐づくシーンを取得する
- * TODO: 適当に作ってるので後で正式版に変える
  * @param
  * @return Scene[]
  */
@@ -448,7 +447,6 @@ function getIndustries(cdList: string[]) {
     const industry = Constants.INDUSTORIES.find((vv) => vv.cd == v);
     if (industry) result.push(industry);
   });
-  // TODO: sort
 
   return result;
 }
@@ -460,7 +458,6 @@ function getScenes(cdList?: string[]) {
     const scene = Constants.SCENES.find((vv) => vv.cd == v);
     if (scene) result.push(scene);
   });
-  // TODO: sort
 
   return result;
 }
