@@ -21,85 +21,54 @@ describe("fetchのテスト", () => {
     jest.clearAllMocks();
   });
 
-  test(`正常終了の場合、CmItem[]が返ること`, async () => {
+  test(`正常終了の場合、Scene[], CmItem[]が返ること`, async () => {
     const responseJson = [
       {
-        endDate: "9999-12-31T14:59:59.000Z",
-        productionType: "02",
-        description: "説明",
-        title: "cmテスト",
-        scene: {
-          sceneCd: "001",
-          sceneName: "チャイム",
-        },
-        seconds: 74.109388,
-        materials: {
-          narrations: [
-            {
-              volume: 100,
-              seconds: 0,
-              description: "ナレーション・サンプル01",
-              id: "サンプル01",
-              title: "サンプル01",
-              category: "narration",
-              timestamp: "2019-09-01T09:00:00+09:00",
-            },
-          ],
-        },
-        uploadSystem: "01",
-        id: "123456789-c-v2qvc913",
-        category: "cm",
-        startDate: "2019-09-01T00:00:00.000Z",
-        status: "03",
-        timestamp: "2021-03-17T13:29:32.195+09:00",
-      },
-      {
-        endDate: "9999-12-31T14:59:59.000Z",
-        productionType: "02",
-        description: "",
-        title: "かか",
-        scene: {
-          sceneCd: "001",
-          sceneName: "チャイム",
-        },
-        seconds: 78.106122,
-        materials: {
-          startChime: {
-            volume: 100,
-            seconds: 5,
-            description: "チャイム・サンプル01",
-            id: "サンプル01",
-            title: "サンプル01",
-            category: "chime",
-            timestamp: "2019-09-01T09:00:00+09:00",
-          },
-          narrations: [
-            {
-              volume: 100,
-              seconds: 0,
-              description: "ナレーション・サンプル01",
-              id: "サンプル01",
-              title: "サンプル01",
-              category: "narration",
-              timestamp: "2019-09-01T09:00:00+09:00",
-            },
-          ],
-        },
-        uploadSystem: "01",
-        id: "123456789-c-5ml6xdvj",
-        category: "cm",
-        startDate: "2019-09-01T00:00:00.000Z",
-        status: "03",
-        timestamp: "2021-03-17T11:04:06.570+09:00",
-      },
-    ];
+          "sceneCd": "012",
+          "sceneName": "営業時間案内",
+          "details": [
+              {
+                  "seconds": 42,
+                  "materials": {
+                      "narrations": [
+                          {
+                              "volume": 100,
+                              "seconds": 0,
+                              "description": "ナレーション・サンプル04",
+                              "id": "サンプル04",
+                              "title": "サンプル04",
+                              "category": "narration",
+                              "timestamp": "2019-09-01T09:00:00+09:00"
+                          }
+                      ]
+                  },
+                  "endDate": "9999-12-31T14:59:59.000Z",
+                  "productionType": "02",
+                  "description": "",
+                  "uploadSystem": "01",
+                  "title": "a",
+                  "startDate": "2019-09-01T00:00:00.000Z",
+                  "status": "03",
+                  "timestamp": "2021-04-01T21:57:20.865+09:00",
+                  "scene": {
+                      "sceneCd": "012",
+                      "sceneName": "営業時間案内"
+                  },
+                  "id": "123456789-c-qzdjdj2m",
+                  "category": "cm"
+              }
+          ]
+      }
+  ];
     jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
 
-    const response = await cmService.fetch("token", "001");
+    const response = await cmService.fetch("token", 1);
 
     expect(response.length).toBe(2);
-    expect(response[0].id).toBe("123456789-c-v2qvc913");
-    expect(response[1].id).toBe("123456789-c-5ml6xdvj");
+    expect(response[0].length).toBe(1);
+    expect(response[0][0].cd).toBe("012");
+    expect(response[1].length).toBe(1);
+    expect(response[1][0].id).toBe("123456789-c-qzdjdj2m");
   });
 
   test(`想定外の値が返却された場合、UMesseErrorがthrowされること`, async () => {
@@ -112,7 +81,7 @@ describe("fetchのテスト", () => {
 
     jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
 
-    await expect(cmService.fetch("token", "001")).rejects.toThrowError(
+    await expect(cmService.fetch("token", 1)).rejects.toThrowError(
       expoectedError
     );
   });
@@ -128,7 +97,7 @@ describe("fetchのテスト", () => {
       .spyOn(axios, "request")
       .mockRejectedValue({ response: { status: 500 } });
 
-    await expect(cmService.fetch("token", "001")).rejects.toThrowError(
+    await expect(cmService.fetch("token", 1)).rejects.toThrowError(
       expoectedError
     );
   });
