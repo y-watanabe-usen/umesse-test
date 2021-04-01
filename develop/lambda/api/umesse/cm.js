@@ -1,6 +1,5 @@
 "use strict";
 
-const path = require("path");
 const {
   constants,
   debuglog,
@@ -8,7 +7,6 @@ const {
   generateId,
   responseData,
 } = require("umesse-lib/constants");
-const UMesseConverter = require("umesse-lib/converter");
 const { checkParams } = require("umesse-lib/validation");
 const {
   ERROR_CODE,
@@ -119,6 +117,7 @@ exports.createCm = async (unisCustomerCd, body) => {
       unisCustomerCd: unisCustomerCd,
       id: id,
       category: constants.resourceCategory.CM,
+      materials: body.materials,
     }),
     QueueUrl: constants.sqsQueueUrl(constants.sqsType.GENERATE),
     DelaySeconds: 0,
@@ -350,40 +349,3 @@ exports.deleteCm = async (unisCustomerCd, id) => {
 
   return responseData(ret, constants.resourceCategory.CM);
 };
-
-// CM結合処理
-async function generateCm(unisCustomerCd, id, materials) {
-  try {
-    // UMesseConverter.
-    const converter = new UMesseConverter(s3Manager);
-
-    // 出力ファイルパス解決.
-    const workDir = converter.getWorkDir(unisCustomerCd, id);
-    const output = path.join(workDir, `${id}.mp3`);
-
-    // CM作成.
-    await converter.generateCm(unisCustomerCd, id, materials, output);
-
-    // CMのduration取得.
-    const seconds = await converter.getDuration(output);
-    debuglog(`seconds = ${seconds}`);
-
-    // CM Fileをs3へ.
-    // TODO: Windowsのpath解決のため converter.createReadStreamをコールしている
-    // converterに依存しないでfs.createReadStream(output);にしたい
-    const fileStream = await converter.createReadStream(output);
-    fileStream.on("error", (e) => {
-      throw e;
-    });
-    const res = await s3Manager.put(
-      constants.s3Bucket().users,
-      `users/${unisCustomerCd}/cm/${id}.mp3`,
-      fileStream
-    );
-    if (!res) throw new InternalServerError(ERROR_CODE.E0000500);
-    debuglog("generate complete");
-    return Math.trunc(seconds);
-  } catch (e) {
-    throw new InternalServerError(e.message);
-  }
-}

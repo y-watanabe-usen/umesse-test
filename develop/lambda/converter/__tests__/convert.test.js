@@ -5,6 +5,7 @@ process.env.environment = "local";
 const aws = require("aws-sdk");
 const { ERROR_CODE } = require("umesse-lib/error");
 const { constants } = require("umesse-lib/constants");
+const { s3Manager } = require("umesse-lib/utils/s3Manager");
 const { dynamodbManager } = require("umesse-lib/utils/dynamodbManager");
 const { handler } = require("../lambda");
 
@@ -67,6 +68,13 @@ describe("convert", () => {
       status: "1",
       timestamp: expect.anything(),
     });
+
+    // s3オブジェクトの確認
+    ret = await s3Manager.head(
+      constants.s3Bucket().users,
+      `users/${cmData.unisCustomerCd}/cm/${cmData.cm[0].cmId}.aac`
+    );
+    expect(ret).toEqual(expect.anything());
   });
 
   test("[error] 音圧調整/エンコード　顧客データ存在しない", async () => {
