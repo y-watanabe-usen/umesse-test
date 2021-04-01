@@ -227,7 +227,7 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
         id: id,
         category: constants.resourceCategory.CM,
       }),
-      QueueUrl: constants.sqsQueueUrl(),
+      QueueUrl: constants.sqsQueueUrl(constants.sqsType.CONVERTER),
       DelaySeconds: 0,
     };
 
