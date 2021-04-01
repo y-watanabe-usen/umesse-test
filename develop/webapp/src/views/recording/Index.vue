@@ -220,6 +220,9 @@ export default defineComponent({
       if (audioRecorder.isRecording()) {
         audioRecorder.stop();
       }
+      if ( audioPlayer.isPlaying()) {
+        audioPlayer.stop();
+      }
     });
 
     // toggle voice recorder.
