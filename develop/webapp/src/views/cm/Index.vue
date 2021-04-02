@@ -914,7 +914,7 @@ export default defineComponent({
       toVoiceFree();
     };
     const toHome = () => {
-      cm.clearAll();
+      cm.reset();
       router.push({ name: "Home" });
     };
     const toRecoding = () => {

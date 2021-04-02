@@ -96,8 +96,9 @@ export default function cmStore() {
   const clearBgm = () => {
     state.displayCmItem.clearBgm();
   };
-  const clearAll = () => {
+  const reset = () => {
     state.displayCmItem.reset();
+    state.status = UPLOAD_CM_STATE.NONE;
   };
 
   const selectNarrationIndex = (index: number) => {
@@ -195,7 +196,7 @@ export default function cmStore() {
     clearOpenChime,
     clearEndChime,
     clearBgm,
-    clearAll,
+    reset,
     selectNarrationIndex,
     unSelectNarrationIndex,
     setNarration,
