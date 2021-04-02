@@ -2,6 +2,8 @@ export * from './auth';
 export * from './bgm-item';
 export * from './chime-item';
 export * from './cm-item';
+export * from './cm-list-item';
+export * from './cm-list-item-inner';
 export * from './cm-material-list-item';
 export * from './cm-material-list-item-bgm';
 export * from './cm-material-list-item-end-chime';

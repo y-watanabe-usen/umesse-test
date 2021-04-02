@@ -11,10 +11,10 @@
           <template #sub-menu>
             <SubMenu>
               <SubMenuItem
-                v-for="scene in scenes"
+                v-for="scene in sceneList"
                 :key="scene.cd"
                 :isSelected="scene.cd == activeSceneCd"
-                @click="clickScene(scene.cd)"
+                @click="fetchCm(scene.cd)"
               >
                 {{ scene.name }}
               </SubMenuItem>
@@ -25,7 +25,7 @@
               <ListHeader>
                 <Sort
                   v-model="sort"
-                  @update:modelValue="fetchCm"
+                  @update:modelValue="fetchScene"
                   :options="
                     cmSorts.map((cmSort) => {
                       return { title: cmSort.name, value: cmSort.cd };
@@ -49,13 +49,9 @@
                   <span class="start">{{
                     convertDatestringToDate(cm.timestamp)
                   }}</span>
-                  <span
-                    class="status"
-                    :class="getStatusClass(cm.status)"
-                  >{{
+                  <span class="status" :class="getStatusClass(cm.status)">{{
                     Constants.CM_STATUS.find((v) => v.cd == cm.status).name
-                  }}</span
-                  >
+                  }}</span>
                 </p>
               </template>
               <template #operations>
@@ -276,7 +272,7 @@ import {
   convertDatestringToDate,
   convertNumberToTime,
 } from "@/utils/FormatDate";
-import Constants from "@/utils/Constants";
+import Constants, { Scene } from "@/utils/Constants";
 import { useRouter } from "vue-router";
 import SelectBox from "@/components/atoms/SelectBox.vue";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
@@ -315,9 +311,10 @@ export default defineComponent({
     const disabledEditContentsStatus = ["11", "12"];
     const disabledDeleteStatus = ["00", "11"];
     const authToken = <string>auth.getToken();
-    const scenes = Common.getManagementScenes();
     const state = reactive({
-      activeSceneCd: "001",
+      activeSceneCd: "",
+      sceneList: [] as Scene[],
+      cmList: [] as CmItem[],
       cms: [] as CmItem[],
       sort: 4,
       cmSorts: computed(() => Common.getSort()),
@@ -341,25 +338,26 @@ export default defineComponent({
       errorCode: "",
       errorMessage: "",
     });
-    const clickScene = (sceneCd: string) => {
-      if (state.activeSceneCd !== sceneCd) {
-        state.activeSceneCd = sceneCd;
-        fetchCm();
-      }
-    };
-    const fetchCm = async () => {
+    const fetchScene = async () => {
       try {
         openModalLoading("");
-        const response = await cmService.fetch(
-          authToken,
-          state.activeSceneCd,
-          state.sort
-        );
-        state.cms = response;
+        const response = await cmService.fetch(authToken, state.sort);
+        state.sceneList = response[0];
+        state.cmList = response[1];
+        fetchCm(state.sceneList[0].cd);
       } catch (e) {
         openErrorModal(e);
       } finally {
         closeModalLoading();
+      }
+    };
+    const fetchCm = (sceneCd: string) => {
+      if (state.activeSceneCd !== sceneCd) {
+        state.activeSceneCd = sceneCd;
+        state.cms = state.cmList.filter((v) => {
+          if (!v.scene) return false;
+          return v.scene.sceneCd == sceneCd;
+        });
       }
     };
     const selectCm = (cm: CmItem) => {
@@ -392,11 +390,11 @@ export default defineComponent({
         state.scene,
         cm.productionType
       );
-      fetchCm();
+      fetchScene();
     };
     const remove = async (cmId: string) => {
       await cmService.remove(authToken, cmId);
-      fetchCm();
+      fetchScene();
     };
     const openPlayModal = () => {
       state.isPlayModalAppear = true;
@@ -487,7 +485,7 @@ export default defineComponent({
       router.push({ name: "Cm" });
     };
     onMounted(async () => {
-      fetchCm();
+      fetchScene();
     });
     const openModalLoading = (title: string) => {
       state.titleModalLoading = title;
@@ -517,27 +515,26 @@ export default defineComponent({
     };
     const getStatusClass = (cd: string) => {
       switch (cd) {
-        case "00":  // CM削除
-        case "09":  // CMエラー
-        case "19":  // 外部システムアップロードエラー
+        case "00": // CM削除
+        case "09": // CMエラー
+        case "19": // 外部システムアップロードエラー
           return ["error"];
-        case "01":  // CM作成中
-        case "03":  // CMエンコード中
-        case "04":  // CM共有中
-        case "11":  // 外部システムアップロード中
+        case "01": // CM作成中
+        case "03": // CMエンコード中
+        case "04": // CM共有中
+        case "11": // 外部システムアップロード中
           return ["busy"];
-        case "02":  // CM作成完了
-        case "12":  // 外部システムアップロード完了
+        case "02": // CM作成完了
+        case "12": // 外部システムアップロード完了
           return ["comp"];
       }
     };
     return {
       ...toRefs(state),
-      scenes,
       play,
       stop,
       remove,
-      clickScene,
+      fetchCm,
       selectCm,
       convertDatestringToDate,
       convertNumberToTime,
@@ -559,7 +556,7 @@ export default defineComponent({
       removeAndOpenRemovedModal,
       toEditCm,
       Constants,
-      fetchCm,
+      fetchScene,
       disabledEditContentsStatus,
       disabledDeleteStatus,
       closeAllDropdownMenu,

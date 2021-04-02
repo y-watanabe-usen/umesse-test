@@ -102,24 +102,16 @@
                   "endDate": { "S": "9999-12-31T23:59:59+09:00" },
                   "productionType": { "S": "01" },
                   "industry": {
-                    "L": [
-                      {
-                        "M": {
-                          "industryCd": { "S": "01" },
-                          "industryName": { "S": "業種01" }
-                        }
-                      }
-                    ]
+                    "M": {
+                      "industryCd": { "S": "01" },
+                      "industryName": { "S": "業種01" }
+                    }
                   },
                   "scene": {
-                    "L": [
-                      {
-                        "M": {
-                          "sceneCd": { "S": "01" },
-                          "sceneName": { "S": "シーン01" }
-                        }
-                      }
-                    ]
+                    "M": {
+                      "sceneCd": { "S": "01" },
+                      "sceneName": { "S": "シーン01" }
+                    }
                   },
                   "materials": {
                     "M": {

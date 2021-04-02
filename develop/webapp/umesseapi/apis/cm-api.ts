@@ -17,6 +17,7 @@ import { Configuration } from '../configuration';
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
 import { CmItem } from '../models';
+import { CmListItem } from '../models';
 import { CreateCmItem } from '../models';
 /**
  * CmApi - axios parameter creator
@@ -334,7 +335,7 @@ export const CmApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listUserCm(xUnisCustomerCd: string, sort?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CmItem>>> {
+        async listUserCm(xUnisCustomerCd: string, sort?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CmListItem>> {
             const localVarAxiosArgs = await CmApiAxiosParamCreator(configuration).listUserCm(xUnisCustomerCd, sort, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
@@ -407,7 +408,7 @@ export const CmApiFactory = function (configuration?: Configuration, basePath?: 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listUserCm(xUnisCustomerCd: string, sort?: number, options?: any): AxiosPromise<Array<CmItem>> {
+        listUserCm(xUnisCustomerCd: string, sort?: number, options?: any): AxiosPromise<CmListItem> {
             return CmApiFp(configuration).listUserCm(xUnisCustomerCd, sort, options).then((request) => request(axios, basePath));
         },
         /**

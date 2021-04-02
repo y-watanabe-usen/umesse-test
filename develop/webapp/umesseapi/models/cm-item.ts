@@ -67,13 +67,13 @@ export interface CmItem {
     productionType?: any;
     /**
      * 
-     * @type {Array&lt;IndustryItem&gt;}
+     * @type {IndustryItem}
      * @memberof CmItem
      */
     industry?: any;
     /**
      * 
-     * @type {Array&lt;SceneItem&gt;}
+     * @type {SceneItem}
      * @memberof CmItem
      */
     scene?: any;
