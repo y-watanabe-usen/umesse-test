@@ -93,7 +93,7 @@
                     </button>
                     <button
                       class="btn-delete"
-                      :disabled="!hasRecordedData"
+                      :disabled="!hasRecordedData || isPlaying"
                       @click="deleteRecordedData"
                     >
                       <img src="@/assets/icon_delete.svg" />削除
@@ -233,6 +233,8 @@ export default defineComponent({
 
     // toggle voice recorder.
     const toggleVoiceRecorder = async () => {
+      if( audioPlayer.isPlaying())
+        audioPlayer.stop();
       if (audioRecorder.isRecording()) {
         audioRecorder.stop();
       } else {
