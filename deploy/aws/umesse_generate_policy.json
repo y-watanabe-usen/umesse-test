@@ -50,7 +50,7 @@
         "sqs:GetQueueAttributes",
         "sqs:ReceiveMessage"
       ],
-      "Resource": ["arn:aws:sqs:*:*:UMesseConverterQueue"]
+      "Resource": ["arn:aws:sqs:*:*:UMesseGenerateQueue"]
     }
   ]
 }
