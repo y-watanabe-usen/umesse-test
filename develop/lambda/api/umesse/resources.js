@@ -92,7 +92,7 @@ exports.getSignedUrl = async (id, category) => {
   switch (category) {
     case constants.resourceCategory.CM:
       bucket = constants.s3Bucket().users;
-      path = `users/${id.split("-")[0]}/${category}/${id}.aac`;
+      path = `users/${id.split("-")[0]}/${category}/${id}.mp3`;
       break;
 
     case constants.resourceCategory.RECORDING:
