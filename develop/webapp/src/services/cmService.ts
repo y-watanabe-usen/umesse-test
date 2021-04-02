@@ -49,6 +49,25 @@ export function useCmService(api: UMesseApi.CmApi, freeCache: FreeCache) {
     });
   };
 
+  const fetchById = async (
+    authToken: string,
+    id: string
+  ): Promise<CmItem> => {
+    return new Promise(function (resolve, reject) {
+      api
+        .getUserCm(id, authToken)
+        .then((value) => {
+          console.log("resolve");
+          console.log("getUserCm", value.data);
+          resolve(value.data);
+        })
+        .catch((e) => {
+          console.log("reject", e);
+          reject(UMesseErrorFromApiFactory(e));
+        });
+    });
+  };
+
   const create = async (
     authToken: string,
     narrations: (Narration | Recording | Tts)[],
@@ -175,6 +194,7 @@ export function useCmService(api: UMesseApi.CmApi, freeCache: FreeCache) {
 
   return {
     fetch,
+    fetchById,
     create,
     update,
     remove,

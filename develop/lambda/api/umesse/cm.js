@@ -47,6 +47,10 @@ exports.getCm = async (unisCustomerCd, id, sort) => {
   if (id) {
     ret = ret.filter((item) => item.cmId === id).shift();
     if (!ret) throw new NotFoundError(ERROR_CODE.E0000404);
+    ret.url = await s3Manager.getSignedUrl(
+      constants.s3Bucket().users,
+      `users/${ret.unisCustomerCd}/${constants.resourceCategory.CM}/${ret.cmId}.mp3`
+    );
   }
 
   let data = responseData(ret, constants.resourceCategory.CM, sort);
