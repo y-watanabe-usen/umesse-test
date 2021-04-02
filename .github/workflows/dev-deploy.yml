@@ -40,6 +40,11 @@ jobs:
       run: |
         npm install --production
 
+    - name: Build Lambda Generate
+      working-directory: ./develop/lambda/generate
+      run: |
+        npm install --production
+
     - name: Build Lambda Lib
       working-directory: ./develop/lambda/layer/nodejs/node_modules/umesse-lib
       run: |
