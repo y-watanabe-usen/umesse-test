@@ -125,15 +125,13 @@ export default function ttsStore() {
       };
 
       console.log("generateUserTts", token(), requestModel);
-      try {
-        const response = await ttsService.generate(token(), requestModel);
-        console.log(response);
-        state.ttsDatas = response.details;
-      } catch (e) {
-        // throw new e;
-      }
+      const response = await ttsService.generate(token(), requestModel);
+      console.log(response);
+      state.ttsDatas = response.details;
+      // throw new e;
     } catch (err) {
       console.log(err);
+      throw err;
       state.error = err.message;
     } finally {
       state.generating = false;
@@ -160,16 +158,13 @@ export default function ttsStore() {
           speaker: speaker,
         }]
       };
-      try {
-        const response = await ttsService.generate(
-          token(), requestModel);
-        console.log(response);
-        state.ttsDatas = response.details;
-      } catch (e) {
-        // throw new e;
-      }
+      const response = await ttsService.generate(token(), requestModel);
+      console.log(response);
+      state.ttsDatas = response.details;
+      // throw new e;
     } catch (err) {
       console.log(err);
+      throw err;
       state.error = err.message;
     } finally {
       state.generating = false;

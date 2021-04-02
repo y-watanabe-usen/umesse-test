@@ -47,6 +47,14 @@
     </BasicLayout>
     <!-- modal -->
     <transition>
+      <ModalErrorDialog
+        v-if="isErrorModalApper"
+        @close="closeErrorModal"
+        :errorCode="errorCode"
+        :errorMessage="errorMessage"
+      />
+    </transition>
+    <transition>
       <ModalDialog v-if="isModalAppear" @close="stopAndCloseModal">
         <template #header>
           <ModalHeader title="保存しますか？" @close="stopAndCloseModal" />
@@ -100,6 +108,7 @@ import Button from "@/components/atoms/Button.vue";
 import ModalDialog from "@/components/organisms/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
+import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
 import PlayDialogContents from "@/components/molecules/PlayDialogContents.vue";
 import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
@@ -108,6 +117,7 @@ import SelectBox from "@/components/atoms/SelectBox.vue";
 import { useGlobalStore } from "@/store";
 import Constants from "@/utils/Constants";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
+import { UMesseError } from "../../../models/UMesseError";
 import { freeCache } from "@/repository/cache";
 import { audioService } from "@/services";
 export default defineComponent({
@@ -119,6 +129,7 @@ export default defineComponent({
     ModalDialog,
     ModalHeader,
     ModalFooter,
+    ModalErrorDialog,
     PlayDialogContents,
     FormGroup,
     TextBox,
@@ -142,6 +153,9 @@ export default defineComponent({
       text: "",
       speaker: "1", // 女性
       isModalAppear: false,
+      isErrorModalApper: false,
+      errorCode: "",
+      errorMessage: "",
       title: "",
       description: "",
       isLoading: false,
@@ -180,8 +194,13 @@ export default defineComponent({
     };
 
     const openModal = async () => {
-      state.isModalAppear = true;
-      await ttsStore.generateTtsDataFromFree(state.text, state.speaker);
+      try {
+        state.isModalAppear = true;
+        await ttsStore.generateTtsDataFromFree(state.text, state.speaker);
+      } catch(e) {
+        closeModal();
+        openErrorModal(e);
+      }
     };
     const closeModal = () => {
       state.isModalAppear = false;
@@ -197,6 +216,14 @@ export default defineComponent({
     const closeModalLoading = () => {
       state.isLoading = false;
     };
+    const openErrorModal = (e: UMesseError) => {
+      state.errorCode = e.errorCode;
+      state.errorMessage = e.message;
+      state.isErrorModalApper = true;
+    };
+    const closeErrorModal = () => {
+      state.isErrorModalApper = false;
+    };
     return {
       ttsSpeakers,
       ...toRefs(state),
@@ -206,6 +233,8 @@ export default defineComponent({
       openModal,
       closeModal,
       stopAndCloseModal,
+      openErrorModal,
+      closeErrorModal,
     };
   },
 });

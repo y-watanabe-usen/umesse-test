@@ -109,6 +109,14 @@
     </BasicLayout>
     <!-- modal -->
     <transition>
+      <ModalErrorDialog
+        v-if="isErrorModalApper"
+        @close="closeErrorModal"
+        :errorCode="errorCode"
+        :errorMessage="errorMessage"
+      />
+    </transition>
+    <transition>
       <ModalDialog v-if="isModalAppear" @close="stopAndCloseModal">
         <template #header>
           <ModalHeader title="保存しますか？" @close="stopAndCloseModal" />
@@ -172,6 +180,7 @@ import Button from "@/components/atoms/Button.vue";
 import ModalDialog from "@/components/organisms/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
+import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
 import PlayDialogContents from "@/components/molecules/PlayDialogContents.vue";
 import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
@@ -182,6 +191,7 @@ import { useGlobalStore } from "@/store";
 import { TemplateItem } from "umesseapi/models";
 import Constants from "@/utils/Constants";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
+import { UMesseError } from "../../../models/UMesseError";
 import { lang, speaker, TemplateDetailItem } from "@/models/TemplateDetailItem";
 import validator from "@/utils/validator";
 import { audioService } from "@/services";
@@ -207,6 +217,7 @@ export default defineComponent({
     ModalDialog,
     ModalHeader,
     ModalFooter,
+    ModalErrorDialog,
     PlayDialogContents,
     FormGroup,
     TextBox,
@@ -278,6 +289,9 @@ export default defineComponent({
       minutes: 10,
       point: 3,
       isModalAppear: false,
+      isErrorModalApper: false,
+      errorCode: "",
+      errorMessage: "",
       text: computed(() => {
         const text: string = ttsTextConverter.convertManuscript(
           template.manuscript,
@@ -346,21 +360,26 @@ export default defineComponent({
     };
 
     const openModal = async () => {
-      state.isModalAppear = true;
-      await ttsStore.generateTtsDataFromTemplate(
-        templateDetails,
-        state.langs,
-        state.speaker,
-        state.customerName,
-        state.time,
-        state.percentage,
-        state.count,
-        state.endYearDate,
-        state.newYearDate,
-        state.age,
-        state.minutes,
-        state.point
-      );
+      try {
+        state.isModalAppear = true;
+        await ttsStore.generateTtsDataFromTemplate(
+          templateDetails,
+          state.langs,
+          state.speaker,
+          state.customerName,
+          state.time,
+          state.percentage,
+          state.count,
+          state.endYearDate,
+          state.newYearDate,
+          state.age,
+          state.minutes,
+          state.point
+        );
+      } catch(e) {
+        closeModal();
+        openErrorModal(e);
+      }
     };
     const closeModal = () => {
       state.isModalAppear = false;
@@ -374,6 +393,14 @@ export default defineComponent({
     };
     const closeModalLoading = () => {
       state.isLoading = false;
+    };
+    const openErrorModal = (e: UMesseError) => {
+      state.errorCode = e.errorCode;
+      state.errorMessage = e.message;
+      state.isErrorModalApper = true;
+    };
+    const closeErrorModal = () => {
+      state.isErrorModalApper = false;
     };
     const selectErrorMessageCustomerName = (customerName: string) => {
       if (!validator.isFullWidthKana(customerName)) {
@@ -443,6 +470,8 @@ export default defineComponent({
       openModal,
       closeModal,
       stopAndCloseModal,
+      openErrorModal,
+      closeErrorModal,
       template,
       templateDetails,
       ConverterType,
