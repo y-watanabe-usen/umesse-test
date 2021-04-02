@@ -8,12 +8,7 @@
     },
     {
       "Effect": "Allow",
-      "Action": [
-        "s3:ListBucket",
-        "s3:GetObject",
-        "s3:PutObject",
-        "s3:DeleteObject"
-      ],
+      "Action": ["s3:ListBucket", "s3:GetObject", "s3:PutObject", "s3:DeleteObject"],
       "Resource": [
         "arn:aws:s3:::dev-umesse-users/*",
         "arn:aws:s3:::dev-umesse-contents/*",
@@ -49,11 +44,13 @@
     },
     {
       "Effect": "Allow",
-      "Action": ["sqs:SendMessage"],
-      "Resource": [
-        "arn:aws:sqs:*:*:UMesseConverterQueue",
-        "arn:aws:sqs:*:*:UMesseGenerateQueue"
-      ]
+      "Action": [
+        "sqs:ChangeMessageVisibility",
+        "sqs:DeleteMessage",
+        "sqs:GetQueueAttributes",
+        "sqs:ReceiveMessage"
+      ],
+      "Resource": ["arn:aws:sqs:*:*:UMesseConverterQueue"]
     }
   ]
 }
