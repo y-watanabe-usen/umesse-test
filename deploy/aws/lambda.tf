@@ -58,6 +58,7 @@ resource "aws_lambda_function" "umesse_api_function" {
       "debug"                   = true
       "environment"             = "dev"
       "CONVERTER_SQS_QUEUE_URL" = aws_sqs_queue.umesse_converter_queue.id
+      "GENERATE_SQS_QUEUE_URL"  = aws_sqs_queue.umesse_generate_queue.id
     }
   }
 
