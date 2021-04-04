@@ -18,18 +18,14 @@ cd ../develop/lambda/api
 npm run build
 cd ../converter
 npm run build
+cd ../generate
+npm run build
 
 cd ../../../deploy/local
 terraform init
 terraform plan
 terraform apply
 init.sh  // s3のデータ転送
-```
-
-## call lambda api via apigateway
-
-```bash
-./curl_lambda.sh
 ```
 
 ### send SQS
@@ -47,18 +43,12 @@ npm run build:prod
 cd ../converter
 rm -rf node_modules/
 npm run build:prod
+cd ../generate
+rm -rf node_modules/
+npm run build:prod
 
 cd ../../../deploy/aws
 terraform init
 terraform plan
 terraform apply
-```
-
-## workspaceの管理
-
-```bash
-terraform workspace new [dev / stg / prod ]
-terraform workspace select [ default / dev / stg / prod ]
-terraform init
-terraform plan
 ```

@@ -1,5 +1,9 @@
-output "sqs_url" {
+output "sqs_url_converter" {
   value = aws_sqs_queue.umesse_converter_queue.id
+}
+
+output "sqs_url_generate" {
+  value = aws_sqs_queue.umesse_generate_queue.id
 }
 
 output "rest_api_id" {

@@ -1,6 +1,6 @@
 {
-  "name": "umesse-converter",
-  "description": "U MESSE AUDIO CONVERTER",
+  "name": "umesse-generate",
+  "description": "U MESSE AUDIO GENERATE",
   "version": "0.0.1",
   "private": true,
   "main": "lambda.js",

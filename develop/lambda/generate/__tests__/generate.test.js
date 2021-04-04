@@ -10,12 +10,9 @@ const { dynamodbManager } = require("umesse-lib/utils/dynamodbManager");
 const { handler } = require("../lambda");
 
 // test data
-const json = require("./data/convert.test.json");
-const cmData = aws.DynamoDB.Converter.unmarshall(
+const json = require("./data/generate.test.json");
+const data = aws.DynamoDB.Converter.unmarshall(
   json["umesse-users"][0].PutRequest.Item
-);
-const externalData = aws.DynamoDB.Converter.unmarshall(
-  json["umesse-external"][0].PutRequest.Item
 );
 
 console.warn = jest.fn();
@@ -25,14 +22,21 @@ beforeAll(() => {
 });
 
 describe("convert", () => {
-  test("[success] 音圧調整/エンコード", async () => {
+  test("[success] CM生成", async () => {
     const event = {
       Records: [
         {
           body: JSON.stringify({
-            unisCustomerCd: cmData.unisCustomerCd,
-            id: cmData.cm[0].cmId,
+            unisCustomerCd: data.unisCustomerCd,
+            id: data.cm[0].cmId,
             category: "cm",
+            materials: {
+              narrations: [
+                { id: "サンプル03", category: "narration", volume: 300 },
+              ],
+              startChime: { id: "サンプル01", category: "chime", volume: 50 },
+              endChime: { id: "サンプル02", category: "chime", volume: 50 },
+            },
           }),
         },
       ],
@@ -46,43 +50,39 @@ describe("convert", () => {
     // CMステータスの確認
     ret = await dynamodbManager.get(
       constants.dynamoDbTable().users,
-      { unisCustomerCd: cmData.unisCustomerCd },
+      { unisCustomerCd: data.unisCustomerCd },
       { ProjectionExpression: "cm" }
     );
     expect(ret.Item.cm[0]).toEqual({
-      ...cmData.cm[0],
-      status: "11",
-      timestamp: expect.anything(),
-    });
-
-    // 外部連携ステータスの確認
-    ret = await dynamodbManager.get(
-      constants.dynamoDbTable().external,
-      { unisCustomerCd: externalData.unisCustomerCd },
-      {}
-    );
-    expect(ret.Item).toEqual({
-      ...externalData,
-      status: "1",
+      ...data.cm[0],
+      seconds: expect.anything(),
+      status: "01",
       timestamp: expect.anything(),
     });
 
     // s3オブジェクトの確認
     ret = await s3Manager.head(
       constants.s3Bucket().users,
-      `users/${cmData.unisCustomerCd}/cm/${cmData.cm[0].cmId}.aac`
+      `users/${data.unisCustomerCd}/cm/${data.cm[0].cmId}.mp3`
     );
     expect(ret).toEqual(expect.anything());
   });
 
-  test("[error] 音圧調整/エンコード　顧客データ存在しない", async () => {
+  test("[error] CM生成　顧客データ存在しない", async () => {
     const event = {
       Records: [
         {
           body: JSON.stringify({
             unisCustomerCd: "999999999",
-            id: cmData.cm[1].cmId,
+            id: data.cm[1].cmId,
             category: "cm",
+            materials: {
+              narrations: [
+                { id: "サンプル03", category: "narration", volume: 300 },
+              ],
+              startChime: { id: "サンプル01", category: "chime", volume: 50 },
+              endChime: { id: "サンプル02", category: "chime", volume: 50 },
+            },
           }),
         },
       ],
@@ -93,14 +93,21 @@ describe("convert", () => {
     });
   });
 
-  test("[error] 音圧調整/エンコード　CMデータ存在しない", async () => {
+  test("[error] CM生成　CMデータ存在しない", async () => {
     const event = {
       Records: [
         {
           body: JSON.stringify({
-            unisCustomerCd: cmData.unisCustomerCd,
+            unisCustomerCd: data.unisCustomerCd,
             id: "999999999-c-99999999",
             category: "cm",
+            materials: {
+              narrations: [
+                { id: "サンプル03", category: "narration", volume: 300 },
+              ],
+              startChime: { id: "サンプル01", category: "chime", volume: 50 },
+              endChime: { id: "サンプル02", category: "chime", volume: 50 },
+            },
           }),
         },
       ],
@@ -111,14 +118,21 @@ describe("convert", () => {
     });
   });
 
-  test("[error] 音圧調整/エンコード　CMステータスエラー", async () => {
+  test("[error] CM生成　CMステータスエラー", async () => {
     const event = {
       Records: [
         {
           body: JSON.stringify({
-            unisCustomerCd: cmData.unisCustomerCd,
-            id: cmData.cm[1].cmId,
+            unisCustomerCd: data.unisCustomerCd,
+            id: data.cm[1].cmId,
             category: "cm",
+            materials: {
+              narrations: [
+                { id: "サンプル03", category: "narration", volume: 300 },
+              ],
+              startChime: { id: "サンプル01", category: "chime", volume: 50 },
+              endChime: { id: "サンプル02", category: "chime", volume: 50 },
+            },
           }),
         },
       ],
@@ -129,30 +143,12 @@ describe("convert", () => {
     });
   });
 
-  test("[error] 音圧調整/エンコード　S3にCMが存在しない", async () => {
-    const event = {
-      Records: [
-        {
-          body: JSON.stringify({
-            unisCustomerCd: cmData.unisCustomerCd,
-            id: cmData.cm[2].cmId,
-            category: "cm",
-          }),
-        },
-      ],
-    };
-    await expect(handler(event)).resolves.toEqual({
-      code: 500,
-      message: "converter failed",
-    });
-  });
-
-  test("[error] 音圧調整/エンコード　パラメーターチェック", async () => {
+  test("[error] CM生成　パラメーターチェック", async () => {
     await expect(
       handler({
         Records: [
           {
-            body: JSON.stringify({ MessageBody: JSON.stringify({}) }),
+            body: JSON.stringify({}),
           },
         ],
       })
@@ -267,7 +263,10 @@ describe("convert", () => {
       })
     ).resolves.toEqual({
       code: 400,
-      message: `${ERROR_CODE.E0001030} (E0001030)`,
+      message: [
+        `${ERROR_CODE.E0001001} (E0001001)`,
+        `${ERROR_CODE.E0001030} (E0001030)`,
+      ].join("\n"),
     });
   });
 });

@@ -42,5 +42,5 @@ docker run --rm -it \
 * develop/lambda/umesse/　配下に上記serviceからコールする実体を置く
 
 ### LambdaのLog
-aws --endpoint-url=http://localhost:4566 --region ap-northeast-1 --profile local logs tail /aws/lambda/lambda --follow
-* 一度SQSにSendするとログ取れるようになる
+aws --endpoint-url=http://localhost:4566 --region ap-northeast-1 logs tail /aws/lambda/UMesseApiFunction --follow
+* 一度curlでAPIにアクセスするか、SQSにSendするとログ取れるようになる

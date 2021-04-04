@@ -16,6 +16,12 @@
 - 作成したCMをラウドネス調整、音圧調整、エンコードする
 - APIからAWS SQS経由で起動する
 
+## generate
+
+- CM作成Lambda
+- 選択した素材を結合してCMを作成する
+- APIからAWS SQS経由で起動する
+
 ## sync
 
 - ユーザーデータ取得Lambda

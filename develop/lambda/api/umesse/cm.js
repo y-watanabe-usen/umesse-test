@@ -1,6 +1,5 @@
 "use strict";
 
-const path = require("path");
 const {
   constants,
   debuglog,
@@ -8,7 +7,6 @@ const {
   generateId,
   responseData,
 } = require("umesse-lib/constants");
-const UMesseConverter = require("umesse-lib/converter");
 const { checkParams } = require("umesse-lib/validation");
 const {
   ERROR_CODE,
@@ -49,6 +47,10 @@ exports.getCm = async (unisCustomerCd, id, sort) => {
   if (id) {
     ret = ret.filter((item) => item.cmId === id).shift();
     if (!ret) throw new NotFoundError(ERROR_CODE.E0000404);
+    ret.url = await s3Manager.getSignedUrl(
+      constants.s3Bucket().users,
+      `users/${ret.unisCustomerCd}/${constants.resourceCategory.CM}/${ret.cmId}.mp3`
+    );
   }
 
   let data = responseData(ret, constants.resourceCategory.CM, sort);
@@ -112,19 +114,25 @@ exports.createCm = async (unisCustomerCd, body) => {
     }
   }
 
-  // CM結合、S3へPUT
-  const seconds = await generateCm(unisCustomerCd, id, body.materials);
-  if (!seconds) throw new InternalServerError(ERROR_CODE.E0000500);
+  // FIXME: ローカル環境だとここでエラーになって先の検証が出来ないので、一旦ローカル環境では動かないようにしてる
+  if (process.env.environment !== "local") {
+    // CM結合、S3へPUT
+    // SQS send
+    const messageBody = {
+      unisCustomerCd: unisCustomerCd,
+      id: id,
+      category: constants.resourceCategory.CM,
+      materials: body.materials,
+    };
 
-  // 署名付きURLの発行
-  let url;
-  try {
-    url = await s3Manager.getSignedUrl(
-      constants.s3Bucket().users,
-      `users/${unisCustomerCd}/${constants.resourceCategory.CM}/${id}.mp3`
-    );
-  } catch (e) {
-    throw new InternalServerError(e.message);
+    try {
+      const _ = await sqsManager.send(
+        messageBody,
+        constants.sqsGenerateQueueUrl()
+      );
+    } catch (e) {
+      throw new InternalServerError(e.message);
+    }
   }
 
   // DynamoDBのデータ更新
@@ -136,8 +144,7 @@ exports.createCm = async (unisCustomerCd, body) => {
       "bgm" in body.materials
         ? constants.cmProductionType.MUSIC
         : constants.cmProductionType.NONE;
-    cm.seconds = seconds;
-    cm.status = constants.cmStatus.CREATING;
+    cm.status = constants.cmStatus.GENERATE;
     cm.timestamp = timestamp();
     try {
       ret = await db.User.updateCm(unisCustomerCd, index, cm);
@@ -153,8 +160,7 @@ exports.createCm = async (unisCustomerCd, body) => {
         "bgm" in body.materials
           ? constants.cmProductionType.MUSIC
           : constants.cmProductionType.NONE,
-      seconds: seconds,
-      status: constants.cmStatus.CREATING,
+      status: constants.cmStatus.GENERATE,
       timestamp: timestamp(),
     };
 
@@ -165,7 +171,6 @@ exports.createCm = async (unisCustomerCd, body) => {
     }
   }
 
-  ret.url = url;
   return responseData(ret, constants.resourceCategory.CM);
 };
 
@@ -218,23 +223,23 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
   let contentTime;
   let sceneCd;
   let status = constants.cmStatus.COMPLETE;
+
   // CM作成中の場合
   if (cm.status === constants.cmStatus.CREATING) {
-    // SQS send
-    const params = {
-      MessageBody: JSON.stringify({
-        unisCustomerCd: unisCustomerCd,
-        id: id,
-        category: constants.resourceCategory.CM,
-      }),
-      QueueUrl: constants.sqsQueueUrl(),
-      DelaySeconds: 0,
-    };
-
     // FIXME: ローカル環境だとここでエラーになって先の検証が出来ないので、一旦ローカル環境では動かないようにしてる
     if (process.env.environment !== "local") {
       try {
-        const _ = await sqsManager.send(params);
+        // SQS send
+        const messageBody = {
+          unisCustomerCd: unisCustomerCd,
+          id: id,
+          category: constants.resourceCategory.CM,
+        };
+
+        const _ = await sqsManager.send(
+          messageBody,
+          constants.sqsConverterQueueUrl()
+        );
       } catch (e) {
         throw new InternalServerError(e.message);
       }
@@ -347,40 +352,3 @@ exports.deleteCm = async (unisCustomerCd, id) => {
 
   return responseData(ret, constants.resourceCategory.CM);
 };
-
-// CM結合処理
-async function generateCm(unisCustomerCd, id, materials) {
-  try {
-    // UMesseConverter.
-    const converter = new UMesseConverter(s3Manager);
-
-    // 出力ファイルパス解決.
-    const workDir = converter.getWorkDir(unisCustomerCd, id);
-    const output = path.join(workDir, `${id}.mp3`);
-
-    // CM作成.
-    await converter.generateCm(unisCustomerCd, id, materials, output);
-
-    // CMのduration取得.
-    const seconds = await converter.getDuration(output);
-    debuglog(`seconds = ${seconds}`);
-
-    // CM Fileをs3へ.
-    // TODO: Windowsのpath解決のため converter.createReadStreamをコールしている
-    // converterに依存しないでfs.createReadStream(output);にしたい
-    const fileStream = await converter.createReadStream(output);
-    fileStream.on("error", (e) => {
-      throw e;
-    });
-    const res = await s3Manager.put(
-      constants.s3Bucket().users,
-      `users/${unisCustomerCd}/cm/${id}.mp3`,
-      fileStream
-    );
-    if (!res) throw new InternalServerError(ERROR_CODE.E0000500);
-    debuglog("generate complete");
-    return Math.trunc(seconds);
-  } catch (e) {
-    throw new InternalServerError(e.message);
-  }
-}

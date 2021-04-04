@@ -139,6 +139,7 @@ export default class Constants {
     { cd: "02", status: "COMPLETE", name: "CM作成完了" },
     { cd: "03", status: "CONVERT", name: "CMエンコード中" },
     { cd: "04", status: "SHARING", name: "CM共有中" },
+    { cd: "05", status: "GENERATE", name: "CM生成中" },
     { cd: "09", status: "ERROR", name: "CMエラー" },
     {
       cd: "11",
