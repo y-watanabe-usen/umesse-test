@@ -70,45 +70,6 @@
         </template>
       </ModalDialog>
     </transition>
-    <!-- todo: 未使用 -->
-    <!-- <transition>
-      <ModalDialog
-        v-if="isSaveModalAppear"
-        size="large"
-        @close="closeSaveModal"
-      >
-        <template #header>
-          <ModalHeader title="保存しますか？" @close="closeSaveModal" />
-        </template>
-        <template #contents>
-          <FormGroup title="タイトル" :required="true">
-            <TextBox />
-          </FormGroup>
-          <FormGroup title="説明">
-            <TextArea />
-          </FormGroup>
-        </template>
-        <template #footer>
-          <ModalFooter>
-            <Button type="secondary" @click="closeSaveModal">キャンセル</Button>
-            <Button type="primary" @click="closeSaveModal">保存する</Button>
-          </ModalFooter>
-        </template>
-      </ModalDialog>
-    </transition> -->
-    <!-- todo: 未使用 -->
-    <!-- <transition>
-      <ModalDialog v-if="isSavedModalAppear" @close="closeSavedModal">
-        <template #contents>
-          <MessageDialogContents> 保存が完了しました。 </MessageDialogContents>
-        </template>
-        <template #footer>
-          <ModalFooter>
-            <Button type="secondary" @click="closeSavedModal">閉じる</Button>
-          </ModalFooter>
-        </template>
-      </ModalDialog>
-    </transition> -->
     <transition>
       <ModalErrorDialog
         v-if="isErrorModalApper"
@@ -189,8 +150,6 @@ export default defineComponent({
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       duration: computed(() => audioPlayer.getDuration()),
       isPlayModalAppear: false,
-      // isSaveModalAppear: false, // todo: 未使用
-      isSavedModalAppear: false,
       isErrorModalApper: false,
       errorCode: "",
       errorMessage: "",
@@ -250,21 +209,6 @@ export default defineComponent({
       state.isPlayModalAppear = false;
     };
 
-    // todo: 未使用
-    // const openSaveModal = () => {
-    //   state.isSaveModalAppear = true;
-    // };
-    // const closeSaveModal = () => {
-    //   state.isSaveModalAppear = false;
-    // };
-
-    const openSavedModal = () => {
-      state.isSavedModalAppear = true;
-    };
-    const closeSavedModal = () => {
-      state.isSavedModalAppear = false;
-    };
-
     const selectChimeAndOpenPlayModal = (chime: ChimeItem) => {
       selectChime(chime);
       openPlayModal();
@@ -306,10 +250,6 @@ export default defineComponent({
       stop,
       openPlayModal,
       closePlayModal,
-      // openSaveModal, // todo: 未使用
-      // closeSaveModal, // todo: 未使用
-      openSavedModal,
-      closeSavedModal,
       selectChimeAndOpenPlayModal,
       stopAndClosePlayModal,
       fetchChime,
