@@ -89,8 +89,10 @@
                           ),
                         },
                         {
-                          title: 'U MUSICにアップロード',
-                          action: () => {},
+                          title: uploadSystemtitle,
+                          action: () => {
+                            upload(cm);
+                          },
                         },
                         {
                           title: '削除',
@@ -192,6 +194,24 @@
       </ModalDialog>
     </transition>
     <transition>
+      <ModalDialog
+        v-if="isUpdatedModalAppear"
+        size="small"
+        @close="closeUploadedModal"
+      >
+        <template #contents>
+          <MessageDialogContents>
+            アップロードが完了しました。
+          </MessageDialogContents>
+        </template>
+        <template #footer>
+          <ModalFooter>
+            <Button type="secondary" @click="closeUploadedModal">閉じる</Button>
+          </ModalFooter>
+        </template>
+      </ModalDialog>
+    </transition>
+    <transition>
       <ModalDialog v-if="isRemoveModalAppear" @close="closeRemoveModal">
         <template #header>
           <ModalHeader title="確認" @close="closeRemoveModal" />
@@ -278,7 +298,7 @@ import SelectBox from "@/components/atoms/SelectBox.vue";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import DropdownMenu from "@/components/molecules/DropdownMenu.vue";
 import { UMesseError } from "../../models/UMesseError";
-import { audioService, cmService } from "@/services";
+import { audioService, cmService, uploadService } from "@/services";
 export default defineComponent({
   components: {
     BasicLayout,
@@ -337,6 +357,8 @@ export default defineComponent({
       isErrorModalApper: false,
       errorCode: "",
       errorMessage: "",
+      uploadSystemtitle: "U MUSICにアップロード",
+      isUpdatedModalAppear: false,
     });
     const fetchScene = async () => {
       try {
@@ -392,6 +414,17 @@ export default defineComponent({
       );
       fetchScene();
     };
+    const upload = async (cm: CmItem) => {
+      try {
+        await uploadService.create(authToken, cm.id, "01");
+        openUploadtedModal();
+      } catch (e) {
+        console.log(e.message);
+        openErrorModal(e);
+      } finally {
+        closeModalLoading();
+      }
+    };
     const remove = async (cmId: string) => {
       await cmService.remove(authToken, cmId);
       fetchScene();
@@ -425,6 +458,12 @@ export default defineComponent({
     };
     const closeRemovedModal = () => {
       state.isRemovedModalAppear = false;
+    };
+    const openUploadtedModal = () => {
+      state.isUpdatedModalAppear = true;
+    };
+    const closeUploadedModal = () => {
+      state.isUpdatedModalAppear = false;
     };
     const selectCmAndOpenPlayModal = (cm: CmItem) => {
       selectCm(cm);
@@ -548,6 +587,8 @@ export default defineComponent({
       closeRemoveModal,
       openRemovedModal,
       closeRemovedModal,
+      openUploadtedModal,
+      closeUploadedModal,
       selectCmAndOpenPlayModal,
       selectCmAndOpenSaveModal,
       selectCmAndOpenRemoveModal,
@@ -563,6 +604,7 @@ export default defineComponent({
       toggleDropdown,
       closeErrorModal,
       getStatusClass,
+      upload,
     };
   },
 });
