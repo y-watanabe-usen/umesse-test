@@ -127,11 +127,22 @@ export default class Constants {
   public static readonly UPLOAD_SYSTEMS: UploadSystem[] = [
     { cd: "01", name: "U MUSIC" },
     { cd: "02", name: "S'sence" },
-    { cd: '99', name: "アップロードしない" },
+    { cd: "99", name: "アップロードしない" },
   ];
 
-  public static readonly SERVICE_CD_UMUSIC:string = 'U01';
-  public static readonly SERVICE_CD_SSENSE:string = 'U21';
+  public static readonly SERVICE_CD_UMUSIC: string = "U01";
+  public static readonly SERVICE_CD_SSENSE: string = "U21";
+
+  public static readonly CM_STATUS_DELETE: string = "00";
+  public static readonly CM_STATUS_CREATING: string = "01";
+  public static readonly CM_STATUS_COMPLETE: string = "02";
+  public static readonly CM_STATUS_CONVERT: string = "03";
+  public static readonly CM_STATUS_SHARING: string = "04";
+  public static readonly CM_STATUS_GENERATE: string = "05";
+  public static readonly CM_STATUS_ERROR: string = "09";
+  public static readonly CM_STATUS_EXTERNAL_UPLOADING: string = "11";
+  public static readonly CM_STATUS_EXTERNAL_COMPLETE: string = "12";
+  public static readonly CM_STATUS_EXTERNAL_ERROR: string = "19";
 
   public static readonly CM_STATUS: CmStatus[] = [
     { cd: "00", status: "DELETE", name: "CM削除" },
