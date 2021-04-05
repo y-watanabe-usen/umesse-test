@@ -60,7 +60,15 @@
                   @click="selectCmAndOpenPlayModal(cm)"
                   :isDisabled="disabledPlayingStatus.includes(cm.status)"
                 >
-                  <img src="@/assets/icon_sound.svg" />試聴
+                  <img
+                    v-show="disabledPlayingStatus.includes(cm.status)"
+                    src="@/assets/icon_sound_white.svg"
+                  />
+                  <img
+                    v-show="!disabledPlayingStatus.includes(cm.status)"
+                    src="@/assets/icon_sound.svg"
+                  />
+                  試聴
                 </Button>
                 <button
                   class="btn-more"
