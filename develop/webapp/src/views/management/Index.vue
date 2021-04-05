@@ -619,17 +619,18 @@ export default defineComponent({
     };
     const getStatusClass = (cd: string) => {
       switch (cd) {
-        case "00": // CM削除
-        case "09": // CMエラー
-        case "19": // 外部システムアップロードエラー
+        case Constants.CM_STATUS_DELETE: // CM削除
+        case Constants.CM_STATUS_ERROR: // CMエラー
+        case Constants.CM_STATUS_EXTERNAL_ERROR: // 外部システムアップロードエラー
           return ["error"];
-        case "01": // CM作成中
-        case "03": // CMエンコード中
-        case "04": // CM共有中
-        case "11": // 外部システムアップロード中
+        case Constants.CM_STATUS_CREATING: // CM作成中
+        case Constants.CM_STATUS_CONVERT: // CMエンコード中
+        case Constants.CM_STATUS_SHARING: // CM共有中
+        case Constants.CM_STATUS_GENERATE: // CM生成中
+        case Constants.CM_STATUS_EXTERNAL_UPLOADING: // 外部システムアップロード中
           return ["busy"];
-        case "02": // CM作成完了
-        case "12": // 外部システムアップロード完了
+        case Constants.CM_STATUS_COMPLETE: // CM作成完了
+        case Constants.CM_STATUS_EXTERNAL_COMPLETE: // 外部システムアップロード完了
           return ["comp"];
       }
     };
