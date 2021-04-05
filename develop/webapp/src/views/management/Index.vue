@@ -55,7 +55,11 @@
                 </p>
               </template>
               <template #operations>
-                <Button class="btn-play" @click="selectCmAndOpenPlayModal(cm)">
+                <Button
+                  class="btn-play"
+                  @click="selectCmAndOpenPlayModal(cm)"
+                  :isDisabled="disabledPlayingStatus.includes(cm.status)"
+                >
                   <img src="@/assets/icon_sound.svg" />試聴
                 </Button>
                 <button
@@ -78,6 +82,9 @@
                           action: () => {
                             selectCmAndOpenSaveModal(cm);
                           },
+                          isDisabled: disabledEditTitleAndDescriptionStatus.includes(
+                            cm.status
+                          ),
                         },
                         {
                           title: 'コンテンツ編集',
@@ -89,10 +96,17 @@
                           ),
                         },
                         {
-                          title: uploadSystemtitle,
+                          title:
+                            cm.status === Constants.CM_STATUS_EXTERNAL_COMPLETE
+                              ? 'アップロード解除'
+                              : uploadSystemtitle,
                           action: () => {
                             upload(cm);
                           },
+                          isDisabled:
+                            cm.status === Constants.CM_STATUS_EXTERNAL_COMPLETE
+                              ? false
+                              : disabledSystemUploadStatus.includes(cm.status),
                         },
                         {
                           title: '削除',
@@ -299,6 +313,7 @@ import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import DropdownMenu from "@/components/molecules/DropdownMenu.vue";
 import { UMesseError } from "../../models/UMesseError";
 import { audioService, cmService, uploadService } from "@/services";
+import { User } from "umesseapi/models";
 export default defineComponent({
   components: {
     BasicLayout,
@@ -328,9 +343,55 @@ export default defineComponent({
     const router = useRouter();
     const audioPlayer = AudioPlayer();
     const { auth, cm } = useGlobalStore();
-    const disabledEditContentsStatus = ["11", "12"];
-    const disabledDeleteStatus = ["00", "11"];
+    const disabledPlayingStatus = [
+      Constants.CM_STATUS_DELETE,
+      Constants.CM_STATUS_CREATING,
+      Constants.CM_STATUS_CONVERT,
+      Constants.CM_STATUS_GENERATE,
+      Constants.CM_STATUS_ERROR,
+      Constants.CM_STATUS_EXTERNAL_ERROR,
+    ];
+    const disabledEditTitleAndDescriptionStatus = [
+      Constants.CM_STATUS_DELETE,
+      Constants.CM_STATUS_CONVERT,
+      Constants.CM_STATUS_GENERATE,
+      Constants.CM_STATUS_ERROR,
+      Constants.CM_STATUS_EXTERNAL_UPLOADING,
+      Constants.CM_STATUS_EXTERNAL_ERROR,
+    ];
+    const disabledEditContentsStatus = [
+      Constants.CM_STATUS_DELETE,
+      Constants.CM_STATUS_CONVERT,
+      Constants.CM_STATUS_SHARING,
+      Constants.CM_STATUS_GENERATE,
+      Constants.CM_STATUS_ERROR,
+      Constants.CM_STATUS_EXTERNAL_UPLOADING,
+      Constants.CM_STATUS_EXTERNAL_COMPLETE,
+      Constants.CM_STATUS_EXTERNAL_ERROR,
+    ];
+    const disabledSystemUploadStatus = [
+      Constants.CM_STATUS_DELETE,
+      Constants.CM_STATUS_CREATING,
+      Constants.CM_STATUS_CONVERT,
+      Constants.CM_STATUS_SHARING,
+      Constants.CM_STATUS_GENERATE,
+      Constants.CM_STATUS_ERROR,
+      Constants.CM_STATUS_EXTERNAL_UPLOADING,
+      Constants.CM_STATUS_EXTERNAL_COMPLETE,
+      Constants.CM_STATUS_EXTERNAL_ERROR,
+    ];
+    const disabledDeleteStatus = [
+      Constants.CM_STATUS_DELETE,
+      Constants.CM_STATUS_CONVERT,
+      Constants.CM_STATUS_SHARING,
+      Constants.CM_STATUS_GENERATE,
+      Constants.CM_STATUS_ERROR,
+      Constants.CM_STATUS_EXTERNAL_UPLOADING,
+      Constants.CM_STATUS_EXTERNAL_COMPLETE,
+      Constants.CM_STATUS_EXTERNAL_ERROR,
+    ];
     const authToken = <string>auth.getToken();
+    const authUser = <User>auth.getUserInfo();
     const state = reactive({
       activeSceneCd: "",
       sceneList: [] as Scene[],
@@ -357,7 +418,11 @@ export default defineComponent({
       isErrorModalApper: false,
       errorCode: "",
       errorMessage: "",
-      uploadSystemtitle: "U MUSICにアップロード",
+      uploadSystemtitle:
+        authUser.serviceCd === Constants.SERVICE_CD_UMUSIC
+          ? "U MUSICにアップロード"
+          : "S'Senceにアップロード",
+      unUploadSystemtitle: "",
       isUpdatedModalAppear: false,
     });
     const fetchScene = async () => {
@@ -598,7 +663,10 @@ export default defineComponent({
       toEditCm,
       Constants,
       fetchScene,
+      disabledPlayingStatus,
+      disabledEditTitleAndDescriptionStatus,
       disabledEditContentsStatus,
+      disabledSystemUploadStatus,
       disabledDeleteStatus,
       closeAllDropdownMenu,
       toggleDropdown,
