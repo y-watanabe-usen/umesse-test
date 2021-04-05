@@ -90,8 +90,14 @@ describe("共有CMデータ追加", () => {
 
   test("[error] 共有CMデータ追加　データ存在しない", async () => {
     await expect(
-      createShareCm(data.unisCustomerCd, data.cm[0].id)
+      createShareCm(data.unisCustomerCd, "123456789-c-12345678")
     ).rejects.toThrow(new NotFoundError(ERROR_CODE.E0000404));
+  });
+
+  test("[error] 共有CMデータ追加　CMステータスエラー", async () => {
+    await expect(
+      createShareCm(data.unisCustomerCd, data.cm[0].id)
+    ).rejects.toThrow(new BadRequestError(ERROR_CODE.E0002000));
   });
 
   test("[error] 共有CMデータ追加　パラメータチェック", async () => {
@@ -152,9 +158,9 @@ describe("共有CMデータ追加", () => {
 describe("共有CMデータ解除", () => {
   test("[success] 共有CMデータ解除", async () => {
     await expect(
-      deleteShareCm(data.unisCustomerCd, data.cm[1].id)
+      deleteShareCm(data.unisCustomerCd, data.cm[0].id)
     ).resolves.toEqual({
-      ...data.cm[1],
+      ...data.cm[0],
       status: "02",
       timestamp: expect.anything(),
     });
@@ -162,8 +168,14 @@ describe("共有CMデータ解除", () => {
 
   test("[error] 共有CMデータ解除　データ存在しない", async () => {
     await expect(
-      deleteShareCm(data.unisCustomerCd, data.cm[1].id)
+      deleteShareCm(data.unisCustomerCd, "1234567890-c-12345678")
     ).rejects.toThrow(new NotFoundError(ERROR_CODE.E0000404));
+  });
+
+  test("[error] 共有CMデータ解除　CMステータスエラー", async () => {
+    await expect(
+      deleteShareCm(data.unisCustomerCd, data.cm[0].id)
+    ).rejects.toThrow(new BadRequestError(ERROR_CODE.E0002000));
   });
 
   test("[error] 共有CMデータ解除　パラメータチェック", async () => {

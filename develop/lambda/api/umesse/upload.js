@@ -40,7 +40,7 @@ exports.getUploadCm = async (unisCustomerCd, id) => {
     throw new InternalServerError(e.message);
   }
 
-  // TODO: CMステータス状態によるチェック
+  // CMステータスのチェック
   ret = ret.filter(
     (item) =>
       item.status === constants.cmStatus.EXTERNAL_UPLOADING ||
@@ -76,6 +76,15 @@ exports.createUploadCm = async (unisCustomerCd, id, body) => {
   );
   if (checkError) throw new BadRequestError(checkError);
 
+  // 既に連携データがある場合はエラー
+  let external;
+  try {
+    external = await db.External.find(unisCustomerCd);
+  } catch (e) {
+    throw new InternalServerError(e.message);
+  }
+  if (external) throw new BadRequestError(ERROR_CODE.E0400010);
+
   // CM一覧から該当CMを取得
   let cm, index;
   try {
@@ -85,18 +94,9 @@ exports.createUploadCm = async (unisCustomerCd, id, body) => {
     throw new InternalServerError(e.message);
   }
 
-  // TODO: CMステータス状態によるチェック
+  // CMステータスのチェック
   if (cm.status !== constants.cmStatus.COMPLETE)
-    throw new NotFoundError(ERROR_CODE.E0000404);
-
-  // 既に連携データがある場合はエラー
-  let external;
-  try {
-    external = await db.External.find(unisCustomerCd);
-  } catch (e) {
-    throw new InternalServerError(e.message);
-  }
-  if (external) throw new BadRequestError(ERROR_CODE.E0400010);
+    throw new BadRequestError(ERROR_CODE.E0002000);
 
   // 連携用のデータ追加
   const item = {
@@ -151,6 +151,15 @@ exports.deleteUploadCm = async (unisCustomerCd, id) => {
   });
   if (checkError) throw new BadRequestError(checkError);
 
+  // 既に連携データがある場合はエラー
+  let external;
+  try {
+    external = await db.External.find(unisCustomerCd);
+  } catch (e) {
+    throw new InternalServerError(e.message);
+  }
+  if (external) throw new BadRequestError(ERROR_CODE.E0400010);
+
   // CM一覧から該当CMを取得
   let cm, index;
   try {
@@ -160,9 +169,9 @@ exports.deleteUploadCm = async (unisCustomerCd, id) => {
     throw new InternalServerError(e.message);
   }
 
-  // TODO: CMステータス状態によるチェック
+  // CMステータスのチェック
   if (cm.status !== constants.cmStatus.EXTERNAL_COMPLETE)
-    throw new NotFoundError(ERROR_CODE.E0000404);
+    throw new BadRequestError(ERROR_CODE.E0002000);
 
   // 連携用のデータ追加
   const item = {

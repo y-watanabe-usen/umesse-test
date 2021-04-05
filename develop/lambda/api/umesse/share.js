@@ -41,7 +41,7 @@ exports.getShareCm = async (unisCustomerCd, id) => {
     throw new InternalServerError(e.message);
   }
 
-  // TODO: CMステータス状態によるチェック
+  // CMステータスのチェック
   ret = ret.filter((item) => item.status === constants.cmStatus.SHARING);
   if (!ret) throw new NotFoundError(ERROR_CODE.E0000404);
 
@@ -76,9 +76,9 @@ exports.createShareCm = async (unisCustomerCd, id) => {
     throw new InternalServerError(e.message);
   }
 
-  // TODO: CMステータス状態によるチェック
+  // CMステータスのチェック
   if (cm.status !== constants.cmStatus.COMPLETE)
-    throw new NotFoundError(ERROR_CODE.E0000404);
+    throw new BadRequestError(ERROR_CODE.E0002000);
 
   // ユーザー情報取得
   let user;
@@ -91,12 +91,11 @@ exports.createShareCm = async (unisCustomerCd, id) => {
 
   // S3上のCMをコピー
   try {
+    let path = `${constants.resourceCategory.CM}/${id}.aac`;
     const _ = await s3Manager.copy(
       constants.s3Bucket().users,
-      `group/${user.customerGroupCd}/${constants.resourceCategory.CM}/${id}.aac`,
-      `${constants.s3Bucket().users}/users/${unisCustomerCd}/${
-        constants.resourceCategory.CM
-      }/${id}.aac`
+      `group/${user.customerGroupCd}/${path}`,
+      `${constants.s3Bucket().users}/users/${unisCustomerCd}/${path}`
     );
   } catch (e) {
     throw new InternalServerError(e.message);
@@ -141,9 +140,9 @@ exports.deleteShareCm = async (unisCustomerCd, id) => {
     throw new InternalServerError(e.message);
   }
 
-  // TODO: CMステータス状態によるチェック
+  // CMステータスのチェック
   if (cm.status !== constants.cmStatus.SHARING)
-    throw new NotFoundError(ERROR_CODE.E0000404);
+    throw new BadRequestError(ERROR_CODE.E0002000);
 
   // ユーザー情報取得
   let user;
@@ -167,10 +166,8 @@ exports.deleteShareCm = async (unisCustomerCd, id) => {
 
   // S3上のCMを削除
   try {
-    const _ = await s3Manager.delete(
-      constants.s3Bucket().users,
-      `group/${user.customerGroupCd}/${constants.resourceCategory.CM}/${id}.aac`
-    );
+    let path = `group/${user.customerGroupCd}/${constants.resourceCategory.CM}/${id}.aac`;
+    const _ = await s3Manager.delete(constants.s3Bucket().users, path);
   } catch (e) {
     throw new InternalServerError(e.message);
   }

@@ -124,8 +124,8 @@ describe("convert", () => {
       ],
     };
     await expect(handler(event)).resolves.toEqual({
-      code: 404,
-      message: ERROR_CODE.E0000404,
+      code: 400,
+      message: ERROR_CODE.E0002000,
     });
   });
 

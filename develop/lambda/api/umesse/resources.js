@@ -193,11 +193,8 @@ exports.createRecordingResource = async (unisCustomerCd, body) => {
   // S3へPUT
   let ret;
   try {
-    ret = await s3Manager.put(
-      constants.s3Bucket().users,
-      `users/${unisCustomerCd}/${constants.resourceCategory.RECORDING}/${id}.mp3`,
-      binaryData
-    );
+    let path = `users/${unisCustomerCd}/${constants.resourceCategory.RECORDING}/${id}.mp3`;
+    ret = await s3Manager.put(constants.s3Bucket().users, path, binaryData);
   } catch (e) {
     throw new InternalServerError(e.message);
   }
@@ -253,12 +250,11 @@ exports.createTtsResource = async (unisCustomerCd, body) => {
       // S3のオブジェクトリネーム
       let ret;
       try {
+        let path = `users/${unisCustomerCd}/${constants.resourceCategory.TTS}`;
         ret = await s3Manager.copy(
           constants.s3Bucket().users,
-          `users/${unisCustomerCd}/${constants.resourceCategory.TTS}/${id}.mp3`,
-          `${constants.s3Bucket().users}/users/${unisCustomerCd}/${
-            constants.resourceCategory.TTS
-          }/${data.lang}.mp3`
+          `${path}/${id}.mp3`,
+          `${constants.s3Bucket().users}/${path}/${data.lang}.mp3`
         );
       } catch (e) {
         throw new InternalServerError(e.message);
@@ -471,10 +467,8 @@ exports.deleteUserResource = async (unisCustomerCd, category, id) => {
 
   // S3上の録音音声を削除
   try {
-    const _ = await s3Manager.delete(
-      constants.s3Bucket().users,
-      `users/${unisCustomerCd}/${category}/${id}.mp3`
-    );
+    let path = `users/${unisCustomerCd}/${category}/${id}.mp3`;
+    const _ = await s3Manager.delete(constants.s3Bucket().users, path);
   } catch (e) {
     throw new InternalServerError(e.message);
   }
