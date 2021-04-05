@@ -88,6 +88,15 @@
                   </p>
                 </template>
                 <template #operations>
+                  <template v-if="activeIndustryCd !== '02'">
+                    <Button
+                      v-if="narration.manuscript"
+                      class="btn-document"
+                      @click="selectNarrationAndOpenDocumentModal(narration)"
+                    >
+                      <img src="@/assets/icon_document.svg" />原稿
+                    </Button>
+                  </template>
                   <Button
                     class="btn-play"
                     @click="selectNarrationAndOpenPlayModal(narration)"
@@ -97,61 +106,63 @@
                   <Button class="btn-select" @click="setNarration(narration)">
                     選択<img src="@/assets/icon_select.svg" />
                   </Button>
-                  <button
-                    class="btn-more"
-                    type="button"
-                    @click.stop="toggleDropdown(narration.id)"
-                  >
-                    <img src="@/assets/icon_more_black.svg" />
-                    <transition>
-                      <template v-if="dropdownNarrationId === narration.id">
-                        <DropdownMenu
-                          v-if="narration.manuscript"
-                          :width="240"
-                          :targetWidth="80"
-                          :targetHeight="30"
-                          :offset="-70"
-                          direction="down"
-                          :params="[
-                            {
-                              title: '原稿',
-                              action: () => {
-                                selectNarrationAndOpenDocumentModal(narration)
+                  <template v-if="activeIndustryCd === '02'">
+                    <button
+                      class="btn-more"
+                      type="button"
+                      @click.stop="toggleDropdown(narration.id)"
+                    >
+                      <img src="@/assets/icon_more_black.svg" />
+                      <transition>
+                        <template v-if="dropdownNarrationId === narration.id">
+                          <DropdownMenu
+                            v-if="narration.manuscript"
+                            :width="240"
+                            :targetWidth="80"
+                            :targetHeight="30"
+                            :offset="-70"
+                            direction="down"
+                            :params="[
+                              {
+                                title: '原稿',
+                                action: () => {
+                                  selectNarrationAndOpenDocumentModal(narration)
+                                },
                               },
-                            },
-                            {
-                              title: 'タイトル/説明 編集',
-                              action: () => {},
-                            },
-                            {
-                              title: '削除',
-                              action: () => {},
-                              isCaution: true,
-                            },
-                          ]"
-                        />
-                        <DropdownMenu
-                          v-else
-                          :width="240"
-                          :targetWidth="80"
-                          :targetHeight="30"
-                          :offset="-70"
-                          direction="down"
-                          :params="[
-                            {
-                              title: 'タイトル/説明 編集',
-                              action: () => {},
-                            },
-                            {
-                              title: '削除',
-                              action: () => {},
-                              isCaution: true,
-                            },
-                          ]"
-                        />
-                      </template>
-                    </transition>
-                  </button>
+                              {
+                                title: 'タイトル/説明 編集',
+                                action: () => {},
+                              },
+                              {
+                                title: '削除',
+                                action: () => {},
+                                isCaution: true,
+                              },
+                            ]"
+                          />
+                          <DropdownMenu
+                            v-else
+                            :width="240"
+                            :targetWidth="80"
+                            :targetHeight="30"
+                            :offset="-70"
+                            direction="down"
+                            :params="[
+                              {
+                                title: 'タイトル/説明 編集',
+                                action: () => {},
+                              },
+                              {
+                                title: '削除',
+                                action: () => {},
+                                isCaution: true,
+                              },
+                            ]"
+                          />
+                        </template>
+                      </transition>
+                    </button>
+                  </template>
                 </template>
               </ListItem>
             </List>
