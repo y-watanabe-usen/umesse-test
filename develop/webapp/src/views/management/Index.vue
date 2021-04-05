@@ -91,7 +91,7 @@
                         {
                           title: uploadSystemtitle,
                           action: () => {
-                            uploadServiceSave(cm);
+                            upload(cm);
                           },
                         },
                         {
@@ -414,7 +414,7 @@ export default defineComponent({
       );
       fetchScene();
     };
-    const uploadServiceSave = async (cm: CmItem) => {
+    const upload = async (cm: CmItem) => {
       try {
         await uploadService.create(authToken, cm.id, "01");
         openUploadtedModal();
@@ -604,7 +604,7 @@ export default defineComponent({
       toggleDropdown,
       closeErrorModal,
       getStatusClass,
-      uploadServiceSave,
+      upload,
     };
   },
 });
