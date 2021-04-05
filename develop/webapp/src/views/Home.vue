@@ -2,7 +2,7 @@
   <div>
     <header>
       <h2>
-        <img src="@/assets/logo_umesse.svg" />
+        <img src="@/assets/logo_umesse.png" />
         <span v-if="authenticating">Loading...</span>
         <span v-else> {{ token }} {{ error }} </span>
       </h2>
@@ -61,7 +61,6 @@ header {
     caret-color: transparent;
     img {
       height: 32px;
-      width: 184px;
       margin-right: 20px;
     }
   }

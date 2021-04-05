@@ -33,13 +33,13 @@
         >作成した店内CMの管理を行います。</template
       >
     </MainMenuItem>
-    <MainMenuItem to="Home" :isWide="true">
+    <!-- <MainMenuItem to="Home" :isWide="true">
       <template #icon><img src="@/assets/icon_home_order.svg" /></template>
       <template #title>発注する</template>
       <template #description
         >ご希望の内容で、弊社の制作チームに店内CMを発注します。<br />※発注は有料サービスになります。</template
       >
-    </MainMenuItem>
+    </MainMenuItem> -->
   </ul>
 </template>
 
@@ -65,15 +65,16 @@ export default {
 @import "@/scss/_variables.scss";
 
 .main-menu {
-  @include flex_between;
+  @include flex_center;
+  align-items: stretch;
   flex-flow: row wrap;
-  padding-left: 30px;
-  padding-right: 30px;
   caret-color: transparent;
   .main-menu-item {
-    width: calc((100% - 60px) / 4);
+    margin-left: 10px;
+    margin-right: 10px;
+    width: calc((100% - 120px) / 4);
     &.is-wide {
-      width: calc((100% - 20px) / 2);
+      width: calc((100% - 80px) / 2);
     }
   }
 }
