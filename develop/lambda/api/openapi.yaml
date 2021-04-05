@@ -1315,10 +1315,13 @@ components:
         materials:
           items:
             $ref: "#/components/schemas/CmMaterialListItem"
+        uploadSystem:
+          type: string
+          example: "01: センター, 02: S'sence"
         status:
           type: string
           description: CMステータス
-          example: "00:CM削除, 01: CM作成中, 02: CM作成完了, 09: CM作成エラー, 11: 外部システム連携中, 12: 外部システム連携完了, 19: 外部システム連携エラー"
+          example: "00:CM削除, 01: CM作成中, 02: CM作成完了, 03: CMエンコード中, 04: CM共有中, 05: CM生成中, 09: CM作成エラー, 11: 外部システム連携中, 12: 外部システム連携完了, 19: 外部システム連携エラー"
         timestamp:
           type: string
           example: "2019-09-01T09:00:00+9:00"

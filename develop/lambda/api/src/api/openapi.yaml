@@ -2204,11 +2204,14 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CmMaterialListItem'
+        uploadSystem:
+          type: string
+          example: "01: センター, 02: S'sence"
         status:
           type: string
           description: CMステータス
-          example: "00:CM削除, 01: CM作成中, 02: CM作成完了, 09: CM作成エラー, 11: 外部システム連携中, 12:\
-            \ 外部システム連携完了, 19: 外部システム連携エラー"
+          example: "00:CM削除, 01: CM作成中, 02: CM作成完了, 03: CMエンコード中, 04: CM共有中, 05: CM生\
+            成中, 09: CM作成エラー, 11: 外部システム連携中, 12: 外部システム連携完了, 19: 外部システム連携エラー"
         timestamp:
           type: string
           example: 2019-09-01T09:00:00+9:00
@@ -2263,11 +2266,12 @@ components:
             volume: 50
             id: サンプル01
             category: bgm
+        uploadSystem: "01: センター, 02: S'sence"
         id: 123456789-c-12345678
         category: cm
         startDate: 2019-09-01T09:00:00+9:00
-        status: "00:CM削除, 01: CM作成中, 02: CM作成完了, 09: CM作成エラー, 11: 外部システム連携中, 12: 外\
-          部システム連携完了, 19: 外部システム連携エラー"
+        status: "00:CM削除, 01: CM作成中, 02: CM作成完了, 03: CMエンコード中, 04: CM共有中, 05: CM生成\
+          中, 09: CM作成エラー, 11: 外部システム連携中, 12: 外部システム連携完了, 19: 外部システム連携エラー"
         timestamp: 2019-09-01T09:00:00+9:00
     CreateCmItem:
       properties:
@@ -3002,11 +3006,12 @@ components:
               volume: 50
               id: サンプル01
               category: bgm
+          uploadSystem: "01: センター, 02: S'sence"
           id: 123456789-c-12345678
           category: cm
           startDate: 2019-09-01T09:00:00+9:00
-          status: "00:CM削除, 01: CM作成中, 02: CM作成完了, 09: CM作成エラー, 11: 外部システム連携中, 12:\
-            \ 外部システム連携完了, 19: 外部システム連携エラー"
+          status: "00:CM削除, 01: CM作成中, 02: CM作成完了, 03: CMエンコード中, 04: CM共有中, 05: CM生\
+            成中, 09: CM作成エラー, 11: 外部システム連携中, 12: 外部システム連携完了, 19: 外部システム連携エラー"
           timestamp: 2019-09-01T09:00:00+9:00
         - endDate: 9999-12-31T23:59:59+09:00
           productionType: "01: 音楽系, 02: 素ナレ"
@@ -3058,11 +3063,12 @@ components:
               volume: 50
               id: サンプル01
               category: bgm
+          uploadSystem: "01: センター, 02: S'sence"
           id: 123456789-c-12345678
           category: cm
           startDate: 2019-09-01T09:00:00+9:00
-          status: "00:CM削除, 01: CM作成中, 02: CM作成完了, 09: CM作成エラー, 11: 外部システム連携中, 12:\
-            \ 外部システム連携完了, 19: 外部システム連携エラー"
+          status: "00:CM削除, 01: CM作成中, 02: CM作成完了, 03: CMエンコード中, 04: CM共有中, 05: CM生\
+            成中, 09: CM作成エラー, 11: 外部システム連携中, 12: 外部システム連携完了, 19: 外部システム連携エラー"
           timestamp: 2019-09-01T09:00:00+9:00
     CmMaterialListItem_narrations:
       properties:
