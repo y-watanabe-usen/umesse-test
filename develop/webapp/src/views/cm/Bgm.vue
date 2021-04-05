@@ -83,43 +83,6 @@
       </ModalDialog>
     </transition>
     <transition>
-      <ModalDialog
-        v-if="isSaveModalAppear"
-        size="large"
-        @close="closeSaveModal"
-      >
-        <template #header>
-          <ModalHeader title="保存しますか？" @close="closeSaveModal" />
-        </template>
-        <template #contents>
-          <FormGroup title="タイトル" :required="true">
-            <TextBox />
-          </FormGroup>
-          <FormGroup title="説明">
-            <TextArea />
-          </FormGroup>
-        </template>
-        <template #footer>
-          <ModalFooter>
-            <Button type="secondary" @click="closeSaveModal">キャンセル</Button>
-            <Button type="primary" @click="closeSaveModal">保存する</Button>
-          </ModalFooter>
-        </template>
-      </ModalDialog>
-    </transition>
-    <transition>
-      <ModalDialog v-if="isSavedModalAppear" @close="closeSavedModal">
-        <template #contents>
-          <MessageDialogContents> 保存が完了しました。 </MessageDialogContents>
-        </template>
-        <template #footer>
-          <ModalFooter>
-            <Button type="secondary" @click="closeSavedModal">閉じる</Button>
-          </ModalFooter>
-        </template>
-      </ModalDialog>
-    </transition>
-    <transition>
       <ModalErrorDialog
         v-if="isErrorModalApper"
         @close="closeErrorModal"
@@ -153,10 +116,6 @@ import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
 import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
 import PlayDialogContents from "@/components/molecules/PlayDialogContents.vue";
-import MessageDialogContents from "@/components/molecules/MessageDialogContents.vue";
-import FormGroup from "@/components/molecules/FormGroup.vue";
-import TextBox from "@/components/atoms/TextBox.vue";
-import TextArea from "@/components/atoms/TextArea.vue";
 import { UMesseError } from "../../models/UMesseError";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { audioService, resourcesService } from "@/services";
@@ -178,10 +137,6 @@ export default defineComponent({
     ModalHeader,
     ModalFooter,
     PlayDialogContents,
-    MessageDialogContents,
-    FormGroup,
-    TextBox,
-    TextArea,
     ModalErrorDialog,
     ModalLoading,
   },
@@ -202,8 +157,6 @@ export default defineComponent({
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       duration: computed(() => audioPlayer.getDuration()),
       isPlayModalAppear: false,
-      isSaveModalAppear: false,
-      isSavedModalAppear: false,
       isErrorModalApper: false,
       errorCode: "",
       errorMessage: "",
@@ -265,20 +218,6 @@ export default defineComponent({
       state.isPlayModalAppear = false;
     };
 
-    const openSaveModal = () => {
-      state.isSaveModalAppear = true;
-    };
-    const closeSaveModal = () => {
-      state.isSaveModalAppear = false;
-    };
-
-    const openSavedModal = () => {
-      state.isSavedModalAppear = true;
-    };
-    const closeSavedModal = () => {
-      state.isSavedModalAppear = false;
-    };
-
     const selectBgmAndOpenPlayModal = (bgm: BgmItem) => {
       selectBgm(bgm);
       openPlayModal();
@@ -319,10 +258,6 @@ export default defineComponent({
       stop,
       openPlayModal,
       closePlayModal,
-      openSaveModal,
-      closeSaveModal,
-      openSavedModal,
-      closeSavedModal,
       selectBgmAndOpenPlayModal,
       stopAndClosePlayModal,
       closeErrorModal,
