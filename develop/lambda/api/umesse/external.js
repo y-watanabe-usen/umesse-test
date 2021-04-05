@@ -55,9 +55,10 @@ exports.getExternalCm = async (unisCustomerCd, external) => {
     let meta = [];
     data.forEach(async (item) => {
       if (item.dataProcessType === constants.cmDataProcessType.ADD) {
+        let path = `users/${item.unisCustomerCd}/${constants.resourceCategory.CM}/${item.cmId}.aac`;
         item.url = await s3Manager.getSignedUrl(
           constants.s3Bucket().users,
-          `users/${item.unisCustomerCd}/${constants.resourceCategory.CM}/${item.cmId}.aac`
+          path
         );
         item.fileName = `${item.cmId}.aac`;
       }
@@ -103,9 +104,9 @@ exports.completeExternalCm = async (unisCustomerCd, external, body) => {
     throw new InternalServerError(e.message);
   }
 
-  // TODO: CMステータス状態によるチェック
+  // CMステータスのチェック
   if (cm.status !== constants.cmStatus.EXTERNAL_UPLOADING)
-    throw new NotFoundError(ERROR_CODE.E0000404);
+    throw new BadRequestError(ERROR_CODE.E0002000);
 
   // 外部連携データ取得
   let ret = await this.getExternalCm(unisCustomerCd, external);
@@ -143,6 +144,10 @@ exports.completeExternalCm = async (unisCustomerCd, external, body) => {
           constants.s3Bucket().users,
           `${path}/${id}.aac`,
           `${constants.s3Bucket().users}/${path}/${cm.cmId}.aac`
+        );
+        const _ = await s3Manager.delete(
+          constants.s3Bucket().users,
+          `${path}/${cm.cmId}.aac`
         );
       } catch (e) {
         throw new InternalServerError(e.message);

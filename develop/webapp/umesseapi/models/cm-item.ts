@@ -84,6 +84,12 @@ export interface CmItem {
      */
     materials?: any;
     /**
+     * 
+     * @type {string}
+     * @memberof CmItem
+     */
+    uploadSystem?: any;
+    /**
      * CMステータス
      * @type {string}
      * @memberof CmItem

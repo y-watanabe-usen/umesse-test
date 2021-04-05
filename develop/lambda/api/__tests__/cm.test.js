@@ -32,9 +32,10 @@ beforeAll(() => {
 // CMデータ取得
 describe("CMデータ取得", () => {
   test("[success] CMデータ取得", async () => {
-    await expect(getCm(data.unisCustomerCd, data.cm[0].id)).resolves.toEqual(
-      data.cm[0]
-    );
+    await expect(getCm(data.unisCustomerCd, data.cm[0].id)).resolves.toEqual({
+      ...data.cm[0],
+      url: expect.anything(),
+    });
   });
 
   test("[success] CMデータ一覧取得", async () => {

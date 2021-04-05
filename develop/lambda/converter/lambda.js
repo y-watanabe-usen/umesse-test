@@ -81,7 +81,7 @@ exports.handler = async (event, context) => {
 
   // CMステータスの確認
   if (cm.status !== constants.cmStatus.CONVERT)
-    return errorResponse(new NotFoundError(ERROR_CODE.E0000404));
+    return errorResponse(new BadRequestError(ERROR_CODE.E0002000));
 
   // CMコンバート処理
   try {
@@ -174,10 +174,8 @@ function convertCm(unisCustomerCd, id) {
     try {
       execSync(`mkdir -p ${workDir} && rm -f ${workDir}/*`);
 
-      let ret = await s3Manager.get(
-        constants.s3Bucket().users,
-        `users/${unisCustomerCd}/cm/${id}.mp3`
-      );
+      let path = `users/${unisCustomerCd}/${constants.resourceCategory.CM}/${id}`;
+      let ret = await s3Manager.get(constants.s3Bucket().users, `${path}.mp3`);
       if (!ret || !ret.Body) throw "getObject failed";
 
       fs.writeFileSync(`${workDir}/${id}.mp3`, ret.Body);
@@ -229,18 +227,19 @@ function convertCm(unisCustomerCd, id) {
       fileStream.on("error", (e) => {
         throw e;
       });
+
+      path = `users/${unisCustomerCd}/${constants.resourceCategory.CM}/${id}`;
       ret = await s3Manager.put(
         constants.s3Bucket().users,
-        `users/${unisCustomerCd}/${constants.resourceCategory.CM}/${id}.aac`,
+        `${path}.aac`,
         fileStream
       );
       if (!ret) throw "putObject failed";
 
       const _ = await s3Manager.delete(
         constants.s3Bucket().users,
-        `users/${unisCustomerCd}/${constants.resourceCategory.CM}/${id}.mp3`
+        `${path}.mp3`
       );
-
       debuglog("converter complete");
       resolve();
     } catch (e) {

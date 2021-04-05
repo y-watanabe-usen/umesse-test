@@ -47,9 +47,11 @@ exports.getCm = async (unisCustomerCd, id, sort) => {
   if (id) {
     ret = ret.filter((item) => item.cmId === id).shift();
     if (!ret) throw new NotFoundError(ERROR_CODE.E0000404);
+
+    let path = `users/${unisCustomerCd}/${constants.resourceCategory.CM}/${id}`;
     ret.url = await s3Manager.getSignedUrl(
       constants.s3Bucket().users,
-      `users/${unisCustomerCd}/${constants.resourceCategory.CM}/${ret.cmId}.mp3`
+      ret.status === constants.cmStatus.CREATING ? `${path}.mp3` : `${path}.aac`
     );
   }
 
@@ -99,12 +101,9 @@ exports.createCm = async (unisCustomerCd, body) => {
   );
   if (checkError) throw new BadRequestError(checkError);
 
-  // ID生成
-  let id = generateId(unisCustomerCd, constants.resourceCategory.CM);
-
-  // CMIDが存在している場合は更新する
-  let cm, index;
+  let id, cm, index;
   if (body.id) {
+    // CMIDが存在している場合は更新する
     id = body.id;
     try {
       [cm, index] = await db.User.findCmIndex(unisCustomerCd, id);
@@ -112,6 +111,16 @@ exports.createCm = async (unisCustomerCd, body) => {
       if (e instanceof NotFoundError) throw e;
       throw new InternalServerError(e.message);
     }
+
+    // CMステータスのチェック
+    if (
+      cm.status !== constants.cmStatus.CREATING &&
+      cm.status !== constants.cmStatus.COMPLETE
+    )
+      throw new BadRequestError(ERROR_CODE.E0002000);
+  } else {
+    // ID生成
+    id = generateId(unisCustomerCd, constants.resourceCategory.CM);
   }
 
   // FIXME: ローカル環境だとここでエラーになって先の検証が出来ないので、一旦ローカル環境では動かないようにしてる
@@ -195,18 +204,8 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
   );
   if (checkError) throw new BadRequestError(checkError);
 
-  // CM一覧から該当CMを取得
-  let cm, index;
-  try {
-    [cm, index] = await db.User.findCmIndex(unisCustomerCd, id);
-  } catch (e) {
-    if (e instanceof NotFoundError) throw e;
-    throw new InternalServerError(e.message);
-  }
-
-  // TODO: CMステータス状態によるチェック
+  // 既に連携データがある場合はエラー
   if (body.uploadSystem) {
-    // 既に連携データがある場合はエラー
     let external;
     try {
       external = await db.External.find(unisCustomerCd);
@@ -214,6 +213,15 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
       throw new InternalServerError(e.message);
     }
     if (external) throw new BadRequestError(ERROR_CODE.E0400010);
+  }
+
+  // CM一覧から該当CMを取得
+  let cm, index;
+  try {
+    [cm, index] = await db.User.findCmIndex(unisCustomerCd, id);
+  } catch (e) {
+    if (e instanceof NotFoundError) throw e;
+    throw new InternalServerError(e.message);
   }
 
   let dataProcessType;
@@ -325,9 +333,12 @@ exports.deleteCm = async (unisCustomerCd, id) => {
     throw new InternalServerError(e.message);
   }
 
-  // TODO: CMステータス状態によるチェック
-  if (cm.status !== constants.cmStatus.COMPLETE)
-    throw new NotFoundError(ERROR_CODE.E0000404);
+  // CMステータスのチェック
+  if (
+    cm.status !== constants.cmStatus.CREATING &&
+    cm.status !== constants.cmStatus.COMPLETE
+  )
+    throw new BadRequestError(ERROR_CODE.E0002000);
 
   // DynamoDBのデータ更新
   cm.status = constants.cmStatus.DELETE;
@@ -342,9 +353,10 @@ exports.deleteCm = async (unisCustomerCd, id) => {
 
   // S3上のCMを削除
   try {
+    let path = `users/${unisCustomerCd}/${constants.resourceCategory.CM}/${id}`;
     const _ = await s3Manager.delete(
       constants.s3Bucket().users,
-      `users/${unisCustomerCd}/${constants.resourceCategory.CM}/${id}.aac`
+      cm.status === constants.cmStatus.CREATING ? `${path}.mp3` : `${path}.aac`
     );
   } catch (e) {
     throw new InternalServerError(e.message);
