@@ -82,7 +82,8 @@
         </template>
       </ModalDialog>
     </transition>
-    <transition>
+    <!-- todo: 未使用 -->
+    <!-- <transition>
       <ModalDialog
         v-if="isSaveModalAppear"
         size="large"
@@ -106,8 +107,9 @@
           </ModalFooter>
         </template>
       </ModalDialog>
-    </transition>
-    <transition>
+    </transition> -->
+    <!-- todo: 未使用 -->
+    <!-- <transition>
       <ModalDialog v-if="isSavedModalAppear" @close="closeSavedModal">
         <template #contents>
           <MessageDialogContents> 保存が完了しました。 </MessageDialogContents>
@@ -118,7 +120,7 @@
           </ModalFooter>
         </template>
       </ModalDialog>
-    </transition>
+    </transition> -->
     <transition>
       <ModalErrorDialog
         v-if="isErrorModalApper"
@@ -153,10 +155,10 @@ import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
 import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
 import PlayDialogContents from "@/components/molecules/PlayDialogContents.vue";
-import MessageDialogContents from "@/components/molecules/MessageDialogContents.vue";
-import FormGroup from "@/components/molecules/FormGroup.vue";
-import TextBox from "@/components/atoms/TextBox.vue";
-import TextArea from "@/components/atoms/TextArea.vue";
+// import MessageDialogContents from "@/components/molecules/MessageDialogContents.vue";
+// import FormGroup from "@/components/molecules/FormGroup.vue";
+// import TextBox from "@/components/atoms/TextBox.vue";
+// import TextArea from "@/components/atoms/TextArea.vue";
 import { UMesseError } from "../../models/UMesseError";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { audioService, resourcesService } from "@/services";
@@ -178,10 +180,10 @@ export default defineComponent({
     ModalHeader,
     ModalFooter,
     PlayDialogContents,
-    MessageDialogContents,
-    FormGroup,
-    TextBox,
-    TextArea,
+    // MessageDialogContents,
+    // FormGroup,
+    // TextBox,
+    // TextArea,
     ModalErrorDialog,
     ModalLoading,
   },
@@ -202,8 +204,8 @@ export default defineComponent({
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       duration: computed(() => audioPlayer.getDuration()),
       isPlayModalAppear: false,
-      isSaveModalAppear: false,
-      isSavedModalAppear: false,
+      // isSaveModalAppear: false, // todo: 未使用
+      // isSavedModalAppear: false, // todo: 未使用
       isErrorModalApper: false,
       errorCode: "",
       errorMessage: "",
@@ -265,19 +267,21 @@ export default defineComponent({
       state.isPlayModalAppear = false;
     };
 
-    const openSaveModal = () => {
-      state.isSaveModalAppear = true;
-    };
-    const closeSaveModal = () => {
-      state.isSaveModalAppear = false;
-    };
+    // todo: 未使用
+    // const openSaveModal = () => {
+    //   state.isSaveModalAppear = true;
+    // };
+    // const closeSaveModal = () => {
+    //   state.isSaveModalAppear = false;
+    // };
 
-    const openSavedModal = () => {
-      state.isSavedModalAppear = true;
-    };
-    const closeSavedModal = () => {
-      state.isSavedModalAppear = false;
-    };
+    // todo: 未使用
+    // const openSavedModal = () => {
+    //   state.isSavedModalAppear = true;
+    // };
+    // const closeSavedModal = () => {
+    //   state.isSavedModalAppear = false;
+    // };
 
     const selectBgmAndOpenPlayModal = (bgm: BgmItem) => {
       selectBgm(bgm);
@@ -319,10 +323,10 @@ export default defineComponent({
       stop,
       openPlayModal,
       closePlayModal,
-      openSaveModal,
-      closeSaveModal,
-      openSavedModal,
-      closeSavedModal,
+      // openSaveModal, // todo: 未使用
+      // closeSaveModal, // todo: 未使用
+      // openSavedModal, // todo: 未使用
+      // closeSavedModal, // todo: 未使用
       selectBgmAndOpenPlayModal,
       stopAndClosePlayModal,
       closeErrorModal,
