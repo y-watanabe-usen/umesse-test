@@ -343,12 +343,14 @@ import {
 import { Scene } from "@/utils/Constants";
 import { UMesseError } from "../../models/UMesseError";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
-import { audioService, resourcesService, recordingService } from "@/services";
+import { audioService, resourcesService, recordingService, ttsService } from "@/services";
 import analytics from "@/utils/firebaseAnalytics";
 import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
 import MessageDialogContents from "@/components/molecules/MessageDialogContents.vue";
+
+import Constants from "@/utils/Constants";
 
 export default defineComponent({
   components: {
@@ -570,12 +572,7 @@ export default defineComponent({
       }
     };
     const save = async (narration: NarrationItem) => {
-      await recordingService.update(
-        authToken,
-        narration.id,
-        state.title,
-        state.description,
-      );
+      narration.category === Constants.CATEGORY.RECORDING ? await recordingService.update(authToken, narration.id, state.title, state.description) : await ttsService.update(authToken, narration.id, state.title, state.description);
       fetchNarration();
     };
     const selectNarrationAndOpenRemoveModal = (narration: NarrationItem) => {
@@ -592,9 +589,12 @@ export default defineComponent({
     const openRemovedModal = () => {
       state.isRemovedModalAppear = true;
     };
+    const closeRemovedModal = () => {
+      state.isRemovedModalAppear = false;
+    };
     const removeAndOpenRemovedModal = async () => {
       try {
-        await remove(state.selectedNarration?.id);
+        await remove(state.selectedNarration?.id, state.selectedNarration?.category);
         closeModalLoading();
         closeRemoveModal();
         openRemovedModal();
@@ -606,8 +606,8 @@ export default defineComponent({
         state.isDownloading = false;
       }
     };
-    const remove = async (narrationId: string) => {
-      await recordingService.remove(authToken, narrationId);
+    const remove = async (narrationId: string, narrationCategory: string) => {
+      narrationCategory === Constants.CATEGORY.RECORDING ? await recordingService.remove(authToken, narrationId) : await ttsService.remove(authToken, narrationId);
       fetchNarration();
     };
     return {
@@ -641,6 +641,7 @@ export default defineComponent({
       saveAndOpenSavedModal,
       selectNarrationAndOpenRemoveModal,
       closeRemoveModal,
+      closeRemovedModal,
       removeAndOpenRemovedModal,
     };
   },
