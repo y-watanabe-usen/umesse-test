@@ -150,11 +150,15 @@
                             :params="[
                               {
                                 title: 'タイトル/説明 編集',
-                                action: () => {},
+                                action: () => {
+                                  selectCmAndOpenSaveModal(narration);
+                                },
                               },
                               {
                                 title: '削除',
-                                action: () => {},
+                                action: () => {
+                                  selectCmAndOpenRemoveModal(narration);
+                                },
                                 isCaution: true,
                               },
                             ]"
@@ -212,6 +216,90 @@
         </template>
       </ModalDialog>
     </transition>
+        <transition>
+      <ModalDialog
+        v-if="isSaveModalAppear"
+        size="large"
+        @close="closeSaveModal"
+      >
+        <template #header>
+          <ModalHeader title="タイトルと説明の編集" @close="closeSaveModal" />
+        </template>
+        <template #contents>
+          <FormGroup title="タイトル" :required="true">
+            <TextBox v-model="title" />
+          </FormGroup>
+          <FormGroup title="説明">
+            <TextArea v-model="description" />
+          </FormGroup>
+        </template>
+        <template #footer>
+          <ModalFooter>
+            <Button type="secondary" @click="closeSaveModal">キャンセル</Button>
+            <Button
+              type="primary"
+              :isDisabled="!title"
+              @click="saveAndOpenSavedModal"
+              >保存する</Button
+            >
+          </ModalFooter>
+        </template>
+      </ModalDialog>
+    </transition>
+    <transition>
+      <ModalDialog
+        v-if="isSavedModalAppear"
+        size="small"
+        @close="closeSavedModal"
+      >
+        <template #contents>
+          <MessageDialogContents> 保存が完了しました。 </MessageDialogContents>
+        </template>
+        <template #footer>
+          <ModalFooter>
+            <Button type="secondary" @click="closeSavedModal">閉じる</Button>
+          </ModalFooter>
+        </template>
+      </ModalDialog>
+    </transition>
+    <transition>
+      <ModalDialog v-if="isRemoveModalAppear" @close="closeRemoveModal">
+        <template #header>
+          <ModalHeader title="確認" @close="closeRemoveModal" />
+        </template>
+        <template #contents>
+          <MessageDialogContents>
+            削除してよろしいですか？
+          </MessageDialogContents>
+        </template>
+        <template #footer>
+          <ModalFooter>
+            <Button type="secondary" @click="closeRemoveModal"
+              >キャンセル</Button
+            >
+            <Button type="primary" @click="removeAndOpenRemovedModal"
+              >はい</Button
+            >
+          </ModalFooter>
+        </template>
+      </ModalDialog>
+    </transition>
+    <transition>
+      <ModalDialog
+        v-if="isRemovedModalAppear"
+        size="small"
+        @close="closeRemovedModal"
+      >
+        <template #contents>
+          <MessageDialogContents> 削除が完了しました。 </MessageDialogContents>
+        </template>
+        <template #footer>
+          <ModalFooter>
+            <Button type="secondary" @click="closeRemovedModal">閉じる</Button>
+          </ModalFooter>
+        </template>
+      </ModalDialog>
+    </transition>
     <transition>
       <ModalErrorDialog
         v-if="isErrorModalApper"
@@ -255,8 +343,12 @@ import {
 import { Scene } from "@/utils/Constants";
 import { UMesseError } from "../../models/UMesseError";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
-import { audioService, resourcesService } from "@/services";
+import { audioService, resourcesService, recordingService } from "@/services";
 import analytics from "@/utils/firebaseAnalytics";
+import FormGroup from "@/components/molecules/FormGroup.vue";
+import TextBox from "@/components/atoms/TextBox.vue";
+import TextArea from "@/components/atoms/TextArea.vue";
+import MessageDialogContents from "@/components/molecules/MessageDialogContents.vue";
 
 export default defineComponent({
   components: {
@@ -278,6 +370,10 @@ export default defineComponent({
     PlayDialogContents,
     TextDialogContents,
     DropdownMenu,
+    FormGroup,
+    TextBox,
+    TextArea,
+    MessageDialogContents,
   },
   setup() {
     const audioPlayer = AudioPlayer();
@@ -303,6 +399,12 @@ export default defineComponent({
       errorMessage: "",
       isLoading: false,
       dropdownNarrationId: "",
+      title: "",
+      description: "",
+      isSaveModalAppear: false,
+      isSavedModalAppear: false,
+      isRemoveModalAppear: false,
+      isRemovedModalAppear: false,
     });
 
     const setNarration = (narration: NarrationItem) => {
@@ -432,6 +534,84 @@ export default defineComponent({
       state.errorMessage = e.message;
       state.isErrorModalApper = true;
     };
+    const closeModalLoading = () => {
+      state.isLoading = false;
+    };
+    const openSaveModal = () => {
+      state.isSaveModalAppear = true;
+    };
+    const closeSaveModal = () => {
+      state.isSaveModalAppear = false;
+    };
+    const openSavedModal = () => {
+      state.isSavedModalAppear = true;
+    };
+    const closeSavedModal = () => {
+      state.isSavedModalAppear = false;
+    };
+    const selectCmAndOpenSaveModal = (narration: NarrationItem) => {
+      closeAllDropdownMenu();
+      selectNarration(narration);
+      state.title = narration.title;
+      state.description = narration.description;
+      openSaveModal();
+    };
+    const saveAndOpenSavedModal = async () => {
+      try {
+        if (!state.selectedNarration) return;
+        await save(state.selectedNarration);
+        closeSaveModal();
+        openSavedModal();
+      } catch (e) {
+        console.log(e.message);
+        openErrorModal(e);
+      } finally {
+        state.isDownloading = false;
+      }
+    };
+    const save = async (narration: NarrationItem) => {
+      await recordingService.update(
+        authToken,
+        narration.id,
+        state.title,
+        state.description,
+      );
+      fetchNarration();
+    };
+    const selectCmAndOpenRemoveModal = (narration: NarrationItem) => {
+      closeAllDropdownMenu();
+      selectNarration(narration);
+      openRemoveModal();
+    };
+    const openRemoveModal = () => {
+      state.isRemoveModalAppear = true;
+    };
+    const closeRemoveModal = () => {
+      state.isRemoveModalAppear = false;
+    };
+    const openRemovedModal = () => {
+      state.isRemovedModalAppear = true;
+    };
+    const removeAndOpenRemovedModal = async () => {
+      try {
+        await remove(state.selectedNarration?.id);
+        closeModalLoading();
+        closeRemoveModal();
+        openRemovedModal();
+      } catch (e) {
+        closeRemoveModal();
+        console.log(e.message);
+        openErrorModal(e);
+      } finally {
+        state.isDownloading = false;
+      }
+    };
+    const remove = async (narrationId: string) => {
+      console.log(authToken);
+      console.log(narrationId);
+      await recordingService.remove(authToken, narrationId);
+      fetchNarration();
+    };
     return {
       ...toRefs(state),
       sortList,
@@ -456,6 +636,14 @@ export default defineComponent({
       clickBack,
       closeAllDropdownMenu,
       toggleDropdown,
+      selectCmAndOpenSaveModal,
+      openSaveModal,
+      closeSaveModal,
+      closeSavedModal,
+      saveAndOpenSavedModal,
+      selectCmAndOpenRemoveModal,
+      closeRemoveModal,
+      removeAndOpenRemovedModal,
     };
   },
 });
