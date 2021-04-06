@@ -151,7 +151,7 @@
                               {
                                 title: 'タイトル/説明 編集',
                                 action: () => {
-                                  selectCmAndOpenSaveModal(narration);
+                                  selectNarrationAndOpenSaveModal(narration);
                                 },
                               },
                               {
@@ -549,7 +549,7 @@ export default defineComponent({
     const closeSavedModal = () => {
       state.isSavedModalAppear = false;
     };
-    const selectCmAndOpenSaveModal = (narration: NarrationItem) => {
+    const selectNarrationAndOpenSaveModal = (narration: NarrationItem) => {
       closeAllDropdownMenu();
       selectNarration(narration);
       state.title = narration.title;
@@ -607,8 +607,6 @@ export default defineComponent({
       }
     };
     const remove = async (narrationId: string) => {
-      console.log(authToken);
-      console.log(narrationId);
       await recordingService.remove(authToken, narrationId);
       fetchNarration();
     };
@@ -636,7 +634,7 @@ export default defineComponent({
       clickBack,
       closeAllDropdownMenu,
       toggleDropdown,
-      selectCmAndOpenSaveModal,
+      selectNarrationAndOpenSaveModal,
       openSaveModal,
       closeSaveModal,
       closeSavedModal,
