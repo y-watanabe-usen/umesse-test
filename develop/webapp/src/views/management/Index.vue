@@ -109,7 +109,9 @@
                               ? 'アップロード解除'
                               : uploadSystemtitle,
                           action: () => {
-                            upload(cm);
+                            cm.status === Constants.CM_STATUS_EXTERNAL_COMPLETE
+                              ? selectCmAndOpenUnUploadModal(cm)
+                              : upload(cm);
                           },
                           isDisabled:
                             cm.status === Constants.CM_STATUS_EXTERNAL_COMPLETE
@@ -267,6 +269,42 @@
         <template #footer>
           <ModalFooter>
             <Button type="secondary" @click="closeRemovedModal">閉じる</Button>
+          </ModalFooter>
+        </template>
+      </ModalDialog>
+    </transition>
+    <transition>
+      <ModalDialog v-if="isUnUploadModalAppear" @close="closeUnUploadModal">
+        <template #header>
+          <ModalHeader title="確認" @close="closeUnUploadModal" />
+        </template>
+        <template #contents>
+          <MessageDialogContents>
+            アップロード解除してよろしいですか？
+          </MessageDialogContents>
+        </template>
+        <template #footer>
+          <ModalFooter>
+            <Button type="secondary" @click="closeUnUploadModal"
+              >キャンセル</Button
+            >
+            <Button type="primary" @click="unUpload">はい</Button>
+          </ModalFooter>
+        </template>
+      </ModalDialog>
+    </transition>
+    <transition>
+      <ModalDialog
+        v-if="isUnUploadedModalAppear"
+        size="small"
+        @close="closeUnUploadedModal"
+      >
+        <template #contents>
+          <MessageDialogContents> 解除しました。 </MessageDialogContents>
+        </template>
+        <template #footer>
+          <ModalFooter>
+            <Button type="secondary" @click="closeUnUploadedModal">閉じる</Button>
           </ModalFooter>
         </template>
       </ModalDialog>
@@ -430,8 +468,9 @@ export default defineComponent({
         authUser.serviceCd === Constants.SERVICE_CD_UMUSIC
           ? "U MUSICにアップロード"
           : "S'Senceにアップロード",
-      unUploadSystemtitle: "",
       isUpdatedModalAppear: false,
+      isUnUploadModalAppear: false,
+      isUnUploadedModalAppear: false,
     });
     const fetchScene = async () => {
       try {
@@ -498,6 +537,21 @@ export default defineComponent({
         closeModalLoading();
       }
     };
+    const unUpload = async () => {
+      try {
+        if (!state.selectedCm) return;
+        openModalLoading("アップロード解除中");
+        const cmId = state.selectedCm.id;
+        await uploadService.remove(cmId, authToken);
+        openUnUploadedModal();
+      } catch (e) {
+        console.log(e.message);
+        openErrorModal(e);
+      } finally {
+        closeModalLoading();
+        closeUnUploadModal();
+      }
+    };
     const remove = async (cmId: string) => {
       await cmService.remove(authToken, cmId);
       fetchScene();
@@ -538,6 +592,15 @@ export default defineComponent({
     const closeUploadedModal = () => {
       state.isUpdatedModalAppear = false;
     };
+    const closeUnUploadModal = () => {
+      state.isUnUploadModalAppear = false;
+    };
+    const openUnUploadedModal = () => {
+      state.isUnUploadedModalAppear = true;
+    };
+    const closeUnUploadedModal = () => {
+      state.isUnUploadedModalAppear = false;
+    };
     const selectCmAndOpenPlayModal = (cm: CmItem) => {
       selectCm(cm);
       openPlayModal();
@@ -555,6 +618,11 @@ export default defineComponent({
       closeAllDropdownMenu();
       selectCm(cm);
       openRemoveModal();
+    };
+    const selectCmAndOpenUnUploadModal = (cm: CmItem) => {
+      closeAllDropdownMenu();
+      selectCm(cm);
+      state.isUnUploadModalAppear = true;
     };
     const stopAndClosePlayModal = () => {
       stop();
@@ -663,9 +731,12 @@ export default defineComponent({
       closeRemovedModal,
       openUploadtedModal,
       closeUploadedModal,
+      closeUnUploadModal,
+      closeUnUploadedModal,
       selectCmAndOpenPlayModal,
       selectCmAndOpenSaveModal,
       selectCmAndOpenRemoveModal,
+      selectCmAndOpenUnUploadModal,
       stopAndClosePlayModal,
       saveAndOpenSavedModal,
       removeAndOpenRemovedModal,
@@ -682,6 +753,7 @@ export default defineComponent({
       closeErrorModal,
       getStatusClass,
       upload,
+      unUpload,
     };
   },
 });
