@@ -157,7 +157,7 @@
                               {
                                 title: '削除',
                                 action: () => {
-                                  selectCmAndOpenRemoveModal(narration);
+                                  selectNarrationAndOpenRemoveModal(narration);
                                 },
                                 isCaution: true,
                               },
@@ -578,7 +578,7 @@ export default defineComponent({
       );
       fetchNarration();
     };
-    const selectCmAndOpenRemoveModal = (narration: NarrationItem) => {
+    const selectNarrationAndOpenRemoveModal = (narration: NarrationItem) => {
       closeAllDropdownMenu();
       selectNarration(narration);
       openRemoveModal();
@@ -639,7 +639,7 @@ export default defineComponent({
       closeSaveModal,
       closeSavedModal,
       saveAndOpenSavedModal,
-      selectCmAndOpenRemoveModal,
+      selectNarrationAndOpenRemoveModal,
       closeRemoveModal,
       removeAndOpenRemovedModal,
     };
