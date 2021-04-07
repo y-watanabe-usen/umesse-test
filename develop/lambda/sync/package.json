@@ -1,0 +1,24 @@
+{
+  "name": "umesse-sync",
+  "description": "U MESSE UDS-API SYNC",
+  "version": "0.0.1",
+  "private": true,
+  "main": "lambda.js",
+  "devDependencies": {
+    "aws-sdk": "^2.442.0",
+    "jest": "^26.6.3",
+    "umesse-lib": "file:../layer/nodejs/node_modules/umesse-lib"
+  },
+  "scripts": {
+    "build": "npm pack ../layer/nodejs/node_modules/umesse-lib/ && npm install --no-save umesse-lib-0.0.1.tgz && rm umesse-lib-0.0.1.tgz",
+    "build:prod": "npm install --production",
+    "pretest": "npm run build",
+    "test": "PATH=$PATH:../layer/bin jest -i --coverage"
+  },
+  "jest": {
+    "verbose": false,
+    "testMatch": [
+      "**/__tests__/*.test.js"
+    ]
+  }
+}
