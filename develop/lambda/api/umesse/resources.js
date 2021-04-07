@@ -5,6 +5,7 @@ const querystring = require("querystring");
 const {
   constants,
   debuglog,
+  errorlog,
   timestamp,
   generateId,
   responseData,
@@ -44,7 +45,8 @@ exports.getResource = async (category, industryCd, sceneCd, sort) => {
     ret = await db.Contents.findByCategory(category);
   } catch (e) {
     if (e instanceof NotFoundError) throw e;
-    throw new InternalServerError(e.message);
+    errorlog(JSON.stringify(e));
+    throw new InternalServerError(ERROR_CODE.E0000500);
   }
 
   if (industryCd) {
@@ -120,7 +122,8 @@ exports.getSignedUrl = async (id, category) => {
   try {
     ret = await s3Manager.getSignedUrl(bucket, path);
   } catch (e) {
-    throw new InternalServerError(e.message);
+    errorlog(JSON.stringify(e));
+    throw new InternalServerError(ERROR_CODE.E0000500);
   }
 
   return { url: ret };
@@ -156,7 +159,8 @@ exports.getUserResource = async (unisCustomerCd, category, id) => {
     ret = await db.User.findResource(unisCustomerCd, category);
   } catch (e) {
     if (e instanceof NotFoundError) throw e;
-    throw new InternalServerError(e.message);
+    errorlog(JSON.stringify(e));
+    throw new InternalServerError(ERROR_CODE.E0000500);
   }
 
   if (id) {
@@ -196,7 +200,8 @@ exports.createRecordingResource = async (unisCustomerCd, body) => {
     let path = `users/${unisCustomerCd}/${constants.resourceCategory.RECORDING}/${id}.mp3`;
     ret = await s3Manager.put(constants.s3Bucket().users, path, binaryData);
   } catch (e) {
-    throw new InternalServerError(e.message);
+    errorlog(JSON.stringify(e));
+    throw new InternalServerError(ERROR_CODE.E0000500);
   }
 
   // DynamoDBのデータ更新
@@ -215,7 +220,8 @@ exports.createRecordingResource = async (unisCustomerCd, body) => {
       data
     );
   } catch (e) {
-    throw new InternalServerError(e.message);
+    errorlog(JSON.stringify(e));
+    throw new InternalServerError(ERROR_CODE.E0000500);
   }
 
   return responseData(ret, constants.resourceCategory.RECORDING);
@@ -257,7 +263,8 @@ exports.createTtsResource = async (unisCustomerCd, body) => {
           `${constants.s3Bucket().users}/${path}/${data.lang}.mp3`
         );
       } catch (e) {
-        throw new InternalServerError(e.message);
+        errorlog(JSON.stringify(e));
+        throw new InternalServerError(ERROR_CODE.E0000500);
       }
 
       // DynamoDBのデータ更新
@@ -276,7 +283,8 @@ exports.createTtsResource = async (unisCustomerCd, body) => {
           item
         );
       } catch (e) {
-        throw new InternalServerError(e.message);
+        errorlog(JSON.stringify(e));
+        throw new InternalServerError(ERROR_CODE.E0000500);
       }
       json.push(responseData(ret, constants.resourceCategory.TTS));
     }
@@ -305,10 +313,10 @@ exports.generateTtsResource = async (unisCustomerCd, body) => {
   if (checkError) throw new BadRequestError(checkError);
 
   const options = {
-    host: constants.ttsConfig().host,
-    path: constants.ttsConfig().path,
+    host: constants.ttsApiConfig().host,
+    path: constants.ttsApiConfig().path,
     port: 443,
-    auth: `${constants.ttsConfig().key}:`,
+    auth: `${constants.ttsApiConfig().key}:`,
     method: "POST",
   };
 
@@ -339,9 +347,10 @@ exports.generateTtsResource = async (unisCustomerCd, body) => {
       // TTS API リクエスト
       let binaryData;
       try {
-        binaryData = await requestTts(options, postData);
+        binaryData = await requestTtsApi(options, postData);
       } catch (e) {
-        throw new InternalServerError(e.message);
+        errorlog(JSON.stringify(e));
+        throw new InternalServerError(ERROR_CODE.E0000500);
       }
 
       // S3へPUT
@@ -350,7 +359,8 @@ exports.generateTtsResource = async (unisCustomerCd, body) => {
       try {
         ret = await s3Manager.put(constants.s3Bucket().users, id, binaryData);
       } catch (e) {
-        throw new InternalServerError(e.message);
+        errorlog(JSON.stringify(e));
+        throw new InternalServerError(ERROR_CODE.E0000500);
       }
       id = `${unisCustomerCd}-${data.lang}`;
     }
@@ -397,7 +407,8 @@ exports.updateUserResource = async (unisCustomerCd, category, id, body) => {
     );
   } catch (e) {
     if (e instanceof NotFoundError) throw e;
-    throw new InternalServerError(e.message);
+    errorlog(JSON.stringify(e));
+    throw new InternalServerError(ERROR_CODE.E0000500);
   }
 
   // DynamoDBのデータ更新
@@ -415,7 +426,8 @@ exports.updateUserResource = async (unisCustomerCd, category, id, body) => {
       resource
     );
   } catch (e) {
-    throw new InternalServerError(e.message);
+    errorlog(JSON.stringify(e));
+    throw new InternalServerError(ERROR_CODE.E0000500);
   }
 
   return responseData(ret, category);
@@ -454,7 +466,8 @@ exports.deleteUserResource = async (unisCustomerCd, category, id) => {
     );
   } catch (e) {
     if (e instanceof NotFoundError) throw e;
-    throw new InternalServerError(e.message);
+    errorlog(JSON.stringify(e));
+    throw new InternalServerError(ERROR_CODE.E0000500);
   }
 
   // DynamoDBのデータ更新
@@ -462,7 +475,8 @@ exports.deleteUserResource = async (unisCustomerCd, category, id) => {
   try {
     ret = await db.User.deleteFromCategory(unisCustomerCd, category, index);
   } catch (e) {
-    throw new InternalServerError(e.message);
+    errorlog(JSON.stringify(e));
+    throw new InternalServerError(ERROR_CODE.E0000500);
   }
 
   // S3上の録音音声を削除
@@ -470,14 +484,15 @@ exports.deleteUserResource = async (unisCustomerCd, category, id) => {
     let path = `users/${unisCustomerCd}/${category}/${id}.mp3`;
     const _ = await s3Manager.delete(constants.s3Bucket().users, path);
   } catch (e) {
-    throw new InternalServerError(e.message);
+    errorlog(JSON.stringify(e));
+    throw new InternalServerError(ERROR_CODE.E0000500);
   }
 
   return responseData(ret, category);
 };
 
 // TTSリクエスト
-function requestTts(options, postData) {
+function requestTtsApi(options, postData) {
   return new Promise(function (resolve, reject) {
     const request = https.request(options, (response) => {
       let data = [];

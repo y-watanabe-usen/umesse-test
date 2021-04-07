@@ -3,6 +3,7 @@
 const {
   constants,
   debuglog,
+  errorlog,
   timestamp,
   generateId,
 } = require("umesse-lib/constants");
@@ -39,7 +40,8 @@ exports.getExternalCm = async (unisCustomerCd, external) => {
     ret = await db.External.findByUploadSystem(uploadSystem);
   } catch (e) {
     if (e instanceof NotFoundError) throw e;
-    throw new InternalServerError(e.message);
+    errorlog(JSON.stringify(e));
+    throw new InternalServerError(ERROR_CODE.E0000500);
   }
 
   if (unisCustomerCd) {
@@ -101,7 +103,8 @@ exports.completeExternalCm = async (unisCustomerCd, external, body) => {
     [cm, index] = await db.User.findCmIndex(unisCustomerCd, body.cmId);
   } catch (e) {
     if (e instanceof NotFoundError) throw e;
-    throw new InternalServerError(e.message);
+    errorlog(JSON.stringify(e));
+    throw new InternalServerError(ERROR_CODE.E0000500);
   }
 
   // CMステータスのチェック
@@ -124,7 +127,8 @@ exports.completeExternalCm = async (unisCustomerCd, external, body) => {
     try {
       const _ = await db.External.updateErrorData(unisCustomerCd, data);
     } catch (e) {
-      throw new InternalServerError(e.message);
+      errorlog(JSON.stringify(e));
+      throw new InternalServerError(ERROR_CODE.E0000500);
     }
     cm.status = constants.cmStatus.EXTERNAL_ERROR;
   } else {
@@ -132,7 +136,8 @@ exports.completeExternalCm = async (unisCustomerCd, external, body) => {
     try {
       const _ = await db.External.delete(unisCustomerCd);
     } catch (e) {
-      throw new InternalServerError(e.message);
+      errorlog(JSON.stringify(e));
+      throw new InternalServerError(ERROR_CODE.E0000500);
     }
     if (ret.dataProcessType == constants.cmDataProcessType.DELETE) {
       // 連携解除の場合、各連携システム側で制御できないので、CMIDを新たに降りなおす
@@ -150,9 +155,9 @@ exports.completeExternalCm = async (unisCustomerCd, external, body) => {
           `${path}/${cm.cmId}.aac`
         );
       } catch (e) {
-        throw new InternalServerError(e.message);
+        errorlog(JSON.stringify(e));
+        throw new InternalServerError(ERROR_CODE.E0000500);
       }
-      if (!res) throw new InternalServerError(ERROR_CODE.E0000500);
 
       cm.cmId = id;
       cm.uploadSystem = "";
@@ -167,7 +172,8 @@ exports.completeExternalCm = async (unisCustomerCd, external, body) => {
   try {
     const _ = await db.User.updateCm(unisCustomerCd, index, cm);
   } catch (e) {
-    throw new InternalServerError(e.message);
+    errorlog(JSON.stringify(e));
+    throw new InternalServerError(ERROR_CODE.E0000500);
   }
 
   return body;

@@ -2,8 +2,8 @@
 
 const assert = require("assert");
 const { respondWithCode } = require("../utils/writer");
-const { UMesseError, InternalServerError } = require("umesse-lib/error");
-const { debuglog, errorlog } = require("umesse-lib/constants");
+const { UMesseError } = require("umesse-lib/error");
+const { debuglog } = require("umesse-lib/constants");
 const {
   getUploadCm,
   createUploadCm,
@@ -28,7 +28,6 @@ exports.createUploadCm = function (body, id, xUnisCustomerCd) {
     } catch (e) {
       debuglog(JSON.stringify(e));
       assert(e instanceof UMesseError);
-      if (e instanceof InternalServerError) errorlog(JSON.stringify(e));
       reject(
         respondWithCode(e.statusCode, { code: e.code, message: e.message })
       );
@@ -53,7 +52,6 @@ exports.deleteUploadCm = function (id, xUnisCustomerCd) {
     } catch (e) {
       debuglog(JSON.stringify(e));
       assert(e instanceof UMesseError);
-      if (e instanceof InternalServerError) errorlog(JSON.stringify(e));
       reject(
         respondWithCode(e.statusCode, { code: e.code, message: e.message })
       );
@@ -78,7 +76,6 @@ exports.getUploadCm = function (id, xUnisCustomerCd) {
     } catch (e) {
       debuglog(JSON.stringify(e));
       assert(e instanceof UMesseError);
-      if (e instanceof InternalServerError) errorlog(JSON.stringify(e));
       reject(
         respondWithCode(e.statusCode, { code: e.code, message: e.message })
       );
@@ -102,7 +99,6 @@ exports.listUploadCm = function (xUnisCustomerCd) {
     } catch (e) {
       debuglog(JSON.stringify(e));
       assert(e instanceof UMesseError);
-      if (e instanceof InternalServerError) errorlog(JSON.stringify(e));
       reject(
         respondWithCode(e.statusCode, { code: e.code, message: e.message })
       );

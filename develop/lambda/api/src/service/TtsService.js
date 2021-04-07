@@ -2,8 +2,8 @@
 
 const assert = require("assert");
 const { respondWithCode } = require("../utils/writer");
-const { UMesseError, InternalServerError } = require("umesse-lib/error");
-const { constants, debuglog, errorlog } = require("umesse-lib/constants");
+const { UMesseError } = require("umesse-lib/error");
+const { constants, debuglog } = require("umesse-lib/constants");
 const {
   getUserResource,
   createTtsResource,
@@ -29,7 +29,6 @@ exports.createUserTts = function (body, xUnisCustomerCd) {
     } catch (e) {
       debuglog(JSON.stringify(e));
       assert(e instanceof UMesseError);
-      if (e instanceof InternalServerError) errorlog(JSON.stringify(e));
       reject(
         respondWithCode(e.statusCode, { code: e.code, message: e.message })
       );
@@ -58,7 +57,6 @@ exports.deleteUserTts = function (id, xUnisCustomerCd) {
     } catch (e) {
       debuglog(JSON.stringify(e));
       assert(e instanceof UMesseError);
-      if (e instanceof InternalServerError) errorlog(JSON.stringify(e));
       reject(
         respondWithCode(e.statusCode, { code: e.code, message: e.message })
       );
@@ -83,7 +81,6 @@ exports.generateUserTts = function (body, xUnisCustomerCd) {
     } catch (e) {
       debuglog(JSON.stringify(e));
       assert(e instanceof UMesseError);
-      if (e instanceof InternalServerError) errorlog(JSON.stringify(e));
       reject(
         respondWithCode(e.statusCode, { code: e.code, message: e.message })
       );
@@ -112,7 +109,6 @@ exports.getUserTts = function (id, xUnisCustomerCd) {
     } catch (e) {
       debuglog(JSON.stringify(e));
       assert(e instanceof UMesseError);
-      if (e instanceof InternalServerError) errorlog(JSON.stringify(e));
       reject(
         respondWithCode(e.statusCode, { code: e.code, message: e.message })
       );
@@ -139,7 +135,6 @@ exports.listUserTts = function (xUnisCustomerCd) {
     } catch (e) {
       debuglog(JSON.stringify(e));
       assert(e instanceof UMesseError);
-      if (e instanceof InternalServerError) errorlog(JSON.stringify(e));
       reject(
         respondWithCode(e.statusCode, { code: e.code, message: e.message })
       );
@@ -170,7 +165,6 @@ exports.updateUserTts = function (body, id, xUnisCustomerCd) {
     } catch (e) {
       debuglog(JSON.stringify(e));
       assert(e instanceof UMesseError);
-      if (e instanceof InternalServerError) errorlog(JSON.stringify(e));
       reject(
         respondWithCode(e.statusCode, { code: e.code, message: e.message })
       );

@@ -2,8 +2,8 @@
 
 const assert = require("assert");
 const { respondWithCode } = require("../utils/writer");
-const { UMesseError, InternalServerError } = require("umesse-lib/error");
-const { debuglog, errorlog } = require("umesse-lib/constants");
+const { UMesseError } = require("umesse-lib/error");
+const { debuglog } = require("umesse-lib/constants");
 const { authUser } = require("../../umesse/user");
 
 /**
@@ -21,7 +21,6 @@ exports.auth = function (body) {
     } catch (e) {
       debuglog(JSON.stringify(e));
       assert(e instanceof UMesseError);
-      if (e instanceof InternalServerError) errorlog(JSON.stringify(e));
       reject(
         respondWithCode(e.statusCode, { code: e.code, message: e.message })
       );

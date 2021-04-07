@@ -3,6 +3,7 @@
 const {
   constants,
   debuglog,
+  errorlog,
   timestamp,
   responseData,
 } = require("umesse-lib/constants");
@@ -37,7 +38,8 @@ exports.getUploadCm = async (unisCustomerCd, id) => {
     ret = await db.User.findCm(unisCustomerCd);
   } catch (e) {
     if (e instanceof NotFoundError) throw e;
-    throw new InternalServerError(e.message);
+    errorlog(JSON.stringify(e));
+    throw new InternalServerError(ERROR_CODE.E0000500);
   }
 
   // CMステータスのチェック
@@ -81,7 +83,8 @@ exports.createUploadCm = async (unisCustomerCd, id, body) => {
   try {
     external = await db.External.find(unisCustomerCd);
   } catch (e) {
-    throw new InternalServerError(e.message);
+    errorlog(JSON.stringify(e));
+    throw new InternalServerError(ERROR_CODE.E0000500);
   }
   if (external) throw new BadRequestError(ERROR_CODE.E0400010);
 
@@ -91,7 +94,8 @@ exports.createUploadCm = async (unisCustomerCd, id, body) => {
     [cm, index] = await db.User.findCmIndex(unisCustomerCd, id);
   } catch (e) {
     if (e instanceof NotFoundError) throw e;
-    throw new InternalServerError(e.message);
+    errorlog(JSON.stringify(e));
+    throw new InternalServerError(ERROR_CODE.E0000500);
   }
 
   // CMステータスのチェック
@@ -117,7 +121,8 @@ exports.createUploadCm = async (unisCustomerCd, id, body) => {
   try {
     const _ = await db.External.add(item);
   } catch (e) {
-    throw new InternalServerError(e.message);
+    errorlog(JSON.stringify(e));
+    throw new InternalServerError(ERROR_CODE.E0000500);
   }
 
   // DynamoDBのデータ更新
@@ -129,7 +134,8 @@ exports.createUploadCm = async (unisCustomerCd, id, body) => {
   try {
     ret = await db.User.updateCm(unisCustomerCd, index, cm);
   } catch (e) {
-    throw new InternalServerError(e.message);
+    errorlog(JSON.stringify(e));
+    throw new InternalServerError(ERROR_CODE.E0000500);
   }
 
   return responseData(ret, constants.resourceCategory.CM);
@@ -156,7 +162,8 @@ exports.deleteUploadCm = async (unisCustomerCd, id) => {
   try {
     external = await db.External.find(unisCustomerCd);
   } catch (e) {
-    throw new InternalServerError(e.message);
+    errorlog(JSON.stringify(e));
+    throw new InternalServerError(ERROR_CODE.E0000500);
   }
   if (external) throw new BadRequestError(ERROR_CODE.E0400010);
 
@@ -166,7 +173,8 @@ exports.deleteUploadCm = async (unisCustomerCd, id) => {
     [cm, index] = await db.User.findCmIndex(unisCustomerCd, id);
   } catch (e) {
     if (e instanceof NotFoundError) throw e;
-    throw new InternalServerError(e.message);
+    errorlog(JSON.stringify(e));
+    throw new InternalServerError(ERROR_CODE.E0000500);
   }
 
   // CMステータスのチェック
@@ -186,7 +194,8 @@ exports.deleteUploadCm = async (unisCustomerCd, id) => {
   try {
     const _ = await db.External.add(item);
   } catch (e) {
-    throw new InternalServerError(e.message);
+    errorlog(JSON.stringify(e));
+    throw new InternalServerError(ERROR_CODE.E0000500);
   }
 
   // DynamoDBのデータ更新
@@ -197,7 +206,8 @@ exports.deleteUploadCm = async (unisCustomerCd, id) => {
   try {
     ret = await db.User.updateCm(unisCustomerCd, index, cm);
   } catch (e) {
-    throw new InternalServerError(e.message);
+    errorlog(JSON.stringify(e));
+    throw new InternalServerError(ERROR_CODE.E0000500);
   }
 
   return responseData(ret, constants.resourceCategory.CM);
