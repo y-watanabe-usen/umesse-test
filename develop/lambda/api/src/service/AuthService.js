@@ -16,7 +16,10 @@ exports.auth = function (body) {
   return new Promise(async function (resolve, reject) {
     try {
       // TODO: あとで消す
-      if (!body || !body.unisCustomerCd) resolve({ token: "123456789" });
+      if (!body || !body.unisCustomerCd) {
+        resolve({ token: "123456789" });
+        return;
+      }
       const json = await authUser(body);
       debuglog(JSON.stringify(json));
       resolve(json);
