@@ -3,6 +3,7 @@
 const {
   constants,
   debuglog,
+  errorlog,
   timestamp,
   generateId,
   responseData,
@@ -42,7 +43,8 @@ exports.getCm = async (unisCustomerCd, id, sort) => {
     ret = await db.User.findCm(unisCustomerCd);
   } catch (e) {
     if (e instanceof NotFoundError) throw e;
-    throw new InternalServerError(e.message);
+    errorlog(JSON.stringify(e));
+    throw new InternalServerError(ERROR_CODE.E0000500);
   }
   if (id) {
     ret = ret.filter((item) => item.cmId === id).shift();
@@ -109,7 +111,8 @@ exports.createCm = async (unisCustomerCd, body) => {
       [cm, index] = await db.User.findCmIndex(unisCustomerCd, id);
     } catch (e) {
       if (e instanceof NotFoundError) throw e;
-      throw new InternalServerError(e.message);
+      errorlog(JSON.stringify(e));
+      throw new InternalServerError(ERROR_CODE.E0000500);
     }
 
     // CMステータスのチェック
@@ -140,7 +143,8 @@ exports.createCm = async (unisCustomerCd, body) => {
         constants.sqsGenerateQueueUrl()
       );
     } catch (e) {
-      throw new InternalServerError(e.message);
+      errorlog(JSON.stringify(e));
+      throw new InternalServerError(ERROR_CODE.E0000500);
     }
   }
 
@@ -158,7 +162,8 @@ exports.createCm = async (unisCustomerCd, body) => {
     try {
       ret = await db.User.updateCm(unisCustomerCd, index, cm);
     } catch (e) {
-      throw new InternalServerError(e.message);
+      errorlog(JSON.stringify(e));
+      throw new InternalServerError(ERROR_CODE.E0000500);
     }
   } else {
     // 新規の場合
@@ -176,7 +181,8 @@ exports.createCm = async (unisCustomerCd, body) => {
     try {
       ret = await db.User.addCm(unisCustomerCd, data);
     } catch (e) {
-      throw new InternalServerError(e.message);
+      errorlog(JSON.stringify(e));
+      throw new InternalServerError(ERROR_CODE.E0000500);
     }
   }
 
@@ -210,7 +216,8 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
     try {
       external = await db.External.find(unisCustomerCd);
     } catch (e) {
-      throw new InternalServerError(e.message);
+      errorlog(JSON.stringify(e));
+      throw new InternalServerError(ERROR_CODE.E0000500);
     }
     if (external) throw new BadRequestError(ERROR_CODE.E0400010);
   }
@@ -221,7 +228,8 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
     [cm, index] = await db.User.findCmIndex(unisCustomerCd, id);
   } catch (e) {
     if (e instanceof NotFoundError) throw e;
-    throw new InternalServerError(e.message);
+    errorlog(JSON.stringify(e));
+    throw new InternalServerError(ERROR_CODE.E0000500);
   }
 
   let dataProcessType;
@@ -249,7 +257,8 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
           constants.sqsConverterQueueUrl()
         );
       } catch (e) {
-        throw new InternalServerError(e.message);
+        errorlog(JSON.stringify(e));
+        throw new InternalServerError(ERROR_CODE.E0000500);
       }
     }
 
@@ -288,7 +297,8 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
     try {
       const _ = await db.External.add(item);
     } catch (e) {
-      throw new InternalServerError(e.message);
+      errorlog(JSON.stringify(e));
+      throw new InternalServerError(ERROR_CODE.E0000500);
     }
   }
 
@@ -302,7 +312,8 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
   try {
     ret = await db.User.updateCm(unisCustomerCd, index, cm);
   } catch (e) {
-    throw new InternalServerError(e.message);
+    errorlog(JSON.stringify(e));
+    throw new InternalServerError(ERROR_CODE.E0000500);
   }
 
   return responseData(ret, constants.resourceCategory.CM);
@@ -330,7 +341,8 @@ exports.deleteCm = async (unisCustomerCd, id) => {
     [cm, index] = await db.User.findCmIndex(unisCustomerCd, id);
   } catch (e) {
     if (e instanceof NotFoundError) throw e;
-    throw new InternalServerError(e.message);
+    errorlog(JSON.stringify(e));
+    throw new InternalServerError(ERROR_CODE.E0000500);
   }
 
   // CMステータスのチェック
@@ -348,7 +360,8 @@ exports.deleteCm = async (unisCustomerCd, id) => {
   try {
     ret = await db.User.updateCm(unisCustomerCd, index, cm);
   } catch (e) {
-    throw new InternalServerError(e.message);
+    errorlog(JSON.stringify(e));
+    throw new InternalServerError(ERROR_CODE.E0000500);
   }
 
   // S3上のCMを削除
@@ -359,7 +372,8 @@ exports.deleteCm = async (unisCustomerCd, id) => {
       cm.status === constants.cmStatus.CREATING ? `${path}.mp3` : `${path}.aac`
     );
   } catch (e) {
-    throw new InternalServerError(e.message);
+    errorlog(JSON.stringify(e));
+    throw new InternalServerError(ERROR_CODE.E0000500);
   }
 
   return responseData(ret, constants.resourceCategory.CM);

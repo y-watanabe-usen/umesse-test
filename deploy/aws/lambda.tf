@@ -35,6 +35,17 @@ data "archive_file" "umesse_generate_file" {
   ]
 }
 
+data "archive_file" "umesse_sync_file" {
+  type        = "zip"
+  source_dir  = "${path.module}/../../develop/lambda/sync"
+  output_path = "${path.module}/umesse_sync_lambda.zip"
+  excludes = [
+    "__tests__",
+    "coverage",
+    "node_modules/umesse-lib",
+  ]
+}
+
 data "archive_file" "umesse_layer_file" {
   type        = "zip"
   source_dir  = "${path.module}/../../develop/lambda/layer"
@@ -110,6 +121,29 @@ resource "aws_lambda_function" "umesse_generate_function" {
 
   tags = {
     CreateOwner = "UMesseGenerate"
+  }
+}
+
+resource "aws_lambda_function" "umesse_sync_function" {
+  function_name    = "UMesseSyncFunction"
+  handler          = "lambda.handler"
+  role             = aws_iam_role.umesse_sync_lambda_role.arn
+  runtime          = "nodejs12.x"
+  filename         = data.archive_file.umesse_sync_file.output_path
+  source_code_hash = data.archive_file.umesse_sync_file.output_base64sha256
+  memory_size      = "300"
+  timeout          = "180"
+  layers           = [aws_lambda_layer_version.umesse_layer.arn]
+
+  environment {
+    variables = {
+      "debug"       = true
+      "environment" = "dev"
+    }
+  }
+
+  tags = {
+    CreateOwner = "UMesseSync"
   }
 }
 

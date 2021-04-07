@@ -2,8 +2,8 @@
 
 const assert = require("assert");
 const { respondWithCode } = require("../utils/writer");
-const { UMesseError, InternalServerError } = require("umesse-lib/error");
-const { debuglog, errorlog } = require("umesse-lib/constants");
+const { UMesseError } = require("umesse-lib/error");
+const { debuglog } = require("umesse-lib/constants");
 const { getExternalCm, completeExternalCm } = require("../../umesse/external");
 
 /**
@@ -24,7 +24,6 @@ exports.completeExternalCm = function (body, external, unisCustomerCd) {
     } catch (e) {
       debuglog(JSON.stringify(e));
       assert(e instanceof UMesseError);
-      if (e instanceof InternalServerError) errorlog(JSON.stringify(e));
       reject(
         respondWithCode(e.statusCode, { code: e.code, message: e.message })
       );
@@ -49,7 +48,6 @@ exports.getExternalCm = function (external, unisCustomerCd) {
     } catch (e) {
       debuglog(JSON.stringify(e));
       assert(e instanceof UMesseError);
-      if (e instanceof InternalServerError) errorlog(JSON.stringify(e));
       reject(
         respondWithCode(e.statusCode, { code: e.code, message: e.message })
       );
@@ -73,7 +71,6 @@ exports.listExternalCm = function (external) {
     } catch (e) {
       debuglog(JSON.stringify(e));
       assert(e instanceof UMesseError);
-      if (e instanceof InternalServerError) errorlog(JSON.stringify(e));
       reject(
         respondWithCode(e.statusCode, { code: e.code, message: e.message })
       );

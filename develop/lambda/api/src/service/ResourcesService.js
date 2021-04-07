@@ -2,8 +2,8 @@
 
 const assert = require("assert");
 const { respondWithCode } = require("../utils/writer");
-const { UMesseError, InternalServerError } = require("umesse-lib/error");
-const { constants, debuglog, errorlog } = require("umesse-lib/constants");
+const { UMesseError } = require("umesse-lib/error");
+const { constants, debuglog } = require("umesse-lib/constants");
 const { getResource, getSignedUrl } = require("../../umesse/resources");
 
 /**
@@ -23,7 +23,6 @@ exports.getSignedUrl = function (id, category) {
     } catch (e) {
       debuglog(JSON.stringify(e));
       assert(e instanceof UMesseError);
-      if (e instanceof InternalServerError) errorlog(JSON.stringify(e));
       reject(
         respondWithCode(e.statusCode, { code: e.code, message: e.message })
       );
@@ -53,7 +52,6 @@ exports.listBgm = function (industryCd, sort) {
     } catch (e) {
       debuglog(JSON.stringify(e));
       assert(e instanceof UMesseError);
-      if (e instanceof InternalServerError) errorlog(JSON.stringify(e));
       reject(
         respondWithCode(e.statusCode, { code: e.code, message: e.message })
       );
@@ -82,7 +80,6 @@ exports.listChime = function (sort) {
     } catch (e) {
       debuglog(JSON.stringify(e));
       assert(e instanceof UMesseError);
-      if (e instanceof InternalServerError) errorlog(JSON.stringify(e));
       reject(
         respondWithCode(e.statusCode, { code: e.code, message: e.message })
       );
@@ -113,7 +110,6 @@ exports.listFree = function (industryCd, sceneCd, sort) {
     } catch (e) {
       debuglog(JSON.stringify(e));
       assert(e instanceof UMesseError);
-      if (e instanceof InternalServerError) errorlog(JSON.stringify(e));
       reject(
         respondWithCode(e.statusCode, { code: e.code, message: e.message })
       );
@@ -144,7 +140,6 @@ exports.listNarration = function (industryCd, sceneCd, sort) {
     } catch (e) {
       debuglog(JSON.stringify(e));
       assert(e instanceof UMesseError);
-      if (e instanceof InternalServerError) errorlog(JSON.stringify(e));
       reject(
         respondWithCode(e.statusCode, { code: e.code, message: e.message })
       );
@@ -175,7 +170,6 @@ exports.listTemplate = function (industryCd, sceneCd, sort) {
     } catch (e) {
       debuglog(JSON.stringify(e));
       assert(e instanceof UMesseError);
-      if (e instanceof InternalServerError) errorlog(JSON.stringify(e));
       reject(
         respondWithCode(e.statusCode, { code: e.code, message: e.message })
       );
