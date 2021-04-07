@@ -3,7 +3,6 @@ import axios from "@/repository/api/axiosInstance";
 import { useUploadService } from "@/services/uploadService";
 import { ERROR_CODE, ERROR_PATTERN } from "@/utils/Constants";
 import * as umesseapi from "umesseapi";
-import { UploadCreateRequestItem } from "@/models/UploadCreateRequestItem";
 
 const uploadRepository = new umesseapi.UploadApi(undefined, "", axios);
 const uploadService = useUploadService(uploadRepository);
