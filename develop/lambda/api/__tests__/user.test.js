@@ -8,7 +8,7 @@ const {
   BadRequestError,
   NotFoundError,
 } = require("umesse-lib/error");
-const { getUser } = require("../umesse/user");
+const { getUser, authUser } = require("../umesse/user");
 
 // test data
 const json = require("./data/user.test.json");
@@ -50,5 +50,44 @@ describe("ユーザーデータ", () => {
     await expect(getUser("11111111111")).rejects.toThrow(
       new BadRequestError(`${ERROR_CODE.E0001010} (E0001010)`)
     );
+  });
+});
+
+// ユーザー認証
+describe("ユーザー認証", () => {
+  test("[success] ユーザー認証", async () => {
+    await expect(
+      authUser({
+        unisCustomerCd: data.unisCustomerCd,
+      })
+    ).resolves.toEqual({ token: data.unisCustomerCd });
+  });
+
+  test("[error] ユーザー認証　データ存在しない", async () => {
+    await expect(
+      authUser({
+        unisCustomerCd: "999999999",
+      })
+    ).rejects.toThrow(new NotFoundError(ERROR_CODE.E0000404));
+  });
+
+  test("[error] ユーザー認証　パラメータチェック", async () => {
+    await expect(
+      authUser({
+        unisCustomerCd: "aaaaaaaaaa",
+      })
+    ).rejects.toThrow(new BadRequestError(`${ERROR_CODE.E0001010} (E0001010)`));
+
+    await expect(
+      authUser({
+        unisCustomerCd: "1111",
+      })
+    ).rejects.toThrow(new BadRequestError(`${ERROR_CODE.E0001010} (E0001010)`));
+
+    await expect(
+      authUser({
+        unisCustomerCd: "11111111111",
+      })
+    ).rejects.toThrow(new BadRequestError(`${ERROR_CODE.E0001010} (E0001010)`));
   });
 });
