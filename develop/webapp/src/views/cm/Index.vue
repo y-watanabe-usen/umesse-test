@@ -107,9 +107,9 @@
               :key="narration.contentsId"
               :title="
                 'ナレーション ' +
-                `${index + 1}` +
-                '/' +
-                `${MAX_NARRATION_COUNT}`
+                  `${index + 1}` +
+                  '/' +
+                  `${MAX_NARRATION_COUNT}`
               "
               size="flexible"
               :contentTitle="`${narration.title}`"
@@ -186,9 +186,9 @@
               <CmItem
                 :title="
                   'ナレーション ' +
-                  `${narrations.length + 1}` +
-                  '/' +
-                  `${MAX_NARRATION_COUNT}`
+                    `${narrations.length + 1}` +
+                    '/' +
+                    `${MAX_NARRATION_COUNT}`
                 "
                 :isEmpty="true"
                 size="flexible"
@@ -645,6 +645,7 @@ import { UMesseError } from "../../models/UMesseError";
 import { audioService } from "@/services";
 import * as Common from "@/utils/Common";
 import { User } from "umesseapi/models";
+import analytics from "@/utils/firebaseAnalytics";
 
 export default defineComponent({
   components: {
@@ -718,26 +719,31 @@ export default defineComponent({
 
     const playOpenChime = async () => {
       if (!cm.openChime) return;
-      playById(cm.openChime.id, cm.openChime.category);
+      playById(
+        cm.openChime.id,
+        cm.openChime.category,
+        Constants.CATEGORY.CHIME
+      );
     };
     const playEndChime = async () => {
       if (!cm.endChime) return;
-      playById(cm.endChime.id, cm.endChime.category);
+      playById(cm.endChime.id, cm.endChime.category, Constants.CATEGORY.CHIME);
     };
     const playNarration = () => {
       const narration = cm.narration(state.narrationIndex);
       if (!narration) return;
-      playById(narration.id, narration.category);
+      playById(narration.id, narration.category, Constants.CATEGORY.NARRATION);
     };
     const playBgm = () => {
       if (!cm.bgm) return;
-      playById(cm.bgm.id, cm.bgm.category);
+      playById(cm.bgm.id, cm.bgm.category, Constants.CATEGORY.BGM);
     };
-    const playById = async (id: string, category: string) => {
+    const playById = async (id: string, category: string, type: string) => {
       stop();
       try {
         state.isDownloading = true;
         const audioBuffer = await audioService.getById(id, category);
+        analytics.pressButtonPlayTrial(id, type, Constants.SCREEN.CM);
         audioPlayer.start(audioBuffer);
       } catch (e) {
         openErrorModal(e);
@@ -751,6 +757,8 @@ export default defineComponent({
       try {
         state.isDownloading = true;
         const audioBuffer = await audioService.getByUrl(cm.url);
+        // todo: timeoutになり未確認
+        // analytics.pressButtonPlayTrial(cm.url, Constants.CATEGORY.CM, Constants.SCREEN.CM);
         audioPlayer.start(audioBuffer);
       } catch (e) {
         openErrorModal(e);

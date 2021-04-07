@@ -362,6 +362,8 @@ import DropdownMenu from "@/components/molecules/DropdownMenu.vue";
 import { UMesseError } from "../../models/UMesseError";
 import { audioService, cmService, uploadService } from "@/services";
 import { User } from "umesseapi/models";
+import analytics from "@/utils/firebaseAnalytics";
+
 export default defineComponent({
   components: {
     BasicLayout,
@@ -507,6 +509,7 @@ export default defineComponent({
           cm.id,
           Constants.CATEGORY.CM
         );
+        analytics.pressButtonPlayTrial(cm.id, Constants.CATEGORY.CM, Constants.SCREEN.MANAGEMENT);
         audioPlayer.start(audioBuffer);
       } catch (e) {
         openErrorModal(e);

@@ -207,6 +207,7 @@ import ttsTextConverter, { ConverterType } from "@/utils/ttsTextConverter";
 import * as Common from "@/utils/Common";
 import { NarrationItem } from "umesseapi/models";
 import { MAX_NARRATION_COUNT } from "@/store/cm";
+import analytics from "@/utils/firebaseAnalytics";
 
 export default defineComponent({
   components: {
@@ -339,6 +340,7 @@ export default defineComponent({
       console.log("play");
       const data = await ttsStore.getTtsData(state.playLang);
       const audioBuffer = await audioService.getByUrl(<string>data?.url);
+      analytics.pressButtonPlayTrial(<string>data?.url, Constants.CATEGORY.TEMPLATE, Constants.SCREEN.VOICE_TEMPLATE_DETAIL);
       audioPlayer.start(audioBuffer);
     };
     const stop = () => {

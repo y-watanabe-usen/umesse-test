@@ -349,7 +349,6 @@ import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
 import MessageDialogContents from "@/components/molecules/MessageDialogContents.vue";
-
 import Constants from "@/utils/Constants";
 
 export default defineComponent({
@@ -470,6 +469,7 @@ export default defineComponent({
           narration.id,
           narration.category
         );
+        analytics.pressButtonPlayTrial(narration.id, Constants.CATEGORY.NARRATION, Constants.SCREEN.NARRATION);
         audioPlayer.start(audioBuffer);
       } catch (e) {
         openErrorModal(e);
