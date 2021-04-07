@@ -432,7 +432,7 @@ export function getUploadSystemService(serviceCd: string) {
 
   if (serviceCd === Constants.SERVICE_CD_UMUSIC) {
     getCdList = ["01", "99"];
-  } else if (serviceCd === Constants.SERVICE_CD_SSENSE) {
+  } else if (serviceCd === Constants.SERVICE_CD_SSENCE) {
     getCdList = ["02", "99"];
   } else {
     getCdList = [];

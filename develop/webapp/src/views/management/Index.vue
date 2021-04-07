@@ -533,7 +533,7 @@ export default defineComponent({
         const uploadSystem =
           authUser.serviceCd === Constants.SERVICE_CD_UMUSIC
             ? Constants.UPLOAD_SYSTEM_UMUSIC
-            : Constants.UPLOAD_SYSTEM_SSENSE;
+            : Constants.UPLOAD_SYSTEM_SSENCE;
         await uploadService.create(authToken, cm.id, uploadSystem);
         openUploadtedModal();
       } catch (e) {
