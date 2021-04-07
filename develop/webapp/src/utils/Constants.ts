@@ -125,7 +125,7 @@ export default class Constants {
   ];
 
   public static readonly UPLOAD_SYSTEM_UMUSIC = "01";
-  public static readonly UPLOAD_SYSTEM_SSENSE = "02";
+  public static readonly UPLOAD_SYSTEM_SSENCE = "02";
 
   public static readonly UPLOAD_SYSTEMS: UploadSystem[] = [
     { cd: "01", name: "U MUSIC" },
@@ -134,7 +134,7 @@ export default class Constants {
   ];
 
   public static readonly SERVICE_CD_UMUSIC: string = "U01";
-  public static readonly SERVICE_CD_SSENSE: string = "U21";
+  public static readonly SERVICE_CD_SSENCE: string = "U21";
 
   public static readonly CM_STATUS_DELETE: string = "00";
   public static readonly CM_STATUS_CREATING: string = "01";
