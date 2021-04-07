@@ -124,6 +124,9 @@ export default class Constants {
     { cd: "902", name: "音声合成" },
   ];
 
+  public static readonly UPLOAD_SYSTEM_UMUSIC = "01";
+  public static readonly UPLOAD_SYSTEM_SSENSE = "02";
+
   public static readonly UPLOAD_SYSTEMS: UploadSystem[] = [
     { cd: "01", name: "U MUSIC" },
     { cd: "02", name: "S'sence" },

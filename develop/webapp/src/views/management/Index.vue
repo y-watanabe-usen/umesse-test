@@ -304,7 +304,9 @@
         </template>
         <template #footer>
           <ModalFooter>
-            <Button type="secondary" @click="closeUnUploadedModal">閉じる</Button>
+            <Button type="secondary" @click="closeUnUploadedModal"
+              >閉じる</Button
+            >
           </ModalFooter>
         </template>
       </ModalDialog>
@@ -528,7 +530,11 @@ export default defineComponent({
     };
     const upload = async (cm: CmItem) => {
       try {
-        await uploadService.create(authToken, cm.id, "01");
+        const uploadSystem =
+          authUser.serviceCd === Constants.SERVICE_CD_UMUSIC
+            ? Constants.UPLOAD_SYSTEM_UMUSIC
+            : Constants.UPLOAD_SYSTEM_SSENSE;
+        await uploadService.create(authToken, cm.id, uploadSystem);
         openUploadtedModal();
       } catch (e) {
         console.log(e.message);
