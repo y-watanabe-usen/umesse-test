@@ -3,12 +3,7 @@
 const assert = require("assert");
 const fs = require("fs");
 const https = require("https");
-const {
-  constants,
-  debuglog,
-  errorlog,
-  timestamp,
-} = require("umesse-lib/constants");
+const { constants, debuglog, errorlog } = require("umesse-lib/constants");
 const {
   ERROR_CODE,
   AppError,
@@ -29,8 +24,7 @@ exports.handler = async (event, context) => {
   let lastdate;
   try {
     lastdate = fs.readFileSync(file);
-    if (!lastdate || lastdate == "")
-      throw new Error(`no such file, open './lastdata']`);
+    if (!lastdate || lastdate == "") throw _;
   } catch (e) {
     lastdate = targetDate(60 * 60);
   }
