@@ -15,7 +15,7 @@ const {
   InternalServerError,
 } = require("umesse-lib/error");
 const { dynamodbManager } = require("umesse-lib/utils/dynamodbManager");
-const file = "./lastdata";
+const file = "./lastdate";
 
 exports.handler = async (event, context) => {
   debuglog(
