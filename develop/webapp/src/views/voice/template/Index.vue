@@ -92,11 +92,11 @@ import { TemplateItem } from "umesseapi/models";
 import * as Common from "@/utils/Common";
 import router from "@/router";
 import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
-import { UMesseError } from "../../../models/UMesseError";
 import { resourcesService } from "@/services";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { freeCache } from "@/repository/cache";
 import analytics from "@/utils/firebaseAnalytics";
+import useErrorModalController from "@/mixins/errorModalController";
 
 export default defineComponent({
   components: {
@@ -116,13 +116,17 @@ export default defineComponent({
   setup() {
     const sortList = Common.getSort();
     const industries = Common.getTemplateIndustries();
+    const {
+      isApper: isErrorModalApper,
+      errorCode,
+      errorMessage,
+      open: openErrorModal,
+      close: closeErrorModal,
+    } = useErrorModalController();
     const state = reactive({
       sort: 1,
       activeIndustryCd: "10",
       templates: [] as TemplateItem[],
-      isErrorModalApper: false,
-      errorCode: "",
-      errorMessage: "",
       isLoading: false,
     });
 
@@ -158,16 +162,6 @@ export default defineComponent({
       await fetchTemplate();
     });
 
-    const closeErrorModal = () => {
-      state.isErrorModalApper = false;
-    };
-
-    const openErrorModal = (e: UMesseError) => {
-      state.errorCode = e.errorCode;
-      state.errorMessage = e.message;
-      state.isErrorModalApper = true;
-    };
-
     const openLoadingModal = () => {
       state.isLoading = true;
     };
@@ -181,8 +175,12 @@ export default defineComponent({
       industries,
       clickIndustry,
       toVoiceTemplateDetail,
-      closeErrorModal,
       fetchTemplate,
+      isErrorModalApper,
+      errorCode,
+      errorMessage,
+      openErrorModal,
+      closeErrorModal,
     };
   },
 });

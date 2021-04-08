@@ -5,12 +5,7 @@
         <Header>
           <template #title>音声合成でナレーションを作成する</template>
           <template #buttons>
-            <Button
-              :disabled="!text"
-              @click="openModal"
-            >
-              確定
-            </Button>
+            <Button :disabled="!text" @click="openModal"> 確定 </Button>
           </template>
         </Header>
       </template>
@@ -117,10 +112,10 @@ import SelectBox from "@/components/atoms/SelectBox.vue";
 import { useGlobalStore } from "@/store";
 import Constants from "@/utils/Constants";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
-import { UMesseError } from "../../../models/UMesseError";
 import { freeCache } from "@/repository/cache";
 import { audioService } from "@/services";
 import analytics from "@/utils/firebaseAnalytics";
+import useErrorModalController from "@/mixins/errorModalController";
 
 export default defineComponent({
   components: {
@@ -146,6 +141,13 @@ export default defineComponent({
     const ttsSpeakers = Constants.TTS_GENDERS;
     const lang = "ja";
     const { cm } = useGlobalStore();
+    const {
+      isApper: isErrorModalApper,
+      errorCode,
+      errorMessage,
+      open: openErrorModal,
+      close: closeErrorModal,
+    } = useErrorModalController();
     const state = reactive({
       isGenerating: computed(() => ttsStore.isGenerating()),
       isCreating: computed(() => ttsStore.isCreating()),
@@ -155,9 +157,6 @@ export default defineComponent({
       text: "",
       speaker: "1", // 女性
       isModalAppear: false,
-      isErrorModalApper: false,
-      errorCode: "",
-      errorMessage: "",
       title: "",
       description: "",
       isLoading: false,
@@ -204,7 +203,7 @@ export default defineComponent({
       try {
         state.isModalAppear = true;
         await ttsStore.generateTtsDataFromFree(state.text, state.speaker);
-      } catch(e) {
+      } catch (e) {
         closeModal();
         openErrorModal(e);
       }
@@ -223,14 +222,6 @@ export default defineComponent({
     const closeLoadingModal = () => {
       state.isLoading = false;
     };
-    const openErrorModal = (e: UMesseError) => {
-      state.errorCode = e.errorCode;
-      state.errorMessage = e.message;
-      state.isErrorModalApper = true;
-    };
-    const closeErrorModal = () => {
-      state.isErrorModalApper = false;
-    };
     return {
       ttsSpeakers,
       ...toRefs(state),
@@ -240,6 +231,9 @@ export default defineComponent({
       openModal,
       closeModal,
       stopAndCloseModal,
+      isErrorModalApper,
+      errorCode,
+      errorMessage,
       openErrorModal,
       closeErrorModal,
     };

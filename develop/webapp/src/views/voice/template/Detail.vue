@@ -196,7 +196,6 @@ import { useGlobalStore } from "@/store";
 import { TemplateItem } from "umesseapi/models";
 import Constants from "@/utils/Constants";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
-import { UMesseError } from "../../../models/UMesseError";
 import { lang, speaker, TemplateDetailItem } from "@/models/TemplateDetailItem";
 import validator from "@/utils/validator";
 import { audioService } from "@/services";
@@ -213,6 +212,7 @@ import * as Common from "@/utils/Common";
 import { NarrationItem } from "umesseapi/models";
 import { MAX_NARRATION_COUNT } from "@/store/cm";
 import analytics from "@/utils/firebaseAnalytics";
+import useErrorModalController from "@/mixins/errorModalController";
 
 export default defineComponent({
   components: {
@@ -278,6 +278,14 @@ export default defineComponent({
     const isVisiblePoint =
       template.manuscript.indexOf(ConverterType.point) != -1;
 
+    const {
+      isApper: isErrorModalApper,
+      errorCode,
+      errorMessage,
+      open: openErrorModal,
+      close: closeErrorModal,
+    } = useErrorModalController();
+
     const state = reactive({
       isPlaying: computed(() => audioPlayer.isPlaying()),
       isGenerating: computed(() => ttsStore.isGenerating()),
@@ -295,9 +303,6 @@ export default defineComponent({
       minutes: 10,
       point: 3,
       isModalAppear: false,
-      isErrorModalApper: false,
-      errorCode: "",
-      errorMessage: "",
       text: computed(() => {
         const text: string = ttsTextConverter.convertManuscript(
           template.manuscript,
@@ -409,14 +414,6 @@ export default defineComponent({
     const closeLoadingModal = () => {
       state.isLoading = false;
     };
-    const openErrorModal = (e: UMesseError) => {
-      state.errorCode = e.errorCode;
-      state.errorMessage = e.message;
-      state.isErrorModalApper = true;
-    };
-    const closeErrorModal = () => {
-      state.isErrorModalApper = false;
-    };
     const selectErrorMessageCustomerName = (customerName: string) => {
       if (!validator.isFullWidthKana(customerName)) {
         state.isErrorCustomerName = true;
@@ -485,8 +482,6 @@ export default defineComponent({
       openModal,
       closeModal,
       stopAndCloseModal,
-      openErrorModal,
-      closeErrorModal,
       template,
       templateDetails,
       ConverterType,
@@ -500,6 +495,11 @@ export default defineComponent({
       isVisibleMinutes,
       isVisiblePoint,
       getLangsTitle,
+      isErrorModalApper,
+      errorCode,
+      errorMessage,
+      openErrorModal,
+      closeErrorModal,
     };
   },
 });

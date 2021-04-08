@@ -102,11 +102,11 @@ import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
 import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
 import PlayDialogContents from "@/components/molecules/PlayDialogContents.vue";
-import { UMesseError } from "../../models/UMesseError";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { audioService, resourcesService } from "@/services";
 import analytics from "@/utils/firebaseAnalytics";
 import Constants from "@/utils/Constants";
+import useErrorModalController from "@/mixins/errorModalController";
 
 export default defineComponent({
   components: {
@@ -133,6 +133,13 @@ export default defineComponent({
     const sortList = Common.getSort();
     const isOpenChime = route.params.div == "open";
     const title = isOpenChime ? "Openチャイム" : "Endチャイム";
+    const {
+      isApper: isErrorModalApper,
+      errorCode,
+      errorMessage,
+      open: openErrorModal,
+      close: closeErrorModal,
+    } = useErrorModalController();
 
     const state = reactive({
       sort: 1,
@@ -143,9 +150,6 @@ export default defineComponent({
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       duration: computed(() => audioPlayer.getDuration()),
       isPlayModalAppear: false,
-      isErrorModalApper: false,
-      errorCode: "",
-      errorMessage: "",
       isLoading: false,
     });
 
@@ -216,16 +220,6 @@ export default defineComponent({
       fetchChime();
     });
 
-    const closeErrorModal = () => {
-      state.isErrorModalApper = false;
-    };
-
-    const openErrorModal = (e: UMesseError) => {
-      state.errorCode = e.errorCode;
-      state.errorMessage = e.message;
-      state.isErrorModalApper = true;
-    };
-
     const openLoadingModal = () => {
       state.isLoading = true;
     };
@@ -247,6 +241,10 @@ export default defineComponent({
       selectChimeAndOpenPlayModal,
       stopAndClosePlayModal,
       fetchChime,
+      isErrorModalApper,
+      errorCode,
+      errorMessage,
+      openErrorModal,
       closeErrorModal,
     };
   },

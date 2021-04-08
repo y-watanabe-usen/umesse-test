@@ -335,7 +335,6 @@ import {
   convertNumberToTime,
 } from "@/utils/FormatDate";
 import { Scene } from "@/utils/Constants";
-import { UMesseError } from "../../models/UMesseError";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import {
   audioService,
@@ -349,6 +348,7 @@ import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
 import MessageDialogContents from "@/components/molecules/MessageDialogContents.vue";
 import Constants from "@/utils/Constants";
+import useErrorModalController from "@/mixins/errorModalController";
 
 export default defineComponent({
   components: {
@@ -381,6 +381,13 @@ export default defineComponent({
     const authToken = <string>auth.getToken();
     const sortList = Common.getSort();
     const industries = Common.getNarrationIndustries();
+    const {
+      isApper: isErrorModalApper,
+      errorCode,
+      errorMessage,
+      open: openErrorModal,
+      close: closeErrorModal,
+    } = useErrorModalController();
     const state = reactive({
       sort: 1,
       activeIndustryCd: "02",
@@ -394,9 +401,6 @@ export default defineComponent({
       duration: computed(() => audioPlayer.getDuration()),
       isDocumentModalAppear: false,
       isPlayModalAppear: false,
-      isErrorModalApper: false,
-      errorCode: "",
-      errorMessage: "",
       isLoading: false,
       dropdownNarrationId: "",
       title: "",
@@ -514,10 +518,6 @@ export default defineComponent({
       closePlayModal();
     };
 
-    const closeErrorModal = () => {
-      state.isErrorModalApper = false;
-    };
-
     const closeAllDropdownMenu = () => {
       state.dropdownNarrationId = "";
     };
@@ -535,11 +535,6 @@ export default defineComponent({
       fetchScene();
     });
 
-    const openErrorModal = (e: UMesseError) => {
-      state.errorCode = e.errorCode;
-      state.errorMessage = e.message;
-      state.isErrorModalApper = true;
-    };
     const closeLoadingModal = () => {
       state.isLoading = false;
     };
@@ -660,7 +655,6 @@ export default defineComponent({
       selectNarrationAndOpenDocumentModal,
       selectNarrationAndOpenPlayModal,
       stopAndClosePlayModal,
-      closeErrorModal,
       fetchNarration,
       clickBack,
       closeAllDropdownMenu,
@@ -674,6 +668,11 @@ export default defineComponent({
       closeRemoveModal,
       closeRemovedModal,
       removeAndOpenRemovedModal,
+      isErrorModalApper,
+      errorCode,
+      errorMessage,
+      openErrorModal,
+      closeErrorModal,
     };
   },
 });

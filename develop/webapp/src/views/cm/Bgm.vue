@@ -116,11 +116,11 @@ import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
 import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
 import PlayDialogContents from "@/components/molecules/PlayDialogContents.vue";
-import { UMesseError } from "../../models/UMesseError";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { audioService, resourcesService } from "@/services";
 import analytics from "@/utils/firebaseAnalytics";
 import Constants from "@/utils/Constants";
+import useErrorModalController from "@/mixins/errorModalController";
 
 export default defineComponent({
   components: {
@@ -146,6 +146,13 @@ export default defineComponent({
     const audioPlayer = AudioPlayer();
     const { cm } = useGlobalStore();
     const sortList = Common.getSort();
+    const {
+      isApper: isErrorModalApper,
+      errorCode,
+      errorMessage,
+      open: openErrorModal,
+      close: closeErrorModal,
+    } = useErrorModalController();
 
     const state = reactive({
       activeIndustryCd: "10",
@@ -158,9 +165,6 @@ export default defineComponent({
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       duration: computed(() => audioPlayer.getDuration()),
       isPlayModalAppear: false,
-      isErrorModalApper: false,
-      errorCode: "",
-      errorMessage: "",
       isLoading: false,
     });
 
@@ -233,16 +237,6 @@ export default defineComponent({
       fetchBgm();
     });
 
-    const closeErrorModal = () => {
-      state.isErrorModalApper = false;
-    };
-
-    const openErrorModal = (e: UMesseError) => {
-      state.errorCode = e.errorCode;
-      state.errorMessage = e.message;
-      state.isErrorModalApper = true;
-    };
-
     const openLoadingModal = () => {
       state.isLoading = true;
     };
@@ -262,8 +256,12 @@ export default defineComponent({
       closePlayModal,
       selectBgmAndOpenPlayModal,
       stopAndClosePlayModal,
-      closeErrorModal,
       fetchBgm,
+      isErrorModalApper,
+      errorCode,
+      errorMessage,
+      openErrorModal,
+      closeErrorModal,
     };
   },
 });

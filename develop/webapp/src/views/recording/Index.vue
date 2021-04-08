@@ -174,9 +174,9 @@ import TextArea from "@/components/atoms/TextArea.vue";
 import { useGlobalStore } from "@/store";
 import router from "@/router";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
-import { UMesseError } from "../../models/UMesseError";
 import { UPLOAD_RECORDING_STATE } from "@/store/recording";
 import analytics from "@/utils/firebaseAnalytics";
+import useErrorModalController from "@/mixins/errorModalController";
 
 export default defineComponent({
   components: {
@@ -199,15 +199,22 @@ export default defineComponent({
     const audioRecorder = AudioRecorder();
     const audioPlayer = AudioPlayer();
     const { cm } = useGlobalStore();
+    const {
+      isApper: isErrorModalApper,
+      errorCode,
+      errorMessage,
+      open: openErrorModal,
+      close: closeErrorModal,
+    } = useErrorModalController();
     const state = reactive({
       file: <RecordingFile>{},
       isRecording: computed(() => audioRecorder.isRecording()),
       hasRecordedData: computed(() => audioRecorder.hasRecording()),
       decibel: computed(() => {
-        if( audioRecorder.isRecording()){
+        if (audioRecorder.isRecording()) {
           if (audioRecorder.getPowerDecibels() === -Infinity) return -60;
           return audioRecorder.getPowerDecibels();
-        }else if ( audioPlayer.isPlaying()){
+        } else if (audioPlayer.isPlaying()) {
           if (audioPlayer.getPowerDecibels() === -Infinity) return -60;
           return audioPlayer.getPowerDecibels();
         }
@@ -218,24 +225,20 @@ export default defineComponent({
       duration: computed(() => audioPlayer.getDuration()),
       isModalAppear: false,
       isLoading: false,
-      isErrorModalApper: false,
-      errorCode: "",
-      errorMessage: "",
     });
 
-    onUnmounted(()=>{
+    onUnmounted(() => {
       if (audioRecorder.isRecording()) {
         audioRecorder.stop();
       }
-      if ( audioPlayer.isPlaying()) {
+      if (audioPlayer.isPlaying()) {
         audioPlayer.stop();
       }
     });
 
     // toggle voice recorder.
     const toggleVoiceRecorder = async () => {
-      if( audioPlayer.isPlaying())
-        audioPlayer.stop();
+      if (audioPlayer.isPlaying()) audioPlayer.stop();
       if (audioRecorder.isRecording()) {
         audioRecorder.stop();
       } else {
@@ -285,14 +288,6 @@ export default defineComponent({
     const closeLoadingModal = () => {
       state.isLoading = false;
     };
-    const closeErrorModal = () => {
-      state.isErrorModalApper = false;
-    };
-    const openErrorModal = (e: UMesseError) => {
-      state.errorCode = e.errorCode;
-      state.errorMessage = e.message;
-      state.isErrorModalApper = true;
-    };
     return {
       ...toRefs(state),
       toggleVoiceRecorder,
@@ -302,8 +297,12 @@ export default defineComponent({
       UPLOAD_RECORDING_STATE,
       openModal,
       closeModal,
-      closeErrorModal,
       convertNumberToTime,
+      isErrorModalApper,
+      errorCode,
+      errorMessage,
+      openErrorModal,
+      closeErrorModal,
     };
   },
 });

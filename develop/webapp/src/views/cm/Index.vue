@@ -635,11 +635,11 @@ import VolumeSlider from "@/components/molecules/VolumeSlider.vue";
 import { MAX_NARRATION_COUNT, UPLOAD_CM_STATE } from "@/store/cm";
 import router from "@/router";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
-import { UMesseError } from "../../models/UMesseError";
 import { audioService } from "@/services";
 import * as Common from "@/utils/Common";
 import { User } from "umesseapi/models";
 import analytics from "@/utils/firebaseAnalytics";
+import useErrorModalController from "@/mixins/errorModalController";
 
 export default defineComponent({
   components: {
@@ -670,7 +670,15 @@ export default defineComponent({
     const uploadSystemArray = Common.getUploadSystemService(authUser.serviceCd);
     const industryScenesCd = "99";
     const industryScenesList = Common.getIndustryScenes(industryScenesCd);
-    const state = reactive({
+    const {
+      isApper: isErrorModalApper,
+      errorCode,
+      errorMessage,
+      open: openErrorModal,
+      close: closeErrorModal,
+    } = useErrorModalController();
+
+const state = reactive({
       cmTime: computed(() => cm.secounds),
       openChime: computed(() => cm.openChime),
       narrations: computed(() => cm.narrations),
@@ -704,9 +712,6 @@ export default defineComponent({
       isOpenChimeSliderAppear: false,
       isEndChimeSliderAppear: false,
       isBgmSliderAppear: false,
-      isErrorModalApper: false,
-      errorCode: "",
-      errorMessage: "",
       narrationIndex: 0,
       isConfirmBackHomeModalAppear: false,
     });
@@ -1050,14 +1055,6 @@ export default defineComponent({
       closeAllDropdownMenu();
       closeAllSlider();
     };
-    const closeErrorModal = () => {
-      state.isErrorModalApper = false;
-    };
-    const openErrorModal = (e: UMesseError) => {
-      state.errorCode = e.errorCode;
-      state.errorMessage = e.message;
-      state.isErrorModalApper = true;
-    };
     const openConfirmBackHomeModal = () => {
       state.isConfirmBackHomeModalAppear = true;
     };
@@ -1183,15 +1180,22 @@ export default defineComponent({
       toggleEndChimeSlider,
       toggleBgmSlider,
       onClickSomewhere,
-      closeErrorModal,
       openConfirmBackHomeModal,
       closeConfirmBackHomeModal,
       authUser,
       uploadSystemArray,
       industryScenesList,
+<<<<<<< HEAD
       changeCmOpenChime,
       changeCmEndChime,
       changeCmBgm,
+=======
+      isErrorModalApper,
+      errorCode,
+      errorMessage,
+      openErrorModal,
+      closeErrorModal,
+>>>>>>> 6d55d83... refactor errorModal
     };
   },
 });

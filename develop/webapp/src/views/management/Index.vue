@@ -359,10 +359,10 @@ import { useRouter } from "vue-router";
 import SelectBox from "@/components/atoms/SelectBox.vue";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import DropdownMenu from "@/components/molecules/DropdownMenu.vue";
-import { UMesseError } from "../../models/UMesseError";
 import { audioService, cmService, uploadService } from "@/services";
 import { User } from "umesseapi/models";
 import analytics from "@/utils/firebaseAnalytics";
+import useErrorModalController from "@/mixins/errorModalController";
 
 export default defineComponent({
   components: {
@@ -442,6 +442,13 @@ export default defineComponent({
     ];
     const authToken = <string>auth.getToken();
     const authUser = <User>auth.getUserInfo();
+    const {
+      isApper: isErrorModalApper,
+      errorCode,
+      errorMessage,
+      open: openErrorModal,
+      close: closeErrorModal,
+    } = useErrorModalController();
     const state = reactive({
       activeSceneCd: "",
       sceneList: [] as Scene[],
@@ -465,9 +472,6 @@ export default defineComponent({
       isLoading: false,
       dropdownCmId: "",
       titleModalLoading: "",
-      isErrorModalApper: false,
-      errorCode: "",
-      errorMessage: "",
       uploadSystemtitle:
         authUser.serviceCd === Constants.SERVICE_CD_UMUSIC
           ? "U MUSICにアップロード"
@@ -712,14 +716,6 @@ export default defineComponent({
         state.dropdownCmId = cmId;
       }
     };
-    const closeErrorModal = () => {
-      state.isErrorModalApper = false;
-    };
-    const openErrorModal = (e: UMesseError) => {
-      state.errorCode = e.errorCode;
-      state.errorMessage = e.message;
-      state.isErrorModalApper = true;
-    };
     const getStatusClass = (cd: string) => {
       switch (cd) {
         case Constants.CM_STATUS_DELETE: // CM削除
@@ -777,10 +773,14 @@ export default defineComponent({
       disabledDeleteStatus,
       closeAllDropdownMenu,
       toggleDropdown,
-      closeErrorModal,
       getStatusClass,
       upload,
       unUpload,
+      isErrorModalApper,
+      errorCode,
+      errorMessage,
+      openErrorModal,
+      closeErrorModal,
     };
   },
 });
