@@ -630,7 +630,7 @@ describe("TTS音声新規登録", () => {
         {
           id: expect.stringMatching(`^${data.unisCustomerCd}-t-[0-9a-z]{8}$`),
           category: "tts",
-          title: `${body.details[0].title} (${body.details[0].lang})`,
+          title: `${body.details[0].title}`,
           description: body.details[0].description,
           startDate: expect.anything(),
           timestamp: expect.anything(),
@@ -638,7 +638,7 @@ describe("TTS音声新規登録", () => {
         {
           id: expect.stringMatching(`^${data.unisCustomerCd}-t-[0-9a-z]{8}$`),
           category: "tts",
-          title: `${body.details[1].title} (${body.details[1].lang})`,
+          title: `${body.details[1].title} (英語)`,
           description: body.details[1].description,
           startDate: expect.anything(),
           timestamp: expect.anything(),

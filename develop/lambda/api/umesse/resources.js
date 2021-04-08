@@ -275,9 +275,22 @@ exports.createTtsResource = async (unisCustomerCd, body) => {
       }
 
       // DynamoDBのデータ更新
+      let title = data.title;
+      switch (data.lang) {
+        case "en":
+          title = `${title} (英語)`;
+          break;
+        case "zh":
+          title = `${title} (中国語)`;
+          break;
+        case "ko":
+          title = `${title} (韓国語)`;
+          break;
+      }
+
       const item = {
         ttsId: id,
-        title: `${data.title} (${data.lang})`,
+        title: title,
         description: data.description,
         startDate: timestamp(),
         timestamp: timestamp(),
