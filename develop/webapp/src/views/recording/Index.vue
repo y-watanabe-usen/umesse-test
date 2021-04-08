@@ -210,7 +210,7 @@ export default defineComponent({
           if (audioPlayer.getPowerDecibels() === -Infinity) return -100;
           return audioPlayer.getPowerDecibels();
         }
-        return -100;
+        return -60;
       }),
       isPlaying: computed(() => audioPlayer.isPlaying()),
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
