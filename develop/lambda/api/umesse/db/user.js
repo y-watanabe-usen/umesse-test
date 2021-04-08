@@ -190,7 +190,7 @@ module.exports = {
       ExpressionAttributeNames: {
         "#category": category,
       },
-      ReturnValues: "UPDATED_NEW",
+      ReturnValues: "ALL_NEW",
     };
     debuglog(JSON.stringify({ key: key, options: options }));
 
