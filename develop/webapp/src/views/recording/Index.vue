@@ -204,10 +204,10 @@ export default defineComponent({
       hasRecordedData: computed(() => audioRecorder.hasRecording()),
       decibel: computed(() => {
         if( audioRecorder.isRecording()){
-          if (audioRecorder.getPowerDecibels() === -Infinity) return -100;
+          if (audioRecorder.getPowerDecibels() === -Infinity) return -60;
           return audioRecorder.getPowerDecibels();
         }else if ( audioPlayer.isPlaying()){
-          if (audioPlayer.getPowerDecibels() === -Infinity) return -100;
+          if (audioPlayer.getPowerDecibels() === -Infinity) return -60;
           return audioPlayer.getPowerDecibels();
         }
         return -60;
