@@ -62,6 +62,7 @@ export default defineComponent({
     };
     const closeErrorModal = () => {
       state.isErrorModalApper = false;
+      window.location.reload();
     };
     onMounted(async () => {
       try {

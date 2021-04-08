@@ -31,7 +31,7 @@ export default function authStore() {
 
     const unisCustomerCd = router.currentRoute.value.query.unisCustomerCd as string;
     if (unisCustomerCd == undefined) {
-      throw new UMesseError(ERROR_CODE.A0001, ERROR_PATTERN.A0001, "");
+      throw new UMesseError(ERROR_CODE.A4002, ERROR_PATTERN.A4002, "");
     }
 
     console.log(`requestAuthorization`);
