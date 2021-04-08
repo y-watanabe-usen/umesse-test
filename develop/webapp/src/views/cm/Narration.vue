@@ -348,6 +348,7 @@ import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
 import MessageDialogContents from "@/components/molecules/MessageDialogContents.vue";
 import Constants from "@/utils/Constants";
+import useModalController from "@/mixins/modalController";
 import useErrorModalController from "@/mixins/errorModalController";
 
 export default defineComponent({
@@ -382,6 +383,36 @@ export default defineComponent({
     const sortList = Common.getSort();
     const industries = Common.getNarrationIndustries();
     const {
+      isApper: isPlayModalAppear,
+      open: openPlayModal,
+      close: closePlayModal,
+    } = useModalController();
+    const {
+      isApper: isDocumentModalAppear,
+      open: openDocumentModal,
+      close: closeDocumentModal,
+    } = useModalController();
+    const {
+      isApper: isSaveModalAppear,
+      open: openSaveModal,
+      close: closeSaveModal,
+    } = useModalController();
+    const {
+      isApper: isSavedModalAppear,
+      open: openSavedModal,
+      close: closeSavedModal,
+    } = useModalController();
+    const {
+      isApper: isRemoveModalAppear,
+      open: openRemoveModal,
+      close: closeRemoveModal,
+    } = useModalController();
+    const {
+      isApper: isRemovedModalAppear,
+      open: openRemovedModal,
+      close: closeRemovedModal,
+    } = useModalController();
+    const {
       isApper: isErrorModalApper,
       errorCode,
       errorMessage,
@@ -399,16 +430,10 @@ export default defineComponent({
       isDownloading: false,
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       duration: computed(() => audioPlayer.getDuration()),
-      isDocumentModalAppear: false,
-      isPlayModalAppear: false,
       isLoading: false,
       dropdownNarrationId: "",
       title: "",
       description: "",
-      isSaveModalAppear: false,
-      isSavedModalAppear: false,
-      isRemoveModalAppear: false,
-      isRemovedModalAppear: false,
     });
 
     const setNarration = (narration: NarrationItem) => {
@@ -489,20 +514,6 @@ export default defineComponent({
       if (state.isPlaying) audioPlayer.stop();
     };
 
-    const openDocumentModal = () => {
-      state.isDocumentModalAppear = true;
-    };
-    const closeDocumentModal = () => {
-      state.isDocumentModalAppear = false;
-    };
-
-    const openPlayModal = () => {
-      state.isPlayModalAppear = true;
-    };
-    const closePlayModal = () => {
-      state.isPlayModalAppear = false;
-    };
-
     const selectNarrationAndOpenDocumentModal = (narration: NarrationItem) => {
       selectNarration(narration);
       closeAllDropdownMenu();
@@ -537,18 +548,6 @@ export default defineComponent({
 
     const closeLoadingModal = () => {
       state.isLoading = false;
-    };
-    const openSaveModal = () => {
-      state.isSaveModalAppear = true;
-    };
-    const closeSaveModal = () => {
-      state.isSaveModalAppear = false;
-    };
-    const openSavedModal = () => {
-      state.isSavedModalAppear = true;
-    };
-    const closeSavedModal = () => {
-      state.isSavedModalAppear = false;
     };
     const selectNarrationAndOpenSaveModal = (narration: NarrationItem) => {
       closeAllDropdownMenu();
@@ -596,18 +595,6 @@ export default defineComponent({
       selectNarration(narration);
       openRemoveModal();
     };
-    const openRemoveModal = () => {
-      state.isRemoveModalAppear = true;
-    };
-    const closeRemoveModal = () => {
-      state.isRemoveModalAppear = false;
-    };
-    const openRemovedModal = () => {
-      state.isRemovedModalAppear = true;
-    };
-    const closeRemovedModal = () => {
-      state.isRemovedModalAppear = false;
-    };
     const removeAndOpenRemovedModal = async () => {
       analytics.pressButtonRemove(
         state.selectedNarration?.id,
@@ -648,10 +635,6 @@ export default defineComponent({
       clickScene,
       convertDatestringToDateJp,
       convertNumberToTime,
-      openDocumentModal,
-      closeDocumentModal,
-      openPlayModal,
-      closePlayModal,
       selectNarrationAndOpenDocumentModal,
       selectNarrationAndOpenPlayModal,
       stopAndClosePlayModal,
@@ -660,14 +643,27 @@ export default defineComponent({
       closeAllDropdownMenu,
       toggleDropdown,
       selectNarrationAndOpenSaveModal,
-      openSaveModal,
-      closeSaveModal,
-      closeSavedModal,
       saveAndOpenSavedModal,
       selectNarrationAndOpenRemoveModal,
-      closeRemoveModal,
-      closeRemovedModal,
       removeAndOpenRemovedModal,
+      isPlayModalAppear,
+      openPlayModal,
+      closePlayModal,
+      isDocumentModalAppear,
+      openDocumentModal,
+      closeDocumentModal,
+      isSaveModalAppear,
+      openSaveModal,
+      closeSaveModal,
+      isSavedModalAppear,
+      openSavedModal,
+      closeSavedModal,
+      isRemoveModalAppear,
+      openRemoveModal,
+      closeRemoveModal,
+      isRemovedModalAppear,
+      openRemovedModal,
+      closeRemovedModal,
       isErrorModalApper,
       errorCode,
       errorMessage,

@@ -5,7 +5,7 @@
         <Header>
           <template #title>音声合成でナレーションを作成する</template>
           <template #buttons>
-            <Button :isDisabled="isDisabledConfirm" @click="openModal"
+            <Button :isDisabled="isDisabledConfirm" @click="generateTts"
               >確定</Button
             >
           </template>
@@ -212,6 +212,7 @@ import * as Common from "@/utils/Common";
 import { NarrationItem } from "umesseapi/models";
 import { MAX_NARRATION_COUNT } from "@/store/cm";
 import analytics from "@/utils/firebaseAnalytics";
+import useModalController from "@/mixins/modalController";
 import useErrorModalController from "@/mixins/errorModalController";
 
 export default defineComponent({
@@ -279,6 +280,11 @@ export default defineComponent({
       template.manuscript.indexOf(ConverterType.point) != -1;
 
     const {
+      isApper: isModalAppear,
+      open: openModal,
+      close: closeModal,
+    } = useModalController();
+    const {
       isApper: isErrorModalApper,
       errorCode,
       errorMessage,
@@ -302,7 +308,6 @@ export default defineComponent({
       age: 18,
       minutes: 10,
       point: 3,
-      isModalAppear: false,
       text: computed(() => {
         const text: string = ttsTextConverter.convertManuscript(
           template.manuscript,
@@ -379,9 +384,9 @@ export default defineComponent({
       closeLoadingModal();
     };
 
-    const openModal = async () => {
+    const generateTts = async () => {
       try {
-        state.isModalAppear = true;
+        openModal();
         await ttsStore.generateTtsDataFromTemplate(
           templateDetails,
           state.langs,
@@ -400,9 +405,6 @@ export default defineComponent({
         closeModal();
         openErrorModal(e);
       }
-    };
-    const closeModal = () => {
-      state.isModalAppear = false;
     };
     const stopAndCloseModal = () => {
       stop();
@@ -478,9 +480,8 @@ export default defineComponent({
       ttsLangs,
       play,
       stop,
+      generateTts,
       createTts,
-      openModal,
-      closeModal,
       stopAndCloseModal,
       template,
       templateDetails,
@@ -495,6 +496,9 @@ export default defineComponent({
       isVisibleMinutes,
       isVisiblePoint,
       getLangsTitle,
+      isModalAppear,
+      openModal,
+      closeModal,
       isErrorModalApper,
       errorCode,
       errorMessage,

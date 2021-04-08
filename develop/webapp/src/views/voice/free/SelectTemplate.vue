@@ -136,6 +136,7 @@ import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { freeCache } from "@/repository/cache";
 import analytics from "@/utils/firebaseAnalytics";
 import Constants from "@/utils/Constants";
+import useModalController from "@/mixins/modalController";
 import useErrorModalController from "@/mixins/errorModalController";
 
 export default defineComponent({
@@ -161,6 +162,11 @@ export default defineComponent({
     const sortList = Common.getSort();
     const industries = Common.getFreeTemplateIndustries();
     const {
+      isApper: isDocumentModalAppear,
+      open: openDocumentModal,
+      close: closeDocumentModal,
+    } = useModalController();
+    const {
       isApper: isErrorModalApper,
       errorCode,
       errorMessage,
@@ -172,7 +178,6 @@ export default defineComponent({
       activeIndustryCd: "10",
       freeItems: [] as FreeItem[],
       manuscript: "",
-      isDocumentModalAppear: false,
       isLoading: false,
     });
 
@@ -210,13 +215,6 @@ export default defineComponent({
       router.push({ name: "VoiceFree" });
     };
 
-    const openDocumentModal = () => {
-      state.isDocumentModalAppear = true;
-    };
-    const closeDocumentModal = () => {
-      state.isDocumentModalAppear = false;
-    };
-
     const setManuscriptAndOpenDocumentModal = (manuscript: string, freeId: string) => {
       setManuscript(manuscript);
       analytics.pressButtonManuscript(freeId, Constants.SCREEN.SELECT_TEMPLATE);
@@ -241,11 +239,12 @@ export default defineComponent({
       clickIndustry,
       setManuscript,
       selectFreeTemplate,
-      openDocumentModal,
-      closeDocumentModal,
       setManuscriptAndOpenDocumentModal,
       convertDatestringToDateJp,
       fetchFreeTemplate,
+      isDocumentModalAppear,
+      openDocumentModal,
+      closeDocumentModal,
       isErrorModalApper,
       errorCode,
       errorMessage,

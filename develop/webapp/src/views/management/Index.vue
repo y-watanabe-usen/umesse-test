@@ -219,7 +219,7 @@
     </transition>
     <transition>
       <ModalDialog
-        v-if="isUpdatedModalAppear"
+        v-if="isUploadedModalAppear"
         size="small"
         @close="closeUploadedModal"
       >
@@ -362,6 +362,7 @@ import DropdownMenu from "@/components/molecules/DropdownMenu.vue";
 import { audioService, cmService, uploadService } from "@/services";
 import { User } from "umesseapi/models";
 import analytics from "@/utils/firebaseAnalytics";
+import useModalController from "@/mixins/modalController";
 import useErrorModalController from "@/mixins/errorModalController";
 
 export default defineComponent({
@@ -443,6 +444,46 @@ export default defineComponent({
     const authToken = <string>auth.getToken();
     const authUser = <User>auth.getUserInfo();
     const {
+      isApper: isPlayModalAppear,
+      open: openPlayModal,
+      close: closePlayModal,
+    } = useModalController();
+    const {
+      isApper: isSaveModalAppear,
+      open: openSaveModal,
+      close: closeSaveModal,
+    } = useModalController();
+    const {
+      isApper: isSavedModalAppear,
+      open: openSavedModal,
+      close: closeSavedModal,
+    } = useModalController();
+    const {
+      isApper: isRemoveModalAppear,
+      open: openRemoveModal,
+      close: closeRemoveModal,
+    } = useModalController();
+    const {
+      isApper: isRemovedModalAppear,
+      open: openRemovedModal,
+      close: closeRemovedModal,
+    } = useModalController();
+    const {
+      isApper: isUploadedModalAppear,
+      open: openUploadedModal,
+      close: closeUploadedModal,
+    } = useModalController();
+    const {
+      isApper: isUnUploadModalAppear,
+      open: openUnUploadModal,
+      close: closeUnUploadModal,
+    } = useModalController();
+    const {
+      isApper: isUnUploadedModalAppear,
+      open: openUnUploadedModal,
+      close: closeUnUploadedModal,
+    } = useModalController();
+    const {
       isApper: isErrorModalApper,
       errorCode,
       errorMessage,
@@ -464,11 +505,6 @@ export default defineComponent({
       title: "",
       description: "",
       scene: "",
-      isPlayModalAppear: false,
-      isSaveModalAppear: false,
-      isSavedModalAppear: false,
-      isRemoveModalAppear: false,
-      isRemovedModalAppear: false,
       isLoading: false,
       dropdownCmId: "",
       titleModalLoading: "",
@@ -476,9 +512,6 @@ export default defineComponent({
         authUser.serviceCd === Constants.SERVICE_CD_UMUSIC
           ? "U MUSICにアップロード"
           : "S'Senceにアップロード",
-      isUpdatedModalAppear: false,
-      isUnUploadModalAppear: false,
-      isUnUploadedModalAppear: false,
     });
     const fetchScene = async () => {
       try {
@@ -548,7 +581,7 @@ export default defineComponent({
             ? Constants.UPLOAD_SYSTEM_UMUSIC
             : Constants.UPLOAD_SYSTEM_SSENCE;
         await uploadService.create(authToken, cm.id, uploadSystem);
-        openUploadtedModal();
+        openUploadedModal();
       } catch (e) {
         console.log(e.message);
         openErrorModal(e);
@@ -574,51 +607,6 @@ export default defineComponent({
     const remove = async (cmId: string) => {
       await cmService.remove(authToken, cmId);
       fetchScene();
-    };
-    const openPlayModal = () => {
-      state.isPlayModalAppear = true;
-    };
-    const closePlayModal = () => {
-      state.isPlayModalAppear = false;
-    };
-    const openSaveModal = () => {
-      state.isSaveModalAppear = true;
-    };
-    const closeSaveModal = () => {
-      state.isSaveModalAppear = false;
-    };
-    const openSavedModal = () => {
-      state.isSavedModalAppear = true;
-    };
-    const closeSavedModal = () => {
-      state.isSavedModalAppear = false;
-    };
-    const openRemoveModal = () => {
-      state.isRemoveModalAppear = true;
-    };
-    const closeRemoveModal = () => {
-      state.isRemoveModalAppear = false;
-    };
-    const openRemovedModal = () => {
-      state.isRemovedModalAppear = true;
-    };
-    const closeRemovedModal = () => {
-      state.isRemovedModalAppear = false;
-    };
-    const openUploadtedModal = () => {
-      state.isUpdatedModalAppear = true;
-    };
-    const closeUploadedModal = () => {
-      state.isUpdatedModalAppear = false;
-    };
-    const closeUnUploadModal = () => {
-      state.isUnUploadModalAppear = false;
-    };
-    const openUnUploadedModal = () => {
-      state.isUnUploadedModalAppear = true;
-    };
-    const closeUnUploadedModal = () => {
-      state.isUnUploadedModalAppear = false;
     };
     const selectCmAndOpenPlayModal = (cm: CmItem) => {
       selectCm(cm);
@@ -646,7 +634,7 @@ export default defineComponent({
       analytics.pressButtonUnupload(cm.id, Constants.SCREEN.MANAGEMENT);
       closeAllDropdownMenu();
       selectCm(cm);
-      state.isUnUploadModalAppear = true;
+      openUnUploadModal();
     };
     const stopAndClosePlayModal = () => {
       stop();
@@ -742,20 +730,6 @@ export default defineComponent({
       selectCm,
       convertDatestringToDate,
       convertNumberToTime,
-      openPlayModal,
-      closePlayModal,
-      openSaveModal,
-      closeSaveModal,
-      openSavedModal,
-      closeSavedModal,
-      openRemoveModal,
-      closeRemoveModal,
-      openRemovedModal,
-      closeRemovedModal,
-      openUploadtedModal,
-      closeUploadedModal,
-      closeUnUploadModal,
-      closeUnUploadedModal,
       selectCmAndOpenPlayModal,
       selectCmAndOpenSaveModal,
       selectCmAndOpenRemoveModal,
@@ -776,6 +750,30 @@ export default defineComponent({
       getStatusClass,
       upload,
       unUpload,
+      isPlayModalAppear,
+      openPlayModal,
+      closePlayModal,
+      isSaveModalAppear,
+      openSaveModal,
+      closeSaveModal,
+      isSavedModalAppear,
+      openSavedModal,
+      closeSavedModal,
+      isRemoveModalAppear,
+      openRemoveModal,
+      closeRemoveModal,
+      isRemovedModalAppear,
+      openRemovedModal,
+      closeRemovedModal,
+      isUploadedModalAppear,
+      openUploadedModal,
+      closeUploadedModal,
+      isUnUploadModalAppear,
+      openUnUploadModal,
+      closeUnUploadModal,
+      isUnUploadedModalAppear,
+      openUnUploadedModal,
+      closeUnUploadedModal,
       isErrorModalApper,
       errorCode,
       errorMessage,

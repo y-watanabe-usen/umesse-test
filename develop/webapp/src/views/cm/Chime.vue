@@ -106,6 +106,7 @@ import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { audioService, resourcesService } from "@/services";
 import analytics from "@/utils/firebaseAnalytics";
 import Constants from "@/utils/Constants";
+import useModalController from "@/mixins/modalController";
 import useErrorModalController from "@/mixins/errorModalController";
 
 export default defineComponent({
@@ -134,6 +135,11 @@ export default defineComponent({
     const isOpenChime = route.params.div == "open";
     const title = isOpenChime ? "Openチャイム" : "Endチャイム";
     const {
+      isApper: isPlayModalAppear,
+      open: openPlayModal,
+      close: closePlayModal,
+    } = useModalController();
+    const {
       isApper: isErrorModalApper,
       errorCode,
       errorMessage,
@@ -149,7 +155,6 @@ export default defineComponent({
       isDownloading: false,
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       duration: computed(() => audioPlayer.getDuration()),
-      isPlayModalAppear: false,
       isLoading: false,
     });
 
@@ -200,13 +205,6 @@ export default defineComponent({
       if (state.isPlaying) audioPlayer.stop();
     };
 
-    const openPlayModal = () => {
-      state.isPlayModalAppear = true;
-    };
-    const closePlayModal = () => {
-      state.isPlayModalAppear = false;
-    };
-
     const selectChimeAndOpenPlayModal = (chime: ChimeItem) => {
       selectChime(chime);
       openPlayModal();
@@ -236,11 +234,12 @@ export default defineComponent({
       selectChime,
       play,
       stop,
-      openPlayModal,
-      closePlayModal,
       selectChimeAndOpenPlayModal,
       stopAndClosePlayModal,
       fetchChime,
+      isPlayModalAppear,
+      openPlayModal,
+      closePlayModal,
       isErrorModalApper,
       errorCode,
       errorMessage,

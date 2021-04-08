@@ -5,7 +5,7 @@
         <Header>
           <template #title>音声合成でナレーションを作成する</template>
           <template #buttons>
-            <Button :disabled="!text" @click="openModal"> 確定 </Button>
+            <Button :disabled="!text" @click="generateTts"> 確定 </Button>
           </template>
         </Header>
       </template>
@@ -115,6 +115,7 @@ import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { freeCache } from "@/repository/cache";
 import { audioService } from "@/services";
 import analytics from "@/utils/firebaseAnalytics";
+import useModalController from "@/mixins/modalController";
 import useErrorModalController from "@/mixins/errorModalController";
 
 export default defineComponent({
@@ -142,6 +143,11 @@ export default defineComponent({
     const lang = "ja";
     const { cm } = useGlobalStore();
     const {
+      isApper: isModalAppear,
+      open: openModal,
+      close: closeModal,
+    } = useModalController();
+    const {
       isApper: isErrorModalApper,
       errorCode,
       errorMessage,
@@ -156,7 +162,6 @@ export default defineComponent({
       duration: computed(() => audioPlayer.getDuration()),
       text: "",
       speaker: "1", // 女性
-      isModalAppear: false,
       title: "",
       description: "",
       isLoading: false,
@@ -199,17 +204,14 @@ export default defineComponent({
       closeLoadingModal();
     };
 
-    const openModal = async () => {
+    const generateTts = async () => {
       try {
-        state.isModalAppear = true;
+        openModal();
         await ttsStore.generateTtsDataFromFree(state.text, state.speaker);
       } catch (e) {
         closeModal();
         openErrorModal(e);
       }
-    };
-    const closeModal = () => {
-      state.isModalAppear = false;
     };
     const stopAndCloseModal = () => {
       stop();
@@ -227,10 +229,12 @@ export default defineComponent({
       ...toRefs(state),
       play,
       stop,
+      generateTts,
       createTts,
+      stopAndCloseModal,
+      isModalAppear,
       openModal,
       closeModal,
-      stopAndCloseModal,
       isErrorModalApper,
       errorCode,
       errorMessage,

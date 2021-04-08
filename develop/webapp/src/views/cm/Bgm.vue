@@ -120,6 +120,7 @@ import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { audioService, resourcesService } from "@/services";
 import analytics from "@/utils/firebaseAnalytics";
 import Constants from "@/utils/Constants";
+import useModalController from "@/mixins/modalController";
 import useErrorModalController from "@/mixins/errorModalController";
 
 export default defineComponent({
@@ -147,6 +148,11 @@ export default defineComponent({
     const { cm } = useGlobalStore();
     const sortList = Common.getSort();
     const {
+      isApper: isPlayModalAppear,
+      open: openPlayModal,
+      close: closePlayModal,
+    } = useModalController();
+    const {
       isApper: isErrorModalApper,
       errorCode,
       errorMessage,
@@ -164,7 +170,6 @@ export default defineComponent({
       isDownloading: false,
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       duration: computed(() => audioPlayer.getDuration()),
-      isPlayModalAppear: false,
       isLoading: false,
     });
 
@@ -217,13 +222,6 @@ export default defineComponent({
       if (state.isPlaying) audioPlayer.stop();
     };
 
-    const openPlayModal = () => {
-      state.isPlayModalAppear = true;
-    };
-    const closePlayModal = () => {
-      state.isPlayModalAppear = false;
-    };
-
     const selectBgmAndOpenPlayModal = (bgm: BgmItem) => {
       selectBgm(bgm);
       openPlayModal();
@@ -252,11 +250,12 @@ export default defineComponent({
       clickIndustry,
       play,
       stop,
-      openPlayModal,
-      closePlayModal,
       selectBgmAndOpenPlayModal,
       stopAndClosePlayModal,
       fetchBgm,
+      isPlayModalAppear,
+      openPlayModal,
+      closePlayModal,
       isErrorModalApper,
       errorCode,
       errorMessage,

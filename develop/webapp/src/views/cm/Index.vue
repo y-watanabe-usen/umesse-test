@@ -113,7 +113,7 @@
               :duration="`${convertNumberToTime(narration.seconds)}`"
               :volume="narration.volume"
               @toggleSlider="toggleNarrationSlider(index)"
-              @click="openPlayNarrationModal(index)"
+              @click="clickPlayNarration(index)"
             >
               <template #volume>
                 <transition>
@@ -639,6 +639,7 @@ import { audioService } from "@/services";
 import * as Common from "@/utils/Common";
 import { User } from "umesseapi/models";
 import analytics from "@/utils/firebaseAnalytics";
+import useModalController from "@/mixins/modalController";
 import useErrorModalController from "@/mixins/errorModalController";
 
 export default defineComponent({
@@ -671,6 +672,46 @@ export default defineComponent({
     const industryScenesCd = "99";
     const industryScenesList = Common.getIndustryScenes(industryScenesCd);
     const {
+      isApper: isPlayModalAppear,
+      open: openPlayModal,
+      close: closePlayModal,
+    } = useModalController();
+    const {
+      isApper: isPlayOpenChimeModalAppear,
+      open: openPlayOpenChimeModal,
+      close: closePlayOpenChimeModal,
+    } = useModalController();
+    const {
+      isApper: isPlayNarrationModalAppear,
+      open: openPlayNarrationModal,
+      close: closePlayNarrationModal,
+    } = useModalController();
+    const {
+      isApper: isPlayBgmModalAppear,
+      open: openPlayBgmModal,
+      close: closePlayBgmModal,
+    } = useModalController();
+    const {
+      isApper: isPlayEndChimeModalAppear,
+      open: openPlayEndChimeModal,
+      close: closePlayEndChimeModal,
+    } = useModalController();
+    const {
+      isApper: isSaveModalAppear,
+      open: openSaveModal,
+      close: closeSaveModal,
+    } = useModalController();
+    const {
+      isApper: isSavedModalAppear,
+      open: openSavedModal,
+      close: closeSavedModal,
+    } = useModalController();
+    const {
+      isApper: isConfirmBackHomeModalAppear,
+      open: openConfirmBackHomeModal,
+      close: closeConfirmBackHomeModal,
+    } = useModalController();
+    const {
       isApper: isErrorModalApper,
       errorCode,
       errorMessage,
@@ -678,7 +719,7 @@ export default defineComponent({
       close: closeErrorModal,
     } = useErrorModalController();
 
-const state = reactive({
+    const state = reactive({
       cmTime: computed(() => cm.secounds),
       openChime: computed(() => cm.openChime),
       narrations: computed(() => cm.narrations),
@@ -696,13 +737,6 @@ const state = reactive({
       scene: "004",
       uploadSystem:
         authUser.serviceCd === Constants.SERVICE_CD_UMUSIC ? "01" : "02",
-      isPlayModalAppear: false,
-      isPlayOpenChimeModalAppear: false,
-      isPlayNarrationModalAppear: false,
-      isPlayBgmModalAppear: false,
-      isPlayEndChimeModalAppear: false,
-      isSaveModalAppear: false,
-      isSavedModalAppear: false,
       isLoading: false,
       isNarrationDropdownAppear: [false, false, false, false],
       isOpenChimeDropdownAppear: false,
@@ -713,7 +747,6 @@ const state = reactive({
       isEndChimeSliderAppear: false,
       isBgmSliderAppear: false,
       narrationIndex: 0,
-      isConfirmBackHomeModalAppear: false,
     });
 
     const playOpenChime = async () => {
@@ -815,54 +848,9 @@ const state = reactive({
       );
     };
 
-    const openPlayModal = () => {
-      state.isPlayModalAppear = true;
-    };
-    const closePlayModal = () => {
-      state.isPlayModalAppear = false;
-    };
-
-    const openSaveModal = () => {
-      state.isSaveModalAppear = true;
-    };
-    const closeSaveModal = () => {
-      state.isSaveModalAppear = false;
-    };
-
-    const openSavedModal = () => {
-      state.isSavedModalAppear = true;
-    };
-    const closeSavedModal = () => {
-      state.isSavedModalAppear = false;
-    };
-
-    const openPlayOpenChimeModal = () => {
-      state.isPlayOpenChimeModalAppear = true;
-    };
-    const closePlayOpenChimeModal = () => {
-      state.isPlayOpenChimeModalAppear = false;
-    };
-
-    const openPlayNarrationModal = (index: number) => {
-      state.isPlayNarrationModalAppear = true;
+    const clickPlayNarration = (index: number) => {
       state.narrationIndex = index;
-    };
-    const closePlayNarrationModal = () => {
-      state.isPlayNarrationModalAppear = false;
-    };
-
-    const openPlayBgmModal = () => {
-      state.isPlayBgmModalAppear = true;
-    };
-    const closePlayBgmModal = () => {
-      state.isPlayBgmModalAppear = false;
-    };
-
-    const openPlayEndChimeModal = () => {
-      state.isPlayEndChimeModalAppear = true;
-    };
-    const closePlayEndChimeModal = () => {
-      state.isPlayEndChimeModalAppear = false;
+      openPlayNarrationModal();
     };
 
     const createAndOpenPlayModal = async () => {
@@ -1055,12 +1043,6 @@ const state = reactive({
       closeAllDropdownMenu();
       closeAllSlider();
     };
-    const openConfirmBackHomeModal = () => {
-      state.isConfirmBackHomeModalAppear = true;
-    };
-    const closeConfirmBackHomeModal = () => {
-      state.isConfirmBackHomeModalAppear = false;
-    };
 
     const handleBackButton = () => {
       openConfirmBackHomeModal();
@@ -1131,23 +1113,10 @@ const state = reactive({
       update,
       playGenerateCm,
       stop,
-      openPlayModal,
-      closePlayModal,
-      openSaveModal,
-      closeSaveModal,
-      openSavedModal,
-      closeSavedModal,
+      clickPlayNarration,
       createAndOpenPlayModal,
       stopAndClosePlayModal,
       updateAndOpenSavedModal,
-      openPlayOpenChimeModal,
-      openPlayNarrationModal,
-      openPlayBgmModal,
-      openPlayEndChimeModal,
-      closePlayOpenChimeModal,
-      closePlayNarrationModal,
-      closePlayBgmModal,
-      closePlayEndChimeModal,
       stopAndClosePlayOpenChimeModal,
       stopAndClosePlayNarrationModal,
       stopAndClosePlayBgmModal,
@@ -1180,16 +1149,41 @@ const state = reactive({
       toggleEndChimeSlider,
       toggleBgmSlider,
       onClickSomewhere,
-      openConfirmBackHomeModal,
-      closeConfirmBackHomeModal,
       authUser,
       uploadSystemArray,
       industryScenesList,
+<<<<<<< HEAD
 <<<<<<< HEAD
       changeCmOpenChime,
       changeCmEndChime,
       changeCmBgm,
 =======
+=======
+      isPlayModalAppear,
+      openPlayModal,
+      closePlayModal,
+      isPlayOpenChimeModalAppear,
+      openPlayOpenChimeModal,
+      closePlayOpenChimeModal,
+      isPlayNarrationModalAppear,
+      openPlayNarrationModal,
+      closePlayNarrationModal,
+      isPlayBgmModalAppear,
+      openPlayBgmModal,
+      closePlayBgmModal,
+      isPlayEndChimeModalAppear,
+      openPlayEndChimeModal,
+      closePlayEndChimeModal,
+      isSaveModalAppear,
+      openSaveModal,
+      closeSaveModal,
+      isSavedModalAppear,
+      openSavedModal,
+      closeSavedModal,
+      isConfirmBackHomeModalAppear,
+      openConfirmBackHomeModal,
+      closeConfirmBackHomeModal,
+>>>>>>> a96e88c... refactor modal
       isErrorModalApper,
       errorCode,
       errorMessage,

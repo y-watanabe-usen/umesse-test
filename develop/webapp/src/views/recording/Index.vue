@@ -176,6 +176,7 @@ import router from "@/router";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { UPLOAD_RECORDING_STATE } from "@/store/recording";
 import analytics from "@/utils/firebaseAnalytics";
+import useModalController from "@/mixins/modalController";
 import useErrorModalController from "@/mixins/errorModalController";
 
 export default defineComponent({
@@ -200,6 +201,11 @@ export default defineComponent({
     const audioPlayer = AudioPlayer();
     const { cm } = useGlobalStore();
     const {
+      isApper: isModalAppear,
+      open: openModal,
+      close: closeModal,
+    } = useModalController();
+    const {
       isApper: isErrorModalApper,
       errorCode,
       errorMessage,
@@ -223,7 +229,6 @@ export default defineComponent({
       isPlaying: computed(() => audioPlayer.isPlaying()),
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       duration: computed(() => audioPlayer.getDuration()),
-      isModalAppear: false,
       isLoading: false,
     });
 
@@ -275,13 +280,6 @@ export default defineComponent({
         closeLoadingModal();
       }
     };
-    const openModal = () => {
-      stop();
-      state.isModalAppear = true;
-    };
-    const closeModal = () => {
-      state.isModalAppear = false;
-    };
     const openLoadingModal = () => {
       state.isLoading = true;
     };
@@ -295,9 +293,10 @@ export default defineComponent({
       deleteRecordedData,
       uploadRecordingFile,
       UPLOAD_RECORDING_STATE,
+      convertNumberToTime,
+      isModalAppear,
       openModal,
       closeModal,
-      convertNumberToTime,
       isErrorModalApper,
       errorCode,
       errorMessage,
