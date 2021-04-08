@@ -50,7 +50,7 @@ module.exports = {
   },
 
   findByUploadSystem: async function (uploadSystem) {
-    const options = {
+    let options = {
       FilterExpression: "uploadSystem = :uploadSystem AND #status = :status",
       ExpressionAttributeNames: {
         "#status": "status",
@@ -73,13 +73,27 @@ module.exports = {
     };
     debuglog(JSON.stringify({ options: options }));
 
-    let ret = await dynamodbManager.scan(
-      constants.dynamoDbTable().external,
-      options
-    );
+    let ret = [];
+
+    const scan = async () => {
+      const data = await dynamodbManager.scan(
+        constants.dynamoDbTable().external,
+        options
+      );
+      ret.push(...data.Items);
+
+      // continue scanning if we have more movies, because
+      // scan can retrieve a maximum of 1MB of data
+      if (typeof data.LastEvaluatedKey != "undefined") {
+        options.ExclusiveStartKey = data.LastEvaluatedKey;
+        await scan();
+      }
+    };
+    await scan();
+
     debuglog(JSON.stringify(ret));
-    if (!ret || !ret.Items.length) throw new NotFoundError(ERROR_CODE.E0000404);
-    return ret.Items;
+    if (!ret || !ret.length) throw new NotFoundError(ERROR_CODE.E0000404);
+    return ret;
   },
 
   delete: async function (unisCustomerCd) {
