@@ -357,7 +357,7 @@ export default defineComponent({
     };
     const createTts = async () => {
       stop();
-      openModalLoading();
+      openLoadingModal();
       const response = await ttsStore.createTtsData(
         state.title,
         state.description,
@@ -371,7 +371,7 @@ export default defineComponent({
       });
       analytics.setTts(idString);
       router.push({ name: "Cm" });
-      closeModalLoading();
+      closeLoadingModal();
     };
 
     const openModal = async () => {
@@ -403,10 +403,10 @@ export default defineComponent({
       stop();
       closeModal();
     };
-    const openModalLoading = () => {
+    const openLoadingModal = () => {
       state.isLoading = true;
     };
-    const closeModalLoading = () => {
+    const closeLoadingModal = () => {
       state.isLoading = false;
     };
     const openErrorModal = (e: UMesseError) => {

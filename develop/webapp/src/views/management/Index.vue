@@ -478,7 +478,7 @@ export default defineComponent({
     });
     const fetchScene = async () => {
       try {
-        openModalLoading("");
+        openLoadingModal("");
         const response = await cmService.fetch(authToken, state.sort);
         state.sceneList = response[0];
         state.cmList = response[1];
@@ -486,7 +486,7 @@ export default defineComponent({
       } catch (e) {
         openErrorModal(e);
       } finally {
-        closeModalLoading();
+        closeLoadingModal();
       }
     };
     const fetchCm = (sceneCd: string) => {
@@ -549,13 +549,13 @@ export default defineComponent({
         console.log(e.message);
         openErrorModal(e);
       } finally {
-        closeModalLoading();
+        closeLoadingModal();
       }
     };
     const unUpload = async () => {
       try {
         if (!state.selectedCm) return;
-        openModalLoading("アップロード解除中");
+        openLoadingModal("アップロード解除中");
         const cmId = state.selectedCm.id;
         await uploadService.remove(cmId, authToken);
         openUnUploadedModal();
@@ -563,7 +563,7 @@ export default defineComponent({
         console.log(e.message);
         openErrorModal(e);
       } finally {
-        closeModalLoading();
+        closeLoadingModal();
         closeUnUploadModal();
       }
     };
@@ -650,18 +650,18 @@ export default defineComponent({
     };
     const saveAndOpenSavedModal = async () => {
       try {
-        openModalLoading("音源の合成中");
+        openLoadingModal("音源の合成中");
         if (!state.selectedCm) return;
         await save(state.selectedCm);
         analytics.pressButtonSaveEdit(state.selectedCm.id, Constants.SCREEN.MANAGEMENT);
-        closeModalLoading();
+        closeLoadingModal();
         closeSaveModal();
         openSavedModal();
       } catch (e) {
         console.log(e.message);
         openErrorModal(e);
       } finally {
-        closeModalLoading();
+        closeLoadingModal();
       }
     };
     const removeAndOpenRemovedModal = async () => {
@@ -671,9 +671,9 @@ export default defineComponent({
         Constants.SCREEN.MANAGEMENT
       );
       try {
-        openModalLoading("音源の削除中");
+        openLoadingModal("音源の削除中");
         await remove(state.selectedCm?.id);
-        closeModalLoading();
+        closeLoadingModal();
         closeRemoveModal();
         openRemovedModal();
       } catch (e) {
@@ -681,7 +681,7 @@ export default defineComponent({
         console.log(e.message);
         openErrorModal(e);
       } finally {
-        closeModalLoading();
+        closeLoadingModal();
       }
     };
     const toEditCm = (cmItem: CmItem) => {
@@ -694,11 +694,11 @@ export default defineComponent({
     onMounted(async () => {
       fetchScene();
     });
-    const openModalLoading = (title: string) => {
+    const openLoadingModal = (title: string) => {
       state.titleModalLoading = title;
       state.isLoading = true;
     };
-    const closeModalLoading = () => {
+    const closeLoadingModal = () => {
       state.isLoading = false;
     };
     const closeAllDropdownMenu = () => {

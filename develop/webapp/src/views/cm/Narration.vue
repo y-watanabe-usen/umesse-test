@@ -540,7 +540,7 @@ export default defineComponent({
       state.errorMessage = e.message;
       state.isErrorModalApper = true;
     };
-    const closeModalLoading = () => {
+    const closeLoadingModal = () => {
       state.isLoading = false;
     };
     const openSaveModal = () => {
@@ -624,7 +624,7 @@ export default defineComponent({
           state.selectedNarration?.id,
           state.selectedNarration?.category
         );
-        closeModalLoading();
+        closeLoadingModal();
         closeRemoveModal();
         openRemovedModal();
       } catch (e) {

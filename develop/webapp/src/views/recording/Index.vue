@@ -258,18 +258,18 @@ export default defineComponent({
       /// check state.file.
       // state.file.blob = await audioRecorder.getWaveBlob();
       try {
-        openModalLoading();
+        openLoadingModal();
         state.file.blob = await audioRecorder.getMp3Blob();
         const response = await recordingStore.uploadRecordingData(state.file);
         cm.setNarration(response);
         analytics.setRecording(response.id);
         router.push({ name: "Cm" });
-        closeModalLoading();
+        closeLoadingModal();
         closeModal();
       } catch (e) {
         openErrorModal(e);
       } finally {
-        closeModalLoading();
+        closeLoadingModal();
       }
     };
     const openModal = () => {
@@ -279,10 +279,10 @@ export default defineComponent({
     const closeModal = () => {
       state.isModalAppear = false;
     };
-    const openModalLoading = () => {
+    const openLoadingModal = () => {
       state.isLoading = true;
     };
-    const closeModalLoading = () => {
+    const closeLoadingModal = () => {
       state.isLoading = false;
     };
     const closeErrorModal = () => {

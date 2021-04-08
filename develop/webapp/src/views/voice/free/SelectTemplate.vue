@@ -181,7 +181,7 @@ export default defineComponent({
 
     const fetchFreeTemplate = async () => {
       try {
-        openModalLoading();
+        openLoadingModal();
         const response = await resourcesService.fetchFree(
           state.activeIndustryCd,
           state.sort
@@ -190,7 +190,7 @@ export default defineComponent({
       } catch (e) {
         openErrorModal(e);
       } finally {
-        closeModalLoading();
+        closeLoadingModal();
       }
     };
 
@@ -233,11 +233,11 @@ export default defineComponent({
       state.isErrorModalApper = true;
     };
 
-    const openModalLoading = () => {
+    const openLoadingModal = () => {
       state.isLoading = true;
     };
 
-    const closeModalLoading = () => {
+    const closeLoadingModal = () => {
       state.isLoading = false;
     };
     return {

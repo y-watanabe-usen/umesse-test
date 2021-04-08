@@ -166,13 +166,13 @@ export default defineComponent({
 
     const fetchChime = async () => {
       try {
-        openModalLoading();
+        openLoadingModal();
         const response = await resourcesService.fetchChime(state.sort);
         state.chimes = response;
       } catch (e) {
         openErrorModal(e);
       } finally {
-        closeModalLoading();
+        closeLoadingModal();
       }
     };
 
@@ -226,11 +226,11 @@ export default defineComponent({
       state.isErrorModalApper = true;
     };
 
-    const openModalLoading = () => {
+    const openLoadingModal = () => {
       state.isLoading = true;
     };
 
-    const closeModalLoading = () => {
+    const closeLoadingModal = () => {
       state.isLoading = false;
     };
 

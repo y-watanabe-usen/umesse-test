@@ -876,14 +876,14 @@ export default defineComponent({
     const updateAndOpenSavedModal = async () => {
       saveAnalytics();
       try {
-        openModalLoading();
+        openLoadingModal();
         await update();
         closeSaveModal();
         openSavedModal();
       } catch (e) {
         openErrorModal(e);
       } finally {
-        closeModalLoading();
+        closeLoadingModal();
       }
     };
     const stopAndClosePlayOpenChimeModal = () => {
@@ -956,10 +956,10 @@ export default defineComponent({
     const toVoiceFree = () => {
       router.push({ name: "VoiceFree" });
     };
-    const openModalLoading = () => {
+    const openLoadingModal = () => {
       state.isLoading = true;
     };
-    const closeModalLoading = () => {
+    const closeLoadingModal = () => {
       state.isLoading = false;
     };
     const closeAllDropdownMenu = () => {
