@@ -363,7 +363,6 @@ import { UMesseError } from "../../models/UMesseError";
 import { audioService, cmService, uploadService } from "@/services";
 import { User } from "umesseapi/models";
 import analytics from "@/utils/firebaseAnalytics";
-import dayjs from "dayjs";
 
 export default defineComponent({
   components: {
@@ -526,7 +525,7 @@ export default defineComponent({
       if (state.isPlaying) audioPlayer.stop();
     };
     const save = async (cm: CmItem) => {
-      const  response = await cmService.update(
+      await cmService.update(
         authToken,
         cm.id,
         state.title,
