@@ -28,7 +28,7 @@
 
 <script lang="ts">
 import { useGlobalStore } from "@/store";
-import { defineComponent, onMounted, reactive, toRefs } from "vue";
+import { computed, defineComponent, onMounted, reactive, toRefs } from "vue";
 import MainMenu from "@/components/organisms/MainMenu.vue";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
@@ -44,7 +44,7 @@ export default defineComponent({
   setup() {
     const { auth } = useGlobalStore();
     const state = reactive({
-      isLoading: false,
+      isLoading: computed(() => auth.isAuthenticating()),
       isErrorModalApper: false,
       errorCode: "",
       errorMessage: "",
@@ -66,12 +66,9 @@ export default defineComponent({
     };
     onMounted(async () => {
       try {
-        openModalLoading();
         await auth.requestAuth();
       } catch (e) {
         openErrorModal(e);
-      } finally {
-        closeModalLoading();
       }
     });
     return {
