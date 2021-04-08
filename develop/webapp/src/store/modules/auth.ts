@@ -1,4 +1,7 @@
+import { UMesseError } from '@/models/UMesseError';
+import router from '@/router';
 import { userService } from '@/services';
+import { ERROR_CODE, ERROR_PATTERN } from '@/utils/Constants';
 import analytics from '@/utils/firebaseAnalytics';
 import { User } from 'umesseapi/models';
 import { reactive, toRefs } from 'vue';
@@ -26,11 +29,10 @@ export default function authStore() {
     // 認証済み
     if (state.token) return;
 
-    // const unisCustomerCd = router.currentRoute.value.query.unisCustomerCd as string
-    // if (unisCustomerCd == undefined) {
-    //     return state.error = ''
-    // }
-    const unisCustomerCd = "1111";
+    const unisCustomerCd = router.currentRoute.value.query.unisCustomerCd as string;
+    if (unisCustomerCd == undefined) {
+      throw new UMesseError(ERROR_CODE.A0001, ERROR_PATTERN.A0001, "");
+    }
 
     console.log(`requestAuthorization`);
     state.authenticating = true;

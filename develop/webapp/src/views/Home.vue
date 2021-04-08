@@ -3,12 +3,8 @@
     <header>
       <h2>
         <img src="@/assets/logo_umesse.png" />
-        <span v-if="authenticating">Loading...</span>
-        <span v-else> {{ token }} {{ error }} </span>
       </h2>
-      <p class="title">
-        店内CMを作成する
-      </p>
+      <p class="title">店内CMを作成する</p>
       <ul class="nav">
         <li>
           <router-link :to="{ name: 'Setting' }">
@@ -18,26 +14,72 @@
       </ul>
     </header>
     <MainMenu />
+    <transition>
+      <ModalErrorDialog
+        v-if="isErrorModalApper"
+        @close="closeErrorModal"
+        :errorCode="errorCode"
+        :errorMessage="errorMessage"
+      />
+    </transition>
+    <ModalLoading v-if="isLoading" />
   </div>
 </template>
 
 <script lang="ts">
 import { useGlobalStore } from "@/store";
-import { defineComponent, onMounted } from "vue";
+import { defineComponent, onMounted, reactive, toRefs } from "vue";
 import MainMenu from "@/components/organisms/MainMenu.vue";
+import ModalLoading from "@/components/organisms/ModalLoading.vue";
+import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
+import { UMesseError } from "@/models/UMesseError";
 
 export default defineComponent({
   components: {
     MainMenu,
+    ModalLoading,
+    ModalErrorDialog,
   },
   name: "Home",
   setup() {
     const { auth } = useGlobalStore();
-    onMounted(() => {
-      auth.requestAuth();
+    const state = reactive({
+      isLoading: false,
+      isErrorModalApper: false,
+      errorCode: "",
+      errorMessage: "",
+    });
+    const openModalLoading = () => {
+      state.isLoading = true;
+    };
+    const closeModalLoading = () => {
+      state.isLoading = false;
+    };
+    const openErrorModal = (e: UMesseError) => {
+      state.errorCode = e.errorCode;
+      state.errorMessage = e.message;
+      state.isErrorModalApper = true;
+    };
+    const closeErrorModal = () => {
+      state.isErrorModalApper = false;
+    };
+    onMounted(async () => {
+      try {
+        openModalLoading();
+        await auth.requestAuth();
+      } catch (e) {
+        openErrorModal(e);
+      } finally {
+        closeModalLoading();
+      }
     });
     return {
+      ...toRefs(state),
       ...auth,
+      openModalLoading,
+      closeModalLoading,
+      openErrorModal,
+      closeErrorModal,
     };
   },
 });
