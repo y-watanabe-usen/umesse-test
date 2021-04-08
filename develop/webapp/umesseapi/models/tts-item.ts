@@ -48,7 +48,7 @@ export interface TtsItem {
      */
     startDate?: any;
     /**
-     * 
+     *
      * @type {string}
      * @memberof TtsItem
      */

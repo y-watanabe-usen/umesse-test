@@ -64,23 +64,15 @@
                 </template>
                 <template #line2>
                   <p>
-                    <span
-                      v-if="narration.seconds"
-                      class="duration"
-                      >{{
-                        convertNumberToTime(narration.seconds)
-                      }}</span
-                    >
-                    <span
-                      v-if="narration.timestamp"
-                      class="start"
+                    <span v-if="narration.seconds" class="duration">{{
+                      convertNumberToTime(narration.seconds)
+                    }}</span>
+                    <span v-if="narration.timestamp" class="start"
                       >放送開始日{{
                         convertDatestringToDateJp(narration.timestamp)
                       }}</span
                     >
-                    <span
-                      v-if="narration.timestamp"
-                      class="end"
+                    <span v-if="narration.timestamp" class="end"
                       >有効期限{{
                         convertDatestringToDateJp(narration.timestamp)
                       }}</span
@@ -126,7 +118,9 @@
                               {
                                 title: '原稿',
                                 action: () => {
-                                  selectNarrationAndOpenDocumentModal(narration)
+                                  selectNarrationAndOpenDocumentModal(
+                                    narration
+                                  );
                                 },
                               },
                               {
@@ -216,7 +210,7 @@
         </template>
       </ModalDialog>
     </transition>
-        <transition>
+    <transition>
       <ModalDialog
         v-if="isSaveModalAppear"
         size="large"
@@ -343,7 +337,12 @@ import {
 import { Scene } from "@/utils/Constants";
 import { UMesseError } from "../../models/UMesseError";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
-import { audioService, resourcesService, recordingService, ttsService } from "@/services";
+import {
+  audioService,
+  resourcesService,
+  recordingService,
+  ttsService,
+} from "@/services";
 import analytics from "@/utils/firebaseAnalytics";
 import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
@@ -469,7 +468,11 @@ export default defineComponent({
           narration.id,
           narration.category
         );
-        analytics.pressButtonPlayTrial(narration.id, Constants.CATEGORY.NARRATION, Constants.SCREEN.NARRATION);
+        analytics.pressButtonPlayTrial(
+          narration.id,
+          Constants.CATEGORY.NARRATION,
+          Constants.SCREEN.NARRATION
+        );
         audioPlayer.start(audioBuffer);
       } catch (e) {
         openErrorModal(e);
@@ -499,6 +502,7 @@ export default defineComponent({
     const selectNarrationAndOpenDocumentModal = (narration: NarrationItem) => {
       selectNarration(narration);
       closeAllDropdownMenu();
+      analytics.pressButtonManuscript(narration.id, Constants.SCREEN.NARRATION);
       openDocumentModal();
     };
     const selectNarrationAndOpenPlayModal = (narration: NarrationItem) => {
@@ -556,12 +560,17 @@ export default defineComponent({
       selectNarration(narration);
       state.title = narration.title;
       state.description = narration.description;
+      analytics.pressButtonEditTitleAndDescription(
+        narration.id,
+        Constants.SCREEN.NARRATION
+      );
       openSaveModal();
     };
     const saveAndOpenSavedModal = async () => {
       try {
         if (!state.selectedNarration) return;
         await save(state.selectedNarration);
+        analytics.pressButtonSaveEdit(state.selectedNarration.id, Constants.SCREEN.NARRATION);
         closeSaveModal();
         openSavedModal();
       } catch (e) {
@@ -572,7 +581,19 @@ export default defineComponent({
       }
     };
     const save = async (narration: NarrationItem) => {
-      narration.category === Constants.CATEGORY.RECORDING ? await recordingService.update(authToken, narration.id, state.title, state.description) : await ttsService.update(authToken, narration.id, state.title, state.description);
+      narration.category === Constants.CATEGORY.RECORDING
+        ? await recordingService.update(
+            authToken,
+            narration.id,
+            state.title,
+            state.description
+          )
+        : await ttsService.update(
+            authToken,
+            narration.id,
+            state.title,
+            state.description
+          );
       fetchNarration();
     };
     const selectNarrationAndOpenRemoveModal = (narration: NarrationItem) => {
@@ -593,8 +614,16 @@ export default defineComponent({
       state.isRemovedModalAppear = false;
     };
     const removeAndOpenRemovedModal = async () => {
+      analytics.pressButtonRemove(
+        state.selectedNarration?.id,
+        Constants.CATEGORY.NARRATION,
+        Constants.SCREEN.NARRATION
+      );
       try {
-        await remove(state.selectedNarration?.id, state.selectedNarration?.category);
+        await remove(
+          state.selectedNarration?.id,
+          state.selectedNarration?.category
+        );
         closeModalLoading();
         closeRemoveModal();
         openRemovedModal();
@@ -607,7 +636,9 @@ export default defineComponent({
       }
     };
     const remove = async (narrationId: string, narrationCategory: string) => {
-      narrationCategory === Constants.CATEGORY.RECORDING ? await recordingService.remove(authToken, narrationId) : await ttsService.remove(authToken, narrationId);
+      narrationCategory === Constants.CATEGORY.RECORDING
+        ? await recordingService.remove(authToken, narrationId)
+        : await ttsService.remove(authToken, narrationId);
       fetchNarration();
     };
     return {

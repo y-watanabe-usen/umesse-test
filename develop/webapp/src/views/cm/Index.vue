@@ -74,16 +74,13 @@
                         {
                           title: '変更',
                           action: () => {
-                            $router.push({
-                              name: 'CmChime',
-                              params: { div: 'open' },
-                            });
+                            changeCmOpenChime(openChime.id);
                           },
                         },
                         {
                           title: '削除',
                           action: () => {
-                            clearOpenChime();
+                            clearOpenChime(openChime.id);
                           },
                           isCaution: true,
                         },
@@ -172,7 +169,7 @@
                         {
                           title: '削除',
                           action: () => {
-                            clearNarration(index);
+                            clearNarration(index, narration.id);
                           },
                           isCaution: true,
                         },
@@ -275,13 +272,13 @@
                         {
                           title: '変更',
                           action: () => {
-                            $router.push({ name: 'CmBgm' });
+                            changeCmBgm(bgm.id);
                           },
                         },
                         {
                           title: '削除',
                           action: () => {
-                            clearBgm();
+                            clearBgm(bgm.id);
                           },
                           isCaution: true,
                         },
@@ -342,16 +339,13 @@
                         {
                           title: '変更',
                           action: () => {
-                            $router.push({
-                              name: 'CmChime',
-                              params: { div: 'end' },
-                            });
+                            changeCmEndChime(endChime.id);
                           },
                         },
                         {
                           title: '削除',
                           action: () => {
-                            clearEndChime();
+                            clearEndChime(endChime.id);
                           },
                           isCaution: true,
                         },
@@ -770,17 +764,37 @@ export default defineComponent({
       if (state.isPlaying) audioPlayer.stop();
     };
 
-    const clearNarration = (index: number) => {
+    const clearNarration = (index: number, id: string) => {
+      analytics.pressButtonRemove(
+        id,
+        Constants.CATEGORY.NARRATION,
+        Constants.SCREEN.CM
+      );
       cm.clearNarration(index);
       closeAllDropdownMenu();
     };
-    const clearOpenChime = () => {
+    const clearOpenChime = (id: string) => {
+      analytics.pressButtonRemove(
+        id,
+        Constants.CATEGORY.CHIME,
+        Constants.SCREEN.CM
+      );
       cm.clearOpenChime();
     };
-    const clearEndChime = () => {
+    const clearEndChime = (id: string) => {
+      analytics.pressButtonRemove(
+        id,
+        Constants.CATEGORY.CHIME,
+        Constants.SCREEN.CM
+      );
       cm.clearEndChime();
     };
-    const clearBgm = () => {
+    const clearBgm = (id: string) => {
+      analytics.pressButtonRemove(
+        id,
+        Constants.CATEGORY.BGM,
+        Constants.SCREEN.CM
+      );
       cm.clearBgm();
     };
     const create = async () => {
@@ -860,6 +874,7 @@ export default defineComponent({
       closePlayModal();
     };
     const updateAndOpenSavedModal = async () => {
+      saveAnalytics();
       try {
         openModalLoading();
         await update();
@@ -1061,7 +1076,54 @@ export default defineComponent({
     onUnmounted(() => {
       window.removeEventListener("popstate", handleBackButton);
     });
-
+    const changeCmOpenChime = (id: string) => {
+      analytics.pressButtonChange(
+        id,
+        Constants.CATEGORY.CHIME,
+        Constants.SCREEN.CM
+      );
+      router.push({
+        name: "CmChime",
+        params: { div: "open" },
+      });
+    };
+    const changeCmEndChime = (id: string) => {
+      analytics.pressButtonChange(
+        id,
+        Constants.CATEGORY.CHIME,
+        Constants.SCREEN.CM
+      );
+      router.push({
+        name: "CmChime",
+        params: { div: "end" },
+      });
+    };
+    const changeCmBgm = (id: string) => {
+      analytics.pressButtonChange(
+        id,
+        Constants.CATEGORY.BGM,
+        Constants.SCREEN.CM
+      );
+      router.push({ name: "CmBgm" });
+    };
+    const saveAnalytics = () => {
+      analytics.pressButtonSave(
+        {
+          narrations: !state.narrations
+            ? []
+            : [
+                state.narrations[0].id,
+                state.narrations[1].id,
+                state.narrations[2].id,
+                state.narrations[3].id,
+              ],
+          bgm: !state.bgm ? null : state.bgm.id,
+          open_chime: !state.openChime ? null : state.openChime.id,
+          end_chime: !state.endChime ? null : state.endChime.id,
+        },
+        Constants.SCREEN.CM
+      );
+    };
     return {
       ...toRefs(state),
       clearNarration,
@@ -1127,6 +1189,9 @@ export default defineComponent({
       authUser,
       uploadSystemArray,
       industryScenesList,
+      changeCmOpenChime,
+      changeCmEndChime,
+      changeCmBgm,
     };
   },
 });

@@ -200,14 +200,16 @@ export default class Constants {
   public static readonly CATEGORY_BUTTON = {
     PLAYTRIAL: "playTrial",
     PLAY: "play",
+    CHANGE: "change",
     REMOVE: "remove",
     CONFIRM: "confirm",
     SAVE: "save",
+    SAVE_EDIT: "save_edit",
     UPLOAD: "upload",
     UNUPLOAD: "unupload",
     EDIT_CONTENT: "edit_content",
     MANUSCRIPT: "manuscript",
-    COPYMANUSCRIPT: "copy_manuscript",
+    COPY_MANUSCRIPT: "copy_manuscript",
     EDIT_TITLE_ANS_DESCRIPTION: "edit_title_and_decription",
   } as const;
 

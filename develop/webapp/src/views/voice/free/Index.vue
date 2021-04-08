@@ -189,9 +189,13 @@ export default defineComponent({
         state.description,
         [lang]
       );
+
+      var idString = "";
       response?.forEach((element) => {
         cm.setNarration(element);
+        idString += element.id + ",";
       });
+      analytics.setTts(idString);
       router.push({ name: "Cm" });
       closeModalLoading();
     };

@@ -1,5 +1,6 @@
 import firebase from "firebase";
 import Constants from "@/utils/Constants";
+import dayjs from "dayjs";
 
 const config = {
   apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
@@ -9,6 +10,13 @@ const config = {
   messagingSenderId: process.env.VUE_APP_FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.VUE_APP_FIREBASE_APP_ID,
   measurementId: process.env.VUE_APP_FIREBASE_MEASUREMENT_ID,
+};
+
+export type SaveContents = {
+  narrations: string[] | [];
+  bgm: string | null;
+  open_chime: string | null;
+  end_chime: string | null;
 };
 
 firebase.initializeApp(config);
@@ -68,103 +76,123 @@ const setRecording = (id: string) => {
   });
 };
 
+const setTts = (id: string) => {
+  fireBaseAnalytics.logEvent("select_content", {
+    content_type: Constants.CATEGORY.TTS,
+    content_id: id,
+  });
+};
+
 // 試聴の再生ボタン
 const pressButtonPlayTrial = (id: string, type: string, screen: string) => {
+  const now = new Date().toLocaleString();
   fireBaseAnalytics.logEvent("press_playTrial", {
-    button_type: Constants.CATEGORY_BUTTON.PLAYTRIAL,
-    screen_type: screen,
-    trial_type: type,
+    button: Constants.CATEGORY_BUTTON.PLAYTRIAL,
+    screen: screen,
+    type: type,
     content_id: id,
+    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
   });
 };
 
 // 原稿ボタン
 const pressButtonManuscript = (id: string, screen: string) => {
+  const now = new Date().toLocaleString();
   fireBaseAnalytics.logEvent("press_manuscript", {
-    button_type: Constants.CATEGORY_BUTTON.MANUSCRIPT,
-    screen_type: screen,
+    button: Constants.CATEGORY_BUTTON.MANUSCRIPT,
+    screen: screen,
     content_id: id,
+    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
   });
 };
 
-// タイトル・説明編集ボタン
+// タイトル／説明編集ボタン
 const pressButtonEditTitleAndDescription = (id: string, screen: string) => {
-  fireBaseAnalytics.logEvent("press_editTitleAndDescription", {
-    button_type: Constants.CATEGORY_BUTTON.EDIT_TITLE_ANS_DESCRIPTION,
-    screen_type: screen,
+  const now = new Date().toLocaleString();
+  fireBaseAnalytics.logEvent("press_editTitleAndDecription", {
+    button: Constants.CATEGORY_BUTTON.EDIT_TITLE_ANS_DESCRIPTION,
+    screen: screen,
     content_id: id,
+    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
+  });
+};
+
+// 変更ボタン
+const pressButtonChange = (id: string, type: string, screen: string) => {
+  const now = new Date().toLocaleString();
+  fireBaseAnalytics.logEvent("press_change", {
+    button: Constants.CATEGORY_BUTTON.CHANGE,
+    screen: screen,
+    type: type,
+    content_id: id,
+    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
   });
 };
 
 // 削除ボタン
-const pressButtonRemove = (id: string, screen: string) => {
+const pressButtonRemove = (id: string, type: string, screen: string) => {
+  const now = new Date().toLocaleString();
   fireBaseAnalytics.logEvent("press_remove", {
-    button_type: Constants.CATEGORY_BUTTON.REMOVE,
-    screen_type: screen,
+    button: Constants.CATEGORY_BUTTON.REMOVE,
+    screen: screen,
+    type: type,
     content_id: id,
-  });
-};
-
-// 確定ボタン
-const pressButtonConfirm = (id: string, screen: string) => {
-  fireBaseAnalytics.logEvent("press_confirm", {
-    button_type: Constants.CATEGORY_BUTTON.CONFIRM,
-    screen_type: screen,
-    content_id: id,
+    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
   });
 };
 
 // 保存ボタン
-const pressButtonSave = (id: string, screen: string) => {
+const pressButtonSave = (cm: SaveContents, screen: string) => {
+  const now = new Date().toLocaleString();
   fireBaseAnalytics.logEvent("press_save", {
-    button_type: Constants.CATEGORY_BUTTON.SAVE,
-    screen_type: screen,
-    content_id: id,
+    button: Constants.CATEGORY_BUTTON.SAVE,
+    screen: screen,
+    contents: cm,
+    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
+  });
+};
+
+// （タイトル／説明編集の）保存ボタン
+const pressButtonSaveEdit = (cm: string, screen: string) => {
+  const now = new Date().toLocaleString();
+  fireBaseAnalytics.logEvent("press_save_edit", {
+    button: Constants.CATEGORY_BUTTON.SAVE_EDIT,
+    screen: screen,
+    contents: cm,
+    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
   });
 };
 
 // アップロードボタン
 const pressButtonUpload = (id: string, screen: string) => {
+  const now = new Date().toLocaleString();
   fireBaseAnalytics.logEvent("press_upload", {
-    button_type: Constants.CATEGORY_BUTTON.SAVE,
-    screen_type: screen,
+    button: Constants.CATEGORY_BUTTON.SAVE,
+    screen: screen,
     content_id: id,
+    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
   });
 };
 
 // アップロード解除ボタン
 const pressButtonUnupload = (id: string, screen: string) => {
+  const now = new Date().toLocaleString();
   fireBaseAnalytics.logEvent("press_unupload", {
-    button_type: Constants.CATEGORY_BUTTON.UNUPLOAD,
-    screen_type: screen,
+    button: Constants.CATEGORY_BUTTON.UNUPLOAD,
+    screen: screen,
     content_id: id,
+    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
   });
 };
 
 // コンテンツ編集ボタン
 const pressButtonEditContent = (id: string, screen: string) => {
+  const now = new Date().toLocaleString();
   fireBaseAnalytics.logEvent("press_editContent", {
-    button_type: Constants.CATEGORY_BUTTON.EDIT_CONTENT,
-    screen_type: screen,
+    button: Constants.CATEGORY_BUTTON.EDIT_CONTENT,
+    screen: screen,
     content_id: id,
-  });
-};
-
-// 原稿をコピーするボタン（フリー入力）
-const pressButtonCopyManuscript = (id: string, screen: string) => {
-  fireBaseAnalytics.logEvent("press_copyManuscript", {
-    button_type: Constants.CATEGORY_BUTTON.COPYMANUSCRIPT,
-    screen_type: screen,
-    content_id: id,
-  });
-};
-
-// タイトル／説明編集ボタン
-const pressButtonEditTitleAndDecription = (id: string, screen: string) => {
-  fireBaseAnalytics.logEvent("press_editTitleAndDecription", {
-    button_type: Constants.CATEGORY_BUTTON.EDIT_TITLE_ANS_DESCRIPTION,
-    screen_type: screen,
-    content_id: id,
+    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
   });
 };
 
@@ -172,6 +200,7 @@ const pressButtonEditTitleAndDecription = (id: string, screen: string) => {
 // ナレーションの業種選択
 // ナレーションのシーン選択
 // 試聴の再生、停止ボタン必要？
+// 原稿をコピーするボタン（フリー入力）
 
 const analytics = {
   setUserId,
@@ -182,17 +211,17 @@ const analytics = {
   selectTemplate,
   selectFree,
   setRecording,
+  setTts,
   pressButtonPlayTrial,
   pressButtonManuscript,
   pressButtonEditTitleAndDescription,
   pressButtonRemove,
-  pressButtonConfirm,
+  pressButtonChange,
   pressButtonSave,
+  pressButtonSaveEdit,
   pressButtonUpload,
   pressButtonUnupload,
   pressButtonEditContent,
-  pressButtonCopyManuscript,
-  pressButtonEditTitleAndDecription,
 };
 
 export default analytics;
