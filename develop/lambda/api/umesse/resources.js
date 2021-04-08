@@ -42,7 +42,14 @@ exports.getResource = async (category, industryCd, sceneCd, sort) => {
 
   let ret;
   try {
-    ret = await db.Contents.findByCategory(category);
+    if (category === constants.resourceCategory.FREE) {
+      ret = await db.Contents.findByCategoryLang(
+        constants.resourceCategory.NARRATION,
+        "JP"
+      );
+    } else {
+      ret = await db.Contents.findByCategory(category);
+    }
   } catch (e) {
     if (e instanceof NotFoundError) throw e;
     errorlog(JSON.stringify(e));
