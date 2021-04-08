@@ -691,7 +691,8 @@ export default defineComponent({
       title: cm.title,
       description: cm.description,
       scene: "004",
-      uploadSystem: authUser.serviceCd === Constants.SERVICE_CD_UMUSIC ? "01" : "02",
+      uploadSystem:
+        authUser.serviceCd === Constants.SERVICE_CD_UMUSIC ? "01" : "02",
       isPlayModalAppear: false,
       isPlayOpenChimeModalAppear: false,
       isPlayNarrationModalAppear: false,
@@ -915,7 +916,10 @@ export default defineComponent({
     };
     const toHome = () => {
       cm.reset();
-      router.push({ name: "Home" });
+      router.push({
+        path: "/",
+        query: { unisCustomerCd: authUser.unisCustomerCd },
+      });
     };
     const toRecoding = () => {
       router.push({ name: "Recording" });

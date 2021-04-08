@@ -53,7 +53,7 @@ export const UMesseErrorFromAuthFactory = (e: any) => {
       code = ERROR_CODE.A4001;
       break;
     case 404: // Not Found
-      code = ERROR_CODE.A4000;
+      code = ERROR_CODE.A4004;
       break;
     case 500: // Internal Server Error
       code = ERROR_CODE.A4999;

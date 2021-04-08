@@ -8,7 +8,10 @@ export function useUserService(
   const auth = async (unisCustomerCd: string): Promise<string> => {
     try {
       console.log(unisCustomerCd);
-      const response = await authRepository.auth();
+      const requestModel = {
+        unisCustomerCd: unisCustomerCd
+      };
+      const response = await authRepository.auth(requestModel);
       return response.data.token;
     } catch (e) {
       throw UMesseErrorFromAuthFactory(e);
