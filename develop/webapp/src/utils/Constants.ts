@@ -197,6 +197,36 @@ export default class Constants {
     FREE: "free",
   } as const;
 
+  public static readonly CATEGORY_BUTTON = {
+    PLAYTRIAL: "playTrial",
+    PLAY: "play",
+    CHANGE: "change",
+    REMOVE: "remove",
+    CONFIRM: "confirm",
+    SAVE: "save",
+    SAVE_EDIT: "save_edit",
+    UPLOAD: "upload",
+    UNUPLOAD: "unupload",
+    EDIT_CONTENT: "edit_content",
+    MANUSCRIPT: "manuscript",
+    COPY_MANUSCRIPT: "copy_manuscript",
+    EDIT_TITLE_ANS_DESCRIPTION: "edit_title_and_decription",
+  } as const;
+
+  public static readonly SCREEN = {
+    MAIN: "/main",
+    CM: "/cm",
+    CHIME: "/cm/chime",
+    BGM: "/cm/bgm",
+    NARRATION: "/narration",
+    VOICE_TEMPLATE: "/voice/template",
+    VOICE_TEMPLATE_DETAIL: "/voice/template/detail",
+    VOICE_FREE: "/voice/free",
+    SELECT_TEMPLATE: "/voice/free/select_template",
+    SETTINGS: "/settings",
+    MANAGEMENT: "/management",
+  } as const;
+
   public static readonly TTS_LANGS: TtsLangs[] = [
     { cd: "ja", name: "日本語" },
     { cd: "en", name: "英語" },

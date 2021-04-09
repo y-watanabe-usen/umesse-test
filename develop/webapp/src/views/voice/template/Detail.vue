@@ -156,7 +156,12 @@
             >
             <Button
               type="primary"
-              :isDisabled="title === undefined || title === '' || isCreating || isGenerating"
+              :isDisabled="
+                title === undefined ||
+                  title === '' ||
+                  isCreating ||
+                  isGenerating
+              "
               @click="createTts"
               >保存して作成を続ける</Button
             >
@@ -207,6 +212,7 @@ import ttsTextConverter, { ConverterType } from "@/utils/ttsTextConverter";
 import * as Common from "@/utils/Common";
 import { NarrationItem } from "umesseapi/models";
 import { MAX_NARRATION_COUNT } from "@/store/cm";
+import analytics from "@/utils/firebaseAnalytics";
 
 export default defineComponent({
   components: {
@@ -339,6 +345,11 @@ export default defineComponent({
       console.log("play");
       const data = await ttsStore.getTtsData(state.playLang);
       const audioBuffer = await audioService.getByUrl(<string>data?.url);
+      analytics.pressButtonPlayTrial(
+        <string>data?.url,
+        Constants.CATEGORY.TEMPLATE,
+        Constants.SCREEN.VOICE_TEMPLATE_DETAIL
+      );
       audioPlayer.start(audioBuffer);
     };
     const stop = () => {
@@ -352,9 +363,13 @@ export default defineComponent({
         state.description,
         state.langs
       );
+
+      var idString = "";
       response?.forEach((element) => {
         cm.setNarration(element);
+        idString += element.id + ",";
       });
+      analytics.setTts(idString);
       router.push({ name: "Cm" });
       closeModalLoading();
     };
@@ -376,7 +391,7 @@ export default defineComponent({
           state.minutes,
           state.point
         );
-      } catch(e) {
+      } catch (e) {
         closeModal();
         openErrorModal(e);
       }

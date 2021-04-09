@@ -362,6 +362,8 @@ import DropdownMenu from "@/components/molecules/DropdownMenu.vue";
 import { UMesseError } from "../../models/UMesseError";
 import { audioService, cmService, uploadService } from "@/services";
 import { User } from "umesseapi/models";
+import analytics from "@/utils/firebaseAnalytics";
+
 export default defineComponent({
   components: {
     BasicLayout,
@@ -507,6 +509,11 @@ export default defineComponent({
           cm.id,
           Constants.CATEGORY.CM
         );
+        analytics.pressButtonPlayTrial(
+          cm.id,
+          Constants.CATEGORY.CM,
+          Constants.SCREEN.MANAGEMENT
+        );
         audioPlayer.start(audioBuffer);
       } catch (e) {
         openErrorModal(e);
@@ -526,9 +533,11 @@ export default defineComponent({
         state.scene,
         cm.productionType
       );
+
       fetchScene();
     };
     const upload = async (cm: CmItem) => {
+      analytics.pressButtonUpload(cm.id, Constants.SCREEN.MANAGEMENT);
       try {
         const uploadSystem =
           authUser.serviceCd === Constants.SERVICE_CD_UMUSIC
@@ -612,6 +621,10 @@ export default defineComponent({
       openPlayModal();
     };
     const selectCmAndOpenSaveModal = (cm: CmItem) => {
+      analytics.pressButtonEditTitleAndDescription(
+        cm.id,
+        Constants.SCREEN.MANAGEMENT
+      );
       closeAllDropdownMenu();
       selectCm(cm);
       state.title = cm.title;
@@ -626,6 +639,7 @@ export default defineComponent({
       openRemoveModal();
     };
     const selectCmAndOpenUnUploadModal = (cm: CmItem) => {
+      analytics.pressButtonUnupload(cm.id, Constants.SCREEN.MANAGEMENT);
       closeAllDropdownMenu();
       selectCm(cm);
       state.isUnUploadModalAppear = true;
@@ -639,6 +653,7 @@ export default defineComponent({
         openModalLoading("音源の合成中");
         if (!state.selectedCm) return;
         await save(state.selectedCm);
+        analytics.pressButtonSaveEdit(state.selectedCm.id, Constants.SCREEN.MANAGEMENT);
         closeModalLoading();
         closeSaveModal();
         openSavedModal();
@@ -650,6 +665,11 @@ export default defineComponent({
       }
     };
     const removeAndOpenRemovedModal = async () => {
+      analytics.pressButtonRemove(
+        state.selectedCm?.id,
+        Constants.CATEGORY.CM,
+        Constants.SCREEN.MANAGEMENT
+      );
       try {
         openModalLoading("音源の削除中");
         await remove(state.selectedCm?.id);
@@ -665,6 +685,7 @@ export default defineComponent({
       }
     };
     const toEditCm = (cmItem: CmItem) => {
+      analytics.pressButtonEditContent(cmItem.id, Constants.SCREEN.MANAGEMENT);
       closeAllDropdownMenu();
       console.log(cmItem);
       cm.setCm(cmItem);

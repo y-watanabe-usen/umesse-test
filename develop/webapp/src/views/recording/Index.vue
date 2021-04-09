@@ -176,6 +176,7 @@ import router from "@/router";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { UMesseError } from "../../models/UMesseError";
 import { UPLOAD_RECORDING_STATE } from "@/store/recording";
+import analytics from "@/utils/firebaseAnalytics";
 
 export default defineComponent({
   components: {
@@ -261,6 +262,7 @@ export default defineComponent({
         state.file.blob = await audioRecorder.getMp3Blob();
         const response = await recordingStore.uploadRecordingData(state.file);
         cm.setNarration(response);
+        analytics.setRecording(response.id);
         router.push({ name: "Cm" });
         closeModalLoading();
         closeModal();

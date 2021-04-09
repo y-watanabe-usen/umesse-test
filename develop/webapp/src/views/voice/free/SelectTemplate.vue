@@ -63,7 +63,7 @@
                 <Button
                   class="btn-document"
                   @click="
-                    setManuscriptAndOpenDocumentModal(freeItem.manuscript)
+                    setManuscriptAndOpenDocumentModal(freeItem.manuscript, freeItem.id)
                   "
                 >
                   <img src="@/assets/icon_document.svg" />原稿
@@ -136,6 +136,7 @@ import { resourcesService } from "@/services";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { freeCache } from "@/repository/cache";
 import analytics from "@/utils/firebaseAnalytics";
+import Constants from "@/utils/Constants";
 
 export default defineComponent({
   components: {
@@ -212,8 +213,9 @@ export default defineComponent({
       state.isDocumentModalAppear = false;
     };
 
-    const setManuscriptAndOpenDocumentModal = (manuscript: string) => {
+    const setManuscriptAndOpenDocumentModal = (manuscript: string, freeId: string) => {
       setManuscript(manuscript);
+      analytics.pressButtonManuscript(freeId, Constants.SCREEN.SELECT_TEMPLATE);
       openDocumentModal();
     };
 

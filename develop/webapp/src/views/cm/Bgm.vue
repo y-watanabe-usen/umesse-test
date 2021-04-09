@@ -120,6 +120,7 @@ import { UMesseError } from "../../models/UMesseError";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { audioService, resourcesService } from "@/services";
 import analytics from "@/utils/firebaseAnalytics";
+import Constants from "@/utils/Constants";
 
 export default defineComponent({
   components: {
@@ -199,6 +200,7 @@ export default defineComponent({
       try {
         state.isDownloading = true;
         const audioBuffer = await audioService.getById(bgm.id, bgm.category);
+        analytics.pressButtonPlayTrial(bgm.id, Constants.CATEGORY.BGM, Constants.SCREEN.BGM);
         audioPlayer.start(audioBuffer);
       } catch (e) {
         openErrorModal(e);

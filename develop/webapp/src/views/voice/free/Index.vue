@@ -120,6 +120,8 @@ import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { UMesseError } from "../../../models/UMesseError";
 import { freeCache } from "@/repository/cache";
 import { audioService } from "@/services";
+import analytics from "@/utils/firebaseAnalytics";
+
 export default defineComponent({
   components: {
     BasicLayout,
@@ -172,6 +174,7 @@ export default defineComponent({
       console.log("play");
       const data = await ttsStore.getTtsData(lang);
       const audioBuffer = await audioService.getByUrl(<string>data?.url);
+      analytics.pressButtonPlayTrial(<string>data?.url, Constants.CATEGORY.FREE, Constants.SCREEN.VOICE_FREE);
       audioPlayer.start(audioBuffer);
     };
     const stop = () => {
@@ -186,9 +189,13 @@ export default defineComponent({
         state.description,
         [lang]
       );
+
+      var idString = "";
       response?.forEach((element) => {
         cm.setNarration(element);
+        idString += element.id + ",";
       });
+      analytics.setTts(idString);
       router.push({ name: "Cm" });
       closeModalLoading();
     };

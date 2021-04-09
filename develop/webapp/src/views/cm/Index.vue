@@ -74,16 +74,13 @@
                         {
                           title: '変更',
                           action: () => {
-                            $router.push({
-                              name: 'CmChime',
-                              params: { div: 'open' },
-                            });
+                            changeCmOpenChime(openChime.id);
                           },
                         },
                         {
                           title: '削除',
                           action: () => {
-                            clearOpenChime();
+                            clearOpenChime(openChime.id);
                           },
                           isCaution: true,
                         },
@@ -107,9 +104,9 @@
               :key="narration.contentsId"
               :title="
                 'ナレーション ' +
-                `${index + 1}` +
-                '/' +
-                `${MAX_NARRATION_COUNT}`
+                  `${index + 1}` +
+                  '/' +
+                  `${MAX_NARRATION_COUNT}`
               "
               size="flexible"
               :contentTitle="`${narration.title}`"
@@ -172,7 +169,7 @@
                         {
                           title: '削除',
                           action: () => {
-                            clearNarration(index);
+                            clearNarration(index, narration.id);
                           },
                           isCaution: true,
                         },
@@ -186,9 +183,9 @@
               <CmItem
                 :title="
                   'ナレーション ' +
-                  `${narrations.length + 1}` +
-                  '/' +
-                  `${MAX_NARRATION_COUNT}`
+                    `${narrations.length + 1}` +
+                    '/' +
+                    `${MAX_NARRATION_COUNT}`
                 "
                 :isEmpty="true"
                 size="flexible"
@@ -275,13 +272,13 @@
                         {
                           title: '変更',
                           action: () => {
-                            $router.push({ name: 'CmBgm' });
+                            changeCmBgm(bgm.id);
                           },
                         },
                         {
                           title: '削除',
                           action: () => {
-                            clearBgm();
+                            clearBgm(bgm.id);
                           },
                           isCaution: true,
                         },
@@ -342,16 +339,13 @@
                         {
                           title: '変更',
                           action: () => {
-                            $router.push({
-                              name: 'CmChime',
-                              params: { div: 'end' },
-                            });
+                            changeCmEndChime(endChime.id);
                           },
                         },
                         {
                           title: '削除',
                           action: () => {
-                            clearEndChime();
+                            clearEndChime(endChime.id);
                           },
                           isCaution: true,
                         },
@@ -645,6 +639,7 @@ import { UMesseError } from "../../models/UMesseError";
 import { audioService } from "@/services";
 import * as Common from "@/utils/Common";
 import { User } from "umesseapi/models";
+import analytics from "@/utils/firebaseAnalytics";
 
 export default defineComponent({
   components: {
@@ -718,26 +713,31 @@ export default defineComponent({
 
     const playOpenChime = async () => {
       if (!cm.openChime) return;
-      playById(cm.openChime.id, cm.openChime.category);
+      playById(
+        cm.openChime.id,
+        cm.openChime.category,
+        Constants.CATEGORY.CHIME
+      );
     };
     const playEndChime = async () => {
       if (!cm.endChime) return;
-      playById(cm.endChime.id, cm.endChime.category);
+      playById(cm.endChime.id, cm.endChime.category, Constants.CATEGORY.CHIME);
     };
     const playNarration = () => {
       const narration = cm.narration(state.narrationIndex);
       if (!narration) return;
-      playById(narration.id, narration.category);
+      playById(narration.id, narration.category, Constants.CATEGORY.NARRATION);
     };
     const playBgm = () => {
       if (!cm.bgm) return;
-      playById(cm.bgm.id, cm.bgm.category);
+      playById(cm.bgm.id, cm.bgm.category, Constants.CATEGORY.BGM);
     };
-    const playById = async (id: string, category: string) => {
+    const playById = async (id: string, category: string, type: string) => {
       stop();
       try {
         state.isDownloading = true;
         const audioBuffer = await audioService.getById(id, category);
+        analytics.pressButtonPlayTrial(id, type, Constants.SCREEN.CM);
         audioPlayer.start(audioBuffer);
       } catch (e) {
         openErrorModal(e);
@@ -751,6 +751,8 @@ export default defineComponent({
       try {
         state.isDownloading = true;
         const audioBuffer = await audioService.getByUrl(cm.url);
+        // todo: timeoutになり未確認
+        // analytics.pressButtonPlayTrial(cm.url, Constants.CATEGORY.CM, Constants.SCREEN.CM);
         audioPlayer.start(audioBuffer);
       } catch (e) {
         openErrorModal(e);
@@ -762,17 +764,37 @@ export default defineComponent({
       if (state.isPlaying) audioPlayer.stop();
     };
 
-    const clearNarration = (index: number) => {
+    const clearNarration = (index: number, id: string) => {
+      analytics.pressButtonRemove(
+        id,
+        Constants.CATEGORY.NARRATION,
+        Constants.SCREEN.CM
+      );
       cm.clearNarration(index);
       closeAllDropdownMenu();
     };
-    const clearOpenChime = () => {
+    const clearOpenChime = (id: string) => {
+      analytics.pressButtonRemove(
+        id,
+        Constants.CATEGORY.CHIME,
+        Constants.SCREEN.CM
+      );
       cm.clearOpenChime();
     };
-    const clearEndChime = () => {
+    const clearEndChime = (id: string) => {
+      analytics.pressButtonRemove(
+        id,
+        Constants.CATEGORY.CHIME,
+        Constants.SCREEN.CM
+      );
       cm.clearEndChime();
     };
-    const clearBgm = () => {
+    const clearBgm = (id: string) => {
+      analytics.pressButtonRemove(
+        id,
+        Constants.CATEGORY.BGM,
+        Constants.SCREEN.CM
+      );
       cm.clearBgm();
     };
     const create = async () => {
@@ -852,6 +874,7 @@ export default defineComponent({
       closePlayModal();
     };
     const updateAndOpenSavedModal = async () => {
+      saveAnalytics();
       try {
         openModalLoading();
         await update();
@@ -1053,7 +1076,54 @@ export default defineComponent({
     onUnmounted(() => {
       window.removeEventListener("popstate", handleBackButton);
     });
-
+    const changeCmOpenChime = (id: string) => {
+      analytics.pressButtonChange(
+        id,
+        Constants.CATEGORY.CHIME,
+        Constants.SCREEN.CM
+      );
+      router.push({
+        name: "CmChime",
+        params: { div: "open" },
+      });
+    };
+    const changeCmEndChime = (id: string) => {
+      analytics.pressButtonChange(
+        id,
+        Constants.CATEGORY.CHIME,
+        Constants.SCREEN.CM
+      );
+      router.push({
+        name: "CmChime",
+        params: { div: "end" },
+      });
+    };
+    const changeCmBgm = (id: string) => {
+      analytics.pressButtonChange(
+        id,
+        Constants.CATEGORY.BGM,
+        Constants.SCREEN.CM
+      );
+      router.push({ name: "CmBgm" });
+    };
+    const saveAnalytics = () => {
+      analytics.pressButtonSave(
+        {
+          narrations: !state.narrations
+            ? []
+            : [
+                state.narrations[0].id,
+                state.narrations[1].id,
+                state.narrations[2].id,
+                state.narrations[3].id,
+              ],
+          bgm: !state.bgm ? null : state.bgm.id,
+          open_chime: !state.openChime ? null : state.openChime.id,
+          end_chime: !state.endChime ? null : state.endChime.id,
+        },
+        Constants.SCREEN.CM
+      );
+    };
     return {
       ...toRefs(state),
       clearNarration,
@@ -1119,6 +1189,9 @@ export default defineComponent({
       authUser,
       uploadSystemArray,
       industryScenesList,
+      changeCmOpenChime,
+      changeCmEndChime,
+      changeCmBgm,
     };
   },
 });

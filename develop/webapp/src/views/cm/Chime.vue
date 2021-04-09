@@ -106,6 +106,7 @@ import { UMesseError } from "../../models/UMesseError";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { audioService, resourcesService } from "@/services";
 import analytics from "@/utils/firebaseAnalytics";
+import Constants from "@/utils/Constants";
 
 export default defineComponent({
   components: {
@@ -182,6 +183,7 @@ export default defineComponent({
           chime.id,
           chime.category
         );
+        analytics.pressButtonPlayTrial(chime.id, Constants.CATEGORY.CHIME, Constants.SCREEN.CHIME);
         audioPlayer.start(audioBuffer);
       } catch (e) {
         openErrorModal(e);
