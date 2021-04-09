@@ -17,7 +17,7 @@
     <transition>
       <ModalErrorDialog
         v-if="isErrorModalApper"
-        @close="closeErrorModal"
+        @close="reload"
         :errorCode="errorCode"
         :errorMessage="errorMessage"
       />
@@ -49,7 +49,7 @@ export default defineComponent({
       loadingMessage: loadingMessage,
       open: openLoadingModal,
       close: closeLoadingModal,
-    } = useLoadingModalController();
+    } = useLoadingModalController(auth.isAuthenticating);
     const {
       isApper: isErrorModalApper,
       errorCode,
@@ -66,9 +66,14 @@ export default defineComponent({
         openErrorModal(e);
       }
     });
+    const reload = () => {
+      closeErrorModal();
+      window.location.reload();
+    };
     return {
       ...toRefs(state),
       ...auth,
+      reload,
       isLoading,
       loadingMessage,
       openLoadingModal,

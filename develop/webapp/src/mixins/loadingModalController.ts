@@ -1,7 +1,7 @@
-import { ref } from "vue";
+import { computed, ref } from "vue";
 
-export default function useLoadingModalController() {
-  const isApper = ref(false);
+export default function useLoadingModalController(apperFunc?: () => boolean) {
+  const isApper = apperFunc ? computed(() => apperFunc()) : ref(false);
   const loadingMessage = ref("");
 
   const open = (message?: string) => {
