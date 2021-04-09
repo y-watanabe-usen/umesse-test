@@ -168,10 +168,12 @@ export default defineComponent({
     };
 
     const fetchTemplate = async () => {
+      if (!state.activeSceneCd) return;
       try {
         openLoadingModal();
         const response = await resourcesService.fetchTemplate(
           state.activeIndustryCd,
+          state.activeSceneCd,
           state.sort
         );
         state.templates = response;

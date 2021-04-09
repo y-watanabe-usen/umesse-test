@@ -124,11 +124,12 @@ export function useResourcesService(
 
   const fetchTemplate = async (
     industryCd: string,
+    sceneCd: string,
     sort?: number
   ): Promise<TemplateItem[]> => {
     return new Promise(function (resolve, reject) {
       resourcesApi
-        .listTemplate(industryCd, undefined, sort)
+        .listTemplate(industryCd, sceneCd, sort)
         .then((value) => {
           console.log("resolve");
           console.log("listTemplate", value.data);
