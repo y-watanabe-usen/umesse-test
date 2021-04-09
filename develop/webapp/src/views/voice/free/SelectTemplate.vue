@@ -225,7 +225,6 @@ export default defineComponent({
       scenes: [] as Scene[],
       selectedFreeItem: null as FreeItem | null,
       manuscript: "",
-      isLoading: false,
       dropdownfreeItemId: "",
       title: "",
       description: "",
@@ -260,7 +259,7 @@ export default defineComponent({
     const fetchFreeTemplate = async () => {
       if (!state.activeSceneCd) return;
       try {
-        state.isLoading = true;
+        openLoadingModal();
         const response = await resourcesService.fetchNarration(
           authToken,
           state.activeIndustryCd,
@@ -271,7 +270,7 @@ export default defineComponent({
       } catch (e) {
         openErrorModal(e);
       } finally {
-        state.isLoading = false;
+        closeLoadingModal();
       }
     };
 
