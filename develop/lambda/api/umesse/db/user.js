@@ -55,11 +55,23 @@ module.exports = {
   },
 
   findCmIndex: async function (unisCustomerCd, id) {
-    let ret = await this.findCm(unisCustomerCd);
+    const key = { unisCustomerCd: unisCustomerCd };
+    const options = {
+      ProjectionExpression: "cm",
+    };
+    debuglog(JSON.stringify({ key: key, options: options }));
+
+    let ret = await dynamodbManager.get(
+      constants.dynamoDbTable().users,
+      key,
+      options
+    );
     debuglog(JSON.stringify(ret));
-    const index = ret.findIndex((item) => item.cmId === id);
+    if (!ret || !ret.Item) throw new NotFoundError(ERROR_CODE.E0000404);
+
+    const index = ret.Item.cm.findIndex((item) => item.cmId === id);
     if (index < 0) throw new NotFoundError(ERROR_CODE.E0000404);
-    return [ret[index], index];
+    return [ret.Item.cm[index], index];
   },
 
   findResource: async function (unisCustomerCd, category) {
