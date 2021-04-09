@@ -24,7 +24,7 @@ exports.handler = async (event, context) => {
   let lastdate;
   try {
     lastdate = fs.readFileSync(file);
-    if (!lastdate || lastdate == "") throw _;
+    if (!lastdate || lastdate == "") throw "unknown file";
   } catch (e) {
     lastdate = targetDate(60 * 60);
   }
@@ -110,7 +110,7 @@ function requestUdsApi(serviceCd, lastdate) {
     debuglog(JSON.stringify({ options: options }));
 
     const request = https.request(options, (response) => {
-      let data;
+      let data = "";
       response.on("data", (chunk) => {
         data += chunk;
       });

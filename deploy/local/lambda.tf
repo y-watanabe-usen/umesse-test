@@ -53,10 +53,10 @@ resource "aws_lambda_function" "umesse_api_function" {
 
   environment {
     variables = {
-      "debug"       = true
-      "environment" = "localstack"
+      "debug"                   = true
+      "environment"             = "localstack"
       "CONVERTER_SQS_QUEUE_URL" = aws_sqs_queue.umesse_converter_queue.id
-      "GENERATE_SQS_QUEUE_URL" = aws_sqs_queue.umesse_generate_queue.id
+      "GENERATE_SQS_QUEUE_URL"  = aws_sqs_queue.umesse_generate_queue.id
     }
   }
 
@@ -118,6 +118,11 @@ resource "aws_lambda_function" "umesse_sync_function" {
   source_code_hash = data.archive_file.umesse_sync_file.output_base64sha256
   memory_size      = "128"
   timeout          = "30"
+
+  # vpc_config {
+  #   subnet_ids         = ["subnet-0dd119fa747bab961"]
+  #   security_group_ids = ["sg-08c39a651fac3ef3b"]
+  # }
 
   environment {
     variables = {

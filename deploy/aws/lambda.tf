@@ -135,6 +135,11 @@ resource "aws_lambda_function" "umesse_sync_function" {
   timeout          = "180"
   layers           = [aws_lambda_layer_version.umesse_layer.arn]
 
+  vpc_config {
+    subnet_ids         = ["subnet-0dd119fa747bab961"]
+    security_group_ids = ["sg-08c39a651fac3ef3b"]
+  }
+
   environment {
     variables = {
       "debug"       = true
