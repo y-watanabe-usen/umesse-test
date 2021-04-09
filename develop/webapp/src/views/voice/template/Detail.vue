@@ -213,6 +213,7 @@ import { NarrationItem } from "umesseapi/models";
 import { MAX_NARRATION_COUNT } from "@/store/cm";
 import analytics from "@/utils/firebaseAnalytics";
 import useModalController from "@/mixins/modalController";
+import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
 
 export default defineComponent({
@@ -285,6 +286,12 @@ export default defineComponent({
       close: closeModal,
     } = useModalController();
     const {
+      isApper: isLoading,
+      loadingMessage,
+      open: openLoadingModal,
+      close: closeLoadingModal,
+    } = useLoadingModalController();
+    const {
       isApper: isErrorModalApper,
       errorCode,
       errorMessage,
@@ -329,7 +336,6 @@ export default defineComponent({
       playLang: "ja",
       title: template.title,
       description: template.description,
-      isLoading: false,
       errorMessageCustomerName: computed(() => {
         const customerName: string = state.customerName;
         return selectErrorMessageCustomerName(customerName);
@@ -409,12 +415,6 @@ export default defineComponent({
     const stopAndCloseModal = () => {
       stop();
       closeModal();
-    };
-    const openLoadingModal = () => {
-      state.isLoading = true;
-    };
-    const closeLoadingModal = () => {
-      state.isLoading = false;
     };
     const selectErrorMessageCustomerName = (customerName: string) => {
       if (!validator.isFullWidthKana(customerName)) {
@@ -499,6 +499,10 @@ export default defineComponent({
       isModalAppear,
       openModal,
       closeModal,
+      isLoading,
+      loadingMessage,
+      openLoadingModal,
+      closeLoadingModal,
       isErrorModalApper,
       errorCode,
       errorMessage,

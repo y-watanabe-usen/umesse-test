@@ -96,6 +96,7 @@ import { resourcesService } from "@/services";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { freeCache } from "@/repository/cache";
 import analytics from "@/utils/firebaseAnalytics";
+import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
 
 export default defineComponent({
@@ -116,6 +117,12 @@ export default defineComponent({
   setup() {
     const sortList = Common.getSort();
     const industries = Common.getTemplateIndustries();
+    const {
+      isApper: isLoading,
+      loadingMessage,
+      open: openLoadingModal,
+      close: closeLoadingModal,
+    } = useLoadingModalController();
     const {
       isApper: isErrorModalApper,
       errorCode,
@@ -162,13 +169,6 @@ export default defineComponent({
       await fetchTemplate();
     });
 
-    const openLoadingModal = () => {
-      state.isLoading = true;
-    };
-
-    const closeLoadingModal = () => {
-      state.isLoading = false;
-    };
     return {
       ...toRefs(state),
       sortList,
@@ -176,6 +176,10 @@ export default defineComponent({
       clickIndustry,
       toVoiceTemplateDetail,
       fetchTemplate,
+      isLoading,
+      loadingMessage,
+      openLoadingModal,
+      closeLoadingModal,
       isErrorModalApper,
       errorCode,
       errorMessage,

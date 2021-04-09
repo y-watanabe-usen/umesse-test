@@ -177,6 +177,7 @@ import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { UPLOAD_RECORDING_STATE } from "@/store/recording";
 import analytics from "@/utils/firebaseAnalytics";
 import useModalController from "@/mixins/modalController";
+import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
 
 export default defineComponent({
@@ -200,6 +201,12 @@ export default defineComponent({
     const audioRecorder = AudioRecorder();
     const audioPlayer = AudioPlayer();
     const { cm } = useGlobalStore();
+    const {
+      isApper: isLoading,
+      loadingMessage,
+      open: openLoadingModal,
+      close: closeLoadingModal,
+    } = useLoadingModalController();
     const {
       isApper: isModalAppear,
       open: openModal,
@@ -229,7 +236,6 @@ export default defineComponent({
       isPlaying: computed(() => audioPlayer.isPlaying()),
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       duration: computed(() => audioPlayer.getDuration()),
-      isLoading: false,
     });
 
     onUnmounted(() => {
@@ -280,12 +286,6 @@ export default defineComponent({
         closeLoadingModal();
       }
     };
-    const openLoadingModal = () => {
-      state.isLoading = true;
-    };
-    const closeLoadingModal = () => {
-      state.isLoading = false;
-    };
     return {
       ...toRefs(state),
       toggleVoiceRecorder,
@@ -297,6 +297,10 @@ export default defineComponent({
       isModalAppear,
       openModal,
       closeModal,
+      isLoading,
+      loadingMessage,
+      openLoadingModal,
+      closeLoadingModal,
       isErrorModalApper,
       errorCode,
       errorMessage,

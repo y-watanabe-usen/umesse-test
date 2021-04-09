@@ -363,6 +363,7 @@ import { audioService, cmService, uploadService } from "@/services";
 import { User } from "umesseapi/models";
 import analytics from "@/utils/firebaseAnalytics";
 import useModalController from "@/mixins/modalController";
+import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
 
 export default defineComponent({
@@ -483,6 +484,12 @@ export default defineComponent({
       open: openUnUploadedModal,
       close: closeUnUploadedModal,
     } = useModalController();
+    const {
+      isApper: isLoading,
+      loadingMessage,
+      open: openLoadingModal,
+      close: closeLoadingModal,
+    } = useLoadingModalController();
     const {
       isApper: isErrorModalApper,
       errorCode,
@@ -686,13 +693,6 @@ export default defineComponent({
     onMounted(async () => {
       fetchScene();
     });
-    const openLoadingModal = (title: string) => {
-      state.titleModalLoading = title;
-      state.isLoading = true;
-    };
-    const closeLoadingModal = () => {
-      state.isLoading = false;
-    };
     const closeAllDropdownMenu = () => {
       state.dropdownCmId = "";
     };
@@ -774,6 +774,10 @@ export default defineComponent({
       isUnUploadedModalAppear,
       openUnUploadedModal,
       closeUnUploadedModal,
+      isLoading,
+      loadingMessage,
+      openLoadingModal,
+      closeLoadingModal,
       isErrorModalApper,
       errorCode,
       errorMessage,

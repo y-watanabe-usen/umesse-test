@@ -28,10 +28,11 @@
 
 <script lang="ts">
 import { useGlobalStore } from "@/store";
-import { computed, defineComponent, onMounted, reactive, toRefs } from "vue";
+import { defineComponent, onMounted, reactive, toRefs } from "vue";
 import MainMenu from "@/components/organisms/MainMenu.vue";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
+import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
 
 export default defineComponent({
@@ -44,6 +45,12 @@ export default defineComponent({
   setup() {
     const { auth } = useGlobalStore();
     const {
+      isApper: isLoading,
+      loadingMessage: loadingMessage,
+      open: openLoadingModal,
+      close: closeLoadingModal,
+    } = useLoadingModalController();
+    const {
       isApper: isErrorModalApper,
       errorCode,
       errorMessage,
@@ -51,15 +58,7 @@ export default defineComponent({
       close: closeErrorModal,
     } = useErrorModalController();
 
-    const state = reactive({
-      isLoading: computed(() => auth.isAuthenticating()),
-    });
-    const openLoadingModal = () => {
-      state.isLoading = true;
-    };
-    const closeLoadingModal = () => {
-      state.isLoading = false;
-    };
+    const state = reactive({});
     onMounted(async () => {
       try {
         await auth.requestAuth();
@@ -70,6 +69,8 @@ export default defineComponent({
     return {
       ...toRefs(state),
       ...auth,
+      isLoading,
+      loadingMessage,
       openLoadingModal,
       closeLoadingModal,
       isErrorModalApper,

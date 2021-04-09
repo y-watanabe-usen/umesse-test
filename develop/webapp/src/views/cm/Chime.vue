@@ -107,6 +107,7 @@ import { audioService, resourcesService } from "@/services";
 import analytics from "@/utils/firebaseAnalytics";
 import Constants from "@/utils/Constants";
 import useModalController from "@/mixins/modalController";
+import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
 
 export default defineComponent({
@@ -140,6 +141,12 @@ export default defineComponent({
       close: closePlayModal,
     } = useModalController();
     const {
+      isApper: isLoading,
+      loadingMessage,
+      open: openLoadingModal,
+      close: closeLoadingModal,
+    } = useLoadingModalController();
+    const {
       isApper: isErrorModalApper,
       errorCode,
       errorMessage,
@@ -155,7 +162,6 @@ export default defineComponent({
       isDownloading: false,
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       duration: computed(() => audioPlayer.getDuration()),
-      isLoading: false,
     });
 
     const setChime = (chime: ChimeItem) => {
@@ -218,14 +224,6 @@ export default defineComponent({
       fetchChime();
     });
 
-    const openLoadingModal = () => {
-      state.isLoading = true;
-    };
-
-    const closeLoadingModal = () => {
-      state.isLoading = false;
-    };
-
     return {
       ...toRefs(state),
       sortList,
@@ -240,6 +238,10 @@ export default defineComponent({
       isPlayModalAppear,
       openPlayModal,
       closePlayModal,
+      isLoading,
+      loadingMessage,
+      openLoadingModal,
+      closeLoadingModal,
       isErrorModalApper,
       errorCode,
       errorMessage,

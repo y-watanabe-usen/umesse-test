@@ -137,6 +137,7 @@ import { freeCache } from "@/repository/cache";
 import analytics from "@/utils/firebaseAnalytics";
 import Constants from "@/utils/Constants";
 import useModalController from "@/mixins/modalController";
+import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
 
 export default defineComponent({
@@ -166,6 +167,12 @@ export default defineComponent({
       open: openDocumentModal,
       close: closeDocumentModal,
     } = useModalController();
+    const {
+      isApper: isLoading,
+      loadingMessage,
+      open: openLoadingModal,
+      close: closeLoadingModal,
+    } = useLoadingModalController();
     const {
       isApper: isErrorModalApper,
       errorCode,
@@ -225,13 +232,6 @@ export default defineComponent({
       await fetchFreeTemplate();
     });
 
-    const openLoadingModal = () => {
-      state.isLoading = true;
-    };
-
-    const closeLoadingModal = () => {
-      state.isLoading = false;
-    };
     return {
       ...toRefs(state),
       sortList,
@@ -245,6 +245,10 @@ export default defineComponent({
       isDocumentModalAppear,
       openDocumentModal,
       closeDocumentModal,
+      isLoading,
+      loadingMessage,
+      openLoadingModal,
+      closeLoadingModal,
       isErrorModalApper,
       errorCode,
       errorMessage,

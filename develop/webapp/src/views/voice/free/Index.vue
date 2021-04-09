@@ -116,6 +116,7 @@ import { freeCache } from "@/repository/cache";
 import { audioService } from "@/services";
 import analytics from "@/utils/firebaseAnalytics";
 import useModalController from "@/mixins/modalController";
+import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
 
 export default defineComponent({
@@ -148,6 +149,12 @@ export default defineComponent({
       close: closeModal,
     } = useModalController();
     const {
+      isApper: isLoading,
+      loadingMessage,
+      open: openLoadingModal,
+      close: closeLoadingModal,
+    } = useLoadingModalController();
+    const {
       isApper: isErrorModalApper,
       errorCode,
       errorMessage,
@@ -164,7 +171,6 @@ export default defineComponent({
       speaker: "1", // 女性
       title: "",
       description: "",
-      isLoading: false,
     });
     // TODO: キャッシュでいいのか
     const cacheKey = "voice/free/selectTemplate";
@@ -217,13 +223,6 @@ export default defineComponent({
       stop();
       closeModal();
     };
-    const openLoadingModal = () => {
-      state.isLoading = true;
-      closeModal();
-    };
-    const closeLoadingModal = () => {
-      state.isLoading = false;
-    };
     return {
       ttsSpeakers,
       ...toRefs(state),
@@ -235,6 +234,10 @@ export default defineComponent({
       isModalAppear,
       openModal,
       closeModal,
+      isLoading,
+      loadingMessage,
+      openLoadingModal,
+      closeLoadingModal,
       isErrorModalApper,
       errorCode,
       errorMessage,

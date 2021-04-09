@@ -640,6 +640,7 @@ import * as Common from "@/utils/Common";
 import { User } from "umesseapi/models";
 import analytics from "@/utils/firebaseAnalytics";
 import useModalController from "@/mixins/modalController";
+import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
 
 export default defineComponent({
@@ -712,6 +713,12 @@ export default defineComponent({
       close: closeConfirmBackHomeModal,
     } = useModalController();
     const {
+      isApper: isLoading,
+      loadingMessage,
+      open: openLoadingModal,
+      close: closeLoadingModal,
+    } = useLoadingModalController();
+    const {
       isApper: isErrorModalApper,
       errorCode,
       errorMessage,
@@ -737,7 +744,6 @@ export default defineComponent({
       scene: "004",
       uploadSystem:
         authUser.serviceCd === Constants.SERVICE_CD_UMUSIC ? "01" : "02",
-      isLoading: false,
       isNarrationDropdownAppear: [false, false, false, false],
       isOpenChimeDropdownAppear: false,
       isEndChimeDropdownAppear: false,
@@ -949,12 +955,6 @@ export default defineComponent({
     const toVoiceFree = () => {
       router.push({ name: "VoiceFree" });
     };
-    const openLoadingModal = () => {
-      state.isLoading = true;
-    };
-    const closeLoadingModal = () => {
-      state.isLoading = false;
-    };
     const closeAllDropdownMenu = () => {
       state.isNarrationDropdownAppear = [false, false, false, false];
       state.isOpenChimeDropdownAppear = false;
@@ -1152,13 +1152,9 @@ export default defineComponent({
       authUser,
       uploadSystemArray,
       industryScenesList,
-<<<<<<< HEAD
-<<<<<<< HEAD
       changeCmOpenChime,
       changeCmEndChime,
       changeCmBgm,
-=======
-=======
       isPlayModalAppear,
       openPlayModal,
       closePlayModal,
@@ -1183,13 +1179,15 @@ export default defineComponent({
       isConfirmBackHomeModalAppear,
       openConfirmBackHomeModal,
       closeConfirmBackHomeModal,
->>>>>>> a96e88c... refactor modal
+      isLoading,
+      loadingMessage,
+      openLoadingModal,
+      closeLoadingModal,
       isErrorModalApper,
       errorCode,
       errorMessage,
       openErrorModal,
       closeErrorModal,
->>>>>>> 6d55d83... refactor errorModal
     };
   },
 });

@@ -349,6 +349,7 @@ import TextArea from "@/components/atoms/TextArea.vue";
 import MessageDialogContents from "@/components/molecules/MessageDialogContents.vue";
 import Constants from "@/utils/Constants";
 import useModalController from "@/mixins/modalController";
+import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
 
 export default defineComponent({
@@ -413,6 +414,12 @@ export default defineComponent({
       close: closeRemovedModal,
     } = useModalController();
     const {
+      isApper: isLoading,
+      loadingMessage,
+      open: openLoadingModal,
+      close: closeLoadingModal,
+    } = useLoadingModalController();
+    const {
       isApper: isErrorModalApper,
       errorCode,
       errorMessage,
@@ -430,7 +437,6 @@ export default defineComponent({
       isDownloading: false,
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       duration: computed(() => audioPlayer.getDuration()),
-      isLoading: false,
       dropdownNarrationId: "",
       title: "",
       description: "",
@@ -475,7 +481,7 @@ export default defineComponent({
     const fetchNarration = async () => {
       if (!state.activeSceneCd) return;
       try {
-        state.isLoading = true;
+        openLoadingModal();
         const response = await resourcesService.fetchNarration(
           authToken,
           state.activeIndustryCd,
@@ -486,7 +492,7 @@ export default defineComponent({
       } catch (e) {
         openErrorModal(e);
       } finally {
-        state.isLoading = false;
+        closeLoadingModal();
       }
     };
 
@@ -546,9 +552,6 @@ export default defineComponent({
       fetchScene();
     });
 
-    const closeLoadingModal = () => {
-      state.isLoading = false;
-    };
     const selectNarrationAndOpenSaveModal = (narration: NarrationItem) => {
       closeAllDropdownMenu();
       selectNarration(narration);
@@ -664,6 +667,10 @@ export default defineComponent({
       isRemovedModalAppear,
       openRemovedModal,
       closeRemovedModal,
+      isLoading,
+      loadingMessage,
+      openLoadingModal,
+      closeLoadingModal,
       isErrorModalApper,
       errorCode,
       errorMessage,
