@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div @click="closeAllDropdownMenu">
     <BasicLayout>
       <template #header>
-        <Header>
+        <Header :clickBack="activeSceneCd ? clickBack : null">
           <template #title>テンプレート選択</template>
         </Header>
       </template>
@@ -20,63 +20,93 @@
               </SubMenuItem>
             </SubMenu>
           </template>
-          <List>
-            <template #header>
-              <ListHeader>
-                <Sort
-                  v-model="sort"
-                  @update:modelValue="fetchFreeTemplate"
-                  :options="
-                    sortList.map((v) => {
-                      return {
-                        title: v.name,
-                        value: v.cd,
-                      };
-                    })
-                  "
-                />
-              </ListHeader>
-            </template>
-            <ListItem v-for="freeItem in freeItems" :key="freeItem.contentsId">
-              <template #title>
-                <h2>{{ freeItem.title }}</h2>
+          <template v-if="!activeSceneCd">
+            <List>
+              <ListItem
+                class="scene"
+                v-for="scene in scenes"
+                :key="scene.cd"
+                @click="clickScene(scene.cd)"
+              >
+                <template #title>
+                  <h2>{{ scene.name }}</h2>
+                </template>
+              </ListItem>
+            </List>
+          </template>
+          <template v-else>
+            <List>
+              <template #header>
+                <ListHeader>
+                  <Sort
+                    v-model="sort"
+                    @update:modelValue="fetchFreeTemplate"
+                    :options="
+                      sortList.map((v) => {
+                        return {
+                          title: v.name,
+                          value: v.cd,
+                        };
+                      })
+                    "
+                  />
+                </ListHeader>
               </template>
-              <template #line1>
-                <p>{{ freeItem.manuscript }}</p>
-              </template>
-              <template #line2>
-                <p>
-                  <span class="duration">00:00</span>
-                  <span class="start"
-                    >放送開始日{{
-                      convertDatestringToDateJp(freeItem.timestamp)
-                    }}</span
+              <ListItem
+                v-for="freeItem in freeItems"
+                :key="freeItem.contentsId"
+              >
+                <template #title>
+                  <h2>{{ freeItem.title }}</h2>
+                </template>
+                <template #line1>
+                  <p>{{ freeItem.description }}</p>
+                </template>
+                <template #line2>
+                  <p>
+                    <span
+                      v-if="freeItem.seconds"
+                      class="duration"
+                      >{{
+                        convertNumberToTime(freeItem.seconds)
+                      }}</span
+                    >
+                    <span
+                      v-if="freeItem.timestamp"
+                      class="start"
+                      >放送開始日{{
+                        convertDatestringToDateJp(freeItem.timestamp)
+                      }}</span
+                    >
+                    <span
+                      v-if="freeItem.timestamp"
+                      class="end"
+                      >有効期限{{
+                        convertDatestringToDateJp(freeItem.timestamp)
+                      }}</span
+                    >
+                  </p>
+                </template>
+                <template #operations>
+                  <Button
+                    v-if="freeItem.manuscript"
+                    class="btn-document"
+                    @click="
+                      setManuscriptAndOpenDocumentModal(freeItem, freeItem.id)
+                    "
                   >
-                  <span class="end"
-                    >有効期限{{
-                      convertDatestringToDateJp(freeItem.timestamp)
-                    }}</span
+                    <img src="@/assets/icon_document.svg" />原稿
+                  </Button>
+                  <Button
+                    class="btn-select"
+                    @click="selectFreeTemplate(freeItem)"
                   >
-                </p>
-              </template>
-              <template #operations>
-                <Button
-                  class="btn-document"
-                  @click="
-                    setManuscriptAndOpenDocumentModal(freeItem.manuscript, freeItem.id)
-                  "
-                >
-                  <img src="@/assets/icon_document.svg" />原稿
-                </Button>
-                <Button
-                  class="btn-select"
-                  @click="selectFreeTemplate(freeItem)"
-                >
-                  選択<img src="@/assets/icon_select.svg" />
-                </Button>
-              </template>
-            </ListItem>
-          </List>
+                    選択<img src="@/assets/icon_select.svg" />
+                  </Button>
+                </template>
+              </ListItem>
+            </List>
+          </template>
         </ContentsBase>
       </template>
     </BasicLayout>
@@ -88,7 +118,7 @@
         </template>
         <template #contents>
           <TextDialogContents>
-            {{ manuscript }}
+            {{ selectedFreeItem?.manuscript }}
           </TextDialogContents>
         </template>
         <template #footer>
@@ -112,6 +142,7 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, reactive, toRefs } from "vue";
+import * as Common from "@/utils/Common";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
 import Header from "@/components/organisms/Header.vue";
@@ -127,10 +158,14 @@ import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
 import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
 import TextDialogContents from "@/components/molecules/TextDialogContents.vue";
-import { FreeItem } from "umesseapi/models/free-item";
-import * as Common from "@/utils/Common";
-import { convertDatestringToDateJp } from "@/utils/FormatDate";
+import { FreeItem } from "umesseapi/models";
+import { useGlobalStore } from "@/store";
 import router from "@/router";
+import {
+  convertDatestringToDateJp,
+  convertNumberToTime,
+} from "@/utils/FormatDate";
+import { Scene } from "@/utils/Constants";
 import { resourcesService } from "@/services";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { freeCache } from "@/repository/cache";
@@ -160,8 +195,10 @@ export default defineComponent({
     ModalLoading,
   },
   setup() {
+    const { auth } = useGlobalStore();
+    const authToken = <string>auth.getToken();
     const sortList = Common.getSort();
-    const industries = Common.getFreeTemplateIndustries();
+    const industries = Common.getTemplateIndustries();
     const {
       isApper: isDocumentModalAppear,
       open: openDocumentModal,
@@ -183,35 +220,63 @@ export default defineComponent({
     const state = reactive({
       sort: 1,
       activeIndustryCd: "10",
+      activeSceneCd: null as string | null,
       freeItems: [] as FreeItem[],
+      scenes: [] as Scene[],
+      selectedFreeItem: null as FreeItem | null,
       manuscript: "",
       isLoading: false,
+      dropdownfreeItemId: "",
+      title: "",
+      description: "",
     });
 
     const clickIndustry = (industryCd: string) => {
-      if (state.activeIndustryCd !== industryCd) {
+      if (
+        state.activeIndustryCd !== industryCd ||
+        (state.activeIndustryCd === industryCd && state.freeItems)
+      ) {
         state.activeIndustryCd = industryCd;
-        fetchFreeTemplate();
+        state.activeSceneCd = null;
+        fetchScene();
       }
     };
 
+    const clickScene = (sceneCd: string) => {
+      state.activeSceneCd = sceneCd;
+      fetchFreeTemplate();
+    };
+
+    const clickBack = () => {
+      state.activeSceneCd = null;
+      state.freeItems = [];
+    };
+
+    const fetchScene = () => {
+      state.scenes = Common.getIndustryScenes(state.activeIndustryCd);
+      state.freeItems = [];
+    };
+
     const fetchFreeTemplate = async () => {
+      if (!state.activeSceneCd) return;
       try {
-        openLoadingModal();
-        const response = await resourcesService.fetchFree(
+        state.isLoading = true;
+        const response = await resourcesService.fetchNarration(
+          authToken,
           state.activeIndustryCd,
+          state.activeSceneCd,
           state.sort
         );
         state.freeItems = response;
       } catch (e) {
         openErrorModal(e);
       } finally {
-        closeLoadingModal();
+        state.isLoading = false;
       }
     };
 
-    const setManuscript = (manuscript: string) => {
-      state.manuscript = manuscript;
+    const setManuscript = (freeItem: FreeItem) => {
+      state.selectedFreeItem = freeItem;
     };
 
     const selectFreeTemplate = (free: FreeItem) => {
@@ -222,8 +287,9 @@ export default defineComponent({
       router.push({ name: "VoiceFree" });
     };
 
-    const setManuscriptAndOpenDocumentModal = (manuscript: string, freeId: string) => {
-      setManuscript(manuscript);
+    const setManuscriptAndOpenDocumentModal = (freeItem: FreeItem, freeId: string) => {
+      setManuscript(freeItem);
+      closeAllDropdownMenu();
       analytics.pressButtonManuscript(freeId, Constants.SCREEN.SELECT_TEMPLATE);
       openDocumentModal();
     };
@@ -232,16 +298,26 @@ export default defineComponent({
       await fetchFreeTemplate();
     });
 
+    const closeAllDropdownMenu = () => {
+      state.dropdownfreeItemId = "";
+    };
+
+    onMounted(async () => {
+      fetchScene();
+    });
     return {
       ...toRefs(state),
       sortList,
       industries,
       clickIndustry,
-      setManuscript,
+      clickScene,
       selectFreeTemplate,
       setManuscriptAndOpenDocumentModal,
       convertDatestringToDateJp,
+      convertNumberToTime,
       fetchFreeTemplate,
+      clickBack,
+      closeAllDropdownMenu,
       isDocumentModalAppear,
       openDocumentModal,
       closeDocumentModal,
