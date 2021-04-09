@@ -29,6 +29,15 @@
         "arn:aws:dynamodb:*:*:table/umesse-contents",
         "arn:aws:dynamodb:*:*:table/umesse-external"
       ]
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
+        "ec2:CreateNetworkInterface",
+        "ec2:DeleteNetworkInterface",
+        "ec2:DescribeNetworkInterfaces"
+      ],
+      "Resource": "*"
     }
   ]
 }

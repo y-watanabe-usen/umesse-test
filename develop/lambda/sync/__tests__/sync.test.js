@@ -1,7 +1,7 @@
 "use strict";
 
 process.env.debug = true;
-process.env.environment = "dev";
+process.env.environment = "localstack";
 
 const aws = require("aws-sdk");
 const { ERROR_CODE } = require("umesse-lib/error");

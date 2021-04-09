@@ -24,7 +24,7 @@ exports.handler = async (event, context) => {
   let lastdate;
   try {
     lastdate = fs.readFileSync(file);
-    if (!lastdate || lastdate == "") throw _;
+    if (!lastdate || lastdate == "") throw "unknown file";
   } catch (e) {
     lastdate = targetDate(60 * 60);
   }
@@ -44,49 +44,72 @@ exports.handler = async (event, context) => {
       return errorResponse(new InternalServerError(ERROR_CODE.E0000500));
     }
     debuglog(JSON.stringify(ret));
-    if (!ret || ret.count == 0) return { code: "200", message: "data noting" };
+    if (!ret || ret.count == 0) continue;
 
-    // DynamoDbデータ更新
-    const contracts = ret.contracts;
-    const key = { unisCustomerCd: contracts.unisCustomerCd };
-    const options = {
-      UpdateExpression: `SET 
-        contractCd = :contractCd,
-        serviceCd = :serviceCd,
-        serviceName = :serviceName,
-        customerName = :customerName,
-        customerNameKana = :customerNameKana,
-        customerGroupCd = :customerGroupCd,
-        customerGroupName = :customerGroupName,
-        contractStatusCd = :contractStatusCd,
-        contractStatusName = :contractStatusName,
-        createDate = :createDate,
-        renewalDate = :renewalDate`,
-      ExpressionAttributeValues: {
-        ":contractCd": contracts.contractCd,
-        ":serviceCd": contracts.serviceCd,
-        ":serviceName": contracts.serviceName,
-        ":customerName": contracts.customerName,
-        ":customerNameKana": contracts.customerNameKana,
-        ":customerGroupCd": contracts.customerGroupCd,
-        ":customerGroupName": contracts.customerGroupName,
-        ":contractStatusCd": contracts.contractStatusCd,
-        ":contractStatusName": contracts.contractStatusName,
-        ":createDate": contracts.createDate,
-        ":renewalDate": contracts.renewalDate,
-      },
-      ReturnValues: "UPDATED_NEW",
-    };
-    debuglog(JSON.stringify({ key: key, options: options }));
-    try {
-      ret = await dynamodbManager.update(
-        constants.dynamoDbTable().users,
-        key,
-        options
-      );
-    } catch (e) {
-      errorlog(JSON.stringify(e));
-      return errorResponse(new InternalServerError(ERROR_CODE.E0000500));
+    for (const contract of ret.contracts) {
+      const key = { unisCustomerCd: contract.unis_customer_cd };
+      let user;
+      try {
+        user = await dynamodbManager.get(
+          constants.dynamoDbTable().users,
+          key,
+          {}
+        );
+      } catch (e) {
+        errorlog(JSON.stringify(e));
+        return errorResponse(new InternalServerError(ERROR_CODE.E0000500));
+      }
+      debuglog(JSON.stringify(user));
+
+      let options = {
+        UpdateExpression: `SET 
+          contractCd = :contractCd,
+          serviceCd = :serviceCd,
+          serviceName = :serviceName,
+          customerName = :customerName,
+          customerNameKana = :customerNameKana,
+          customerGroupCd = :customerGroupCd,
+          customerGroupName = :customerGroupName,
+          contractStatusCd = :contractStatusCd,
+          contractStatusName = :contractStatusName,
+          createDate = :createDate,
+          renewalDate = :renewalDate`,
+        ExpressionAttributeValues: {
+          ":contractCd": contract.contract_cd,
+          ":serviceCd": contract.service_cd,
+          ":serviceName": contract.service_name,
+          ":customerName": contract.customer_name,
+          ":customerNameKana": contract.customer_name_kana,
+          ":customerGroupCd": contract.customer_group_cd,
+          ":customerGroupName": contract.customer_group_name,
+          ":contractStatusCd": contract.contract_status_cd,
+          ":contractStatusName": contract.contract_status_name,
+          ":createDate": contract.create_date,
+          ":renewalDate": contract.renewal_date,
+        },
+        ReturnValues: "UPDATED_NEW",
+      };
+
+      if (!user.Item) {
+        options.UpdateExpression += `, cm = :cm, recording = :recording, tts = :tts`;
+        options.ExpressionAttributeValues[":cm"] = [];
+        options.ExpressionAttributeValues[":recording"] = [];
+        options.ExpressionAttributeValues[":tts"] = [];
+      }
+
+      debuglog(JSON.stringify({ key: key, options: options }));
+
+      // DynamoDbデータ登録
+      try {
+        ret = await dynamodbManager.update(
+          constants.dynamoDbTable().users,
+          key,
+          options
+        );
+      } catch (e) {
+        errorlog(JSON.stringify(e));
+        return errorResponse(new InternalServerError(ERROR_CODE.E0000500));
+      }
     }
   }
 
@@ -110,7 +133,7 @@ function requestUdsApi(serviceCd, lastdate) {
     debuglog(JSON.stringify({ options: options }));
 
     const request = https.request(options, (response) => {
-      let data;
+      let data = "";
       response.on("data", (chunk) => {
         data += chunk;
       });
