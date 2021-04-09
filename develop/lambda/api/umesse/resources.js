@@ -490,8 +490,17 @@ exports.deleteUserResource = async (unisCustomerCd, category, id) => {
     throw new InternalServerError(ERROR_CODE.E0000500);
   }
 
-  // DynamoDBのデータ更新
+  // CMで利用されているかチェック
   let ret;
+  try {
+    ret = await db.User.findResourceCm(unisCustomerCd, category, id);
+  } catch (e) {
+    errorlog(JSON.stringify(e));
+    throw new InternalServerError(ERROR_CODE.E0000500);
+  }
+  if (ret && ret.length > 0) throw new BadRequestError(ERROR_CODE.E0300010);
+
+  // DynamoDBのデータ更新
   try {
     ret = await db.User.deleteFromCategory(unisCustomerCd, category, index);
   } catch (e) {
