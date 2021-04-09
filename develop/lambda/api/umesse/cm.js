@@ -369,7 +369,7 @@ exports.deleteCm = async (unisCustomerCd, id) => {
     let path = `users/${unisCustomerCd}/${constants.resourceCategory.CM}/${id}`;
     const _ = await s3Manager.delete(
       constants.s3Bucket().users,
-      cm.status === constants.cmStatus.CREATING ? `${path}.mp3` : `${path}.aac`
+      cm.status === constants.cmStatus.COMPLETE ? `${path}.aac` : `${path}.mp3`
     );
   } catch (e) {
     errorlog(JSON.stringify(e));
