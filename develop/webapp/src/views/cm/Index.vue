@@ -1088,14 +1088,15 @@ export default defineComponent({
     const saveAnalytics = () => {
       analytics.pressButtonSave(
         {
-          narrations: !state.narrations
-            ? []
-            : [
-                state.narrations[0].id,
-                state.narrations[1].id,
-                state.narrations[2].id,
-                state.narrations[3].id,
-              ],
+          narrations:
+            state.narrations.length === 0
+              ? []
+              : [
+                  state.narrations[0].id,
+                  state.narrations[1]?.id,
+                  state.narrations[2]?.id,
+                  state.narrations[3]?.id,
+                ],
           bgm: !state.bgm ? null : state.bgm.id,
           open_chime: !state.openChime ? null : state.openChime.id,
           end_chime: !state.endChime ? null : state.endChime.id,
