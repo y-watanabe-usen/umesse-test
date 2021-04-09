@@ -420,7 +420,7 @@ describe("fetchTemplateのテスト", () => {
     ];
     jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
 
-    const response = await resourcesService.fetchTemplate("01", 1);
+    const response = await resourcesService.fetchTemplate("01", "10", 1);
 
     expect(response.length).toBe(2);
     expect(response[0].id).toBe("テンプレート04");
@@ -437,7 +437,7 @@ describe("fetchTemplateのテスト", () => {
 
     jest.spyOn(axios, "request").mockRejectedValue({ data: responseJson });
 
-    await expect(resourcesService.fetchTemplate("01", 1)).rejects.toThrowError(
+    await expect(resourcesService.fetchTemplate("01", "10", 1)).rejects.toThrowError(
       expoectedError
     );
   });
@@ -453,7 +453,7 @@ describe("fetchTemplateのテスト", () => {
       .spyOn(axios, "request")
       .mockRejectedValue({ response: { status: 500 } });
 
-    await expect(resourcesService.fetchTemplate("01", 1)).rejects.toThrowError(
+    await expect(resourcesService.fetchTemplate("01", "10",1)).rejects.toThrowError(
       expoectedError
     );
   });
