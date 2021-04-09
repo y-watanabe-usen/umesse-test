@@ -163,7 +163,7 @@ export default defineComponent({
       if (state.activeIndustryCd !== industryCd) {
         state.activeIndustryCd = industryCd;
         state.activeSceneCd = null;
-        fetchTemplate();
+        fetchScene();
       }
     };
 
