@@ -2,7 +2,7 @@
   <div>
     <BasicLayout>
       <template #header>
-        <Header>
+        <Header :clickBack="activeSceneCd ? clickBack : null">
           <template #title>テンプレート選択</template>
         </Header>
       </template>
@@ -20,46 +20,65 @@
               </SubMenuItem>
             </SubMenu>
           </template>
-          <List>
-            <template #header>
-              <ListHeader>
-                <Sort
-                  v-model="sort"
-                  @update:modelValue="fetchTemplate"
-                  :options="
-                    sortList.map((v) => {
-                      return {
-                        title: v.name,
-                        value: v.cd,
-                      };
-                    })
-                  "
-                />
-              </ListHeader>
-            </template>
-            <ListItem v-for="template in templates" :key="template.contentsId">
-              <template #title>
-                <h2>{{ template.title }}</h2>
+          <template v-if="!activeSceneCd">
+            <List>
+              <ListItem
+                class="scene"
+                v-for="scene in scenes"
+                :key="scene.cd"
+                @click="clickScene(scene.cd)"
+              >
+                <template #title>
+                  <h2>{{ scene.name }}</h2>
+                </template>
+              </ListItem>
+            </List>
+          </template>
+          <template v-else>
+            <List>
+              <template #header>
+                <ListHeader>
+                  <Sort
+                    v-model="sort"
+                    @update:modelValue="fetchTemplate"
+                    :options="
+                      sortList.map((v) => {
+                        return {
+                          title: v.name,
+                          value: v.cd,
+                        };
+                      })
+                    "
+                  />
+                </ListHeader>
               </template>
-              <template #line1>
-                <p>{{ template.manuscript }}</p>
-              </template>
-              <template #line2>
-                <p>
-                  約00:00<!-- TODO: 仮の数値 -->／
-                  {{ template.description }}
-                </p>
-              </template>
-              <template #operations>
-                <Button
-                  class="btn-select"
-                  @click="toVoiceTemplateDetail(template)"
-                >
-                  選択<img src="@/assets/icon_select.svg" />
-                </Button>
-              </template>
-            </ListItem>
-          </List>
+              <ListItem
+                v-for="template in templates"
+                :key="template.contentsId"
+              >
+                <template #title>
+                  <h2>{{ template.title }}</h2>
+                </template>
+                <template #line1>
+                  <p>{{ template.manuscript }}</p>
+                </template>
+                <template #line2>
+                  <p>
+                    約00:00<!-- TODO: 仮の数値 -->／
+                    {{ template.description }}
+                  </p>
+                </template>
+                <template #operations>
+                  <Button
+                    class="btn-select"
+                    @click="toVoiceTemplateDetail(template)"
+                  >
+                    選択<img src="@/assets/icon_select.svg" />
+                  </Button>
+                </template>
+              </ListItem>
+            </List>
+          </template>
         </ContentsBase>
       </template>
     </BasicLayout>
@@ -98,6 +117,7 @@ import { freeCache } from "@/repository/cache";
 import analytics from "@/utils/firebaseAnalytics";
 import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
+import { Scene } from "@/utils/Constants";
 
 export default defineComponent({
   components: {
@@ -135,11 +155,14 @@ export default defineComponent({
       activeIndustryCd: "10",
       templates: [] as TemplateItem[],
       isLoading: false,
+      scenes: [] as Scene[],
+      activeSceneCd: null as string | null,
     });
 
     const clickIndustry = (industryCd: string) => {
       if (state.activeIndustryCd !== industryCd) {
         state.activeIndustryCd = industryCd;
+        state.activeSceneCd = null;
         fetchTemplate();
       }
     };
@@ -169,6 +192,22 @@ export default defineComponent({
       await fetchTemplate();
     });
 
+    const fetchScene = () => {
+      state.scenes = Common.getIndustryScenes(state.activeIndustryCd);
+      state.templates = [];
+    };
+    const clickScene = (sceneCd: string) => {
+      state.activeSceneCd = sceneCd;
+      fetchTemplate();
+    };
+    const clickBack = () => {
+      state.activeSceneCd = null;
+      state.templates = [];
+    };
+    onMounted(async () => {
+      fetchScene();
+    });
+
     return {
       ...toRefs(state),
       sortList,
@@ -185,6 +224,8 @@ export default defineComponent({
       errorMessage,
       openErrorModal,
       closeErrorModal,
+      clickScene,
+      clickBack,
     };
   },
 });
