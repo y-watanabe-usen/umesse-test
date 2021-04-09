@@ -99,6 +99,30 @@ module.exports = {
     return [ret[index], index];
   },
 
+  findResourceCm: async function (unisCustomerCd, category, id) {
+    const key = { unisCustomerCd: unisCustomerCd };
+    const options = {
+      ProjectionExpression: "cm",
+    };
+    debuglog(JSON.stringify({ key: key, options: options }));
+
+    let ret = await dynamodbManager.get(
+      constants.dynamoDbTable().users,
+      key,
+      options
+    );
+    debuglog(JSON.stringify(ret));
+    if (!ret || !ret.Item) return;
+
+    ret = ret.Item.cm.filter((item) => {
+      if (!item.materials || !item.materials.narrations) return false;
+      return item.materials.narrations.some(
+        (el) => el.id === id && el.category === category
+      );
+    });
+    return ret;
+  },
+
   addCm: async function (unisCustomerCd, data) {
     const key = { unisCustomerCd: unisCustomerCd };
     const options = {

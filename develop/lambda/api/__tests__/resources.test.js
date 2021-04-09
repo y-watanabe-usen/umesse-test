@@ -411,9 +411,19 @@ describe("録音音声データ削除", () => {
     ]);
   });
 
+  test("[error] 録音音声データ削除　CMで利用されている", async () => {
+    await expect(
+      deleteUserResource(data.unisCustomerCd, "recording", data.recording[1].id)
+    ).rejects.toThrow(new BadRequestError(ERROR_CODE.E0300010));
+  });
+
   test("[error] 録音音声データ削除　データ存在しない", async () => {
     await expect(
-      getUserResource(data.unisCustomerCd, "recording", "999999999-r-99999999")
+      deleteUserResource(
+        data.unisCustomerCd,
+        "recording",
+        "999999999-r-99999999"
+      )
     ).rejects.toThrow(new NotFoundError(ERROR_CODE.E0000404));
   });
 
