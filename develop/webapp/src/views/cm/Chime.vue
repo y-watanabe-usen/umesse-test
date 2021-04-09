@@ -102,11 +102,13 @@ import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
 import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
 import PlayDialogContents from "@/components/molecules/PlayDialogContents.vue";
-import { UMesseError } from "../../models/UMesseError";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { audioService, resourcesService } from "@/services";
 import analytics from "@/utils/firebaseAnalytics";
 import Constants from "@/utils/Constants";
+import useModalController from "@/mixins/modalController";
+import useLoadingModalController from "@/mixins/loadingModalController";
+import useErrorModalController from "@/mixins/errorModalController";
 
 export default defineComponent({
   components: {
@@ -133,6 +135,24 @@ export default defineComponent({
     const sortList = Common.getSort();
     const isOpenChime = route.params.div == "open";
     const title = isOpenChime ? "Openチャイム" : "Endチャイム";
+    const {
+      isApper: isPlayModalAppear,
+      open: openPlayModal,
+      close: closePlayModal,
+    } = useModalController();
+    const {
+      isApper: isLoading,
+      loadingMessage,
+      open: openLoadingModal,
+      close: closeLoadingModal,
+    } = useLoadingModalController();
+    const {
+      isApper: isErrorModalApper,
+      errorCode,
+      errorMessage,
+      open: openErrorModal,
+      close: closeErrorModal,
+    } = useErrorModalController();
 
     const state = reactive({
       sort: 1,
@@ -142,11 +162,6 @@ export default defineComponent({
       isDownloading: false,
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       duration: computed(() => audioPlayer.getDuration()),
-      isPlayModalAppear: false,
-      isErrorModalApper: false,
-      errorCode: "",
-      errorMessage: "",
-      isLoading: false,
     });
 
     const setChime = (chime: ChimeItem) => {
@@ -166,13 +181,13 @@ export default defineComponent({
 
     const fetchChime = async () => {
       try {
-        openModalLoading();
+        openLoadingModal();
         const response = await resourcesService.fetchChime(state.sort);
         state.chimes = response;
       } catch (e) {
         openErrorModal(e);
       } finally {
-        closeModalLoading();
+        closeLoadingModal();
       }
     };
 
@@ -196,13 +211,6 @@ export default defineComponent({
       if (state.isPlaying) audioPlayer.stop();
     };
 
-    const openPlayModal = () => {
-      state.isPlayModalAppear = true;
-    };
-    const closePlayModal = () => {
-      state.isPlayModalAppear = false;
-    };
-
     const selectChimeAndOpenPlayModal = (chime: ChimeItem) => {
       selectChime(chime);
       openPlayModal();
@@ -216,24 +224,6 @@ export default defineComponent({
       fetchChime();
     });
 
-    const closeErrorModal = () => {
-      state.isErrorModalApper = false;
-    };
-
-    const openErrorModal = (e: UMesseError) => {
-      state.errorCode = e.errorCode;
-      state.errorMessage = e.message;
-      state.isErrorModalApper = true;
-    };
-
-    const openModalLoading = () => {
-      state.isLoading = true;
-    };
-
-    const closeModalLoading = () => {
-      state.isLoading = false;
-    };
-
     return {
       ...toRefs(state),
       sortList,
@@ -242,11 +232,20 @@ export default defineComponent({
       selectChime,
       play,
       stop,
-      openPlayModal,
-      closePlayModal,
       selectChimeAndOpenPlayModal,
       stopAndClosePlayModal,
       fetchChime,
+      isPlayModalAppear,
+      openPlayModal,
+      closePlayModal,
+      isLoading,
+      loadingMessage,
+      openLoadingModal,
+      closeLoadingModal,
+      isErrorModalApper,
+      errorCode,
+      errorMessage,
+      openErrorModal,
       closeErrorModal,
     };
   },

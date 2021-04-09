@@ -174,9 +174,11 @@ import TextArea from "@/components/atoms/TextArea.vue";
 import { useGlobalStore } from "@/store";
 import router from "@/router";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
-import { UMesseError } from "../../models/UMesseError";
 import { UPLOAD_RECORDING_STATE } from "@/store/recording";
 import analytics from "@/utils/firebaseAnalytics";
+import useModalController from "@/mixins/modalController";
+import useLoadingModalController from "@/mixins/loadingModalController";
+import useErrorModalController from "@/mixins/errorModalController";
 
 export default defineComponent({
   components: {
@@ -199,15 +201,33 @@ export default defineComponent({
     const audioRecorder = AudioRecorder();
     const audioPlayer = AudioPlayer();
     const { cm } = useGlobalStore();
+    const {
+      isApper: isLoading,
+      loadingMessage,
+      open: openLoadingModal,
+      close: closeLoadingModal,
+    } = useLoadingModalController();
+    const {
+      isApper: isModalAppear,
+      open: openModal,
+      close: closeModal,
+    } = useModalController();
+    const {
+      isApper: isErrorModalApper,
+      errorCode,
+      errorMessage,
+      open: openErrorModal,
+      close: closeErrorModal,
+    } = useErrorModalController();
     const state = reactive({
       file: <RecordingFile>{},
       isRecording: computed(() => audioRecorder.isRecording()),
       hasRecordedData: computed(() => audioRecorder.hasRecording()),
       decibel: computed(() => {
-        if( audioRecorder.isRecording()){
+        if (audioRecorder.isRecording()) {
           if (audioRecorder.getPowerDecibels() === -Infinity) return -60;
           return audioRecorder.getPowerDecibels();
-        }else if ( audioPlayer.isPlaying()){
+        } else if (audioPlayer.isPlaying()) {
           if (audioPlayer.getPowerDecibels() === -Infinity) return -60;
           return audioPlayer.getPowerDecibels();
         }
@@ -216,26 +236,20 @@ export default defineComponent({
       isPlaying: computed(() => audioPlayer.isPlaying()),
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       duration: computed(() => audioPlayer.getDuration()),
-      isModalAppear: false,
-      isLoading: false,
-      isErrorModalApper: false,
-      errorCode: "",
-      errorMessage: "",
     });
 
-    onUnmounted(()=>{
+    onUnmounted(() => {
       if (audioRecorder.isRecording()) {
         audioRecorder.stop();
       }
-      if ( audioPlayer.isPlaying()) {
+      if (audioPlayer.isPlaying()) {
         audioPlayer.stop();
       }
     });
 
     // toggle voice recorder.
     const toggleVoiceRecorder = async () => {
-      if( audioPlayer.isPlaying())
-        audioPlayer.stop();
+      if (audioPlayer.isPlaying()) audioPlayer.stop();
       if (audioRecorder.isRecording()) {
         audioRecorder.stop();
       } else {
@@ -258,40 +272,19 @@ export default defineComponent({
       /// check state.file.
       // state.file.blob = await audioRecorder.getWaveBlob();
       try {
-        openModalLoading();
+        openLoadingModal();
         state.file.blob = await audioRecorder.getMp3Blob();
         const response = await recordingStore.uploadRecordingData(state.file);
         cm.setNarration(response);
         analytics.setRecording(response.id);
         router.push({ name: "Cm" });
-        closeModalLoading();
+        closeLoadingModal();
         closeModal();
       } catch (e) {
         openErrorModal(e);
       } finally {
-        closeModalLoading();
+        closeLoadingModal();
       }
-    };
-    const openModal = () => {
-      stop();
-      state.isModalAppear = true;
-    };
-    const closeModal = () => {
-      state.isModalAppear = false;
-    };
-    const openModalLoading = () => {
-      state.isLoading = true;
-    };
-    const closeModalLoading = () => {
-      state.isLoading = false;
-    };
-    const closeErrorModal = () => {
-      state.isErrorModalApper = false;
-    };
-    const openErrorModal = (e: UMesseError) => {
-      state.errorCode = e.errorCode;
-      state.errorMessage = e.message;
-      state.isErrorModalApper = true;
     };
     return {
       ...toRefs(state),
@@ -300,10 +293,19 @@ export default defineComponent({
       deleteRecordedData,
       uploadRecordingFile,
       UPLOAD_RECORDING_STATE,
+      convertNumberToTime,
+      isModalAppear,
       openModal,
       closeModal,
+      isLoading,
+      loadingMessage,
+      openLoadingModal,
+      closeLoadingModal,
+      isErrorModalApper,
+      errorCode,
+      errorMessage,
+      openErrorModal,
       closeErrorModal,
-      convertNumberToTime,
     };
   },
 });

@@ -5,12 +5,7 @@
         <Header>
           <template #title>音声合成でナレーションを作成する</template>
           <template #buttons>
-            <Button
-              :disabled="!text"
-              @click="openModal"
-            >
-              確定
-            </Button>
+            <Button :disabled="!text" @click="generateTts"> 確定 </Button>
           </template>
         </Header>
       </template>
@@ -117,10 +112,12 @@ import SelectBox from "@/components/atoms/SelectBox.vue";
 import { useGlobalStore } from "@/store";
 import Constants from "@/utils/Constants";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
-import { UMesseError } from "../../../models/UMesseError";
 import { freeCache } from "@/repository/cache";
 import { audioService } from "@/services";
 import analytics from "@/utils/firebaseAnalytics";
+import useModalController from "@/mixins/modalController";
+import useLoadingModalController from "@/mixins/loadingModalController";
+import useErrorModalController from "@/mixins/errorModalController";
 
 export default defineComponent({
   components: {
@@ -146,6 +143,24 @@ export default defineComponent({
     const ttsSpeakers = Constants.TTS_GENDERS;
     const lang = "ja";
     const { cm } = useGlobalStore();
+    const {
+      isApper: isModalAppear,
+      open: openModal,
+      close: closeModal,
+    } = useModalController();
+    const {
+      isApper: isLoading,
+      loadingMessage,
+      open: openLoadingModal,
+      close: closeLoadingModal,
+    } = useLoadingModalController();
+    const {
+      isApper: isErrorModalApper,
+      errorCode,
+      errorMessage,
+      open: openErrorModal,
+      close: closeErrorModal,
+    } = useErrorModalController();
     const state = reactive({
       isGenerating: computed(() => ttsStore.isGenerating()),
       isCreating: computed(() => ttsStore.isCreating()),
@@ -154,13 +169,8 @@ export default defineComponent({
       duration: computed(() => audioPlayer.getDuration()),
       text: "",
       speaker: "1", // 女性
-      isModalAppear: false,
-      isErrorModalApper: false,
-      errorCode: "",
-      errorMessage: "",
       title: "",
       description: "",
-      isLoading: false,
     });
     // TODO: キャッシュでいいのか
     const cacheKey = "voice/free/selectTemplate";
@@ -183,7 +193,7 @@ export default defineComponent({
 
     const createTts = async () => {
       stop();
-      openModalLoading();
+      openLoadingModal();
       const response = await ttsStore.createTtsData(
         state.title,
         state.description,
@@ -197,49 +207,40 @@ export default defineComponent({
       });
       analytics.setTts(idString);
       router.push({ name: "Cm" });
-      closeModalLoading();
+      closeLoadingModal();
     };
 
-    const openModal = async () => {
+    const generateTts = async () => {
       try {
-        state.isModalAppear = true;
+        openModal();
         await ttsStore.generateTtsDataFromFree(state.text, state.speaker);
-      } catch(e) {
+      } catch (e) {
         closeModal();
         openErrorModal(e);
       }
     };
-    const closeModal = () => {
-      state.isModalAppear = false;
-    };
     const stopAndCloseModal = () => {
       stop();
       closeModal();
-    };
-    const openModalLoading = () => {
-      state.isLoading = true;
-      closeModal();
-    };
-    const closeModalLoading = () => {
-      state.isLoading = false;
-    };
-    const openErrorModal = (e: UMesseError) => {
-      state.errorCode = e.errorCode;
-      state.errorMessage = e.message;
-      state.isErrorModalApper = true;
-    };
-    const closeErrorModal = () => {
-      state.isErrorModalApper = false;
     };
     return {
       ttsSpeakers,
       ...toRefs(state),
       play,
       stop,
+      generateTts,
       createTts,
+      stopAndCloseModal,
+      isModalAppear,
       openModal,
       closeModal,
-      stopAndCloseModal,
+      isLoading,
+      loadingMessage,
+      openLoadingModal,
+      closeLoadingModal,
+      isErrorModalApper,
+      errorCode,
+      errorMessage,
       openErrorModal,
       closeErrorModal,
     };

@@ -5,7 +5,7 @@
         <Header>
           <template #title>音声合成でナレーションを作成する</template>
           <template #buttons>
-            <Button :isDisabled="isDisabledConfirm" @click="openModal"
+            <Button :isDisabled="isDisabledConfirm" @click="generateTts"
               >確定</Button
             >
           </template>
@@ -196,7 +196,6 @@ import { useGlobalStore } from "@/store";
 import { TemplateItem } from "umesseapi/models";
 import Constants from "@/utils/Constants";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
-import { UMesseError } from "../../../models/UMesseError";
 import { lang, speaker, TemplateDetailItem } from "@/models/TemplateDetailItem";
 import validator from "@/utils/validator";
 import { audioService } from "@/services";
@@ -213,6 +212,9 @@ import * as Common from "@/utils/Common";
 import { NarrationItem } from "umesseapi/models";
 import { MAX_NARRATION_COUNT } from "@/store/cm";
 import analytics from "@/utils/firebaseAnalytics";
+import useModalController from "@/mixins/modalController";
+import useLoadingModalController from "@/mixins/loadingModalController";
+import useErrorModalController from "@/mixins/errorModalController";
 
 export default defineComponent({
   components: {
@@ -278,6 +280,25 @@ export default defineComponent({
     const isVisiblePoint =
       template.manuscript.indexOf(ConverterType.point) != -1;
 
+    const {
+      isApper: isModalAppear,
+      open: openModal,
+      close: closeModal,
+    } = useModalController();
+    const {
+      isApper: isLoading,
+      loadingMessage,
+      open: openLoadingModal,
+      close: closeLoadingModal,
+    } = useLoadingModalController();
+    const {
+      isApper: isErrorModalApper,
+      errorCode,
+      errorMessage,
+      open: openErrorModal,
+      close: closeErrorModal,
+    } = useErrorModalController();
+
     const state = reactive({
       isPlaying: computed(() => audioPlayer.isPlaying()),
       isGenerating: computed(() => ttsStore.isGenerating()),
@@ -294,10 +315,6 @@ export default defineComponent({
       age: 18,
       minutes: 10,
       point: 3,
-      isModalAppear: false,
-      isErrorModalApper: false,
-      errorCode: "",
-      errorMessage: "",
       text: computed(() => {
         const text: string = ttsTextConverter.convertManuscript(
           template.manuscript,
@@ -319,7 +336,6 @@ export default defineComponent({
       playLang: "ja",
       title: template.title,
       description: template.description,
-      isLoading: false,
       errorMessageCustomerName: computed(() => {
         const customerName: string = state.customerName;
         return selectErrorMessageCustomerName(customerName);
@@ -357,7 +373,7 @@ export default defineComponent({
     };
     const createTts = async () => {
       stop();
-      openModalLoading();
+      openLoadingModal();
       const response = await ttsStore.createTtsData(
         state.title,
         state.description,
@@ -371,12 +387,12 @@ export default defineComponent({
       });
       analytics.setTts(idString);
       router.push({ name: "Cm" });
-      closeModalLoading();
+      closeLoadingModal();
     };
 
-    const openModal = async () => {
+    const generateTts = async () => {
       try {
-        state.isModalAppear = true;
+        openModal();
         await ttsStore.generateTtsDataFromTemplate(
           templateDetails,
           state.langs,
@@ -396,26 +412,9 @@ export default defineComponent({
         openErrorModal(e);
       }
     };
-    const closeModal = () => {
-      state.isModalAppear = false;
-    };
     const stopAndCloseModal = () => {
       stop();
       closeModal();
-    };
-    const openModalLoading = () => {
-      state.isLoading = true;
-    };
-    const closeModalLoading = () => {
-      state.isLoading = false;
-    };
-    const openErrorModal = (e: UMesseError) => {
-      state.errorCode = e.errorCode;
-      state.errorMessage = e.message;
-      state.isErrorModalApper = true;
-    };
-    const closeErrorModal = () => {
-      state.isErrorModalApper = false;
     };
     const selectErrorMessageCustomerName = (customerName: string) => {
       if (!validator.isFullWidthKana(customerName)) {
@@ -481,12 +480,9 @@ export default defineComponent({
       ttsLangs,
       play,
       stop,
+      generateTts,
       createTts,
-      openModal,
-      closeModal,
       stopAndCloseModal,
-      openErrorModal,
-      closeErrorModal,
       template,
       templateDetails,
       ConverterType,
@@ -500,6 +496,18 @@ export default defineComponent({
       isVisibleMinutes,
       isVisiblePoint,
       getLangsTitle,
+      isModalAppear,
+      openModal,
+      closeModal,
+      isLoading,
+      loadingMessage,
+      openLoadingModal,
+      closeLoadingModal,
+      isErrorModalApper,
+      errorCode,
+      errorMessage,
+      openErrorModal,
+      closeErrorModal,
     };
   },
 });

@@ -219,7 +219,7 @@
     </transition>
     <transition>
       <ModalDialog
-        v-if="isUpdatedModalAppear"
+        v-if="isUploadedModalAppear"
         size="small"
         @close="closeUploadedModal"
       >
@@ -359,10 +359,12 @@ import { useRouter } from "vue-router";
 import SelectBox from "@/components/atoms/SelectBox.vue";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import DropdownMenu from "@/components/molecules/DropdownMenu.vue";
-import { UMesseError } from "../../models/UMesseError";
 import { audioService, cmService, uploadService } from "@/services";
 import { User } from "umesseapi/models";
 import analytics from "@/utils/firebaseAnalytics";
+import useModalController from "@/mixins/modalController";
+import useLoadingModalController from "@/mixins/loadingModalController";
+import useErrorModalController from "@/mixins/errorModalController";
 
 export default defineComponent({
   components: {
@@ -442,6 +444,59 @@ export default defineComponent({
     ];
     const authToken = <string>auth.getToken();
     const authUser = <User>auth.getUserInfo();
+    const {
+      isApper: isPlayModalAppear,
+      open: openPlayModal,
+      close: closePlayModal,
+    } = useModalController();
+    const {
+      isApper: isSaveModalAppear,
+      open: openSaveModal,
+      close: closeSaveModal,
+    } = useModalController();
+    const {
+      isApper: isSavedModalAppear,
+      open: openSavedModal,
+      close: closeSavedModal,
+    } = useModalController();
+    const {
+      isApper: isRemoveModalAppear,
+      open: openRemoveModal,
+      close: closeRemoveModal,
+    } = useModalController();
+    const {
+      isApper: isRemovedModalAppear,
+      open: openRemovedModal,
+      close: closeRemovedModal,
+    } = useModalController();
+    const {
+      isApper: isUploadedModalAppear,
+      open: openUploadedModal,
+      close: closeUploadedModal,
+    } = useModalController();
+    const {
+      isApper: isUnUploadModalAppear,
+      open: openUnUploadModal,
+      close: closeUnUploadModal,
+    } = useModalController();
+    const {
+      isApper: isUnUploadedModalAppear,
+      open: openUnUploadedModal,
+      close: closeUnUploadedModal,
+    } = useModalController();
+    const {
+      isApper: isLoading,
+      loadingMessage,
+      open: openLoadingModal,
+      close: closeLoadingModal,
+    } = useLoadingModalController();
+    const {
+      isApper: isErrorModalApper,
+      errorCode,
+      errorMessage,
+      open: openErrorModal,
+      close: closeErrorModal,
+    } = useErrorModalController();
     const state = reactive({
       activeSceneCd: "",
       sceneList: [] as Scene[],
@@ -457,28 +512,17 @@ export default defineComponent({
       title: "",
       description: "",
       scene: "",
-      isPlayModalAppear: false,
-      isSaveModalAppear: false,
-      isSavedModalAppear: false,
-      isRemoveModalAppear: false,
-      isRemovedModalAppear: false,
       isLoading: false,
       dropdownCmId: "",
       titleModalLoading: "",
-      isErrorModalApper: false,
-      errorCode: "",
-      errorMessage: "",
       uploadSystemtitle:
         authUser.serviceCd === Constants.SERVICE_CD_UMUSIC
           ? "U MUSICにアップロード"
           : "S'Senceにアップロード",
-      isUpdatedModalAppear: false,
-      isUnUploadModalAppear: false,
-      isUnUploadedModalAppear: false,
     });
     const fetchScene = async () => {
       try {
-        openModalLoading("");
+        openLoadingModal("");
         const response = await cmService.fetch(authToken, state.sort);
         state.sceneList = response[0];
         state.cmList = response[1];
@@ -486,7 +530,7 @@ export default defineComponent({
       } catch (e) {
         openErrorModal(e);
       } finally {
-        closeModalLoading();
+        closeLoadingModal();
       }
     };
     const fetchCm = (sceneCd: string) => {
@@ -544,18 +588,18 @@ export default defineComponent({
             ? Constants.UPLOAD_SYSTEM_UMUSIC
             : Constants.UPLOAD_SYSTEM_SSENCE;
         await uploadService.create(authToken, cm.id, uploadSystem);
-        openUploadtedModal();
+        openUploadedModal();
       } catch (e) {
         console.log(e.message);
         openErrorModal(e);
       } finally {
-        closeModalLoading();
+        closeLoadingModal();
       }
     };
     const unUpload = async () => {
       try {
         if (!state.selectedCm) return;
-        openModalLoading("アップロード解除中");
+        openLoadingModal("アップロード解除中");
         const cmId = state.selectedCm.id;
         await uploadService.remove(cmId, authToken);
         openUnUploadedModal();
@@ -563,58 +607,13 @@ export default defineComponent({
         console.log(e.message);
         openErrorModal(e);
       } finally {
-        closeModalLoading();
+        closeLoadingModal();
         closeUnUploadModal();
       }
     };
     const remove = async (cmId: string) => {
       await cmService.remove(authToken, cmId);
       fetchScene();
-    };
-    const openPlayModal = () => {
-      state.isPlayModalAppear = true;
-    };
-    const closePlayModal = () => {
-      state.isPlayModalAppear = false;
-    };
-    const openSaveModal = () => {
-      state.isSaveModalAppear = true;
-    };
-    const closeSaveModal = () => {
-      state.isSaveModalAppear = false;
-    };
-    const openSavedModal = () => {
-      state.isSavedModalAppear = true;
-    };
-    const closeSavedModal = () => {
-      state.isSavedModalAppear = false;
-    };
-    const openRemoveModal = () => {
-      state.isRemoveModalAppear = true;
-    };
-    const closeRemoveModal = () => {
-      state.isRemoveModalAppear = false;
-    };
-    const openRemovedModal = () => {
-      state.isRemovedModalAppear = true;
-    };
-    const closeRemovedModal = () => {
-      state.isRemovedModalAppear = false;
-    };
-    const openUploadtedModal = () => {
-      state.isUpdatedModalAppear = true;
-    };
-    const closeUploadedModal = () => {
-      state.isUpdatedModalAppear = false;
-    };
-    const closeUnUploadModal = () => {
-      state.isUnUploadModalAppear = false;
-    };
-    const openUnUploadedModal = () => {
-      state.isUnUploadedModalAppear = true;
-    };
-    const closeUnUploadedModal = () => {
-      state.isUnUploadedModalAppear = false;
     };
     const selectCmAndOpenPlayModal = (cm: CmItem) => {
       selectCm(cm);
@@ -642,7 +641,7 @@ export default defineComponent({
       analytics.pressButtonUnupload(cm.id, Constants.SCREEN.MANAGEMENT);
       closeAllDropdownMenu();
       selectCm(cm);
-      state.isUnUploadModalAppear = true;
+      openUnUploadModal();
     };
     const stopAndClosePlayModal = () => {
       stop();
@@ -650,18 +649,18 @@ export default defineComponent({
     };
     const saveAndOpenSavedModal = async () => {
       try {
-        openModalLoading("音源の合成中");
+        openLoadingModal("音源の合成中");
         if (!state.selectedCm) return;
         await save(state.selectedCm);
         analytics.pressButtonSaveEdit(state.selectedCm.id, Constants.SCREEN.MANAGEMENT);
-        closeModalLoading();
+        closeLoadingModal();
         closeSaveModal();
         openSavedModal();
       } catch (e) {
         console.log(e.message);
         openErrorModal(e);
       } finally {
-        closeModalLoading();
+        closeLoadingModal();
       }
     };
     const removeAndOpenRemovedModal = async () => {
@@ -671,9 +670,9 @@ export default defineComponent({
         Constants.SCREEN.MANAGEMENT
       );
       try {
-        openModalLoading("音源の削除中");
+        openLoadingModal("音源の削除中");
         await remove(state.selectedCm?.id);
-        closeModalLoading();
+        closeLoadingModal();
         closeRemoveModal();
         openRemovedModal();
       } catch (e) {
@@ -681,7 +680,7 @@ export default defineComponent({
         console.log(e.message);
         openErrorModal(e);
       } finally {
-        closeModalLoading();
+        closeLoadingModal();
       }
     };
     const toEditCm = (cmItem: CmItem) => {
@@ -694,13 +693,6 @@ export default defineComponent({
     onMounted(async () => {
       fetchScene();
     });
-    const openModalLoading = (title: string) => {
-      state.titleModalLoading = title;
-      state.isLoading = true;
-    };
-    const closeModalLoading = () => {
-      state.isLoading = false;
-    };
     const closeAllDropdownMenu = () => {
       state.dropdownCmId = "";
     };
@@ -711,14 +703,6 @@ export default defineComponent({
         closeAllDropdownMenu();
         state.dropdownCmId = cmId;
       }
-    };
-    const closeErrorModal = () => {
-      state.isErrorModalApper = false;
-    };
-    const openErrorModal = (e: UMesseError) => {
-      state.errorCode = e.errorCode;
-      state.errorMessage = e.message;
-      state.isErrorModalApper = true;
     };
     const getStatusClass = (cd: string) => {
       switch (cd) {
@@ -746,20 +730,6 @@ export default defineComponent({
       selectCm,
       convertDatestringToDate,
       convertNumberToTime,
-      openPlayModal,
-      closePlayModal,
-      openSaveModal,
-      closeSaveModal,
-      openSavedModal,
-      closeSavedModal,
-      openRemoveModal,
-      closeRemoveModal,
-      openRemovedModal,
-      closeRemovedModal,
-      openUploadtedModal,
-      closeUploadedModal,
-      closeUnUploadModal,
-      closeUnUploadedModal,
       selectCmAndOpenPlayModal,
       selectCmAndOpenSaveModal,
       selectCmAndOpenRemoveModal,
@@ -777,10 +747,42 @@ export default defineComponent({
       disabledDeleteStatus,
       closeAllDropdownMenu,
       toggleDropdown,
-      closeErrorModal,
       getStatusClass,
       upload,
       unUpload,
+      isPlayModalAppear,
+      openPlayModal,
+      closePlayModal,
+      isSaveModalAppear,
+      openSaveModal,
+      closeSaveModal,
+      isSavedModalAppear,
+      openSavedModal,
+      closeSavedModal,
+      isRemoveModalAppear,
+      openRemoveModal,
+      closeRemoveModal,
+      isRemovedModalAppear,
+      openRemovedModal,
+      closeRemovedModal,
+      isUploadedModalAppear,
+      openUploadedModal,
+      closeUploadedModal,
+      isUnUploadModalAppear,
+      openUnUploadModal,
+      closeUnUploadModal,
+      isUnUploadedModalAppear,
+      openUnUploadedModal,
+      closeUnUploadedModal,
+      isLoading,
+      loadingMessage,
+      openLoadingModal,
+      closeLoadingModal,
+      isErrorModalApper,
+      errorCode,
+      errorMessage,
+      openErrorModal,
+      closeErrorModal,
     };
   },
 });

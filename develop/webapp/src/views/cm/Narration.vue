@@ -335,7 +335,6 @@ import {
   convertNumberToTime,
 } from "@/utils/FormatDate";
 import { Scene } from "@/utils/Constants";
-import { UMesseError } from "../../models/UMesseError";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import {
   audioService,
@@ -349,6 +348,9 @@ import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
 import MessageDialogContents from "@/components/molecules/MessageDialogContents.vue";
 import Constants from "@/utils/Constants";
+import useModalController from "@/mixins/modalController";
+import useLoadingModalController from "@/mixins/loadingModalController";
+import useErrorModalController from "@/mixins/errorModalController";
 
 export default defineComponent({
   components: {
@@ -381,6 +383,49 @@ export default defineComponent({
     const authToken = <string>auth.getToken();
     const sortList = Common.getSort();
     const industries = Common.getNarrationIndustries();
+    const {
+      isApper: isPlayModalAppear,
+      open: openPlayModal,
+      close: closePlayModal,
+    } = useModalController();
+    const {
+      isApper: isDocumentModalAppear,
+      open: openDocumentModal,
+      close: closeDocumentModal,
+    } = useModalController();
+    const {
+      isApper: isSaveModalAppear,
+      open: openSaveModal,
+      close: closeSaveModal,
+    } = useModalController();
+    const {
+      isApper: isSavedModalAppear,
+      open: openSavedModal,
+      close: closeSavedModal,
+    } = useModalController();
+    const {
+      isApper: isRemoveModalAppear,
+      open: openRemoveModal,
+      close: closeRemoveModal,
+    } = useModalController();
+    const {
+      isApper: isRemovedModalAppear,
+      open: openRemovedModal,
+      close: closeRemovedModal,
+    } = useModalController();
+    const {
+      isApper: isLoading,
+      loadingMessage,
+      open: openLoadingModal,
+      close: closeLoadingModal,
+    } = useLoadingModalController();
+    const {
+      isApper: isErrorModalApper,
+      errorCode,
+      errorMessage,
+      open: openErrorModal,
+      close: closeErrorModal,
+    } = useErrorModalController();
     const state = reactive({
       sort: 1,
       activeIndustryCd: "02",
@@ -392,19 +437,9 @@ export default defineComponent({
       isDownloading: false,
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       duration: computed(() => audioPlayer.getDuration()),
-      isDocumentModalAppear: false,
-      isPlayModalAppear: false,
-      isErrorModalApper: false,
-      errorCode: "",
-      errorMessage: "",
-      isLoading: false,
       dropdownNarrationId: "",
       title: "",
       description: "",
-      isSaveModalAppear: false,
-      isSavedModalAppear: false,
-      isRemoveModalAppear: false,
-      isRemovedModalAppear: false,
     });
 
     const setNarration = (narration: NarrationItem) => {
@@ -446,7 +481,7 @@ export default defineComponent({
     const fetchNarration = async () => {
       if (!state.activeSceneCd) return;
       try {
-        state.isLoading = true;
+        openLoadingModal();
         const response = await resourcesService.fetchNarration(
           authToken,
           state.activeIndustryCd,
@@ -457,7 +492,7 @@ export default defineComponent({
       } catch (e) {
         openErrorModal(e);
       } finally {
-        state.isLoading = false;
+        closeLoadingModal();
       }
     };
 
@@ -485,20 +520,6 @@ export default defineComponent({
       if (state.isPlaying) audioPlayer.stop();
     };
 
-    const openDocumentModal = () => {
-      state.isDocumentModalAppear = true;
-    };
-    const closeDocumentModal = () => {
-      state.isDocumentModalAppear = false;
-    };
-
-    const openPlayModal = () => {
-      state.isPlayModalAppear = true;
-    };
-    const closePlayModal = () => {
-      state.isPlayModalAppear = false;
-    };
-
     const selectNarrationAndOpenDocumentModal = (narration: NarrationItem) => {
       selectNarration(narration);
       closeAllDropdownMenu();
@@ -512,10 +533,6 @@ export default defineComponent({
     const stopAndClosePlayModal = () => {
       stop();
       closePlayModal();
-    };
-
-    const closeErrorModal = () => {
-      state.isErrorModalApper = false;
     };
 
     const closeAllDropdownMenu = () => {
@@ -535,26 +552,6 @@ export default defineComponent({
       fetchScene();
     });
 
-    const openErrorModal = (e: UMesseError) => {
-      state.errorCode = e.errorCode;
-      state.errorMessage = e.message;
-      state.isErrorModalApper = true;
-    };
-    const closeModalLoading = () => {
-      state.isLoading = false;
-    };
-    const openSaveModal = () => {
-      state.isSaveModalAppear = true;
-    };
-    const closeSaveModal = () => {
-      state.isSaveModalAppear = false;
-    };
-    const openSavedModal = () => {
-      state.isSavedModalAppear = true;
-    };
-    const closeSavedModal = () => {
-      state.isSavedModalAppear = false;
-    };
     const selectNarrationAndOpenSaveModal = (narration: NarrationItem) => {
       closeAllDropdownMenu();
       selectNarration(narration);
@@ -601,18 +598,6 @@ export default defineComponent({
       selectNarration(narration);
       openRemoveModal();
     };
-    const openRemoveModal = () => {
-      state.isRemoveModalAppear = true;
-    };
-    const closeRemoveModal = () => {
-      state.isRemoveModalAppear = false;
-    };
-    const openRemovedModal = () => {
-      state.isRemovedModalAppear = true;
-    };
-    const closeRemovedModal = () => {
-      state.isRemovedModalAppear = false;
-    };
     const removeAndOpenRemovedModal = async () => {
       analytics.pressButtonRemove(
         state.selectedNarration?.id,
@@ -624,7 +609,7 @@ export default defineComponent({
           state.selectedNarration?.id,
           state.selectedNarration?.category
         );
-        closeModalLoading();
+        closeLoadingModal();
         closeRemoveModal();
         openRemovedModal();
       } catch (e) {
@@ -653,27 +638,44 @@ export default defineComponent({
       clickScene,
       convertDatestringToDateJp,
       convertNumberToTime,
-      openDocumentModal,
-      closeDocumentModal,
-      openPlayModal,
-      closePlayModal,
       selectNarrationAndOpenDocumentModal,
       selectNarrationAndOpenPlayModal,
       stopAndClosePlayModal,
-      closeErrorModal,
       fetchNarration,
       clickBack,
       closeAllDropdownMenu,
       toggleDropdown,
       selectNarrationAndOpenSaveModal,
-      openSaveModal,
-      closeSaveModal,
-      closeSavedModal,
       saveAndOpenSavedModal,
       selectNarrationAndOpenRemoveModal,
-      closeRemoveModal,
-      closeRemovedModal,
       removeAndOpenRemovedModal,
+      isPlayModalAppear,
+      openPlayModal,
+      closePlayModal,
+      isDocumentModalAppear,
+      openDocumentModal,
+      closeDocumentModal,
+      isSaveModalAppear,
+      openSaveModal,
+      closeSaveModal,
+      isSavedModalAppear,
+      openSavedModal,
+      closeSavedModal,
+      isRemoveModalAppear,
+      openRemoveModal,
+      closeRemoveModal,
+      isRemovedModalAppear,
+      openRemovedModal,
+      closeRemovedModal,
+      isLoading,
+      loadingMessage,
+      openLoadingModal,
+      closeLoadingModal,
+      isErrorModalApper,
+      errorCode,
+      errorMessage,
+      openErrorModal,
+      closeErrorModal,
     };
   },
 });

@@ -131,12 +131,14 @@ import { FreeItem } from "umesseapi/models/free-item";
 import * as Common from "@/utils/Common";
 import { convertDatestringToDateJp } from "@/utils/FormatDate";
 import router from "@/router";
-import { UMesseError } from "../../../models/UMesseError";
 import { resourcesService } from "@/services";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { freeCache } from "@/repository/cache";
 import analytics from "@/utils/firebaseAnalytics";
 import Constants from "@/utils/Constants";
+import useModalController from "@/mixins/modalController";
+import useLoadingModalController from "@/mixins/loadingModalController";
+import useErrorModalController from "@/mixins/errorModalController";
 
 export default defineComponent({
   components: {
@@ -160,15 +162,29 @@ export default defineComponent({
   setup() {
     const sortList = Common.getSort();
     const industries = Common.getFreeTemplateIndustries();
+    const {
+      isApper: isDocumentModalAppear,
+      open: openDocumentModal,
+      close: closeDocumentModal,
+    } = useModalController();
+    const {
+      isApper: isLoading,
+      loadingMessage,
+      open: openLoadingModal,
+      close: closeLoadingModal,
+    } = useLoadingModalController();
+    const {
+      isApper: isErrorModalApper,
+      errorCode,
+      errorMessage,
+      open: openErrorModal,
+      close: closeErrorModal,
+    } = useErrorModalController();
     const state = reactive({
       sort: 1,
       activeIndustryCd: "10",
       freeItems: [] as FreeItem[],
       manuscript: "",
-      isDocumentModalAppear: false,
-      isErrorModalApper: false,
-      errorCode: "",
-      errorMessage: "",
       isLoading: false,
     });
 
@@ -181,7 +197,7 @@ export default defineComponent({
 
     const fetchFreeTemplate = async () => {
       try {
-        openModalLoading();
+        openLoadingModal();
         const response = await resourcesService.fetchFree(
           state.activeIndustryCd,
           state.sort
@@ -190,7 +206,7 @@ export default defineComponent({
       } catch (e) {
         openErrorModal(e);
       } finally {
-        closeModalLoading();
+        closeLoadingModal();
       }
     };
 
@@ -206,13 +222,6 @@ export default defineComponent({
       router.push({ name: "VoiceFree" });
     };
 
-    const openDocumentModal = () => {
-      state.isDocumentModalAppear = true;
-    };
-    const closeDocumentModal = () => {
-      state.isDocumentModalAppear = false;
-    };
-
     const setManuscriptAndOpenDocumentModal = (manuscript: string, freeId: string) => {
       setManuscript(manuscript);
       analytics.pressButtonManuscript(freeId, Constants.SCREEN.SELECT_TEMPLATE);
@@ -223,23 +232,6 @@ export default defineComponent({
       await fetchFreeTemplate();
     });
 
-    const closeErrorModal = () => {
-      state.isErrorModalApper = false;
-    };
-
-    const openErrorModal = (e: UMesseError) => {
-      state.errorCode = e.errorCode;
-      state.errorMessage = e.message;
-      state.isErrorModalApper = true;
-    };
-
-    const openModalLoading = () => {
-      state.isLoading = true;
-    };
-
-    const closeModalLoading = () => {
-      state.isLoading = false;
-    };
     return {
       ...toRefs(state),
       sortList,
@@ -247,12 +239,21 @@ export default defineComponent({
       clickIndustry,
       setManuscript,
       selectFreeTemplate,
-      openDocumentModal,
-      closeDocumentModal,
       setManuscriptAndOpenDocumentModal,
       convertDatestringToDateJp,
-      closeErrorModal,
       fetchFreeTemplate,
+      isDocumentModalAppear,
+      openDocumentModal,
+      closeDocumentModal,
+      isLoading,
+      loadingMessage,
+      openLoadingModal,
+      closeLoadingModal,
+      isErrorModalApper,
+      errorCode,
+      errorMessage,
+      openErrorModal,
+      closeErrorModal,
     };
   },
 });

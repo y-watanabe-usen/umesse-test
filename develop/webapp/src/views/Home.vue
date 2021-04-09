@@ -28,11 +28,12 @@
 
 <script lang="ts">
 import { useGlobalStore } from "@/store";
-import { computed, defineComponent, onMounted, reactive, toRefs } from "vue";
+import { defineComponent, onMounted, reactive, toRefs } from "vue";
 import MainMenu from "@/components/organisms/MainMenu.vue";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
-import { UMesseError } from "@/models/UMesseError";
+import useLoadingModalController from "@/mixins/loadingModalController";
+import useErrorModalController from "@/mixins/errorModalController";
 
 export default defineComponent({
   components: {
@@ -43,27 +44,21 @@ export default defineComponent({
   name: "Home",
   setup() {
     const { auth } = useGlobalStore();
-    const state = reactive({
-      isLoading: computed(() => auth.isAuthenticating()),
-      isErrorModalApper: false,
-      errorCode: "",
-      errorMessage: "",
-    });
-    const openModalLoading = () => {
-      state.isLoading = true;
-    };
-    const closeModalLoading = () => {
-      state.isLoading = false;
-    };
-    const openErrorModal = (e: UMesseError) => {
-      state.errorCode = e.errorCode;
-      state.errorMessage = e.message;
-      state.isErrorModalApper = true;
-    };
-    const closeErrorModal = () => {
-      state.isErrorModalApper = false;
-      window.location.reload();
-    };
+    const {
+      isApper: isLoading,
+      loadingMessage: loadingMessage,
+      open: openLoadingModal,
+      close: closeLoadingModal,
+    } = useLoadingModalController();
+    const {
+      isApper: isErrorModalApper,
+      errorCode,
+      errorMessage,
+      open: openErrorModal,
+      close: closeErrorModal,
+    } = useErrorModalController();
+
+    const state = reactive({});
     onMounted(async () => {
       try {
         await auth.requestAuth();
@@ -74,8 +69,13 @@ export default defineComponent({
     return {
       ...toRefs(state),
       ...auth,
-      openModalLoading,
-      closeModalLoading,
+      isLoading,
+      loadingMessage,
+      openLoadingModal,
+      closeLoadingModal,
+      isErrorModalApper,
+      errorCode,
+      errorMessage,
       openErrorModal,
       closeErrorModal,
     };

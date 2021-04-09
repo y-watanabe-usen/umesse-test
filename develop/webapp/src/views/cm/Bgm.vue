@@ -116,11 +116,13 @@ import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
 import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
 import PlayDialogContents from "@/components/molecules/PlayDialogContents.vue";
-import { UMesseError } from "../../models/UMesseError";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { audioService, resourcesService } from "@/services";
 import analytics from "@/utils/firebaseAnalytics";
 import Constants from "@/utils/Constants";
+import useModalController from "@/mixins/modalController";
+import useLoadingModalController from "@/mixins/loadingModalController";
+import useErrorModalController from "@/mixins/errorModalController";
 
 export default defineComponent({
   components: {
@@ -146,6 +148,24 @@ export default defineComponent({
     const audioPlayer = AudioPlayer();
     const { cm } = useGlobalStore();
     const sortList = Common.getSort();
+    const {
+      isApper: isPlayModalAppear,
+      open: openPlayModal,
+      close: closePlayModal,
+    } = useModalController();
+    const {
+      isApper: isLoading,
+      loadingMessage,
+      open: openLoadingModal,
+      close: closeLoadingModal,
+    } = useLoadingModalController();
+    const {
+      isApper: isErrorModalApper,
+      errorCode,
+      errorMessage,
+      open: openErrorModal,
+      close: closeErrorModal,
+    } = useErrorModalController();
 
     const state = reactive({
       activeIndustryCd: "10",
@@ -157,11 +177,6 @@ export default defineComponent({
       isDownloading: false,
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       duration: computed(() => audioPlayer.getDuration()),
-      isPlayModalAppear: false,
-      isErrorModalApper: false,
-      errorCode: "",
-      errorMessage: "",
-      isLoading: false,
     });
 
     const setBgm = (bgm: BgmItem) => {
@@ -183,7 +198,7 @@ export default defineComponent({
 
     const fetchBgm = async () => {
       try {
-        openModalLoading();
+        openLoadingModal();
         const response = await resourcesService.fetchBgm(
           state.activeIndustryCd,
           state.sort
@@ -192,7 +207,7 @@ export default defineComponent({
       } catch (e) {
         openErrorModal(e);
       } finally {
-        closeModalLoading();
+        closeLoadingModal();
       }
     };
 
@@ -213,13 +228,6 @@ export default defineComponent({
       if (state.isPlaying) audioPlayer.stop();
     };
 
-    const openPlayModal = () => {
-      state.isPlayModalAppear = true;
-    };
-    const closePlayModal = () => {
-      state.isPlayModalAppear = false;
-    };
-
     const selectBgmAndOpenPlayModal = (bgm: BgmItem) => {
       selectBgm(bgm);
       openPlayModal();
@@ -233,23 +241,6 @@ export default defineComponent({
       fetchBgm();
     });
 
-    const closeErrorModal = () => {
-      state.isErrorModalApper = false;
-    };
-
-    const openErrorModal = (e: UMesseError) => {
-      state.errorCode = e.errorCode;
-      state.errorMessage = e.message;
-      state.isErrorModalApper = true;
-    };
-
-    const openModalLoading = () => {
-      state.isLoading = true;
-    };
-
-    const closeModalLoading = () => {
-      state.isLoading = false;
-    };
     return {
       ...toRefs(state),
       sortList,
@@ -258,12 +249,21 @@ export default defineComponent({
       clickIndustry,
       play,
       stop,
-      openPlayModal,
-      closePlayModal,
       selectBgmAndOpenPlayModal,
       stopAndClosePlayModal,
-      closeErrorModal,
       fetchBgm,
+      isPlayModalAppear,
+      openPlayModal,
+      closePlayModal,
+      isLoading,
+      loadingMessage,
+      openLoadingModal,
+      closeLoadingModal,
+      isErrorModalApper,
+      errorCode,
+      errorMessage,
+      openErrorModal,
+      closeErrorModal,
     };
   },
 });
