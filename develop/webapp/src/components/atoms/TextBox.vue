@@ -3,6 +3,7 @@
     type="text"
     :value="modelValue"
     :disabled="isDisabled"
+    :maxLength="maxLength"
     @input="onUpdate"
     @change="onChange"
   />
@@ -21,6 +22,10 @@ export default {
     isDisabled: {
       type: Boolean,
       default: false,
+    },
+    maxLength: {
+      type: Number,
+      required: true,
     },
   },
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

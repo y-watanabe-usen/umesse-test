@@ -143,7 +143,7 @@
             />
           </FormGroup>
           <FormGroup title="タイトル" :required="true">
-            <TextBox v-model="title" />
+            <TextBox v-model="title" :maxLength="Constants.TITLE_MAX_LENGTH" />
           </FormGroup>
           <FormGroup title="説明">
             <TextArea v-model="description" />

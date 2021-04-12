@@ -118,7 +118,7 @@
         <template #contents>
           <form>
             <FormGroup title="タイトル" :required="true">
-              <TextBox v-model="file.title" />
+              <TextBox v-model="file.title" :maxLength="Constants.TITLE_MAX_LENGTH" />
             </FormGroup>
             <FormGroup title="説明">
               <TextArea v-model="file.description" />
@@ -179,6 +179,7 @@ import analytics from "@/utils/firebaseAnalytics";
 import useModalController from "@/mixins/modalController";
 import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
+import Constants from "@/utils/Constants";
 
 export default defineComponent({
   components: {
