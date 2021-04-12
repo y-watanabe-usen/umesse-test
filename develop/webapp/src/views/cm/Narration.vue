@@ -295,6 +295,58 @@
       </ModalDialog>
     </transition>
     <transition>
+      <ModalDialog
+        v-if="isNarrationRecordingAbsentApper"
+        size="small"
+        @close="closeNarrationRecordingAbsentModal"
+      >
+        <template #header>
+          <ModalHeader
+            title="お知らせ"
+            @close="closeNarrationRecordingAbsentModal"
+          />
+        </template>
+        <template #contents>
+          <MessageDialogContents>
+            「録音音源がありません。ホーム画面の「録音して作成」から作成が出来ます。
+          </MessageDialogContents>
+        </template>
+        <template #footer>
+          <ModalFooter>
+            <Button type="secondary" @click="closeNarrationRecordingAbsentModal"
+              >閉じる</Button
+            >
+          </ModalFooter>
+        </template>
+      </ModalDialog>
+    </transition>
+    <transition>
+      <ModalDialog
+        v-if="isNarrationTtsAbsentApper"
+        size="small"
+        @close="closeNarrationTtsAbsentModal"
+      >
+        <template #header>
+          <ModalHeader
+            title="お知らせ"
+            @close="closeNarrationTtsAbsentModal"
+          />
+        </template>
+        <template #contents>
+          <MessageDialogContents>
+            合成音声がありません。ホーム画面の「音声合成テンプレートから作成」「音声合成フリー入力から作成」から作成が出来ます。
+          </MessageDialogContents>
+        </template>
+        <template #footer>
+          <ModalFooter>
+            <Button type="secondary" @click="closeNarrationTtsAbsentModal"
+              >閉じる</Button
+            >
+          </ModalFooter>
+        </template>
+      </ModalDialog>
+    </transition>
+    <transition>
       <ModalErrorDialog
         v-if="isErrorModalApper"
         @close="closeErrorModal"
@@ -426,6 +478,17 @@ export default defineComponent({
       open: openErrorModal,
       close: closeErrorModal,
     } = useErrorModalController();
+    const {
+      isApper: isNarrationRecordingAbsentApper,
+      open: openNarrationRecordingAbsentModal,
+      close: closeNarrationRecordingAbsentModal,
+    } = useModalController();
+    const {
+      isApper: isNarrationTtsAbsentApper,
+      open: openNarrationTtsAbsentModal,
+      close: closeNarrationTtsAbsentModal,
+    } = useModalController();
+
     const state = reactive({
       sort: 1,
       activeIndustryCd: "02",
@@ -489,6 +552,11 @@ export default defineComponent({
           state.sort
         );
         state.narrations = response;
+        if (!state.narrations.length && state.activeSceneCd === "901") {
+          openNarrationRecordingAbsentModal();
+        } else if (!state.narrations.length && state.activeSceneCd === "902") {
+          openNarrationTtsAbsentModal();
+        }
       } catch (e) {
         openErrorModal(e);
       } finally {
@@ -676,6 +744,12 @@ export default defineComponent({
       errorMessage,
       openErrorModal,
       closeErrorModal,
+      isNarrationRecordingAbsentApper,
+      openNarrationRecordingAbsentModal,
+      closeNarrationRecordingAbsentModal,
+      isNarrationTtsAbsentApper,
+      openNarrationTtsAbsentModal,
+      closeNarrationTtsAbsentModal,
     };
   },
 });
