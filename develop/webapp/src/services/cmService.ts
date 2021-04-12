@@ -15,13 +15,16 @@ import { CmItem } from "umesseapi/models/cm-item";
 import { UMesseErrorFromApiFactory } from "@/models/UMesseError";
 import { FreeCache } from "@/repository/cache/freeCache";
 import { CmListItemInner } from "umesseapi/models";
+import { ERROR_PATTERN } from "@/utils/Constants";
 
 export function useCmService(api: UMesseApi.CmApi, freeCache: FreeCache) {
+  let timer: number | undefined;
+
   const fetch = async (
     authToken: string,
     sort?: number
   ): Promise<[Scene[], CmItem[]]> => {
-    return new Promise(function (resolve, reject) {
+    return new Promise(function(resolve, reject) {
       api
         .listUserCm(authToken, sort)
         .then((response) => {
@@ -49,19 +52,26 @@ export function useCmService(api: UMesseApi.CmApi, freeCache: FreeCache) {
     });
   };
 
-  const fetchById = async (
-    authToken: string,
-    id: string
-  ): Promise<CmItem> => {
-    return new Promise(function (resolve, reject) {
-      api
-        .getUserCm(id, authToken)
-        .then((value) => {
+  const fetchById = async (authToken: string, id: string): Promise<CmItem> => {
+    return new Promise(function(resolve, reject) {
+      _getUserCm(authToken, id)
+        .then((response) => {
+          if (response.status !== Constants.CM_STATUS_CREATING) {
+            const e = {
+              response: {
+                status: 408,
+              },
+              message: ERROR_PATTERN.A0001,
+            };
+            console.log("timeout", response);
+            throw e;
+          }
           console.log("resolve");
-          console.log("getUserCm", value.data);
-          resolve(value.data);
+          console.log("_getUserCm", response);
+          resolve(response);
         })
         .catch((e) => {
+          clearInterval(timer);
           console.log("reject", e);
           reject(UMesseErrorFromApiFactory(e));
         });
@@ -76,7 +86,7 @@ export function useCmService(api: UMesseApi.CmApi, freeCache: FreeCache) {
     bgm: Bgm | null,
     id?: string
   ): Promise<CreateUserCmResponseItem> => {
-    return new Promise(function (resolve, reject) {
+    return new Promise(function(resolve, reject) {
       const requestModel = getCreateUserCmRequestModel(
         narrations,
         startChime,
@@ -112,7 +122,7 @@ export function useCmService(api: UMesseApi.CmApi, freeCache: FreeCache) {
     sceneCd: string,
     uploadSystem: string
   ): Promise<CmItem> => {
-    return new Promise(function (resolve, reject) {
+    return new Promise(function(resolve, reject) {
       const requestModel = getUpdateUserCmRequestModel(
         title,
         description,
@@ -135,7 +145,7 @@ export function useCmService(api: UMesseApi.CmApi, freeCache: FreeCache) {
 
   // deleteは予約語なのでremove
   const remove = async (authToken: string, id: string): Promise<CmItem> => {
-    return new Promise(function (resolve, reject) {
+    return new Promise(function(resolve, reject) {
       api
         .deleteUserCm(id, authToken)
         .then((value) => {
@@ -187,9 +197,39 @@ export function useCmService(api: UMesseApi.CmApi, freeCache: FreeCache) {
         sceneCd: sceneCd,
         sceneName: Constants.SCENES.find((v) => v.cd == sceneCd)?.name,
       },
-      uploadSystem: (uploadSystem != Constants.UPLOAD_SYSTEMS[2].cd ? uploadSystem : undefined),
+      uploadSystem:
+        uploadSystem != Constants.UPLOAD_SYSTEMS[2].cd
+          ? uploadSystem
+          : undefined,
     };
     return requestModel;
+  };
+
+  const _getUserCm = async (authToken: string, id: string): Promise<CmItem> => {
+    clearInterval(timer);
+    let count = 0;
+    return new Promise(function(resolve) {
+      timer = setInterval(async () => {
+        api.getUserCm(id, authToken).then((value) => {
+          console.log(count);
+          if (
+            value.data.status &&
+            value.data.status === Constants.CM_STATUS_CREATING
+          ) {
+            clearInterval(timer);
+            console.log("resolve");
+            console.log("getUserCm", value.data);
+            resolve(value.data);
+          }
+          if (count++ > Constants.TIMER_COUNT) {
+            clearInterval(timer);
+            console.log("resolve timeout");
+            console.log("getUserCm", value.data);
+            resolve(value.data);
+          }
+        });
+      }, Constants.TIMER);
+    });
   };
 
   return {

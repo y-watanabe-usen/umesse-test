@@ -21,7 +21,6 @@ export enum UPLOAD_CM_STATE {
 
 export default function cmStore() {
   const service = cmService;
-  let timer: number | undefined;
 
   const state = reactive({
     displayCmItem: new DisplayCmItem(),
@@ -49,34 +48,19 @@ export default function cmStore() {
       );
       console.log(response);
 
-      clearInterval(timer);
-      let count = 0;
-      timer = setInterval(async () => {
-        try {
-          response = await service.fetchById(
-            authToken,
-            response.id
-          );
-          console.log(response);
-          if (response.status === '01') {
-            clearInterval(timer);
-            state.displayCmItem.id = response.id;
-            state.displayCmItem.timestamp = response.timestamp;
-            state.displayCmItem.seconds = response.seconds;
-            state.displayCmItem.url = response.url ?? "";
-            state.status = UPLOAD_CM_STATE.CREATED;
-          }
-          console.log(count);
-          if (count++ > 10) {
-            throw new Error("timeout.");
-          }
-        } catch (e) {
-          clearInterval(timer);
-          console.log(e);
-          state.status = UPLOAD_CM_STATE.ERROR;
-          throw e;
-        }
-      }, 10000);
+      try {
+        response = await service.fetchById(authToken, response.id);
+
+        console.log(response);
+        state.displayCmItem.id = response.id;
+        state.displayCmItem.timestamp = response.timestamp;
+        state.displayCmItem.seconds = response.seconds;
+        state.displayCmItem.url = response.url ?? "";
+        state.status = UPLOAD_CM_STATE.CREATED;
+      } catch (e) {
+        state.status = UPLOAD_CM_STATE.ERROR;
+        throw e;
+      }
     } catch (e) {
       state.status = UPLOAD_CM_STATE.ERROR;
       throw e;
