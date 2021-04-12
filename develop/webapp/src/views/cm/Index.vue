@@ -670,8 +670,7 @@ export default defineComponent({
     const authToken = <string>auth.getToken();
     const authUser = <User>auth.getUserInfo();
     const uploadSystemArray = Common.getUploadSystemService(authUser.serviceCd);
-    const industryScenesCd = "99";
-    const industryScenesList = Common.getIndustryScenes(industryScenesCd);
+    const industryScenesList = Common.getInputScenes();
     const {
       isApper: isPlayModalAppear,
       open: openPlayModal,
