@@ -306,7 +306,7 @@ describe("録音音声新規登録", () => {
       createRecordingResource("9999999999", {
         recordedFile: file,
         title: "あ".repeat(201),
-        description: "あ".repeat(401),
+        description: "あ".repeat(1001),
       })
     ).rejects.toThrow(
       new BadRequestError(
@@ -437,7 +437,7 @@ describe("録音音声データ更新", () => {
     await expect(
       updateUserResource("9999999999", "recording", "9999999999-r-99999999", {
         title: "あ".repeat(201),
-        description: "あ".repeat(401),
+        description: "あ".repeat(1001),
       })
     ).rejects.toThrow(
       new BadRequestError(
@@ -857,7 +857,7 @@ describe("TTS音声新規登録", () => {
         details: [
           {
             title: "あ".repeat(201),
-            description: "あ".repeat(401),
+            description: "あ".repeat(1001),
             lang: "ja",
             id: "id",
             category: "tts",
