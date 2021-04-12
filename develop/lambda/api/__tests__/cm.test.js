@@ -458,7 +458,7 @@ describe("CMデータ更新", () => {
     await expect(
       updateCm("9999999999", "9999999999-c-99999999", {
         title: "あ".repeat(201),
-        description: "あ".repeat(401),
+        description: "あ".repeat(1001),
       })
     ).rejects.toThrow(
       new BadRequestError(
