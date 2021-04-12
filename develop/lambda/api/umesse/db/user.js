@@ -115,6 +115,7 @@ module.exports = {
     if (!ret || !ret.Item) return;
 
     ret = ret.Item.cm.filter((item) => {
+      if (item.status === constants.cmStatus.DELETE) return false;
       if (!item.materials || !item.materials.narrations) return false;
       return item.materials.narrations.some(
         (el) => el.id === id && el.category === category
