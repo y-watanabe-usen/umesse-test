@@ -21,7 +21,6 @@ export enum UPLOAD_CM_STATE {
 
 export default function cmStore() {
   const service = cmService;
-  let timer: number | undefined;
 
   const state = reactive({
     displayCmItem: new DisplayCmItem(),

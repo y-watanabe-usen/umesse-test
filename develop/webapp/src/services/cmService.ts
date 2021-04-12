@@ -56,7 +56,7 @@ export function useCmService(api: UMesseApi.CmApi, freeCache: FreeCache) {
     return new Promise(function(resolve, reject) {
       _getUserCm(authToken, id)
         .then((response) => {
-          if (response.status !== "01") {
+          if (response.status !== Constants.CM_STATUS_CREATING) {
             const e = {
               response: {
                 status: 408,
@@ -212,20 +212,23 @@ export function useCmService(api: UMesseApi.CmApi, freeCache: FreeCache) {
       timer = setInterval(async () => {
         api.getUserCm(id, authToken).then((value) => {
           console.log(count);
-          if (value.data.status && value.data.status === "01") {
+          if (
+            value.data.status &&
+            value.data.status === Constants.CM_STATUS_CREATING
+          ) {
             clearInterval(timer);
             console.log("resolve");
             console.log("getUserCm", value.data);
             resolve(value.data);
           }
-          if (count++ > 10) {
+          if (count++ > Constants.TIMER_COUNT) {
             clearInterval(timer);
             console.log("resolve timeout");
             console.log("getUserCm", value.data);
             resolve(value.data);
           }
         });
-      }, 10000);
+      }, Constants.TIMER);
     });
   };
 
