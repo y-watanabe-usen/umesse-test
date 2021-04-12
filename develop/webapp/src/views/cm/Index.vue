@@ -23,11 +23,7 @@
             </div>
           </template>
           <template #buttons>
-            <Button
-              :isDisabled="!(status >= UPLOAD_CM_STATE.CREATED)"
-              @click="openSaveModal"
-              >確定</Button
-            >
+            <Button @click="clickConfirm">確定</Button>
           </template>
         </Header>
       </template>
@@ -104,9 +100,9 @@
               :key="narration.contentsId"
               :title="
                 'ナレーション ' +
-                  `${index + 1}` +
-                  '/' +
-                  `${MAX_NARRATION_COUNT}`
+                `${index + 1}` +
+                '/' +
+                `${MAX_NARRATION_COUNT}`
               "
               size="flexible"
               :contentTitle="`${narration.title}`"
@@ -183,9 +179,9 @@
               <CmItem
                 :title="
                   'ナレーション ' +
-                    `${narrations.length + 1}` +
-                    '/' +
-                    `${MAX_NARRATION_COUNT}`
+                  `${narrations.length + 1}` +
+                  '/' +
+                  `${MAX_NARRATION_COUNT}`
                 "
                 :isEmpty="true"
                 size="flexible"
@@ -840,28 +836,29 @@ export default defineComponent({
       );
       cm.clearBgm();
     };
-    const create = async () => {
-      await cm.create(authToken);
-    };
-    const update = async () => {
-      await cm.update(
-        authToken,
-        state.title,
-        state.description,
-        state.scene,
-        state.uploadSystem
-      );
-    };
 
     const clickPlayNarration = (index: number) => {
       state.narrationIndex = index;
       openPlayNarrationModal();
     };
 
+    const clickConfirm = async () => {
+      try {
+        openLoadingModal();
+        await cm.create(authToken);
+        closeLoadingModal();
+        openSaveModal();
+      } catch (e) {
+        openErrorModal(e);
+      } finally {
+        closeLoadingModal();
+      }
+    };
+
     const createAndOpenPlayModal = async () => {
       try {
         openPlayModal();
-        await create();
+        await cm.create(authToken);
       } catch (e) {
         closePlayModal();
         openErrorModal(e);
@@ -875,7 +872,13 @@ export default defineComponent({
       saveAnalytics();
       try {
         openLoadingModal();
-        await update();
+        await cm.update(
+          authToken,
+          state.title,
+          state.description,
+          state.scene,
+          state.uploadSystem
+        );
         closeSaveModal();
         openSavedModal();
       } catch (e) {
@@ -1109,8 +1112,6 @@ export default defineComponent({
       clearOpenChime,
       clearEndChime,
       clearBgm,
-      create,
-      update,
       playGenerateCm,
       stop,
       clickPlayNarration,
@@ -1155,6 +1156,7 @@ export default defineComponent({
       changeCmOpenChime,
       changeCmEndChime,
       changeCmBgm,
+      clickConfirm,
       isPlayModalAppear,
       openPlayModal,
       closePlayModal,
