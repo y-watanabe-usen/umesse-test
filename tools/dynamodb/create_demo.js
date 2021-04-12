@@ -21,6 +21,7 @@ if (!process.argv[2] || !process.argv[3]) {
 
 const table = process.argv[2];
 const range = process.argv[3];
+const serviceCd = process.argv[4] || "U01";
 
 const [start, end] = range.split("-");
 
@@ -31,8 +32,8 @@ for (let i = start; i <= end; i++) {
     Item: {
       unisCustomerCd: `${i}`,
       contractCd: `N${i}`,
-      serviceCd: `U01`,
-      serviceName: `U∞MUSIC`,
+      serviceCd: serviceCd,
+      serviceName: serviceCd == "U01" ? `UMUSIC` : `UMESSE(S'sence)`,
       customerName: `USEN ${i}`,
       customerNameKana: `ユーセン ${i}`,
       customerGroupCd: `G${i}`,
