@@ -27,6 +27,9 @@ export const UMesseErrorFromApiFactory = (e: any) => {
     case 404: // Not Found
       code = ERROR_CODE.A3000;
       break;
+    case 408: // Timeout
+      code = ERROR_CODE.A3003;
+      break;
     case 500: // Internal Server Error
       code = ERROR_CODE.A3999;
       break;
