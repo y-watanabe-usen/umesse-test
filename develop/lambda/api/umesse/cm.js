@@ -367,10 +367,8 @@ exports.deleteCm = async (unisCustomerCd, id) => {
   // S3上のCMを削除
   try {
     let path = `users/${unisCustomerCd}/${constants.resourceCategory.CM}/${id}`;
-    const _ = await s3Manager.delete(
-      constants.s3Bucket().users,
-      cm.status === constants.cmStatus.COMPLETE ? `${path}.aac` : `${path}.mp3`
-    );
+    const _ = await s3Manager.delete(constants.s3Bucket().users, `${path}.aac`);
+    const _ = await s3Manager.delete(constants.s3Bucket().users, `${path}.mp3`);
   } catch (e) {
     errorlog(JSON.stringify(e));
     throw new InternalServerError(ERROR_CODE.E0000500);
