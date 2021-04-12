@@ -440,6 +440,34 @@ describe("CMデータ更新", () => {
         uploadSystem: "00",
       })
     ).rejects.toThrow(new BadRequestError(`${ERROR_CODE.E0001130} (E0001130)`));
+
+    await expect(
+      updateCm("9999999999", "9999999999-c-99999999", {
+        title: "🍎リンゴ",
+        description: "🍎リンゴ",
+      })
+    ).rejects.toThrow(
+      new BadRequestError(
+        [
+          `${ERROR_CODE.E0001051} (E0001051)`,
+          `${ERROR_CODE.E0001061} (E0001061)`,
+        ].join("\n")
+      )
+    );
+
+    await expect(
+      updateCm("9999999999", "9999999999-c-99999999", {
+        title: "あ".repeat(201),
+        description: "あ".repeat(401),
+      })
+    ).rejects.toThrow(
+      new BadRequestError(
+        [
+          `${ERROR_CODE.E0001052} (E0001052)`,
+          `${ERROR_CODE.E0001062} (E0001062)`,
+        ].join("\n")
+      )
+    );
   });
 });
 
