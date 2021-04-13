@@ -555,7 +555,11 @@ export default defineComponent({
         const response = await cmService.fetch(authToken, state.sort);
         state.sceneList = response[0];
         state.cmList = response[1];
-        fetchCm(state.sceneList[0].cd);
+        if (!state.cmList.length) {
+          openCmAbsentModal();
+        } else {
+          fetchCm(state.sceneList[0].cd);
+        }
       } catch (e) {
         openErrorModal(e);
       } finally {
@@ -563,9 +567,6 @@ export default defineComponent({
       }
     };
     const fetchCm = (sceneCd: string) => {
-      if (!state.cmList.length) {
-          openCmAbsentModal();
-      }
       if (state.activeSceneCd !== sceneCd) {
         state.activeSceneCd = sceneCd;
         state.cms = state.cmList.filter((v) => {
