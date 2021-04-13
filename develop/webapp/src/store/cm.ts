@@ -32,39 +32,25 @@ export default function cmStore() {
   const status = () => state.status;
 
   const create = async (authToken: string) => {
-    try {
-      if (state.status === UPLOAD_CM_STATE.CREATING) {
-        throw new UMesseError(ERROR_CODE.A0001, ERROR_PATTERN.A0001, "");
-      }
-      // TODO: check arguments here.
-      state.status = UPLOAD_CM_STATE.CREATING;
-      let response = await service.create(
-        authToken,
-        state.displayCmItem.narrations,
-        state.displayCmItem.openChime,
-        state.displayCmItem.endChime,
-        state.displayCmItem.bgm,
-        state.displayCmItem.id
-      );
-      console.log(response);
-
-      try {
-        response = await service.fetchById(authToken, response.id);
-
-        console.log(response);
-        state.displayCmItem.id = response.id;
-        state.displayCmItem.timestamp = response.timestamp;
-        state.displayCmItem.seconds = response.seconds;
-        state.displayCmItem.url = response.url ?? "";
-        state.status = UPLOAD_CM_STATE.CREATED;
-      } catch (e) {
-        state.status = UPLOAD_CM_STATE.ERROR;
-        throw e;
-      }
-    } catch (e) {
-      state.status = UPLOAD_CM_STATE.ERROR;
-      throw e;
+    if (state.status === UPLOAD_CM_STATE.CREATING) {
+      throw new UMesseError(ERROR_CODE.A0001, ERROR_PATTERN.A0001, "");
     }
+    // TODO: check arguments here.
+    state.status = UPLOAD_CM_STATE.CREATING;
+    const response = await service.create(
+      authToken,
+      state.displayCmItem.narrations,
+      state.displayCmItem.openChime,
+      state.displayCmItem.endChime,
+      state.displayCmItem.bgm,
+      state.displayCmItem.id
+    );
+    console.log(response);
+    state.displayCmItem.id = response.id;
+    state.displayCmItem.timestamp = response.timestamp;
+    state.displayCmItem.seconds = response.seconds;
+    state.displayCmItem.url = response.url ?? "";
+    state.status = UPLOAD_CM_STATE.CREATED;
   };
 
   const update = async (

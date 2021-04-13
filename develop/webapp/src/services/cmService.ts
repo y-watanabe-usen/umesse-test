@@ -12,10 +12,9 @@ import Constants, { Scene } from "@/utils/Constants";
 import * as UMesseApi from "umesseapi";
 import { Recording, Tts } from "@/models/DisplayCmItem";
 import { CmItem } from "umesseapi/models/cm-item";
-import { UMesseErrorFromApiFactory } from "@/models/UMesseError";
+import { UMesseError, UMesseErrorFromApiFactory } from "@/models/UMesseError";
 import { FreeCache } from "@/repository/cache/freeCache";
 import { CmListItemInner } from "umesseapi/models";
-import { ERROR_PATTERN } from "@/utils/Constants";
 
 export function useCmService(api: UMesseApi.CmApi, freeCache: FreeCache) {
   let timer: number | undefined;
@@ -24,7 +23,7 @@ export function useCmService(api: UMesseApi.CmApi, freeCache: FreeCache) {
     authToken: string,
     sort?: number
   ): Promise<[Scene[], CmItem[]]> => {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       api
         .listUserCm(authToken, sort)
         .then((response) => {
@@ -52,32 +51,6 @@ export function useCmService(api: UMesseApi.CmApi, freeCache: FreeCache) {
     });
   };
 
-  const fetchById = async (authToken: string, id: string): Promise<CmItem> => {
-    return new Promise(function(resolve, reject) {
-      _getUserCm(authToken, id)
-        .then((response) => {
-          if (response.status !== Constants.CM_STATUS_CREATING) {
-            const e = {
-              response: {
-                status: 408,
-              },
-              message: ERROR_PATTERN.A0001,
-            };
-            console.log("timeout", response);
-            throw e;
-          }
-          console.log("resolve");
-          console.log("_getUserCm", response);
-          resolve(response);
-        })
-        .catch((e) => {
-          clearInterval(timer);
-          console.log("reject", e);
-          reject(UMesseErrorFromApiFactory(e));
-        });
-    });
-  };
-
   const create = async (
     authToken: string,
     narrations: (Narration | Recording | Tts)[],
@@ -86,32 +59,34 @@ export function useCmService(api: UMesseApi.CmApi, freeCache: FreeCache) {
     bgm: Bgm | null,
     id?: string
   ): Promise<CreateUserCmResponseItem> => {
-    return new Promise(function(resolve, reject) {
-      const requestModel = getCreateUserCmRequestModel(
-        narrations,
-        startChime,
-        endChime,
-        bgm,
-        id
-      );
+    const requestModel = getCreateUserCmRequestModel(
+      narrations,
+      startChime,
+      endChime,
+      bgm,
+      id
+    );
 
-      const cacheKey = Convert.createUserCmRequestItemToJson(requestModel);
-      const cacheValue = freeCache.get(cacheKey);
-      if (cacheValue) return <CreateUserCmResponseItem>cacheValue;
+    const tmp = requestModel;
+    delete tmp.id;
+    const cacheKey = Convert.createUserCmRequestItemToJson(tmp);
+    const cacheValue = freeCache.get(cacheKey);
+    if (cacheValue) return <CreateUserCmResponseItem>cacheValue;
 
-      api
-        .createUserCm(authToken, requestModel)
-        .then((value) => {
-          freeCache.set(cacheKey, <CreateUserCmResponseItem>value.data);
-          console.log("resolve");
-          console.log("createUserCm", value.data);
-          resolve(<CreateUserCmResponseItem>value.data);
-        })
-        .catch((e) => {
-          console.log("reject", e);
-          reject(UMesseErrorFromApiFactory(e));
-        });
-    });
+    try {
+      const createUserCmResponse = await api.createUserCm(authToken, requestModel);
+      console.log("createUserCmResponse", JSON.stringify(createUserCmResponse.data));
+      const waitForCreateCompletedResponse = await waitForCreateCompleted(authToken, createUserCmResponse.data.id);
+      console.log(JSON.stringify(waitForCreateCompletedResponse));
+      freeCache.set(cacheKey, <CreateUserCmResponseItem>waitForCreateCompletedResponse);
+      return waitForCreateCompletedResponse;
+    } catch (e) {
+      if (e instanceof UMesseError) {
+        throw e;
+      }
+      throw UMesseErrorFromApiFactory(e);
+    }
+
   };
 
   const update = async (
@@ -122,7 +97,7 @@ export function useCmService(api: UMesseApi.CmApi, freeCache: FreeCache) {
     sceneCd: string,
     uploadSystem: string
   ): Promise<CmItem> => {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       const requestModel = getUpdateUserCmRequestModel(
         title,
         description,
@@ -145,7 +120,7 @@ export function useCmService(api: UMesseApi.CmApi, freeCache: FreeCache) {
 
   // deleteは予約語なのでremove
   const remove = async (authToken: string, id: string): Promise<CmItem> => {
-    return new Promise(function(resolve, reject) {
+    return new Promise(function (resolve, reject) {
       api
         .deleteUserCm(id, authToken)
         .then((value) => {
@@ -154,6 +129,31 @@ export function useCmService(api: UMesseApi.CmApi, freeCache: FreeCache) {
           resolve(value.data);
         })
         .catch((e) => {
+          console.log("reject", e);
+          reject(UMesseErrorFromApiFactory(e));
+        });
+    });
+  };
+
+  const waitForCreateCompleted = async (authToken: string, id: string): Promise<CmItem> => {
+    return new Promise(function (resolve, reject) {
+      _getUserCm(authToken, id)
+        .then((response) => {
+          if (response.status !== Constants.CM_STATUS_CREATING) {
+            const e = {
+              response: {
+                status: 408,
+              },
+            };
+            console.log("timeout", response);
+            reject(UMesseErrorFromApiFactory(e));
+          }
+          console.log("resolve");
+          console.log("_getUserCm", response);
+          resolve(response);
+        })
+        .catch((e) => {
+          clearInterval(timer);
           console.log("reject", e);
           reject(UMesseErrorFromApiFactory(e));
         });
@@ -208,7 +208,7 @@ export function useCmService(api: UMesseApi.CmApi, freeCache: FreeCache) {
   const _getUserCm = async (authToken: string, id: string): Promise<CmItem> => {
     clearInterval(timer);
     let count = 0;
-    return new Promise(function(resolve) {
+    return new Promise(function (resolve) {
       timer = setInterval(async () => {
         api.getUserCm(id, authToken).then((value) => {
           console.log(count);
@@ -234,7 +234,6 @@ export function useCmService(api: UMesseApi.CmApi, freeCache: FreeCache) {
 
   return {
     fetch,
-    fetchById,
     create,
     update,
     remove,
