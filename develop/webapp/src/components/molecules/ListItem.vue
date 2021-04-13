@@ -56,6 +56,7 @@ export default {
     .wrapper {
       width: 100%;
       ::v-deep h2 {
+        @include ellipsis;
         color: black;
         font-size: 20px;
         font-weight: $font_weight_bold;
