@@ -175,7 +175,7 @@
             <TextBox v-model="title" :maxLength="Constants.TITLE_MAX_LENGTH"/>
           </FormGroup>
           <FormGroup title="説明">
-            <TextArea v-model="description" />
+            <TextArea v-model="description" :maxLength="Constants.DESCRIPTION_MAX_LENGTH" />
           </FormGroup>
           <FormGroup title="シーン">
             <SelectBox

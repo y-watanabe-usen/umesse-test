@@ -3,7 +3,7 @@
     type="text"
     :value="modelValue"
     :disabled="isDisabled"
-    :maxLength="maxLength"
+    :maxlength="maxLength"
     @input="onUpdate"
     @change="onChange"
   />
