@@ -52,7 +52,7 @@
               description="※カタカナで入力"
               class="name"
             >
-              <TextBox v-model="customerName" :maxLength="Constants.STORE_NAME_MAX_LENGTH" />
+              <TextBox v-model="customerName" :maxLength="Constants.CUSTOMER_NAME_MAX_LENGTH" />
               <div>
                 <p class="errorMessage errorCustomerName">
                   {{ errorMessageCustomerName }}
