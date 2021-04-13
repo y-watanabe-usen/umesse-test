@@ -322,6 +322,31 @@
         />
       </transition>
     </transition>
+    <transition>
+      <ModalDialog
+        v-if="isCmAbsentApper"
+        size="small"
+      >
+        <template #header>
+          <ModalHeader
+            title="お知らせ"
+            @close="closeCmAbsentModal"
+          />
+        </template>
+        <template #contents>
+          <MessageDialogContents>
+            CMがありません。ホーム画面の各メニューから作成が出来ます。
+          </MessageDialogContents>
+        </template>
+        <template #footer>
+          <ModalFooter>
+            <Button type="secondary" @click="closeCmAbsentModal"
+              >閉じる</Button
+            >
+          </ModalFooter>
+        </template>
+      </ModalDialog>
+    </transition>
   </div>
 </template>
 
@@ -497,6 +522,10 @@ export default defineComponent({
       open: openErrorModal,
       close: closeErrorModal,
     } = useErrorModalController();
+    const {
+      isApper: isCmAbsentApper,
+      open: openCmAbsentModal,
+    } = useModalController();
     const state = reactive({
       activeSceneCd: "",
       sceneList: [] as Scene[],
@@ -534,6 +563,9 @@ export default defineComponent({
       }
     };
     const fetchCm = (sceneCd: string) => {
+      if (!state.cmList.length) {
+          openCmAbsentModal();
+      }
       if (state.activeSceneCd !== sceneCd) {
         state.activeSceneCd = sceneCd;
         state.cms = state.cmList.filter((v) => {
@@ -721,6 +753,9 @@ export default defineComponent({
           return ["comp"];
       }
     };
+    const closeCmAbsentModal = () => {
+      router.push({ name: "Home" });
+    };
     return {
       ...toRefs(state),
       play,
@@ -783,6 +818,9 @@ export default defineComponent({
       errorMessage,
       openErrorModal,
       closeErrorModal,
+      isCmAbsentApper,
+      openCmAbsentModal,
+      closeCmAbsentModal,
     };
   },
 });
