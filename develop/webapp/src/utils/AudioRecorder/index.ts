@@ -15,7 +15,6 @@ export default () => {
   const isRecording = () => state.recording;
   const hasRecording = () => (state.chunks.length !== 0);
 
-  
   const context = new window.AudioContext();
   const analyser: AnalyserNode = context.createAnalyser();
   analyser.fftSize = 2048;
@@ -32,7 +31,6 @@ export default () => {
     //マイクから音声の取得を行う
     const stream: MediaStream = await navigator.mediaDevices.getUserMedia({
       audio: {
-        autoGainControl: true,
         channelCount: 1,
         echoCancellation: true,
         noiseSuppression: true,
@@ -102,16 +100,16 @@ export default () => {
   };
 
   const updateAnalyser = () => {
-  analyser.getFloatTimeDomainData(sampleBuffer);
-  let sumOfSquares = 0;
-  for (const x of sampleBuffer) {
-    sumOfSquares += x ** 2;
-  }
-   state.powerDecibels = Math.round(10 * Math.log10(sumOfSquares / sampleBuffer.length));
-};
+    analyser.getFloatTimeDomainData(sampleBuffer);
+    let sumOfSquares = 0;
+    for (const x of sampleBuffer) {
+      sumOfSquares += x ** 2;
+    }
+    state.powerDecibels = Math.round(10 * Math.log10(sumOfSquares / sampleBuffer.length));
+  };
 
   return {
     start, stop, reset, isRecording, hasRecording,
-    getWaveBlob, getMp3Blob, getAudioBuffer,getPowerDecibels
+    getWaveBlob, getMp3Blob, getAudioBuffer, getPowerDecibels
   };
 };
