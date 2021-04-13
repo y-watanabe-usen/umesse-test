@@ -37,6 +37,7 @@
               :contentTitle="openChime.title"
               :duration="`${convertNumberToTime(openChime.seconds)}`"
               :volume="openChime.volume"
+              :indexItem="0"
               @toggleSlider="toggleOpenChimeSlider"
               @click="openPlayOpenChimeModal"
             >
@@ -108,6 +109,7 @@
               :contentTitle="`${narration.title}`"
               :duration="`${convertNumberToTime(narration.seconds)}`"
               :volume="narration.volume"
+              :indexItem="narrations.length"
               @toggleSlider="toggleNarrationSlider(index)"
               @click="clickPlayNarration(index)"
             >
@@ -300,6 +302,7 @@
               :contentTitle="endChime.title"
               :duration="`${convertNumberToTime(endChime.seconds)}`"
               :volume="endChime.volume"
+              :indexItem="0"
               @toggleSlider="toggleEndChimeSlider"
               @click="openPlayEndChimeModal"
             >

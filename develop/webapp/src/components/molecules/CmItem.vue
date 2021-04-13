@@ -12,7 +12,9 @@
         <p class="btn-add-title">素材追加</p>
       </template>
       <template v-else>
-        <p class="content-title">{{ contentTitle }}</p>
+        <p class="content-title" :class="[`content-title-width${indexItem}`]">
+          {{ contentTitle }}
+        </p>
         <button class="sound" @click="$emit('togglePlay')">
           <img src="@/assets/icon_sound.svg" />
         </button>
@@ -58,6 +60,10 @@ export default {
       default: "",
     },
     volume: {
+      type: Number,
+      default: 0,
+    },
+    indexItem: {
       type: Number,
       default: 0,
     },
@@ -131,9 +137,24 @@ export default {
     }
     .btn-add-title,
     .content-title {
+      @include ellipsis;
+      width: 500px;
       font-size: 16px;
       font-weight: $font_weight_bold;
       text-align: center;
+    }
+    .content-title-width0 {
+      width: 170px;
+    }
+    .content-title-width1 {
+      width: 1000px;
+    }
+    .content-title-width2 {
+      width: 650px;
+    }
+    .content-title-width3,
+    .content-title-width4 {
+      width: 480px;
     }
     .btn-add-title {
       color: white;
