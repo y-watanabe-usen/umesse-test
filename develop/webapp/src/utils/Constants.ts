@@ -134,7 +134,7 @@ export default class Constants {
   ];
 
   public static readonly SERVICE_CD_UMUSIC: string = "U01";
-  public static readonly SERVICE_CD_SSENCE: string = "U21";
+  public static readonly SERVICE_CD_SSENCE: string = "U17";
 
   public static readonly CM_STATUS_DELETE: string = "00";
   public static readonly CM_STATUS_CREATING: string = "01";
