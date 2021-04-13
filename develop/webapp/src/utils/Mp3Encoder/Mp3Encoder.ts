@@ -6,7 +6,7 @@ export class Mp3Encoder {
   public encode(audioBuffer: AudioBuffer) {
     const numOfChan = audioBuffer.numberOfChannels;
     const sampleRate = audioBuffer.sampleRate;
-    const length = audioBuffer.length;
+
     const mp3encoder = new lamejs.Mp3Encoder(numOfChan, sampleRate || 44100, 128);
 
     const samples = new Int16Array(this.waveBuffer(audioBuffer));
@@ -14,7 +14,7 @@ export class Mp3Encoder {
     const data = [];
     let buffer = [];
 
-    for (let i = 0; i < length; i += sampleBlockSize) {
+    for (let i = 0; i < samples.length; i += sampleBlockSize) {
       const chunk = samples.subarray(i, i + sampleBlockSize);
       buffer = mp3encoder.encodeBuffer(chunk);
       if (buffer.length > 0) {
@@ -40,22 +40,6 @@ export class Mp3Encoder {
     let sample;
     let offset = 0;
     let pos = 0;
-
-    // write WAVE header
-    view.setUint32(0, 0x46464952, true);                         // "RIFF"
-    view.setUint32(4, length - 8, true);                         // file length - 8
-    view.setUint32(8, 0x45564157, true);                         // "WAVE"
-
-    view.setUint32(12, 0x20746d66, true);                         // "fmt " chunk
-    view.setUint32(16, 16, true);                                 // length = 16
-    view.setUint16(20, 1, true);                                  // PCM (uncompressed)
-    view.setUint16(22, numOfChan, true);
-    view.setUint32(24, audioBuffer.sampleRate, true);
-    view.setUint32(28, audioBuffer.sampleRate * 2 * numOfChan, true); // avg. bytes/sec
-    view.setUint16(32, numOfChan * 2, true);                      // block-align
-    view.setUint16(34, 16, true);                                 // 16-bit (hardcoded in this demo)
-    view.setUint32(36, 0x61746164, true);                         // "data" - chunk
-    view.setUint32(40, length - pos - 4, true);                   // chunk length
 
     // write interleaved data
     pos = 44;
