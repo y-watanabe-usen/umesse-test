@@ -254,6 +254,10 @@ export default defineComponent({
         audioRecorder.stop();
       } else {
         audioRecorder.start();
+        // 最大2分録音
+        setTimeout(() => {
+          audioRecorder.stop();
+        }, 120000);
       }
     };
 
