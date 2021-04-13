@@ -35,6 +35,7 @@
               class="document-text"
               v-model="text"
               placeholder="アナウンスの文言を入力してください。"
+              :maxLength="Constants.TTS_FREE_MAX_LENGTH"
             />
           </div>
         </ContentsBase>
@@ -66,10 +67,10 @@
             />
           </FormGroup>
           <FormGroup title="タイトル" :required="true">
-            <TextBox v-model="title" />
+            <TextBox v-model="title" :maxLength="Constants.TITLE_MAX_LENGTH" />
           </FormGroup>
           <FormGroup title="説明">
-            <TextArea v-model="description" />
+            <TextArea v-model="description" :maxLength="Constants.DESCRIPTION_MAX_LENGTH" />
           </FormGroup>
         </template>
         <template #footer>
@@ -243,6 +244,7 @@ export default defineComponent({
       errorMessage,
       openErrorModal,
       closeErrorModal,
+      Constants,
     };
   },
 });

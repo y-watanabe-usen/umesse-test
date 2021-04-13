@@ -221,10 +221,10 @@
         </template>
         <template #contents>
           <FormGroup title="タイトル" :required="true">
-            <TextBox v-model="title" />
+            <TextBox v-model="title" :maxLength="Constants.TITLE_MAX_LENGTH" />
           </FormGroup>
           <FormGroup title="説明">
-            <TextArea v-model="description" />
+            <TextArea v-model="description" :maxLength="Constants.DESCRIPTION_MAX_LENGTH" />
           </FormGroup>
         </template>
         <template #footer>
@@ -750,6 +750,7 @@ export default defineComponent({
       isNarrationTtsAbsentApper,
       openNarrationTtsAbsentModal,
       closeNarrationTtsAbsentModal,
+      Constants,
     };
   },
 });

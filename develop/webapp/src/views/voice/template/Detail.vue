@@ -52,7 +52,7 @@
               description="※カタカナで入力"
               class="name"
             >
-              <TextBox v-model="customerName" />
+              <TextBox v-model="customerName" :maxLength="Constants.CUSTOMER_NAME_MAX_LENGTH" />
               <div>
                 <p class="errorMessage errorCustomerName">
                   {{ errorMessageCustomerName }}
@@ -143,10 +143,10 @@
             />
           </FormGroup>
           <FormGroup title="タイトル" :required="true">
-            <TextBox v-model="title" />
+            <TextBox v-model="title" :maxLength="Constants.TITLE_MAX_LENGTH" />
           </FormGroup>
           <FormGroup title="説明">
-            <TextArea v-model="description" />
+            <TextArea v-model="description" :maxLength="Constants.DESCRIPTION_MAX_LENGTH" />
           </FormGroup>
         </template>
         <template #footer>
@@ -508,6 +508,7 @@ export default defineComponent({
       errorMessage,
       openErrorModal,
       closeErrorModal,
+      Constants,
     };
   },
 });

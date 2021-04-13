@@ -3,6 +3,7 @@
     :value="modelValue"
     :disabled="isDisabled"
     :placeholder="placeholder"
+    :maxlength="maxLength"
     @input="onUpdate"
   >
   </textarea>
@@ -25,6 +26,10 @@ export default {
     placeholder: {
       type: String,
       default: "",
+    },
+    maxLength: {
+      type: Number,
+      required: true,
     },
   },
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -134,7 +134,7 @@ export default class Constants {
   ];
 
   public static readonly SERVICE_CD_UMUSIC: string = "U01";
-  public static readonly SERVICE_CD_SSENCE: string = "U21";
+  public static readonly SERVICE_CD_SSENCE: string = "U17";
 
   public static readonly CM_STATUS_DELETE: string = "00";
   public static readonly CM_STATUS_CREATING: string = "01";
@@ -241,6 +241,11 @@ export default class Constants {
 
   public static readonly TIMER: number = 10000;
   public static readonly TIMER_COUNT: number = 10;
+
+  public static readonly TITLE_MAX_LENGTH: number = 200;
+  public static readonly DESCRIPTION_MAX_LENGTH: number = 1000;
+  public static readonly TTS_FREE_MAX_LENGTH: number = 500;
+  public static readonly CUSTOMER_NAME_MAX_LENGTH: number = 30;
 }
 
 export const ERROR_CODE = {
