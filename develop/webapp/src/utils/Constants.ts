@@ -239,8 +239,8 @@ export default class Constants {
     { cd: "1", name: "女性" },
   ];
 
-  public static readonly TIMER: number = 1000;
-  public static readonly TIMER_COUNT: number = 1;
+  public static readonly TIMER: number = 10000;
+  public static readonly TIMER_COUNT: number = 10;
 }
 
 export const ERROR_CODE = {
