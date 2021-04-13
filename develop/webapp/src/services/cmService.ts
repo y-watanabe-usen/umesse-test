@@ -12,10 +12,9 @@ import Constants, { Scene } from "@/utils/Constants";
 import * as UMesseApi from "umesseapi";
 import { Recording, Tts } from "@/models/DisplayCmItem";
 import { CmItem } from "umesseapi/models/cm-item";
-import { UMesseErrorFromApiFactory } from "@/models/UMesseError";
+import { UMesseError, UMesseErrorFromApiFactory } from "@/models/UMesseError";
 import { FreeCache } from "@/repository/cache/freeCache";
 import { CmListItemInner } from "umesseapi/models";
-import { ERROR_PATTERN } from "@/utils/Constants";
 
 export function useCmService(api: UMesseApi.CmApi, freeCache: FreeCache) {
   let timer: number | undefined;
@@ -82,6 +81,9 @@ export function useCmService(api: UMesseApi.CmApi, freeCache: FreeCache) {
       freeCache.set(cacheKey, <CreateUserCmResponseItem>waitForCreateCompletedResponse);
       return waitForCreateCompletedResponse;
     } catch (e) {
+      if (e instanceof UMesseError) {
+        throw e;
+      }
       throw UMesseErrorFromApiFactory(e);
     }
 
@@ -142,10 +144,9 @@ export function useCmService(api: UMesseApi.CmApi, freeCache: FreeCache) {
               response: {
                 status: 408,
               },
-              message: ERROR_PATTERN.A0001,
             };
             console.log("timeout", response);
-            throw e;
+            reject(UMesseErrorFromApiFactory(e));
           }
           console.log("resolve");
           console.log("_getUserCm", response);
