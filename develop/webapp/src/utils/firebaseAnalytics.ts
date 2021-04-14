@@ -28,7 +28,7 @@ const setUserId = (id: string) => {
   fireBaseAnalytics.setUserId(id);
 };
 
-// （ナレーション）選択
+// ナレーション選択
 const selectNarration = (id: string) => {
   const now = new Date().toLocaleString();
   fireBaseAnalytics.logEvent("select_content", {
@@ -38,7 +38,7 @@ const selectNarration = (id: string) => {
   });
 };
 
-// （オープンチャイム）選択
+// オープンチャイム選択
 const selectOpenChime = (id: string) => {
   const now = new Date().toLocaleString();
   fireBaseAnalytics.logEvent("select_content", {
@@ -48,7 +48,7 @@ const selectOpenChime = (id: string) => {
   });
 };
 
-// （エンドチャイム）選択
+// エンドチャイム選択
 const selectEndChime = (id: string) => {
   const now = new Date().toLocaleString();
   fireBaseAnalytics.logEvent("select_content", {
@@ -58,7 +58,7 @@ const selectEndChime = (id: string) => {
   });
 };
 
-// （BGM）選択
+// BGM選択
 const selectBgm = (id: string) => {
   const now = new Date().toLocaleString();
   fireBaseAnalytics.logEvent("select_content", {
@@ -68,7 +68,7 @@ const selectBgm = (id: string) => {
   });
 };
 
-// （音声合成テンプレート）選択
+// 音声合成テンプレート選択
 const selectTemplate = (id: string) => {
   const now = new Date().toLocaleString();
   fireBaseAnalytics.logEvent("select_content", {
@@ -78,7 +78,7 @@ const selectTemplate = (id: string) => {
   });
 };
 
-// （音声合成フリーのテンプレート）選択
+// 音声合成フリーのテンプレート選択
 const selectFree = (id: string) => {
   const now = new Date().toLocaleString();
   fireBaseAnalytics.logEvent("select_content", {
