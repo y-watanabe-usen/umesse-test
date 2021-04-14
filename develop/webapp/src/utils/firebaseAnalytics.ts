@@ -23,16 +23,6 @@ firebase.initializeApp(config);
 
 const fireBaseAnalytics = firebase.analytics();
 
-// 画面遷移
-const screenView = (screen: string) => {
-  const now = new Date().toLocaleString();
-  fireBaseAnalytics.logEvent("screen_view", {
-    app_name: "UMESSE",
-    screen_name: screen,
-    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
-  });
-};
-
 // ユーザーIDセット
 const setUserId = (id: string) => {
   fireBaseAnalytics.setUserId(id);
@@ -231,11 +221,40 @@ const pressButtonEditContent = (id: string, screen: string) => {
   });
 };
 
+// 画面遷移
+const screenView = (screen: string) => {
+  const now = new Date().toLocaleString();
+  fireBaseAnalytics.logEvent("screen_view", {
+    app_name: "UMESSE",
+    screen_name: screen,
+    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
+  });
+};
+
+// 業種・シーン選択
+const selectIndustry = (industryCd: string, screen: string) => {
+  const now = new Date().toLocaleString();
+  fireBaseAnalytics.logEvent("select_industry", {
+    industry_cd: industryCd,
+    screen_name: screen,
+    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
+  });
+};
+
+// シーン選択
+const selectScene = (sceneCd: string, screen: string) => {
+  const now = new Date().toLocaleString();
+  fireBaseAnalytics.logEvent("select_scene", {
+    scene_cd: sceneCd,
+    screen_name: screen,
+    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
+  });
+};
+
 // 試聴の再生、停止ボタン必要？
 // 原稿をコピーするボタン（フリー入力）
 
 const analytics = {
-  screenView,
   setUserId,
   selectNarration,
   selectOpenChime,
@@ -255,6 +274,9 @@ const analytics = {
   pressButtonUpload,
   pressButtonUnupload,
   pressButtonEditContent,
+  screenView,
+  selectIndustry,
+  selectScene,
 };
 
 export default analytics;

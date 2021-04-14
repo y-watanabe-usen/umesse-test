@@ -64,23 +64,15 @@
                 </template>
                 <template #line2>
                   <p>
-                    <span
-                      v-if="freeItem.seconds"
-                      class="duration"
-                      >{{
-                        convertNumberToTime(freeItem.seconds)
-                      }}</span
-                    >
-                    <span
-                      v-if="freeItem.timestamp"
-                      class="start"
+                    <span v-if="freeItem.seconds" class="duration">{{
+                      convertNumberToTime(freeItem.seconds)
+                    }}</span>
+                    <span v-if="freeItem.timestamp" class="start"
                       >放送開始日{{
                         convertDatestringToDateJp(freeItem.timestamp)
                       }}</span
                     >
-                    <span
-                      v-if="freeItem.timestamp"
-                      class="end"
+                    <span v-if="freeItem.timestamp" class="end"
                       >有効期限{{
                         convertDatestringToDateJp(freeItem.timestamp)
                       }}</span
@@ -165,12 +157,11 @@ import {
   convertDatestringToDateJp,
   convertNumberToTime,
 } from "@/utils/FormatDate";
-import { Scene } from "@/utils/Constants";
 import { resourcesService } from "@/services";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { freeCache } from "@/repository/cache";
 import analytics from "@/utils/firebaseAnalytics";
-import Constants from "@/utils/Constants";
+import Constants, { Scene } from "@/utils/Constants";
 import useModalController from "@/mixins/modalController";
 import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
@@ -235,6 +226,7 @@ export default defineComponent({
         state.activeIndustryCd !== industryCd ||
         (state.activeIndustryCd === industryCd && state.freeItems)
       ) {
+        analytics.selectIndustry(industryCd, Constants.SCREEN.SELECT_TEMPLATE);
         state.activeIndustryCd = industryCd;
         state.activeSceneCd = null;
         fetchScene();
@@ -242,6 +234,7 @@ export default defineComponent({
     };
 
     const clickScene = (sceneCd: string) => {
+      analytics.selectScene(sceneCd, Constants.SCREEN.SELECT_TEMPLATE);
       state.activeSceneCd = sceneCd;
       fetchFreeTemplate();
     };
@@ -286,7 +279,10 @@ export default defineComponent({
       router.push({ name: "VoiceFree" });
     };
 
-    const setManuscriptAndOpenDocumentModal = (freeItem: FreeItem, freeId: string) => {
+    const setManuscriptAndOpenDocumentModal = (
+      freeItem: FreeItem,
+      freeId: string
+    ) => {
       setManuscript(freeItem);
       closeAllDropdownMenu();
       analytics.pressButtonManuscript(freeId, Constants.SCREEN.SELECT_TEMPLATE);

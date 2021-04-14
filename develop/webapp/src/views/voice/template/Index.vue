@@ -117,8 +117,7 @@ import { freeCache } from "@/repository/cache";
 import analytics from "@/utils/firebaseAnalytics";
 import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
-import { Scene } from "@/utils/Constants";
-import Constants from "@/utils/Constants";
+import Constants, { Scene } from "@/utils/Constants";
 
 export default defineComponent({
   components: {
@@ -160,9 +159,10 @@ export default defineComponent({
       activeSceneCd: null as string | null,
     });
 
-    const clickIndustry = (industryCd: string) => {
-      if (state.activeIndustryCd !== industryCd) {
-        state.activeIndustryCd = industryCd;
+    const clickIndustry = (industryCD: string) => {
+      if (state.activeIndustryCd !== industryCD) {
+        analytics.selectIndustry(industryCD, Constants.SCREEN.VOICE_TEMPLATE);
+        state.activeIndustryCd = industryCD;
         state.activeSceneCd = null;
         fetchScene();
       }
@@ -202,6 +202,7 @@ export default defineComponent({
       state.templates = [];
     };
     const clickScene = (sceneCd: string) => {
+      analytics.selectScene(sceneCd, Constants.SCREEN.VOICE_TEMPLATE);
       state.activeSceneCd = sceneCd;
       fetchTemplate();
     };
