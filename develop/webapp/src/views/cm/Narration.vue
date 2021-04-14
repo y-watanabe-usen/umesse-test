@@ -197,6 +197,8 @@
             :isPlaying="isPlaying"
             :playbackTime="playbackTime"
             :duration="duration"
+            :isDownload="isDownload"
+            @download="download(selectedNarration)"
             @play="play(selectedNarration)"
             @stop="stop"
           />
@@ -503,6 +505,7 @@ export default defineComponent({
       dropdownNarrationId: "",
       title: "",
       description: "",
+      isDownload: false,
     });
 
     const setNarration = (narration: NarrationItem) => {
@@ -528,6 +531,13 @@ export default defineComponent({
 
     const clickScene = (sceneCd: string) => {
       state.activeSceneCd = sceneCd;
+      //if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'staging') {
+         if (state.activeSceneCd === '901' || state.activeSceneCd === '902') {
+            state.isDownload = true;
+          } else {
+            state.isDownload = false;
+          }
+      //}
       fetchNarration();
     };
 
@@ -581,6 +591,26 @@ export default defineComponent({
         openErrorModal(e);
       } finally {
         state.isDownloading = false;
+      }
+    };
+
+    const download = async (narration: NarrationItem) => {
+      try {
+        const downloAdudioUrl = await audioService.downloadById(
+          narration.id,
+          narration.category
+        );
+        //router.push(DownloAdudioUrl);
+        window.open(downloAdudioUrl); 
+
+        // analytics.pressButtonPlayTrial(
+        //   narration.id,
+        //   Constants.CATEGORY.NARRATION,
+        //   Constants.SCREEN.NARRATION
+        // );
+        //audioPlayer.start(audioBuffer);
+      } catch (e) {
+        openErrorModal(e);
       }
     };
 
@@ -751,6 +781,7 @@ export default defineComponent({
       openNarrationTtsAbsentModal,
       closeNarrationTtsAbsentModal,
       Constants,
+      download,
     };
   },
 });
