@@ -23,7 +23,9 @@
             </div>
           </template>
           <template #buttons>
-            <Button @click="clickConfirm">確定</Button>
+            <Button :isDisabled="narrations.length === 0" @click="clickConfirm"
+              >確定</Button
+            >
           </template>
         </Header>
       </template>
@@ -512,7 +514,10 @@
             <TextBox v-model="title" :maxLength="Constants.TITLE_MAX_LENGTH" />
           </FormGroup>
           <FormGroup title="説明">
-            <TextArea v-model="description" :maxLength="Constants.DESCRIPTION_MAX_LENGTH" />
+            <TextArea
+              v-model="description"
+              :maxLength="Constants.DESCRIPTION_MAX_LENGTH"
+            />
           </FormGroup>
           <FormGroup title="シーン">
             <SelectBox
