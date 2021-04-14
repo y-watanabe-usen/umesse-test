@@ -118,10 +118,16 @@
         <template #contents>
           <form>
             <FormGroup title="タイトル" :required="true">
-              <TextBox v-model="file.title" :maxLength="Constants.TITLE_MAX_LENGTH" />
+              <TextBox
+                v-model="file.title"
+                :maxLength="Constants.TITLE_MAX_LENGTH"
+              />
             </FormGroup>
             <FormGroup title="説明">
-              <TextArea v-model="file.description" :maxLength="Constants.DESCRIPTION_MAX_LENGTH" />
+              <TextArea
+                v-model="file.description"
+                :maxLength="Constants.DESCRIPTION_MAX_LENGTH"
+              />
             </FormGroup>
           </form>
         </template>
@@ -154,7 +160,14 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, computed, toRefs, onUnmounted } from "vue";
+import {
+  defineComponent,
+  reactive,
+  computed,
+  toRefs,
+  onUnmounted,
+  onMounted,
+} from "vue";
 import AudioRecorder from "@/utils/AudioRecorder";
 import AudioPlayer from "@/utils/AudioPlayer";
 import { RecordingFile } from "@/services/recordingService";
@@ -291,6 +304,9 @@ export default defineComponent({
         closeLoadingModal();
       }
     };
+    onMounted(() => {
+      analytics.screenView(Constants.SCREEN.RECORDING);
+    });
     return {
       ...toRefs(state),
       toggleVoiceRecorder,

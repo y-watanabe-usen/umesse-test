@@ -118,6 +118,7 @@ import analytics from "@/utils/firebaseAnalytics";
 import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
 import { Scene } from "@/utils/Constants";
+import Constants from "@/utils/Constants";
 
 export default defineComponent({
   components: {
@@ -191,6 +192,8 @@ export default defineComponent({
       router.push({ name: "VoiceTemplateDetail" });
     };
     onMounted(async () => {
+      analytics.screenView(Constants.SCREEN.VOICE_TEMPLATE);
+      fetchScene();
       await fetchTemplate();
     });
 
@@ -206,9 +209,6 @@ export default defineComponent({
       state.activeSceneCd = null;
       state.templates = [];
     };
-    onMounted(async () => {
-      fetchScene();
-    });
 
     return {
       ...toRefs(state),

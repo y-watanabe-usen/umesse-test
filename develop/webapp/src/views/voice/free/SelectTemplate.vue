@@ -294,6 +294,7 @@ export default defineComponent({
     };
 
     onMounted(async () => {
+      analytics.screenView(Constants.SCREEN.SELECT_TEMPLATE);
       await fetchFreeTemplate();
     });
 

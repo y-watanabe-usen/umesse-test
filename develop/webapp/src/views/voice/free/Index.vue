@@ -70,7 +70,10 @@
             <TextBox v-model="title" :maxLength="Constants.TITLE_MAX_LENGTH" />
           </FormGroup>
           <FormGroup title="説明">
-            <TextArea v-model="description" :maxLength="Constants.DESCRIPTION_MAX_LENGTH" />
+            <TextArea
+              v-model="description"
+              :maxLength="Constants.DESCRIPTION_MAX_LENGTH"
+            />
           </FormGroup>
         </template>
         <template #footer>
@@ -93,7 +96,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive, computed, toRefs } from "vue";
+import { defineComponent, reactive, computed, toRefs, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import AudioPlayer from "@/utils/AudioPlayer";
 import provideTtsStore from "@/store/tts";
@@ -185,7 +188,11 @@ export default defineComponent({
       console.log("play");
       const data = await ttsStore.getTtsData(lang);
       const audioBuffer = await audioService.getByUrl(<string>data?.url);
-      analytics.pressButtonPlayTrial(<string>data?.url, Constants.CATEGORY.FREE, Constants.SCREEN.VOICE_FREE);
+      analytics.pressButtonPlayTrial(
+        <string>data?.url,
+        Constants.CATEGORY.FREE,
+        Constants.SCREEN.VOICE_FREE
+      );
       audioPlayer.start(audioBuffer);
     };
     const stop = () => {
@@ -224,6 +231,10 @@ export default defineComponent({
       stop();
       closeModal();
     };
+
+    onMounted(() => {
+      analytics.screenView(Constants.SCREEN.VOICE_FREE);
+    });
     return {
       ttsSpeakers,
       ...toRefs(state),

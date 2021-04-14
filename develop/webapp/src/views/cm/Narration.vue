@@ -617,6 +617,7 @@ export default defineComponent({
     };
 
     onMounted(async () => {
+      analytics.screenView(Constants.SCREEN.NARRATION);
       fetchScene();
     });
 

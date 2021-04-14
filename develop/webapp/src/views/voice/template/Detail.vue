@@ -52,7 +52,10 @@
               description="※カタカナで入力"
               class="name"
             >
-              <TextBox v-model="customerName" :maxLength="Constants.CUSTOMER_NAME_MAX_LENGTH" />
+              <TextBox
+                v-model="customerName"
+                :maxLength="Constants.CUSTOMER_NAME_MAX_LENGTH"
+              />
               <div>
                 <p class="errorMessage errorCustomerName">
                   {{ errorMessageCustomerName }}
@@ -146,7 +149,10 @@
             <TextBox v-model="title" :maxLength="Constants.TITLE_MAX_LENGTH" />
           </FormGroup>
           <FormGroup title="説明">
-            <TextArea v-model="description" :maxLength="Constants.DESCRIPTION_MAX_LENGTH" />
+            <TextArea
+              v-model="description"
+              :maxLength="Constants.DESCRIPTION_MAX_LENGTH"
+            />
           </FormGroup>
         </template>
         <template #footer>
@@ -174,7 +180,7 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, reactive, toRefs } from "vue";
+import { computed, defineComponent, reactive, toRefs, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import AudioPlayer from "@/utils/AudioPlayer";
 import provideTtsStore from "@/store/tts";
@@ -474,6 +480,9 @@ export default defineComponent({
       return Common.getLangs(langs);
     };
 
+    onMounted(() => {
+      analytics.screenView(Constants.SCREEN.VOICE_TEMPLATE_DETAIL);
+    });
     return {
       ...toRefs(state),
       ttsSpeakers,

@@ -34,6 +34,8 @@ import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
 import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
+import analytics from "@/utils/firebaseAnalytics";
+import Constants from "@/utils/Constants";
 
 export default defineComponent({
   components: {
@@ -62,6 +64,7 @@ export default defineComponent({
     onMounted(async () => {
       try {
         await auth.requestAuth();
+        analytics.screenView(Constants.SCREEN.HOME);
       } catch (e) {
         openErrorModal(e);
       }

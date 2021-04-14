@@ -238,6 +238,7 @@ export default defineComponent({
     };
 
     onMounted(async () => {
+      analytics.screenView(Constants.SCREEN.BGM);
       fetchBgm();
     });
 

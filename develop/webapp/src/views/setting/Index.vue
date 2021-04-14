@@ -61,12 +61,7 @@
 </template>
 
 <script lang="ts">
-import {
-  defineComponent,
-  computed,
-  reactive,
-  toRefs,
-} from "vue";
+import { defineComponent, computed, reactive, toRefs, onMounted } from "vue";
 import { useGlobalStore } from "@/store";
 import * as Common from "@/utils/Common";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
@@ -78,6 +73,8 @@ import {
   convertDatestringToDateJp,
   convertNumberToTime,
 } from "@/utils/FormatDate";
+import analytics from "@/utils/firebaseAnalytics";
+import Constants from "@/utils/Constants";
 
 export default defineComponent({
   components: {
@@ -102,6 +99,10 @@ export default defineComponent({
     const clickAppInformation = (appInformationCd: string) => {
       state.activeAppInformationCd = appInformationCd;
     };
+
+    onMounted(() => {
+      analytics.screenView(Constants.SCREEN.SETTINGS);
+    });
 
     return {
       ...toRefs(state),

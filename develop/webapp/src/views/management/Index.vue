@@ -724,6 +724,7 @@ export default defineComponent({
       router.push({ name: "Cm" });
     };
     onMounted(async () => {
+      analytics.screenView(Constants.SCREEN.MANAGEMENT);
       fetchScene();
     });
     const closeAllDropdownMenu = () => {
