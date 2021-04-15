@@ -115,13 +115,14 @@ export default function cmStore() {
       return;
     }
     console.log(narrationItem);
+
     state.displayCmItem.setNarraion(
       state.selectedNarrationIndex,
       narrationItem.category,
       narrationItem.id,
       narrationItem.title,
       narrationItem.description,
-      0, //narrationItem.seconds,
+      'seconds' in narrationItem ? narrationItem.seconds : 0,
       narrationItem.timestamp
     );
     unSelectNarrationIndex();
