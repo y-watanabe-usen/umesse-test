@@ -1,9 +1,12 @@
 name: stg-deploy
 
 on:
-  push:
-    tags:
-      - 'v*\.stg'
+  pull_request:
+    branches: [ master ]
+#on:
+#  push:
+#    tags:
+#      - 'v*\.stg'
 
 jobs:
 #  terraform:
@@ -115,3 +118,10 @@ jobs:
       working-directory: ./develop/twa
       run: |
         ./gradlew assembleStgRelease
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: app-stg-release.apk
+        path: build/app/outputs/apk/stg/release/app-stg-release.apk
+        retention-days: 2

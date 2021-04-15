@@ -1,8 +1,12 @@
 name: dev-dry-run-deploy
 
 on:
-  pull_request:
-    branches: [ master ]
+  push:
+    tags:
+      - 'v*\.stg'
+#on:
+#  pull_request:
+#    branches: [ master ]
 
 jobs:
   terraform:
