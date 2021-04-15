@@ -24,6 +24,9 @@
         </Button>
       </template>
       <template v-else>
+        <Button v-show="isDownload" class="btn-download" type="secondary" @click="$emit('download')">
+          ダウンロード
+        </Button>
         <Button v-show="!isPlaying" class="btn-play" type="secondary" @click="$emit('play')">
           <img src="@/assets/icon_sound.svg" />再生
         </Button>
@@ -76,6 +79,10 @@ export default {
       type: Number,
       required: true,
     },
+    isDownload: {
+      type: Boolean,
+      required: true,
+    },
   },
   setup() {
     const state = reactive({});
@@ -125,6 +132,10 @@ export default {
       width: 34px;
       height: 26px;
     }
+  }
+  .btn-download {
+    width: 114px;
+    margin-right: 8px;
   }
   .meter-wrapper {
     width: 430px;

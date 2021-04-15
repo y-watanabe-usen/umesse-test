@@ -39,8 +39,18 @@ export function useAudioService(
     }
   };
 
+  const downloadById = async (id: string, category: string) => {
+    try {
+      const resourcesRepositoryResponse = await resourcesRepository.getSignedUrl(id, category);
+      return resourcesRepositoryResponse.data.url;
+    } catch (e) {
+      throw UMesseErrorFromApiFactory(e);
+    }
+  };
+
   return {
     getById,
     getByUrl,
+    downloadById,
   };
 }
