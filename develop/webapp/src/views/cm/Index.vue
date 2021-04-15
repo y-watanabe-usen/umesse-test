@@ -39,7 +39,7 @@
               :contentTitle="openChime.title"
               :duration="`${convertNumberToTime(openChime.seconds)}`"
               :volume="openChime.volume"
-              :indexItem="0"
+              :contentTitleName="'chime'"
               @toggleSlider="toggleOpenChimeSlider"
               @click="openPlayOpenChimeModal"
             >
@@ -111,7 +111,7 @@
               :contentTitle="`${narration.title}`"
               :duration="`${convertNumberToTime(narration.seconds)}`"
               :volume="narration.volume"
-              :indexItem="narrations.length"
+              :contentTitleName="'narration' + `${narrations.length}`"
               @toggleSlider="toggleNarrationSlider(index)"
               @click="clickPlayNarration(index)"
             >
@@ -188,6 +188,7 @@
                   `${MAX_NARRATION_COUNT}`
                 "
                 :isEmpty="true"
+                :contentTitleName="'narration' + `${narrations.length}`"
                 size="flexible"
                 @add="toggleNarrationDropdown(narrations.length)"
               >
@@ -239,6 +240,7 @@
               :contentTitle="bgm.title"
               :duration="`${convertNumberToTime(bgm.seconds)}`"
               :volume="bgm.volume"
+              :contentTitleName="'bgm'"
               @toggleSlider="toggleBgmSlider"
               @click="openPlayBgmModal"
             >
@@ -304,7 +306,7 @@
               :contentTitle="endChime.title"
               :duration="`${convertNumberToTime(endChime.seconds)}`"
               :volume="endChime.volume"
-              :indexItem="0"
+              :contentTitleName="'chime'"
               @toggleSlider="toggleEndChimeSlider"
               @click="openPlayEndChimeModal"
             >
