@@ -11,9 +11,10 @@
                   "cmId": { "S": "020000000-c-00000001" },
                   "title": { "S": "CMテスト01" },
                   "description": { "S": "CMテスト01" },
+                  "manuscript": { "S": "CMテスト01" },
                   "seconds": { "N": "60" },
                   "startDate": { "S": "2019-09-01T09:00:00+09:00" },
-                  "endDate": { "S": "9999-12-31T23:59:59+09:00" },
+                  "endDate": { "S": "" },
                   "productionType": { "S": "01" },
                   "scene": {
                     "M": {
@@ -30,9 +31,10 @@
                   "cmId": { "S": "020000000-c-00000002" },
                   "title": { "S": "CMテスト02" },
                   "description": { "S": "CMテスト02" },
+                  "manuscript": { "S": "CMテスト02" },
                   "seconds": { "N": "60" },
                   "startDate": { "S": "2019-09-01T09:00:00+09:00" },
-                  "endDate": { "S": "9999-12-31T23:59:59+09:00" },
+                  "endDate": { "S": "" },
                   "productionType": { "S": "01" },
                   "scene": {
                     "M": {

@@ -285,6 +285,7 @@ describe("CMデータ更新", () => {
     const body = {
       title: "テスト",
       description: "テスト",
+      manuscript: "テスト",
       startDate: "2019-09-01T09:00:00+9:00",
       endDate: "9999-12-31T23:59:59+09:00",
       industry: {
@@ -310,6 +311,7 @@ describe("CMデータ更新", () => {
     const body = {
       title: "テスト",
       description: "テスト",
+      manuscript: "テスト",
       startDate: "2019-09-01T09:00:00+9:00",
       endDate: "9999-12-31T23:59:59+09:00",
       industry: {
@@ -336,6 +338,7 @@ describe("CMデータ更新", () => {
     const body = {
       title: "テスト",
       description: "テスト",
+      manuscript: "テスト",
       startDate: "2019-09-01T09:00:00+9:00",
       endDate: "9999-12-31T23:59:59+09:00",
       industry: {
