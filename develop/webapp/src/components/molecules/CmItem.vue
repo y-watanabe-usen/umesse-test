@@ -12,7 +12,7 @@
         <p class="btn-add-title">素材追加</p>
       </template>
       <template v-else>
-        <p class="content-title" :class="[`content-title-width${indexItem}`]">
+        <p class="content-title" :class="[`content-title-width_${contentTitleName}`]">
           {{ contentTitle }}
         </p>
         <button class="sound" @click="$emit('togglePlay')">
@@ -63,9 +63,9 @@ export default {
       type: Number,
       default: 0,
     },
-    indexItem: {
-      type: Number,
-      default: 0,
+    contentTitleName: {
+      type: String,
+      default: "",
     },
   },
   setup() {
@@ -92,7 +92,7 @@ export default {
     background-color: rgba(211, 211, 211, 0.85);
   }
   &.flexible {
-    width: 100%;
+    width: 200px;
     flex-grow: 1;
     flex-shrink: 1;
   }
@@ -143,18 +143,21 @@ export default {
       font-weight: $font_weight_bold;
       text-align: center;
     }
-    .content-title-width0 {
+    .content-title-width_chime {
       width: 170px;
     }
-    .content-title-width1 {
-      width: 1000px;
+    .content-title-width_bgm {
+      width: 170px;
     }
-    .content-title-width2 {
-      width: 650px;
+    .content-title-width_narration1 {
+      width: 380px;
     }
-    .content-title-width3,
-    .content-title-width4 {
-      width: 480px;
+    .content-title-width_narration2 {
+      width: 240px;
+    }
+    .content-title-width_narration3,
+    .content-title-width_narration4 {
+      width: 170px;
     }
     .btn-add-title {
       color: white;
