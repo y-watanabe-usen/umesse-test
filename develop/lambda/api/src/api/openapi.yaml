@@ -2768,6 +2768,7 @@ components:
             cmCommentManuscript: テストCMです
             productionType: 01：音楽系、02：素ナレ
             contentTime: 30000
+            description: テストCMです
             cmId: 123456789-c-12345678
             url: https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx
             endDatetime: 9999-12-31T23:59:59+09:00
@@ -2779,6 +2780,7 @@ components:
             cmCommentManuscript: テストCMです
             productionType: 01：音楽系、02：素ナレ
             contentTime: 30000
+            description: テストCMです
             cmId: 123456789-c-12345678
             url: https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx
             endDatetime: 9999-12-31T23:59:59+09:00
@@ -2792,6 +2794,7 @@ components:
             cmCommentManuscript: テストCMです
             productionType: 01：音楽系、02：素ナレ
             contentTime: 30000
+            description: テストCMです
             cmId: 123456789-c-12345678
             url: https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx
             endDatetime: 9999-12-31T23:59:59+09:00
@@ -2803,6 +2806,7 @@ components:
             cmCommentManuscript: テストCMです
             productionType: 01：音楽系、02：素ナレ
             contentTime: 30000
+            description: テストCMです
             cmId: 123456789-c-12345678
             url: https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx
             endDatetime: 9999-12-31T23:59:59+09:00
@@ -2826,6 +2830,7 @@ components:
           cmCommentManuscript: テストCMです
           productionType: 01：音楽系、02：素ナレ
           contentTime: 30000
+          description: テストCMです
           cmId: 123456789-c-12345678
           url: https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx
           endDatetime: 9999-12-31T23:59:59+09:00
@@ -2837,6 +2842,7 @@ components:
           cmCommentManuscript: テストCMです
           productionType: 01：音楽系、02：素ナレ
           contentTime: 30000
+          description: テストCMです
           cmId: 123456789-c-12345678
           url: https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx
           endDatetime: 9999-12-31T23:59:59+09:00
@@ -2859,6 +2865,10 @@ components:
           type: string
           description: CM名
           example: 時報A
+        description:
+          type: string
+          description: CM説明
+          example: テストCMです
         cmCommentManuscript:
           type: string
           description: CMコメント原稿
@@ -2897,6 +2907,7 @@ components:
         cmCommentManuscript: テストCMです
         productionType: 01：音楽系、02：素ナレ
         contentTime: 30000
+        description: テストCMです
         cmId: 123456789-c-12345678
         url: https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx
         endDatetime: 9999-12-31T23:59:59+09:00
@@ -3207,6 +3218,7 @@ components:
           cmCommentManuscript: テストCMです
           productionType: 01：音楽系、02：素ナレ
           contentTime: 30000
+          description: テストCMです
           cmId: 123456789-c-12345678
           url: https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx
           endDatetime: 9999-12-31T23:59:59+09:00
@@ -3218,6 +3230,7 @@ components:
           cmCommentManuscript: テストCMです
           productionType: 01：音楽系、02：素ナレ
           contentTime: 30000
+          description: テストCMです
           cmId: 123456789-c-12345678
           url: https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx
           endDatetime: 9999-12-31T23:59:59+09:00

@@ -64,6 +64,7 @@ module.exports = {
         "dataProcessType," +
         "cmId," +
         "cmName," +
+        "description," +
         "cmCommentManuscript," +
         "startDatetime," +
         "endDatetime," +

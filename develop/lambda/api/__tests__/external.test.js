@@ -31,6 +31,7 @@ const data = {
           dataProcessType: "01",
           cmId: "060000000-c-00000001",
           cmName: "時報A",
+          description: "テストCMです",
           cmCommentManuscript: "テストCMです",
           startDatetime: "2020-01-01T12:34:56+09:00",
           endDatetime: "9999-12-31T23:59:59+09:00",

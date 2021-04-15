@@ -42,6 +42,12 @@ export interface ExternalMetaItem {
      */
     cmName?: any;
     /**
+     * CM説明
+     * @type {string}
+     * @memberof ExternalMetaItem
+     */
+    description?: any;
+    /**
      * CMコメント原稿
      * @type {string}
      * @memberof ExternalMetaItem
