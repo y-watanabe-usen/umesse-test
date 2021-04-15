@@ -13,7 +13,7 @@ describe("convertDatestringToDateのテスト", () => {
     {
       dateString: "2021-01-01 01:01:01",
       expected: "2021/01/01",
-    }
+    },
   ];
   datas.forEach((v) => {
     test(`引数に${v.dateString}を渡すと${v.expected}が返ること`, () => {
@@ -35,11 +35,33 @@ describe("convertDatestringToDateJpのテスト", () => {
     {
       dateString: "2021-12-01 12:01:01",
       expected: "2021年12月01日",
-    }
+    },
   ];
   datas.forEach((v) => {
     test(`引数に${v.dateString}を渡すと${v.expected}が返ること`, () => {
-      expect(FormatDate.convertDatestringToDateJp(v.dateString)).toBe(v.expected);
+      expect(FormatDate.convertDatestringToDateJp(v.dateString)).toBe(
+        v.expected
+      );
+    });
+  });
+});
+
+describe("convertDatestringToDateTimeのテスト", () => {
+  const datas = [
+    {
+      dateString: "2021-01-01",
+      expected: "2021/01/01 00:00:00",
+    },
+    {
+      dateString: "2021-01-01 01:01:01",
+      expected: "2021/01/01 01:01:01",
+    },
+  ];
+  datas.forEach((v) => {
+    test(`引数に${v.dateString}を渡すと${v.expected}が返ること`, () => {
+      expect(FormatDate.convertDatestringToDateTime(v.dateString)).toBe(
+        v.expected
+      );
     });
   });
 });

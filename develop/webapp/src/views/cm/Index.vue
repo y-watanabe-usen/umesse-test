@@ -1059,6 +1059,7 @@ export default defineComponent({
       history.go(1);
     };
     onMounted(() => {
+      analytics.screenView(Constants.SCREEN.CM);
       history.pushState(null, "", location.href);
       window.addEventListener("popstate", handleBackButton);
     });

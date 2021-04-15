@@ -224,7 +224,10 @@
             <TextBox v-model="title" :maxLength="Constants.TITLE_MAX_LENGTH" />
           </FormGroup>
           <FormGroup title="説明">
-            <TextArea v-model="description" :maxLength="Constants.DESCRIPTION_MAX_LENGTH" />
+            <TextArea
+              v-model="description"
+              :maxLength="Constants.DESCRIPTION_MAX_LENGTH"
+            />
           </FormGroup>
         </template>
         <template #footer>
@@ -327,10 +330,7 @@
         @close="closeNarrationTtsAbsentModal"
       >
         <template #header>
-          <ModalHeader
-            title="お知らせ"
-            @close="closeNarrationTtsAbsentModal"
-          />
+          <ModalHeader title="お知らせ" @close="closeNarrationTtsAbsentModal" />
         </template>
         <template #contents>
           <MessageDialogContents>
@@ -386,7 +386,6 @@ import {
   convertDatestringToDateJp,
   convertNumberToTime,
 } from "@/utils/FormatDate";
-import { Scene } from "@/utils/Constants";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import {
   audioService,
@@ -399,7 +398,7 @@ import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
 import MessageDialogContents from "@/components/molecules/MessageDialogContents.vue";
-import Constants from "@/utils/Constants";
+import Constants, { Scene } from "@/utils/Constants";
 import useModalController from "@/mixins/modalController";
 import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
@@ -520,6 +519,7 @@ export default defineComponent({
         state.activeIndustryCd !== industryCd ||
         (state.activeIndustryCd === industryCd && state.narrations)
       ) {
+        analytics.selectIndustry(industryCd, Constants.SCREEN.NARRATION);
         state.activeIndustryCd = industryCd;
         state.activeSceneCd = null;
         fetchScene();
@@ -527,6 +527,7 @@ export default defineComponent({
     };
 
     const clickScene = (sceneCd: string) => {
+      analytics.selectScene(sceneCd, Constants.SCREEN.NARRATION);
       state.activeSceneCd = sceneCd;
       fetchNarration();
     };
@@ -617,6 +618,7 @@ export default defineComponent({
     };
 
     onMounted(async () => {
+      analytics.screenView(Constants.SCREEN.NARRATION);
       fetchScene();
     });
 
@@ -635,7 +637,10 @@ export default defineComponent({
       try {
         if (!state.selectedNarration) return;
         await save(state.selectedNarration);
-        analytics.pressButtonSaveEdit(state.selectedNarration.id, Constants.SCREEN.NARRATION);
+        analytics.pressButtonSaveEdit(
+          state.selectedNarration.id,
+          Constants.SCREEN.NARRATION
+        );
         closeSaveModal();
         openSavedModal();
       } catch (e) {

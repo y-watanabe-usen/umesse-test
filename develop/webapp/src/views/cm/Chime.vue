@@ -221,6 +221,7 @@ export default defineComponent({
     };
 
     onMounted(async () => {
+      analytics.screenView(Constants.SCREEN.CHIME);
       fetchChime();
     });
 

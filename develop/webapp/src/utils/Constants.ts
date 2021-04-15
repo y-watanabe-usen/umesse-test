@@ -214,7 +214,7 @@ export default class Constants {
   } as const;
 
   public static readonly SCREEN = {
-    MAIN: "/main",
+    HOME: "/home",
     CM: "/cm",
     CHIME: "/cm/chime",
     BGM: "/cm/bgm",
@@ -225,6 +225,7 @@ export default class Constants {
     SELECT_TEMPLATE: "/voice/free/select_template",
     SETTINGS: "/settings",
     MANAGEMENT: "/management",
+    RECORDING: "/recording",
   } as const;
 
   public static readonly TTS_LANGS: TtsLangs[] = [

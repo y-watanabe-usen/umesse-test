@@ -117,7 +117,7 @@ import { freeCache } from "@/repository/cache";
 import analytics from "@/utils/firebaseAnalytics";
 import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
-import { Scene } from "@/utils/Constants";
+import Constants, { Scene } from "@/utils/Constants";
 
 export default defineComponent({
   components: {
@@ -159,9 +159,10 @@ export default defineComponent({
       activeSceneCd: null as string | null,
     });
 
-    const clickIndustry = (industryCd: string) => {
-      if (state.activeIndustryCd !== industryCd) {
-        state.activeIndustryCd = industryCd;
+    const clickIndustry = (industryCD: string) => {
+      if (state.activeIndustryCd !== industryCD) {
+        analytics.selectIndustry(industryCD, Constants.SCREEN.VOICE_TEMPLATE);
+        state.activeIndustryCd = industryCD;
         state.activeSceneCd = null;
         fetchScene();
       }
@@ -191,6 +192,8 @@ export default defineComponent({
       router.push({ name: "VoiceTemplateDetail" });
     };
     onMounted(async () => {
+      analytics.screenView(Constants.SCREEN.VOICE_TEMPLATE);
+      fetchScene();
       await fetchTemplate();
     });
 
@@ -199,6 +202,7 @@ export default defineComponent({
       state.templates = [];
     };
     const clickScene = (sceneCd: string) => {
+      analytics.selectScene(sceneCd, Constants.SCREEN.VOICE_TEMPLATE);
       state.activeSceneCd = sceneCd;
       fetchTemplate();
     };
@@ -206,9 +210,6 @@ export default defineComponent({
       state.activeSceneCd = null;
       state.templates = [];
     };
-    onMounted(async () => {
-      fetchScene();
-    });
 
     return {
       ...toRefs(state),

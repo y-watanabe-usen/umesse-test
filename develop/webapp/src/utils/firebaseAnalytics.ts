@@ -1,6 +1,6 @@
 import firebase from "firebase";
 import Constants from "@/utils/Constants";
-import dayjs from "dayjs";
+import * as FormatDate from "@/utils/FormatDate";
 
 const config = {
   apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
@@ -23,63 +23,88 @@ firebase.initializeApp(config);
 
 const fireBaseAnalytics = firebase.analytics();
 
+// ユーザーIDセット
 const setUserId = (id: string) => {
   fireBaseAnalytics.setUserId(id);
 };
 
+// ナレーション選択
 const selectNarration = (id: string) => {
+  const now = new Date().toLocaleString();
   fireBaseAnalytics.logEvent("select_content", {
     content_type: Constants.CATEGORY.NARRATION,
     content_id: id,
+    timestamp: FormatDate.convertDatestringToDateTime(now),
   });
 };
 
+// オープンチャイム選択
 const selectOpenChime = (id: string) => {
+  const now = new Date().toLocaleString();
   fireBaseAnalytics.logEvent("select_content", {
     content_type: "open-chime",
     content_id: id,
+    timestamp: FormatDate.convertDatestringToDateTime(now),
   });
 };
 
+// エンドチャイム選択
 const selectEndChime = (id: string) => {
+  const now = new Date().toLocaleString();
   fireBaseAnalytics.logEvent("select_content", {
     content_type: "end-chime",
     content_id: id,
+    timestamp: FormatDate.convertDatestringToDateTime(now),
   });
 };
 
+// BGM選択
 const selectBgm = (id: string) => {
+  const now = new Date().toLocaleString();
   fireBaseAnalytics.logEvent("select_content", {
     content_type: Constants.CATEGORY.BGM,
     content_id: id,
+    timestamp: FormatDate.convertDatestringToDateTime(now),
   });
 };
 
+// 音声合成テンプレート選択
 const selectTemplate = (id: string) => {
+  const now = new Date().toLocaleString();
   fireBaseAnalytics.logEvent("select_content", {
     content_type: Constants.CATEGORY.TEMPLATE,
     content_id: id,
+    timestamp: FormatDate.convertDatestringToDateTime(now),
   });
 };
 
+// 音声合成フリーのテンプレート選択
 const selectFree = (id: string) => {
+  const now = new Date().toLocaleString();
   fireBaseAnalytics.logEvent("select_content", {
     content_type: Constants.CATEGORY.FREE,
     content_id: id,
+    timestamp: FormatDate.convertDatestringToDateTime(now),
   });
 };
 
+// レコーディング保存
 const setRecording = (id: string) => {
+  const now = new Date().toLocaleString();
   fireBaseAnalytics.logEvent("select_content", {
     content_type: Constants.CATEGORY.RECORDING,
     content_id: id,
+    timestamp: FormatDate.convertDatestringToDateTime(now),
   });
 };
 
+// 音声合成保存
 const setTts = (id: string) => {
+  const now = new Date().toLocaleString();
   fireBaseAnalytics.logEvent("select_content", {
     content_type: Constants.CATEGORY.TTS,
     content_id: id,
+    timestamp: FormatDate.convertDatestringToDateTime(now),
   });
 };
 
@@ -88,10 +113,10 @@ const pressButtonPlayTrial = (id: string, type: string, screen: string) => {
   const now = new Date().toLocaleString();
   fireBaseAnalytics.logEvent("press_playTrial", {
     button: Constants.CATEGORY_BUTTON.PLAYTRIAL,
-    screen: screen,
+    screen_name: screen,
     type: type,
     content_id: id,
-    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
+    timestamp: FormatDate.convertDatestringToDateTime(now),
   });
 };
 
@@ -100,9 +125,9 @@ const pressButtonManuscript = (id: string, screen: string) => {
   const now = new Date().toLocaleString();
   fireBaseAnalytics.logEvent("press_manuscript", {
     button: Constants.CATEGORY_BUTTON.MANUSCRIPT,
-    screen: screen,
+    screen_name: screen,
     content_id: id,
-    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
+    timestamp: FormatDate.convertDatestringToDateTime(now),
   });
 };
 
@@ -111,9 +136,9 @@ const pressButtonEditTitleAndDescription = (id: string, screen: string) => {
   const now = new Date().toLocaleString();
   fireBaseAnalytics.logEvent("press_editTitleAndDecription", {
     button: Constants.CATEGORY_BUTTON.EDIT_TITLE_ANS_DESCRIPTION,
-    screen: screen,
+    screen_name: screen,
     content_id: id,
-    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
+    timestamp: FormatDate.convertDatestringToDateTime(now),
   });
 };
 
@@ -122,10 +147,10 @@ const pressButtonChange = (id: string, type: string, screen: string) => {
   const now = new Date().toLocaleString();
   fireBaseAnalytics.logEvent("press_change", {
     button: Constants.CATEGORY_BUTTON.CHANGE,
-    screen: screen,
+    screen_name: screen,
     type: type,
     content_id: id,
-    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
+    timestamp: FormatDate.convertDatestringToDateTime(now),
   });
 };
 
@@ -134,10 +159,10 @@ const pressButtonRemove = (id: string, type: string, screen: string) => {
   const now = new Date().toLocaleString();
   fireBaseAnalytics.logEvent("press_remove", {
     button: Constants.CATEGORY_BUTTON.REMOVE,
-    screen: screen,
+    screen_name: screen,
     type: type,
     content_id: id,
-    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
+    timestamp: FormatDate.convertDatestringToDateTime(now),
   });
 };
 
@@ -146,9 +171,9 @@ const pressButtonSave = (cm: SaveContents, screen: string) => {
   const now = new Date().toLocaleString();
   fireBaseAnalytics.logEvent("press_save", {
     button: Constants.CATEGORY_BUTTON.SAVE,
-    screen: screen,
+    screen_name: screen,
     contents: cm,
-    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
+    timestamp: FormatDate.convertDatestringToDateTime(now),
   });
 };
 
@@ -157,9 +182,9 @@ const pressButtonSaveEdit = (cm: string, screen: string) => {
   const now = new Date().toLocaleString();
   fireBaseAnalytics.logEvent("press_save_edit", {
     button: Constants.CATEGORY_BUTTON.SAVE_EDIT,
-    screen: screen,
+    screen_name: screen,
     contents: cm,
-    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
+    timestamp: FormatDate.convertDatestringToDateTime(now),
   });
 };
 
@@ -168,9 +193,9 @@ const pressButtonUpload = (id: string, screen: string) => {
   const now = new Date().toLocaleString();
   fireBaseAnalytics.logEvent("press_upload", {
     button: Constants.CATEGORY_BUTTON.SAVE,
-    screen: screen,
+    screen_name: screen,
     content_id: id,
-    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
+    timestamp: FormatDate.convertDatestringToDateTime(now),
   });
 };
 
@@ -179,9 +204,9 @@ const pressButtonUnupload = (id: string, screen: string) => {
   const now = new Date().toLocaleString();
   fireBaseAnalytics.logEvent("press_unupload", {
     button: Constants.CATEGORY_BUTTON.UNUPLOAD,
-    screen: screen,
+    screen_name: screen,
     content_id: id,
-    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
+    timestamp: FormatDate.convertDatestringToDateTime(now),
   });
 };
 
@@ -190,15 +215,42 @@ const pressButtonEditContent = (id: string, screen: string) => {
   const now = new Date().toLocaleString();
   fireBaseAnalytics.logEvent("press_editContent", {
     button: Constants.CATEGORY_BUTTON.EDIT_CONTENT,
-    screen: screen,
+    screen_name: screen,
     content_id: id,
-    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
+    timestamp: FormatDate.convertDatestringToDateTime(now),
   });
 };
 
-// メインメニューからの画面選択
-// ナレーションの業種選択
-// ナレーションのシーン選択
+// 画面遷移
+const screenView = (screen: string) => {
+  const now = new Date().toLocaleString();
+  fireBaseAnalytics.logEvent("screen_view", {
+    app_name: "UMESSE",
+    screen_name: screen,
+    timestamp: FormatDate.convertDatestringToDateTime(now),
+  });
+};
+
+// 業種・シーン選択
+const selectIndustry = (industryCd: string, screen: string) => {
+  const now = new Date().toLocaleString();
+  fireBaseAnalytics.logEvent("select_industry", {
+    industry_cd: industryCd,
+    screen_name: screen,
+    timestamp: FormatDate.convertDatestringToDateTime(now),
+  });
+};
+
+// シーン選択
+const selectScene = (sceneCd: string, screen: string) => {
+  const now = new Date().toLocaleString();
+  fireBaseAnalytics.logEvent("select_scene", {
+    scene_cd: sceneCd,
+    screen_name: screen,
+    timestamp: FormatDate.convertDatestringToDateTime(now),
+  });
+};
+
 // 試聴の再生、停止ボタン必要？
 // 原稿をコピーするボタン（フリー入力）
 
@@ -222,6 +274,9 @@ const analytics = {
   pressButtonUpload,
   pressButtonUnupload,
   pressButtonEditContent,
+  screenView,
+  selectIndustry,
+  selectScene,
 };
 
 export default analytics;
