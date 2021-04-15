@@ -124,5 +124,5 @@ jobs:
       with:
         name: app-stg-release.apk
         #        path: develop/twa/build/app/outputs/apk/stg/release/app-stg-release.apk
-        path: ./develop/twa/build/app/outputs/apk
+        path: ./develop/twa/app/build/outputs/apk
         retention-days: 2
