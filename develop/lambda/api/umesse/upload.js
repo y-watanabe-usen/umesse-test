@@ -108,7 +108,8 @@ exports.createUploadCm = async (unisCustomerCd, id, body) => {
     dataProcessType: constants.cmDataProcessType.ADD,
     cmId: id,
     cmName: cm.title,
-    cmCommentManuscript: cm.description,
+    description: body.description.replace(/\r?\n/g, " "), // 改行削除
+    cmCommentManuscript: cm.manuscript,
     startDatetime: cm.startDate,
     endDatetime: cm.endDate,
     productionType: cm.productionType,
@@ -186,7 +187,6 @@ exports.deleteUploadCm = async (unisCustomerCd, id) => {
     unisCustomerCd: unisCustomerCd,
     dataProcessType: constants.cmDataProcessType.DELETE,
     cmId: id,
-    endDateTime: timestamp(),
     uploadSystem: cm.uploadSystem,
     status: "1",
     timestamp: timestamp(),
