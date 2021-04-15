@@ -145,27 +145,16 @@ export default function cmStore() {
       return;
     }
     console.log(narrationItem);
-    if ( 'seconds' in narrationItem ) {
-      state.displayCmItem.setNarraion(
-        state.selectedNarrationIndex,
-        narrationItem.category,
-        narrationItem.id,
-        narrationItem.title,
-        narrationItem.description,
-        narrationItem.seconds,
-        narrationItem.timestamp
-      );
-    } else {
-      state.displayCmItem.setNarraion(
-        state.selectedNarrationIndex,
-        narrationItem.category,
-        narrationItem.id,
-        narrationItem.title,
-        narrationItem.description,
-        0,
-        narrationItem.timestamp
-      );
-    }
+
+    state.displayCmItem.setNarraion(
+      state.selectedNarrationIndex,
+      narrationItem.category,
+      narrationItem.id,
+      narrationItem.title,
+      narrationItem.description,
+      'seconds' in narrationItem ? narrationItem.seconds : 0,
+      narrationItem.timestamp
+    );
     unSelectNarrationIndex();
   };
   const setOpenChime = (chimeItem: ChimeItem) => {
