@@ -1,9 +1,9 @@
-name: stg-deploy
+name: prod-deploy
 
 on:
   push:
     tags:
-      - 'v[0-9]+\.[0-9]+\.[0-9]+\.stg'
+      - 'v[0-9]+\.[0-9]+\.[0-9]+'
 
 jobs:
 #  terraform:
@@ -91,8 +91,8 @@ jobs:
       working-directory: ./develop/webapp
       run: |
         yarn install
-        yarn build --mode staging
-        aws s3 sync --exact-timestamps --delete ./dist/ s3://stg-umesse-webapp/
+        yarn build --mode production
+        aws s3 sync --exact-timestamps --delete ./dist/ s3://umesse-webapp/
 
   twa:
     name: Twa
@@ -114,11 +114,11 @@ jobs:
     - name: Build Twa
       working-directory: ./develop/twa
       run: |
-        ./gradlew assembleStgRelease
+        ./gradlew assembleProdRelease
 
     - name: Upload artifact
       uses: actions/upload-artifact@v2
       with:
-        name: app-stg-release.apk
-        path: ./develop/twa/app/build/outputs/apk/stg/release/app-stg-release.apk
+        name: app-prod-release.apk
+        path: ./develop/twa/app/build/outputs/apk/stg/release/app-prod-release.apk
         retention-days: 3
