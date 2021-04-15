@@ -40,9 +40,6 @@ export function useAudioService(
   };
 
   const downloadById = async (id: string, category: string) => {
-    const cacheKey = `audioService/getById/${category}/${id}`;
-    const cacheData = audioCache.get(cacheKey);
-    if (cacheData) return cacheData;
     try {
       const resourcesRepositoryResponse = await resourcesRepository.getSignedUrl(id, category);
       return resourcesRepositoryResponse.data.url;

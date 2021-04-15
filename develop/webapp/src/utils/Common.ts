@@ -553,3 +553,7 @@ function getUploadDestination(cdList: string[]) {
 
   return result;
 }
+
+export function isVisibleDownload() {
+  return process.env.NODE_ENV !== "production";
+}

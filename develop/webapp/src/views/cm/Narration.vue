@@ -506,6 +506,7 @@ export default defineComponent({
       title: "",
       description: "",
       isDownload: false,
+      isVisibleDownload: false,
     });
 
     const setNarration = (narration: NarrationItem) => {
@@ -531,13 +532,12 @@ export default defineComponent({
 
     const clickScene = (sceneCd: string) => {
       state.activeSceneCd = sceneCd;
-      //if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'staging') {
-         if (state.activeSceneCd === '901' || state.activeSceneCd === '902') {
-            state.isDownload = true;
-          } else {
-            state.isDownload = false;
-          }
-      //}
+      state.isVisibleDownload = Common.isVisibleDownload();
+      if (state.isVisibleDownload && state.activeSceneCd === '901' || state.activeSceneCd === '902') {
+        state.isDownload = true;
+      } else {
+        state.isDownload = false;
+      }
       fetchNarration();
     };
 
@@ -600,15 +600,9 @@ export default defineComponent({
           narration.id,
           narration.category
         );
-        //router.push(DownloAdudioUrl);
-        window.open(downloAdudioUrl); 
-
-        // analytics.pressButtonPlayTrial(
-        //   narration.id,
-        //   Constants.CATEGORY.NARRATION,
-        //   Constants.SCREEN.NARRATION
-        // );
-        //audioPlayer.start(audioBuffer);
+        const fileLink = document.createElement('a');
+        fileLink.href = downloAdudioUrl;
+        fileLink.click();
       } catch (e) {
         openErrorModal(e);
       }
