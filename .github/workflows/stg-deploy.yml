@@ -1,0 +1,117 @@
+name: stg-deploy
+
+on:
+  push:
+    tags:
+      - 'v*\.stg'
+
+jobs:
+#  terraform:
+#    name: Terraform
+#    runs-on: ubuntu-latest
+#
+#    defaults:
+#      run:
+#        shell: bash
+#
+#    steps:
+#    - name: Checkout
+#      uses: actions/checkout@v2
+#
+#    - name: configure AWS credentials
+#      uses: aws-actions/configure-aws-credentials@v1
+#      with:
+#        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#        aws-region: ap-northeast-1
+#
+#    - name: Setup Nodejs
+#      uses: actions/setup-node@v2
+#      with:
+#        node-version: '14'
+#
+#    - name: Build Lambda Api
+#      working-directory: ./develop/lambda/api
+#      run: |
+#        npm install --production
+#    - name: Build Lambda Converter
+#      working-directory: ./develop/lambda/converter
+#      run: |
+#        npm install --production
+#    - name: Build Lambda Generate
+#      working-directory: ./develop/lambda/generate
+#      run: |
+#        npm install --production
+#    - name: Build Lambda Sync
+#      working-directory: ./develop/lambda/sync
+#      run: |
+#        npm install --production
+#    - name: Build Lambda Lib
+#      working-directory: ./develop/lambda/layer/nodejs/node_modules/umesse-lib
+#      run: |
+#        npm install --production
+#    - name: Setup Terraform
+#      uses: hashicorp/setup-terraform@v1
+#      with:
+#        terraform_version: 0.14.7
+#
+#    - name: Terraform apply
+#      working-directory: ./deploy/aws
+#      run: |
+#        terraform init
+#        terraform validate
+#        terraform plan
+#        terraform apply -auto-approve
+
+  webapp:
+    name: Webapp
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-northeast-1
+
+    - name: Setup Nodejs
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Build Webapp & Upload s3
+      working-directory: ./develop/webapp
+      run: |
+        yarn install
+        yarn build --mode staging
+        aws s3 sync --exact-timestamps --delete ./dist/ s3://stg-umesse-webapp/
+
+  twa:
+    name: Twa
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Setup JDK
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
+
+    - name: Build Twa
+      working-directory: ./develop/twa
+      run: |
+        ./gradlew assembleStgRelease
