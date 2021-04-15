@@ -49,10 +49,6 @@ describe("convertDatestringToDateJpのテスト", () => {
 describe("convertDatestringToDateTimeのテスト", () => {
   const datas = [
     {
-      dateString: "2021-01-01T09:00:00+09:00",
-      expected: "2021/01/01 09:00:00",
-    },
-    {
       dateString: "2021-01-01",
       expected: "2021/01/01 00:00:00",
     },
