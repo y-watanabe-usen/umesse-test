@@ -55,6 +55,7 @@
               <TextBox
                 v-model="customerName"
                 :maxLength="Constants.CUSTOMER_NAME_MAX_LENGTH"
+                placeholder="入力してください。"
               />
               <div>
                 <p class="errorMessage errorCustomerName">
@@ -312,7 +313,7 @@ export default defineComponent({
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       duration: computed(() => audioPlayer.getDuration()),
       narrations: computed(() => cm.narrations),
-      customerName: "テンポメイ",
+      customerName: "",
       time: "21:00",
       percentage: 10,
       count: 3,

@@ -134,7 +134,7 @@ export default defineComponent({
     const { cm } = useGlobalStore();
     const sortList = Common.getSort();
     const isOpenChime = route.params.div == "open";
-    const title = isOpenChime ? "Openチャイム" : "Endチャイム";
+    const title = isOpenChime ? "開始チャイム" : "終了チャイム";
     const {
       isApper: isPlayModalAppear,
       open: openPlayModal,
