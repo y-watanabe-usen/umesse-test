@@ -147,7 +147,7 @@ export default {
       width: 170px;
     }
     .content-title-width_bgm {
-      width: 170px;
+      width: 800px;
     }
     .content-title-width_narration1 {
       width: 380px;
