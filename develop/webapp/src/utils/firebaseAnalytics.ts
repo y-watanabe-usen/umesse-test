@@ -1,6 +1,6 @@
 import firebase from "firebase";
 import Constants from "@/utils/Constants";
-import dayjs from "dayjs";
+import * as FormatDate from "@/utils/FormatDate";
 
 const config = {
   apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
@@ -34,7 +34,7 @@ const selectNarration = (id: string) => {
   fireBaseAnalytics.logEvent("select_content", {
     content_type: Constants.CATEGORY.NARRATION,
     content_id: id,
-    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
+    timestamp: FormatDate.convertDatestringToDateTime(now),
   });
 };
 
@@ -44,7 +44,7 @@ const selectOpenChime = (id: string) => {
   fireBaseAnalytics.logEvent("select_content", {
     content_type: "open-chime",
     content_id: id,
-    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
+    timestamp: FormatDate.convertDatestringToDateTime(now),
   });
 };
 
@@ -54,7 +54,7 @@ const selectEndChime = (id: string) => {
   fireBaseAnalytics.logEvent("select_content", {
     content_type: "end-chime",
     content_id: id,
-    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
+    timestamp: FormatDate.convertDatestringToDateTime(now),
   });
 };
 
@@ -64,7 +64,7 @@ const selectBgm = (id: string) => {
   fireBaseAnalytics.logEvent("select_content", {
     content_type: Constants.CATEGORY.BGM,
     content_id: id,
-    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
+    timestamp: FormatDate.convertDatestringToDateTime(now),
   });
 };
 
@@ -74,7 +74,7 @@ const selectTemplate = (id: string) => {
   fireBaseAnalytics.logEvent("select_content", {
     content_type: Constants.CATEGORY.TEMPLATE,
     content_id: id,
-    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
+    timestamp: FormatDate.convertDatestringToDateTime(now),
   });
 };
 
@@ -84,7 +84,7 @@ const selectFree = (id: string) => {
   fireBaseAnalytics.logEvent("select_content", {
     content_type: Constants.CATEGORY.FREE,
     content_id: id,
-    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
+    timestamp: FormatDate.convertDatestringToDateTime(now),
   });
 };
 
@@ -94,7 +94,7 @@ const setRecording = (id: string) => {
   fireBaseAnalytics.logEvent("select_content", {
     content_type: Constants.CATEGORY.RECORDING,
     content_id: id,
-    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
+    timestamp: FormatDate.convertDatestringToDateTime(now),
   });
 };
 
@@ -104,7 +104,7 @@ const setTts = (id: string) => {
   fireBaseAnalytics.logEvent("select_content", {
     content_type: Constants.CATEGORY.TTS,
     content_id: id,
-    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
+    timestamp: FormatDate.convertDatestringToDateTime(now),
   });
 };
 
@@ -116,7 +116,7 @@ const pressButtonPlayTrial = (id: string, type: string, screen: string) => {
     screen_name: screen,
     type: type,
     content_id: id,
-    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
+    timestamp: FormatDate.convertDatestringToDateTime(now),
   });
 };
 
@@ -127,7 +127,7 @@ const pressButtonManuscript = (id: string, screen: string) => {
     button: Constants.CATEGORY_BUTTON.MANUSCRIPT,
     screen_name: screen,
     content_id: id,
-    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
+    timestamp: FormatDate.convertDatestringToDateTime(now),
   });
 };
 
@@ -138,7 +138,7 @@ const pressButtonEditTitleAndDescription = (id: string, screen: string) => {
     button: Constants.CATEGORY_BUTTON.EDIT_TITLE_ANS_DESCRIPTION,
     screen_name: screen,
     content_id: id,
-    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
+    timestamp: FormatDate.convertDatestringToDateTime(now),
   });
 };
 
@@ -150,7 +150,7 @@ const pressButtonChange = (id: string, type: string, screen: string) => {
     screen_name: screen,
     type: type,
     content_id: id,
-    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
+    timestamp: FormatDate.convertDatestringToDateTime(now),
   });
 };
 
@@ -162,7 +162,7 @@ const pressButtonRemove = (id: string, type: string, screen: string) => {
     screen_name: screen,
     type: type,
     content_id: id,
-    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
+    timestamp: FormatDate.convertDatestringToDateTime(now),
   });
 };
 
@@ -173,7 +173,7 @@ const pressButtonSave = (cm: SaveContents, screen: string) => {
     button: Constants.CATEGORY_BUTTON.SAVE,
     screen_name: screen,
     contents: cm,
-    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
+    timestamp: FormatDate.convertDatestringToDateTime(now),
   });
 };
 
@@ -184,7 +184,7 @@ const pressButtonSaveEdit = (cm: string, screen: string) => {
     button: Constants.CATEGORY_BUTTON.SAVE_EDIT,
     screen_name: screen,
     contents: cm,
-    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
+    timestamp: FormatDate.convertDatestringToDateTime(now),
   });
 };
 
@@ -195,7 +195,7 @@ const pressButtonUpload = (id: string, screen: string) => {
     button: Constants.CATEGORY_BUTTON.SAVE,
     screen_name: screen,
     content_id: id,
-    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
+    timestamp: FormatDate.convertDatestringToDateTime(now),
   });
 };
 
@@ -206,7 +206,7 @@ const pressButtonUnupload = (id: string, screen: string) => {
     button: Constants.CATEGORY_BUTTON.UNUPLOAD,
     screen_name: screen,
     content_id: id,
-    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
+    timestamp: FormatDate.convertDatestringToDateTime(now),
   });
 };
 
@@ -217,7 +217,7 @@ const pressButtonEditContent = (id: string, screen: string) => {
     button: Constants.CATEGORY_BUTTON.EDIT_CONTENT,
     screen_name: screen,
     content_id: id,
-    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
+    timestamp: FormatDate.convertDatestringToDateTime(now),
   });
 };
 
@@ -227,7 +227,7 @@ const screenView = (screen: string) => {
   fireBaseAnalytics.logEvent("screen_view", {
     app_name: "UMESSE",
     screen_name: screen,
-    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
+    timestamp: FormatDate.convertDatestringToDateTime(now),
   });
 };
 
@@ -237,7 +237,7 @@ const selectIndustry = (industryCd: string, screen: string) => {
   fireBaseAnalytics.logEvent("select_industry", {
     industry_cd: industryCd,
     screen_name: screen,
-    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
+    timestamp: FormatDate.convertDatestringToDateTime(now),
   });
 };
 
@@ -247,7 +247,7 @@ const selectScene = (sceneCd: string, screen: string) => {
   fireBaseAnalytics.logEvent("select_scene", {
     scene_cd: sceneCd,
     screen_name: screen,
-    timestamp: dayjs(now).format("YYYY/MM/DD HH:ss:ss"),
+    timestamp: FormatDate.convertDatestringToDateTime(now),
   });
 };
 

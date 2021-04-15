@@ -19,6 +19,15 @@ export const convertDatestringToDateJp = (dateString: string): string => {
 };
 
 /**
+ * 日付文字列をYYYY/MM/DD HH:mm:ssに変換
+ * @param dateString YYYY-MM-DDTHH:mm:ss+09:00
+ * @return YYYY/MM/DD HH:mm:ss 形式の文字列
+ */
+export const convertDatestringToDateTime = (dateString: string): string => {
+  return dayjs(dateString).format("YYYY/MM/DD HH:mm:ss");
+};
+
+/**
  * 秒を時分秒に変換
  * @param second 秒
  * @return h:m:s 形式の時刻
