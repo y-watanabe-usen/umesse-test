@@ -445,12 +445,14 @@ describe("CMデータ更新", () => {
       updateCm("9999999999", "9999999999-c-99999999", {
         title: "🍎リンゴ",
         description: "🍎リンゴ",
+        manuscript: "🍎リンゴ",
       })
     ).rejects.toThrow(
       new BadRequestError(
         [
           `${ERROR_CODE.E0001051} (E0001051)`,
           `${ERROR_CODE.E0001061} (E0001061)`,
+          `${ERROR_CODE.E0001291} (E0001291)`,
         ].join("\n")
       )
     );
@@ -458,13 +460,15 @@ describe("CMデータ更新", () => {
     await expect(
       updateCm("9999999999", "9999999999-c-99999999", {
         title: "あ".repeat(201),
-        description: "あ".repeat(1001),
+        description: "あ".repeat(201),
+        manuscript: "あ".repeat(2001),
       })
     ).rejects.toThrow(
       new BadRequestError(
         [
           `${ERROR_CODE.E0001052} (E0001052)`,
           `${ERROR_CODE.E0001062} (E0001062)`,
+          `${ERROR_CODE.E0001292} (E0001292)`,
         ].join("\n")
       )
     );

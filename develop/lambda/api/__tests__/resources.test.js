@@ -306,7 +306,7 @@ describe("録音音声新規登録", () => {
       createRecordingResource("9999999999", {
         recordedFile: file,
         title: "あ".repeat(201),
-        description: "あ".repeat(1001),
+        description: "あ".repeat(201),
       })
     ).rejects.toThrow(
       new BadRequestError(
@@ -437,7 +437,7 @@ describe("録音音声データ更新", () => {
     await expect(
       updateUserResource("9999999999", "recording", "9999999999-r-99999999", {
         title: "あ".repeat(201),
-        description: "あ".repeat(1001),
+        description: "あ".repeat(201),
       })
     ).rejects.toThrow(
       new BadRequestError(
@@ -839,6 +839,7 @@ describe("TTS音声新規登録", () => {
           {
             title: "🍎リンゴ",
             description: "🍎リンゴ",
+            manuscript: "🍎リンゴ",
             lang: "ja",
             id: "id",
             category: "tts",
@@ -850,6 +851,7 @@ describe("TTS音声新規登録", () => {
         [
           `${ERROR_CODE.E0001051} (E0001051)`,
           `${ERROR_CODE.E0001061} (E0001061)`,
+          `${ERROR_CODE.E0001291} (E0001291)`,
         ].join("\n")
       )
     );
@@ -861,7 +863,8 @@ describe("TTS音声新規登録", () => {
         details: [
           {
             title: "あ".repeat(201),
-            description: "あ".repeat(1001),
+            description: "あ".repeat(201),
+            manuscript: "あ".repeat(2001),
             lang: "ja",
             id: "id",
             category: "tts",
@@ -873,6 +876,7 @@ describe("TTS音声新規登録", () => {
         [
           `${ERROR_CODE.E0001052} (E0001052)`,
           `${ERROR_CODE.E0001062} (E0001062)`,
+          `${ERROR_CODE.E0001292} (E0001292)`,
         ].join("\n")
       )
     );
