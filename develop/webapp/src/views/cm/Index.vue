@@ -34,7 +34,7 @@
           <template #left>
             <CmItem
               v-if="openChime"
-              title="Openチャイム"
+              title="開始チャイム"
               size="fixed"
               :contentTitle="openChime.title"
               :duration="`${convertNumberToTime(openChime.seconds)}`"
@@ -91,7 +91,7 @@
             </CmItem>
             <CmItem
               v-else
-              title="Openチャイム"
+              title="開始チャイム"
               :isEmpty="true"
               size="fixed"
               @add="$router.push({ name: 'CmChime', params: { div: 'open' } })"
@@ -143,7 +143,7 @@
                       direction="down"
                       :params="[
                         {
-                          title: '自分で録音して音声と入れ替える',
+                          title: '自分で録音した音声と入れ替える',
                           action: () => {
                             changeRecording(index);
                           },
@@ -155,13 +155,13 @@
                           },
                         },
                         {
-                          title: '音声合成(テンプレートから)入れ替える',
+                          title: '音声合成(テンプレート)から入れ替える',
                           action: () => {
                             changeVoiceTemplate(index);
                           },
                         },
                         {
-                          title: '音声合成(フリー入力から)入れ替える',
+                          title: '音声合成(フリー入力)から入れ替える',
                           action: () => {
                             changeVoiceFree(index);
                           },
@@ -202,25 +202,25 @@
                       direction="down"
                       :params="[
                         {
-                          title: '自分で録音して音声と入れ替える',
+                          title: '自分で録音して音声を追加',
                           action: () => {
                             addRecording();
                           },
                         },
                         {
-                          title: '他のナレーションと入れ替える',
+                          title: '他のナレーションを追加',
                           action: () => {
                             addNarration();
                           },
                         },
                         {
-                          title: '音声合成(テンプレートから)入れ替える',
+                          title: '音声合成(テンプレート)を追加',
                           action: () => {
                             addVoiceTemplate();
                           },
                         },
                         {
-                          title: '音声合成(フリー入力から)入れ替える',
+                          title: '音声合成(フリー入力)を追加',
                           action: () => {
                             addVoiceFree();
                           },
@@ -301,7 +301,7 @@
           <template #right>
             <CmItem
               v-if="endChime"
-              title="Endチャイム"
+              title="終了チャイム"
               size="fixed"
               :contentTitle="endChime.title"
               :duration="`${convertNumberToTime(endChime.seconds)}`"
@@ -360,7 +360,7 @@
             </CmItem>
             <CmItem
               v-else
-              title="Endチャイム"
+              title="終了チャイム"
               :isEmpty="true"
               size="fixed"
               @add="$router.push({ name: 'CmChime', params: { div: 'end' } })"
