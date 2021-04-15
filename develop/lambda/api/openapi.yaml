@@ -1734,6 +1734,10 @@ components:
           type: string
           description: CM名
           example: "時報A"
+        description:
+          type: string
+          description: CM説明
+          example: "テストCMです"
         cmCommentManuscript:
           type: string
           description: CMコメント原稿
