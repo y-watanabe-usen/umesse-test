@@ -705,11 +705,13 @@ describe("TTS音声新規登録", () => {
         {
           title: "TTSテスト",
           description: "TTSテスト",
+          manuscript: "TTSテスト",
           lang: "ja",
         },
         {
           title: "TTSテスト",
           description: "TTテスト",
+          manuscript: "TTSテスト",
           lang: "en",
         },
         {
@@ -728,6 +730,7 @@ describe("TTS音声新規登録", () => {
           category: "tts",
           title: `${body.details[0].title}`,
           description: body.details[0].description,
+          manuscript: body.details[0].manuscript,
           startDate: expect.anything(),
           timestamp: expect.anything(),
         },
@@ -736,6 +739,7 @@ describe("TTS音声新規登録", () => {
           category: "tts",
           title: `${body.details[1].title} (英語)`,
           description: body.details[1].description,
+          manuscript: body.details[1].manuscript,
           startDate: expect.anything(),
           timestamp: expect.anything(),
         },

@@ -42,13 +42,19 @@ export interface TtsItem {
      */
     description?: any;
     /**
+     * 原稿
+     * @type {string}
+     * @memberof TtsItem
+     */
+    manuscript?: any;
+    /**
      * 掲載開始日
      * @type {string}
      * @memberof TtsItem
      */
     startDate?: any;
     /**
-     *
+     * 
      * @type {string}
      * @memberof TtsItem
      */

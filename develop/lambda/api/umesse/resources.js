@@ -292,6 +292,7 @@ exports.createTtsResource = async (unisCustomerCd, body) => {
         ttsId: id,
         title: title,
         description: data.description,
+        manuscript: data.manuscript,
         startDate: timestamp(),
         timestamp: timestamp(),
       };
