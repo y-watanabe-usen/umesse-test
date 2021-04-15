@@ -3,6 +3,7 @@
 [![dev-dry-run-deploy](https://github.com/openusen/umesse/actions/workflows/dev-dry-run-deploy.yml/badge.svg)](https://github.com/openusen/umesse/actions/workflows/dev-dry-run-deploy.yml)
 [![dev-deploy](https://github.com/openusen/umesse/actions/workflows/dev-deploy.yml/badge.svg)](https://github.com/openusen/umesse/actions/workflows/dev-deploy.yml)
 [![stg-deploy](https://github.com/openusen/umesse/actions/workflows/stg-deploy.yml/badge.svg)](https://github.com/openusen/umesse/actions/workflows/stg-deploy.yml)
+[![prod-deploy](https://github.com/openusen/umesse/actions/workflows/prod-deploy.yml/badge.svg)](https://github.com/openusen/umesse/actions/workflows/prod-deploy.yml)
 
 - [U MESSE](#u-messe)
   - [Index](#index)
