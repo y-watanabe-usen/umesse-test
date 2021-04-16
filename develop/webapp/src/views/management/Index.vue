@@ -581,11 +581,6 @@ export default defineComponent({
     const selectCm = (cm: CmItem) => {
       state.selectedCm = cm;
       state.isDownload = Common.isVisibleDownload();
-      if (state.isDownload) {
-        state.isDownload = true;
-      } else {
-        state.isDownload = false;
-      }
     };
     const play = async (cm: CmItem) => {
       if (state.isPlaying) return;
