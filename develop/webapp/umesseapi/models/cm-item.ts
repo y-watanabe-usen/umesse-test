@@ -42,6 +42,12 @@ export interface CmItem {
      */
     description?: any;
     /**
+     * 原稿
+     * @type {string}
+     * @memberof CmItem
+     */
+    manuscript?: any;
+    /**
      * 秒数
      * @type {number}
      * @memberof CmItem

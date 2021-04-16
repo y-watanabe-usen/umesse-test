@@ -269,7 +269,7 @@ paths:
           multipart/form-data:
             schema:
               type: object
-              $ref: '#/components/schemas/RecordingCreateItem'
+              $ref: "#/components/schemas/RecordingCreateItem"
       responses:
         200:
           description: successful response
@@ -459,7 +459,6 @@ paths:
           $ref: "#/components/responses/NotFound"
         5XX:
           $ref: "#/components/responses/Unexpected"
-
 
   /user/tts/{id}:
     get:
@@ -870,7 +869,7 @@ paths:
       # security:
       #   - ApiKeyAuth: []
       parameters:
-      # - $ref: "#/components/parameters/Token"
+        # - $ref: "#/components/parameters/Token"
         - name: sort
           in: query
           description: ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
@@ -1273,7 +1272,7 @@ components:
             type: array
             items:
               type: object
-              $ref: "#/components/schemas/CmItem"        
+              $ref: "#/components/schemas/CmItem"
     CmItem:
       properties:
         id:
@@ -1292,6 +1291,10 @@ components:
           type: string
           description: 説明文
           example: "タイムセールサンプル１"
+        manuscript:
+          type: string
+          description: 原稿
+          example: 本日はご来店いただきましてありがとうございます。当店は18時30分閉店です
         seconds:
           type: integer
           description: 秒数
@@ -1624,6 +1627,10 @@ components:
           type: string
           description: 説明文
           example: "サンプル"
+        manuscript:
+          type: string
+          description: 原稿
+          example: 本日はご来店いただきましてありがとうございます。当店は18時30分閉店です
         startDate:
           type: string
           description: 掲載開始日
@@ -1644,6 +1651,10 @@ components:
         description:
           type: string
           example: サンプル
+        manuscript:
+          type: string
+          description: 原稿
+          example: 本日はご来店いただきましてありがとうございます。当店は18時30分閉店です
     TtsItem:
       properties:
         id:
@@ -1834,6 +1845,10 @@ components:
               description:
                 type: string
                 example: "サンプル"
+              manuscript:
+                type: string
+                description: 原稿
+                example: 本日はご来店いただきましてありがとうございます。当店は18時30分閉店です
               startDate:
                 type: string
                 example: "2019-09-01T09:00:00+9:00"

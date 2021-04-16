@@ -42,6 +42,12 @@ export interface RecordingItem {
      */
     description?: any;
     /**
+     * 原稿
+     * @type {string}
+     * @memberof RecordingItem
+     */
+    manuscript?: any;
+    /**
      * 掲載開始日
      * @type {string}
      * @memberof RecordingItem
