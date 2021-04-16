@@ -108,7 +108,7 @@ exports.createUploadCm = async (unisCustomerCd, id, body) => {
     dataProcessType: constants.cmDataProcessType.ADD,
     cmId: id,
     cmName: cm.title,
-    description: body.description.replace(/\r?\n/g, " "), // 改行削除
+    description: cm.description.replace(/\r?\n/g, " "), // 改行削除
     cmCommentManuscript: cm.manuscript,
     startDatetime: cm.startDate,
     endDatetime: cm.endDate,
