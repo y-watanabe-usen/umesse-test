@@ -534,7 +534,7 @@ export default defineComponent({
       analytics.selectScene(sceneCd, Constants.SCREEN.NARRATION);
       state.activeSceneCd = sceneCd;
       state.isVisibleDownload = Common.isVisibleDownload();
-      if (state.isVisibleDownload && state.activeSceneCd === '901' || state.activeSceneCd === '902') {
+      if (state.isVisibleDownload && (state.activeSceneCd === '901' || state.activeSceneCd === '902')) {
         state.isDownload = true;
       } else {
         state.isDownload = false;
