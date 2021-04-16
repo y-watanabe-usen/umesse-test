@@ -11,8 +11,9 @@ describe("getNarrationIndustriesのテスト", () => {
     { cd: "50", name: "オフィス／事務所／教育機関向け", sort: 8 },
     { cd: "51", name: "金融機関向け", sort: 9 },
     { cd: "90", name: "施設向け", sort: 10 },
+    { cd: "99", name: "全業種", sort: 11 },
   ];
-  test(`指定（02, 10, 20, 30, 31, 40, 50, 51, 90）の業種一覧が返ること`, () => {
+  test(`指定（02, 10, 20, 30, 31, 40, 50, 51, 90, 99）の業種一覧が返ること`, () => {
     expect(Common.getNarrationIndustries()).toEqual(expected);
   });
 });
