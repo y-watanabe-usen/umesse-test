@@ -66,8 +66,8 @@
             <FormGroup v-if="isVisibleTime" title="時間" class="time">
               <TimeInput v-model="time" />
               <div>
-                <p class="errorMessage errorEndTime">
-                  {{ errorMessageEndTime }}
+                <p class="errorMessage errorTime">
+                  {{ errorMessageTime }}
                 </p>
               </div>
             </FormGroup>
@@ -348,11 +348,11 @@ export default defineComponent({
         return selectErrorMessageCustomerName(customerName);
       }),
       isErrorCustomerName: false,
-      errorMessageEndTime: computed(() => {
+      errorMessageTime: computed(() => {
         const time: string = state.time;
-        return selectErrorMessageEndTime(time);
+        return selectErrorMessageTime(time);
       }),
-      isErrorEndTime: false,
+      isErrorTime: false,
       errorMessageLangs: computed(() => {
         const langs: string[] = state.langs;
         const narrations: NarrationItem[] = state.narrations;
@@ -460,12 +460,12 @@ export default defineComponent({
         return "";
       }
     };
-    const selectErrorMessageEndTime = (endTime: string) => {
-      if (!endTime) {
-        state.isErrorEndTime = true;
+    const selectErrorMessageTime = (time: string) => {
+      if (!time) {
+        state.isErrorTime = true;
         return "閉店時間を入力してください";
       } else {
-        state.isErrorEndTime = false;
+        state.isErrorTime = false;
         return "";
       }
     };
@@ -491,15 +491,48 @@ export default defineComponent({
         return "";
       }
     };
-    const isDisabledButtonConfirm = (customerName: string) => {
-      if (!customerName || validator.isEmpty(customerName))
-        state.isErrorCustomerName = true;
 
-      if (
-        !state.isErrorLangs &&
-        !state.isErrorCustomerName &&
-        !state.isErrorEndTime
-      ) {
+    const isDisabledButtonConfirm = (customerName: string) => {
+      if (isVisibleCustomerName) {
+        if (!customerName || validator.isEmpty(customerName)) {
+          state.isErrorCustomerName = true;
+          return true;
+        }
+      }
+
+      if (isVisibleTime) {
+        if (!state.time) return true;
+      }
+
+      if (isVisiblePercentage) {
+        if (!state.percentage) return true;
+      }
+
+      if (isVisibleCount) {
+        if (!state.count) return true;
+      }
+
+      if (isVisibleEndYearDate) {
+        if (!state.endYearDate) return true;
+      }
+
+      if (isVisibleNewYearDate) {
+        if (!state.newYearDate) return true;
+      }
+
+      if (isVisibleAge) {
+        if (!state.age) return true;
+      }
+
+      if (isVisibleMinutes) {
+        if (!state.minutes) return true;
+      }
+
+      if (isVisiblePoint) {
+        if (!state.point) return true;
+      }
+
+      if (!state.isErrorLangs && !state.isErrorCustomerName) {
         return false;
       } else {
         return true;
@@ -780,7 +813,7 @@ export default defineComponent({
   &.errorCustomerName {
     width: 80%;
   }
-  &.errorEndTime {
+  &.errorTime {
     width: 150%;
     left: 0px;
   }
