@@ -551,7 +551,6 @@ export default defineComponent({
           ? "U MUSICにアップロード"
           : "S'Senceにアップロード",
       isDownload: false,
-      isVisibleDownload: false,
     });
     const fetchScene = async () => {
       try {
@@ -581,9 +580,8 @@ export default defineComponent({
     };
     const selectCm = (cm: CmItem) => {
       state.selectedCm = cm;
-      console.log(state.activeSceneCd);
-      state.isVisibleDownload = Common.isVisibleDownload();
-      if (state.isVisibleDownload) {
+      state.isDownload = Common.isVisibleDownload();
+      if (state.isDownload) {
         state.isDownload = true;
       } else {
         state.isDownload = false;
