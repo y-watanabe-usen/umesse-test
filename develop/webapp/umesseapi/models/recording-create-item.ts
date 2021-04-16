@@ -41,4 +41,10 @@ export interface RecordingCreateItem {
      * @memberof RecordingCreateItem
      */
     description?: any;
+    /**
+     * 原稿
+     * @type {string}
+     * @memberof RecordingCreateItem
+     */
+    manuscript?: any;
 }

@@ -2180,6 +2180,10 @@ components:
           type: string
           description: 説明文
           example: タイムセールサンプル１
+        manuscript:
+          type: string
+          description: 原稿
+          example: 本日はご来店いただきましてありがとうございます。当店は18時30分閉店です
         seconds:
           type: integer
           description: 秒数
@@ -2227,6 +2231,7 @@ components:
           sceneCd: "01"
           sceneName: シーン名
         seconds: 540
+        manuscript: 本日はご来店いただきましてありがとうございます。当店は18時30分閉店です
         materials:
         - startChime:
             volume: 50
@@ -2665,6 +2670,10 @@ components:
           type: string
           description: 説明文
           example: サンプル
+        manuscript:
+          type: string
+          description: 原稿
+          example: 本日はご来店いただきましてありがとうございます。当店は18時30分閉店です
         startDate:
           type: string
           description: 掲載開始日
@@ -2673,6 +2682,7 @@ components:
           type: string
           example: 2019-09-01T09:00:00+9:00
       example:
+        manuscript: 本日はご来店いただきましてありがとうございます。当店は18時30分閉店です
         description: サンプル
         id: 123456789-r-12345678
         category: recording
@@ -2692,6 +2702,10 @@ components:
         description:
           type: string
           example: サンプル
+        manuscript:
+          type: string
+          description: 原稿
+          example: 本日はご来店いただきましてありがとうございます。当店は18時30分閉店です
     TtsItem:
       properties:
         id:
@@ -2983,6 +2997,7 @@ components:
             sceneCd: "01"
             sceneName: シーン名
           seconds: 540
+          manuscript: 本日はご来店いただきましてありがとうございます。当店は18時30分閉店です
           materials:
           - startChime:
               volume: 50
@@ -3040,6 +3055,7 @@ components:
             sceneCd: "01"
             sceneName: シーン名
           seconds: 540
+          manuscript: 本日はご来店いただきましてありがとうございます。当店は18時30分閉店です
           materials:
           - startChime:
               volume: 50
@@ -3349,6 +3365,10 @@ components:
               description:
                 type: string
                 example: サンプル
+              manuscript:
+                type: string
+                description: 原稿
+                example: 本日はご来店いただきましてありがとうございます。当店は18時30分閉店です
               startDate:
                 type: string
                 example: 2019-09-01T09:00:00+9:00

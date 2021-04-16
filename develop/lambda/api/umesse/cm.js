@@ -63,7 +63,7 @@ exports.getCm = async (unisCustomerCd, id, sort) => {
     const scenes = Array.from(
       new Set(
         data.map((item) => {
-          if (!item.scene) item.scene = { sceneCd: "999", sceneName: "作成中" };
+          if (!item.scene) item.scene = { sceneCd: "" };
           return item.scene.sceneCd;
         })
       )
@@ -71,6 +71,7 @@ exports.getCm = async (unisCustomerCd, id, sort) => {
 
     let res = [];
     for (const sceneCd of scenes) {
+      if (!sceneCd) continue;
       const details = data.filter((item) => item.scene.sceneCd === sceneCd);
       res.push({
         sceneCd: sceneCd,
@@ -302,6 +303,9 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
   // DynamoDBのデータ更新
   Object.keys(body).map((key) => {
     cm[key] = body[key];
+    // FIXME: startDate endDateは将来の拡張のため、現状は固定で登録する
+    if (key == "startDate") cm[key] = timestamp();
+    if (key == "endDate") cm[key] = "";
   });
   cm.timestamp = timestamp();
 
