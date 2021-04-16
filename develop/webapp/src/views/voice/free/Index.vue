@@ -205,7 +205,8 @@ export default defineComponent({
       const response = await ttsStore.createTtsData(
         state.title,
         state.description,
-        [lang]
+        [lang],
+        [state.text],
       );
 
       var idString = "";

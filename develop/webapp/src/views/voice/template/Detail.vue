@@ -381,10 +381,23 @@ export default defineComponent({
     const createTts = async () => {
       stop();
       openLoadingModal();
+
+      let manuscripts: string[] = [];
+      state.langs.forEach((lang) => {
+        templateDetails.forEach((templateDetail) => {
+          if (
+            templateDetail.lang == lang &&
+            templateDetail.speaker == state.speaker
+          )
+            manuscripts.push(templateDetail.text);
+        });
+      });
+
       const response = await ttsStore.createTtsData(
         state.title,
         state.description,
-        state.langs
+        state.langs,
+        manuscripts,
       );
 
       var idString = "";

@@ -14,6 +14,7 @@ export interface CreateUserTtsRequestDetailItem {
   title?: string;
   description?: string;
   lang?: string;
+  manuscript?: string;
 }
 
 // Converts JSON strings to/from your types
