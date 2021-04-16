@@ -14,7 +14,7 @@ import PackageJson from "@/../../webapp/package.json";
  * @return Industry[]
  */
 export function getNarrationIndustries() {
-  const getCdList = ["02", "10", "20", "30", "31", "40", "50", "51", "90"];
+  const getCdList = ["02", "10", "20", "30", "31", "40", "50", "51", "90", "99"];
   return getIndustries(getCdList);
 }
 
