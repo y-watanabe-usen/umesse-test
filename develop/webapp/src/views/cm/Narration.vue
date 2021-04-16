@@ -116,16 +116,16 @@
                             direction="down"
                             :params="[
                               {
+                                title: 'タイトル/説明 編集',
+                                action: () => {},
+                              },
+                              {
                                 title: '原稿',
                                 action: () => {
                                   selectNarrationAndOpenDocumentModal(
                                     narration
                                   );
                                 },
-                              },
-                              {
-                                title: 'タイトル/説明 編集',
-                                action: () => {},
                               },
                               {
                                 title: '削除',
@@ -601,7 +601,7 @@ export default defineComponent({
           narration.id,
           narration.category
         );
-        const fileLink = document.createElement('a');
+        const fileLink = document.createElement("a");
         fileLink.href = downloAdudioUrl;
         fileLink.click();
       } catch (e) {
