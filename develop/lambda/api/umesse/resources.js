@@ -216,6 +216,7 @@ exports.createRecordingResource = async (unisCustomerCd, body) => {
     recordingId: id,
     title: body.title,
     description: body.description,
+    manuscript: body.manuscript,
     startDate: timestamp(),
     timestamp: timestamp(),
   };

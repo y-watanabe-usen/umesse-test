@@ -45,14 +45,6 @@ describe("CMデータ取得", () => {
         sceneName: data.cm[0].scene.sceneName,
         details: [data.cm[0], data.cm[1]],
       },
-      {
-        sceneCd: "999",
-        sceneName: "作成中",
-        details: [
-          { ...data.cm[2], scene: { sceneCd: "999", sceneName: "作成中" } },
-          { ...data.cm[3], scene: { sceneCd: "999", sceneName: "作成中" } },
-        ],
-      },
     ]);
   });
 
@@ -302,6 +294,8 @@ describe("CMデータ更新", () => {
     ).resolves.toEqual({
       ...data.cm[2],
       ...body,
+      startDate: expect.anything(),
+      endDate: "",
       status: "03",
       timestamp: expect.anything(),
     });
@@ -329,6 +323,8 @@ describe("CMデータ更新", () => {
     ).resolves.toEqual({
       ...data.cm[3],
       ...body,
+      startDate: expect.anything(),
+      endDate: "",
       status: "03",
       timestamp: expect.anything(),
     });
