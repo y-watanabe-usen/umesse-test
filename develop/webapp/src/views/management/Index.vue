@@ -148,6 +148,8 @@
             :isPlaying="isPlaying"
             :playbackTime="playbackTime"
             :duration="duration"
+            :isDownload="isDownload"
+            @download="download(selectedCm)"
             @play="play(selectedCm)"
             @stop="stop"
           />
@@ -548,6 +550,8 @@ export default defineComponent({
         authUser.serviceCd === Constants.SERVICE_CD_UMUSIC
           ? "U MUSICにアップロード"
           : "S'Senceにアップロード",
+      isDownload: false,
+      isVisibleDownload: false,
     });
     const fetchScene = async () => {
       try {
@@ -577,6 +581,13 @@ export default defineComponent({
     };
     const selectCm = (cm: CmItem) => {
       state.selectedCm = cm;
+      console.log(state.activeSceneCd);
+      state.isVisibleDownload = Common.isVisibleDownload();
+      if (state.isVisibleDownload) {
+        state.isDownload = true;
+      } else {
+        state.isDownload = false;
+      }
     };
     const play = async (cm: CmItem) => {
       if (state.isPlaying) return;
@@ -596,6 +607,19 @@ export default defineComponent({
         openErrorModal(e);
       } finally {
         state.isDownloading = false;
+      }
+    };
+    const download = async (cm: CmItem) => {
+      try {
+        const downloAdudioUrl = await audioService.downloadById(
+          cm.id,
+          cm.category
+        );
+        const fileLink = document.createElement('a');
+        fileLink.href = downloAdudioUrl;
+        fileLink.click();
+      } catch (e) {
+        openErrorModal(e);
       }
     };
     const stop = () => {
@@ -823,6 +847,7 @@ export default defineComponent({
       isCmAbsentApper,
       openCmAbsentModal,
       closeCmAbsentModal,
+      download,
     };
   },
 });
