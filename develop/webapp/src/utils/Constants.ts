@@ -245,8 +245,9 @@ export default class Constants {
 
   public static readonly TITLE_MAX_LENGTH: number = 200;
   public static readonly DESCRIPTION_MAX_LENGTH: number = 200;
-  public static readonly TTS_FREE_MAX_LENGTH: number = 2000;
+  public static readonly TTS_FREE_MAX_LENGTH: number = 500;
   public static readonly CUSTOMER_NAME_MAX_LENGTH: number = 30;
+  public static readonly MANUSCRIPT_MAX_LENGTH: number = 2000;
 }
 
 export const ERROR_CODE = {
