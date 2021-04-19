@@ -72,6 +72,12 @@
                         convertDatestringToDateJp(narration.timestamp)
                       }}</span
                     >
+                    <span v-if="narration.timestamp" class="end"
+                      >作成日{{
+                        convertDatestringToDateJp(narration.timestamp)
+                      }}</span
+                    >
+
                   </p>
                 </template>
                 <template #operations>

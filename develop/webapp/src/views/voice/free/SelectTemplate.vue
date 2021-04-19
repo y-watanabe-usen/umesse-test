@@ -72,6 +72,11 @@
                         convertDatestringToDateJp(freeItem.timestamp)
                       }}</span
                     >
+                    <span v-if="freeItem.timestamp" class="end"
+                      >作成日{{
+                        convertDatestringToDateJp(freeItem.timestamp)
+                      }}</span
+                    >
                   </p>
                 </template>
                 <template #operations>
