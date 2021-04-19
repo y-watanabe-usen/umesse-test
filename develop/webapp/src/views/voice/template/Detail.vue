@@ -378,6 +378,7 @@ export default defineComponent({
     const stop = () => {
       if (state.isPlaying) audioPlayer.stop();
     };
+
     const createTts = async () => {
       stop();
       openLoadingModal();
@@ -388,8 +389,10 @@ export default defineComponent({
           if (
             templateDetail.lang == lang &&
             templateDetail.speaker == state.speaker
-          )
-            manuscripts.push(templateDetail.text);
+          ) {
+            const manuscript = replaceManuscripts(templateDetail.text);
+            manuscripts.push(manuscript);
+          }
         });
       });
 
@@ -397,7 +400,7 @@ export default defineComponent({
         state.title,
         state.description,
         state.langs,
-        manuscripts,
+        manuscripts
       );
 
       var idString = "";
@@ -492,6 +495,43 @@ export default defineComponent({
     };
     const getLangsTitle = (langs: string[]) => {
       return Common.getLangs(langs);
+    };
+
+    const replaceManuscripts = (manuscript: string) => {
+      return manuscript
+        .replace(
+          new RegExp(`\\${ConverterType.customerName}`, "g"),
+          state.customerName
+        )
+        .replace(new RegExp(`\\${ConverterType.time}`, "g"), state.time)
+        .replace(
+          new RegExp(`\\${ConverterType.percentage}`, "g"),
+          state.percentage.toString()
+        )
+        .replace(
+          new RegExp(`\\${ConverterType.count}`, "g"),
+          state.count.toString()
+        )
+        .replace(
+          new RegExp(`\\${ConverterType.endYearDate}`, "g"),
+          state.endYearDate
+        )
+        .replace(
+          new RegExp(`\\${ConverterType.newYearDate}`, "g"),
+          state.newYearDate
+        )
+        .replace(
+          new RegExp(`\\${ConverterType.age}`, "g"),
+          state.age.toString()
+        )
+        .replace(
+          new RegExp(`\\${ConverterType.minutes}`, "g"),
+          state.minutes.toString()
+        )
+        .replace(
+          new RegExp(`\\${ConverterType.point}`, "g"),
+          state.point.toString()
+        );
     };
 
     onMounted(() => {
