@@ -250,6 +250,7 @@ export default defineComponent({
       isPlaying: computed(() => audioPlayer.isPlaying()),
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       duration: computed(() => audioPlayer.getDuration()),
+      timerId: 0,
     });
 
     onUnmounted(() => {
@@ -266,10 +267,11 @@ export default defineComponent({
       if (audioPlayer.isPlaying()) audioPlayer.stop();
       if (audioRecorder.isRecording()) {
         audioRecorder.stop();
+        clearTimeout(state.timerId);
       } else {
         audioRecorder.start();
         // 最大2分録音
-        setTimeout(() => {
+        state.timerId = setTimeout(() => {
           audioRecorder.stop();
         }, 120000);
       }
