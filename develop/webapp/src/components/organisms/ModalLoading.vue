@@ -1,6 +1,6 @@
 <template>
   <div class="modal-uploading">
-    <div class="base">
+    <div :class="[title ? 'base' : '']">
       <p class="title">{{ title }}</p>
       <transition>
         <div class="vld-parent">
@@ -8,8 +8,8 @@
             :active="true"
             :can-cancel="false"
             :is-full-page="true"
-            :height="50"
-            :widht="50"
+            :height="100"
+            :widht="100"
             :background-color="transparent"
             :opacity="0"
           ></loading>
