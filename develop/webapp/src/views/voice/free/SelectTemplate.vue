@@ -72,11 +72,6 @@
                         convertDatestringToDateJp(freeItem.timestamp)
                       }}</span
                     >
-                    <span v-if="freeItem.timestamp" class="end"
-                      >有効期限{{
-                        convertDatestringToDateJp(freeItem.timestamp)
-                      }}</span
-                    >
                   </p>
                 </template>
                 <template #operations>
