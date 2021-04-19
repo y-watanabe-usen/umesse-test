@@ -1,5 +1,6 @@
 "use strict";
 
+const fs = require("fs");
 const https = require("https");
 const path = require("path");
 const querystring = require("querystring");
@@ -562,6 +563,11 @@ async function getDuration(unisCustomerCd, id, category) {
     // 出力ファイルパス解決.
     const workDir = converter.getWorkDir(unisCustomerCd, id);
     const output = path.join(workDir, `${id}.mp3`);
+
+    // Initialized workdir.
+    if (!fs.existsSync(workDir)) {
+      fs.mkdirSync(workDir, { recursive: true });
+    }
 
     if (
       !(await converter.getContents(
