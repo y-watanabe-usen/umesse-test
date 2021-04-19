@@ -949,7 +949,7 @@ export default defineComponent({
       toVoiceFree();
     };
     const toHome = () => {
-      cm.reset();
+      cm.reset(authToken);
       router.push({
         path: "/",
         query: { unisCustomerCd: authUser.unisCustomerCd },

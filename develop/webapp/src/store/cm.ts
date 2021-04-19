@@ -92,7 +92,10 @@ export default function cmStore() {
   const clearBgm = () => {
     state.displayCmItem.clearBgm();
   };
-  const reset = () => {
+  const reset = (authToken: string) => {
+    if (!state.displayCmItem.isEdit && state.displayCmItem.id) {
+      cmService.remove(authToken, state.displayCmItem.id);
+    }
     state.displayCmItem.reset();
     state.status = UPLOAD_CM_STATE.NONE;
   };
@@ -154,8 +157,9 @@ export default function cmStore() {
       bgmItem.timestamp
     );
   };
-  const setCm = (cmItem: CmItem) => {
+  const setCm = (cmItem: CmItem, isEdit: boolean) => {
     state.displayCmItem.setCm(cmItem);
+    state.displayCmItem.isEdit = isEdit;
     state.status = UPLOAD_CM_STATE.NONE;
   };
 
