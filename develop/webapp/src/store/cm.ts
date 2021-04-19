@@ -61,6 +61,10 @@ export default function cmStore() {
     uploadSystem: string
   ) => {
     try {
+      let manuscript = "";
+      state.displayCmItem.materials.narrations.forEach(v => {
+        manuscript += 'manuscript' in v ? v.manuscript : "";
+      });
       state.status = UPLOAD_CM_STATE.UPDATING;
       await service.update(
         authToken,
@@ -68,7 +72,8 @@ export default function cmStore() {
         title,
         description,
         sceneCd,
-        uploadSystem
+        uploadSystem,
+        manuscript,
       );
       state.displayCmItem.isEdit = true;
       state.status = UPLOAD_CM_STATE.UPDATED;
@@ -126,6 +131,7 @@ export default function cmStore() {
       narrationItem.id,
       narrationItem.title,
       narrationItem.description,
+      narrationItem.manuscript,
       'seconds' in narrationItem ? narrationItem.seconds : 0,
       narrationItem.timestamp
     );

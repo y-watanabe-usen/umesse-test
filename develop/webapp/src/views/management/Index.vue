@@ -619,6 +619,7 @@ export default defineComponent({
         cm.id,
         state.title,
         state.description,
+        cm.manuscript,
         state.scene,
         cm.productionType
       );

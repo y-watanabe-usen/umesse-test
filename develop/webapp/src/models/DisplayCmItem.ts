@@ -70,6 +70,7 @@ export default class DisplayCmItem {
     contentsId: string,
     title: string,
     description: string,
+    manuscript: string,
     seconds: number,
     timestamp: string,
     volume?: number
@@ -78,9 +79,9 @@ export default class DisplayCmItem {
       if (categody == Constants.CATEGORY.RECORDING) {
         return new Recording(contentsId, title, description, seconds, timestamp, volume);
       } else if (categody == Constants.CATEGORY.TTS) {
-        return new Tts(contentsId, title, description, seconds, timestamp, volume);
+        return new Tts(contentsId, title, description, manuscript, seconds, timestamp, volume);
       } else {
-        return new Narration(contentsId, title, description, seconds, timestamp, volume);
+        return new Narration(contentsId, title, description, manuscript, seconds, timestamp, volume);
       }
     };
     if (index != null) {
@@ -150,7 +151,7 @@ export default class DisplayCmItem {
     this.seconds = cmItem.seconds;
     if (cmItem.materials.narrations.length > 0) {
       cmItem.materials.narrations.forEach((v: NarrationItem) => {
-        this.setNarraion(null, v.category, v.id, v.title, v.description, v.seconds, v.timestamp);
+        this.setNarraion(null, v.category, v.id, v.title, v.description, v.manuscript, v.seconds, v.timestamp);
       });
     }
     if (cmItem.materials.startChime) {
@@ -209,6 +210,7 @@ export class Narration {
     public id: string,
     public title: string = "",
     public description: string = "",
+    public manuscript: string = "",
     public seconds: number = 0,
     public timestamp: string = "",
     public volume: number = 100
@@ -231,6 +233,7 @@ export class Tts {
     public id: string,
     public title: string = "",
     public description: string = "",
+    public manuscript: string = "",
     public seconds: number = 0,
     public timestamp: string = "",
     public volume: number = 100
