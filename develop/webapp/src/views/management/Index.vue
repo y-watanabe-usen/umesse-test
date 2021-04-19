@@ -174,10 +174,13 @@
         </template>
         <template #contents>
           <FormGroup title="タイトル" :required="true">
-            <TextBox v-model="title" :maxLength="Constants.TITLE_MAX_LENGTH"/>
+            <TextBox v-model="title" :maxLength="Constants.TITLE_MAX_LENGTH" />
           </FormGroup>
           <FormGroup title="説明">
-            <TextArea v-model="description" :maxLength="Constants.DESCRIPTION_MAX_LENGTH" />
+            <TextArea
+              v-model="description"
+              :maxLength="Constants.DESCRIPTION_MAX_LENGTH"
+            />
           </FormGroup>
           <FormGroup title="シーン">
             <SelectBox
@@ -325,15 +328,9 @@
       </transition>
     </transition>
     <transition>
-      <ModalDialog
-        v-if="isCmAbsentApper"
-        size="small"
-      >
+      <ModalDialog v-if="isCmAbsentApper" size="small">
         <template #header>
-          <ModalHeader
-            title="お知らせ"
-            @close="closeCmAbsentModal"
-          />
+          <ModalHeader title="お知らせ" @close="closeCmAbsentModal" />
         </template>
         <template #contents>
           <MessageDialogContents>
@@ -342,9 +339,7 @@
         </template>
         <template #footer>
           <ModalFooter>
-            <Button type="secondary" @click="closeCmAbsentModal"
-              >閉じる</Button
-            >
+            <Button type="secondary" @click="closeCmAbsentModal">閉じる</Button>
           </ModalFooter>
         </template>
       </ModalDialog>
@@ -608,7 +603,7 @@ export default defineComponent({
           cm.id,
           cm.category
         );
-        const fileLink = document.createElement('a');
+        const fileLink = document.createElement("a");
         fileLink.href = downloAdudioUrl;
         fileLink.click();
       } catch (e) {
@@ -702,7 +697,10 @@ export default defineComponent({
         openLoadingModal("音源の合成中");
         if (!state.selectedCm) return;
         await save(state.selectedCm);
-        analytics.pressButtonSaveEdit(state.selectedCm.id, Constants.SCREEN.MANAGEMENT);
+        analytics.pressButtonSaveEdit(
+          state.selectedCm.id,
+          Constants.SCREEN.MANAGEMENT
+        );
         closeLoadingModal();
         closeSaveModal();
         openSavedModal();
@@ -737,7 +735,7 @@ export default defineComponent({
       analytics.pressButtonEditContent(cmItem.id, Constants.SCREEN.MANAGEMENT);
       closeAllDropdownMenu();
       console.log(cmItem);
-      cm.setCm(cmItem);
+      cm.setCm(cmItem, true);
       router.push({ name: "Cm" });
     };
     onMounted(async () => {

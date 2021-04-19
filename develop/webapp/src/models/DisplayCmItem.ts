@@ -15,6 +15,7 @@ export default class DisplayCmItem {
   status = "";
   timestamp = "";
   url = "";
+  isEdit = false; // 新規作成: false, 編集: true
 
   narration(index: number): Narration | Recording | Tts {
     return this.materials.narrations[index];
@@ -60,6 +61,7 @@ export default class DisplayCmItem {
     this.status = "";
     this.timestamp = "";
     this.url = "";
+    this.isEdit = false;
   }
 
   setNarraion(
