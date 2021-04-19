@@ -390,7 +390,19 @@ export default defineComponent({
             templateDetail.lang == lang &&
             templateDetail.speaker == state.speaker
           ) {
-            const manuscript = replaceManuscripts(templateDetail.text);
+            const manuscript = ttsTextConverter.convertManuscript(
+              templateDetail.text,
+              lang,
+              state.customerName,
+              state.time,
+              state.percentage,
+              state.count,
+              state.endYearDate,
+              state.newYearDate,
+              state.age,
+              state.minutes,
+              state.point
+            );
             manuscripts.push(manuscript);
           }
         });
@@ -495,43 +507,6 @@ export default defineComponent({
     };
     const getLangsTitle = (langs: string[]) => {
       return Common.getLangs(langs);
-    };
-
-    const replaceManuscripts = (manuscript: string) => {
-      return manuscript
-        .replace(
-          new RegExp(`\\${ConverterType.customerName}`, "g"),
-          state.customerName
-        )
-        .replace(new RegExp(`\\${ConverterType.time}`, "g"), state.time)
-        .replace(
-          new RegExp(`\\${ConverterType.percentage}`, "g"),
-          state.percentage.toString()
-        )
-        .replace(
-          new RegExp(`\\${ConverterType.count}`, "g"),
-          state.count.toString()
-        )
-        .replace(
-          new RegExp(`\\${ConverterType.endYearDate}`, "g"),
-          state.endYearDate
-        )
-        .replace(
-          new RegExp(`\\${ConverterType.newYearDate}`, "g"),
-          state.newYearDate
-        )
-        .replace(
-          new RegExp(`\\${ConverterType.age}`, "g"),
-          state.age.toString()
-        )
-        .replace(
-          new RegExp(`\\${ConverterType.minutes}`, "g"),
-          state.minutes.toString()
-        )
-        .replace(
-          new RegExp(`\\${ConverterType.point}`, "g"),
-          state.point.toString()
-        );
     };
 
     onMounted(() => {
