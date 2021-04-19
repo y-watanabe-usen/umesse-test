@@ -387,7 +387,8 @@ describe("updateのテスト", () => {
       "タイトル",
       "説明",
       "001",
-      "02"
+      "02",
+      "原稿"
     );
 
     expect(response.id).toBe("123456789-c-v2qvc913");
@@ -405,7 +406,7 @@ describe("updateのテスト", () => {
     jest.spyOn(axios, "request").mockRejectedValue({ data: responseJson });
 
     await expect(
-      cmService.update("token", "001", "タイトル", "説明", "001", "02")
+      cmService.update("token", "001", "タイトル", "説明", "001", "02", "原稿")
     ).rejects.toThrowError(expoectedError);
   });
 
@@ -421,7 +422,7 @@ describe("updateのテスト", () => {
       .mockRejectedValue({ response: { status: 500 } });
 
     await expect(
-      cmService.update("token", "001", "タイトル", "説明", "001", "02")
+      cmService.update("token", "001", "タイトル", "説明", "001", "02", "原稿")
     ).rejects.toThrowError(expoectedError);
   });
 });
