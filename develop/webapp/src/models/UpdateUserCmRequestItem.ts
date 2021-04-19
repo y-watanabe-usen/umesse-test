@@ -12,6 +12,7 @@ export interface UpdateUserCmRequestItem {
   industry?: Industry;
   scene?: Scene;
   uploadSystem?: string;
+  manuscript?: string;
 }
 
 export interface Industry {

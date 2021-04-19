@@ -95,14 +95,16 @@ export function useCmService(api: UMesseApi.CmApi, freeCache: FreeCache) {
     title: string,
     description: string | null,
     sceneCd: string,
-    uploadSystem: string
+    uploadSystem: string,
+    manuscript: string,
   ): Promise<CmItem> => {
     return new Promise(function (resolve, reject) {
       const requestModel = getUpdateUserCmRequestModel(
         title,
         description,
         sceneCd,
-        uploadSystem
+        uploadSystem,
+        manuscript
       );
       api
         .updateUserCm(authToken, id, requestModel)
@@ -176,7 +178,7 @@ export function useCmService(api: UMesseApi.CmApi, freeCache: FreeCache) {
         bgm: bgm ?? undefined,
       },
     };
-    console.log(Convert.createUserCmRequestItemToJson(requestModel));
+    console.log("createUserCmRequestModel", Convert.createUserCmRequestItemToJson(requestModel));
     return requestModel;
   };
 
@@ -184,7 +186,8 @@ export function useCmService(api: UMesseApi.CmApi, freeCache: FreeCache) {
     title: string,
     description: string | null,
     sceneCd: string,
-    uploadSystem: string
+    uploadSystem: string,
+    manuscript: string
   ) => {
     // TODO: startDate, endDate, Industryは何の値を入れる？
     const requestModel: UpdateUserCmRequestItem = {
@@ -201,6 +204,7 @@ export function useCmService(api: UMesseApi.CmApi, freeCache: FreeCache) {
         uploadSystem != Constants.UPLOAD_SYSTEMS[2].cd
           ? uploadSystem
           : undefined,
+      manuscript: manuscript != "" ? manuscript : undefined
     };
     return requestModel;
   };
@@ -210,6 +214,7 @@ export function useCmService(api: UMesseApi.CmApi, freeCache: FreeCache) {
     let count = 0;
     return new Promise(function (resolve) {
       timer = setInterval(async () => {
+        console.log("getUserCm", id);
         api.getUserCm(id, authToken).then((value) => {
           console.log(count);
           if (
