@@ -30,6 +30,9 @@ readStream.pipe(parser);
 parser.on("readable", () => {
   let data;
   while ((data = parser.read())) {
+    // skip
+    if (data.lang && (!data.manuscript || !data.seconds)) continue;
+
     // contentsId
     let contentsId = data.contentsId;
     if (data.lang) {
