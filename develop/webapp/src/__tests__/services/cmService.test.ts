@@ -249,7 +249,7 @@ describe("createのテスト", () => {
         bgm: undefined,
       },
     };
-    const tmp = requestModel;
+    const tmp = JSON.parse(JSON.stringify(requestModel));
     delete tmp.id;
     const cacheKey = Convert.createUserCmRequestItemToJson(tmp);
     freeCache.set(cacheKey, responseJson);
