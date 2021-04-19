@@ -1631,6 +1631,10 @@ components:
           type: string
           description: 原稿
           example: 本日はご来店いただきましてありがとうございます。当店は18時30分閉店です
+        seconds:
+          type: integer
+          description: 秒数
+          example: 540
         startDate:
           type: string
           description: 掲載開始日
@@ -1677,6 +1681,10 @@ components:
           type: string
           description: 原稿
           example: "本日はご来店いただきましてありがとうございます。当店は18時30分閉店です"
+        seconds:
+          type: integer
+          description: 秒数
+          example: 540
         startDate:
           type: string
           description: 掲載開始日

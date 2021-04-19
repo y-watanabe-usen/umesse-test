@@ -48,6 +48,12 @@ export interface TtsItem {
      */
     manuscript?: any;
     /**
+     * 秒数
+     * @type {number}
+     * @memberof TtsItem
+     */
+    seconds?: any;
+    /**
      * 掲載開始日
      * @type {string}
      * @memberof TtsItem

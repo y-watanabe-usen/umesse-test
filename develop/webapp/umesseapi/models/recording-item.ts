@@ -48,6 +48,12 @@ export interface RecordingItem {
      */
     manuscript?: any;
     /**
+     * 秒数
+     * @type {number}
+     * @memberof RecordingItem
+     */
+    seconds?: any;
+    /**
      * 掲載開始日
      * @type {string}
      * @memberof RecordingItem

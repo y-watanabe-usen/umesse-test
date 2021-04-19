@@ -10,6 +10,7 @@ const {
   generateId,
   responseData,
 } = require("umesse-lib/constants");
+const UMesseConverter = require("umesse-lib/converter");
 const { checkParams } = require("umesse-lib/validation");
 const {
   ERROR_CODE,
@@ -211,12 +212,22 @@ exports.createRecordingResource = async (unisCustomerCd, body) => {
     throw new InternalServerError(ERROR_CODE.E0000500);
   }
 
+  // 秒数取得
+  let seconds;
+  try {
+    seconds = await getDuration(id, constants.resourceCategory.RECORDING);
+  } catch (e) {
+    errorlog(JSON.stringify(e));
+    throw new InternalServerError(ERROR_CODE.E0000500);
+  }
+
   // DynamoDBのデータ更新
   const data = {
     recordingId: id,
     title: body.title,
     description: body.description,
     manuscript: body.manuscript,
+    seconds: seconds,
     startDate: timestamp(),
     timestamp: timestamp(),
   };
@@ -289,11 +300,21 @@ exports.createTtsResource = async (unisCustomerCd, body) => {
           break;
       }
 
+      // 秒数取得
+      let seconds;
+      try {
+        seconds = await getDuration(id, constants.resourceCategory.TTS);
+      } catch (e) {
+        errorlog(JSON.stringify(e));
+        throw new InternalServerError(ERROR_CODE.E0000500);
+      }
+
       const item = {
         ttsId: id,
         title: title,
         description: data.description,
         manuscript: data.manuscript,
+        seconds: seconds,
         startDate: timestamp(),
         timestamp: timestamp(),
       };
@@ -521,6 +542,25 @@ exports.deleteUserResource = async (unisCustomerCd, category, id) => {
 
   return responseData(ret, category);
 };
+
+// 秒数取得処理
+async function getDuration(id, category) {
+  try {
+    // UMesseConverter.
+    const converter = new UMesseConverter(s3Manager);
+
+    // s3 object取得
+    const ret = await exports.getSignedUrl(id, category);
+
+    // CMのduration取得.
+    const seconds = await converter.getDuration(ret.url);
+    debuglog(`seconds = ${seconds}`);
+
+    return Math.trunc(seconds);
+  } catch (e) {
+    throw new InternalServerError(e);
+  }
+}
 
 // TTSリクエスト
 function requestTtsApi(options, postData) {
