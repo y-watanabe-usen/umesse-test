@@ -32,10 +32,11 @@ describe("convert", () => {
             category: "cm",
             materials: {
               narrations: [
-                { id: "サンプル03", category: "narration", volume: 300 },
+                { id: "サンプル03", category: "narration", volume: 100 },
               ],
               startChime: { id: "サンプル01", category: "chime", volume: 50 },
               endChime: { id: "サンプル02", category: "chime", volume: 50 },
+              bgm: { id: "サンプル01", category: "bgm", volume: 50 },
             },
           }),
         },

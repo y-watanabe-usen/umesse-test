@@ -247,7 +247,7 @@ export class OpenChime {
     public description: string = "",
     public seconds: number = 0,
     public timestamp: string = "",
-    public volume: number = 100
+    public volume: number = 50
   ) { }
 }
 
@@ -259,7 +259,7 @@ export class EndChime {
     public description: string = "",
     public seconds: number = 0,
     public timestamp: string = "",
-    public volume: number = 100
+    public volume: number = 50
   ) { }
 }
 
