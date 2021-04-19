@@ -60,6 +60,7 @@ export function useResourcesService(
                   description: v.description,
                   category: Constants.CATEGORY.TTS,
                   timestamp: v.timestamp,
+                  manuscript: v.manuscript,
                 });
               });
               console.log(data);

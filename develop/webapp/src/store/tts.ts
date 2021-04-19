@@ -1,16 +1,22 @@
 import { useGlobalStore } from "@/store";
 import { inject, InjectionKey, provide, reactive, toRefs } from "vue";
 import { TtsItem } from "umesseapi/models/tts-item";
-import { GenerateUserTtsRequestDetailItem, GenerateUserTtsRequestItem } from "@/models/GenerateUserTtsRequestItem";
-import { CreateUserTtsRequestDetailItem, CreateUserTtsRequestItem } from "@/models/CreateUserTtsRequestItem";
+import {
+  GenerateUserTtsRequestDetailItem,
+  GenerateUserTtsRequestItem,
+} from "@/models/GenerateUserTtsRequestItem";
+import {
+  CreateUserTtsRequestDetailItem,
+  CreateUserTtsRequestItem,
+} from "@/models/CreateUserTtsRequestItem";
 import { TemplateDetailItem } from "@/models/TemplateDetailItem";
 import { ttsService } from "@/services";
 import ttsTextConverter from "@/utils/ttsTextConverter";
 import Constants from "@/utils/Constants";
 
 interface TtsData {
-  url: string,
-  lang: string,
+  url: string;
+  lang: string;
 }
 
 // tts.
@@ -63,8 +69,8 @@ export default function ttsStore() {
     }
   };
 
-  const hasTtsData = () => (state.ttsDatas.length !== 0);
-  const resetTtsData = () => state.ttsDatas = [];
+  const hasTtsData = () => state.ttsDatas.length !== 0;
+  const resetTtsData = () => (state.ttsDatas = []);
 
   const getTtsData = async (lang: string) => {
     if (!hasTtsData()) {
@@ -97,7 +103,9 @@ export default function ttsStore() {
 
       const details: GenerateUserTtsRequestDetailItem[] = [];
       langs.forEach((v) => {
-        const templateDetail = templateDetails.find(vv => (vv.lang == v && vv.speaker == speaker));
+        const templateDetail = templateDetails.find(
+          (vv) => vv.lang == v && vv.speaker == speaker
+        );
         if (!templateDetail) return;
         details.push({
           text: ttsTextConverter.convertManuscript(
@@ -111,7 +119,7 @@ export default function ttsStore() {
             newYearDate,
             age,
             minutes,
-            point,
+            point
           ),
           lang: v,
           speaker: speaker,
@@ -121,7 +129,7 @@ export default function ttsStore() {
         // idとcategoryは後々のバージョンアップで使う予定
         id: "dummy",
         category: Constants.CATEGORY.TEMPLATE,
-        details: details
+        details: details,
       };
 
       console.log("generateUserTts", token(), requestModel);
@@ -131,17 +139,14 @@ export default function ttsStore() {
       // throw new e;
     } catch (err) {
       console.log(err);
-      throw err;
       state.error = err.message;
+      throw err;
     } finally {
       state.generating = false;
     }
   };
 
-  const generateTtsDataFromFree = async (
-    text: string,
-    speaker: string,
-  ) => {
+  const generateTtsDataFromFree = async (text: string, speaker: string) => {
     if (hasTtsData()) {
       resetTtsData();
     }
@@ -152,11 +157,13 @@ export default function ttsStore() {
         // idとcategoryは後々のバージョンアップで使う予定
         id: "dummy",
         category: Constants.CATEGORY.FREE,
-        details: [{
-          text: text,
-          lang: "ja",
-          speaker: speaker,
-        }]
+        details: [
+          {
+            text: text,
+            lang: "ja",
+            speaker: speaker,
+          },
+        ],
       };
       const response = await ttsService.generate(token(), requestModel);
       console.log(response);
@@ -171,22 +178,29 @@ export default function ttsStore() {
     }
   };
 
-  const createTtsData = async (title: string, description: string, langs: string[]) => {
+  const createTtsData = async (
+    title: string,
+    description: string,
+    langs: string[],
+    manuscript: string[],
+  ) => {
     try {
       state.creating = true;
       const details: CreateUserTtsRequestDetailItem[] = [];
-      langs.forEach((v) => {
+      langs.forEach((v, index) => {
         details.push({
           title: title,
           description: description,
           lang: v,
+          manuscript: manuscript[index],
         });
       });
+
       const requestModel: CreateUserTtsRequestItem = {
         // idとcategoryは後々のバージョンアップで使う予定
         id: "dummy",
         category: Constants.CATEGORY.TEMPLATE,
-        details: details
+        details: details,
       };
 
       try {
@@ -221,9 +235,7 @@ export default function ttsStore() {
 }
 
 export type TtsStore = ReturnType<typeof ttsStore>;
-export const TtsStoreKey: InjectionKey<TtsStore> = Symbol(
-  "RecordingStore"
-);
+export const TtsStoreKey: InjectionKey<TtsStore> = Symbol("RecordingStore");
 export function useTtsStore() {
   const store = inject(TtsStoreKey);
   if (!store) {
