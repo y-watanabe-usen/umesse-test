@@ -67,13 +67,14 @@ export function useCmService(api: UMesseApi.CmApi, freeCache: FreeCache) {
       id
     );
 
-    const tmp = requestModel;
+    const tmp = JSON.parse(JSON.stringify(requestModel));
     delete tmp.id;
     const cacheKey = Convert.createUserCmRequestItemToJson(tmp);
     const cacheValue = freeCache.get(cacheKey);
     if (cacheValue) return <CreateUserCmResponseItem>cacheValue;
 
     try {
+      console.log("requestModel", JSON.stringify(requestModel));
       const createUserCmResponse = await api.createUserCm(authToken, requestModel);
       console.log("createUserCmResponse", JSON.stringify(createUserCmResponse.data));
       const waitForCreateCompletedResponse = await waitForCreateCompleted(authToken, createUserCmResponse.data.id);
