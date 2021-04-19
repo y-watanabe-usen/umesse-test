@@ -1,6 +1,7 @@
 "use strict";
 
 const https = require("https");
+const path = require("path");
 const querystring = require("querystring");
 const {
   constants,
@@ -216,7 +217,11 @@ exports.createRecordingResource = async (unisCustomerCd, body) => {
   // 秒数取得
   let seconds;
   try {
-    seconds = await getDuration(id, constants.resourceCategory.RECORDING);
+    seconds = await getDuration(
+      unisCustomerCd,
+      id,
+      constants.resourceCategory.RECORDING
+    );
   } catch (e) {
     errorlog(JSON.stringify(e));
     throw new InternalServerError(ERROR_CODE.E0000500);
@@ -304,7 +309,11 @@ exports.createTtsResource = async (unisCustomerCd, body) => {
       // 秒数取得
       let seconds;
       try {
-        seconds = await getDuration(id, constants.resourceCategory.TTS);
+        seconds = await getDuration(
+          unisCustomerCd,
+          id,
+          constants.resourceCategory.TTS
+        );
       } catch (e) {
         errorlog(JSON.stringify(e));
         throw new InternalServerError(ERROR_CODE.E0000500);
@@ -545,16 +554,27 @@ exports.deleteUserResource = async (unisCustomerCd, category, id) => {
 };
 
 // 秒数取得処理
-async function getDuration(id, category) {
+async function getDuration(unisCustomerCd, id, category) {
   try {
-    // s3 object取得
-    const ret = await exports.getSignedUrl(id, category);
-
     // UMesseConverter.
     const converter = new UMesseConverter(s3Manager);
 
+    // 出力ファイルパス解決.
+    const workDir = converter.getWorkDir(unisCustomerCd, id);
+    const output = path.join(workDir, `${id}.mp3`);
+
+    if (
+      !(await converter.getContents(
+        constants.s3Bucket().users,
+        `users/${unisCustomerCd}/${category}/${id}.mp3`,
+        workDir,
+        `${id}.mp3`
+      ))
+    )
+      throw "getObject failed";
+
     // CMのduration取得.
-    const seconds = await converter.getDuration(ret.url);
+    const seconds = await converter.getDuration(output);
     debuglog(`seconds = ${seconds}`);
 
     return Math.trunc(seconds);
