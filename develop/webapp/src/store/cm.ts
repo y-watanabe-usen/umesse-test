@@ -70,6 +70,7 @@ export default function cmStore() {
         sceneCd,
         uploadSystem
       );
+      state.displayCmItem.isEdit = true;
       state.status = UPLOAD_CM_STATE.UPDATED;
     } catch (e) {
       state.status = UPLOAD_CM_STATE.ERROR;
