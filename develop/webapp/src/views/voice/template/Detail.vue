@@ -478,6 +478,7 @@ export default defineComponent({
       }
     };
     const getLangsTitle = (langs: string[]) => {
+      state.playLang = langs[0];
       return Common.getLangs(langs);
     };
 
