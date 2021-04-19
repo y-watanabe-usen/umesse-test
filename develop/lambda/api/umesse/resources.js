@@ -129,6 +129,7 @@ exports.getSignedUrl = async (id, category) => {
   let ret;
   try {
     ret = await s3Manager.getSignedUrl(bucket, path);
+    debuglog(ret);
   } catch (e) {
     errorlog(JSON.stringify(e));
     throw new InternalServerError(ERROR_CODE.E0000500);
@@ -546,11 +547,11 @@ exports.deleteUserResource = async (unisCustomerCd, category, id) => {
 // 秒数取得処理
 async function getDuration(id, category) {
   try {
-    // UMesseConverter.
-    const converter = new UMesseConverter(s3Manager);
-
     // s3 object取得
     const ret = await exports.getSignedUrl(id, category);
+
+    // UMesseConverter.
+    const converter = new UMesseConverter(s3Manager);
 
     // CMのduration取得.
     const seconds = await converter.getDuration(ret.url);
@@ -558,7 +559,8 @@ async function getDuration(id, category) {
 
     return Math.trunc(seconds);
   } catch (e) {
-    throw new InternalServerError(e);
+    errorlog(JSON.stringify(e));
+    throw new Error(e);
   }
 }
 
