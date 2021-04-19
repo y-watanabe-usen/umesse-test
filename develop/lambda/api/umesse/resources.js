@@ -559,6 +559,7 @@ async function getDuration(id, category) {
 
     return Math.trunc(seconds);
   } catch (e) {
+    errorlog(JSON.stringify(e));
     throw new Error(e);
   }
 }
