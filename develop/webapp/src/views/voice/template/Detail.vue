@@ -132,7 +132,7 @@
               :isPlaying="isPlaying"
               :playbackTime="playbackTime"
               :duration="duration"
-              @play="play(selectedBgm)"
+              @play="play()"
               @stop="stop"
             />
           </FormGroup>
@@ -165,9 +165,9 @@
               type="primary"
               :isDisabled="
                 title === undefined ||
-                  title === '' ||
-                  isCreating ||
-                  isGenerating
+                title === '' ||
+                isCreating ||
+                isGenerating
               "
               @click="createTts"
               >保存して作成を続ける</Button
@@ -289,7 +289,7 @@ export default defineComponent({
 
     const {
       isApper: isModalAppear,
-      open: openModal,
+      // open: openModal,
       close: closeModal,
     } = useModalController();
     const {
@@ -364,8 +364,12 @@ export default defineComponent({
         return isDisabledButtonConfirm(customerName);
       }),
     });
+    const openModal = () => {
+      state.playLang = state.langs[0];
+      isModalAppear.value = true;
+    };
     const play = async () => {
-      console.log("play");
+      console.log("play", state.playLang);
       const data = await ttsStore.getTtsData(state.playLang);
       const audioBuffer = await audioService.getByUrl(<string>data?.url);
       analytics.pressButtonPlayTrial(
@@ -539,7 +543,6 @@ export default defineComponent({
       }
     };
     const getLangsTitle = (langs: string[]) => {
-      state.playLang = langs[0];
       return Common.getLangs(langs);
     };
 
