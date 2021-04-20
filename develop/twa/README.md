@@ -16,7 +16,7 @@ bubblewrap init --manifest http://localhost/manifest.json
 ? Short name: U MESSE
 ? Application ID: com.usen.umesse
 ? Starting version code for the new app version: 1
-? Display mode: standalone
+? Display mode: fullscreen
 ? Orientation: landscape
 ? Status bar color: #39A0D2
 ? Splash screen color: #FFFFFF

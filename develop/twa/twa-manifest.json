@@ -3,7 +3,7 @@
   "host": "umesse.usen.com",
   "name": "U MESSE",
   "launcherName": "U MESSE",
-  "display": "standalone",
+  "display": "fullscreen",
   "themeColor": "#39A0D2",
   "navigationColor": "#000000",
   "navigationColorDark": "#000000",
@@ -31,5 +31,6 @@
   "enableSiteSettingsShortcut": true,
   "isChromeOSOnly": false,
   "orientation": "landscape",
+  "fingerprints": [],
   "appVersion": "1"
 }
