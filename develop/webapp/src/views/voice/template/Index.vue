@@ -2,7 +2,7 @@
   <div>
     <BasicLayout>
       <template #header>
-        <Header :clickBack="activeSceneCd ? clickBack : null">
+        <Header :clickBack="clickBack">
           <template #title>テンプレート選択</template>
         </Header>
       </template>
@@ -64,11 +64,9 @@
                 </template>
                 <template #line2>
                   <p>
-                    <span v-if="template.timestamp" class="start"
-                      >{{
-                        convertDatestringToDate(template.timestamp)
-                      }}</span
-                    >
+                    <span v-if="template.timestamp" class="start">{{
+                      convertDatestringToDate(template.timestamp)
+                    }}</span>
                   </p>
                 </template>
                 <template #operations>
@@ -147,12 +145,13 @@ import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
 import { resourcesService } from "@/services";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import TextDialogContents from "@/components/molecules/TextDialogContents.vue";
-import { freeCache } from "@/repository/cache";
+import { freeCache, displayCache } from "@/repository/cache";
 import analytics from "@/utils/firebaseAnalytics";
 import useLoadingModalController from "@/mixins/loadingModalController";
 import useModalController from "@/mixins/modalController";
 import useErrorModalController from "@/mixins/errorModalController";
 import Constants, { Scene } from "@/utils/Constants";
+import { DISPLAY_CACHE_KEY } from "@/repository/cache/displayCache";
 
 export default defineComponent({
   components: {
@@ -194,20 +193,34 @@ export default defineComponent({
       open: openErrorModal,
       close: closeErrorModal,
     } = useErrorModalController();
+
     const state = reactive({
-      sort: 1,
-      activeIndustryCd: "10",
-      templates: [] as TemplateItem[],
-      isLoading: false,
-      scenes: [] as Scene[],
-      activeSceneCd: null as string | null,
+      sort:
+        displayCache.get<number>(DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_SORT) ??
+        1,
+      activeIndustryCd:
+        displayCache.get<string>(
+          DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_INDUSTRY_CD
+        ) ?? "10",
+      templates:
+        displayCache.get<TemplateItem[]>(
+          DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_TEMPLATES
+        ) ?? [],
+      scenes:
+        displayCache.get<Scene[]>(
+          DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_SCENES
+        ) ?? [],
+      activeSceneCd:
+        displayCache.get<string | null>(
+          DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_SCENE_CD
+        ) ?? null,
       selectedTemplate: null as TemplateItem | null,
     });
 
-    const clickIndustry = (industryCD: string) => {
-      if (state.activeIndustryCd !== industryCD) {
-        analytics.selectIndustry(industryCD, Constants.SCREEN.VOICE_TEMPLATE);
-        state.activeIndustryCd = industryCD;
+    const clickIndustry = (industryCd: string) => {
+      if (state.activeIndustryCd !== industryCd) {
+        analytics.selectIndustry(industryCd, Constants.SCREEN.VOICE_TEMPLATE);
+        state.activeIndustryCd = industryCd;
         state.activeSceneCd = null;
         fetchScene();
       }
@@ -234,12 +247,43 @@ export default defineComponent({
       // TODO: キャッシュでいいのか
       freeCache.set("voice/template", templateItem);
       analytics.selectTemplate(templateItem.id);
+      setDisplayCache();
       router.push({ name: "VoiceTemplateDetail" });
     };
+
+    const setDisplayCache = () => {
+      displayCache.set(
+        DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_INDUSTRY_CD,
+        state.activeIndustryCd
+      );
+      displayCache.set(
+        DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_SCENE_CD,
+        state.activeSceneCd
+      );
+      displayCache.set(
+        DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_TEMPLATES,
+        state.templates
+      );
+      displayCache.set(
+        DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_SCENES,
+        state.scenes
+      );
+      displayCache.set(DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_SORT, state.sort);
+    };
+    const removeDisplayCache = () => {
+      displayCache.remove(DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_INDUSTRY_CD);
+      displayCache.remove(DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_SCENE_CD);
+      displayCache.remove(DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_TEMPLATES);
+      displayCache.remove(DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_SCENES);
+      displayCache.remove(DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_SORT);
+    };
+
     onMounted(async () => {
       analytics.screenView(Constants.SCREEN.VOICE_TEMPLATE);
-      fetchScene();
-      await fetchTemplate();
+      if (state.templates.length == 0) {
+        fetchScene();
+        await fetchTemplate();
+      }
     });
 
     const fetchScene = () => {
@@ -252,8 +296,13 @@ export default defineComponent({
       fetchTemplate();
     };
     const clickBack = () => {
-      state.activeSceneCd = null;
-      state.templates = [];
+      if (state.activeSceneCd) {
+        state.activeSceneCd = null;
+        state.templates = [];
+      } else {
+        removeDisplayCache();
+        router.go(-1);
+      }
     };
 
     const selectTemplate = (template: TemplateItem) => {
@@ -262,7 +311,10 @@ export default defineComponent({
 
     const selectTemplateAndOpenDocumentModal = (template: TemplateItem) => {
       selectTemplate(template);
-      analytics.pressButtonManuscript(template.id, Constants.SCREEN.VOICE_TEMPLATE);
+      analytics.pressButtonManuscript(
+        template.id,
+        Constants.SCREEN.VOICE_TEMPLATE
+      );
       openDocumentModal();
     };
 
