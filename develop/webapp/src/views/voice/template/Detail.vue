@@ -206,7 +206,7 @@ import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { lang, speaker, TemplateDetailItem } from "@/models/TemplateDetailItem";
 import validator from "@/utils/validator";
 import { audioService } from "@/services";
-import { freeCache } from "@/repository/cache";
+import { displayCache } from "@/repository/cache";
 import Percentage from "@/components/molecules/Percentage.vue";
 import Count from "@/components/molecules/Count.vue";
 import EndYearDate from "@/components/molecules/EndYearDate.vue";
@@ -222,6 +222,7 @@ import analytics from "@/utils/firebaseAnalytics";
 import useModalController from "@/mixins/modalController";
 import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
+import { DISPLAY_CACHE_KEY } from "@/repository/cache/displayCache";
 
 export default defineComponent({
   components: {
@@ -255,7 +256,9 @@ export default defineComponent({
     const ttsSpeakers = Constants.TTS_GENDERS;
     const { cm } = useGlobalStore();
 
-    const template = <TemplateItem>freeCache.get("voice/template");
+    const template = displayCache.get<TemplateItem>(
+      DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_SELECT_TEMPLATE
+    );
     let templateDetails: TemplateDetailItem[] = [];
     let ttsLangs: string[] = [];
     template.details.forEach(
