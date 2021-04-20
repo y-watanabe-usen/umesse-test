@@ -67,16 +67,9 @@
                     <span v-if="freeItem.seconds" class="duration">{{
                       convertNumberToTime(freeItem.seconds)
                     }}</span>
-                    <span v-if="freeItem.timestamp" class="start"
-                      >放送開始日{{
-                        convertDatestringToDateJp(freeItem.timestamp)
-                      }}</span
-                    >
-                    <span v-if="freeItem.timestamp" class="end"
-                      >有効期限{{
-                        convertDatestringToDateJp(freeItem.timestamp)
-                      }}</span
-                    >
+                    <span v-if="freeItem.timestamp" class="start">{{
+                      convertDatestringToDate(freeItem.timestamp)
+                    }}</span>
                   </p>
                 </template>
                 <template #operations>
@@ -154,8 +147,8 @@ import { FreeItem } from "umesseapi/models";
 import { useGlobalStore } from "@/store";
 import router from "@/router";
 import {
-  convertDatestringToDateJp,
   convertNumberToTime,
+  convertDatestringToDate,
 } from "@/utils/FormatDate";
 import { resourcesService } from "@/services";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
@@ -301,6 +294,7 @@ export default defineComponent({
     onMounted(async () => {
       fetchScene();
     });
+
     return {
       ...toRefs(state),
       sortList,
@@ -309,7 +303,7 @@ export default defineComponent({
       clickScene,
       selectFreeTemplate,
       setManuscriptAndOpenDocumentModal,
-      convertDatestringToDateJp,
+      convertDatestringToDate,
       convertNumberToTime,
       fetchFreeTemplate,
       clickBack,

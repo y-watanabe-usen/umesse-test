@@ -67,16 +67,9 @@
                     <span v-if="narration.seconds" class="duration">{{
                       convertNumberToTime(narration.seconds)
                     }}</span>
-                    <span v-if="narration.timestamp" class="start"
-                      >放送開始日{{
-                        convertDatestringToDateJp(narration.timestamp)
-                      }}</span
-                    >
-                    <span v-if="narration.timestamp" class="end"
-                      >有効期限{{
-                        convertDatestringToDateJp(narration.timestamp)
-                      }}</span
-                    >
+                    <span v-if="narration.timestamp" class="start">{{
+                      convertDatestringToDate(narration.timestamp)
+                    }}</span>
                   </p>
                 </template>
                 <template #operations>
@@ -385,8 +378,8 @@ import { NarrationItem } from "umesseapi/models";
 import { useGlobalStore } from "@/store";
 import router from "@/router";
 import {
-  convertDatestringToDateJp,
   convertNumberToTime,
+  convertDatestringToDate,
 } from "@/utils/FormatDate";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import {
@@ -723,6 +716,7 @@ export default defineComponent({
         : await ttsService.remove(authToken, narrationId);
       fetchNarration();
     };
+
     return {
       ...toRefs(state),
       sortList,
@@ -733,7 +727,7 @@ export default defineComponent({
       selectNarration,
       clickIndustry,
       clickScene,
-      convertDatestringToDateJp,
+      convertDatestringToDate,
       convertNumberToTime,
       selectNarrationAndOpenDocumentModal,
       selectNarrationAndOpenPlayModal,
