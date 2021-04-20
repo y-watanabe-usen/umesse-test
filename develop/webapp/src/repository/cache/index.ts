@@ -1,9 +1,11 @@
 import { AudioCache } from "./audioCache";
-import { FreeCache } from "./freeCache";
+import { CmCache } from "./cmCache";
+import { TtsCache } from "./ttsCache";
 import { DisplayCache } from "./displayCache";
 
 const audioCache = new AudioCache();
-const freeCache = new FreeCache();
+const cmCache = new CmCache();
+const ttsCache = new TtsCache();
 const displayCache = new DisplayCache();
 
-export { audioCache, freeCache, displayCache };
+export { audioCache, cmCache, ttsCache, displayCache };
