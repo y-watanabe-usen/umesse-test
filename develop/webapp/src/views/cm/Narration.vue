@@ -716,23 +716,6 @@ export default defineComponent({
         : await ttsService.remove(authToken, narrationId);
       fetchNarration();
     };
-    const getStatusClass = (cd: string) => {
-      switch (cd) {
-        case Constants.CM_STATUS_DELETE: // CM削除
-        case Constants.CM_STATUS_ERROR: // CMエラー
-        case Constants.CM_STATUS_EXTERNAL_ERROR: // 外部システムアップロードエラー
-          return ["error"];
-        case Constants.CM_STATUS_CREATING: // CM作成中
-        case Constants.CM_STATUS_CONVERT: // CMエンコード中
-        case Constants.CM_STATUS_SHARING: // CM共有中
-        case Constants.CM_STATUS_GENERATE: // CM生成中
-        case Constants.CM_STATUS_EXTERNAL_UPLOADING: // 外部システムアップロード中
-          return ["busy"];
-        case Constants.CM_STATUS_COMPLETE: // CM作成完了
-        case Constants.CM_STATUS_EXTERNAL_COMPLETE: // 外部システムアップロード完了
-          return ["comp"];
-      }
-    };
 
     return {
       ...toRefs(state),
