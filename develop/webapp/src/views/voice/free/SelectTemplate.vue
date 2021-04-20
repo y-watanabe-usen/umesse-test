@@ -70,9 +70,6 @@
                     <span v-if="freeItem.timestamp" class="start">{{
                       convertDatestringToDateJp(freeItem.timestamp)
                     }}</span>
-                    <span v-if="freeItem.status" class="state" :class="getStatusClass(freeItem.status)">{{
-                      Constants.CM_STATUS.find((v) => v.cd == freeItem.status).name
-                    }}</span>
                   </p>
                 </template>
                 <template #operations>
@@ -150,8 +147,8 @@ import { FreeItem } from "umesseapi/models";
 import { useGlobalStore } from "@/store";
 import router from "@/router";
 import {
-  convertDatestringToDateJp,
   convertNumberToTime,
+  convertDatestringToDate,
 } from "@/utils/FormatDate";
 import { resourcesService } from "@/services";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
@@ -298,24 +295,6 @@ export default defineComponent({
       fetchScene();
     });
 
-    const getStatusClass = (cd: string) => {
-      switch (cd) {
-        case Constants.CM_STATUS_DELETE: // CM削除
-        case Constants.CM_STATUS_ERROR: // CMエラー
-        case Constants.CM_STATUS_EXTERNAL_ERROR: // 外部システムアップロードエラー
-          return ["error"];
-        case Constants.CM_STATUS_CREATING: // CM作成中
-        case Constants.CM_STATUS_CONVERT: // CMエンコード中
-        case Constants.CM_STATUS_SHARING: // CM共有中
-        case Constants.CM_STATUS_GENERATE: // CM生成中
-        case Constants.CM_STATUS_EXTERNAL_UPLOADING: // 外部システムアップロード中
-          return ["busy"];
-        case Constants.CM_STATUS_COMPLETE: // CM作成完了
-        case Constants.CM_STATUS_EXTERNAL_COMPLETE: // 外部システムアップロード完了
-          return ["comp"];
-      }
-    };
-
     return {
       ...toRefs(state),
       sortList,
@@ -324,7 +303,7 @@ export default defineComponent({
       clickScene,
       selectFreeTemplate,
       setManuscriptAndOpenDocumentModal,
-      convertDatestringToDateJp,
+      convertDatestringToDate,
       convertNumberToTime,
       fetchFreeTemplate,
       clickBack,
@@ -341,7 +320,6 @@ export default defineComponent({
       errorMessage,
       openErrorModal,
       closeErrorModal,
-      getStatusClass,
     };
   },
 });
