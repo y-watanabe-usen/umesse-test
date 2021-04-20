@@ -1,6 +1,6 @@
 import LRUCache from "lru-cache";
 
-export class FreeCache {
+export class TtsCache {
   private cache: LRUCache<string, unknown>;
 
   constructor() {

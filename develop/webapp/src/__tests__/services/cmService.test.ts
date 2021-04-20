@@ -3,7 +3,7 @@ import axios from "@/repository/api/axiosInstance";
 import { useCmService } from "@/services/cmService";
 import { ERROR_CODE, ERROR_PATTERN } from "@/utils/Constants";
 import * as umesseapi from "umesseapi";
-import { FreeCache } from "@/repository/cache/freeCache";
+import { CmCache } from "@/repository/cache/cmCache";
 
 import {
   Convert,
@@ -12,9 +12,9 @@ import {
 } from "@/models/CreateUserCmRequestItem";
 import { Recording } from "@/models/DisplayCmItem";
 
-const freeCache = new FreeCache();
+const cmCache = new CmCache();
 const cmRepository = new umesseapi.CmApi(undefined, "", axios);
-const cmService = useCmService(cmRepository, freeCache);
+const cmService = useCmService(cmRepository, cmCache);
 
 describe("fetchのテスト", () => {
   beforeEach(() => {
@@ -106,7 +106,7 @@ describe("fetchのテスト", () => {
 describe("createのテスト", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    freeCache.removeAll();
+    cmCache.removeAll();
   });
 
   test(`正常終了の場合、CreateUserCmResponseItemが返ること`, async () => {
@@ -252,7 +252,7 @@ describe("createのテスト", () => {
     const tmp = JSON.parse(JSON.stringify(requestModel));
     delete tmp.id;
     const cacheKey = Convert.createUserCmRequestItemToJson(tmp);
-    freeCache.set(cacheKey, responseJson);
+    cmCache.set(cacheKey, responseJson);
 
     const response = await cmService.create(
       "token",
