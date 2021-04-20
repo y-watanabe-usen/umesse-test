@@ -580,18 +580,22 @@ describe("getLangsのテスト", () => {
         {
           cd: "ja",
           name: "日本語",
+          sort: 1,
         },
         {
           cd: "en",
           name: "英語",
+          sort: 2,
         },
         {
           cd: "zh",
           name: "中国語",
+          sort: 3,
         },
         {
           cd: "ko",
           name: "韓国語",
+          sort: 4,
         },
       ],
     },
@@ -601,18 +605,22 @@ describe("getLangsのテスト", () => {
         {
           cd: "ja",
           name: "日本語",
+          sort: 1,
         },
         {
           cd: "en",
           name: "英語",
+          sort: 2,
         },
         {
           cd: "zh",
           name: "中国語",
+          sort: 3,
         },
         {
           cd: "ko",
           name: "韓国語",
+          sort: 4,
         },
       ],
     },
@@ -622,6 +630,7 @@ describe("getLangsのテスト", () => {
         {
           cd: "ja",
           name: "日本語",
+          sort: 1,
         },
       ],
     },
@@ -631,6 +640,7 @@ describe("getLangsのテスト", () => {
         {
           cd: "en",
           name: "英語",
+          sort: 2,
         },
       ],
     },
@@ -640,6 +650,7 @@ describe("getLangsのテスト", () => {
         {
           cd: "zh",
           name: "中国語",
+          sort: 3,
         },
       ],
     },
@@ -649,6 +660,7 @@ describe("getLangsのテスト", () => {
         {
           cd: "ko",
           name: "韓国語",
+          sort: 4,
         },
       ],
     },
@@ -658,10 +670,12 @@ describe("getLangsのテスト", () => {
         {
           cd: "ja",
           name: "日本語",
+          sort: 1,
         },
         {
           cd: "zh",
           name: "中国語",
+          sort: 3,
         },
       ],
     },
