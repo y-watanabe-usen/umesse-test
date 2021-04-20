@@ -152,12 +152,13 @@ import {
 } from "@/utils/FormatDate";
 import { resourcesService } from "@/services";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
-import { freeCache } from "@/repository/cache";
+import { displayCache } from "@/repository/cache";
 import analytics from "@/utils/firebaseAnalytics";
 import Constants, { Scene } from "@/utils/Constants";
 import useModalController from "@/mixins/modalController";
 import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
+import { DISPLAY_CACHE_KEY } from "@/repository/cache/displayCache";
 
 export default defineComponent({
   components: {
@@ -265,9 +266,10 @@ export default defineComponent({
     };
 
     const selectFreeTemplate = (free: FreeItem) => {
-      // TODO: キャッシュに入れるでいいのか
-      const cacheKey = "voice/free/selectTemplate";
-      freeCache.set(cacheKey, free.manuscript);
+      displayCache.set<string>(
+        DISPLAY_CACHE_KEY.VOICE_FREE_INDEX_SELECT_TEXT,
+        free.manuscript
+      );
       analytics.selectFree(free.id);
       router.push({ name: "VoiceFree" });
     };

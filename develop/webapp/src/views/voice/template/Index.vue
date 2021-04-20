@@ -143,7 +143,7 @@ import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
 import { resourcesService } from "@/services";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import TextDialogContents from "@/components/molecules/TextDialogContents.vue";
-import { freeCache, displayCache } from "@/repository/cache";
+import { displayCache } from "@/repository/cache";
 import analytics from "@/utils/firebaseAnalytics";
 import useLoadingModalController from "@/mixins/loadingModalController";
 import useModalController from "@/mixins/modalController";
@@ -242,14 +242,12 @@ export default defineComponent({
     };
 
     const toVoiceTemplateDetail = (templateItem: TemplateItem) => {
-      // TODO: キャッシュでいいのか
-      freeCache.set("voice/template", templateItem);
       analytics.selectTemplate(templateItem.id);
-      setDisplayCache();
+      setDisplayCache(templateItem);
       router.push({ name: "VoiceTemplateDetail" });
     };
 
-    const setDisplayCache = () => {
+    const setDisplayCache = (templateItem: TemplateItem) => {
       displayCache.set(
         DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_INDUSTRY_CD,
         state.activeIndustryCd
@@ -267,6 +265,10 @@ export default defineComponent({
         state.scenes
       );
       displayCache.set(DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_SORT, state.sort);
+      displayCache.set<TemplateItem>(
+        DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_SELECT_TEMPLATE,
+        templateItem
+      );
     };
     const removeDisplayCache = () => {
       displayCache.remove(DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_INDUSTRY_CD);

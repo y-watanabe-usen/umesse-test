@@ -27,22 +27,19 @@ export function useTtsService(
   const generate = async (authToken: string, requestModel: GenerateUserTtsRequestItem): Promise<GenerateTtsItem> => {
     return new Promise(function (resolve, reject) {
       const cacheKey = Convert.generateUserTtsRequestItemToJson(requestModel);
-      const cacheValue = freeCache.get(cacheKey);
-      if (freeCache.has(cacheKey)) {
-        resolve(<GenerateTtsItem>cacheValue);
-      } else {
-        ttsApi
-          .generateUserTts(authToken, requestModel)
-          .then((value) => {
-            console.log("resolve");
-            freeCache.set(cacheKey, <GenerateTtsItem>value.data);
-            resolve(value.data);
-          })
-          .catch((e) => {
-            console.log("reject", e);
-            reject(UMesseErrorFromApiFactory(e));
-          });
-      }
+      const cacheValue = freeCache.get<GenerateTtsItem | null>(cacheKey);
+      if (cacheValue) resolve(cacheValue);
+      ttsApi
+        .generateUserTts(authToken, requestModel)
+        .then((value) => {
+          console.log("resolve");
+          freeCache.set<GenerateTtsItem>(cacheKey, value.data);
+          resolve(value.data);
+        })
+        .catch((e) => {
+          console.log("reject", e);
+          reject(UMesseErrorFromApiFactory(e));
+        });
     });
   };
 

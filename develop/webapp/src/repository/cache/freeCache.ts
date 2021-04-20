@@ -14,11 +14,11 @@ export class FreeCache {
     return this.cache.has(key);
   }
 
-  get(key: string) {
-    return this.cache.get(key);
+  get<T>(key: string) {
+    return <T>this.cache.get(key);
   }
 
-  set(key: string, value: unknown) {
+  set<T>(key: string, value: T) {
     this.cache.set(key, value);
   }
 
