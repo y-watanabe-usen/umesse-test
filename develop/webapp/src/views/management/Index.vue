@@ -736,7 +736,7 @@ export default defineComponent({
       analytics.pressButtonEditContent(cmItem.id, Constants.SCREEN.MANAGEMENT);
       closeAllDropdownMenu();
       console.log(cmItem);
-      cm.setCm(cmItem, true, false);
+      cm.setCm(cmItem, true);
       router.push({ name: "Cm" });
     };
     const toHome = () => {

@@ -16,7 +16,6 @@ export default class DisplayCmItem {
   timestamp = "";
   url = "";
   isEdit = false; // 新規作成: false, 編集: true
-  isBackHome = true; // ホーム画面: true, 管理画面: false,
 
   narration(index: number): Narration | Recording | Tts {
     return this.materials.narrations[index];
@@ -63,7 +62,6 @@ export default class DisplayCmItem {
     this.timestamp = "";
     this.url = "";
     this.isEdit = false;
-    this.isBackHome = true;
   }
 
   setNarraion(

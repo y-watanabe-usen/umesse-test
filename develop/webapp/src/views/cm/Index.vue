@@ -765,10 +765,10 @@ export default defineComponent({
       isBgmSliderAppear: false,
       narrationIndex: 0,
       backScreenName: computed(() =>
-        cm.isBackHome === true ? "ホーム" : "管理"
+        !cm.isEdit ? "ホーム" : "管理"
       ),
       toBackFunction: computed(() =>
-        cm.isBackHome === true ? toHome : toManagement
+        !cm.isEdit ? toHome : toManagement
       ),
     });
 
