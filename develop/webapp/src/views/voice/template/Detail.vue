@@ -543,7 +543,9 @@ export default defineComponent({
       }
     };
     const getLangsTitle = (langs: string[]) => {
-      return Common.getLangs(langs);
+      const selectLang = Common.getLangs(langs);
+      state.playLang = selectLang[0].cd;
+      return selectLang;
     };
 
     onMounted(() => {

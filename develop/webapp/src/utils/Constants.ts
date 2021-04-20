@@ -38,6 +38,7 @@ export type TtsGenders = {
 export type TtsLangs = {
   cd: string;
   name: string;
+  sort: number;
 };
 
 export default class Constants {
@@ -229,10 +230,10 @@ export default class Constants {
   } as const;
 
   public static readonly TTS_LANGS: TtsLangs[] = [
-    { cd: "ja", name: "日本語" },
-    { cd: "en", name: "英語" },
-    { cd: "zh", name: "中国語" },
-    { cd: "ko", name: "韓国語" },
+    { cd: "ja", name: "日本語", sort: 1 },
+    { cd: "en", name: "英語", sort: 2 },
+    { cd: "zh", name: "中国語", sort: 3 },
+    { cd: "ko", name: "韓国語", sort: 4 },
   ];
 
   public static readonly TTS_GENDERS: TtsGenders[] = [
