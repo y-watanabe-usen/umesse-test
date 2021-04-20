@@ -68,7 +68,7 @@
                       convertNumberToTime(freeItem.seconds)
                     }}</span>
                     <span v-if="freeItem.timestamp" class="start">{{
-                      convertDatestringToDateJp(freeItem.timestamp)
+                      convertDatestringToDate(freeItem.timestamp)
                     }}</span>
                   </p>
                 </template>
