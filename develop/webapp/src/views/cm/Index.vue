@@ -103,9 +103,9 @@
               :key="narration.contentsId"
               :title="
                 'ナレーション ' +
-                `${index + 1}` +
-                '/' +
-                `${MAX_NARRATION_COUNT}`
+                  `${index + 1}` +
+                  '/' +
+                  `${MAX_NARRATION_COUNT}`
               "
               size="flexible"
               :contentTitle="`${narration.title}`"
@@ -183,9 +183,9 @@
               <CmItem
                 :title="
                   'ナレーション ' +
-                  `${narrations.length + 1}` +
-                  '/' +
-                  `${MAX_NARRATION_COUNT}`
+                    `${narrations.length + 1}` +
+                    '/' +
+                    `${MAX_NARRATION_COUNT}`
                 "
                 :isEmpty="true"
                 :contentTitleName="'narration' + `${narrations.length}`"
@@ -570,7 +570,7 @@
             <Button type="secondary" @click="closeSavedModal"
               >編集の続きをする</Button
             >
-            <Button type="primary" @click="toHome">終了する</Button>
+            <Button type="primary" @click="toBackFunction">終了する</Button>
           </ModalFooter>
         </template>
       </ModalDialog>
@@ -592,7 +592,9 @@
       >
         <template #contents>
           <MessageDialogContents>
-            ホーム画面へ戻ります。作成中のCMは保存されませんが、よろしいでしょうか？
+            {{
+              backScreenName
+            }}画面へ戻ります。作成中のCMは保存されませんが、よろしいでしょうか？
           </MessageDialogContents>
         </template>
         <template #footer>
@@ -600,7 +602,9 @@
             <Button type="secondary" @click="closeConfirmBackHomeModal"
               >キャンセル</Button
             >
-            <Button type="primary" @click="toHome">ホーム画面へ戻る</Button>
+            <Button type="primary" @click="toBackFunction"
+              >{{ backScreenName }}画面へ戻る</Button
+            >
           </ModalFooter>
         </template>
       </ModalDialog>
@@ -760,6 +764,12 @@ export default defineComponent({
       isEndChimeSliderAppear: false,
       isBgmSliderAppear: false,
       narrationIndex: 0,
+      backScreenName: computed(() =>
+        !cm.isEdit ? "ホーム" : "管理"
+      ),
+      toBackFunction: computed(() =>
+        !cm.isEdit ? toHome : toManagement
+      ),
     });
 
     const playOpenChime = async () => {
@@ -977,6 +987,12 @@ export default defineComponent({
     };
     const toVoiceFree = () => {
       router.push({ name: "VoiceFree" });
+    };
+    const toManagement = () => {
+      cm.reset(authToken);
+      router.push({
+        name: "Management",
+      });
     };
     const closeAllDropdownMenu = () => {
       state.isNarrationDropdownAppear = [false, false, false, false];

@@ -199,6 +199,9 @@ export default function cmStore() {
     get description() {
       return state.displayCmItem.description;
     },
+    get isEdit() {
+      return state.displayCmItem.isEdit;
+    },
     clearNarration,
     clearAllNarration,
     clearOpenChime,
