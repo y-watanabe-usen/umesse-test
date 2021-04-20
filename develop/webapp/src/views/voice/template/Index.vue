@@ -60,15 +60,27 @@
                   <h2>{{ template.title }}</h2>
                 </template>
                 <template #line1>
-                  <p>{{ template.manuscript }}</p>
+                  <p>{{ template.description }}</p>
                 </template>
                 <template #line2>
                   <p>
-                    約00:00<!-- TODO: 仮の数値 -->／
-                    {{ template.description }}
+                    <span v-if="template.timestamp" class="start"
+                      >{{
+                        convertDatestringToDate(template.timestamp)
+                      }}</span
+                    >
                   </p>
                 </template>
                 <template #operations>
+                  <template>
+                    <Button
+                      v-if="template.manuscript"
+                      class="btn-document"
+                      @click="selectTemplateAndOpenDocumentModal(template)"
+                    >
+                      <img src="@/assets/icon_document.svg" />原稿
+                    </Button>
+                  </template>
                   <Button
                     class="btn-select"
                     @click="toVoiceTemplateDetail(template)"
@@ -83,6 +95,23 @@
       </template>
     </BasicLayout>
     <!-- modal -->
+    <transition>
+      <ModalDialog v-if="isDocumentModalAppear" @close="closeDocumentModal">
+        <template #header>
+          <ModalHeader title="原稿" @close="closeDocumentModal" />
+        </template>
+        <template #contents>
+          <TextDialogContents>
+            {{ selectedTemplate?.manuscript }}
+          </TextDialogContents>
+        </template>
+        <template #footer>
+          <ModalFooter>
+            <Button type="secondary" @click="closeDocumentModal">閉じる</Button>
+          </ModalFooter>
+        </template>
+      </ModalDialog>
+    </transition>
     <transition>
       <ModalErrorDialog
         v-if="isErrorModalApper"
@@ -110,12 +139,18 @@ import ListItem from "@/components/molecules/ListItem.vue";
 import { TemplateItem } from "umesseapi/models";
 import * as Common from "@/utils/Common";
 import router from "@/router";
+import { convertDatestringToDate } from "@/utils/FormatDate";
+import ModalDialog from "@/components/organisms/ModalDialog.vue";
+import ModalHeader from "@/components/molecules/ModalHeader.vue";
+import ModalFooter from "@/components/molecules/ModalFooter.vue";
 import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
 import { resourcesService } from "@/services";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
+import TextDialogContents from "@/components/molecules/TextDialogContents.vue";
 import { freeCache } from "@/repository/cache";
 import analytics from "@/utils/firebaseAnalytics";
 import useLoadingModalController from "@/mixins/loadingModalController";
+import useModalController from "@/mixins/modalController";
 import useErrorModalController from "@/mixins/errorModalController";
 import Constants, { Scene } from "@/utils/Constants";
 
@@ -131,12 +166,21 @@ export default defineComponent({
     List,
     ListHeader,
     ListItem,
+    ModalDialog,
+    ModalHeader,
+    ModalFooter,
     ModalErrorDialog,
     ModalLoading,
+    TextDialogContents,
   },
   setup() {
     const sortList = Common.getSort();
     const industries = Common.getTemplateIndustries();
+    const {
+      isApper: isDocumentModalAppear,
+      open: openDocumentModal,
+      close: closeDocumentModal,
+    } = useModalController();
     const {
       isApper: isLoading,
       loadingMessage,
@@ -157,6 +201,7 @@ export default defineComponent({
       isLoading: false,
       scenes: [] as Scene[],
       activeSceneCd: null as string | null,
+      selectedTemplate: null as TemplateItem | null,
     });
 
     const clickIndustry = (industryCD: string) => {
@@ -211,6 +256,16 @@ export default defineComponent({
       state.templates = [];
     };
 
+    const selectTemplate = (template: TemplateItem) => {
+      state.selectedTemplate = template;
+    };
+
+    const selectTemplateAndOpenDocumentModal = (template: TemplateItem) => {
+      selectTemplate(template);
+      analytics.pressButtonManuscript(template.id, Constants.SCREEN.VOICE_TEMPLATE);
+      openDocumentModal();
+    };
+
     return {
       ...toRefs(state),
       sortList,
@@ -227,8 +282,14 @@ export default defineComponent({
       errorMessage,
       openErrorModal,
       closeErrorModal,
+      isDocumentModalAppear,
+      openDocumentModal,
+      closeDocumentModal,
       clickScene,
       clickBack,
+      convertDatestringToDate,
+      selectTemplate,
+      selectTemplateAndOpenDocumentModal,
     };
   },
 });
