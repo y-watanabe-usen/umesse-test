@@ -72,7 +72,7 @@
                   </p>
                 </template>
                 <template #operations>
-                  <template v-if="activeIndustryCd !== '02'">
+                  <template>
                     <Button
                       v-if="template.manuscript"
                       class="btn-document"
