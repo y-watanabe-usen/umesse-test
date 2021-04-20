@@ -16,20 +16,43 @@
 package com.usen.umesse
 
 import android.net.Uri
+import android.os.Bundle
 import android.util.Log
 import com.google.androidbrowserhelper.trusted.LauncherActivity
 import com.usen.umesse.MdmIntentReceiver.Companion.UNIS_CUSTOMER_CD
+import com.usen.umesse.mdm.MdmClient
 
 class LauncherActivity : LauncherActivity() {
-    override fun getLaunchingUrl(): Uri {
-        val unisCustomerCd = intent.getStringExtra(UNIS_CUSTOMER_CD)
-        Log.d("CustomLauncherActivity", "unisCustomerCd = $unisCustomerCd")
 
-        if (unisCustomerCd.isNullOrEmpty()) {
-            // TODO: エラーページへ遷移
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        Log.d(TAG, "onCreate.")
+        mdmClient = MdmClient(applicationContext).apply {
+            registerMdmReceiver()
+            requestCustomerInfo()
         }
+    }
 
+    override fun getLaunchingUrl(): Uri {
         val uri = super.getLaunchingUrl()
+        Log.d(TAG, "getLaunchingUrl. $uri")
+        unisCustomerCd = intent.getStringExtra(UNIS_CUSTOMER_CD)
+        Log.d(TAG, "unisCustomerCd = $unisCustomerCd")
+        if (unisCustomerCd.isNullOrEmpty()) {
+            finish()
+        }
         return uri.buildUpon().appendQueryParameter("unisCustomerCd", unisCustomerCd).build()
+    }
+
+    override fun onDestroy() {
+        Log.d(TAG, "onDestroy.")
+        mdmClient.unregisterMdmReceiver()
+        super.onDestroy()
+    }
+
+    companion object {
+        private const val TAG = "LauncherActivity"
+        private lateinit var mdmClient: MdmClient
+        private var unisCustomerCd: String? = null
     }
 }

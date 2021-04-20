@@ -20,21 +20,17 @@ import android.util.Log
 import com.usen.umesse.mdm.MdmClient
 
 class Application : Application() {
-    private lateinit var mdmClient: MdmClient
-
     override fun onCreate() {
         super.onCreate()
-        Log.d("MainActivity", "onCreate.")
-        mdmClient = MdmClient(applicationContext).apply {
-            registerMdmReceiver()
-            requestCustomerInfo()
-        }
-
-        // TODO: スプラッシュ画面 MdmIntentReceiver来ない場合のエラー
+        Log.d(TAG, "onCreate.")
     }
 
     override fun onTerminate() {
-        mdmClient.unregisterMdmReceiver()
+        Log.d(TAG, "onTerminate.")
         super.onTerminate()
+    }
+
+    companion object {
+        private const val TAG = "Application"
     }
 }
