@@ -2,7 +2,7 @@
   <div @click="closeAllDropdownMenu">
     <BasicLayout>
       <template #header>
-        <Header>
+        <Header :clickBack="toHome">
           <template #title>店内CMの管理</template>
         </Header>
       </template>
@@ -736,8 +736,11 @@ export default defineComponent({
       analytics.pressButtonEditContent(cmItem.id, Constants.SCREEN.MANAGEMENT);
       closeAllDropdownMenu();
       console.log(cmItem);
-      cm.setCm(cmItem, true);
+      cm.setCm(cmItem, true, false);
       router.push({ name: "Cm" });
+    };
+    const toHome = () => {
+      router.push({ name: "Home" });
     };
     onMounted(async () => {
       analytics.screenView(Constants.SCREEN.MANAGEMENT);
@@ -772,7 +775,7 @@ export default defineComponent({
       }
     };
     const closeCmAbsentModal = () => {
-      router.push({ name: "Home" });
+      toHome();
     };
     return {
       ...toRefs(state),
@@ -840,6 +843,7 @@ export default defineComponent({
       openCmAbsentModal,
       closeCmAbsentModal,
       download,
+      toHome,
     };
   },
 });

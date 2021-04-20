@@ -164,9 +164,10 @@ export default function cmStore() {
       bgmItem.timestamp
     );
   };
-  const setCm = (cmItem: CmItem, isEdit: boolean) => {
+  const setCm = (cmItem: CmItem, isEdit: boolean, isBackHome: boolean) => {
     state.displayCmItem.setCm(cmItem);
     state.displayCmItem.isEdit = isEdit;
+    state.displayCmItem.isBackHome = isBackHome;
     state.status = UPLOAD_CM_STATE.NONE;
   };
 
@@ -198,6 +199,9 @@ export default function cmStore() {
     },
     get description() {
       return state.displayCmItem.description;
+    },
+    get isBackHome() {
+      return state.displayCmItem.isBackHome;
     },
     clearNarration,
     clearAllNarration,
