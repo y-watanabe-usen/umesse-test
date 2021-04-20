@@ -209,7 +209,7 @@ export default defineComponent({
           DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_SCENES
         ) ?? [],
       activeSceneCd:
-        displayCache.get<string | null>(
+        displayCache.get<string | undefined>(
           DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_SCENE_CD
         ) ?? null,
       selectedTemplate: null as TemplateItem | null,

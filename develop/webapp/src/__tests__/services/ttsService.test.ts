@@ -1,12 +1,14 @@
+import { Convert } from "@/models/GenerateUserTtsRequestItem";
 import { UMesseError } from "@/models/UMesseError";
 import axios from "@/repository/api/axiosInstance";
-import { freeCache } from "@/repository/cache";
+import { TtsCache } from "@/repository/cache/ttsCache";
 import { useTtsService } from "@/services/ttsService";
 import { ERROR_CODE, ERROR_PATTERN } from "@/utils/Constants";
 import * as umesseapi from "umesseapi";
 
 const ttsRepository = new umesseapi.TtsApi(undefined, "", axios);
-const ttsService = useTtsService(ttsRepository);
+const ttsCache = new TtsCache();
+const ttsService = useTtsService(ttsRepository, ttsCache);
 
 describe("fetchのテスト", () => {
   beforeEach(() => {
@@ -76,7 +78,7 @@ describe("fetchのテスト", () => {
 describe("generateのテスト", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    freeCache.removeAll();
+    ttsCache.removeAll();
   });
 
   test(`正常終了の場合、GenerateTtsItemが返ること`, async () => {
@@ -114,6 +116,50 @@ describe("generateのテスト", () => {
         },
       ],
     });
+
+    expect(response.id).toBe("サンプル01");
+    expect(response.details.length).toBe(2);
+  });
+
+  test(`キャッシュがある場合、キャッシュの中身が返ること`, async () => {
+    const responseJson = {
+      id: "サンプル01",
+      category: "tts",
+      details: [
+        {
+          url: "https://example.com",
+          lang: "ja",
+        },
+        {
+          url: "https://example.com",
+          lang: "en",
+        },
+      ],
+    };
+
+    const requestModel = {
+      id: "サンプル01",
+      category: "tts",
+      details: [
+        {
+          text:
+            "本日は{customerName}へご来店頂きまして、誠にありがとうございます。",
+          speaker: "0",
+          lang: "ja",
+        },
+        {
+          text:
+            "本日は{customerName}へご来店頂きまして、誠にありがとうございます。",
+          speaker: "0",
+          lang: "en",
+        },
+      ],
+    };
+
+    const cacheKey = Convert.generateUserTtsRequestItemToJson(requestModel);
+    ttsCache.set(cacheKey, responseJson);
+
+    const response = await ttsService.generate("token", requestModel);
 
     expect(response.id).toBe("サンプル01");
     expect(response.details.length).toBe(2);

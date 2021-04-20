@@ -173,7 +173,7 @@ export default defineComponent({
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       duration: computed(() => audioPlayer.getDuration()),
       text:
-        displayCache.get<string | null>(
+        displayCache.get<string | undefined>(
           DISPLAY_CACHE_KEY.VOICE_FREE_INDEX_SELECT_TEXT
         ) ?? "",
       speaker: "1", // 女性

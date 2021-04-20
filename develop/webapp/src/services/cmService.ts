@@ -13,10 +13,10 @@ import * as UMesseApi from "umesseapi";
 import { Recording, Tts } from "@/models/DisplayCmItem";
 import { CmItem } from "umesseapi/models/cm-item";
 import { UMesseError, UMesseErrorFromApiFactory } from "@/models/UMesseError";
-import { FreeCache } from "@/repository/cache/freeCache";
+import { CmCache } from "@/repository/cache/cmCache";
 import { CmListItemInner } from "umesseapi/models";
 
-export function useCmService(api: UMesseApi.CmApi, freeCache: FreeCache) {
+export function useCmService(api: UMesseApi.CmApi, cmCache: CmCache) {
   let timer: number | undefined;
 
   const fetch = async (
@@ -36,13 +36,6 @@ export function useCmService(api: UMesseApi.CmApi, freeCache: FreeCache) {
             });
           });
           resolve([scenes, cms]);
-          // const response = tmp.data.filter((v) => {
-          //   if (!v.scene) return false;
-          //   return v.scene.sceneCd == sceneCd;
-          // });
-          // console.log("resolve");
-          // console.log("listUserCm", response);
-          // resolve(response);
         })
         .catch((e) => {
           console.log("reject", e);
@@ -70,7 +63,8 @@ export function useCmService(api: UMesseApi.CmApi, freeCache: FreeCache) {
     const tmp = JSON.parse(JSON.stringify(requestModel));
     delete tmp.id;
     const cacheKey = Convert.createUserCmRequestItemToJson(tmp);
-    const cacheValue = freeCache.get<CreateUserCmResponseItem | null>(cacheKey);
+    cmCache.removeOther(cacheKey);
+    const cacheValue = cmCache.get<CreateUserCmResponseItem | undefined>(cacheKey);
     if (cacheValue) return cacheValue;
 
     try {
@@ -79,7 +73,7 @@ export function useCmService(api: UMesseApi.CmApi, freeCache: FreeCache) {
       console.log("createUserCmResponse", JSON.stringify(createUserCmResponse.data));
       const waitForCreateCompletedResponse = await waitForCreateCompleted(authToken, createUserCmResponse.data.id);
       console.log(JSON.stringify(waitForCreateCompletedResponse));
-      freeCache.set<CreateUserCmResponseItem>(cacheKey, waitForCreateCompletedResponse);
+      cmCache.set<CreateUserCmResponseItem>(cacheKey, waitForCreateCompletedResponse);
       return waitForCreateCompletedResponse;
     } catch (e) {
       if (e instanceof UMesseError) {

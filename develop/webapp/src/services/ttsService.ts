@@ -3,10 +3,11 @@ import { UMesseErrorFromApiFactory } from "@/models/UMesseError";
 import { GenerateUserTtsRequestItem, Convert } from "@/models/GenerateUserTtsRequestItem";
 import { CreateUserTtsRequestItem } from "@/models/CreateUserTtsRequestItem";
 import { GenerateTtsItem, TtsItem } from "umesseapi/models";
-import { freeCache } from "@/repository/cache";
+import { TtsCache } from "@/repository/cache/ttsCache";
 
 export function useTtsService(
-  ttsApi: UMesseApi.TtsApi
+  ttsApi: UMesseApi.TtsApi,
+  ttsCache: TtsCache
 ) {
 
   const fetch = async (authToken: string): Promise<TtsItem[]> => {
@@ -25,15 +26,16 @@ export function useTtsService(
   };
 
   const generate = async (authToken: string, requestModel: GenerateUserTtsRequestItem): Promise<GenerateTtsItem> => {
+    const cacheKey = Convert.generateUserTtsRequestItemToJson(requestModel);
+    const cacheValue = ttsCache.get<GenerateTtsItem | undefined>(cacheKey);
+    if (cacheValue) return cacheValue;
+
     return new Promise(function (resolve, reject) {
-      const cacheKey = Convert.generateUserTtsRequestItemToJson(requestModel);
-      const cacheValue = freeCache.get<GenerateTtsItem | null>(cacheKey);
-      if (cacheValue) resolve(cacheValue);
       ttsApi
         .generateUserTts(authToken, requestModel)
         .then((value) => {
           console.log("resolve");
-          freeCache.set<GenerateTtsItem>(cacheKey, value.data);
+          ttsCache.set<GenerateTtsItem>(cacheKey, value.data);
           resolve(value.data);
         })
         .catch((e) => {

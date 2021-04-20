@@ -16,6 +16,10 @@ describe("removeOtherのテスト", () => {
 
     cmCache.removeOther("key3");
 
-    expect(cmCache.get<string|null>("key1")).toBe(null);
+    expect(cmCache.get<string|undefined>("key1")).toBe(undefined);
+    expect(cmCache.get<string|undefined>("key2")).toBe(undefined);
+    expect(cmCache.get<string|undefined>("key3")).toBe("value3");
+    expect(cmCache.get<string|undefined>("key4")).toBe(undefined);
+    expect(cmCache.get<string|undefined>("key5")).toBe(undefined);
   });
 });
