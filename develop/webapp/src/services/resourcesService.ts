@@ -37,6 +37,7 @@ export function useResourcesService(
                   description: v.description,
                   category: Constants.CATEGORY.RECORDING,
                   timestamp: v.timestamp,
+                  seconds: v.seconds,
                 });
               });
               resolve(<NarrationItem[]>data);
@@ -61,6 +62,7 @@ export function useResourcesService(
                   category: Constants.CATEGORY.TTS,
                   timestamp: v.timestamp,
                   manuscript: v.manuscript,
+                  seconds: v.seconds,
                 });
               });
               console.log(data);
