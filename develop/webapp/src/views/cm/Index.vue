@@ -648,6 +648,8 @@ import analytics from "@/utils/firebaseAnalytics";
 import useModalController from "@/mixins/modalController";
 import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
+import { displayCache } from "@/repository/cache";
+import { DISPLAY_CACHE_KEY } from "@/repository/cache/displayCache";
 
 export default defineComponent({
   components: {
@@ -926,6 +928,7 @@ export default defineComponent({
     };
     const addVoiceTemplate = () => {
       cm.unSelectNarrationIndex();
+      removeDisplayCacheVoiceTemplate();
       toVoiceTemplate();
     };
     const addVoiceFree = () => {
@@ -942,11 +945,19 @@ export default defineComponent({
     };
     const changeVoiceTemplate = (index: number) => {
       cm.selectNarrationIndex(index);
+      removeDisplayCacheVoiceTemplate();
       toVoiceTemplate();
     };
     const changeVoiceFree = (index: number) => {
       cm.selectNarrationIndex(index);
       toVoiceFree();
+    };
+    const removeDisplayCacheVoiceTemplate = () => {
+      displayCache.remove(DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_INDUSTRY_CD);
+      displayCache.remove(DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_SCENE_CD);
+      displayCache.remove(DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_TEMPLATES);
+      displayCache.remove(DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_SCENES);
+      displayCache.remove(DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_SORT);
     };
     const toHome = () => {
       cm.reset(authToken);

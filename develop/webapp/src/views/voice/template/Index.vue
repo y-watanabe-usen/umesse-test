@@ -270,7 +270,7 @@ export default defineComponent({
       );
       displayCache.set(DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_SORT, state.sort);
     };
-    const clearDisplayStorage = () => {
+    const removeDisplayCache = () => {
       displayCache.remove(DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_INDUSTRY_CD);
       displayCache.remove(DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_SCENE_CD);
       displayCache.remove(DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_TEMPLATES);
@@ -300,7 +300,7 @@ export default defineComponent({
         state.activeSceneCd = null;
         state.templates = [];
       } else {
-        clearDisplayStorage();
+        removeDisplayCache();
         router.go(-1);
       }
     };
