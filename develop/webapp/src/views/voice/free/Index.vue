@@ -116,12 +116,13 @@ import SelectBox from "@/components/atoms/SelectBox.vue";
 import { useGlobalStore } from "@/store";
 import Constants from "@/utils/Constants";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
-import { freeCache } from "@/repository/cache";
+import { displayCache } from "@/repository/cache";
 import { audioService } from "@/services";
 import analytics from "@/utils/firebaseAnalytics";
 import useModalController from "@/mixins/modalController";
 import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
+import { DISPLAY_CACHE_KEY } from "@/repository/cache/displayCache";
 
 export default defineComponent({
   components: {
@@ -171,19 +172,15 @@ export default defineComponent({
       isPlaying: computed(() => audioPlayer.isPlaying()),
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       duration: computed(() => audioPlayer.getDuration()),
-      text: "",
+      text:
+        displayCache.get<string | null>(
+          DISPLAY_CACHE_KEY.VOICE_FREE_INDEX_SELECT_TEXT
+        ) ?? "",
       speaker: "1", // 女性
       title: "",
       description: "",
     });
-    // TODO: キャッシュでいいのか
-    const cacheKey = "voice/free/selectTemplate";
-    if (freeCache.has(cacheKey)) {
-      state.text = <string>freeCache.get(cacheKey);
-      freeCache.remove(cacheKey);
-    } else {
-      state.text = "";
-    }
+
     const play = async () => {
       console.log("play");
       const data = await ttsStore.getTtsData(lang);
@@ -206,7 +203,7 @@ export default defineComponent({
         state.title,
         state.description,
         [lang],
-        [state.text],
+        [state.text]
       );
 
       var idString = "";
