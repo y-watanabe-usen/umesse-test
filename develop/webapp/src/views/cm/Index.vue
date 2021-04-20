@@ -654,7 +654,6 @@ import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
 import { displayCache } from "@/repository/cache";
 import { DISPLAY_CACHE_KEY } from "@/repository/cache/displayCache";
-import DisplayCmItem from "@/models/DisplayCmItem";
 
 export default defineComponent({
   components: {
