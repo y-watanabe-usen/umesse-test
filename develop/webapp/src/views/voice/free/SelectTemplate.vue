@@ -67,16 +67,12 @@
                     <span v-if="freeItem.seconds" class="duration">{{
                       convertNumberToTime(freeItem.seconds)
                     }}</span>
-                    <span v-if="freeItem.timestamp" class="start"
-                      >放送開始日{{
-                        convertDatestringToDateJp(freeItem.timestamp)
-                      }}</span
-                    >
-                    <span v-if="freeItem.timestamp" class="end"
-                      >作成日{{
-                        convertDatestringToDateJp(freeItem.timestamp)
-                      }}</span
-                    >
+                    <span v-if="freeItem.timestamp" class="start">{{
+                      convertDatestringToDateJp(freeItem.timestamp)
+                    }}</span>
+                    <span v-if="freeItem.status" class="state" :class="getStatusClass(freeItem.status)">{{
+                      Constants.CM_STATUS.find((v) => v.cd == freeItem.status).name
+                    }}</span>
                   </p>
                 </template>
                 <template #operations>
@@ -301,6 +297,25 @@ export default defineComponent({
     onMounted(async () => {
       fetchScene();
     });
+
+    const getStatusClass = (cd: string) => {
+      switch (cd) {
+        case Constants.CM_STATUS_DELETE: // CM削除
+        case Constants.CM_STATUS_ERROR: // CMエラー
+        case Constants.CM_STATUS_EXTERNAL_ERROR: // 外部システムアップロードエラー
+          return ["error"];
+        case Constants.CM_STATUS_CREATING: // CM作成中
+        case Constants.CM_STATUS_CONVERT: // CMエンコード中
+        case Constants.CM_STATUS_SHARING: // CM共有中
+        case Constants.CM_STATUS_GENERATE: // CM生成中
+        case Constants.CM_STATUS_EXTERNAL_UPLOADING: // 外部システムアップロード中
+          return ["busy"];
+        case Constants.CM_STATUS_COMPLETE: // CM作成完了
+        case Constants.CM_STATUS_EXTERNAL_COMPLETE: // 外部システムアップロード完了
+          return ["comp"];
+      }
+    };
+
     return {
       ...toRefs(state),
       sortList,
@@ -326,6 +341,7 @@ export default defineComponent({
       errorMessage,
       openErrorModal,
       closeErrorModal,
+      getStatusClass,
     };
   },
 });

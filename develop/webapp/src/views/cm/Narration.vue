@@ -67,17 +67,12 @@
                     <span v-if="narration.seconds" class="duration">{{
                       convertNumberToTime(narration.seconds)
                     }}</span>
-                    <span v-if="narration.timestamp" class="start"
-                      >放送開始日{{
-                        convertDatestringToDateJp(narration.timestamp)
-                      }}</span
-                    >
-                    <span v-if="narration.timestamp" class="end"
-                      >作成日{{
-                        convertDatestringToDateJp(narration.timestamp)
-                      }}</span
-                    >
-
+                    <span v-if="narration.timestamp" class="start">{{
+                      convertDatestringToDateJp(narration.timestamp)
+                    }}</span>
+                    <span v-if="narration.status" class="state" :class="getStatusClass(narration.status)">{{
+                      Constants.CM_STATUS.find((v) => v.cd == narration.status).name
+                    }}</span>
                   </p>
                 </template>
                 <template #operations>
@@ -724,6 +719,24 @@ export default defineComponent({
         : await ttsService.remove(authToken, narrationId);
       fetchNarration();
     };
+    const getStatusClass = (cd: string) => {
+      switch (cd) {
+        case Constants.CM_STATUS_DELETE: // CM削除
+        case Constants.CM_STATUS_ERROR: // CMエラー
+        case Constants.CM_STATUS_EXTERNAL_ERROR: // 外部システムアップロードエラー
+          return ["error"];
+        case Constants.CM_STATUS_CREATING: // CM作成中
+        case Constants.CM_STATUS_CONVERT: // CMエンコード中
+        case Constants.CM_STATUS_SHARING: // CM共有中
+        case Constants.CM_STATUS_GENERATE: // CM生成中
+        case Constants.CM_STATUS_EXTERNAL_UPLOADING: // 外部システムアップロード中
+          return ["busy"];
+        case Constants.CM_STATUS_COMPLETE: // CM作成完了
+        case Constants.CM_STATUS_EXTERNAL_COMPLETE: // 外部システムアップロード完了
+          return ["comp"];
+      }
+    };
+
     return {
       ...toRefs(state),
       sortList,
@@ -782,6 +795,7 @@ export default defineComponent({
       closeNarrationTtsAbsentModal,
       Constants,
       download,
+      getStatusClass,
     };
   },
 });
