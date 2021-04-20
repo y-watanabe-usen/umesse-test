@@ -70,15 +70,13 @@
                   </p>
                 </template>
                 <template #operations>
-                  <template>
-                    <Button
-                      v-if="template.manuscript"
-                      class="btn-document"
-                      @click="selectTemplateAndOpenDocumentModal(template)"
-                    >
-                      <img src="@/assets/icon_document.svg" />原稿
-                    </Button>
-                  </template>
+                  <Button
+                    v-if="template.manuscript"
+                    class="btn-document"
+                    @click="selectTemplateAndOpenDocumentModal(template)"
+                  >
+                    <img src="@/assets/icon_document.svg" />原稿
+                  </Button>
                   <Button
                     class="btn-select"
                     @click="toVoiceTemplateDetail(template)"
