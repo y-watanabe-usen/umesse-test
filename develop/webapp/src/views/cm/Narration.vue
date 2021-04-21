@@ -397,6 +397,7 @@ import Constants, { Scene } from "@/utils/Constants";
 import useModalController from "@/mixins/modalController";
 import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
+import {  useCmStore } from "@/store/cm";
 
 export default defineComponent({
   components: {
@@ -425,7 +426,8 @@ export default defineComponent({
   },
   setup() {
     const audioPlayer = AudioPlayer();
-    const { auth, cm } = useGlobalStore();
+    const { auth } = useGlobalStore();
+    const cm = useCmStore();
     const authToken = <string>auth.getToken();
     const sortList = Common.getSort();
     const industries = Common.getNarrationIndustries();

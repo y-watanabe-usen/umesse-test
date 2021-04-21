@@ -199,7 +199,6 @@ import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
 import SelectBox from "@/components/atoms/SelectBox.vue";
 import TimeInput from "@/components/atoms/TimeInput.vue";
-import { useGlobalStore } from "@/store";
 import { TemplateItem } from "umesseapi/models";
 import Constants from "@/utils/Constants";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
@@ -217,7 +216,7 @@ import Point from "@/components/molecules/Point.vue";
 import ttsTextConverter, { ConverterType } from "@/utils/ttsTextConverter";
 import * as Common from "@/utils/Common";
 import { NarrationItem } from "umesseapi/models";
-import { MAX_NARRATION_COUNT } from "@/store/cm";
+import { MAX_NARRATION_COUNT, useCmStore } from "@/store/cm";
 import analytics from "@/utils/firebaseAnalytics";
 import useModalController from "@/mixins/modalController";
 import useLoadingModalController from "@/mixins/loadingModalController";
@@ -254,7 +253,7 @@ export default defineComponent({
     const ttsStore = provideTtsStore(); //FIXME: provide name.
     const audioPlayer = AudioPlayer();
     const ttsSpeakers = Constants.TTS_GENDERS;
-    const { cm } = useGlobalStore();
+    const cm = useCmStore();
 
     const template = displayCache.get<TemplateItem>(
       DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_SELECT_TEMPLATE

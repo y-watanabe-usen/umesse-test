@@ -184,7 +184,6 @@ import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
 import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
-import { useGlobalStore } from "@/store";
 import router from "@/router";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { UPLOAD_RECORDING_STATE } from "@/store/recording";
@@ -193,6 +192,7 @@ import useModalController from "@/mixins/modalController";
 import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
 import Constants from "@/utils/Constants";
+import { useCmStore } from "@/store/cm";
 
 export default defineComponent({
   components: {
@@ -214,7 +214,7 @@ export default defineComponent({
     const recordingStore = provideRecordingStore(); //FIXME: provide name.
     const audioRecorder = AudioRecorder();
     const audioPlayer = AudioPlayer();
-    const { cm } = useGlobalStore();
+    const cm = useCmStore();
     const {
       isApper: isLoading,
       loadingMessage,

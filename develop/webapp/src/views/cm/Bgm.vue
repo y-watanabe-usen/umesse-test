@@ -98,7 +98,6 @@
 import { computed, defineComponent, onMounted, reactive, toRefs } from "vue";
 import AudioPlayer from "@/utils/AudioPlayer";
 import { BgmItem } from "umesseapi/models";
-import { useGlobalStore } from "@/store";
 import { useRouter } from "vue-router";
 import * as Common from "@/utils/Common";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
@@ -123,6 +122,7 @@ import Constants from "@/utils/Constants";
 import useModalController from "@/mixins/modalController";
 import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
+import { useCmStore } from "@/store/cm";
 
 export default defineComponent({
   components: {
@@ -146,7 +146,7 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const audioPlayer = AudioPlayer();
-    const { cm } = useGlobalStore();
+    const cm = useCmStore();
     const sortList = Common.getSort();
     const {
       isApper: isPlayModalAppear,

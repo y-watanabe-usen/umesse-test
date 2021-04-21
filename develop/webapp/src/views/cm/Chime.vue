@@ -86,7 +86,6 @@
 import { computed, defineComponent, onMounted, reactive, toRefs } from "vue";
 import AudioPlayer from "@/utils/AudioPlayer";
 import { ChimeItem } from "umesseapi/models";
-import { useGlobalStore } from "@/store";
 import { useRoute, useRouter } from "vue-router";
 import * as Common from "@/utils/Common";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
@@ -109,6 +108,7 @@ import Constants from "@/utils/Constants";
 import useModalController from "@/mixins/modalController";
 import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
+import { useCmStore } from "@/store/cm";
 
 export default defineComponent({
   components: {
@@ -131,7 +131,7 @@ export default defineComponent({
     const router = useRouter();
     const route = useRoute();
     const audioPlayer = AudioPlayer();
-    const { cm } = useGlobalStore();
+    const cm = useCmStore();
     const sortList = Common.getSort();
     const isOpenChime = route.params.div == "open";
     const title = isOpenChime ? "開始チャイム" : "終了チャイム";
@@ -198,7 +198,11 @@ export default defineComponent({
           chime.id,
           chime.category
         );
-        analytics.pressButtonPlayTrial(chime.id, Constants.CATEGORY.CHIME, Constants.SCREEN.CHIME);
+        analytics.pressButtonPlayTrial(
+          chime.id,
+          Constants.CATEGORY.CHIME,
+          Constants.SCREEN.CHIME
+        );
         audioPlayer.start(audioBuffer);
       } catch (e) {
         openErrorModal(e);

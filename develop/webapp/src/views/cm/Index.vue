@@ -103,9 +103,9 @@
               :key="narration.contentsId"
               :title="
                 'ナレーション ' +
-                  `${index + 1}` +
-                  '/' +
-                  `${MAX_NARRATION_COUNT}`
+                `${index + 1}` +
+                '/' +
+                `${MAX_NARRATION_COUNT}`
               "
               size="flexible"
               :contentTitle="`${narration.title}`"
@@ -183,9 +183,9 @@
               <CmItem
                 :title="
                   'ナレーション ' +
-                    `${narrations.length + 1}` +
-                    '/' +
-                    `${MAX_NARRATION_COUNT}`
+                  `${narrations.length + 1}` +
+                  '/' +
+                  `${MAX_NARRATION_COUNT}`
                 "
                 :isEmpty="true"
                 :contentTitleName="'narration' + `${narrations.length}`"
@@ -642,7 +642,7 @@ import CmLayout from "@/components/templates/CmLayout.vue";
 import CmItem from "@/components/molecules/CmItem.vue";
 import DropdownMenu from "@/components/molecules/DropdownMenu.vue";
 import VolumeSlider from "@/components/molecules/VolumeSlider.vue";
-import { MAX_NARRATION_COUNT, UPLOAD_CM_STATE } from "@/store/cm";
+import { MAX_NARRATION_COUNT, UPLOAD_CM_STATE, useCmStore } from "@/store/cm";
 import router from "@/router";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { audioService } from "@/services";
@@ -678,8 +678,8 @@ export default defineComponent({
   },
   setup() {
     const audioPlayer = AudioPlayer();
-    const { auth, cm } = useGlobalStore();
-    const authToken = <string>auth.getToken();
+    const { auth } = useGlobalStore();
+    const cm = useCmStore();
     const authUser = <User>auth.getUserInfo();
     const uploadSystemArray = Common.getUploadSystemService(authUser.serviceCd);
     const industryScenesList = Common.getInputScenes();
@@ -764,12 +764,8 @@ export default defineComponent({
       isEndChimeSliderAppear: false,
       isBgmSliderAppear: false,
       narrationIndex: 0,
-      backScreenName: computed(() =>
-        !cm.isEdit ? "ホーム" : "管理"
-      ),
-      toBackFunction: computed(() =>
-        !cm.isEdit ? toHome : toManagement
-      ),
+      backScreenName: computed(() => (!cm.isEdit ? "ホーム" : "管理")),
+      toBackFunction: computed(() => (!cm.isEdit ? toHome : toManagement)),
     });
 
     const playOpenChime = async () => {
@@ -867,7 +863,7 @@ export default defineComponent({
     const clickConfirm = async () => {
       try {
         openLoadingModal();
-        await cm.create(authToken);
+        await cm.create();
         closeLoadingModal();
         openSaveModal();
       } catch (e) {
@@ -880,7 +876,7 @@ export default defineComponent({
     const createAndOpenPlayModal = async () => {
       try {
         openPlayModal();
-        await cm.create(authToken);
+        await cm.create();
       } catch (e) {
         closePlayModal();
         openErrorModal(e);
@@ -895,7 +891,6 @@ export default defineComponent({
       try {
         openLoadingModal();
         await cm.update(
-          authToken,
           state.title,
           state.description,
           state.scene,
@@ -970,7 +965,7 @@ export default defineComponent({
       displayCache.remove(DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_SORT);
     };
     const toHome = () => {
-      cm.reset(authToken);
+      cm.reset();
       router.push({
         path: "/",
         query: { unisCustomerCd: authUser.unisCustomerCd },
@@ -989,7 +984,7 @@ export default defineComponent({
       router.push({ name: "VoiceFree" });
     };
     const toManagement = () => {
-      cm.reset(authToken);
+      cm.reset();
       router.push({
         name: "Management",
       });

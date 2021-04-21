@@ -5,6 +5,17 @@
   </div>
 </template>
 
+<script lang="ts">
+import { defineComponent } from "vue";
+import { provideCmStore } from "./store/cm";
+
+export default defineComponent({
+  setup() {
+    provideCmStore();
+  },
+});
+</script>
+
 <style>
 * {
   padding: 0;
