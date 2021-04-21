@@ -736,7 +736,6 @@ export default defineComponent({
       open: openErrorModal,
       close: closeErrorModal,
     } = useErrorModalController();
-
     const state = reactive({
       cmTime: computed(() => cm.secounds),
       openChime: computed(() => cm.openChime),
@@ -764,8 +763,6 @@ export default defineComponent({
       isEndChimeSliderAppear: false,
       isBgmSliderAppear: false,
       narrationIndex: 0,
-      backScreenName: computed(() => (!cm.isEdit ? "ホーム" : "管理")),
-      toBackFunction: computed(() => (!cm.isEdit ? toHome : toManagement)),
     });
 
     const playOpenChime = async () => {
@@ -894,7 +891,7 @@ export default defineComponent({
           state.title,
           state.description,
           state.scene,
-          state.uploadSystem
+          state.uploadSystem,
         );
         closeSaveModal();
         openSavedModal();
@@ -1139,6 +1136,8 @@ export default defineComponent({
         Constants.SCREEN.CM
       );
     };
+    const backScreenName = cm.isEdit ? "管理" : "ホーム";
+    const toBackFunction = cm.isEdit ? toManagement : toHome;
     return {
       ...toRefs(state),
       clearNarration,
@@ -1223,6 +1222,8 @@ export default defineComponent({
       errorMessage,
       openErrorModal,
       closeErrorModal,
+      backScreenName,
+      toBackFunction,
     };
   },
 });

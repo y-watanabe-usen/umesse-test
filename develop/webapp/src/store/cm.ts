@@ -59,7 +59,7 @@ export default function cmStore() {
     title: string,
     description: string | null,
     sceneCd: string,
-    uploadSystem: string
+    uploadSystem: string,
   ) => {
     try {
       let manuscript = "";
