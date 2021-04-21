@@ -752,7 +752,7 @@ export default defineComponent({
       title: cm.title,
       description: cm.description,
       scene: "004",
-      uploadSystem: Common.getUploadSystemServiceCd(
+      uploadSystem: common.getUploadSystemServiceCd(
         authUser.serviceCd,
         cm.uploadSystem,
         cm.isEdit
