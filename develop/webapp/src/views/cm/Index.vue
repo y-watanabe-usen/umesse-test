@@ -103,9 +103,9 @@
               :key="narration.contentsId"
               :title="
                 'ナレーション ' +
-                `${index + 1}` +
-                '/' +
-                `${MAX_NARRATION_COUNT}`
+                  `${index + 1}` +
+                  '/' +
+                  `${MAX_NARRATION_COUNT}`
               "
               size="flexible"
               :contentTitle="`${narration.title}`"
@@ -183,9 +183,9 @@
               <CmItem
                 :title="
                   'ナレーション ' +
-                  `${narrations.length + 1}` +
-                  '/' +
-                  `${MAX_NARRATION_COUNT}`
+                    `${narrations.length + 1}` +
+                    '/' +
+                    `${MAX_NARRATION_COUNT}`
                 "
                 :isEmpty="true"
                 :contentTitleName="'narration' + `${narrations.length}`"
@@ -752,8 +752,11 @@ export default defineComponent({
       title: cm.title,
       description: cm.description,
       scene: "004",
-      uploadSystem:
-        authUser.serviceCd === Constants.SERVICE_CD_UMUSIC ? "01" : "02",
+      uploadSystem: Common.getUploadSystemServiceCd(
+        authUser.serviceCd,
+        cm.uploadSystem,
+        cm.isEdit
+      ),
       isNarrationDropdownAppear: [false, false, false, false],
       isOpenChimeDropdownAppear: false,
       isEndChimeDropdownAppear: false,
@@ -891,7 +894,7 @@ export default defineComponent({
           state.title,
           state.description,
           state.scene,
-          state.uploadSystem,
+          state.uploadSystem
         );
         closeSaveModal();
         openSavedModal();

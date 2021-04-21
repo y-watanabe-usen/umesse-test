@@ -203,6 +203,9 @@ export default function cmStore() {
     get isEdit() {
       return state.displayCmItem.isEdit;
     },
+    get uploadSystem() {
+      return state.displayCmItem.uploadSystem;
+    },
     clearNarration,
     clearAllNarration,
     clearOpenChime,

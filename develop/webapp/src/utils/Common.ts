@@ -14,7 +14,18 @@ import PackageJson from "@/../../webapp/package.json";
  * @return Industry[]
  */
 export function getNarrationIndustries() {
-  const getCdList = ["02", "10", "20", "30", "31", "40", "50", "51", "90", "99"];
+  const getCdList = [
+    "02",
+    "10",
+    "20",
+    "30",
+    "31",
+    "40",
+    "50",
+    "51",
+    "90",
+    "99",
+  ];
   return getIndustries(getCdList);
 }
 
@@ -478,9 +489,9 @@ export function getLangs(langList?: string[]) {
     if (lang) result.push(lang);
   });
 
-  result.sort(function(a,b){
-    if(a.sort < b.sort) return -1;
-    if(a.sort > b.sort) return 1;
+  result.sort(function(a, b) {
+    if (a.sort < b.sort) return -1;
+    if (a.sort > b.sort) return 1;
     return 0;
   });
 
@@ -504,6 +515,33 @@ export function getUploadSystemService(serviceCd: string) {
   }
 
   return getUploadDestination(getCdList);
+}
+
+/**
+ * CM作成で設定したCMアップロード先のCDを取得する（CM作成画面の確認モーダルのアップロード先）
+ * @param authUserServiceCd string
+ * @param uploadSystem string
+ * @param isEdit boolean
+ * @return string
+ */
+export function getUploadSystemServiceCd(
+  authUserServiceCd: string,
+  uploadSystem: string,
+  isEdit: boolean
+) {
+  const userServiceCd =
+    authUserServiceCd === Constants.SERVICE_CD_UMUSIC ? "01" : "02";
+
+  if (!isEdit) return userServiceCd;
+
+  if (
+    uploadSystem === Constants.UPLOAD_SYSTEM_UMUSIC ||
+    uploadSystem === Constants.UPLOAD_SYSTEM_SSENCE
+  ) {
+    return userServiceCd;
+  } else {
+    return "99";
+  }
 }
 
 function getIndustries(cdList: string[]) {

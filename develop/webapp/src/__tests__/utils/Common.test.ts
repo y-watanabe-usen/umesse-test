@@ -711,3 +711,45 @@ describe("getUploadSystemServiceのテスト", () => {
     });
   });
 });
+
+describe("getUploadSystemServiceCdのテスト", () => {
+  const datas = [
+    {
+      authUserServiceCd: "U01",
+      uploadSystem: "01",
+      isEdit: false,
+      expected: "01",
+    },
+    {
+      authUserServiceCd: "U01",
+      uploadSystem: "01",
+      isEdit: true,
+      expected: "01",
+    },
+    {
+      authUserServiceCd: "U17",
+      uploadSystem: "02",
+      isEdit: true,
+      expected: "02",
+    },
+    {
+      authUserServiceCd: "U01",
+      uploadSystem: "99",
+      isEdit: true,
+      expected: "99",
+    },
+    {
+      authUserServiceCd: "U01",
+      uploadSystem: "",
+      isEdit: true,
+      expected: "99",
+    },
+  ];
+  datas.forEach((v) => {
+    test(`紐づくアップロード先CDが返ること`, () => {
+      expect(
+        Common.getUploadSystemServiceCd(v.authUserServiceCd, v.uploadSystem, v.isEdit)
+      ).toStrictEqual(v.expected);
+    });
+  });
+});
