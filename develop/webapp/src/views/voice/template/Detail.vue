@@ -819,7 +819,7 @@ export default defineComponent({
   bottom: -24px;
   caret-color: transparent;
   &.errorLangs {
-    width: 15em;
+    width: 20em;
     left: 0px;
   }
   &.errorCustomerName {
