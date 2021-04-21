@@ -27,7 +27,7 @@ export function useResourcesService(
       if (sceneCd == "901") {
         return new Promise(function (resolve, reject) {
           recordingApi
-            .listUserRecording(authToken)
+            .listUserRecording(authToken, sort)
             .then((value) => {
               const data: NarrationItem[] = [];
               value.data.forEach((v) => {
@@ -50,7 +50,7 @@ export function useResourcesService(
       } else {
         return new Promise(function (resolve, reject) {
           ttsApi
-            .listUserTts(authToken)
+            .listUserTts(authToken, sort)
             .then((value) => {
               console.log(value);
               const data: NarrationItem[] = [];
