@@ -126,10 +126,34 @@ describe("USEN素材データ取得", () => {
 
 // ユーザー音声データ取得
 describe("ユーザー音声データ取得", () => {
+  test("[success] 録音音声データ一覧取得", async () => {
+    await expect(
+      getUserResource(data.unisCustomerCd, "recording")
+    ).resolves.toEqual(data.recording);
+  });
+
+  test("[success] 録音音声データ一覧取得ソート", async () => {
+    await expect(
+      getUserResource(data.unisCustomerCd, "recording", "", 2)
+    ).resolves.toEqual(data.recording.slice().reverse());
+  });
+
   test("[success] 録音音声データ取得", async () => {
     await expect(
       getUserResource(data.unisCustomerCd, "recording", data.recording[0].id)
     ).resolves.toEqual(data.recording[0]);
+  });
+
+  test("[success] 合成音声データ一覧取得", async () => {
+    await expect(getUserResource(data.unisCustomerCd, "tts")).resolves.toEqual(
+      data.tts
+    );
+  });
+
+  test("[success] 合成音声データ一覧取得ソート", async () => {
+    await expect(
+      getUserResource(data.unisCustomerCd, "tts", "", 2)
+    ).resolves.toEqual(data.tts.slice().reverse());
   });
 
   test("[success] 合成音声データ取得", async () => {

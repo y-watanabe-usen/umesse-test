@@ -5,16 +5,16 @@ process.env.environment = "localstack";
 const { constants } = require("umesse-lib/constants");
 const { dynamodbManager } = require("umesse-lib/utils/dynamodbManager");
 
-async function main() {
+async function deleteTable(table) {
   let ret;
   try {
-    ret = await dynamodbManager.scan(constants.dynamoDbTable().external, {});
+    ret = await dynamodbManager.scan(table, {});
     if (!ret || ret.Count === 0) {
-      console.debug("not record.");
+      console.debug(`not record. ${table}`);
       return;
     }
     for (let item of ret.Items) {
-      console.debug(`delete unisCustomerCd: ${item.unisCustomerCd}`);
+      console.debug(`delete ${table} unisCustomerCd: ${item.unisCustomerCd}`);
       const _ = await dynamodbManager.delete(
         constants.dynamoDbTable().external,
         { unisCustomerCd: item.unisCustomerCd }
@@ -25,4 +25,5 @@ async function main() {
   }
 }
 
-main();
+deleteTable(constants.dynamoDbTable().users);
+deleteTable(constants.dynamoDbTable().external);
