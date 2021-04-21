@@ -365,7 +365,8 @@ export default defineComponent({
       }),
     });
     const openModal = () => {
-      state.playLang = state.langs[0];
+      const selectLang = Common.getLangs(state.langs);
+      state.playLang = selectLang[0].cd;
       isModalAppear.value = true;
     };
     const play = async () => {
@@ -543,9 +544,7 @@ export default defineComponent({
       }
     };
     const getLangsTitle = (langs: string[]) => {
-      const selectLang = Common.getLangs(langs);
-      state.playLang = selectLang[0].cd;
-      return selectLang;
+      return Common.getLangs(langs);
     };
 
     onMounted(() => {
