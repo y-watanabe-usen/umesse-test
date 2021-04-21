@@ -33,8 +33,8 @@ module.exports.getUserRecording = function getUserRecording (req, res, next, id,
     });
 };
 
-module.exports.listUserRecording = function listUserRecording (req, res, next, xUnisCustomerCd) {
-  Recording.listUserRecording(xUnisCustomerCd)
+module.exports.listUserRecording = function listUserRecording (req, res, next, sort, xUnisCustomerCd) {
+  Recording.listUserRecording(sort, xUnisCustomerCd)
     .then(function (response) {
       utils.writeJson(res, response);
     })

@@ -222,10 +222,11 @@ export const TtsApiAxiosParamCreator = function (configuration?: Configuration) 
          * 合成音声素材の情報を一覧で取得する
          * @summary TTSデータ一覧取得
          * @param {string} xUnisCustomerCd UNIS顧客CD
+         * @param {number} [sort] ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listUserTts: async (xUnisCustomerCd: string, options: any = {}): Promise<RequestArgs> => {
+        listUserTts: async (xUnisCustomerCd: string, sort?: number, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'xUnisCustomerCd' is not null or undefined
             if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
                 throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling listUserTts.');
@@ -240,6 +241,10 @@ export const TtsApiAxiosParamCreator = function (configuration?: Configuration) 
             const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
             const localVarHeaderParameter = {} as any;
             const localVarQueryParameter = {} as any;
+
+            if (sort !== undefined) {
+                localVarQueryParameter['sort'] = sort;
+            }
 
             if (xUnisCustomerCd !== undefined && xUnisCustomerCd !== null) {
                 localVarHeaderParameter['x-unis-customer-cd'] = String(xUnisCustomerCd);
@@ -388,11 +393,12 @@ export const TtsApiFp = function(configuration?: Configuration) {
          * 合成音声素材の情報を一覧で取得する
          * @summary TTSデータ一覧取得
          * @param {string} xUnisCustomerCd UNIS顧客CD
+         * @param {number} [sort] ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listUserTts(xUnisCustomerCd: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<TtsItem>>> {
-            const localVarAxiosArgs = await TtsApiAxiosParamCreator(configuration).listUserTts(xUnisCustomerCd, options);
+        async listUserTts(xUnisCustomerCd: string, sort?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<TtsItem>>> {
+            const localVarAxiosArgs = await TtsApiAxiosParamCreator(configuration).listUserTts(xUnisCustomerCd, sort, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -471,11 +477,12 @@ export const TtsApiFactory = function (configuration?: Configuration, basePath?:
          * 合成音声素材の情報を一覧で取得する
          * @summary TTSデータ一覧取得
          * @param {string} xUnisCustomerCd UNIS顧客CD
+         * @param {number} [sort] ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listUserTts(xUnisCustomerCd: string, options?: any): AxiosPromise<Array<TtsItem>> {
-            return TtsApiFp(configuration).listUserTts(xUnisCustomerCd, options).then((request) => request(axios, basePath));
+        listUserTts(xUnisCustomerCd: string, sort?: number, options?: any): AxiosPromise<Array<TtsItem>> {
+            return TtsApiFp(configuration).listUserTts(xUnisCustomerCd, sort, options).then((request) => request(axios, basePath));
         },
         /**
          * 合成音声素材の情報を更新する
@@ -551,12 +558,13 @@ export class TtsApi extends BaseAPI {
      * 合成音声素材の情報を一覧で取得する
      * @summary TTSデータ一覧取得
      * @param {string} xUnisCustomerCd UNIS顧客CD
+     * @param {number} [sort] ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof TtsApi
      */
-    public listUserTts(xUnisCustomerCd: string, options?: any) {
-        return TtsApiFp(this.configuration).listUserTts(xUnisCustomerCd, options).then((request) => request(this.axios, this.basePath));
+    public listUserTts(xUnisCustomerCd: string, sort?: number, options?: any) {
+        return TtsApiFp(this.configuration).listUserTts(xUnisCustomerCd, sort, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * 合成音声素材の情報を更新する
