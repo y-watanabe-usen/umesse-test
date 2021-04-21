@@ -1,4 +1,4 @@
-import { UMesseErrorFromAuthFactory } from "@/models/UMesseError";
+import { UMesseErrorFromAuthFactory } from "@/models/umesseError";
 import { AuthApi, UserApi } from "umesseapi";
 
 export function useUserService(

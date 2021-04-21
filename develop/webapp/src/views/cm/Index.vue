@@ -621,10 +621,10 @@ import {
   onMounted,
   onUnmounted,
 } from "vue";
-import AudioPlayer from "@/utils/AudioPlayer";
+import useAudioPlayer from "@/utils/audioPlayer";
 import { useGlobalStore } from "@/store";
-import * as FormatDate from "@/utils/FormatDate";
-import Constants from "@/utils/Constants";
+import * as formatDate from "@/utils/formatDate";
+import Constants from "@/utils/constants";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import Header from "@/components/organisms/Header.vue";
 import Button from "@/components/atoms/Button.vue";
@@ -646,7 +646,7 @@ import { MAX_NARRATION_COUNT, UPLOAD_CM_STATE, useCmStore } from "@/store/cm";
 import router from "@/router";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { audioService } from "@/services";
-import * as Common from "@/utils/Common";
+import * as common from "@/utils/common";
 import { User } from "umesseapi/models";
 import analytics from "@/utils/firebaseAnalytics";
 import useModalController from "@/mixins/modalController";
@@ -677,12 +677,12 @@ export default defineComponent({
     ModalLoading,
   },
   setup() {
-    const audioPlayer = AudioPlayer();
+    const audioPlayer = useAudioPlayer();
     const { auth } = useGlobalStore();
     const cm = useCmStore();
     const authUser = <User>auth.getUserInfo();
-    const uploadSystemArray = Common.getUploadSystemService(authUser.serviceCd);
-    const industryScenesList = Common.getInputScenes();
+    const uploadSystemArray = common.getUploadSystemService(authUser.serviceCd);
+    const industryScenesList = common.getInputScenes();
     const {
       isApper: isPlayModalAppear,
       open: openPlayModal,
@@ -921,7 +921,7 @@ export default defineComponent({
       closePlayEndChimeModal();
     };
     const convertNumberToTime = (second: number) =>
-      FormatDate.convertNumberToTime(second);
+      formatDate.convertNumberToTime(second);
 
     const addRecording = () => {
       cm.unSelectNarrationIndex();

@@ -1,4 +1,4 @@
-import { ERROR_CODE, ERROR_PATTERN } from "@/utils/Constants";
+import { ERROR_CODE, ERROR_PATTERN } from "@/utils/constants";
 
 export class UMesseError extends Error {
   constructor(

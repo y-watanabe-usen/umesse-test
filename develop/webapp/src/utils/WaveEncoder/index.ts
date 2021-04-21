@@ -1,4 +1,4 @@
-import { WaveEncoder } from './WaveEncoder';
+import { WaveEncoder } from '@/utils/waveEncoder/waveEncoder';
 
 const useWaveEncoder = new WaveEncoder();
 export { useWaveEncoder };

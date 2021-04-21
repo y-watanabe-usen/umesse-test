@@ -96,10 +96,10 @@
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, reactive, toRefs } from "vue";
-import AudioPlayer from "@/utils/AudioPlayer";
+import useAudioPlayer from "@/utils/audioPlayer";
 import { BgmItem } from "umesseapi/models";
 import { useRouter } from "vue-router";
-import * as Common from "@/utils/Common";
+import * as common from "@/utils/common";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
 import Header from "@/components/organisms/Header.vue";
@@ -118,7 +118,7 @@ import PlayDialogContents from "@/components/molecules/PlayDialogContents.vue";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { audioService, resourcesService } from "@/services";
 import analytics from "@/utils/firebaseAnalytics";
-import Constants from "@/utils/Constants";
+import Constants from "@/utils/constants";
 import useModalController from "@/mixins/modalController";
 import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
@@ -145,9 +145,9 @@ export default defineComponent({
   },
   setup() {
     const router = useRouter();
-    const audioPlayer = AudioPlayer();
+    const audioPlayer = useAudioPlayer();
     const cm = useCmStore();
-    const sortList = Common.getSort();
+    const sortList = common.getSort();
     const {
       isApper: isPlayModalAppear,
       open: openPlayModal,
@@ -171,7 +171,7 @@ export default defineComponent({
       activeIndustryCd: "10",
       sort: 1,
       bgms: [] as BgmItem[],
-      industries: computed(() => Common.getBgmIndustries()),
+      industries: computed(() => common.getBgmIndustries()),
       selectedBgm: null as BgmItem | null,
       isPlaying: computed(() => audioPlayer.isPlaying()),
       isDownloading: false,
@@ -215,7 +215,11 @@ export default defineComponent({
       try {
         state.isDownloading = true;
         const audioBuffer = await audioService.getById(bgm.id, bgm.category);
-        analytics.pressButtonPlayTrial(bgm.id, Constants.CATEGORY.BGM, Constants.SCREEN.BGM);
+        analytics.pressButtonPlayTrial(
+          bgm.id,
+          Constants.CATEGORY.BGM,
+          Constants.SCREEN.BGM
+        );
         audioPlayer.start(audioBuffer);
       } catch (e) {
         openErrorModal(e);

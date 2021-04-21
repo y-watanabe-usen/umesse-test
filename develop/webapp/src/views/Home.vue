@@ -35,7 +35,7 @@ import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
 import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
 import analytics from "@/utils/firebaseAnalytics";
-import Constants from "@/utils/Constants";
+import Constants from "@/utils/constants";
 
 export default defineComponent({
   components: {

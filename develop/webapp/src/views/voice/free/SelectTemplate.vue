@@ -127,7 +127,7 @@
 
 <script lang="ts">
 import { defineComponent, onMounted, reactive, toRefs } from "vue";
-import * as Common from "@/utils/Common";
+import * as common from "@/utils/common";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
 import Header from "@/components/organisms/Header.vue";
@@ -149,12 +149,12 @@ import router from "@/router";
 import {
   convertNumberToTime,
   convertDatestringToDate,
-} from "@/utils/FormatDate";
+} from "@/utils/formatDate";
 import { resourcesService } from "@/services";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { displayCache } from "@/repository/cache";
 import analytics from "@/utils/firebaseAnalytics";
-import Constants, { Scene } from "@/utils/Constants";
+import Constants, { Scene } from "@/utils/constants";
 import useModalController from "@/mixins/modalController";
 import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
@@ -182,8 +182,8 @@ export default defineComponent({
   setup() {
     const { auth } = useGlobalStore();
     const authToken = <string>auth.getToken();
-    const sortList = Common.getSort();
-    const industries = Common.getTemplateIndustries();
+    const sortList = common.getSort();
+    const industries = common.getTemplateIndustries();
     const {
       isApper: isDocumentModalAppear,
       open: openDocumentModal,
@@ -239,7 +239,7 @@ export default defineComponent({
     };
 
     const fetchScene = () => {
-      state.scenes = Common.getIndustryScenes(state.activeIndustryCd);
+      state.scenes = common.getIndustryScenes(state.activeIndustryCd);
       state.freeItems = [];
     };
 

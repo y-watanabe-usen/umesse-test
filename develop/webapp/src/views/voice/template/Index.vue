@@ -133,9 +133,9 @@ import List from "@/components/organisms/List.vue";
 import ListHeader from "@/components/molecules/ListHeader.vue";
 import ListItem from "@/components/molecules/ListItem.vue";
 import { TemplateItem } from "umesseapi/models";
-import * as Common from "@/utils/Common";
+import * as common from "@/utils/common";
 import router from "@/router";
-import { convertDatestringToDate } from "@/utils/FormatDate";
+import { convertDatestringToDate } from "@/utils/formatDate";
 import ModalDialog from "@/components/organisms/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
@@ -148,7 +148,7 @@ import analytics from "@/utils/firebaseAnalytics";
 import useLoadingModalController from "@/mixins/loadingModalController";
 import useModalController from "@/mixins/modalController";
 import useErrorModalController from "@/mixins/errorModalController";
-import Constants, { Scene } from "@/utils/Constants";
+import Constants, { Scene } from "@/utils/constants";
 import { DISPLAY_CACHE_KEY } from "@/repository/cache/displayCache";
 
 export default defineComponent({
@@ -171,8 +171,8 @@ export default defineComponent({
     TextDialogContents,
   },
   setup() {
-    const sortList = Common.getSort();
-    const industries = Common.getTemplateIndustries();
+    const sortList = common.getSort();
+    const industries = common.getTemplateIndustries();
     const {
       isApper: isDocumentModalAppear,
       open: openDocumentModal,
@@ -287,7 +287,7 @@ export default defineComponent({
     });
 
     const fetchScene = () => {
-      state.scenes = Common.getIndustryScenes(state.activeIndustryCd);
+      state.scenes = common.getIndustryScenes(state.activeIndustryCd);
       state.templates = [];
     };
     const clickScene = (sceneCd: string) => {

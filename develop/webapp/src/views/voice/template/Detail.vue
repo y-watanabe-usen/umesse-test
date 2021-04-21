@@ -183,7 +183,7 @@
 <script lang="ts">
 import { computed, defineComponent, reactive, toRefs, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import AudioPlayer from "@/utils/AudioPlayer";
+import useAudioPlayer from "@/utils/audioPlayer";
 import provideTtsStore from "@/store/tts";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
@@ -200,9 +200,9 @@ import TextArea from "@/components/atoms/TextArea.vue";
 import SelectBox from "@/components/atoms/SelectBox.vue";
 import TimeInput from "@/components/atoms/TimeInput.vue";
 import { TemplateItem } from "umesseapi/models";
-import Constants from "@/utils/Constants";
+import Constants from "@/utils/constants";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
-import { lang, speaker, TemplateDetailItem } from "@/models/TemplateDetailItem";
+import { lang, speaker, TemplateDetailItem } from "@/models/templateDetailItem";
 import validator from "@/utils/validator";
 import { audioService } from "@/services";
 import { displayCache } from "@/repository/cache";
@@ -214,7 +214,7 @@ import Age from "@/components/molecules/Age.vue";
 import Minutes from "@/components/molecules/Minutes.vue";
 import Point from "@/components/molecules/Point.vue";
 import ttsTextConverter, { ConverterType } from "@/utils/ttsTextConverter";
-import * as Common from "@/utils/Common";
+import * as common from "@/utils/common";
 import { NarrationItem } from "umesseapi/models";
 import { MAX_NARRATION_COUNT, useCmStore } from "@/store/cm";
 import analytics from "@/utils/firebaseAnalytics";
@@ -251,7 +251,7 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const ttsStore = provideTtsStore(); //FIXME: provide name.
-    const audioPlayer = AudioPlayer();
+    const audioPlayer = useAudioPlayer();
     const ttsSpeakers = Constants.TTS_GENDERS;
     const cm = useCmStore();
 
@@ -367,7 +367,7 @@ export default defineComponent({
       }),
     });
     const openModal = () => {
-      const selectLang = Common.getLangs(state.langs);
+      const selectLang = common.getLangs(state.langs);
       let index = 0;
       selectLang.forEach((v) => {
         state.langs.splice(index, 1, v.cd);
@@ -551,7 +551,7 @@ export default defineComponent({
       }
     };
     const getLangsTitle = (langs: string[]) => {
-      return Common.getLangs(langs);
+      return common.getLangs(langs);
     };
 
     onMounted(() => {

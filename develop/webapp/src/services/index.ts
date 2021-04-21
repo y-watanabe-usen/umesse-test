@@ -1,12 +1,12 @@
-import { useResourcesService } from "./resourcesService";
-import { useRecordingService } from "./recordingService";
-import { useCmService } from "./cmService";
+import { useResourcesService } from "@/services/resourcesService";
+import { useRecordingService } from "@/services/recordingService";
+import { useCmService } from "@/services/cmService";
 import { useTtsService } from "./ttsService";
 import { audioRepository, authRepository, cmRepository, recordingRepository, resourcesRepository, ttsRepository, userRepository, uploadRepository } from "@/repository/api";
-import { useAudioService } from "./audioService";
+import { useAudioService } from "@/services/audioService";
 import { audioCache, cmCache, ttsCache } from "@/repository/cache";
-import { useUserService } from "./userService";
-import { useUploadService } from "./uploadService";
+import { useUserService } from "@/services/userService";
+import { useUploadService } from "@/services/uploadService";
 
 const audioContext = new AudioContext();
 const fileReader = new FileReader();

@@ -1,4 +1,4 @@
-import * as Common from "@/utils/Common";
+import * as common from "@/utils/common";
 
 describe("getNarrationIndustriesのテスト", () => {
   const expected = [
@@ -14,7 +14,7 @@ describe("getNarrationIndustriesのテスト", () => {
     { cd: "99", name: "全業種", sort: 11 },
   ];
   test(`指定（02, 10, 20, 30, 31, 40, 50, 51, 90, 99）の業種一覧が返ること`, () => {
-    expect(Common.getNarrationIndustries()).toEqual(expected);
+    expect(common.getNarrationIndustries()).toEqual(expected);
   });
 });
 
@@ -320,7 +320,7 @@ describe("getIndustryScenesのテスト", () => {
   ];
   datas.forEach((v) => {
     test(`引数に${v.industryCd}を渡すと${v.industryCd}に紐づくシーン一覧が返ること`, () => {
-      expect(Common.getIndustryScenes(v.industryCd)).toEqual(v.expected);
+      expect(common.getIndustryScenes(v.industryCd)).toEqual(v.expected);
     });
   });
 });
@@ -338,7 +338,7 @@ describe("getBgmIndustriesのテスト", () => {
     { cd: "99", name: "全業種", sort: 11 },
   ];
   test(`10, 20 ,30 ,31 ,40 ,50, 51, 90, 99に紐づく業種一覧が返ること`, () => {
-    expect(Common.getBgmIndustries()).toEqual(expected);
+    expect(common.getBgmIndustries()).toEqual(expected);
   });
 });
 
@@ -355,7 +355,7 @@ describe("getTemplateIndustriesのテスト", () => {
     { cd: "99", name: "全業種", sort: 11 },
   ];
   test(`10, 20, 30, 31, 40, 50, 51, 90, 99に紐づく業種一覧が返ること`, () => {
-    expect(Common.getTemplateIndustries()).toEqual(expected);
+    expect(common.getTemplateIndustries()).toEqual(expected);
   });
 });
 
@@ -372,7 +372,7 @@ describe("getFreeTemplateIndustriesのテスト", () => {
     { cd: "99", name: "全業種", sort: 11 },
   ];
   test(`10, 20, 30, 31, 40, 50, 51, 90, 99に紐づく業種一覧が返ること`, () => {
-    expect(Common.getFreeTemplateIndustries()).toEqual(expected);
+    expect(common.getFreeTemplateIndustries()).toEqual(expected);
   });
 });
 
@@ -427,7 +427,7 @@ describe("getInputScenesのテスト", () => {
     { cd: "053", name: "誕生日演出" },
   ];
   test(`保存するシーンの一覧が返ること`, () => {
-    expect(Common.getInputScenes()).toEqual(expected);
+    expect(common.getInputScenes()).toEqual(expected);
   });
 });
 
@@ -490,7 +490,7 @@ describe("getManagementScenesのテスト", () => {
     { cd: "902", name: "音声合成" },
   ];
   test(`全シーン一覧が返ること`, () => {
-    expect(Common.getManagementScenes()).toEqual(expected);
+    expect(common.getManagementScenes()).toEqual(expected);
   });
 });
 
@@ -502,7 +502,7 @@ describe("getSettingAppInformationsのテスト", () => {
     { cd: "04", name: "お客様情報" },
   ];
   test(`全設定項目が返ること`, () => {
-    expect(Common.getSettingAppInformations()).toEqual(expected);
+    expect(common.getSettingAppInformations()).toEqual(expected);
   });
 });
 
@@ -514,7 +514,7 @@ describe("getSortのテスト", () => {
     { cd: 4, name: "日時降順" },
   ];
   test(`1, 2, 3, 4に紐づく並び替えが返ること`, () => {
-    expect(Common.getSort()).toEqual(expected);
+    expect(common.getSort()).toEqual(expected);
   });
 });
 
@@ -531,7 +531,7 @@ describe("isRecordingByIdのテスト", () => {
   ];
   datas.forEach((v) => {
     test(`引数に${v.id}を渡すと${v.expected}が返ること`, () => {
-      expect(Common.isRecordingById(v.id)).toBe(v.expected);
+      expect(common.isRecordingById(v.id)).toBe(v.expected);
     });
   });
 });
@@ -549,14 +549,14 @@ describe("isTtsByIdのテスト", () => {
   ];
   datas.forEach((v) => {
     test(`引数に${v.id}を渡すと${v.expected}が返ること`, () => {
-      expect(Common.isTtsById(v.id)).toBe(v.expected);
+      expect(common.isTtsById(v.id)).toBe(v.expected);
     });
   });
 });
 
 describe("getVersionのテスト", () => {
   test(`package.jsonのバージョン（例: 0.1.0）が返ること`, () => {
-    expect(Common.getVersion()).toMatch(/^[0-9].[0-9].[0-9]$/);
+    expect(common.getVersion()).toMatch(/^[0-9].[0-9].[0-9]$/);
   });
 });
 
@@ -567,7 +567,7 @@ describe("rangeのテスト", () => {
   ];
   datas.forEach((v) => {
     test(`引数に(${v.from}, ${v.to})を渡すと${v.expected}が返ること`, () => {
-      expect(Common.range(v.from, v.to)).toStrictEqual(v.expected);
+      expect(common.range(v.from, v.to)).toStrictEqual(v.expected);
     });
   });
 });
@@ -682,7 +682,7 @@ describe("getLangsのテスト", () => {
   ];
   datas.forEach((v) => {
     test(`引数に${v.langs}を渡すと${v.langs}に紐づく言語が返ること`, () => {
-      expect(Common.getLangs(v.langs)).toEqual(v.expected);
+      expect(common.getLangs(v.langs)).toEqual(v.expected);
     });
   });
 });
@@ -707,7 +707,7 @@ describe("getUploadSystemServiceのテスト", () => {
   ];
   datas.forEach((v) => {
     test(`引数に(${v.cd})を渡すと${v.cd}に紐づくアップロード先情報が返ること`, () => {
-      expect(Common.getUploadSystemService(v.cd)).toStrictEqual(v.expected);
+      expect(common.getUploadSystemService(v.cd)).toStrictEqual(v.expected);
     });
   });
 });

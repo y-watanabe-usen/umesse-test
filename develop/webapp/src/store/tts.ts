@@ -4,15 +4,15 @@ import { TtsItem } from "umesseapi/models/tts-item";
 import {
   GenerateUserTtsRequestDetailItem,
   GenerateUserTtsRequestItem,
-} from "@/models/GenerateUserTtsRequestItem";
+} from "@/models/generateUserTtsRequestItem";
 import {
   CreateUserTtsRequestDetailItem,
   CreateUserTtsRequestItem,
-} from "@/models/CreateUserTtsRequestItem";
-import { TemplateDetailItem } from "@/models/TemplateDetailItem";
+} from "@/models/createUserTtsRequestItem";
+import { TemplateDetailItem } from "@/models/templateDetailItem";
 import { ttsService } from "@/services";
 import ttsTextConverter from "@/utils/ttsTextConverter";
-import Constants from "@/utils/Constants";
+import Constants from "@/utils/constants";
 
 interface TtsData {
   url: string;

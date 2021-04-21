@@ -98,7 +98,7 @@
 <script lang="ts">
 import { defineComponent, reactive, computed, toRefs, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import AudioPlayer from "@/utils/AudioPlayer";
+import useAudioPlayer from "@/utils/audioPlayer";
 import provideTtsStore from "@/store/tts";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
@@ -113,7 +113,7 @@ import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
 import SelectBox from "@/components/atoms/SelectBox.vue";
-import Constants from "@/utils/Constants";
+import Constants from "@/utils/constants";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { displayCache } from "@/repository/cache";
 import { audioService } from "@/services";
@@ -144,7 +144,7 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const ttsStore = provideTtsStore(); //FIXME: provide name.
-    const audioPlayer = AudioPlayer();
+    const audioPlayer = useAudioPlayer();
     const ttsSpeakers = Constants.TTS_GENDERS;
     const lang = "ja";
     const cm = useCmStore();

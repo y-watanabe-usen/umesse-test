@@ -1,7 +1,7 @@
 import * as UMesseApi from "umesseapi";
-import { UMesseErrorFromApiFactory } from "@/models/UMesseError";
-import { GenerateUserTtsRequestItem, Convert } from "@/models/GenerateUserTtsRequestItem";
-import { CreateUserTtsRequestItem } from "@/models/CreateUserTtsRequestItem";
+import { UMesseErrorFromApiFactory } from "@/models/umesseError";
+import { GenerateUserTtsRequestItem, Convert } from "@/models/generateUserTtsRequestItem";
+import { CreateUserTtsRequestItem } from "@/models/createUserTtsRequestItem";
 import { GenerateTtsItem, TtsItem } from "umesseapi/models";
 import { TtsCache } from "@/repository/cache/ttsCache";
 

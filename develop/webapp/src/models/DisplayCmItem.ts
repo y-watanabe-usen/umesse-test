@@ -1,4 +1,4 @@
-import Constants from "@/utils/Constants";
+import Constants from "@/utils/constants";
 import { BgmItem, ChimeItem, CmItem, NarrationItem, SceneItem } from "umesseapi/models";
 
 export default class DisplayCmItem {

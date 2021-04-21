@@ -1,5 +1,5 @@
 import * as umesseapi from "umesseapi";
-import { config } from "@/repository/api/UMesseApiConfiguration";
+import { config } from "@/repository/api/umesseApiConfiguration";
 import axios from "@/repository/api/axiosInstance";
 import { AudioRepository } from "./audioRepositry";
 

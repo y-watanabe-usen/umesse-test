@@ -3,8 +3,8 @@ import { useGlobalStore } from "@/store";
 import { inject, InjectionKey, provide, reactive, toRefs } from "vue";
 import { RecordingItem } from "umesseapi/models/recording-item";
 import { recordingService } from "@/services";
-import { UMesseError } from "@/models/UMesseError";
-import { ERROR_CODE, ERROR_PATTERN } from "@/utils/Constants";
+import { UMesseError } from "@/models/umesseError";
+import { ERROR_CODE, ERROR_PATTERN } from "@/utils/constants";
 
 export enum UPLOAD_RECORDING_STATE {
   NONE,
