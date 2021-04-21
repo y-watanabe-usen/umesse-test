@@ -355,8 +355,8 @@
 
 <script lang="ts">
 import { defineComponent, computed, onMounted, reactive, toRefs } from "vue";
-import AudioPlayer from "@/utils/AudioPlayer";
-import * as Common from "@/utils/Common";
+import useAudioPlayer from "@/utils/audioPlayer";
+import * as common from "@/utils/common";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
 import Header from "@/components/organisms/Header.vue";
@@ -380,7 +380,7 @@ import router from "@/router";
 import {
   convertNumberToTime,
   convertDatestringToDate,
-} from "@/utils/FormatDate";
+} from "@/utils/formatDate";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import {
   audioService,
@@ -393,11 +393,11 @@ import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
 import MessageDialogContents from "@/components/molecules/MessageDialogContents.vue";
-import Constants, { Scene } from "@/utils/Constants";
+import Constants, { Scene } from "@/utils/constants";
 import useModalController from "@/mixins/modalController";
 import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
-import {  useCmStore } from "@/store/cm";
+import { useCmStore } from "@/store/cm";
 
 export default defineComponent({
   components: {
@@ -425,12 +425,12 @@ export default defineComponent({
     MessageDialogContents,
   },
   setup() {
-    const audioPlayer = AudioPlayer();
+    const audioPlayer = useAudioPlayer();
     const { auth } = useGlobalStore();
     const cm = useCmStore();
     const authToken = <string>auth.getToken();
-    const sortList = Common.getSort();
-    const industries = Common.getNarrationIndustries();
+    const sortList = common.getSort();
+    const industries = common.getNarrationIndustries();
     const {
       isApper: isPlayModalAppear,
       open: openPlayModal,
@@ -528,8 +528,11 @@ export default defineComponent({
     const clickScene = (sceneCd: string) => {
       analytics.selectScene(sceneCd, Constants.SCREEN.NARRATION);
       state.activeSceneCd = sceneCd;
-      state.isVisibleDownload = Common.isVisibleDownload();
-      if (state.isVisibleDownload && (state.activeSceneCd === '901' || state.activeSceneCd === '902')) {
+      state.isVisibleDownload = common.isVisibleDownload();
+      if (
+        state.isVisibleDownload &&
+        (state.activeSceneCd === "901" || state.activeSceneCd === "902")
+      ) {
         state.isDownload = true;
       } else {
         state.isDownload = false;
@@ -543,7 +546,7 @@ export default defineComponent({
     };
 
     const fetchScene = () => {
-      state.scenes = Common.getIndustryScenes(state.activeIndustryCd);
+      state.scenes = common.getIndustryScenes(state.activeIndustryCd);
       state.narrations = [];
     };
 

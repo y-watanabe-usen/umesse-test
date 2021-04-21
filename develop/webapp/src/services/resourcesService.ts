@@ -1,4 +1,4 @@
-import Constants from "@/utils/Constants";
+import Constants from "@/utils/constants";
 import * as UMesseApi from "umesseapi";
 import {
   BgmItem,
@@ -7,7 +7,7 @@ import {
   NarrationItem,
   TemplateItem,
 } from "umesseapi/models";
-import { UMesseErrorFromApiFactory } from "@/models/UMesseError";
+import { UMesseErrorFromApiFactory } from "@/models/umesseError";
 
 export function useResourcesService(
   resourcesApi: UMesseApi.ResourcesApi,

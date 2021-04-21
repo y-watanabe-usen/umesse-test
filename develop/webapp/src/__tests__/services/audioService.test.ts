@@ -1,9 +1,9 @@
-import { UMesseError } from "@/models/UMesseError";
+import { UMesseError } from "@/models/umesseError";
 import { AudioRepository } from "@/repository/api/audioRepositry";
 import axios from "@/repository/api/axiosInstance";
 import { AudioCache } from "@/repository/cache/audioCache";
 import { useAudioService } from "@/services/audioService";
-import { ERROR_CODE, ERROR_PATTERN } from "@/utils/Constants";
+import { ERROR_CODE, ERROR_PATTERN } from "@/utils/constants";
 import * as umesseapi from "umesseapi";
 
 const audioRepository = new AudioRepository(axios);

@@ -1,6 +1,6 @@
-import { UMesseErrorFromApiFactory } from "@/models/UMesseError";
+import { UMesseErrorFromApiFactory } from "@/models/umesseError";
 import { UploadApi } from "umesseapi";
-import { UploadCreateRequestItem } from "@/models/UploadCreateRequestItem";
+import { UploadCreateRequestItem } from "@/models/uploadCreateRequestItem";
 
 export function useUploadService(uploadRepository: UploadApi) {
   const create = async (

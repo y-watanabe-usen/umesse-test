@@ -1,9 +1,9 @@
-import { Convert } from "@/models/GenerateUserTtsRequestItem";
-import { UMesseError } from "@/models/UMesseError";
+import { Convert } from "@/models/generateUserTtsRequestItem";
+import { UMesseError } from "@/models/umesseError";
 import axios from "@/repository/api/axiosInstance";
 import { TtsCache } from "@/repository/cache/ttsCache";
 import { useTtsService } from "@/services/ttsService";
-import { ERROR_CODE, ERROR_PATTERN } from "@/utils/Constants";
+import { ERROR_CODE, ERROR_PATTERN } from "@/utils/constants";
 import * as umesseapi from "umesseapi";
 
 const ttsRepository = new umesseapi.TtsApi(undefined, "", axios);

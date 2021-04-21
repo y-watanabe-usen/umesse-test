@@ -1,7 +1,7 @@
-import { UMesseError } from '@/models/UMesseError';
+import { UMesseError } from '@/models/umesseError';
 import router from '@/router';
 import { userService } from '@/services';
-import { ERROR_CODE, ERROR_PATTERN } from '@/utils/Constants';
+import { ERROR_CODE, ERROR_PATTERN } from '@/utils/constants';
 import analytics from '@/utils/firebaseAnalytics';
 import { User } from 'umesseapi/models';
 import { reactive, toRefs } from 'vue';

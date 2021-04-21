@@ -1,9 +1,9 @@
 import { reactive } from 'vue';
-import { AudioRecorderState } from './state';
-import { useWaveEncoder } from '@/utils/WaveEncoder';
-import { useMp3Encoder } from '@/utils/Mp3Encoder';
+import { AudioRecorderState } from '@/utils/audioRecorder/state';
+import { useWaveEncoder } from '@/utils/waveEncoder';
+import { useMp3Encoder } from '@/utils/mp3Encoder';
 
-export default () => {
+export default function useAudioRecorder() {
   const state = reactive<AudioRecorderState>({
     recording: false,
     chunks: new Array<Blob>(),
@@ -112,4 +112,4 @@ export default () => {
     start, stop, reset, isRecording, hasRecording,
     getWaveBlob, getMp3Blob, getAudioBuffer, getPowerDecibels
   };
-};
+}

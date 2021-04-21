@@ -1,6 +1,6 @@
 import * as UMesseApi from "umesseapi";
 import { RecordingItem } from "umesseapi/models";
-import { UMesseErrorFromApiFactory } from "@/models/UMesseError";
+import { UMesseErrorFromApiFactory } from "@/models/umesseError";
 
 export interface RecordingFile {
   title: string | undefined;

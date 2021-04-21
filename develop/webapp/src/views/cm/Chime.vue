@@ -84,10 +84,10 @@
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, reactive, toRefs } from "vue";
-import AudioPlayer from "@/utils/AudioPlayer";
+import useAudioPlayer from "@/utils/audioPlayer";
 import { ChimeItem } from "umesseapi/models";
 import { useRoute, useRouter } from "vue-router";
-import * as Common from "@/utils/Common";
+import * as common from "@/utils/common";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
 import Header from "@/components/organisms/Header.vue";
@@ -104,7 +104,7 @@ import PlayDialogContents from "@/components/molecules/PlayDialogContents.vue";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { audioService, resourcesService } from "@/services";
 import analytics from "@/utils/firebaseAnalytics";
-import Constants from "@/utils/Constants";
+import Constants from "@/utils/constants";
 import useModalController from "@/mixins/modalController";
 import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
@@ -130,9 +130,9 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const route = useRoute();
-    const audioPlayer = AudioPlayer();
+    const audioPlayer = useAudioPlayer();
     const cm = useCmStore();
-    const sortList = Common.getSort();
+    const sortList = common.getSort();
     const isOpenChime = route.params.div == "open";
     const title = isOpenChime ? "開始チャイム" : "終了チャイム";
     const {

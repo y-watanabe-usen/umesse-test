@@ -349,8 +349,8 @@
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, reactive, toRefs } from "vue";
-import AudioPlayer from "@/utils/AudioPlayer";
-import * as Common from "@/utils/Common";
+import useAudioPlayer from "@/utils/audioPlayer";
+import * as common from "@/utils/common";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
 import Header from "@/components/organisms/Header.vue";
@@ -375,8 +375,8 @@ import { useGlobalStore } from "@/store";
 import {
   convertDatestringToDate,
   convertNumberToTime,
-} from "@/utils/FormatDate";
-import Constants, { Scene } from "@/utils/Constants";
+} from "@/utils/formatDate";
+import Constants, { Scene } from "@/utils/constants";
 import { useRouter } from "vue-router";
 import SelectBox from "@/components/atoms/SelectBox.vue";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
@@ -416,7 +416,7 @@ export default defineComponent({
   },
   setup() {
     const router = useRouter();
-    const audioPlayer = AudioPlayer();
+    const audioPlayer = useAudioPlayer();
     const { auth } = useGlobalStore();
     const cm = useCmStore();
     const disabledPlayingStatus = [
@@ -531,7 +531,7 @@ export default defineComponent({
       cmList: [] as CmItem[],
       cms: [] as CmItem[],
       sort: 4,
-      cmSorts: computed(() => Common.getSort()),
+      cmSorts: computed(() => common.getSort()),
       isPlaying: computed(() => audioPlayer.isPlaying()),
       isDownloading: false,
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
@@ -577,7 +577,7 @@ export default defineComponent({
     };
     const selectCm = (cm: CmItem) => {
       state.selectedCm = cm;
-      state.isDownload = Common.isVisibleDownload();
+      state.isDownload = common.isVisibleDownload();
     };
     const play = async (cm: CmItem) => {
       if (state.isPlaying) return;

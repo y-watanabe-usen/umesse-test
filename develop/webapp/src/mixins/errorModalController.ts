@@ -1,4 +1,4 @@
-import { UMesseError } from "@/models/UMesseError";
+import { UMesseError } from "@/models/umesseError";
 import { ref } from "vue";
 
 export default function useErrorModalController() {

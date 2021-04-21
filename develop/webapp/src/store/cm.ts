@@ -3,11 +3,11 @@ import { ChimeItem } from "umesseapi/models/chime-item";
 import { NarrationItem } from "umesseapi/models/narration-item";
 import { BgmItem } from "umesseapi/models/bgm-item";
 import { CmItem, RecordingItem, TtsItem } from "umesseapi/models";
-import DisplayCmItem from "@/models/DisplayCmItem";
+import DisplayCmItem from "@/models/displayCmItem";
 import { cmService } from "@/services";
-import { UMesseError } from "@/models/UMesseError";
-import { ERROR_CODE, ERROR_PATTERN } from "@/utils/Constants";
-import { useGlobalStore } from ".";
+import { UMesseError } from "@/models/umesseError";
+import { ERROR_CODE, ERROR_PATTERN } from "@/utils/constants";
+import { useGlobalStore } from "@/store";
 
 export const MAX_NARRATION_COUNT = 4;
 

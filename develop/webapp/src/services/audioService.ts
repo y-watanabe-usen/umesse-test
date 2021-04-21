@@ -1,4 +1,4 @@
-import { UMesseErrorFromApiFactory } from "@/models/UMesseError";
+import { UMesseErrorFromApiFactory } from "@/models/umesseError";
 import { AudioRepository } from "@/repository/api/audioRepositry";
 import { AudioCache } from "@/repository/cache/audioCache";
 import { ResourcesApi } from "umesseapi";

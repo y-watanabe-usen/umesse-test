@@ -1,4 +1,4 @@
-import * as FormatDate from "@/utils/FormatDate";
+import * as formatDate from "@/utils/formatDate";
 
 describe("convertDatestringToDateのテスト", () => {
   const datas = [
@@ -17,7 +17,7 @@ describe("convertDatestringToDateのテスト", () => {
   ];
   datas.forEach((v) => {
     test(`引数に${v.dateString}を渡すと${v.expected}が返ること`, () => {
-      expect(FormatDate.convertDatestringToDate(v.dateString)).toBe(v.expected);
+      expect(formatDate.convertDatestringToDate(v.dateString)).toBe(v.expected);
     });
   });
 });
@@ -39,7 +39,7 @@ describe("convertDatestringToDateJpのテスト", () => {
   ];
   datas.forEach((v) => {
     test(`引数に${v.dateString}を渡すと${v.expected}が返ること`, () => {
-      expect(FormatDate.convertDatestringToDateJp(v.dateString)).toBe(
+      expect(formatDate.convertDatestringToDateJp(v.dateString)).toBe(
         v.expected
       );
     });
@@ -59,7 +59,7 @@ describe("convertDatestringToDateTimeのテスト", () => {
   ];
   datas.forEach((v) => {
     test(`引数に${v.dateString}を渡すと${v.expected}が返ること`, () => {
-      expect(FormatDate.convertDatestringToDateTime(v.dateString)).toBe(
+      expect(formatDate.convertDatestringToDateTime(v.dateString)).toBe(
         v.expected
       );
     });
@@ -95,7 +95,7 @@ describe("convertNumberToTimeのテスト", () => {
   ];
   datas.forEach((v) => {
     test(`引数に${v.second}を渡すと${v.expected}が返ること`, () => {
-      expect(FormatDate.convertNumberToTime(v.second)).toBe(v.expected);
+      expect(formatDate.convertNumberToTime(v.second)).toBe(v.expected);
     });
   });
 });

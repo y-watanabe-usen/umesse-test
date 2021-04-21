@@ -1,7 +1,7 @@
 import { reactive } from 'vue';
-import { AudioPlayerState } from './state';
+import { AudioPlayerState } from '@/utils/audioPlayer/state';
 
-export default () => {
+export default function useAudioPlayer() {
   const state = reactive<AudioPlayerState>({
     playing: false,
     mediaRecorder: null,
@@ -74,4 +74,4 @@ export default () => {
   return {
     start, stop, getPowerDecibels, getPlaybackTime, getDuration, isPlaying,
   };
-};
+}

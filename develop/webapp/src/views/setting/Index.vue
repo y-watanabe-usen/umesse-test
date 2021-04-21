@@ -63,7 +63,7 @@
 <script lang="ts">
 import { defineComponent, computed, reactive, toRefs, onMounted } from "vue";
 import { useGlobalStore } from "@/store";
-import * as Common from "@/utils/Common";
+import * as common from "@/utils/common";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
 import Header from "@/components/organisms/Header.vue";
@@ -72,9 +72,9 @@ import SubMenuItem from "@/components/molecules/SubMenuItem.vue";
 import {
   convertDatestringToDateJp,
   convertNumberToTime,
-} from "@/utils/FormatDate";
+} from "@/utils/formatDate";
 import analytics from "@/utils/firebaseAnalytics";
-import Constants from "@/utils/Constants";
+import Constants from "@/utils/constants";
 
 export default defineComponent({
   components: {
@@ -89,8 +89,8 @@ export default defineComponent({
     const authUser = auth.getUserInfo();
 
     const state = reactive({
-      appInformations: computed(() => Common.getSettingAppInformations()),
-      version: computed(() => Common.getVersion()),
+      appInformations: computed(() => common.getSettingAppInformations()),
+      version: computed(() => common.getVersion()),
       activeAppInformationCd: "01",
       isDocumentModalAppear: false,
       isPlayModalAppear: false,

@@ -18,7 +18,7 @@
 <script lang="ts">
 import { SetupContext } from "vue";
 import SelectBox from "@/components/atoms/SelectBox.vue";
-import { range } from "@/utils/Common";
+import { range } from "@/utils/common";
 
 export default {
   name: "NewYearDate",

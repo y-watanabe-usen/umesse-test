@@ -168,11 +168,11 @@ import {
   onUnmounted,
   onMounted,
 } from "vue";
-import AudioRecorder from "@/utils/AudioRecorder";
-import AudioPlayer from "@/utils/AudioPlayer";
+import useAudioRecorder from "@/utils/audioRecorder";
+import useAudioPlayer from "@/utils/audioPlayer";
 import { RecordingFile } from "@/services/recordingService";
 import provideRecordingStore from "@/store/recording";
-import { convertNumberToTime } from "@/utils/FormatDate";
+import { convertNumberToTime } from "@/utils/formatDate";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
 import Header from "@/components/organisms/Header.vue";
@@ -191,7 +191,7 @@ import analytics from "@/utils/firebaseAnalytics";
 import useModalController from "@/mixins/modalController";
 import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
-import Constants from "@/utils/Constants";
+import Constants from "@/utils/constants";
 import { useCmStore } from "@/store/cm";
 
 export default defineComponent({
@@ -212,8 +212,8 @@ export default defineComponent({
   name: "RecordingStart",
   setup() {
     const recordingStore = provideRecordingStore(); //FIXME: provide name.
-    const audioRecorder = AudioRecorder();
-    const audioPlayer = AudioPlayer();
+    const audioRecorder = useAudioRecorder();
+    const audioPlayer = useAudioPlayer();
     const cm = useCmStore();
     const {
       isApper: isLoading,

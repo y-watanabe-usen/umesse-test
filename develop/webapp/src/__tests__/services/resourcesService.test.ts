@@ -1,7 +1,7 @@
-import { UMesseError } from "@/models/UMesseError";
+import { UMesseError } from "@/models/umesseError";
 import axios from "@/repository/api/axiosInstance";
 import { useResourcesService } from "@/services/resourcesService";
-import { ERROR_CODE, ERROR_PATTERN } from "@/utils/Constants";
+import { ERROR_CODE, ERROR_PATTERN } from "@/utils/constants";
 import * as umesseapi from "umesseapi";
 
 const resourcesRepository = new umesseapi.ResourcesApi(undefined, "", axios);

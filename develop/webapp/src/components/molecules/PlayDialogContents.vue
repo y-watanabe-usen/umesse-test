@@ -51,7 +51,7 @@
 
 <script lang="ts">
 import { reactive } from "vue";
-import { convertNumberToTime } from "@/utils/FormatDate";
+import { convertNumberToTime } from "@/utils/formatDate";
 import Button from "@/components/atoms/Button.vue";
 import Loading from "vue3-loading-overlay";
 import "vue3-loading-overlay/dist/vue3-loading-overlay.css";

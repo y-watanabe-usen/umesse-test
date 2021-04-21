@@ -5,8 +5,8 @@ import Constants, {
   AppInformation,
   TtsLangs,
   UploadSystem,
-} from "@/utils/Constants";
-import PackageJson from "@/../../webapp/package.json";
+} from "@/utils/constants";
+import PackageJson from "@/../package.json";
 
 /**
  * ナレーション選択画面に表示する業種を取得する
