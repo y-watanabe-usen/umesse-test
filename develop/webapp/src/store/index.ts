@@ -1,13 +1,11 @@
 import { InjectionKey, inject } from 'vue';
 import authStore from '@/store/modules/auth';
-import cmStore from '@/store/cm';
 
 
 // Provide: globalで使うものを定義.
 export default function globalStore() {
   return {
     auth: authStore(),
-    cm: cmStore(),
   };
 }
 

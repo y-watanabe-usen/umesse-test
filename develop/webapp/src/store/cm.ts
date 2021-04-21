@@ -7,6 +7,7 @@ import DisplayCmItem from "@/models/DisplayCmItem";
 import { cmService } from "@/services";
 import { UMesseError } from "@/models/UMesseError";
 import { ERROR_CODE, ERROR_PATTERN } from "@/utils/Constants";
+import { useGlobalStore } from ".";
 
 export const MAX_NARRATION_COUNT = 4;
 
@@ -20,7 +21,8 @@ export enum UPLOAD_CM_STATE {
 }
 
 export default function cmStore() {
-  const service = cmService;
+  const { auth } = useGlobalStore();
+  const token = () => <string>auth.getToken();
 
   const state = reactive({
     displayCmItem: new DisplayCmItem(),
@@ -31,14 +33,14 @@ export default function cmStore() {
 
   const status = () => state.status;
 
-  const create = async (authToken: string) => {
+  const create = async () => {
     if (state.status === UPLOAD_CM_STATE.CREATING) {
       throw new UMesseError(ERROR_CODE.A0001, ERROR_PATTERN.A0001, "");
     }
     // TODO: check arguments here.
     state.status = UPLOAD_CM_STATE.CREATING;
-    const response = await service.create(
-      authToken,
+    const response = await cmService.create(
+      token(),
       state.displayCmItem.narrations,
       state.displayCmItem.openChime,
       state.displayCmItem.endChime,
@@ -54,7 +56,6 @@ export default function cmStore() {
   };
 
   const update = async (
-    authToken: string,
     title: string,
     description: string | null,
     sceneCd: string,
@@ -66,8 +67,8 @@ export default function cmStore() {
         manuscript += 'manuscript' in v ? v.manuscript : "";
       });
       state.status = UPLOAD_CM_STATE.UPDATING;
-      await service.update(
-        authToken,
+      await cmService.update(
+        token(),
         state.displayCmItem.id,
         title,
         description,
@@ -98,9 +99,9 @@ export default function cmStore() {
   const clearBgm = () => {
     state.displayCmItem.clearBgm();
   };
-  const reset = (authToken: string) => {
+  const reset = () => {
     if (!state.displayCmItem.isEdit && state.displayCmItem.id) {
-      cmService.remove(authToken, state.displayCmItem.id);
+      cmService.remove(token(), state.displayCmItem.id);
     }
     state.displayCmItem.reset();
     state.status = UPLOAD_CM_STATE.NONE;
@@ -230,7 +231,7 @@ export function useCmStore() {
   }
   return store;
 }
-export function provideRecordingStore() {
+export function provideCmStore() {
   const store = cmStore();
   provide(CmStoreKey, store);
   return store;

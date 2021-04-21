@@ -387,6 +387,7 @@ import analytics from "@/utils/firebaseAnalytics";
 import useModalController from "@/mixins/modalController";
 import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
+import { useCmStore } from "@/store/cm";
 
 export default defineComponent({
   components: {
@@ -416,7 +417,8 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const audioPlayer = AudioPlayer();
-    const { auth, cm } = useGlobalStore();
+    const { auth } = useGlobalStore();
+    const cm = useCmStore();
     const disabledPlayingStatus = [
       Constants.CM_STATUS_DELETE,
       Constants.CM_STATUS_CREATING,

@@ -113,7 +113,6 @@ import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
 import SelectBox from "@/components/atoms/SelectBox.vue";
-import { useGlobalStore } from "@/store";
 import Constants from "@/utils/Constants";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { displayCache } from "@/repository/cache";
@@ -123,6 +122,7 @@ import useModalController from "@/mixins/modalController";
 import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
 import { DISPLAY_CACHE_KEY } from "@/repository/cache/displayCache";
+import { useCmStore } from "@/store/cm";
 
 export default defineComponent({
   components: {
@@ -147,7 +147,7 @@ export default defineComponent({
     const audioPlayer = AudioPlayer();
     const ttsSpeakers = Constants.TTS_GENDERS;
     const lang = "ja";
-    const { cm } = useGlobalStore();
+    const cm = useCmStore();
     const {
       isApper: isModalAppear,
       open: openModal,
