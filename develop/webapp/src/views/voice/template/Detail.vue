@@ -368,6 +368,11 @@ export default defineComponent({
     });
     const openModal = () => {
       const selectLang = Common.getLangs(state.langs);
+      let index = 0;
+      selectLang.forEach((v) => {
+        state.langs.splice(index, 1, v.cd);
+        index ++;
+      });
       state.playLang = selectLang[0].cd;
       isModalAppear.value = true;
     };
