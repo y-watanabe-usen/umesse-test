@@ -892,7 +892,6 @@ export default defineComponent({
           state.description,
           state.scene,
           state.uploadSystem,
-          cm.isEdit
         );
         closeSaveModal();
         openSavedModal();
