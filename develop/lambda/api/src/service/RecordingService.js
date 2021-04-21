@@ -95,15 +95,18 @@ exports.getUserRecording = function (id, xUnisCustomerCd) {
  * 録音データ一覧取得
  * 録音音声素材の情報を一覧で取得する
  *
+ * sort Integer ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順) (optional)
  * xUnisCustomerCd String UNIS顧客CD
  * returns List
  **/
-exports.listUserRecording = function (xUnisCustomerCd) {
+exports.listUserRecording = function (sort, xUnisCustomerCd) {
   return new Promise(async function (resolve, reject) {
     try {
       const json = await getUserResource(
         xUnisCustomerCd,
-        constants.resourceCategory.RECORDING
+        constants.resourceCategory.RECORDING,
+        "",
+        sort
       );
       debuglog(JSON.stringify(json));
       resolve(json);

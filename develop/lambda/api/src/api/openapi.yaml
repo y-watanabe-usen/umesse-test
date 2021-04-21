@@ -422,6 +422,15 @@ paths:
         schema:
           type: string
           example: "123456789"
+      - name: sort
+        in: query
+        description: "ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)"
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          example: 1
       responses:
         "200":
           description: successful response
@@ -715,6 +724,15 @@ paths:
         schema:
           type: string
           example: "123456789"
+      - name: sort
+        in: query
+        description: "ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)"
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: integer
+          example: 1
       responses:
         "200":
           description: successful response
@@ -3339,6 +3357,36 @@ components:
       schema:
         type: string
         example: 123456789-t-12345678
+    IndustryCd:
+      name: industryCd
+      in: query
+      description: 業種CD
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: string
+        example: "001"
+    SceneCd:
+      name: sceneCd
+      in: query
+      description: シーンCD
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: string
+        example: "001"
+    Sort:
+      name: sort
+      in: query
+      description: "ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)"
+      required: false
+      style: form
+      explode: true
+      schema:
+        type: integer
+        example: 1
   requestBodies:
     AuthRequest:
       description: 認証リクエストBody

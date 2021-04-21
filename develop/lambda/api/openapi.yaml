@@ -89,12 +89,7 @@ paths:
       parameters:
         # - $ref: "#/components/parameters/Token"
         - $ref: "#/components/parameters/UnisCustomerCd"
-        - name: sort
-          in: query
-          description: ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
-          schema:
-            type: integer
-            example: 1
+        - $ref: "#/components/parameters/Sort"
       responses:
         200:
           description: successful response
@@ -236,6 +231,7 @@ paths:
       parameters:
         # - $ref: "#/components/parameters/Token"
         - $ref: "#/components/parameters/UnisCustomerCd"
+        - $ref: "#/components/parameters/Sort"
       responses:
         200:
           description: successful response
@@ -384,6 +380,7 @@ paths:
       parameters:
         # - $ref: "#/components/parameters/Token"
         - $ref: "#/components/parameters/UnisCustomerCd"
+        - $ref: "#/components/parameters/Sort"
       responses:
         200:
           description: successful response
@@ -782,18 +779,8 @@ paths:
       #   - ApiKeyAuth: []
       parameters:
         # - $ref: "#/components/parameters/Token"
-        - name: industryCd
-          in: query
-          description: 業種CD
-          schema:
-            type: string
-            example: "001"
-        - name: sort
-          in: query
-          description: ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
-          schema:
-            type: integer
-            example: 1
+        - $ref: "#/components/parameters/IndustryCd"
+        - $ref: "#/components/parameters/Sort"
       responses:
         200:
           description: successful response
@@ -823,24 +810,9 @@ paths:
       #   - ApiKeyAuth: []
       parameters:
         # - $ref: "#/components/parameters/Token"
-        - name: industryCd
-          in: query
-          description: 業種CD
-          schema:
-            type: string
-            example: "001"
-        - name: sceneCd
-          in: query
-          description: シーンCD
-          schema:
-            type: string
-            example: "001"
-        - name: sort
-          in: query
-          description: ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
-          schema:
-            type: integer
-            example: 1
+        - $ref: "#/components/parameters/IndustryCd"
+        - $ref: "#/components/parameters/SceneCd"
+        - $ref: "#/components/parameters/Sort"
       responses:
         200:
           description: successful response
@@ -870,12 +842,7 @@ paths:
       #   - ApiKeyAuth: []
       parameters:
         # - $ref: "#/components/parameters/Token"
-        - name: sort
-          in: query
-          description: ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
-          schema:
-            type: integer
-            example: 1
+        - $ref: "#/components/parameters/Sort"
       responses:
         200:
           description: successful response
@@ -905,24 +872,9 @@ paths:
       #   - ApiKeyAuth: []
       parameters:
         # - $ref: "#/components/parameters/Token"
-        - name: industryCd
-          in: query
-          description: 業種CD
-          schema:
-            type: string
-            example: "001"
-        - name: sceneCd
-          in: query
-          description: シーンCD
-          schema:
-            type: string
-            example: "001"
-        - name: sort
-          in: query
-          description: ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
-          schema:
-            type: integer
-            example: 1
+        - $ref: "#/components/parameters/IndustryCd"
+        - $ref: "#/components/parameters/SceneCd"
+        - $ref: "#/components/parameters/Sort"
       responses:
         200:
           description: successful response
@@ -952,24 +904,9 @@ paths:
       #   - ApiKeyAuth: []
       parameters:
         # - $ref: "#/components/parameters/Token"
-        - name: industryCd
-          in: query
-          description: 業種CD
-          schema:
-            type: string
-            example: "001"
-        - name: sceneCd
-          in: query
-          description: シーンCD
-          schema:
-            type: string
-            example: "001"
-        - name: sort
-          in: query
-          description: ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
-          schema:
-            type: integer
-            example: 1
+        - $ref: "#/components/parameters/IndustryCd"
+        - $ref: "#/components/parameters/SceneCd"
+        - $ref: "#/components/parameters/Sort"
       responses:
         200:
           description: successful response
@@ -1199,6 +1136,27 @@ components:
       schema:
         type: string
         example: "123456789-t-12345678"
+    IndustryCd:
+      name: industryCd
+      in: query
+      description: 業種CD
+      schema:
+        type: string
+        example: "001"
+    SceneCd:
+      name: sceneCd
+      in: query
+      description: シーンCD
+      schema:
+        type: string
+        example: "001"
+    Sort:
+      name: sort
+      in: query
+      description: ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順)
+      schema:
+        type: integer
+        example: 1
 
   schemas:
     Auth:

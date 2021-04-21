@@ -141,12 +141,13 @@ exports.getSignedUrl = async (id, category) => {
 };
 
 // ユーザー作成の音声取得（一覧・個別）
-exports.getUserResource = async (unisCustomerCd, category, id) => {
+exports.getUserResource = async (unisCustomerCd, category, id, sort) => {
   debuglog(
     `[getUserResource] ${JSON.stringify({
       unisCustomerCd: unisCustomerCd,
       category: category,
       id: id,
+      sort: sort,
     })}`
   );
 
@@ -162,6 +163,7 @@ exports.getUserResource = async (unisCustomerCd, category, id) => {
         params[`${category}Id`] = id;
     }
   }
+  if (sort) params.sort = sort;
   let checkError = checkParams(params);
   if (checkError) throw new BadRequestError(checkError);
 
@@ -179,7 +181,7 @@ exports.getUserResource = async (unisCustomerCd, category, id) => {
     if (!ret) throw new NotFoundError(ERROR_CODE.E0000404);
   }
 
-  return responseData(ret, category);
+  return responseData(ret, category, sort);
 };
 
 // ユーザー作成の録音音声新規作成
