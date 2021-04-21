@@ -478,6 +478,12 @@ export function getLangs(langList?: string[]) {
     if (lang) result.push(lang);
   });
 
+  result.sort(function(a,b){
+    if(a.sort < b.sort) return -1;
+    if(a.sort > b.sort) return 1;
+    return 0;
+  });
+
   return result;
 }
 
