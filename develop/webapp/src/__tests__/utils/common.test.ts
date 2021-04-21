@@ -748,7 +748,7 @@ describe("getUploadSystemServiceCdのテスト", () => {
   datas.forEach((v) => {
     test(`紐づくアップロード先CDが返ること`, () => {
       expect(
-        Common.getUploadSystemServiceCd(v.authUserServiceCd, v.uploadSystem, v.isEdit)
+        common.getUploadSystemServiceCd(v.authUserServiceCd, v.uploadSystem, v.isEdit)
       ).toStrictEqual(v.expected);
     });
   });
