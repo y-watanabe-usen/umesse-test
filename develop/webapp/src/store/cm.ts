@@ -59,7 +59,8 @@ export default function cmStore() {
     title: string,
     description: string | null,
     sceneCd: string,
-    uploadSystem: string
+    uploadSystem: string,
+    isEdit: boolean,
   ) => {
     try {
       let manuscript = "";
@@ -76,7 +77,7 @@ export default function cmStore() {
         uploadSystem,
         manuscript,
       );
-      state.displayCmItem.isEdit = true;
+      state.displayCmItem.isEdit = isEdit;
       state.status = UPLOAD_CM_STATE.UPDATED;
     } catch (e) {
       state.status = UPLOAD_CM_STATE.ERROR;
