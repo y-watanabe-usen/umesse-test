@@ -61,12 +61,12 @@ export default defineComponent({
     } = useErrorModalController();
 
     const state = reactive({});
-    const handleBackButton = () => {
-      history.go(1);
-    };
+//    const handleBackButton = () => {
+//      history.go(1);
+//    };
     onMounted(async () => {
-      history.pushState(null, "", location.href);
-      window.addEventListener("popstate", handleBackButton);
+ //     history.pushState(null, "", location.href);
+ //     window.addEventListener("popstate", handleBackButton);
       try {
         await auth.requestAuth();
         analytics.screenView(Constants.SCREEN.HOME);
@@ -74,9 +74,9 @@ export default defineComponent({
         openErrorModal(e);
       }
     });
-    onUnmounted(() => {
-      window.removeEventListener("popstate", handleBackButton);
-    });
+  //  onUnmounted(() => {
+  //    window.removeEventListener("popstate", handleBackButton);
+  //  });
     const reload = () => {
       closeErrorModal();
       window.location.reload();

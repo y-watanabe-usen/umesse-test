@@ -966,10 +966,11 @@ export default defineComponent({
     };
     const toHome = () => {
       cm.reset();
-      router.push({
-        path: "/",
-        query: { unisCustomerCd: authUser.unisCustomerCd },
-      });
+      router.go(1 - history.length); // gohome.
+//      router.push({
+//        path: "/",
+//        query: { unisCustomerCd: authUser.unisCustomerCd },
+//      });
     };
     const toRecoding = () => {
       router.push({ name: "Recording" });
