@@ -236,8 +236,9 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
   let dataProcessType;
   let productionType;
   let contentTime;
-  let sceneCd;
-  let status = constants.cmStatus.COMPLETE;
+  let startDatetime;
+  let uploadSystem = body.uploadSystem;
+  let status;
 
   // CM作成中の場合
   if (cm.status === constants.cmStatus.CREATING) {
@@ -265,16 +266,17 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
     dataProcessType = constants.cmDataProcessType.ADD;
     productionType = cm.productionType;
     contentTime = cm.seconds * 1000; // millisecond
-    sceneCd = body.scene.sceneCd;
+    startDatetime = timestamp();
     status = "0";
-  } else if (cm.status !== constants.cmStatus.CREATING && body.uploadSystem) {
+  } else if (cm.status === constants.cmStatus.EXTERNAL_COMPLETE) {
     cm.status = constants.cmStatus.EXTERNAL_UPLOADING;
     dataProcessType = constants.cmDataProcessType.UPDATE;
+    uploadSystem = cm.uploadSystem;
     status = "1";
   }
 
   // 外部連携データ登録
-  if (body.uploadSystem) {
+  if (uploadSystem) {
     const item = {
       unisCustomerCd: unisCustomerCd,
       dataProcessType: dataProcessType,
@@ -282,11 +284,11 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
       cmName: body.title,
       description: body.description.replace(/\r?\n/g, " "), // 改行削除
       cmCommentManuscript: body.manuscript,
-      startDatetime: timestamp(),
+      startDatetime: startDatetime,
       endDatetime: "",
       productionType: productionType,
       contentTime: contentTime,
-      sceneCd: sceneCd,
+      sceneCd: body.scene.sceneCd,
       uploadSystem: body.uploadSystem,
       status: status,
       timestamp: timestamp(),
@@ -304,7 +306,7 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
   Object.keys(body).map((key) => {
     cm[key] = body[key];
     // FIXME: startDate endDateは将来の拡張のため、現状は固定で登録する
-    if (key == "startDate") cm[key] = timestamp();
+    if (key == "startDate") cm[key] = startDatetime;
     if (key == "endDate") cm[key] = "";
   });
   cm.timestamp = timestamp();

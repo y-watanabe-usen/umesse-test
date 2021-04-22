@@ -330,6 +330,25 @@ describe("CMデータ更新", () => {
     });
   });
 
+  test("[success] CMデータ更新　外部連携", async () => {
+    const body = {
+      title: "テスト",
+      description: "テスト",
+      scene: {
+        sceneCd: "01",
+        sceneName: "シーン01",
+      },
+    };
+    await expect(
+      updateCm(data.unisCustomerCd, data.cm[5].id, body)
+    ).resolves.toEqual({
+      ...data.cm[5],
+      ...body,
+      status: "11",
+      timestamp: expect.anything(),
+    });
+  });
+
   test("[error] CMデータ更新　外部連携　重複", async () => {
     const body = {
       title: "テスト",
