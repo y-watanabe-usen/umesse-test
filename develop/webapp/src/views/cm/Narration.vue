@@ -662,7 +662,9 @@ export default defineComponent({
     const saveAndOpenSavedModal = async () => {
       try {
         if (!state.selectedNarration) return;
+        openLoadingModal();
         await save(state.selectedNarration);
+        closeLoadingModal();
         analytics.pressButtonSaveEdit(
           state.selectedNarration.id,
           Constants.SCREEN.NARRATION
