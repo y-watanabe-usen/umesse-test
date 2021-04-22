@@ -110,7 +110,9 @@
                             :params="[
                               {
                                 title: 'タイトル/説明 編集',
-                                action: () => {},
+                                action: () => {
+                                  selectNarrationAndOpenSaveModal(narration);
+                                },
                               },
                               {
                                 title: '原稿',
@@ -122,7 +124,9 @@
                               },
                               {
                                 title: '削除',
-                                action: () => {},
+                                action: () => {
+                                  selectNarrationAndOpenRemoveModal(narration);
+                                },
                                 isCaution: true,
                               },
                             ]"
