@@ -238,6 +238,7 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
   let cmCommentManuscript;
   let contentTime;
   let startDatetime;
+  let endDatetime;
   let uploadSystem = body.uploadSystem;
   let status;
 
@@ -269,6 +270,7 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
     cmCommentManuscript = body.manuscript;
     contentTime = cm.seconds * 1000; // millisecond
     startDatetime = timestamp();
+    endDatetime = "";
     status = "0";
   } else if (cm.status === constants.cmStatus.EXTERNAL_COMPLETE) {
     cm.status = constants.cmStatus.EXTERNAL_UPLOADING;
@@ -287,7 +289,7 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
       description: body.description.replace(/\r?\n/g, " "), // 改行削除
       cmCommentManuscript: cmCommentManuscript,
       startDatetime: startDatetime,
-      endDatetime: "",
+      endDatetime: endDatetime,
       productionType: productionType,
       contentTime: contentTime,
       sceneCd: body.scene.sceneCd,
