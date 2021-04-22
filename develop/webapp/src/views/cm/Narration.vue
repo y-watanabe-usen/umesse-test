@@ -675,7 +675,7 @@ export default defineComponent({
         console.log(e.message);
         openErrorModal(e);
       } finally {
-        state.isDownloading = false;
+        closeLoadingModal();
       }
     };
     const save = async (narration: NarrationItem) => {
@@ -706,6 +706,7 @@ export default defineComponent({
         Constants.SCREEN.NARRATION
       );
       try {
+        openLoadingModal();
         await remove(
           state.selectedNarration?.id,
           state.selectedNarration?.category
@@ -718,7 +719,7 @@ export default defineComponent({
         console.log(e.message);
         openErrorModal(e);
       } finally {
-        state.isDownloading = false;
+        closeLoadingModal();
       }
     };
     const remove = async (narrationId: string, narrationCategory: string) => {
