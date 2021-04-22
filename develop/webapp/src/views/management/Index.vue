@@ -186,7 +186,7 @@
             <SelectBox
               v-model="scene"
               :options="
-                Constants.SCENES.map((scene) => {
+                inputScenesList.map((scene) => {
                   return { title: scene.name, value: scene.cd };
                 })
               "
@@ -419,6 +419,7 @@ export default defineComponent({
     const audioPlayer = useAudioPlayer();
     const { auth } = useGlobalStore();
     const cm = useCmStore();
+    const inputScenesList = common.getInputScenes();
     const disabledPlayingStatus = [
       Constants.CM_STATUS_DELETE,
       Constants.CM_STATUS_CREATING,
@@ -553,6 +554,7 @@ export default defineComponent({
       try {
         openLoadingModal("");
         const response = await cmService.fetch(authToken, state.sort);
+        console.log("fetchScene", response);
         state.sceneList = response[0];
         state.cmList = response[1];
         if (!state.cmList.length) {
@@ -567,13 +569,11 @@ export default defineComponent({
       }
     };
     const fetchCm = (sceneCd: string) => {
-      if (state.activeSceneCd !== sceneCd) {
-        state.activeSceneCd = sceneCd;
-        state.cms = state.cmList.filter((v) => {
-          if (!v.scene) return false;
-          return v.scene.sceneCd == sceneCd;
-        });
-      }
+      state.activeSceneCd = sceneCd;
+      state.cms = state.cmList.filter((v) => {
+        if (!v.scene) return false;
+        return v.scene.sceneCd == sceneCd;
+      });
     };
     const selectCm = (cm: CmItem) => {
       state.selectedCm = cm;
@@ -621,9 +621,9 @@ export default defineComponent({
         cm.id,
         state.title,
         state.description,
-        cm.manuscript,
         state.scene,
-        cm.productionType
+        Constants.UPLOAD_SYSTEMS[2].cd,
+        cm.manuscript
       );
 
       fetchScene();
@@ -700,6 +700,7 @@ export default defineComponent({
         openLoadingModal("音源の合成中");
         if (!state.selectedCm) return;
         await save(state.selectedCm);
+        await fetchScene();
         analytics.pressButtonSaveEdit(
           state.selectedCm.id,
           Constants.SCREEN.MANAGEMENT
@@ -781,6 +782,7 @@ export default defineComponent({
     };
     return {
       ...toRefs(state),
+      inputScenesList,
       play,
       stop,
       remove,
