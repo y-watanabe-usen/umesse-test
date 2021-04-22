@@ -235,6 +235,7 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
 
   let dataProcessType;
   let productionType;
+  let cmCommentManuscript;
   let contentTime;
   let startDatetime;
   let uploadSystem = body.uploadSystem;
@@ -265,6 +266,7 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
     cm.status = constants.cmStatus.CONVERT;
     dataProcessType = constants.cmDataProcessType.ADD;
     productionType = cm.productionType;
+    cmCommentManuscript = body.manuscript;
     contentTime = cm.seconds * 1000; // millisecond
     startDatetime = timestamp();
     status = "0";
@@ -283,13 +285,13 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
       cmId: id,
       cmName: body.title,
       description: body.description.replace(/\r?\n/g, " "), // 改行削除
-      cmCommentManuscript: body.manuscript,
+      cmCommentManuscript: cmCommentManuscript,
       startDatetime: startDatetime,
       endDatetime: "",
       productionType: productionType,
       contentTime: contentTime,
       sceneCd: body.scene.sceneCd,
-      uploadSystem: body.uploadSystem,
+      uploadSystem: uploadSystem,
       status: status,
       timestamp: timestamp(),
     };
