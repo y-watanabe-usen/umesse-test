@@ -186,7 +186,7 @@
             <SelectBox
               v-model="scene"
               :options="
-                Constants.SCENES.map((scene) => {
+                inputScenesList.map((scene) => {
                   return { title: scene.name, value: scene.cd };
                 })
               "
@@ -419,6 +419,7 @@ export default defineComponent({
     const audioPlayer = useAudioPlayer();
     const { auth } = useGlobalStore();
     const cm = useCmStore();
+    const inputScenesList = common.getInputScenes();
     const disabledPlayingStatus = [
       Constants.CM_STATUS_DELETE,
       Constants.CM_STATUS_CREATING,
@@ -621,9 +622,9 @@ export default defineComponent({
         cm.id,
         state.title,
         state.description,
-        cm.manuscript,
         state.scene,
-        cm.productionType
+        Constants.UPLOAD_SYSTEMS[2].cd,
+        cm.manuscript
       );
 
       fetchScene();
@@ -781,6 +782,7 @@ export default defineComponent({
     };
     return {
       ...toRefs(state),
+      inputScenesList,
       play,
       stop,
       remove,

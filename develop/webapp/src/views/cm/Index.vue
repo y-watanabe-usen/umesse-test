@@ -525,7 +525,7 @@
             <SelectBox
               v-model="scene"
               :options="
-                industryScenesList.map((scene) => {
+                inputScenesList.map((scene) => {
                   return { title: scene.name, value: scene.cd };
                 })
               "
@@ -682,7 +682,7 @@ export default defineComponent({
     const cm = useCmStore();
     const authUser = <User>auth.getUserInfo();
     const uploadSystemArray = common.getUploadSystemService(authUser.serviceCd);
-    const industryScenesList = common.getInputScenes();
+    const inputScenesList = common.getInputScenes();
     const {
       isApper: isPlayModalAppear,
       open: openPlayModal,
@@ -1187,7 +1187,7 @@ export default defineComponent({
       onClickSomewhere,
       authUser,
       uploadSystemArray,
-      industryScenesList,
+      inputScenesList,
       changeCmOpenChime,
       changeCmEndChime,
       changeCmBgm,
