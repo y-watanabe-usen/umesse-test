@@ -26,7 +26,7 @@
               <Button
                 class="btn-document"
                 type="rectangle"
-                @click="$router.push({ name: 'VoiceFreeSelectTemplate' })"
+                @click="toVoiceFreeSelectTemplate"
               >
                 原稿をコピーする
               </Button>
@@ -176,7 +176,10 @@ export default defineComponent({
         displayCache.get<string | undefined>(
           DISPLAY_CACHE_KEY.VOICE_FREE_INDEX_SELECT_TEXT
         ) ?? "",
-      speaker: "1", // 女性
+      speaker:
+        displayCache.get<string | undefined>(
+          DISPLAY_CACHE_KEY.VOICE_FREE_INDEX_SELECT_SPEAKER
+        ) ?? "1", // 女性
       title: "",
       description: "",
     });
@@ -197,6 +200,7 @@ export default defineComponent({
     };
 
     const createTts = async () => {
+      displayCache.remove(DISPLAY_CACHE_KEY.VOICE_FREE_INDEX_SELECT_SPEAKER);
       stop();
       openLoadingModal();
       const response = await ttsStore.createTtsData(
@@ -230,6 +234,14 @@ export default defineComponent({
       closeModal();
     };
 
+    const toVoiceFreeSelectTemplate = () => {
+      displayCache.set<string>(
+        DISPLAY_CACHE_KEY.VOICE_FREE_INDEX_SELECT_SPEAKER,
+        state.speaker
+      );
+      router.push({ name: "VoiceFreeSelectTemplate" });
+    };
+
     onMounted(() => {
       analytics.screenView(Constants.SCREEN.VOICE_FREE);
     });
@@ -254,6 +266,7 @@ export default defineComponent({
       openErrorModal,
       closeErrorModal,
       Constants,
+      toVoiceFreeSelectTemplate,
     };
   },
 });
