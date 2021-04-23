@@ -6,6 +6,8 @@
     :maxlength="maxLength"
     @input="onUpdate"
     @change="onChange"
+    @focus="$emit('focus')"
+    @blur="$emit('blur')"
   />
 </template>
 
