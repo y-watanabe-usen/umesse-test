@@ -753,3 +753,36 @@ describe("getUploadSystemServiceCdのテスト", () => {
     });
   });
 });
+
+
+describe("getSceneCdのテスト", () => {
+  const datas = [
+    {
+      sceneCd: "",
+      isEdit: false,
+      expected: "004",
+    },
+    {
+      sceneCd: "004",
+      isEdit: false,
+      expected: "004",
+    },
+    {
+      sceneCd: "004",
+      isEdit: true,
+      expected: "004",
+    },
+    {
+      sceneCd: "005",
+      isEdit: true,
+      expected: "005",
+    },
+  ];
+  datas.forEach((v) => {
+    test(`紐づくシーンCDが返ること`, () => {
+      expect(
+        common.getSceneCd(v.sceneCd, v.isEdit)
+      ).toStrictEqual(v.expected);
+    });
+  });
+});

@@ -206,6 +206,9 @@ export default function cmStore() {
     get uploadSystem() {
       return state.displayCmItem.uploadSystem;
     },
+    get scene() {
+      return state.displayCmItem.scene;
+    },
     clearNarration,
     clearAllNarration,
     clearStartChime,
