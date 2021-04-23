@@ -544,6 +544,21 @@ export function getUploadSystemServiceCd(
   }
 }
 
+/**
+ * CM作成で設定したシーンのCDを取得する（CM作成画面の確認モーダルのシーン）
+ * @param sceneCd string
+ * @param isEdit boolean
+ * @return string
+ */
+ export function getSceneCd(
+  sceneCd: string,
+  isEdit: boolean
+) {
+  const userSceneCd = isEdit ? sceneCd : "004";
+
+  return userSceneCd;
+}
+
 function getIndustries(cdList: string[]) {
   const result: Industry[] = [];
   cdList.forEach((v) => {

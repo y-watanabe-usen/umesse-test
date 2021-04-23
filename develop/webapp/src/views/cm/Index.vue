@@ -751,7 +751,10 @@ export default defineComponent({
       duration: computed(() => audioPlayer.getDuration()),
       title: cm.title,
       description: cm.description,
-      scene: "004",
+      scene: common.getSceneCd(
+        cm.scene.sceneCd,
+        cm.isEdit
+      ),
       uploadSystem: common.getUploadSystemServiceCd(
         authUser.serviceCd,
         cm.uploadSystem,
