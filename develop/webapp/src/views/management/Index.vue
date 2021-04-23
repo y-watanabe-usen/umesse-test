@@ -348,7 +348,14 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted, reactive, toRefs } from "vue";
+import {
+  computed,
+  defineComponent,
+  onMounted,
+  onUnmounted,
+  reactive,
+  toRefs,
+} from "vue";
 import useAudioPlayer from "@/utils/audioPlayer";
 import * as common from "@/utils/common";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
@@ -743,11 +750,21 @@ export default defineComponent({
       router.push({ name: "Cm" });
     };
     const toHome = () => {
-      router.push({ name: "Home" });
+      router.go(1 - history.length); // gohome.
+    };
+    const handleBackButton = () => {
+      console.log("hadleBackButton", history.length);
+      router.go(1);
+      toHome();
     };
     onMounted(async () => {
       analytics.screenView(Constants.SCREEN.MANAGEMENT);
+      history.pushState(null, "", location.href);
+      window.addEventListener("popstate", handleBackButton);
       fetchScene();
+    });
+    onUnmounted(() => {
+      window.removeEventListener("popstate", handleBackButton);
     });
     const closeAllDropdownMenu = () => {
       state.dropdownCmId = "";

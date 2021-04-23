@@ -28,7 +28,7 @@
 
 <script lang="ts">
 import { useGlobalStore } from "@/store";
-import { defineComponent, onMounted, onUnmounted, reactive, toRefs } from "vue";
+import { defineComponent, onMounted, reactive, toRefs } from "vue";
 import MainMenu from "@/components/organisms/MainMenu.vue";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
@@ -61,21 +61,14 @@ export default defineComponent({
     } = useErrorModalController();
 
     const state = reactive({});
-    const handleBackButton = () => {
-      history.go(1);
-    };
+
     onMounted(async () => {
-      history.pushState(null, "", location.href);
-      window.addEventListener("popstate", handleBackButton);
       try {
         await auth.requestAuth();
         analytics.screenView(Constants.SCREEN.HOME);
       } catch (e) {
         openErrorModal(e);
       }
-    });
-    onUnmounted(() => {
-      window.removeEventListener("popstate", handleBackButton);
     });
     const reload = () => {
       closeErrorModal();
