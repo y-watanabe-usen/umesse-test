@@ -228,10 +228,6 @@ export default defineComponent({
     };
 
     const clickScene = (sceneCd: string) => {
-      displayCache.set<string>(
-        DISPLAY_CACHE_KEY.VOICE_FREE_SELECT_TEMPLATE_SELECT_SCENE,
-        sceneCd
-      );
       analytics.selectScene(sceneCd, Constants.SCREEN.SELECT_TEMPLATE);
       state.activeSceneCd = sceneCd;
       fetchFreeTemplate();

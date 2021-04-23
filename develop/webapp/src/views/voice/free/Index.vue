@@ -2,7 +2,7 @@
   <div>
     <BasicLayout>
       <template #header>
-        <Header :clickBack="toBackPage">
+        <Header>
           <template #title>音声合成でナレーションを作成する</template>
           <template #buttons>
             <Button :disabled="!text" @click="generateTts"> 確定 </Button>
@@ -200,6 +200,7 @@ export default defineComponent({
     };
 
     const createTts = async () => {
+      displayCache.remove(DISPLAY_CACHE_KEY.VOICE_FREE_INDEX_SELECT_SPEAKER);
       stop();
       openLoadingModal();
       const response = await ttsStore.createTtsData(
@@ -242,16 +243,6 @@ export default defineComponent({
       router.push({ name: "VoiceFreeSelectTemplate" });
     };
 
-    const toBackPage = () => {
-      if (
-        displayCache.get<string | undefined>(
-          DISPLAY_CACHE_KEY.VOICE_FREE_SELECT_TEMPLATE_SELECT_SCENE
-        ) === ""
-      )
-        displayCache.remove(DISPLAY_CACHE_KEY.VOICE_FREE_INDEX_SELECT_SPEAKER);
-      router.go(-1);
-    };
-
     onMounted(() => {
       analytics.screenView(Constants.SCREEN.VOICE_FREE);
     });
@@ -277,7 +268,6 @@ export default defineComponent({
       closeErrorModal,
       Constants,
       toVoiceFreeSelectTemplate,
-      toBackPage,
     };
   },
 });
