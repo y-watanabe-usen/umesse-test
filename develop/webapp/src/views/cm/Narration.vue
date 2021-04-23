@@ -299,7 +299,6 @@
     <transition>
       <ModalDialog
         v-if="isNarrationRecordingAbsentApper"
-        size="small"
         @close="closeNarrationRecordingAbsentModal"
       >
         <template #header>
@@ -310,7 +309,7 @@
         </template>
         <template #contents>
           <MessageDialogContents>
-            「録音音源がありません。ホーム画面の「録音して作成」から作成が出来ます。
+            録音音源がありません。ホーム画面の「録音して作成」から作成が出来ます。
           </MessageDialogContents>
         </template>
         <template #footer>
