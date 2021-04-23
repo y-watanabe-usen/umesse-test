@@ -133,8 +133,8 @@ export default defineComponent({
     const audioPlayer = useAudioPlayer();
     const cm = useCmStore();
     const sortList = common.getSort();
-    const isOpenChime = route.params.div == "open";
-    const title = isOpenChime ? "開始チャイム" : "終了チャイム";
+    const isStartChime = route.params.div == "start";
+    const title = isStartChime ? "開始チャイム" : "終了チャイム";
     const {
       isApper: isPlayModalAppear,
       open: openPlayModal,
@@ -165,9 +165,9 @@ export default defineComponent({
     });
 
     const setChime = (chime: ChimeItem) => {
-      if (isOpenChime) {
-        analytics.selectOpenChime(chime.id);
-        cm.setOpenChime(chime);
+      if (isStartChime) {
+        analytics.selectStartChime(chime.id);
+        cm.setStartChime(chime);
       } else {
         analytics.selectEndChime(chime.id);
         cm.setEndChime(chime);

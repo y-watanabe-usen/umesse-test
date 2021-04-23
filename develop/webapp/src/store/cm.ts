@@ -42,7 +42,7 @@ export default function cmStore() {
     const response = await cmService.create(
       token(),
       state.displayCmItem.narrations,
-      state.displayCmItem.openChime,
+      state.displayCmItem.startChime,
       state.displayCmItem.endChime,
       state.displayCmItem.bgm,
       state.displayCmItem.id
@@ -90,8 +90,8 @@ export default function cmStore() {
   const clearAllNarration = () => {
     state.displayCmItem.clearAllNaraion();
   };
-  const clearOpenChime = () => {
-    state.displayCmItem.clearOpenChime();
+  const clearStartChime = () => {
+    state.displayCmItem.clearStartChime();
   };
   const clearEndChime = () => {
     state.displayCmItem.clearEndChime();
@@ -138,8 +138,8 @@ export default function cmStore() {
     );
     unSelectNarrationIndex();
   };
-  const setOpenChime = (chimeItem: ChimeItem) => {
-    state.displayCmItem.setOpenChime(
+  const setStartChime = (chimeItem: ChimeItem) => {
+    state.displayCmItem.setStartChime(
       chimeItem.id,
       chimeItem.title,
       chimeItem.description,
@@ -179,8 +179,8 @@ export default function cmStore() {
     get narrations() {
       return state.displayCmItem.narrations;
     },
-    get openChime() {
-      return state.displayCmItem.openChime;
+    get startChime() {
+      return state.displayCmItem.startChime;
     },
     get endChime() {
       return state.displayCmItem.endChime;
@@ -208,14 +208,14 @@ export default function cmStore() {
     },
     clearNarration,
     clearAllNarration,
-    clearOpenChime,
+    clearStartChime,
     clearEndChime,
     clearBgm,
     reset,
     selectNarrationIndex,
     unSelectNarrationIndex,
     setNarration,
-    setOpenChime,
+    setStartChime,
     setEndChime,
     setBgm,
     setCm,
