@@ -2,7 +2,7 @@
   <div>
     <BasicLayout>
       <template #header>
-        <Header>
+        <Header :clickBack="toBackPage">
           <template #title>音声合成でナレーションを作成する</template>
           <template #buttons>
             <Button :disabled="!text" @click="generateTts"> 確定 </Button>
@@ -26,7 +26,7 @@
               <Button
                 class="btn-document"
                 type="rectangle"
-                @click="$router.push({ name: 'VoiceFreeSelectTemplate' })"
+                @click="toVoiceFreeSelectTemplate"
               >
                 原稿をコピーする
               </Button>
@@ -176,7 +176,10 @@ export default defineComponent({
         displayCache.get<string | undefined>(
           DISPLAY_CACHE_KEY.VOICE_FREE_INDEX_SELECT_TEXT
         ) ?? "",
-      speaker: "1", // 女性
+      speaker:
+        displayCache.get<string | undefined>(
+          DISPLAY_CACHE_KEY.VOICE_FREE_INDEX_SELECT_SPEAKER
+        ) ?? "1", // 女性
       title: "",
       description: "",
     });
@@ -220,6 +223,7 @@ export default defineComponent({
       try {
         openModal();
         await ttsStore.generateTtsDataFromFree(state.text, state.speaker);
+        displayCache.remove(DISPLAY_CACHE_KEY.VOICE_FREE_INDEX_SELECT_SPEAKER);
       } catch (e) {
         closeModal();
         openErrorModal(e);
@@ -228,6 +232,24 @@ export default defineComponent({
     const stopAndCloseModal = () => {
       stop();
       closeModal();
+    };
+
+    const toVoiceFreeSelectTemplate = () => {
+      displayCache.set<string>(
+        DISPLAY_CACHE_KEY.VOICE_FREE_INDEX_SELECT_SPEAKER,
+        state.speaker
+      );
+      router.push({ name: "VoiceFreeSelectTemplate" });
+    };
+
+    const toBackPage = () => {
+      if (
+        displayCache.get<string | undefined>(
+          DISPLAY_CACHE_KEY.VOICE_FREE_SELECT_TEMPLATE_SELECT_SCENE
+        ) === ""
+      )
+        displayCache.remove(DISPLAY_CACHE_KEY.VOICE_FREE_INDEX_SELECT_SPEAKER);
+      router.go(-1);
     };
 
     onMounted(() => {
@@ -254,6 +276,8 @@ export default defineComponent({
       openErrorModal,
       closeErrorModal,
       Constants,
+      toVoiceFreeSelectTemplate,
+      toBackPage,
     };
   },
 });

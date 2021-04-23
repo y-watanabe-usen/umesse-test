@@ -953,6 +953,7 @@ export default defineComponent({
     };
     const addVoiceFree = () => {
       cm.unSelectNarrationIndex();
+      removeDisplayCacheVoiceFree();
       toVoiceFree();
     };
     const changeRecording = (index: number) => {
@@ -970,6 +971,7 @@ export default defineComponent({
     };
     const changeVoiceFree = (index: number) => {
       cm.selectNarrationIndex(index);
+      removeDisplayCacheVoiceFree();
       toVoiceFree();
     };
     const removeDisplayCacheVoiceTemplate = () => {
@@ -978,6 +980,10 @@ export default defineComponent({
       displayCache.remove(DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_TEMPLATES);
       displayCache.remove(DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_SCENES);
       displayCache.remove(DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_SORT);
+    };
+    const removeDisplayCacheVoiceFree = () => {
+      displayCache.remove(DISPLAY_CACHE_KEY.VOICE_FREE_INDEX_SELECT_SPEAKER);
+      displayCache.remove(DISPLAY_CACHE_KEY.VOICE_FREE_SELECT_TEMPLATE_SELECT_SCENE);
     };
     const toHome = () => {
       cm.reset();
