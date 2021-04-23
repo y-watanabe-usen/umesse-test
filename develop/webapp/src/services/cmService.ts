@@ -106,6 +106,7 @@ export function useCmService(api: UMesseApi.CmApi, cmCache: CmCache) {
         .then((value) => {
           console.log("resolve");
           console.log("updateUserCm", value.data);
+          removeCacheAll();
           resolve(value.data);
         })
         .catch((e) => {
@@ -130,6 +131,10 @@ export function useCmService(api: UMesseApi.CmApi, cmCache: CmCache) {
           reject(UMesseErrorFromApiFactory(e));
         });
     });
+  };
+
+  const removeCacheAll = () => {
+    cmCache.removeAll();
   };
 
   const waitForCreateCompleted = async (authToken: string, id: string): Promise<CmItem> => {
@@ -237,5 +242,6 @@ export function useCmService(api: UMesseApi.CmApi, cmCache: CmCache) {
     create,
     update,
     remove,
+    removeCacheAll,
   };
 }
