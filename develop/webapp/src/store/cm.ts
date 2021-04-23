@@ -103,6 +103,7 @@ export default function cmStore() {
     if (!state.displayCmItem.isEdit && state.displayCmItem.id) {
       cmService.remove(token(), state.displayCmItem.id);
     }
+    cmService.removeCacheAll();
     state.displayCmItem.reset();
     state.status = UPLOAD_CM_STATE.NONE;
   };
