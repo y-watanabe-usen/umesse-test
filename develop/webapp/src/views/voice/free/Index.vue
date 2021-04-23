@@ -224,7 +224,6 @@ export default defineComponent({
       try {
         openModal();
         await ttsStore.generateTtsDataFromFree(state.text, state.speaker);
-        displayCache.remove(DISPLAY_CACHE_KEY.VOICE_FREE_INDEX_SELECT_SPEAKER);
       } catch (e) {
         closeModal();
         openErrorModal(e);
