@@ -1,6 +1,6 @@
 <template>
   <div class="modal-dialog" @click="onClick">
-    <div class="base" :class="[size]">
+    <div class="base" :class="[size, isFocus ? 'base-margin-top' : '']">
       <slot name="header" />
       <div class="contents">
         <slot name="contents" />
@@ -21,6 +21,10 @@ export default {
       default: "medium",
     },
     closeDisabled: {
+      type: Boolean,
+      default: false,
+    },
+    isFocus: {
       type: Boolean,
       default: false,
     },
@@ -75,6 +79,9 @@ export default {
       padding-top: 40px;
       padding-bottom: 40px;
     }
+  }
+  .base-margin-top {
+    margin-top: 120px;
   }
 }
 </style>

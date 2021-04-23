@@ -506,6 +506,7 @@
       <ModalDialog
         v-if="isSaveModalAppear"
         size="large"
+        :isFocus="isFocus"
         @close="closeSaveModal"
       >
         <template #header>
@@ -513,12 +514,19 @@
         </template>
         <template #contents>
           <FormGroup title="タイトル" :required="true">
-            <TextBox v-model="title" :maxLength="Constants.TITLE_MAX_LENGTH" />
+            <TextBox
+              v-model="title"
+              :maxLength="Constants.TITLE_MAX_LENGTH"
+              @focus="inputFocusBlur(true)"
+              @blur="inputFocusBlur(false)"
+            />
           </FormGroup>
           <FormGroup title="説明">
             <TextArea
               v-model="description"
               :maxLength="Constants.DESCRIPTION_MAX_LENGTH"
+              @focus="inputFocusBlur(true)"
+              @blur="inputFocusBlur(false)"
             />
           </FormGroup>
           <FormGroup title="シーン">
@@ -766,8 +774,12 @@ export default defineComponent({
       isEndChimeSliderAppear: false,
       isBgmSliderAppear: false,
       narrationIndex: 0,
+      isFocus: false,
     });
 
+    const inputFocusBlur = (isFocus: boolean) => {
+      state.isFocus = isFocus;
+    };
     const playOpenChime = async () => {
       if (!cm.openChime) return;
       playById(
@@ -1224,6 +1236,7 @@ export default defineComponent({
       closeErrorModal,
       backScreenName,
       toBackFunction,
+      inputFocusBlur,
     };
   },
 });

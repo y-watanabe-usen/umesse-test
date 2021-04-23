@@ -5,6 +5,8 @@
     :placeholder="placeholder"
     :maxlength="maxLength"
     @input="onUpdate"
+    @focus="$emit('focus')"
+    @blur="$emit('blur')"
   >
   </textarea>
 </template>
