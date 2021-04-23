@@ -15,7 +15,7 @@ const config = {
 export type SaveContents = {
   narrations: string[] | [];
   bgm: string | null;
-  open_chime: string | null;
+  start_chime: string | null;
   end_chime: string | null;
 };
 
@@ -39,10 +39,10 @@ const selectNarration = (id: string) => {
 };
 
 // オープンチャイム選択
-const selectOpenChime = (id: string) => {
+const selectStartChime = (id: string) => {
   const now = new Date().toLocaleString();
   fireBaseAnalytics.logEvent("select_content", {
-    content_type: "open-chime",
+    content_type: "start-chime",
     content_id: id,
     timestamp: formatDate.convertDatestringToDateTime(now),
   });
@@ -257,7 +257,7 @@ const selectScene = (sceneCd: string, screen: string) => {
 const analytics = {
   setUserId,
   selectNarration,
-  selectOpenChime,
+  selectStartChime,
   selectEndChime,
   selectBgm,
   selectTemplate,

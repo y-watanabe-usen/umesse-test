@@ -33,21 +33,21 @@
         <CmLayout>
           <template #left>
             <CmItem
-              v-if="openChime"
+              v-if="startChime"
               title="開始チャイム"
               size="fixed"
-              :contentTitle="openChime.title"
-              :duration="`${convertNumberToTime(openChime.seconds)}`"
-              :volume="openChime.volume"
+              :contentTitle="startChime.title"
+              :duration="`${convertNumberToTime(startChime.seconds)}`"
+              :volume="startChime.volume"
               :contentTitleName="'chime'"
-              @toggleSlider="toggleOpenChimeSlider"
-              @click="openPlayOpenChimeModal"
+              @toggleSlider="toggleStartChimeSlider"
+              @click="openPlayStartChimeModal"
             >
               <template #volume>
                 <transition>
                   <VolumeSlider
-                    v-show="isOpenChimeSliderAppear"
-                    v-model="openChime.volume"
+                    v-show="isStartChimeSliderAppear"
+                    v-model="startChime.volume"
                     :width="400"
                     :targetWidth="76"
                     :targetHeight="30"
@@ -59,12 +59,12 @@
                 <button
                   class="btn-more"
                   type="button"
-                  @click.stop="toggleOpenChimeDropdown"
+                  @click.stop="toggleStartChimeDropdown"
                 >
                   <img src="@/assets/icon_more.svg" />
                   <transition>
                     <DropdownMenu
-                      v-if="isOpenChimeDropdownAppear"
+                      v-if="isStartChimeDropdownAppear"
                       :width="200"
                       :targetWidth="30"
                       :targetHeight="30"
@@ -73,13 +73,13 @@
                         {
                           title: '変更',
                           action: () => {
-                            changeCmOpenChime(openChime.id);
+                            changeCmStartChime(startChime.id);
                           },
                         },
                         {
                           title: '削除',
                           action: () => {
-                            clearOpenChime(openChime.id);
+                            clearStartChime(startChime.id);
                           },
                           isCaution: true,
                         },
@@ -94,7 +94,7 @@
               title="開始チャイム"
               :isEmpty="true"
               size="fixed"
-              @add="$router.push({ name: 'CmChime', params: { div: 'open' } })"
+              @add="$router.push({ name: 'CmChime', params: { div: 'start' } })"
             />
           </template>
           <template #top>
@@ -103,9 +103,9 @@
               :key="narration.contentsId"
               :title="
                 'ナレーション ' +
-                  `${index + 1}` +
-                  '/' +
-                  `${MAX_NARRATION_COUNT}`
+                `${index + 1}` +
+                '/' +
+                `${MAX_NARRATION_COUNT}`
               "
               size="flexible"
               :contentTitle="`${narration.title}`"
@@ -183,9 +183,9 @@
               <CmItem
                 :title="
                   'ナレーション ' +
-                    `${narrations.length + 1}` +
-                    '/' +
-                    `${MAX_NARRATION_COUNT}`
+                  `${narrations.length + 1}` +
+                  '/' +
+                  `${MAX_NARRATION_COUNT}`
                 "
                 :isEmpty="true"
                 :contentTitleName="'narration' + `${narrations.length}`"
@@ -396,11 +396,11 @@
     </transition>
     <transition>
       <ModalDialog
-        v-if="isPlayOpenChimeModalAppear"
-        @close="stopAndClosePlayOpenChimeModal"
+        v-if="isPlayStartChimeModalAppear"
+        @close="stopAndClosePlayStartChimeModal"
       >
         <template #header>
-          <ModalHeader title="試聴" @close="stopAndClosePlayOpenChimeModal" />
+          <ModalHeader title="試聴" @close="stopAndClosePlayStartChimeModal" />
         </template>
         <template #contents>
           <PlayDialogContents
@@ -408,13 +408,13 @@
             :isPlaying="isPlaying"
             :playbackTime="playbackTime"
             :duration="duration"
-            @play="playOpenChime()"
+            @play="playStartChime()"
             @stop="stop"
           />
         </template>
         <template #footer>
           <ModalFooter>
-            <Button type="secondary" @click="stopAndClosePlayOpenChimeModal"
+            <Button type="secondary" @click="stopAndClosePlayStartChimeModal"
               >終了</Button
             >
           </ModalFooter>
@@ -697,9 +697,9 @@ export default defineComponent({
       close: closePlayModal,
     } = useModalController();
     const {
-      isApper: isPlayOpenChimeModalAppear,
-      open: openPlayOpenChimeModal,
-      close: closePlayOpenChimeModal,
+      isApper: isPlayStartChimeModalAppear,
+      open: openPlayStartChimeModal,
+      close: closePlayStartChimeModal,
     } = useModalController();
     const {
       isApper: isPlayNarrationModalAppear,
@@ -746,7 +746,7 @@ export default defineComponent({
     } = useErrorModalController();
     const state = reactive({
       cmTime: computed(() => cm.secounds),
-      openChime: computed(() => cm.openChime),
+      startChime: computed(() => cm.startChime),
       narrations: computed(() => cm.narrations),
       bgm: computed(() => cm.bgm),
       endChime: computed(() => cm.endChime),
@@ -766,11 +766,11 @@ export default defineComponent({
         cm.isEdit
       ),
       isNarrationDropdownAppear: [false, false, false, false],
-      isOpenChimeDropdownAppear: false,
+      isStartChimeDropdownAppear: false,
       isEndChimeDropdownAppear: false,
       isBgmDropdownAppear: false,
       isNarrationSliderAppear: [false, false, false, false],
-      isOpenChimeSliderAppear: false,
+      isStartChimeSliderAppear: false,
       isEndChimeSliderAppear: false,
       isBgmSliderAppear: false,
       narrationIndex: 0,
@@ -780,11 +780,11 @@ export default defineComponent({
     const inputFocusBlur = (isFocus: boolean) => {
       state.isFocus = isFocus;
     };
-    const playOpenChime = async () => {
-      if (!cm.openChime) return;
+    const playStartChime = async () => {
+      if (!cm.startChime) return;
       playById(
-        cm.openChime.id,
-        cm.openChime.category,
+        cm.startChime.id,
+        cm.startChime.category,
         Constants.CATEGORY.CHIME
       );
     };
@@ -842,13 +842,13 @@ export default defineComponent({
       cm.clearNarration(index);
       closeAllDropdownMenu();
     };
-    const clearOpenChime = (id: string) => {
+    const clearStartChime = (id: string) => {
       analytics.pressButtonRemove(
         id,
         Constants.CATEGORY.CHIME,
         Constants.SCREEN.CM
       );
-      cm.clearOpenChime();
+      cm.clearStartChime();
     };
     const clearEndChime = (id: string) => {
       analytics.pressButtonRemove(
@@ -916,9 +916,9 @@ export default defineComponent({
         closeLoadingModal();
       }
     };
-    const stopAndClosePlayOpenChimeModal = () => {
+    const stopAndClosePlayStartChimeModal = () => {
       stop();
-      closePlayOpenChimeModal();
+      closePlayStartChimeModal();
     };
     const stopAndClosePlayNarrationModal = () => {
       stop();
@@ -1000,7 +1000,7 @@ export default defineComponent({
     };
     const closeAllDropdownMenu = () => {
       state.isNarrationDropdownAppear = [false, false, false, false];
-      state.isOpenChimeDropdownAppear = false;
+      state.isStartChimeDropdownAppear = false;
       state.isEndChimeDropdownAppear = false;
       state.isBgmDropdownAppear = false;
     };
@@ -1013,13 +1013,13 @@ export default defineComponent({
         state.isNarrationDropdownAppear[index] = true;
       }
     };
-    const toggleOpenChimeDropdown = () => {
+    const toggleStartChimeDropdown = () => {
       closeAllSlider();
-      if (state.isOpenChimeDropdownAppear) {
+      if (state.isStartChimeDropdownAppear) {
         closeAllDropdownMenu();
       } else {
         closeAllDropdownMenu();
-        state.isOpenChimeDropdownAppear = true;
+        state.isStartChimeDropdownAppear = true;
       }
     };
     const toggleEndChimeDropdown = () => {
@@ -1042,7 +1042,7 @@ export default defineComponent({
     };
     const closeAllSlider = () => {
       state.isNarrationSliderAppear = [false, false, false, false];
-      state.isOpenChimeSliderAppear = false;
+      state.isStartChimeSliderAppear = false;
       state.isEndChimeSliderAppear = false;
       state.isBgmSliderAppear = false;
     };
@@ -1055,13 +1055,13 @@ export default defineComponent({
         state.isNarrationSliderAppear[index] = true;
       }
     };
-    const toggleOpenChimeSlider = () => {
+    const toggleStartChimeSlider = () => {
       closeAllDropdownMenu();
-      if (state.isOpenChimeSliderAppear) {
+      if (state.isStartChimeSliderAppear) {
         closeAllSlider();
       } else {
         closeAllSlider();
-        state.isOpenChimeSliderAppear = true;
+        state.isStartChimeSliderAppear = true;
       }
     };
     const toggleEndChimeSlider = () => {
@@ -1099,7 +1099,7 @@ export default defineComponent({
     onUnmounted(() => {
       window.removeEventListener("popstate", handleBackButton);
     });
-    const changeCmOpenChime = (id: string) => {
+    const changeCmStartChime = (id: string) => {
       analytics.pressButtonChange(
         id,
         Constants.CATEGORY.CHIME,
@@ -1107,7 +1107,7 @@ export default defineComponent({
       );
       router.push({
         name: "CmChime",
-        params: { div: "open" },
+        params: { div: "start" },
       });
     };
     const changeCmEndChime = (id: string) => {
@@ -1142,7 +1142,7 @@ export default defineComponent({
                   state.narrations[3]?.id,
                 ],
           bgm: !state.bgm ? null : state.bgm.id,
-          open_chime: !state.openChime ? null : state.openChime.id,
+          start_chime: !state.startChime ? null : state.startChime.id,
           end_chime: !state.endChime ? null : state.endChime.id,
         },
         Constants.SCREEN.CM
@@ -1153,7 +1153,7 @@ export default defineComponent({
     return {
       ...toRefs(state),
       clearNarration,
-      clearOpenChime,
+      clearStartChime,
       clearEndChime,
       clearBgm,
       playGenerateCm,
@@ -1162,7 +1162,7 @@ export default defineComponent({
       createAndOpenPlayModal,
       stopAndClosePlayModal,
       updateAndOpenSavedModal,
-      stopAndClosePlayOpenChimeModal,
+      stopAndClosePlayStartChimeModal,
       stopAndClosePlayNarrationModal,
       stopAndClosePlayBgmModal,
       stopAndClosePlayEndChimeModal,
@@ -1179,34 +1179,34 @@ export default defineComponent({
       UPLOAD_CM_STATE,
       MAX_NARRATION_COUNT,
       playNarration,
-      playOpenChime,
+      playStartChime,
       playEndChime,
       playBgm,
       toHome,
       closeAllDropdownMenu,
       toggleNarrationDropdown,
-      toggleOpenChimeDropdown,
+      toggleStartChimeDropdown,
       toggleEndChimeDropdown,
       toggleBgmDropdown,
       closeAllSlider,
       toggleNarrationSlider,
-      toggleOpenChimeSlider,
+      toggleStartChimeSlider,
       toggleEndChimeSlider,
       toggleBgmSlider,
       onClickSomewhere,
       authUser,
       uploadSystemArray,
       inputScenesList,
-      changeCmOpenChime,
+      changeCmStartChime,
       changeCmEndChime,
       changeCmBgm,
       clickConfirm,
       isPlayModalAppear,
       openPlayModal,
       closePlayModal,
-      isPlayOpenChimeModalAppear,
-      openPlayOpenChimeModal,
-      closePlayOpenChimeModal,
+      isPlayStartChimeModalAppear,
+      openPlayStartChimeModal,
+      closePlayStartChimeModal,
       isPlayNarrationModalAppear,
       openPlayNarrationModal,
       closePlayNarrationModal,

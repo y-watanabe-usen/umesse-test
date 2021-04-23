@@ -23,8 +23,8 @@ export default class DisplayCmItem {
   get narrations(): (Narration | Recording | Tts)[] {
     return this.materials.narrations;
   }
-  get openChime() {
-    return this.materials.openChime;
+  get startChime() {
+    return this.materials.startChime;
   }
   get endChime() {
     return this.materials.endChime;
@@ -38,8 +38,8 @@ export default class DisplayCmItem {
   clearAllNaraion() {
     this.materials.narrations = [];
   }
-  clearOpenChime() {
-    this.materials.openChime = null;
+  clearStartChime() {
+    this.materials.startChime = null;
   }
   clearEndChime() {
     this.materials.endChime = null;
@@ -90,7 +90,7 @@ export default class DisplayCmItem {
       this.materials.narrations.push(getNarraion());
     }
   }
-  setOpenChime(
+  setStartChime(
     contentsId: string,
     title: string,
     description: string,
@@ -98,8 +98,8 @@ export default class DisplayCmItem {
     timestamp: string,
     volume?: number
   ) {
-    this.clearOpenChime();
-    this.materials.openChime = new OpenChime(
+    this.clearStartChime();
+    this.materials.startChime = new StartChime(
       contentsId,
       title,
       description,
@@ -156,7 +156,7 @@ export default class DisplayCmItem {
     }
     if (cmItem.materials.startChime) {
       const chime = <ChimeItem>cmItem.materials.startChime;
-      this.setOpenChime(
+      this.setStartChime(
         chime.id,
         chime.title,
         chime.description,
@@ -199,7 +199,7 @@ export default class DisplayCmItem {
 
 export class Materials {
   narrations: (Narration | Recording | Tts)[] = [];
-  openChime: OpenChime | null = null;
+  startChime: StartChime | null = null;
   endChime: EndChime | null = null;
   bgm: Bgm | null = null;
 }
@@ -239,7 +239,7 @@ export class Tts {
     public volume: number = 100
   ) { }
 }
-export class OpenChime {
+export class StartChime {
   readonly category = Constants.CATEGORY.CHIME;
   constructor(
     public id: string = "",
