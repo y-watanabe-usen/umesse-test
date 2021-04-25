@@ -144,7 +144,6 @@ import ModalFooter from "@/components/molecules/ModalFooter.vue";
 import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
 import TextDialogContents from "@/components/molecules/TextDialogContents.vue";
 import { FreeItem } from "umesseapi/models";
-import { useGlobalStore } from "@/store";
 import router from "@/router";
 import {
   convertNumberToTime,
@@ -180,8 +179,6 @@ export default defineComponent({
     ModalLoading,
   },
   setup() {
-    const { auth } = useGlobalStore();
-    const authToken = <string>auth.getToken();
     const sortList = common.getSort();
     const industries = common.getTemplateIndustries();
     const {
@@ -247,8 +244,7 @@ export default defineComponent({
       if (!state.activeSceneCd) return;
       try {
         openLoadingModal();
-        const response = await resourcesService.fetchNarration(
-          authToken,
+        const response = await resourcesService.fetchFree(
           state.activeIndustryCd,
           state.activeSceneCd,
           state.sort
