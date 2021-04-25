@@ -147,11 +147,12 @@ export function useResourcesService(
 
   const fetchFree = async (
     industryCd: string,
+    sceneCd: string,
     sort?: number
   ): Promise<FreeItem[]> => {
     return new Promise(function (resolve, reject) {
       resourcesApi
-        .listFree(industryCd, undefined, sort)
+        .listFree(industryCd, sceneCd, sort)
         .then((value) => {
           console.log("resolve");
           console.log("listFreeTemplate", value.data);
