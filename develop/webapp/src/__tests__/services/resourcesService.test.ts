@@ -489,7 +489,7 @@ describe("fetchFreeのテスト", () => {
     ];
     jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
 
-    const response = await resourcesService.fetchFree("01", 1);
+    const response = await resourcesService.fetchFree("01", "001", 1);
 
     expect(response.length).toBe(2);
     expect(response[0].id).toBe("サンプル01");
@@ -506,7 +506,7 @@ describe("fetchFreeのテスト", () => {
 
     jest.spyOn(axios, "request").mockRejectedValue({ data: responseJson });
 
-    await expect(resourcesService.fetchFree("01", 1)).rejects.toThrowError(
+    await expect(resourcesService.fetchFree("01", "001", 1)).rejects.toThrowError(
       expoectedError
     );
   });
@@ -522,7 +522,7 @@ describe("fetchFreeのテスト", () => {
       .spyOn(axios, "request")
       .mockRejectedValue({ response: { status: 500 } });
 
-    await expect(resourcesService.fetchFree("01", 1)).rejects.toThrowError(
+    await expect(resourcesService.fetchFree("01", "001", 1)).rejects.toThrowError(
       expoectedError
     );
   });
