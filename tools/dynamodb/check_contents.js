@@ -5,7 +5,7 @@ const csv = require("csv");
 const path = require("path");
 
 if (!process.argv[2] || !process.argv[3]) {
-  console.log("argv error: node check.js [contents data dir] [csv file]");
+  console.log("argv error: node check_contents.js [contents data dir] [csv file]");
   return;
 }
 
