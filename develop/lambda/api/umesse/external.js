@@ -102,9 +102,28 @@ exports.completeExternalCm = async (unisCustomerCd, external, body) => {
   try {
     [cm, index] = await db.User.findCmIndex(unisCustomerCd, body.cmId);
   } catch (e) {
-    if (e instanceof NotFoundError) throw e;
-    errorlog(JSON.stringify(e));
-    throw new InternalServerError(ERROR_CODE.E0000500);
+    if (!e instanceof NotFoundError) {
+      errorlog(JSON.stringify(e));
+      throw new InternalServerError(ERROR_CODE.E0000500);
+    }
+  }
+
+  if (!cm) {
+    // 該当CMが存在していない場合、外部連携をエラーにする
+    let data = {
+      ":status": "9",
+      ":errorCode": "U990",
+      ":errorMessage": ERROR_CODE.E0000404,
+      ":timestamp": timestamp(),
+    };
+    try {
+      const _ = await db.External.updateErrorData(unisCustomerCd, data);
+    } catch (e) {
+      errorlog(JSON.stringify(e));
+      throw new InternalServerError(ERROR_CODE.E0000500);
+    }
+
+    return body;
   }
 
   // CMステータスのチェック
@@ -112,8 +131,8 @@ exports.completeExternalCm = async (unisCustomerCd, external, body) => {
     // 整合性が合っていない状態の場合、外部連携をエラーにする
     let data = {
       ":status": "9",
-      ":errorCode": "U009",
-      ":errorMessage": $ERROR_CODE.E0002000,
+      ":errorCode": "U991",
+      ":errorMessage": ERROR_CODE.E0002000,
       ":timestamp": timestamp(),
     };
     try {
@@ -135,32 +154,13 @@ exports.completeExternalCm = async (unisCustomerCd, external, body) => {
   }
 
   // 外部連携データ取得
-  let ret = await this.getExternalCm(unisCustomerCd, external);
-  ret = ret.unisCustomers.shift();
-  if (!ret) {
-    // 整合性が合っていない状態の場合、外部連携をエラーにする
-    let data = {
-      ":status": "9",
-      ":errorCode": "U009",
-      ":errorMessage": $ERROR_CODE.E0000404,
-      ":timestamp": timestamp(),
-    };
-    try {
-      const _ = await db.External.updateErrorData(unisCustomerCd, data);
-    } catch (e) {
-      errorlog(JSON.stringify(e));
-      throw new InternalServerError(ERROR_CODE.E0000500);
-    }
-
-    cm.status = constants.cmStatus.EXTERNAL_ERROR;
-    try {
-      const _ = await db.User.updateCm(unisCustomerCd, index, cm);
-    } catch (e) {
-      errorlog(JSON.stringify(e));
-      throw new InternalServerError(ERROR_CODE.E0000500);
-    }
-
-    return body;
+  let ret;
+  try {
+    ret = await db.External.find(unisCustomerCd);
+  } catch (e) {
+    if (e instanceof NotFoundError) throw e;
+    errorlog(JSON.stringify(e));
+    throw new InternalServerError(ERROR_CODE.E0000500);
   }
 
   if (body.dataProcessType == constants.cmDataProcessType.ERROR) {

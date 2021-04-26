@@ -8,43 +8,16 @@ const {
   BadRequestError,
   NotFoundError,
 } = require("umesse-lib/error");
+const { constants } = require("umesse-lib/constants");
+const { s3Manager } = require("umesse-lib/utils/s3Manager");
+const { dynamodbManager } = require("umesse-lib/utils/dynamodbManager");
 const { getExternalCm, completeExternalCm } = require("../umesse/external");
 
 // test data
-const data = {
-  unisCustomers: [
-    {
-      unisCustomerCd: "060000002",
-      cmMetas: [
-        {
-          dataProcessType: "02",
-          cmId: "060000002-c-00000001",
-          cmName: "時報A",
-          cmCommentManuscript: "テストCMです",
-        },
-      ],
-    },
-    {
-      unisCustomerCd: "060000000",
-      cmMetas: [
-        {
-          dataProcessType: "01",
-          cmId: "060000000-c-00000001",
-          cmName: "時報A",
-          description: "テストCMです",
-          cmCommentManuscript: "テストCMです",
-          startDatetime: "2020-01-01T12:34:56+09:00",
-          endDatetime: "9999-12-31T23:59:59+09:00",
-          productionType: "01",
-          contentTime: 60,
-          sceneCd: "01",
-          url: expect.anything(),
-          fileName: "060000000-c-00000001.aac",
-        },
-      ],
-    },
-  ],
-};
+const json = require("./data/external.test.json");
+const cmData = json["umesse-users"].map((item) =>
+  aws.DynamoDB.Converter.unmarshall(item.PutRequest.Item)
+);
 
 console.warn = jest.fn();
 console.error = jest.fn();
@@ -55,6 +28,61 @@ beforeAll(() => {
 // 外部連携CMデータ取得
 describe("外部連携CMデータ", () => {
   test("[success] 外部連携CMデータ取得", async () => {
+    const data = {
+      unisCustomers: [
+        {
+          unisCustomerCd: "060000010",
+          cmMetas: [
+            {
+              dataProcessType: "02",
+              cmId: "060000010-c-00000001",
+              cmName: "時報A",
+              description: "テストCMです",
+              sceneCd: "01",
+            },
+          ],
+        },
+        {
+          unisCustomerCd: "060000002",
+          cmMetas: [
+            {
+              dataProcessType: "02",
+              cmId: "060000002-c-00000001",
+              cmName: "時報A",
+              cmCommentManuscript: "テストCMです",
+            },
+          ],
+        },
+        {
+          unisCustomerCd: "060000020",
+          cmMetas: [
+            {
+              dataProcessType: "03",
+              cmId: "060000020-c-00000001",
+            },
+          ],
+        },
+        {
+          unisCustomerCd: "060000000",
+          cmMetas: [
+            {
+              dataProcessType: "01",
+              cmId: "060000000-c-00000001",
+              cmName: "時報A",
+              description: "テストCMです",
+              cmCommentManuscript: "テストCMです",
+              startDatetime: "2020-01-01T12:34:56+09:00",
+              endDatetime: "9999-12-31T23:59:59+09:00",
+              productionType: "01",
+              contentTime: 60,
+              sceneCd: "01",
+              url: expect.anything(),
+              fileName: "060000000-c-00000001.aac",
+            },
+          ],
+        },
+      ],
+    };
     await expect(getExternalCm("", "center")).resolves.toEqual(data);
   });
 
@@ -97,44 +125,144 @@ describe("外部連携CMデータ", () => {
 
 // 外部連携CMデータ連携完了
 describe("外部連携CMデータ連携完了", () => {
-  test("[success] 外部連携CMデータ連携完了", async () => {
+  test("[success] 外部連携CMデータ連携完了　作成", async () => {
     const data = {
       dataProcessType: "01",
-      cmId: "060000000-c-00000001",
+      cmId: cmData[0].cm[0].cmId,
     };
     await expect(
-      completeExternalCm("060000000", "center", data)
+      completeExternalCm(cmData[0].unisCustomerCd, "center", data)
     ).resolves.toEqual(data);
+
+    let ret;
+    // CMステータスの確認
+    ret = await dynamodbManager.get(
+      constants.dynamoDbTable().users,
+      { unisCustomerCd: cmData[0].unisCustomerCd },
+      { ProjectionExpression: "cm" }
+    );
+    expect(ret.Item.cm[0]).toEqual({
+      ...cmData[0].cm[0],
+      status: "12",
+      timestamp: expect.anything(),
+    });
+
+    // 外部連携ステータスの確認
+    ret = await dynamodbManager.get(
+      constants.dynamoDbTable().external,
+      { unisCustomerCd: cmData[0].unisCustomerCd },
+      {}
+    );
+    expect(ret).toEqual({});
+  });
+
+  test("[success] 外部連携CMデータ連携完了　更新", async () => {
+    const data = {
+      dataProcessType: "01",
+      cmId: cmData[1].cm[0].cmId,
+    };
+    await expect(
+      completeExternalCm(cmData[1].unisCustomerCd, "center", data)
+    ).resolves.toEqual(data);
+
+    let ret;
+    // CMステータスの確認
+    ret = await dynamodbManager.get(
+      constants.dynamoDbTable().users,
+      { unisCustomerCd: cmData[1].unisCustomerCd },
+      { ProjectionExpression: "cm" }
+    );
+    expect(ret.Item.cm[0]).toEqual({
+      ...cmData[1].cm[0],
+      status: "12",
+      timestamp: expect.anything(),
+    });
+
+    // 外部連携ステータスの確認
+    ret = await dynamodbManager.get(
+      constants.dynamoDbTable().external,
+      { unisCustomerCd: cmData[1].unisCustomerCd },
+      {}
+    );
+    expect(ret).toEqual({});
+  });
+
+  test("[success] 外部連携CMデータ連携完了　解除", async () => {
+    const data = {
+      dataProcessType: "01",
+      cmId: cmData[2].cm[0].cmId,
+    };
+    await expect(
+      completeExternalCm(cmData[2].unisCustomerCd, "center", data)
+    ).resolves.toEqual(data);
+
+    let ret;
+    // CMステータスの確認
+    ret = await dynamodbManager.get(
+      constants.dynamoDbTable().users,
+      { unisCustomerCd: cmData[2].unisCustomerCd },
+      { ProjectionExpression: "cm" }
+    );
+    expect(ret.Item.cm[0]).toEqual({
+      ...cmData[2].cm[0],
+      cmId: expect.stringMatching(
+        `^${cmData[2].unisCustomerCd}-c-[0-9a-z]{8}$`
+      ),
+      uploadSystem: "",
+      status: "02",
+      timestamp: expect.anything(),
+    });
+    let cmId = ret.Item.cm[0].cmId;
+
+    // 外部連携ステータスの確認
+    ret = await dynamodbManager.get(
+      constants.dynamoDbTable().external,
+      { unisCustomerCd: cmData[2].unisCustomerCd },
+      {}
+    );
+    expect(ret).toEqual({});
+
+    // s3オブジェクトの確認
+    ret = await s3Manager.head(
+      constants.s3Bucket().users,
+      `users/${cmData[2].unisCustomerCd}/cm/${cmId}.aac`
+    );
+    expect(ret).toEqual(expect.anything());
   });
 
   test("[error] 外部連携CMデータ連携完了　データ存在しない", async () => {
+    let data;
+    data = {
+      dataProcessType: "01",
+      cmId: "999999999-c-12345678",
+    };
     await expect(
-      completeExternalCm("999999999", "ssence", {
-        dataProcessType: "01",
-        cmId: "999999999-c-12345678",
-      })
-    ).rejects.toThrow(new NotFoundError(ERROR_CODE.E0000404));
+      completeExternalCm("999999999", "ssence", data)
+    ).resolves.toEqual(data);
 
+    data = {
+      dataProcessType: "01",
+      cmId: "060000001-c-00000001",
+    };
     await expect(
-      completeExternalCm("060000000", "ssence", {
-        dataProcessType: "01",
-        cmId: "060000001-c-00000001",
-      })
-    ).rejects.toThrow(new NotFoundError(ERROR_CODE.E0000404));
+      completeExternalCm("060000000", "ssence", data)
+    ).resolves.toEqual(data);
 
+    data = {
+      dataProcessType: "01",
+      cmId: "060000001-c-00000001",
+    };
     await expect(
-      completeExternalCm("060000001", "center", {
-        dataProcessType: "01",
-        cmId: "060000001-c-00000001",
-      })
-    ).rejects.toThrow(new NotFoundError(ERROR_CODE.E0000404));
+      completeExternalCm("060000001", "center", data)
+    ).resolves.toEqual(data);
 
+    data = {
+      dataProcessType: "01",
+      cmId: "060000002-c-00000001",
+    };
     await expect(
-      completeExternalCm("060000002", "center", {
-        dataProcessType: "01",
-        cmId: "060000002-c-00000001",
-      })
-    ).rejects.toThrow(new NotFoundError(ERROR_CODE.E0000404));
+      completeExternalCm("060000002", "center", data)
+    ).resolves.toEqual(data);
   });
 
   test("[error] 外部連携CMデータ連携完了　パラメータチェック", async () => {
