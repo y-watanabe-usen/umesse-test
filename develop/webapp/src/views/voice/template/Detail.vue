@@ -128,7 +128,7 @@
         <template #contents>
           <FormGroup title="試聴" class="play-form-group">
             <PlayDialogContents
-              :isLoading="isGenerating"
+              :isLoading="isGenerating || isDownloading"
               :isPlaying="isPlaying"
               :playbackTime="playbackTime"
               :duration="duration"
@@ -312,6 +312,7 @@ export default defineComponent({
       isPlaying: computed(() => audioPlayer.isPlaying()),
       isGenerating: computed(() => ttsStore.isGenerating()),
       isCreating: computed(() => ttsStore.isCreating()),
+      isDownloading: false,
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       duration: computed(() => audioPlayer.getDuration()),
       narrations: computed(() => cm.narrations),
@@ -371,21 +372,28 @@ export default defineComponent({
       let index = 0;
       selectLang.forEach((v) => {
         state.langs.splice(index, 1, v.cd);
-        index ++;
+        index++;
       });
       state.playLang = selectLang[0].cd;
       isModalAppear.value = true;
     };
     const play = async () => {
-      console.log("play", state.playLang);
-      const data = await ttsStore.getTtsData(state.playLang);
-      const audioBuffer = await audioService.getByUrl(<string>data?.url);
-      analytics.pressButtonPlayTrial(
-        <string>data?.url,
-        Constants.CATEGORY.TEMPLATE,
-        Constants.SCREEN.VOICE_TEMPLATE_DETAIL
-      );
-      audioPlayer.start(audioBuffer);
+      try {
+        state.isDownloading = true;
+        console.log("play", state.playLang);
+        const data = await ttsStore.getTtsData(state.playLang);
+        const audioBuffer = await audioService.getByUrl(<string>data?.url);
+        analytics.pressButtonPlayTrial(
+          <string>data?.url,
+          Constants.CATEGORY.TEMPLATE,
+          Constants.SCREEN.VOICE_TEMPLATE_DETAIL
+        );
+        audioPlayer.start(audioBuffer);
+      } catch (e) {
+        openErrorModal(e);
+      } finally {
+        state.isDownloading = false;
+      }
     };
     const stop = () => {
       if (state.isPlaying) audioPlayer.stop();
