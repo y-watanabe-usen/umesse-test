@@ -14,7 +14,7 @@ const dynamodb = new aws.DynamoDB.DocumentClient();
 
 if (!process.argv[2] || !process.argv[3]) {
   console.log(
-    "argv error: node create_demo.js [dynamodb table] [unisCustomerCd range 100000000-100000010]"
+    "argv error: node create_demo.js [dynamodb table] [unisCustomerCd range 100000000-100000010] [serviceCd U01 or U17]"
   );
   return;
 }

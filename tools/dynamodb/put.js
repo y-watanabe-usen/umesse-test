@@ -33,6 +33,35 @@ parser.on("readable", () => {
     // skip
     if (data.lang && (!data.manuscript || !data.seconds)) continue;
 
+    // convert
+    // - title
+    for (let i = 0; i <= data.title.length; i++) {
+      const v = data.title.substring(i, i + 1);
+      const hexV = v.charCodeAt(0).toString(16).toLowerCase();
+      if (hexV.substring(0, 2) == "2f") {
+        data.title = data.title.replace(v, convert[v]);
+      }
+    }
+    // - description
+    for (let i = 0; i <= data.description.length; i++) {
+      const v = data.description.substring(i, i + 1);
+      const hexV = v.charCodeAt(0).toString(16).toLowerCase();
+      if (hexV.substring(0, 2) == "2f") {
+        data.description = data.description.replace(v, convert[v]);
+      }
+    }
+    // - manuscript
+    if (data.category === "template" || data.lang === "JP") {
+      for (let i = 0; i <= data.manuscript.length; i++) {
+        const v = data.manuscript.substring(i, i + 1);
+        const hexV = v.charCodeAt(0).toString(16).toLowerCase();
+        if (hexV.substring(0, 2) == "2f") {
+          data.manuscript = data.manuscript.replace(v, convert[v]);
+          if (data.jp) data.jp = data.jp.replace(v, convert[v]);
+        }
+      }
+    }
+
     // contentsId
     let contentsId = data.contentsId;
     if (data.lang) {
@@ -138,7 +167,7 @@ parser.on("readable", () => {
       };
     }
 
-    console.log(`\n[T${contentsId}] ===================================`);
+    console.log(`\n[${contentsId}] ===================================`);
     console.log(JSON.stringify(params));
 
     // dynamodb put
@@ -155,3 +184,66 @@ parser.on("error", (e) => {
 parser.on("end", () => {
   console.log("\nend");
 });
+
+const convert = {
+  "/": "/",
+  "⾏": "行",
+  "⾔": "言",
+  "⼼": "心",
+  "⽇": "日",
+  "⼀": "一",
+  "⽤": "用",
+  "⾊": "色",
+  "⼗": "十",
+  "⽌": "止",
+  "⾝": "身",
+  "⽰": "示",
+  "⼒": "力",
+  "⽉": "月",
+  "⾖": "豆",
+  "⾷": "食",
+  "⽅": "方",
+  "⽗": "父",
+  "⼿": "手",
+  "⼦": "子",
+  "⼾": "戸",
+  "⽔": "水",
+  "⾁": "肉",
+  "⿂": "魚",
+  "⾒": "見",
+  "⾞": "車",
+  "⼝": "口",
+  "⼤": "大",
+  "⽣": "生",
+  "⽴": "立",
+  "⾦": "金",
+  "⾃": "自",
+  "⾛": "走",
+  "⼊": "入",
+  "⼈": "人",
+  "⾼": "高",
+  "⾎": "血",
+  "⽋": "欠",
+  "⼥": "女",
+  "⽢": "甘",
+  "⽞": "玄",
+  "⾐": "衣",
+  "⽿": "耳",
+  "⿊": "黒",
+  "⽯": "石",
+  "⼠": "土",
+  "⼲": "干",
+  "⽕": "火",
+  "⼋": "八",
+  "⽩": "白",
+  "⾍": "虫",
+  "⾧": "長",
+  "⾯": "面",
+  "⽀": "支",
+  "⼟": "土",
+  "⽂": "文",
+  "⾜": "足",
+  "⽼": "老",
+  "⽊": "木",
+  "⼩": "小",
+};

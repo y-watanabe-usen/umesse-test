@@ -5,9 +5,13 @@ https://drive.google.com/drive/u/1/folders/1qkjYI80C-0_WQFxZkWIy4Aq2GcYhdn5N
 ```bash
 npm install
 
-# csv data dir check 
-# node check.js [data dir] [csv file]
-node check.js ./umesse-contents umesse-contents.csv
+# csv data contents check 
+# node check_contents.js [data dir] [csv file]
+node check_contents.js ./umesse-contents umesse-contents.csv
+
+# csv data japanese check 
+# node check_kanji.js [data dir] [csv file]
+node check_kanji.js umesse-contents.csv
 
 # s3 put
 aws --profile umesse s3 sync --exact-timestamps --delete ./umesse-contents/ s3://dev-umesse-contents/
