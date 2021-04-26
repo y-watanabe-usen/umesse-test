@@ -139,7 +139,6 @@ import TextDialogContents from "@/components/molecules/TextDialogContents.vue";
 import { displayCache } from "@/repository/cache";
 import analytics from "@/utils/firebaseAnalytics";
 import useLoadingModalController from "@/mixins/loadingModalController";
-import useModalController from "@/mixins/modalController";
 import useErrorModalController from "@/mixins/errorModalController";
 import Constants, { Scene } from "@/utils/constants";
 import { DISPLAY_CACHE_KEY } from "@/repository/cache/displayCache";
