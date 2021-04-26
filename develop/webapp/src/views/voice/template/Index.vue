@@ -71,13 +71,6 @@
                 </template>
                 <template #operations>
                   <Button
-                    v-if="template.manuscript"
-                    class="btn-document"
-                    @click="selectTemplateAndOpenDocumentModal(template)"
-                  >
-                    <img src="@/assets/icon_document.svg" />原稿
-                  </Button>
-                  <Button
                     class="btn-select"
                     @click="toVoiceTemplateDetail(template)"
                   >
@@ -146,7 +139,6 @@ import TextDialogContents from "@/components/molecules/TextDialogContents.vue";
 import { displayCache } from "@/repository/cache";
 import analytics from "@/utils/firebaseAnalytics";
 import useLoadingModalController from "@/mixins/loadingModalController";
-import useModalController from "@/mixins/modalController";
 import useErrorModalController from "@/mixins/errorModalController";
 import Constants, { Scene } from "@/utils/constants";
 import { DISPLAY_CACHE_KEY } from "@/repository/cache/displayCache";
@@ -173,11 +165,6 @@ export default defineComponent({
   setup() {
     const sortList = common.getSort();
     const industries = common.getTemplateIndustries();
-    const {
-      isApper: isDocumentModalAppear,
-      open: openDocumentModal,
-      close: closeDocumentModal,
-    } = useModalController();
     const {
       isApper: isLoading,
       loadingMessage,
@@ -309,15 +296,6 @@ export default defineComponent({
       state.selectedTemplate = template;
     };
 
-    const selectTemplateAndOpenDocumentModal = (template: TemplateItem) => {
-      selectTemplate(template);
-      analytics.pressButtonManuscript(
-        template.id,
-        Constants.SCREEN.VOICE_TEMPLATE
-      );
-      openDocumentModal();
-    };
-
     return {
       ...toRefs(state),
       sortList,
@@ -334,14 +312,10 @@ export default defineComponent({
       errorMessage,
       openErrorModal,
       closeErrorModal,
-      isDocumentModalAppear,
-      openDocumentModal,
-      closeDocumentModal,
       clickScene,
       clickBack,
       convertDatestringToDate,
       selectTemplate,
-      selectTemplateAndOpenDocumentModal,
     };
   },
 });
