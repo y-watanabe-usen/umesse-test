@@ -16,16 +16,22 @@ const readStream = fs.createReadStream(file, { encoding: "utf-8" });
 
 readStream.pipe(parser);
 
+let check = [];
 parser.on("readable", () => {
   let data;
   while ((data = parser.read())) {
-    const str = `${data.title}${data.description}${data.manuscript}`;
+    let manuscript;
+    if (data.category === "template" || data.lang === "JP")
+      manuscript = data.manuscript;
+
+    const str = `${data.title}${data.description}${manuscript}`;
 
     for (let i = 0; i <= str.length; i++) {
       const v = str.substring(i, i + 1);
       const hexV = v.charCodeAt(0).toString(16).toLowerCase();
       if (hexV.substring(0, 2) == "2f") {
-        console.log(v, hexV);
+        // console.log(v, hexV);
+        check.push(v);
       }
     }
   }
@@ -36,5 +42,6 @@ parser.on("error", (e) => {
 });
 
 parser.on("end", () => {
+  console.log(Array.from(new Set(check)));
   console.log("\nend");
 });
