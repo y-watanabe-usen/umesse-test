@@ -200,6 +200,7 @@ export default defineComponent({
     };
 
     const createTts = async () => {
+      displayCache.remove(DISPLAY_CACHE_KEY.VOICE_FREE_INDEX_SELECT_TEXT);
       displayCache.remove(DISPLAY_CACHE_KEY.VOICE_FREE_INDEX_SELECT_SPEAKER);
       stop();
       openLoadingModal();

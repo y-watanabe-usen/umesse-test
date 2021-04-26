@@ -13,6 +13,8 @@
 <script lang="ts">
 import { reactive } from "vue";
 import { useRouter } from "vue-router";
+import { displayCache } from "@/repository/cache";
+import { DISPLAY_CACHE_KEY } from "@/repository/cache/displayCache";
 
 export default {
   name: "Header",
@@ -31,6 +33,8 @@ export default {
       if (props.clickBack) {
         props.clickBack();
       } else {
+        displayCache.remove(DISPLAY_CACHE_KEY.VOICE_FREE_INDEX_SELECT_TEXT);
+        displayCache.remove(DISPLAY_CACHE_KEY.VOICE_FREE_INDEX_SELECT_SPEAKER);
         router.go(-1);
       }
     };
