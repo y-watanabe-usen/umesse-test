@@ -102,19 +102,66 @@ exports.completeExternalCm = async (unisCustomerCd, external, body) => {
   try {
     [cm, index] = await db.User.findCmIndex(unisCustomerCd, body.cmId);
   } catch (e) {
+    if (!e instanceof NotFoundError) {
+      errorlog(JSON.stringify(e));
+      throw new InternalServerError(ERROR_CODE.E0000500);
+    }
+  }
+
+  if (!cm) {
+    // 該当CMが存在していない場合、外部連携をエラーにする
+    let data = {
+      ":status": "9",
+      ":errorCode": "U990",
+      ":errorMessage": ERROR_CODE.E0000404,
+      ":timestamp": timestamp(),
+    };
+    try {
+      const _ = await db.External.updateErrorData(unisCustomerCd, data);
+    } catch (e) {
+      errorlog(JSON.stringify(e));
+      throw new InternalServerError(ERROR_CODE.E0000500);
+    }
+
+    return body;
+  }
+
+  // CMステータスのチェック
+  if (cm.status !== constants.cmStatus.EXTERNAL_UPLOADING) {
+    // 整合性が合っていない状態の場合、外部連携をエラーにする
+    let data = {
+      ":status": "9",
+      ":errorCode": "U991",
+      ":errorMessage": ERROR_CODE.E0002000,
+      ":timestamp": timestamp(),
+    };
+    try {
+      const _ = await db.External.updateErrorData(unisCustomerCd, data);
+    } catch (e) {
+      errorlog(JSON.stringify(e));
+      throw new InternalServerError(ERROR_CODE.E0000500);
+    }
+
+    cm.status = constants.cmStatus.EXTERNAL_ERROR;
+    try {
+      const _ = await db.User.updateCm(unisCustomerCd, index, cm);
+    } catch (e) {
+      errorlog(JSON.stringify(e));
+      throw new InternalServerError(ERROR_CODE.E0000500);
+    }
+
+    return body;
+  }
+
+  // 外部連携データ取得
+  let ret;
+  try {
+    ret = await db.External.find(unisCustomerCd);
+  } catch (e) {
     if (e instanceof NotFoundError) throw e;
     errorlog(JSON.stringify(e));
     throw new InternalServerError(ERROR_CODE.E0000500);
   }
-
-  // CMステータスのチェック
-  if (cm.status !== constants.cmStatus.EXTERNAL_UPLOADING)
-    throw new BadRequestError(ERROR_CODE.E0002000);
-
-  // 外部連携データ取得
-  let ret = await this.getExternalCm(unisCustomerCd, external);
-  ret = ret.unisCustomers.shift();
-  if (!ret) throw new NotFoundError(ERROR_CODE.E0000404);
 
   if (body.dataProcessType == constants.cmDataProcessType.ERROR) {
     // エラー終了の場合
@@ -133,13 +180,7 @@ exports.completeExternalCm = async (unisCustomerCd, external, body) => {
     cm.status = constants.cmStatus.EXTERNAL_ERROR;
   } else {
     // 正常完了の場合
-    try {
-      const _ = await db.External.delete(unisCustomerCd);
-    } catch (e) {
-      errorlog(JSON.stringify(e));
-      throw new InternalServerError(ERROR_CODE.E0000500);
-    }
-    if (ret.dataProcessType == constants.cmDataProcessType.DELETE) {
+    if (ret.dataProcessType === constants.cmDataProcessType.DELETE) {
       // 連携解除の場合、各連携システム側で制御できないので、CMIDを新たに降りなおす
       const id = generateId(unisCustomerCd, constants.resourceCategory.CM);
       const path = `users/${unisCustomerCd}/${constants.resourceCategory.CM}`;
@@ -164,6 +205,13 @@ exports.completeExternalCm = async (unisCustomerCd, external, body) => {
       cm.status = constants.cmStatus.COMPLETE;
     } else {
       cm.status = constants.cmStatus.EXTERNAL_COMPLETE;
+    }
+
+    try {
+      const _ = await db.External.delete(unisCustomerCd);
+    } catch (e) {
+      errorlog(JSON.stringify(e));
+      throw new InternalServerError(ERROR_CODE.E0000500);
     }
   }
   cm.timestamp = timestamp();

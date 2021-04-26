@@ -110,7 +110,13 @@ describe("USEN素材データ取得", () => {
         contentsData[3].industry[0].industryCd,
         contentsData[3].scene[0].sceneCd
       )
-    ).resolves.toEqual([contentsData[3]]);
+    ).resolves.toEqual([contentsData[3], contentsData[4], contentsData[5]]);
+  });
+
+  test("[success] フリーデータ取得", async () => {
+    await expect(getResource("free")).resolves.toEqual([
+      { ...contentsData[4], category: "free" },
+    ]);
   });
 
   test("[error] USEN素材データ取得　パラメーターチェック", async () => {

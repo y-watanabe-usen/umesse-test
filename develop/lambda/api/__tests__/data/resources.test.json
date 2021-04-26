@@ -250,6 +250,72 @@
           "timestamp": { "S": "2019-09-01T09:00:00+09:00" }
         }
       }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "contentsId": { "S": "サンプル03_JP" },
+          "category": { "S": "narration" },
+          "title": { "S": "サンプル03" },
+          "description": { "S": "ナレーション・サンプル02" },
+          "manuscript": { "S": "あいうえお" },
+          "seconds": { "N": "60" },
+          "industry": {
+            "L": [
+              {
+                "M": {
+                  "industryCd": { "S": "02" },
+                  "industryName": { "S": "業種02" }
+                }
+              }
+            ]
+          },
+          "scene": {
+            "L": [
+              {
+                "M": {
+                  "sceneCd": { "S": "002" },
+                  "sceneName": { "S": "シーン002" }
+                }
+              }
+            ]
+          },
+          "timestamp": { "S": "2019-09-01T09:00:00+09:00" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "contentsId": { "S": "サンプル03_EN" },
+          "category": { "S": "narration" },
+          "title": { "S": "サンプル03" },
+          "description": { "S": "ナレーション・サンプル02" },
+          "manuscript": { "S": "あいうえお" },
+          "seconds": { "N": "60" },
+          "industry": {
+            "L": [
+              {
+                "M": {
+                  "industryCd": { "S": "02" },
+                  "industryName": { "S": "業種02" }
+                }
+              }
+            ]
+          },
+          "scene": {
+            "L": [
+              {
+                "M": {
+                  "sceneCd": { "S": "002" },
+                  "sceneName": { "S": "シーン002" }
+                }
+              }
+            ]
+          },
+          "timestamp": { "S": "2019-09-01T09:00:00+09:00" }
+        }
+      }
     }
   ]
 }
