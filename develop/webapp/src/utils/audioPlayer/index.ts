@@ -32,7 +32,7 @@ export default function useAudioPlayer() {
 
   const start = async (audioBuffer: AudioBuffer) => {
     source = context.createBufferSource();
-
+    
     source.buffer = audioBuffer;
     analyser.connect(context.destination);
     source.connect(analyser);
