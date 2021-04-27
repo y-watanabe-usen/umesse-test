@@ -4,6 +4,7 @@ import { RecordingItem } from "umesseapi/models";
 import { UMesseErrorFromApiFactory } from "@/models/umesseError";
 
 export interface RecordingFile {
+  id: string | undefined;
   title: string | undefined;
   description: string | undefined;
   blob: Blob | undefined;
@@ -27,27 +28,23 @@ export function useRecordingService(
     authToken: string,
     file: RecordingFile
   ): Promise<RecordingItem> => {
-    return new Promise(function(resolve, reject) {
-      fileReader.onload = function() {
-        recordingApi
-          .createUserRecording(
-            authToken,
-            file.title ?? "",
-            fileReader.result as string,
-            file.title,
-            file.description
-          )
-          .then((value) => {
-            console.log("resolve");
-            console.log("createUserRecording", <RecordingItem>value.data);
-            resolve(<RecordingItem>value.data);
-          })
-          .catch((e) => {
-            console.log("reject", e);
-            reject(UMesseErrorFromApiFactory(e));
-          });
-      };
-      if (file.blob) fileReader.readAsBinaryString(file.blob);
+    return new Promise(function (resolve, reject) {
+      recordingApi
+        .createUserRecording(
+          authToken,
+          file.id,
+          file.title,
+          file.description
+        )
+        .then((value) => {
+          console.log("resolve");
+          console.log("createUserRecording", <RecordingItem>value.data);
+          resolve(<RecordingItem>value.data);
+        })
+        .catch((e) => {
+          console.log("reject", e);
+          reject(UMesseErrorFromApiFactory(e));
+        });
     });
   };
 
@@ -80,17 +77,17 @@ export function useRecordingService(
   const put = async (url: string, file: RecordingFile): Promise<any> => {
     return new Promise(function (resolve, reject) {
       fileReader.onload = function () {
-        const data = new FormData();
-        data.append("file", fileReader.result as string);
         const config = {
           headers: {
-            "content-type": "multipart/form-data",
+            'Content-Type': 'audio/wave; charset=utf-8',
+            'x-amz-acl': 'private',
+            'Access-Control-Allow-Origin': '*',
           },
         }
         axios
-          .put(url, data, config)
-          .then(response => resolve(response))
-          .catch(error => reject(error));
+          .put(url, fileReader.result, config)
+          .then(res => resolve(res))
+          .catch(err => reject(err));
       };
       if (file.blob) fileReader.readAsBinaryString(file.blob);
     });

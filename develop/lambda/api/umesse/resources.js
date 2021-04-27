@@ -114,6 +114,9 @@ exports.getSignedUrl = async (id, category, protocol) => {
     case constants.resourceCategory.TTS:
       bucket = constants.s3Bucket().users;
       path = `users/${id.split("-")[0]}/${category}/${id}.mp3`;
+      if (protocol === "put") {
+        path = `users/${id.split("-")[0]}/${category}/${id}.wav`;
+      }
       break;
 
     case constants.resourceCategory.LANG:
