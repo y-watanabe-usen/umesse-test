@@ -567,7 +567,10 @@ export default defineComponent({
         if (!state.cmList.length) {
           openCmAbsentModal();
         } else {
-          fetchCm(state.sceneList[0].cd);
+          if (!state.activeSceneCd) {
+            state.activeSceneCd = state.sceneList[0].cd;
+          }
+          fetchCm(state.activeSceneCd);
         }
       } catch (e) {
         openErrorModal(e);
@@ -581,6 +584,7 @@ export default defineComponent({
         if (!v.scene) return false;
         return v.scene.sceneCd == sceneCd;
       });
+      console.log("fetchCm", state.cms);
     };
     const selectCm = (cm: CmItem) => {
       state.selectedCm = cm;
