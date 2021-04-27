@@ -319,9 +319,9 @@ export default defineComponent({
         // FIXME: mp3変換が重いので、wavでアップロード
         // state.file.blob = await audioRecorder.getMp3Blob();
         const response = await recordingStore.uploadRecordingData(state.file);
-        // cm.setNarration(response);
-        // analytics.setRecording(response.id);
-        // router.push({ name: "Cm" });
+        cm.setNarration(response);
+        analytics.setRecording(response.id);
+        router.push({ name: "Cm" });
         closeLoadingModal();
         closeModal();
       } catch (e) {

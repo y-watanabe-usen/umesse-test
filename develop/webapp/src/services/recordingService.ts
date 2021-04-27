@@ -76,20 +76,15 @@ export function useRecordingService(
 
   const put = async (url: string, file: RecordingFile): Promise<any> => {
     return new Promise(function (resolve, reject) {
-      fileReader.onload = function () {
-        const config = {
-          headers: {
-            'Content-Type': 'audio/wave; charset=utf-8',
-            'x-amz-acl': 'private',
-            'Access-Control-Allow-Origin': '*',
-          },
-        }
+      if (file.blob)
         axios
-          .put(url, fileReader.result, config)
+          .put(url, file.blob, {
+            headers: {
+              'Content-Type': 'audio/wav'
+            }
+          })
           .then(res => resolve(res))
           .catch(err => reject(err));
-      };
-      if (file.blob) fileReader.readAsBinaryString(file.blob);
     });
   };
 

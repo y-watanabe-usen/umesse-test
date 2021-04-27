@@ -53,18 +53,17 @@ export default function recordingStore() {
       // TODO: check arguments here.
       state.status = UPLOAD_RECORDING_STATE.UPLOADING;
 
-      // TODO: try
       const id = `${token()}-r-${new Date().getTime()}`;
       recordingFile.id = id;
       const uploadUrl = await recordingService.uploadById(id, "recording");
       const _ = await recordingService.put(uploadUrl, recordingFile);
-      // const response = await recordingService.upload(
-      //   token(),
-      //   recordingFile
-      // );
+      const response = await recordingService.upload(
+        token(),
+        recordingFile
+      );
       fetchRecordingData();
       state.status = UPLOAD_RECORDING_STATE.UPLOADED;
-      // return response;
+      return response;
     } catch (e) {
       console.log("error", e);
       state.status = UPLOAD_RECORDING_STATE.ERROR;
