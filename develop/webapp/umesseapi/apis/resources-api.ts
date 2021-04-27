@@ -33,10 +33,11 @@ export const ResourcesApiAxiosParamCreator = function (configuration?: Configura
          * @summary S3オブジェクトの署名付きURLの取得
          * @param {string} id 音源ID
          * @param {string} category カテゴリー
+         * @param {string} [protocol] プロトコル
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSignedUrl: async (id: string, category: string, options: any = {}): Promise<RequestArgs> => {
+        getSignedUrl: async (id: string, category: string, protocol?: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             if (id === null || id === undefined) {
                 throw new RequiredError('id','Required parameter id was null or undefined when calling getSignedUrl.');
@@ -62,6 +63,10 @@ export const ResourcesApiAxiosParamCreator = function (configuration?: Configura
 
             if (category !== undefined) {
                 localVarQueryParameter['category'] = category;
+            }
+
+            if (protocol !== undefined) {
+                localVarQueryParameter['protocol'] = protocol;
             }
 
             const query = new URLSearchParams(localVarUrlObj.search);
@@ -324,11 +329,12 @@ export const ResourcesApiFp = function(configuration?: Configuration) {
          * @summary S3オブジェクトの署名付きURLの取得
          * @param {string} id 音源ID
          * @param {string} category カテゴリー
+         * @param {string} [protocol] プロトコル
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getSignedUrl(id: string, category: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse200>> {
-            const localVarAxiosArgs = await ResourcesApiAxiosParamCreator(configuration).getSignedUrl(id, category, options);
+        async getSignedUrl(id: string, category: string, protocol?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse200>> {
+            const localVarAxiosArgs = await ResourcesApiAxiosParamCreator(configuration).getSignedUrl(id, category, protocol, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -425,11 +431,12 @@ export const ResourcesApiFactory = function (configuration?: Configuration, base
          * @summary S3オブジェクトの署名付きURLの取得
          * @param {string} id 音源ID
          * @param {string} category カテゴリー
+         * @param {string} [protocol] プロトコル
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getSignedUrl(id: string, category: string, options?: any): AxiosPromise<InlineResponse200> {
-            return ResourcesApiFp(configuration).getSignedUrl(id, category, options).then((request) => request(axios, basePath));
+        getSignedUrl(id: string, category: string, protocol?: string, options?: any): AxiosPromise<InlineResponse200> {
+            return ResourcesApiFp(configuration).getSignedUrl(id, category, protocol, options).then((request) => request(axios, basePath));
         },
         /**
          * BGM素材を一覧で取得する
@@ -503,12 +510,13 @@ export class ResourcesApi extends BaseAPI {
      * @summary S3オブジェクトの署名付きURLの取得
      * @param {string} id 音源ID
      * @param {string} category カテゴリー
+     * @param {string} [protocol] プロトコル
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ResourcesApi
      */
-    public getSignedUrl(id: string, category: string, options?: any) {
-        return ResourcesApiFp(this.configuration).getSignedUrl(id, category, options).then((request) => request(this.axios, this.basePath));
+    public getSignedUrl(id: string, category: string, protocol?: string, options?: any) {
+        return ResourcesApiFp(this.configuration).getSignedUrl(id, category, protocol, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * BGM素材を一覧で取得する

@@ -12,12 +12,13 @@ const { getResource, getSignedUrl } = require("../../umesse/resources");
  *
  * id String 音源ID
  * category String カテゴリー
+ * protocol String プロトコル (optional)
  * returns inline_response_200
  **/
-exports.getSignedUrl = function (id, category) {
+exports.getSignedUrl = function (id, category, protocol) {
   return new Promise(async function (resolve, reject) {
     try {
-      const json = await getSignedUrl(id, category);
+      const json = await getSignedUrl(id, category, protocol);
       debuglog(JSON.stringify(json));
       resolve(json);
     } catch (e) {

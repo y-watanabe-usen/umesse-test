@@ -3,8 +3,8 @@
 var utils = require('../utils/writer.js');
 var Resources = require('../service/ResourcesService');
 
-module.exports.getSignedUrl = function getSignedUrl (req, res, next, id, category) {
-  Resources.getSignedUrl(id, category)
+module.exports.getSignedUrl = function getSignedUrl (req, res, next, id, category, protocol) {
+  Resources.getSignedUrl(id, category, protocol)
     .then(function (response) {
       utils.writeJson(res, response);
     })

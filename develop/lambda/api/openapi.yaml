@@ -950,6 +950,12 @@ paths:
           schema:
             type: string
             example: "cm"
+        - name: protocol
+          in: query
+          description: プロトコル
+          schema:
+            type: string
+            example: "get or put"
       responses:
         200:
           description: successful response
@@ -1604,9 +1610,6 @@ components:
       properties:
         filename:
           type: string
-        recordedFile:
-          type: string
-          format: binary
         title:
           type: string
           example: サンプル
