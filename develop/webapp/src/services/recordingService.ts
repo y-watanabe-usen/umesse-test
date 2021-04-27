@@ -73,7 +73,7 @@ export function useRecordingService(
     }
   };
 
-  const put = async (url: string, file: RecordingFile): Promise<any> => {
+  const put = async (url: string, file: RecordingFile): Promise<void> => {
     return new Promise(function (resolve, reject) {
       if (file.blob)
         axios
@@ -82,7 +82,7 @@ export function useRecordingService(
               'Content-Type': 'audio/wav'
             }
           })
-          .then(res => resolve(res))
+          .then(res => resolve())
           .catch(err => reject(err));
     });
   };
