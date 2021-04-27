@@ -16,6 +16,11 @@ const readStream = fs.createReadStream(file, { encoding: "utf-8" });
 
 readStream.pipe(parser);
 
+function isNeedReplace(hexV) {
+  return hexV.substring(0, 2) == "2e";
+//  return hexV.substring(0, 2) == "2e" || hexV.substring(0, 2) == "2f";
+}
+
 let check = [];
 parser.on("readable", () => {
   let data;
@@ -29,7 +34,7 @@ parser.on("readable", () => {
     for (let i = 0; i <= str.length; i++) {
       const v = str.substring(i, i + 1);
       const hexV = v.charCodeAt(0).toString(16).toLowerCase();
-      if (hexV.substring(0, 2) == "2f") {
+      if (isNeedReplace(hexV)) {
         // console.log(v, hexV);
         check.push(v);
       }
