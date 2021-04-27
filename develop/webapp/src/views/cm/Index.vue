@@ -19,7 +19,8 @@
                 />
                 試聴
               </Button>
-              <p>{{ convertNumberToTime(cmTime) }}</p>
+              <p v-if="isIndicateCmTime">{{ convertNumberToTime(cmTime) }}</p>
+              <p v-else>約 {{ convertNumberToTime(getAboutCmTime()) }}</p>
             </div>
           </template>
           <template #buttons>
@@ -776,6 +777,7 @@ export default defineComponent({
       isBgmSliderAppear: false,
       narrationIndex: 0,
       isFocus: false,
+      isIndicateCmTime: cm.isEdit,
     });
 
     const inputFocusBlur = (isFocus: boolean) => {
@@ -842,6 +844,7 @@ export default defineComponent({
       );
       cm.clearNarration(index);
       closeAllDropdownMenu();
+      state.isIndicateCmTime = false;
     };
     const clearStartChime = (id: string) => {
       analytics.pressButtonRemove(
@@ -850,6 +853,7 @@ export default defineComponent({
         Constants.SCREEN.CM
       );
       cm.clearStartChime();
+      state.isIndicateCmTime = false;
     };
     const clearEndChime = (id: string) => {
       analytics.pressButtonRemove(
@@ -858,6 +862,7 @@ export default defineComponent({
         Constants.SCREEN.CM
       );
       cm.clearEndChime();
+      state.isIndicateCmTime = false;
     };
     const clearBgm = (id: string) => {
       analytics.pressButtonRemove(
@@ -866,6 +871,7 @@ export default defineComponent({
         Constants.SCREEN.CM
       );
       cm.clearBgm();
+      state.isIndicateCmTime = false;
     };
 
     const clickPlayNarration = (index: number) => {
@@ -877,10 +883,12 @@ export default defineComponent({
       try {
         openLoadingModal();
         await cm.create();
+        state.isIndicateCmTime = true;
         closeLoadingModal();
         openSaveModal();
       } catch (e) {
         openErrorModal(e);
+        state.isIndicateCmTime = false;
       } finally {
         closeLoadingModal();
       }
@@ -890,9 +898,11 @@ export default defineComponent({
       try {
         openPlayModal();
         await cm.create();
+        state.isIndicateCmTime = true;
       } catch (e) {
         closePlayModal();
         openErrorModal(e);
+        state.isIndicateCmTime = false;
       }
     };
     const stopAndClosePlayModal = () => {
@@ -1151,6 +1161,16 @@ export default defineComponent({
     };
     const backScreenName = cm.isEdit ? "管理" : "ホーム";
     const toBackFunction = cm.isEdit ? toManagement : toHome;
+
+    const getAboutCmTime = () => {
+      let aboutCmTime =
+        (state.startChime?.seconds ?? 0) + (state.endChime?.seconds ?? 0);
+      state.narrations.forEach((v) => {
+        aboutCmTime += v.seconds;
+      });
+      return aboutCmTime;
+    };
+
     return {
       ...toRefs(state),
       clearNarration,
@@ -1184,6 +1204,7 @@ export default defineComponent({
       playEndChime,
       playBgm,
       toHome,
+      getAboutCmTime,
       closeAllDropdownMenu,
       toggleNarrationDropdown,
       toggleStartChimeDropdown,
