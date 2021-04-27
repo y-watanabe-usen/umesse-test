@@ -82,7 +82,10 @@ export function useRecordingService(
               'Content-Type': 'audio/wav'
             }
           })
-          .then(res => resolve())
+          .then(res => {
+            console.log(res);
+            resolve();
+          })
           .catch(err => reject(err));
     });
   };
