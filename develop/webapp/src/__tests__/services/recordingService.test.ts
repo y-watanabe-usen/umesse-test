@@ -7,16 +7,12 @@ import {
 import { ERROR_CODE, ERROR_PATTERN } from "@/utils/constants";
 import * as umesseapi from "umesseapi";
 
-    const recordingRepository = new umesseapi.RecordingApi(
-      undefined,
-      "",
-      axios
-    );
-    const fileReader = new FileReader();
-    const recordingService = useRecordingService(
-      recordingRepository,
-      fileReader
-    );
+const resourcesRepository = new umesseapi.ResourcesApi(undefined, "", axios);
+const recordingRepository = new umesseapi.RecordingApi(undefined, "", axios);
+const recordingService = useRecordingService(
+  resourcesRepository,
+  recordingRepository
+);
 
 describe("fetchのテスト", () => {
   beforeEach(() => {
@@ -158,12 +154,9 @@ describe("uploadのテスト", () => {
       timestamp: "2021-03-17T13:29:32.195+09:00",
     };
     jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
-    fileReader.onload = function() {
-      responseJson;
-    };
-    fileReader.readAsBinaryString(new Blob());
 
     const response = await recordingService.upload("authToken", <RecordingFile>{
+      id: "id",
       title: "title",
       description: "description",
       blob: undefined,
@@ -183,13 +176,10 @@ describe("uploadのテスト", () => {
     );
 
     jest.spyOn(axios, "request").mockRejectedValue({ data: responseJson });
-    fileReader.onload = function() {
-      expoectedError;
-    };
-    fileReader.readAsBinaryString(new Blob());
 
     await expect(
       recordingService.upload("authToken", <RecordingFile>{
+        id: "id",
         title: "title",
         description: "description",
         blob: undefined,
@@ -207,13 +197,10 @@ describe("uploadのテスト", () => {
     jest
       .spyOn(axios, "request")
       .mockRejectedValue({ response: { status: 500 } });
-    fileReader.onload = function() {
-      expoectedError;
-    };
-    fileReader.readAsBinaryString(new Blob());
 
     await expect(
       recordingService.upload("authToken", <RecordingFile>{
+        id: "id",
         title: "title",
         description: "description",
         blob: undefined,
