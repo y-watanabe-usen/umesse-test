@@ -13,7 +13,7 @@ const fileReader = new FileReader();
 
 const userService = useUserService(authRepository, userRepository);
 const resourcesService = useResourcesService(resourcesRepository, recordingRepository, ttsRepository);
-const recordingService = useRecordingService(recordingRepository, fileReader);
+const recordingService = useRecordingService(resourcesRepository, recordingRepository, fileReader);
 const cmService = useCmService(cmRepository, cmCache);
 const ttsService = useTtsService(ttsRepository, ttsCache);
 const audioService = useAudioService(audioRepository, resourcesRepository, audioCache, audioContext);

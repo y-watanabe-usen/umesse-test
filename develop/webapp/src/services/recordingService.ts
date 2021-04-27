@@ -1,3 +1,4 @@
+import axios from "axios";
 import * as UMesseApi from "umesseapi";
 import { RecordingItem } from "umesseapi/models";
 import { UMesseErrorFromApiFactory } from "@/models/umesseError";
@@ -9,12 +10,13 @@ export interface RecordingFile {
 }
 
 export function useRecordingService(
-  api: UMesseApi.RecordingApi,
+  resourcesApi: UMesseApi.ResourcesApi,
+  recordingApi: UMesseApi.RecordingApi,
   fileReader: FileReader
 ) {
   const fetch = async (authToken: string) => {
     try {
-      const response = await api.listUserRecording(authToken);
+      const response = await recordingApi.listUserRecording(authToken);
       return response.data;
     } catch (e) {
       throw UMesseErrorFromApiFactory(e);
@@ -27,7 +29,7 @@ export function useRecordingService(
   ): Promise<RecordingItem> => {
     return new Promise(function(resolve, reject) {
       fileReader.onload = function() {
-        api
+        recordingApi
           .createUserRecording(
             authToken,
             file.title ?? "",
@@ -56,7 +58,7 @@ export function useRecordingService(
     description: string
   ) => {
     try {
-      const response = await api.updateUserRecording(authToken, id, {
+      const response = await recordingApi.updateUserRecording(authToken, id, {
         title: title,
         description: description,
       });
@@ -68,8 +70,36 @@ export function useRecordingService(
 
   const remove = async (authToken: string, id: string) => {
     try {
-      const response = await api.deleteUserRecording(id, authToken);
+      const response = await recordingApi.deleteUserRecording(id, authToken);
       return response.data;
+    } catch (e) {
+      throw UMesseErrorFromApiFactory(e);
+    }
+  };
+
+  const put = async (url: string, file: RecordingFile): Promise<any> => {
+    return new Promise(function (resolve, reject) {
+      fileReader.onload = function () {
+        const data = new FormData();
+        data.append("file", fileReader.result as string);
+        const config = {
+          headers: {
+            "content-type": "multipart/form-data",
+          },
+        }
+        axios
+          .put(url, data, config)
+          .then(response => resolve(response))
+          .catch(error => reject(error));
+      };
+      if (file.blob) fileReader.readAsBinaryString(file.blob);
+    });
+  };
+
+  const uploadById = async (id: string, category: string) => {
+    try {
+      const resourcesRepositoryResponse = await resourcesApi.getSignedUrl(id, category, "put");
+      return resourcesRepositoryResponse.data.url;
     } catch (e) {
       throw UMesseErrorFromApiFactory(e);
     }
@@ -80,5 +110,7 @@ export function useRecordingService(
     upload,
     update,
     remove,
+    put,
+    uploadById,
   };
 }
