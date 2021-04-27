@@ -8,12 +8,17 @@ export default function useAudioRecorder() {
     recording: false,
     chunks: new Array<Blob>(),
     powerDecibels: -100,
+    recordingStartedTime: 0,
+    recordingTime: 0,
   });
   let mediaRecorder: MediaRecorder | undefined;
   let timer: number | undefined;
 
   const isRecording = () => state.recording;
   const hasRecording = () => (state.chunks.length !== 0);
+  const getRecordingTime = () => {
+    return state.recordingTime;
+  };
 
   const context = new window.AudioContext();
   const analyser: AnalyserNode = context.createAnalyser();
@@ -39,6 +44,7 @@ export default function useAudioRecorder() {
     });
     const sourceAudioNode = context.createMediaStreamSource(stream);
     sourceAudioNode.connect(analyser);
+
     //取得した音声の録音
     mediaRecorder = new MediaRecorder(stream);
     mediaRecorder.onstop = () => {
@@ -50,8 +56,11 @@ export default function useAudioRecorder() {
     };
     mediaRecorder.ondataavailable = (e: BlobEvent) => state.chunks.push(e.data);
     mediaRecorder.start();
+    state.recordingStartedTime = context.currentTime;
+    state.recordingTime = 0;
     timer = setInterval(() => {
       updateAnalyser();
+      updateRecordingTIme();
     }, 100);
     state.recording = true;
   };
@@ -108,8 +117,12 @@ export default function useAudioRecorder() {
     state.powerDecibels = Math.round(10 * Math.log10(sumOfSquares / sampleBuffer.length));
   };
 
+  const updateRecordingTIme = () => {
+    state.recordingTime = context.currentTime - state.recordingStartedTime;
+  };
+
   return {
     start, stop, reset, isRecording, hasRecording,
-    getWaveBlob, getMp3Blob, getAudioBuffer, getPowerDecibels
+    getWaveBlob, getMp3Blob, getAudioBuffer, getPowerDecibels, getRecordingTime
   };
 }

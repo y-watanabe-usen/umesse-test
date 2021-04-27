@@ -58,21 +58,43 @@
                     optimum="-30"
                   ></meter>
                   <span id="avg-level-text"> {{ decibel }} </span> dB
-                  <h5 class="title">録音したデータ１</h5>
-                  <div class="time" v-if="hasRecordedData">
-                    <p>{{ convertNumberToTime(playbackTime) }}</p>
-                    <p>{{ convertNumberToTime(duration) }}</p>
-                  </div>
-                  <div class="time" v-else>
-                    <p>— : — : —</p>
-                    <p>— : — : —</p>
-                  </div>
-                  <meter
-                    min="0"
-                    :max="duration"
-                    class="progress-meter"
-                    :value="playbackTime"
-                  ></meter>
+                  <h5 class="title">録音したデータ</h5>
+                  <template v-if="hasRecordedData">
+                    <div class="time">
+                      <p>{{ convertNumberToTime(playbackTime) }}</p>
+                      <p>{{ convertNumberToTime(duration) }}</p>
+                    </div>
+                    <meter
+                      min="0"
+                      :max="duration"
+                      class="progress-meter"
+                      :value="playbackTime"
+                    ></meter>
+                  </template>
+                  <template v-else-if="isRecording">
+                    <div class="time">
+                      <p>{{ convertNumberToTime(recordingTime) }}</p>
+                      <p>{{ convertNumberToTime(Constants.MAX_RECORDING_TIME) }}</p>
+                    </div>
+                    <meter
+                      min="0"
+                      :max="Constants.MAX_RECORDING_TIME"
+                      class="progress-meter"
+                      :value="recordingTime"
+                    ></meter>
+                  </template>
+                  <template v-else>
+                    <div class="time">
+                      <p>— : — : —</p>
+                      <p>— : — : —</p>
+                    </div>
+                    <meter
+                      min="0"
+                      :max="duration"
+                      class="progress-meter"
+                      :value="playbackTime"
+                    ></meter>
+                  </template>
                   <div class="buttons">
                     <button
                       class="btn-play"
@@ -250,6 +272,7 @@ export default defineComponent({
       isPlaying: computed(() => audioPlayer.isPlaying()),
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       duration: computed(() => audioPlayer.getDuration()),
+      recordingTime: computed(() => audioRecorder.getRecordingTime()),
       timerId: 0,
     });
 
@@ -273,7 +296,7 @@ export default defineComponent({
         // 最大2分録音
         state.timerId = setTimeout(() => {
           audioRecorder.stop();
-        }, 120000);
+        }, Constants.MAX_RECORDING_TIME * 1000);
       }
     };
 
