@@ -189,15 +189,16 @@
           <ModalHeader title="試聴" @close="stopAndClosePlayModal" />
         </template>
         <template #contents>
-          <PlayDialogContents
+          <NewPlayDialogContents
             :isLoading="isDownloading"
             :isPlaying="isPlaying"
-            :playbackTime="playbackTime"
+            :currentTime="currentTime"
             :duration="duration"
             :isDownload="isDownload"
             @download="download(selectedNarration)"
             @play="play(selectedNarration)"
             @stop="stop"
+            :oninput="oninput"
           />
         </template>
         <template #footer>
@@ -357,7 +358,7 @@
 
 <script lang="ts">
 import { defineComponent, computed, onMounted, reactive, toRefs } from "vue";
-import useAudioPlayer from "@/utils/audioPlayer";
+import useNewAudioPlayer from "@/utils/newAudioPlayer";
 import * as common from "@/utils/common";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
@@ -373,7 +374,7 @@ import ModalDialog from "@/components/organisms/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
 import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
-import PlayDialogContents from "@/components/molecules/PlayDialogContents.vue";
+import NewPlayDialogContents from "@/components/molecules/NewPlayDialogContents.vue";
 import TextDialogContents from "@/components/molecules/TextDialogContents.vue";
 import DropdownMenu from "@/components/molecules/DropdownMenu.vue";
 import { NarrationItem } from "umesseapi/models";
@@ -400,6 +401,7 @@ import useModalController from "@/mixins/modalController";
 import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
 import { useCmStore } from "@/store/cm";
+import { resourcesRepository } from "@/repository/api";
 
 export default defineComponent({
   components: {
@@ -418,7 +420,7 @@ export default defineComponent({
     ModalFooter,
     ModalErrorDialog,
     ModalLoading,
-    PlayDialogContents,
+    NewPlayDialogContents,
     TextDialogContents,
     DropdownMenu,
     FormGroup,
@@ -427,7 +429,7 @@ export default defineComponent({
     MessageDialogContents,
   },
   setup() {
-    const audioPlayer = useAudioPlayer();
+    const audioPlayer = useNewAudioPlayer();
     const { auth } = useGlobalStore();
     const cm = useCmStore();
     const authToken = <string>auth.getToken();
@@ -496,7 +498,7 @@ export default defineComponent({
       selectedNarration: null as NarrationItem | null,
       isPlaying: computed(() => audioPlayer.isPlaying()),
       isDownloading: false,
-      playbackTime: computed(() => audioPlayer.getPlaybackTime()),
+      currentTime: computed(() => audioPlayer.getCurrentTime()),
       duration: computed(() => audioPlayer.getDuration()),
       dropdownNarrationId: "",
       title: "",
@@ -578,16 +580,21 @@ export default defineComponent({
     const play = async (narration: NarrationItem) => {
       try {
         state.isDownloading = true;
-        const audioBuffer = await audioService.getById(
+        // const audioBuffer = await audioService.getById(
+        //   narration.id,
+        //   narration.category
+        // );
+        const response = await resourcesRepository.getSignedUrl(
           narration.id,
           narration.category
         );
+        const url = response.data.url ?? "";
         analytics.pressButtonPlayTrial(
           narration.id,
           Constants.CATEGORY.NARRATION,
           Constants.SCREEN.NARRATION
         );
-        audioPlayer.start(audioBuffer);
+        audioPlayer.start(url);
       } catch (e) {
         openErrorModal(e);
       } finally {
@@ -727,6 +734,11 @@ export default defineComponent({
       fetchNarration();
     };
 
+    const oninput = (e: any) => {
+      console.log("oninput", e.target.value);
+      audioPlayer.changeCurrentTime(e.target.value);
+    };
+
     return {
       ...toRefs(state),
       sortList,
@@ -750,6 +762,7 @@ export default defineComponent({
       saveAndOpenSavedModal,
       selectNarrationAndOpenRemoveModal,
       removeAndOpenRemovedModal,
+      oninput,
       isPlayModalAppear,
       openPlayModal,
       closePlayModal,
