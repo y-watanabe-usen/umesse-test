@@ -823,8 +823,7 @@ export default defineComponent({
       try {
         state.isDownloading = true;
         const audioBuffer = await audioService.getByUrl(cm.url);
-        // todo: timeoutになり未確認
-        // analytics.pressButtonPlayTrial(cm.url, Constants.CATEGORY.CM, Constants.SCREEN.CM);
+        analytics.pressButtonPlayTrial(cm.url, Constants.CATEGORY.CM, Constants.SCREEN.CM);
         audioPlayer.start(audioBuffer);
       } catch (e) {
         openErrorModal(e);
