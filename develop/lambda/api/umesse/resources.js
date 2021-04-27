@@ -74,11 +74,12 @@ exports.getResource = async (category, industryCd, sceneCd, sort) => {
 };
 
 // 署名付きURL取得
-exports.getSignedUrl = async (id, category) => {
+exports.getSignedUrl = async (id, category, protocol) => {
   debuglog(
     `[getSignedUrl] ${JSON.stringify({
       id: id,
       category: category,
+      protocol: protocol,
     })}`
   );
 
@@ -86,15 +87,17 @@ exports.getSignedUrl = async (id, category) => {
   let params = {
     category: category,
   };
-  switch (category) {
-    case constants.resourceCategory.CM:
-    case constants.resourceCategory.RECORDING:
-    case constants.resourceCategory.TTS:
-      params[`${category}Id`] = id;
-      break;
-    default:
-      params.id = id;
-      break;
+  if (protocol !== "put") {
+    switch (category) {
+      case constants.resourceCategory.CM:
+      case constants.resourceCategory.RECORDING:
+      case constants.resourceCategory.TTS:
+        params[`${category}Id`] = id;
+        break;
+      default:
+        params.id = id;
+        break;
+    }
   }
   let checkError = checkParams(params);
   if (checkError) throw new BadRequestError(checkError);
@@ -130,7 +133,11 @@ exports.getSignedUrl = async (id, category) => {
 
   let ret;
   try {
-    ret = await s3Manager.getSignedUrl(bucket, path);
+    if (protocol === "put") {
+      ret = await s3Manager.putSignedUrl(bucket, path);
+    } else {
+      ret = await s3Manager.getSignedUrl(bucket, path);
+    }
     debuglog(ret);
   } catch (e) {
     errorlog(JSON.stringify(e));
