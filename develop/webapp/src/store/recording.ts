@@ -56,7 +56,7 @@ export default function recordingStore() {
       const id = `${token()}-r-${new Date().getTime()}`;
       recordingFile.id = id;
       const uploadUrl = await recordingService.uploadById(id, "recording");
-      const _ = await recordingService.put(uploadUrl, recordingFile);
+      await recordingService.put(uploadUrl, recordingFile);
       const response = await recordingService.upload(
         token(),
         recordingFile

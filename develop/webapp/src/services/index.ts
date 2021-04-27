@@ -9,11 +9,10 @@ import { useUserService } from "@/services/userService";
 import { useUploadService } from "@/services/uploadService";
 
 const audioContext = new AudioContext();
-const fileReader = new FileReader();
 
 const userService = useUserService(authRepository, userRepository);
 const resourcesService = useResourcesService(resourcesRepository, recordingRepository, ttsRepository);
-const recordingService = useRecordingService(resourcesRepository, recordingRepository, fileReader);
+const recordingService = useRecordingService(resourcesRepository, recordingRepository);
 const cmService = useCmService(cmRepository, cmCache);
 const ttsService = useTtsService(ttsRepository, ttsCache);
 const audioService = useAudioService(audioRepository, resourcesRepository, audioCache, audioContext);

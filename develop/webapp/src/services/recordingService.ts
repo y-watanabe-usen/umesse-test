@@ -12,8 +12,7 @@ export interface RecordingFile {
 
 export function useRecordingService(
   resourcesApi: UMesseApi.ResourcesApi,
-  recordingApi: UMesseApi.RecordingApi,
-  fileReader: FileReader
+  recordingApi: UMesseApi.RecordingApi
 ) {
   const fetch = async (authToken: string) => {
     try {
