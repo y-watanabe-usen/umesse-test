@@ -27,6 +27,10 @@ const readStream = fs.createReadStream(file, { encoding: "utf-8" });
 
 readStream.pipe(parser);
 
+function isNeedReplace(hexV) {
+  return hexV.substring(0, 2) == "2e" || hexV.substring(0, 2) == "2f";
+}
+
 parser.on("readable", () => {
   let data;
   while ((data = parser.read())) {
@@ -38,7 +42,7 @@ parser.on("readable", () => {
     for (let i = 0; i <= data.title.length; i++) {
       const v = data.title.substring(i, i + 1);
       const hexV = v.charCodeAt(0).toString(16).toLowerCase();
-      if (hexV.substring(0, 2) == "2f") {
+      if (isNeedReplace(hexV)) {
         data.title = data.title.replace(v, convert[v]);
       }
     }
@@ -46,7 +50,7 @@ parser.on("readable", () => {
     for (let i = 0; i <= data.description.length; i++) {
       const v = data.description.substring(i, i + 1);
       const hexV = v.charCodeAt(0).toString(16).toLowerCase();
-      if (hexV.substring(0, 2) == "2f") {
+      if (isNeedReplace(hexV)) {
         data.description = data.description.replace(v, convert[v]);
       }
     }
@@ -55,7 +59,7 @@ parser.on("readable", () => {
       for (let i = 0; i <= data.manuscript.length; i++) {
         const v = data.manuscript.substring(i, i + 1);
         const hexV = v.charCodeAt(0).toString(16).toLowerCase();
-        if (hexV.substring(0, 2) == "2f") {
+        if (isNeedReplace(hexV)) {
           data.manuscript = data.manuscript.replace(v, convert[v]);
           if (data.jp) data.jp = data.jp.replace(v, convert[v]);
         }
@@ -246,4 +250,9 @@ const convert = {
   "⽼": "老",
   "⽊": "木",
   "⼩": "小",
+  "⻤": "鬼",
+  "⺟": "母",
+  "⻑": "長",
+  "⺠": "民",
+  "⻭": "歯",
 };
