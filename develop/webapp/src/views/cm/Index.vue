@@ -172,6 +172,7 @@
                             clearNarration(index, narration.id);
                           },
                           isCaution: true,
+                          isDisabled: narrations.length == 1,
                         },
                       ]"
                     />
@@ -759,10 +760,7 @@ export default defineComponent({
       duration: computed(() => audioPlayer.getDuration()),
       title: cm.title,
       description: cm.description,
-      scene: common.getSceneCd(
-        cm.scene.sceneCd,
-        cm.isEdit
-      ),
+      scene: common.getSceneCd(cm.scene.sceneCd, cm.isEdit),
       uploadSystem: common.getUploadSystemServiceCd(
         authUser.serviceCd,
         cm.uploadSystem,
