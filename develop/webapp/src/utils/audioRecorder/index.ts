@@ -60,7 +60,7 @@ export default function useAudioRecorder() {
     state.recordingTime = 0;
     timer = setInterval(() => {
       updateAnalyser();
-      updateRecordingTIme();
+      updateRecordingTime();
     }, 100);
     state.recording = true;
   };
@@ -117,7 +117,7 @@ export default function useAudioRecorder() {
     state.powerDecibels = Math.round(10 * Math.log10(sumOfSquares / sampleBuffer.length));
   };
 
-  const updateRecordingTIme = () => {
+  const updateRecordingTime = () => {
     state.recordingTime = context.currentTime - state.recordingStartedTime;
   };
 
