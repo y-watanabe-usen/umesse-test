@@ -27,7 +27,6 @@ export function useCmService(api: UMesseApi.CmApi, cmCache: CmCache) {
       api
         .listUserCm(authToken, sort)
         .then((response) => {
-          console.log(response.data);
           const scenes: Scene[] = [];
           const cms: CmItem[] = [];
           response.data.forEach((scene: CmListItemInner) => {
@@ -36,7 +35,6 @@ export function useCmService(api: UMesseApi.CmApi, cmCache: CmCache) {
               cms.push(cm);
             });
           });
-          console.log("fetch", cms);
           resolve([scenes, cms]);
         })
         .catch((e) => {

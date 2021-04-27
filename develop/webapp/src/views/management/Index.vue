@@ -584,7 +584,6 @@ export default defineComponent({
         if (!v.scene) return false;
         return v.scene.sceneCd == sceneCd;
       });
-      console.log("fetchCm", state.cms);
     };
     const selectCm = (cm: CmItem) => {
       state.selectedCm = cm;
