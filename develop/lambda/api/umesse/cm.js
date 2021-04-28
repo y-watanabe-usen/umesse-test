@@ -72,7 +72,8 @@ exports.getCm = async (unisCustomerCd, id, sort) => {
     let res = [];
     for (const sceneCd of scenes) {
       if (!sceneCd) continue;
-      const details = data.filter((item) => item.scene.sceneCd === sceneCd);
+      let details = data.filter((item) => item.scene.sceneCd === sceneCd);
+      details = responseData(details, constants.resourceCategory.CM, sort);
       res.push({
         sceneCd: sceneCd,
         sceneName: details[0].scene.sceneName,
