@@ -324,7 +324,6 @@
     <transition>
       <ModalDialog
         v-if="isNarrationTtsAbsentApper"
-        size="small"
         @close="closeNarrationTtsAbsentModal"
       >
         <template #header>
