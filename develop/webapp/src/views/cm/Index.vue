@@ -909,6 +909,7 @@ export default defineComponent({
       closePlayModal();
     };
     const updateAndOpenSavedModal = async () => {
+      removeDisplayCache();
       saveAnalytics();
       try {
         openLoadingModal();
@@ -1170,6 +1171,14 @@ export default defineComponent({
       return aboutCmTime;
     };
 
+    const removeDisplayCache = () => {
+      displayCache.remove(DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_INDUSTRY_CD);
+      displayCache.remove(DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_SCENE_CD);
+      displayCache.remove(DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_TEMPLATES);
+      displayCache.remove(DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_SCENES);
+      displayCache.remove(DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_SORT);
+    };
+
     return {
       ...toRefs(state),
       clearNarration,
@@ -1258,6 +1267,7 @@ export default defineComponent({
       backScreenName,
       toBackFunction,
       inputFocusBlur,
+      removeDisplayCache,
     };
   },
 });
