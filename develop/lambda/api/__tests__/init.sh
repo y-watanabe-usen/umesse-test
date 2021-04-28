@@ -6,9 +6,10 @@ AWSCLI="aws --endpoint-url http://localhost:4566 --region $REGION"
 
 # s3 test data
 $AWSCLI s3 cp $HERE/data/040000000-c-00000002.aac s3://umesse-users/users/040000000/cm/
+$AWSCLI s3 cp $HERE/data/050000000-r-00000004.wav s3://umesse-users/users/050000000/recording/
+$AWSCLI s3 cp $HERE/data/060000020-c-00000001.aac s3://umesse-users/users/060000020/cm/
 $AWSCLI s3 cp $HERE/data/ja.mp3 s3://umesse-users/users/050000000/tts/
 $AWSCLI s3 cp $HERE/data/en.mp3 s3://umesse-users/users/050000000/tts/
-$AWSCLI s3 cp $HERE/data/060000020-c-00000001.aac s3://umesse-users/users/060000020/cm/
 
 # dynamodb external table clear
 node $HERE/clear.js

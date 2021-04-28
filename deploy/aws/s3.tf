@@ -23,7 +23,7 @@ resource "aws_s3_bucket" "users" {
 
   cors_rule {
     allowed_headers = ["*"]
-    allowed_methods = ["GET", "HEAD"]
+    allowed_methods = ["GET", "HEAD", "PUT"]
     allowed_origins = ["*"]
   }
 }

@@ -313,10 +313,11 @@ export default defineComponent({
     const deleteRecordedData = () => audioRecorder.reset();
     const uploadRecordingFile = async () => {
       /// check state.file.
-      // state.file.blob = await audioRecorder.getWaveBlob();
       try {
         openLoadingModal();
-        state.file.blob = await audioRecorder.getMp3Blob();
+        state.file.blob = await audioRecorder.getWaveBlob();
+        // FIXME: mp3変換が重いので、wavでアップロード
+        // state.file.blob = await audioRecorder.getMp3Blob();
         const response = await recordingStore.uploadRecordingData(state.file);
         cm.setNarration(response);
         analytics.setRecording(response.id);

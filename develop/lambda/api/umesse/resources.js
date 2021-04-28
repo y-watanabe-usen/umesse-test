@@ -74,11 +74,12 @@ exports.getResource = async (category, industryCd, sceneCd, sort) => {
 };
 
 // 署名付きURL取得
-exports.getSignedUrl = async (id, category) => {
+exports.getSignedUrl = async (id, category, protocol) => {
   debuglog(
     `[getSignedUrl] ${JSON.stringify({
       id: id,
       category: category,
+      protocol: protocol,
     })}`
   );
 
@@ -86,15 +87,17 @@ exports.getSignedUrl = async (id, category) => {
   let params = {
     category: category,
   };
-  switch (category) {
-    case constants.resourceCategory.CM:
-    case constants.resourceCategory.RECORDING:
-    case constants.resourceCategory.TTS:
-      params[`${category}Id`] = id;
-      break;
-    default:
-      params.id = id;
-      break;
+  if (protocol !== "put") {
+    switch (category) {
+      case constants.resourceCategory.CM:
+      case constants.resourceCategory.RECORDING:
+      case constants.resourceCategory.TTS:
+        params[`${category}Id`] = id;
+        break;
+      default:
+        params.id = id;
+        break;
+    }
   }
   let checkError = checkParams(params);
   if (checkError) throw new BadRequestError(checkError);
@@ -111,6 +114,9 @@ exports.getSignedUrl = async (id, category) => {
     case constants.resourceCategory.TTS:
       bucket = constants.s3Bucket().users;
       path = `users/${id.split("-")[0]}/${category}/${id}.mp3`;
+      if (protocol === "put") {
+        path = `users/${id.split("-")[0]}/${category}/${id}.wav`;
+      }
       break;
 
     case constants.resourceCategory.LANG:
@@ -130,7 +136,11 @@ exports.getSignedUrl = async (id, category) => {
 
   let ret;
   try {
-    ret = await s3Manager.getSignedUrl(bucket, path);
+    if (protocol === "put") {
+      ret = await s3Manager.putSignedUrl(bucket, path);
+    } else {
+      ret = await s3Manager.getSignedUrl(bucket, path);
+    }
     debuglog(ret);
   } catch (e) {
     errorlog(JSON.stringify(e));
@@ -199,32 +209,17 @@ exports.createRecordingResource = async (unisCustomerCd, body) => {
       unisCustomerCd: unisCustomerCd,
       ...body,
     },
-    ["recordedFile", "title"]
+    ["filename", "title"]
   );
   if (checkError) throw new BadRequestError(checkError);
 
   // ID作成
   const id = generateId(unisCustomerCd, constants.resourceCategory.RECORDING);
 
-  const binaryData = Buffer.from(body.recordedFile, "binary");
-  // S3へPUT
-  let ret;
-  try {
-    let path = `users/${unisCustomerCd}/${constants.resourceCategory.RECORDING}/${id}.mp3`;
-    ret = await s3Manager.put(constants.s3Bucket().users, path, binaryData);
-  } catch (e) {
-    errorlog(JSON.stringify(e));
-    throw new InternalServerError(ERROR_CODE.E0000500);
-  }
-
-  // 秒数取得
+  // S3のオブジェクト変換
   let seconds;
   try {
-    seconds = await getDuration(
-      unisCustomerCd,
-      id,
-      constants.resourceCategory.RECORDING
-    );
+    seconds = await convertMp3(unisCustomerCd, id, body.filename);
   } catch (e) {
     errorlog(JSON.stringify(e));
     throw new InternalServerError(ERROR_CODE.E0000500);
@@ -241,6 +236,7 @@ exports.createRecordingResource = async (unisCustomerCd, body) => {
     timestamp: timestamp(),
   };
 
+  let ret;
   try {
     ret = await db.User.addResource(
       unisCustomerCd,
@@ -555,6 +551,64 @@ exports.deleteUserResource = async (unisCustomerCd, category, id) => {
 
   return responseData(ret, category);
 };
+
+// mp3変換処理
+async function convertMp3(unisCustomerCd, id, filename) {
+  try {
+    // UMesseConverter.
+    const converter = new UMesseConverter(s3Manager);
+
+    // 出力ファイルパス解決.
+    const workDir = converter.getWorkDir(unisCustomerCd, filename);
+    const input = path.join(workDir, `${filename}.wav`);
+    const output = path.join(workDir, `${id}.mp3`);
+
+    // Initialized workdir.
+    if (!fs.existsSync(workDir)) {
+      fs.mkdirSync(workDir, { recursive: true });
+    }
+
+    const target = `users/${unisCustomerCd}/${constants.resourceCategory.RECORDING}`;
+    // 音源取得
+    if (
+      !(await converter.getContents(
+        constants.s3Bucket().users,
+        `${target}/${filename}.wav`,
+        workDir,
+        `${filename}.wav`
+      ))
+    )
+      throw "getObject failed";
+
+    // mp3変換処理
+    await converter.toMp3(input, output);
+
+    // 音源のduration取得.
+    const seconds = await converter.getDuration(output);
+    debuglog(`seconds = ${seconds}`);
+
+    // s3アップロード、削除
+    const fileStream = await converter.createReadStream(output);
+    fileStream.on("error", (e) => {
+      throw e;
+    });
+    const res = await s3Manager.put(
+      constants.s3Bucket().users,
+      `${target}/${id}.mp3`,
+      fileStream
+    );
+    if (!res) throw "putObject failed";
+    const _ = await s3Manager.delete(
+      constants.s3Bucket().users,
+      `${target}/${filename}.wav`
+    );
+
+    return Math.trunc(seconds);
+  } catch (e) {
+    errorlog(JSON.stringify(e));
+    throw new Error(e);
+  }
+}
 
 // 秒数取得処理
 async function getDuration(unisCustomerCd, id, category) {

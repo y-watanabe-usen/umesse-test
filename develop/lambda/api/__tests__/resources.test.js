@@ -235,9 +235,8 @@ describe("ユーザー音声データ取得", () => {
 // ユーザー音声作成
 describe("録音音声新規登録", () => {
   test("[success] 録音音声新規登録", async () => {
-    const file = fs.readFileSync("./__tests__/data/050000000-r-00000003.mp3");
     const body = {
-      recordedFile: file,
+      filename: `${data.unisCustomerCd}-r-00000004`,
       title: "録音テスト04",
       description: "録音テスト04",
     };
@@ -256,8 +255,6 @@ describe("録音音声新規登録", () => {
   });
 
   test("[error] 録音音声新規登録　パラメータチェック", async () => {
-    const file = fs.readFileSync("./__tests__/data/050000000-r-00000003.mp3");
-
     await expect(createRecordingResource()).rejects.toThrow(
       new BadRequestError(`${ERROR_CODE.E0001001} (E0001001)`)
     );
@@ -298,29 +295,14 @@ describe("録音音声新規登録", () => {
 
     await expect(
       createRecordingResource("9999999999", {
-        recordedFile: file,
+        filename: "test",
         description: "test",
       })
     ).rejects.toThrow(new BadRequestError(`${ERROR_CODE.E0001001} (E0001001)`));
 
-    // FIXME: webappからの録音音声が下記スキームで通らないので、一旦コメント
-    // "recordedFile": {
-    //   "type": "object",
-    //   "contentEncoding": "binary",
-    //   "contentMediaType": "audio/mp3",
-    //   "errorMessage": "E0001150"
-    // },
-    // await expect(
-    //   createRecordingResource("9999999999", {
-    //     recordedFile: "test",
-    //     title: "test",
-    //     description: "test",
-    //   })
-    // ).rejects.toThrow(new BadRequestError(`${ERROR_CODE.E0001150} (E0001150)`));
-
     await expect(
       createRecordingResource("9999999999", {
-        recordedFile: file,
+        filename: "test",
         title: "🍎リンゴ",
         description: "🍎リンゴ",
       })
@@ -335,7 +317,7 @@ describe("録音音声新規登録", () => {
 
     await expect(
       createRecordingResource("9999999999", {
-        recordedFile: file,
+        filename: "test",
         title: "あ".repeat(201),
         description: "あ".repeat(201),
       })

@@ -28,12 +28,6 @@ export interface RecordingCreateItem {
      * @type {string}
      * @memberof RecordingCreateItem
      */
-    recordedFile?: any;
-    /**
-     * 
-     * @type {string}
-     * @memberof RecordingCreateItem
-     */
     title?: any;
     /**
      * 

@@ -1,20 +1,22 @@
+import axios from "axios";
 import * as UMesseApi from "umesseapi";
 import { RecordingItem } from "umesseapi/models";
 import { UMesseErrorFromApiFactory } from "@/models/umesseError";
 
 export interface RecordingFile {
+  id: string | undefined;
   title: string | undefined;
   description: string | undefined;
   blob: Blob | undefined;
 }
 
 export function useRecordingService(
-  api: UMesseApi.RecordingApi,
-  fileReader: FileReader
+  resourcesApi: UMesseApi.ResourcesApi,
+  recordingApi: UMesseApi.RecordingApi
 ) {
   const fetch = async (authToken: string) => {
     try {
-      const response = await api.listUserRecording(authToken);
+      const response = await recordingApi.listUserRecording(authToken);
       return response.data;
     } catch (e) {
       throw UMesseErrorFromApiFactory(e);
@@ -25,27 +27,23 @@ export function useRecordingService(
     authToken: string,
     file: RecordingFile
   ): Promise<RecordingItem> => {
-    return new Promise(function(resolve, reject) {
-      fileReader.onload = function() {
-        api
-          .createUserRecording(
-            authToken,
-            file.title ?? "",
-            fileReader.result as string,
-            file.title,
-            file.description
-          )
-          .then((value) => {
-            console.log("resolve");
-            console.log("createUserRecording", <RecordingItem>value.data);
-            resolve(<RecordingItem>value.data);
-          })
-          .catch((e) => {
-            console.log("reject", e);
-            reject(UMesseErrorFromApiFactory(e));
-          });
-      };
-      if (file.blob) fileReader.readAsBinaryString(file.blob);
+    return new Promise(function (resolve, reject) {
+      recordingApi
+        .createUserRecording(
+          authToken,
+          file.id,
+          file.title,
+          file.description
+        )
+        .then((value) => {
+          console.log("resolve");
+          console.log("createUserRecording", <RecordingItem>value.data);
+          resolve(<RecordingItem>value.data);
+        })
+        .catch((e) => {
+          console.log("reject", e);
+          reject(UMesseErrorFromApiFactory(e));
+        });
     });
   };
 
@@ -56,7 +54,7 @@ export function useRecordingService(
     description: string
   ) => {
     try {
-      const response = await api.updateUserRecording(authToken, id, {
+      const response = await recordingApi.updateUserRecording(authToken, id, {
         title: title,
         description: description,
       });
@@ -68,8 +66,34 @@ export function useRecordingService(
 
   const remove = async (authToken: string, id: string) => {
     try {
-      const response = await api.deleteUserRecording(id, authToken);
+      const response = await recordingApi.deleteUserRecording(id, authToken);
       return response.data;
+    } catch (e) {
+      throw UMesseErrorFromApiFactory(e);
+    }
+  };
+
+  const put = async (url: string, file: RecordingFile): Promise<void> => {
+    return new Promise(function (resolve, reject) {
+      if (file.blob)
+        axios
+          .put(url, file.blob, {
+            headers: {
+              'Content-Type': 'audio/wav'
+            }
+          })
+          .then(res => {
+            console.log(res);
+            resolve();
+          })
+          .catch(err => reject(err));
+    });
+  };
+
+  const uploadById = async (id: string, category: string) => {
+    try {
+      const resourcesRepositoryResponse = await resourcesApi.getSignedUrl(id, category, "put");
+      return resourcesRepositoryResponse.data.url;
     } catch (e) {
       throw UMesseErrorFromApiFactory(e);
     }
@@ -80,5 +104,7 @@ export function useRecordingService(
     upload,
     update,
     remove,
+    put,
+    uploadById,
   };
 }
