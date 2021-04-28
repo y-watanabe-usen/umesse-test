@@ -38,7 +38,10 @@ export const UMesseErrorFromApiFactory = (e: any) => {
       code = ERROR_CODE.A0001;
       break;
   }
-  return new UMesseError(code, ERROR_PATTERN[code], e.message ?? e.toString());
+  const errorCode = e.response?.data?.code ? `[ ${e.response.data.code} ]` : "";
+  const errorMessage = e.response?.data?.message ?? ERROR_PATTERN[code];
+  const msg = errorMessage + errorCode;
+  return new UMesseError(code, msg, e.message ?? e.toString());
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
