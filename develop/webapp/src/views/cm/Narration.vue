@@ -198,7 +198,7 @@
             @download="download(selectedNarration)"
             @play="play(selectedNarration)"
             @stop="stop"
-            :oninput="oninput"
+            :oninput="seekAudioPlayerProgressBar"
           />
         </template>
         <template #footer>
@@ -734,9 +734,10 @@ export default defineComponent({
       fetchNarration();
     };
 
-    const oninput = (e: any) => {
-      console.log("oninput", e.target.value);
-      audioPlayer.changeCurrentTime(e.target.value);
+    const seekAudioPlayerProgressBar = (e: Event) => {
+      if (e.target instanceof HTMLInputElement) {
+        audioPlayer.changeCurrentTime(+e.target.value);
+      }
     };
 
     return {
@@ -762,7 +763,7 @@ export default defineComponent({
       saveAndOpenSavedModal,
       selectNarrationAndOpenRemoveModal,
       removeAndOpenRemovedModal,
-      oninput,
+      seekAudioPlayerProgressBar,
       isPlayModalAppear,
       openPlayModal,
       closePlayModal,
