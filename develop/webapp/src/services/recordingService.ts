@@ -79,7 +79,8 @@ export function useRecordingService(
         axios
           .put(url, file.blob, {
             headers: {
-              'Content-Type': 'audio/wav'
+              'Content-Type': file.blob.type,
+              'Content-Length': file.blob.size
             }
           })
           .then(res => {
