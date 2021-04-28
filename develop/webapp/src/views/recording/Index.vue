@@ -74,7 +74,6 @@
                   <template v-else-if="isRecording">
                     <div class="time">
                       <p>{{ convertNumberToTime(recordingTime) }}</p>
-                      <p>{{ convertNumberToTime(Constants.MAX_RECORDING_TIME) }}</p>
                     </div>
                     <meter
                       min="0"
