@@ -64,8 +64,9 @@
           min="0"
           :max="duration"
           :value="currentTime"
-          step="0.0001"
+          step="0.001"
           :oninput="$emit('oninput')"
+          :disabled="!isPlaying"
         />
       </div>
     </div>
