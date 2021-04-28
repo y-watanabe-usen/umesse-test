@@ -36,6 +36,8 @@ import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
 import analytics from "@/utils/firebaseAnalytics";
 import Constants from "@/utils/constants";
+import { displayCache } from "@/repository/cache";
+import { DISPLAY_CACHE_KEY } from "@/repository/cache/displayCache";
 
 export default defineComponent({
   components: {
@@ -63,6 +65,7 @@ export default defineComponent({
     const state = reactive({});
 
     onMounted(async () => {
+      removeDisplayCache();
       try {
         await auth.requestAuth();
         analytics.screenView(Constants.SCREEN.HOME);
@@ -73,6 +76,13 @@ export default defineComponent({
     const reload = () => {
       closeErrorModal();
       window.location.reload();
+    };
+    const removeDisplayCache = () => {
+      displayCache.remove(DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_INDUSTRY_CD);
+      displayCache.remove(DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_SCENE_CD);
+      displayCache.remove(DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_TEMPLATES);
+      displayCache.remove(DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_SCENES);
+      displayCache.remove(DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_SORT);
     };
     return {
       ...toRefs(state),
@@ -87,6 +97,7 @@ export default defineComponent({
       errorMessage,
       openErrorModal,
       closeErrorModal,
+      removeDisplayCache,
     };
   },
 });
