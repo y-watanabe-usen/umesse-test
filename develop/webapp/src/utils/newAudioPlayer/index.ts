@@ -17,7 +17,6 @@ export default function useNewAudioPlayer() {
     }
     if (!audio.src) return;
     await audio.play();
-    state.duration = audio.duration;
     state.playing = true;
   };
 
@@ -40,9 +39,25 @@ export default function useNewAudioPlayer() {
   };
 
   audio.addEventListener("timeupdate", () => {
-    console.log("timeupdate");
     state.currentTime = audio.currentTime;
-    state.duration = audio.duration;
+    if (!isNaN(audio.duration)) {
+      state.duration = audio.duration;
+    }
+  });
+
+  audio.addEventListener('loadedmetadata', () => {
+    let time = audio.currentTime;
+    requestAnimationFrame(function me() {
+      if (time !== audio.currentTime) {
+        time = audio.currentTime;
+        audio.dispatchEvent(new CustomEvent("timeupdate"));
+      }
+      requestAnimationFrame(me);
+    });
+  });
+
+  audio.addEventListener("ended", () => {
+    stop();
   });
 
   const isPlaying = () => {

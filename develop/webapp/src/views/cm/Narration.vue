@@ -594,7 +594,7 @@ export default defineComponent({
           Constants.CATEGORY.NARRATION,
           Constants.SCREEN.NARRATION
         );
-        audioPlayer.start(url);
+        await audioPlayer.start(url);
       } catch (e) {
         openErrorModal(e);
       } finally {
