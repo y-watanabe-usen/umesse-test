@@ -34,7 +34,7 @@ describe("getArrayBufferByIdのテスト", () => {
 
   test(`キャッシュがある場合、キャッシュの中身が返ること`, async () => {
     jest.spyOn(axios, 'request').mockResolvedValue({ data: { url: "https://example.com" } });
-    jest.spyOn(axios, 'get').mockResolvedValue({ data: "DownloadedAudioBuffer" });
+    jest.spyOn(axios, 'get').mockResolvedValue({ data: "DownloadedArrayBuffer" });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     audioCache.set(cacheKey, <any>"CacheArrayBuffer");
 

@@ -67,6 +67,7 @@ export default function useAudioPlayer() {
   const stopFunction = () => {
     clearInterval(timer);
     state.playbackTime = 0;
+    state.powerDecibels = -100;
     state.playing = false;
     Howler.masterGain.disconnect(analyser);
     analyser.disconnect(Howler.ctx.destination);

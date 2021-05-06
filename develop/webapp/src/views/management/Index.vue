@@ -612,12 +612,12 @@ export default defineComponent({
     };
     const download = async (cm: CmItem) => {
       try {
-        const downloAdudioUrl = await audioService.getUrlById(
+        const url = await audioService.getUrlById(
           cm.id,
           cm.category
         );
         const fileLink = document.createElement("a");
-        fileLink.href = downloAdudioUrl;
+        fileLink.href = url;
         fileLink.click();
       } catch (e) {
         openErrorModal(e);

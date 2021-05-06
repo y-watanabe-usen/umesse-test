@@ -64,12 +64,6 @@
                       <p>{{ convertNumberToTime(playbackTime) }}</p>
                       <p>{{ convertNumberToTime(duration) }}</p>
                     </div>
-                    <!-- <meter
-                      min="0"
-                      :max="duration"
-                      class="progress-meter"
-                      :value="playbackTime"
-                    ></meter> -->
                     <input
                       type="range"
                       min="0"
@@ -489,7 +483,7 @@ export default defineComponent({
         }
       }
       input[type="range"] {
-        background-color: #aaa;
+        background-color: #ccc;
         width: 630px;
         margin-top: 8px;
         margin-bottom: 8px;
