@@ -192,7 +192,7 @@
           <NewPlayDialogContents
             :isLoading="isDownloading"
             :isPlaying="isPlaying"
-            :currentTime="currentTime"
+            :currentTime="playbackTime"
             :duration="duration"
             :isDownload="isDownload"
             @download="download(selectedNarration)"
@@ -500,7 +500,7 @@ export default defineComponent({
       selectedNarration: null as NarrationItem | null,
       isPlaying: computed(() => newAudioPlayer.isPlaying()),
       isDownloading: false,
-      currentTime: computed(() => newAudioPlayer.getCurrentTime()),
+      playbackTime: computed(() => newAudioPlayer.getPlaybackTime()),
       duration: computed(() => newAudioPlayer.getDuration()),
       dropdownNarrationId: "",
       title: "",
@@ -606,7 +606,7 @@ export default defineComponent({
           narration.id,
           narration.category
         );
-        await newAudioPlayer.startBuffer(arrayBuffer);
+        newAudioPlayer.start(arrayBuffer);
         // NEW
       } catch (e) {
         openErrorModal(e);

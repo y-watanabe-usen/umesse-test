@@ -271,7 +271,7 @@ export default defineComponent({
         return -60;
       }),
       isPlaying: computed(() => newAudioPlayer.isPlaying()),
-      playbackTime: computed(() => newAudioPlayer.getCurrentTime()),
+      playbackTime: computed(() => newAudioPlayer.getPlaybackTime()),
       duration: computed(() => newAudioPlayer.getDuration()),
       recordingTime: computed(() => audioRecorder.getRecordingTime()),
       timerId: 0,
@@ -308,7 +308,7 @@ export default defineComponent({
       } else {
         // const audioBuffer = await audioRecorder.getAudioBuffer();
         const arrayBuffer = await audioRecorder.getArrayBuffer();
-        if (arrayBuffer) newAudioPlayer.startBuffer(arrayBuffer);
+        if (arrayBuffer) newAudioPlayer.start(arrayBuffer);
       }
     };
 

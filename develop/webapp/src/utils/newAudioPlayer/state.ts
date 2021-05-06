@@ -3,7 +3,7 @@ import { Howl } from "howler";
 export interface NewAudioPlayerState {
   playing: boolean;
   powerDecibels: number;
-  currentTime: number;
+  playbackTime: number;
   duration: number;
-  sound: Howl;
+  howl: Howl;
 }
