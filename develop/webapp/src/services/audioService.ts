@@ -16,7 +16,6 @@ export function useAudioService(
     try {
       const resourcesRepositoryResponse = await resourcesRepository.getSignedUrl(id, category);
       const audioRepositoryResponse = await audioRepository.download(resourcesRepositoryResponse.data.url);
-      console.log(resourcesRepositoryResponse.data.url);
       audioCache.set(cacheKey, audioRepositoryResponse.data);
       return audioRepositoryResponse.data;
     } catch (e) {

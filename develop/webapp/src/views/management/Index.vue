@@ -603,7 +603,7 @@ export default defineComponent({
           Constants.CATEGORY.CM,
           Constants.SCREEN.MANAGEMENT
         );
-        audioPlayer.start(url);
+        await audioPlayer.start(url);
       } catch (e) {
         openErrorModal(e);
       } finally {

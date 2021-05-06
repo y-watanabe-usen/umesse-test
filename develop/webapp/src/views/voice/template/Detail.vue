@@ -389,7 +389,7 @@ export default defineComponent({
           Constants.CATEGORY.TEMPLATE,
           Constants.SCREEN.VOICE_TEMPLATE_DETAIL
         );
-        audioPlayer.start(arrayBuffer);
+        await audioPlayer.start(arrayBuffer);
       } catch (e) {
         openErrorModal(e);
       } finally {

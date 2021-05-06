@@ -194,7 +194,7 @@ export default defineComponent({
         Constants.CATEGORY.FREE,
         Constants.SCREEN.VOICE_FREE
       );
-      audioPlayer.start(arrayBuffer);
+      await audioPlayer.start(arrayBuffer);
     };
     const stop = () => {
       if (state.isPlaying) audioPlayer.stop();

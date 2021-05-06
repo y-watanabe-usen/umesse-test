@@ -216,6 +216,11 @@ export default defineComponent({
       try {
         state.isDownloading = true;
         const url = await audioService.getUrlById(bgm.id, bgm.category);
+        analytics.pressButtonPlayTrial(
+          bgm.id,
+          Constants.CATEGORY.BGM,
+          Constants.SCREEN.BGM
+        );
         await audioPlayer.start(url);
       } catch (e) {
         openErrorModal(e);
