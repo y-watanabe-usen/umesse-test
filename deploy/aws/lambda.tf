@@ -64,12 +64,13 @@ resource "aws_lambda_function" "umesse_api_function" {
   timeout          = "30"
   layers           = [aws_lambda_layer_version.umesse_layer.arn]
 
+  # FIXME: prod, stgはgithub actionsのtagで設定する
   environment {
     variables = {
       "debug"                   = true
       "environment"             = "dev"
-      "CONVERTER_SQS_QUEUE_URL" = aws_sqs_queue.umesse_converter_queue.id
-      "GENERATE_SQS_QUEUE_URL"  = aws_sqs_queue.umesse_generate_queue.id
+      "CONVERTER_SQS_QUEUE_URL" = aws_sqs_queue.umesse_converter_queue["dev-umesse"].id
+      "GENERATE_SQS_QUEUE_URL"  = aws_sqs_queue.umesse_generate_queue["dev-umesse"].id
     }
   }
 
@@ -89,6 +90,7 @@ resource "aws_lambda_function" "umesse_converter_function" {
   timeout          = "300"
   layers           = [aws_lambda_layer_version.umesse_layer.arn]
 
+  # FIXME: prod, stgはgithub actionsのtagで設定する
   environment {
     variables = {
       "debug"       = true
@@ -112,6 +114,7 @@ resource "aws_lambda_function" "umesse_generate_function" {
   timeout          = "300"
   layers           = [aws_lambda_layer_version.umesse_layer.arn]
 
+  # FIXME: prod, stgはgithub actionsのtagで設定する
   environment {
     variables = {
       "debug"       = true
@@ -140,6 +143,7 @@ resource "aws_lambda_function" "umesse_sync_function" {
     security_group_ids = ["sg-08c39a651fac3ef3b"]
   }
 
+  # FIXME: prod, stgはgithub actionsのtagで設定する
   environment {
     variables = {
       "debug"       = true

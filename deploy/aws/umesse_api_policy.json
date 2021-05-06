@@ -51,8 +51,12 @@
       "Effect": "Allow",
       "Action": ["sqs:SendMessage"],
       "Resource": [
-        "arn:aws:sqs:*:*:UMesseConverterQueue",
-        "arn:aws:sqs:*:*:UMesseGenerateQueue"
+        "arn:aws:sqs:*:*:UMesseConverterQueueDev",
+        "arn:aws:sqs:*:*:UMesseConverterQueueStg",
+        "arn:aws:sqs:*:*:UMesseConverterQueueProd",
+        "arn:aws:sqs:*:*:UMesseGenerateQueueDev",
+        "arn:aws:sqs:*:*:UMesseGenerateQueueStg",
+        "arn:aws:sqs:*:*:UMesseGenerateQueueProd"
       ]
     }
   ]
