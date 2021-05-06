@@ -81,18 +81,18 @@ resource "aws_api_gateway_usage_plan_key" "umesse_plan_key" {
 # TODO: CROS
 # どうもdeployする時に上手くいかないことがあるため、一旦AWSコンソール上で設定する
 # resource "aws_api_gateway_method" "umesse_options" {
-#   # for_each      = toset(var.name)
-#   rest_api_id   = aws_api_gateway_rest_api.umesse["dev-umesse"].id
-#   resource_id   = aws_api_gateway_resource.umesse.id
+#   for_each      = toset(var.name)
+#   rest_api_id   = aws_api_gateway_rest_api.umesse[each.key].id
+#   resource_id   = aws_api_gateway_resource.umesse[each.key].id
 #   http_method   = "OPTIONS"
 #   authorization = "NONE"
 # }
 
 # resource "aws_api_gateway_integration" "umesse_options" {
-#   # for_each                = toset(var.name)
-#   rest_api_id             = aws_api_gateway_rest_api.umesse["dev-umesse"].id
-#   resource_id             = aws_api_gateway_resource.umesse.id
-#   http_method             = aws_api_gateway_method.umesse_options.http_method
+#   for_each                = toset(var.name)
+#   rest_api_id             = aws_api_gateway_rest_api.umesse[each.key].id
+#   resource_id             = aws_api_gateway_resource.umesse[each.key].id
+#   http_method             = aws_api_gateway_method.umesse_options[each.key].http_method
 #   integration_http_method = "OPTIONS"
 #   type                    = "MOCK"
 
@@ -106,9 +106,9 @@ resource "aws_api_gateway_usage_plan_key" "umesse_plan_key" {
 # }
 
 # resource "aws_api_gateway_method_response" "umesse_options" {
-#   rest_api_id = aws_api_gateway_rest_api.umesse["dev-umesse"].id
-#   resource_id = aws_api_gateway_resource.umesse.id
-#   http_method = aws_api_gateway_method.umesse_options.http_method
+#   rest_api_id = aws_api_gateway_rest_api.umesse[each.key].id
+#   resource_id = aws_api_gateway_resource.umesse[each.key].id
+#   http_method = aws_api_gateway_method.umesse_options[each.key].http_method
 #   status_code = "200"
 
 #   response_models = {
@@ -123,74 +123,14 @@ resource "aws_api_gateway_usage_plan_key" "umesse_plan_key" {
 # }
 
 # resource "aws_api_gateway_integration_response" "umesse_options" {
-#   rest_api_id = aws_api_gateway_rest_api.umesse["dev-umesse"].id
-#   resource_id = aws_api_gateway_resource.umesse.id
-#   http_method = aws_api_gateway_method.umesse_options.http_method
-#   status_code = aws_api_gateway_method_response.umesse_options.status_code
+#   rest_api_id = aws_api_gateway_rest_api.umesse[each.key].id
+#   resource_id = aws_api_gateway_resource.umesse[each.key].id
+#   http_method = aws_api_gateway_method.umesse_options[each.key].http_method
+#   status_code = aws_api_gateway_method_response.umesse_options[each.key].status_code
 
 #   response_parameters = {
 #     "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Unis-Customer-Cd'",
 #     "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS,POST,PUT,DELETE'",
 #     "method.response.header.Access-Control-Allow-Origin"  = "'*'"
-#   }
-# }
-
-# TODO: 枠だけ作成するためstg、prodの一時用
-# MOCK
-# resource "aws_api_gateway_resource" "umesse_mock" {
-#   for_each    = toset(var.mock)
-#   rest_api_id = aws_api_gateway_rest_api.umesse[each.key].id
-#   parent_id   = aws_api_gateway_rest_api.umesse[each.key].root_resource_id
-#   path_part   = "api"
-# }
-
-# resource "aws_api_gateway_method" "umesse_mock" {
-#   for_each      = toset(var.mock)
-#   rest_api_id   = aws_api_gateway_rest_api.umesse[each.key].id
-#   resource_id   = aws_api_gateway_resource.umesse_mock[each.key].id
-#   http_method   = "GET"
-#   authorization = "NONE"
-# }
-
-# resource "aws_api_gateway_integration" "umesse_mock" {
-#   for_each                = toset(var.mock)
-#   rest_api_id             = aws_api_gateway_rest_api.umesse[each.key].id
-#   resource_id             = aws_api_gateway_resource.umesse_mock[each.key].id
-#   http_method             = aws_api_gateway_method.umesse_mock[each.key].http_method
-#   integration_http_method = "GET"
-#   type                    = "MOCK"
-
-#   request_templates = {
-#     "application/json" = <<EOF
-# {
-#   "statusCode": 200
-# }
-# EOF
-#   }
-# }
-
-# resource "aws_api_gateway_method_response" "umesse_mock" {
-#   for_each    = toset(var.mock)
-#   rest_api_id = aws_api_gateway_rest_api.umesse[each.key].id
-#   resource_id = aws_api_gateway_resource.umesse_mock[each.key].id
-#   http_method = aws_api_gateway_method.umesse_mock[each.key].http_method
-#   status_code = "200"
-
-#   response_models = {
-#     "application/json" = "Empty"
-#   }
-# }
-
-# resource "aws_api_gateway_integration_response" "umesse_mock" {
-#   for_each    = toset(var.mock)
-#   rest_api_id = aws_api_gateway_rest_api.umesse[each.key].id
-#   resource_id = aws_api_gateway_resource.umesse_mock[each.key].id
-#   http_method = aws_api_gateway_method.umesse_mock[each.key].http_method
-#   status_code = aws_api_gateway_method_response.umesse_mock[each.key].status_code
-
-#   response_templates = {
-#     "application/json" = <<EOF
-# { message: ${each.key} }
-# EOF
 #   }
 # }
