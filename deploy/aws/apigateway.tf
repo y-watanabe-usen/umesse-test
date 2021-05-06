@@ -1,5 +1,4 @@
-#### API Gateway ####
-
+#### API Gateway
 resource "aws_api_gateway_rest_api" "umesse" {
   for_each = toset(var.name)
   name     = format("%s-api", each.key)
@@ -9,20 +8,19 @@ resource "aws_api_gateway_rest_api" "umesse" {
   ]
 }
 
-# TODO: 一旦dev環境のみ
 ### Set Path
 resource "aws_api_gateway_resource" "umesse" {
-  # for_each    = toset(var.name)
-  rest_api_id = aws_api_gateway_rest_api.umesse["dev-umesse"].id
-  parent_id   = aws_api_gateway_rest_api.umesse["dev-umesse"].root_resource_id
+  for_each    = toset(var.name)
+  rest_api_id = aws_api_gateway_rest_api.umesse[each.key].id
+  parent_id   = aws_api_gateway_rest_api.umesse[each.key].root_resource_id
   path_part   = "{proxy+}"
 }
 
 # Internet -----> API Gateway
 resource "aws_api_gateway_method" "umesse" {
-  # for_each         = toset(var.name)
-  rest_api_id      = aws_api_gateway_rest_api.umesse["dev-umesse"].id
-  resource_id      = aws_api_gateway_resource.umesse.id
+  for_each         = toset(var.name)
+  rest_api_id      = aws_api_gateway_rest_api.umesse[each.key].id
+  resource_id      = aws_api_gateway_resource.umesse[each.key].id
   http_method      = "ANY"
   authorization    = "NONE"
   api_key_required = true
@@ -30,31 +28,34 @@ resource "aws_api_gateway_method" "umesse" {
 
 # API Gateway ------> Lambda
 resource "aws_api_gateway_integration" "umesse" {
-  # for_each                = toset(var.name)
-  rest_api_id             = aws_api_gateway_rest_api.umesse["dev-umesse"].id
-  resource_id             = aws_api_gateway_resource.umesse.id
-  http_method             = aws_api_gateway_method.umesse.http_method
+  for_each                = toset(var.name)
+  rest_api_id             = aws_api_gateway_rest_api.umesse[each.key].id
+  resource_id             = aws_api_gateway_resource.umesse[each.key].id
+  http_method             = aws_api_gateway_method.umesse[each.key].http_method
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
-  uri                     = aws_lambda_function.umesse_api_function.invoke_arn
+  uri                     = aws_lambda_alias.umesse_api_alias[each.key].invoke_arn
 }
 
 # deploy
 ## v1
 resource "aws_api_gateway_deployment" "umesse_v1" {
+  for_each    = toset(var.name)
+  rest_api_id = aws_api_gateway_rest_api.umesse[each.key].id
   depends_on = [
-    aws_api_gateway_integration.umesse,
+    aws_api_gateway_integration.umesse
   ]
-  rest_api_id = aws_api_gateway_rest_api.umesse["dev-umesse"].id
-  stage_name  = "v1"
+  stage_name = "v1"
 }
 
 ## permission:   API Gateway ----> Lambda
 resource "aws_lambda_permission" "umesse" {
+  for_each      = toset(var.name)
   statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.umesse_api_function.function_name
   principal     = "apigateway.amazonaws.com"
+  qualifier     = aws_lambda_alias.umesse_api_alias[each.key].name
 }
 
 # API Gateway API Key
@@ -68,7 +69,17 @@ resource "aws_api_gateway_usage_plan" "umesse_plan" {
 
   api_stages {
     api_id = aws_api_gateway_rest_api.umesse["dev-umesse"].id
-    stage  = aws_api_gateway_deployment.umesse_v1.stage_name
+    stage  = aws_api_gateway_deployment.umesse_v1["dev-umesse"].stage_name
+  }
+
+  api_stages {
+    api_id = aws_api_gateway_rest_api.umesse["stg-umesse"].id
+    stage  = aws_api_gateway_deployment.umesse_v1["stg-umesse"].stage_name
+  }
+
+  api_stages {
+    api_id = aws_api_gateway_rest_api.umesse["umesse"].id
+    stage  = aws_api_gateway_deployment.umesse_v1["umesse"].stage_name
   }
 }
 
@@ -78,8 +89,8 @@ resource "aws_api_gateway_usage_plan_key" "umesse_plan_key" {
   usage_plan_id = aws_api_gateway_usage_plan.umesse_plan.id
 }
 
-# TODO: CROS
-# どうもdeployする時に上手くいかないことがあるため、一旦AWSコンソール上で設定する
+# CROS
+# FIXME: deployする時に上手くいかないことがあるため、一旦AWSコンソール上で設定する
 # resource "aws_api_gateway_method" "umesse_options" {
 #   for_each      = toset(var.name)
 #   rest_api_id   = aws_api_gateway_rest_api.umesse[each.key].id
