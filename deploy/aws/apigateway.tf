@@ -36,7 +36,7 @@ resource "aws_api_gateway_integration" "umesse" {
   http_method             = aws_api_gateway_method.umesse.http_method
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
-  uri                     = aws_lambda_function.umesse_api_function.invoke_arn
+  uri                     = aws_lambda_alias.umesse_api_alias["dev-umesse"].invoke_arn
 }
 
 # deploy
