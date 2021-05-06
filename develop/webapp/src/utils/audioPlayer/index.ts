@@ -1,9 +1,9 @@
 import { reactive } from 'vue';
-import { NewAudioPlayerState } from '@/utils/newAudioPlayer/state';
+import { AudioPlayerState } from '@/utils/audioPlayer/state';
 import { Howl, Howler } from 'howler';
 
-export default function useNewAudioPlayer() {
-  const state = reactive<NewAudioPlayerState>({
+export default function useAudioPlayer() {
+  const state = reactive<AudioPlayerState>({
     playing: false,
     powerDecibels: -100,
     playbackTime: 0,
@@ -14,37 +14,50 @@ export default function useNewAudioPlayer() {
   let analyser: AnalyserNode;
   let sampleBuffer: Float32Array;
 
-  const start = (arrayBuffer: ArrayBuffer) => {
-    const howlSource = [`data:audio/mp3;base64,${arrayBufferToBase64(arrayBuffer)}`];
-    state.howl = new Howl({
-      src: howlSource,
-      onplay: function () {
-        state.playbackTime = 0;
-        state.duration = state.howl.duration();
-        state.playing = true;
-        Howler.usingWebAudio = true;
-        analyser = Howler.ctx.createAnalyser();
-        analyser.fftSize = 2048;
-        sampleBuffer = new Float32Array(analyser.fftSize);
-        Howler.masterGain.connect(analyser);
-        analyser.connect(Howler.ctx.destination);
-        timer = setInterval(() => {
+  const start = async (urlOrBuffer: string | ArrayBuffer) => {
+    return new Promise<void>(function (resolve, reject) {
+      let howlSource: string | string[];
+      if (typeof (urlOrBuffer) === "string") {
+        howlSource = urlOrBuffer;
+      } else {
+        howlSource = [`data:audio/mp3;base64,${arrayBufferToBase64(urlOrBuffer)}`];
+      }
+      state.howl = new Howl({
+        src: howlSource,
+        onplay: function () {
+          state.playbackTime = 0;
+          state.duration = state.howl.duration();
+          state.playing = true;
+          resolve();
+        },
+        onloaderror: function () {
+          reject();
+        },
+        onplayerror: function () {
+          reject();
+        },
+        onpause: function () {
           updatePlaybackTime();
-          updateAnalyser();
-        }, 50);
-      },
-      onpause: function () {
+        },
+        onstop: function () {
+          stopFunction();
+        },
+        onend: function () {
+          stopFunction();
+        },
+      });
+      state.howl.play();
+      Howler.usingWebAudio = true;
+      analyser = Howler.ctx.createAnalyser();
+      analyser.fftSize = 2048;
+      sampleBuffer = new Float32Array(analyser.fftSize);
+      Howler.masterGain.connect(analyser);
+      analyser.connect(Howler.ctx.destination);
+      timer = setInterval(() => {
         updatePlaybackTime();
-      },
-      onstop: function () {
-        stopFunction();
-      },
-      onend: function () {
-        stopFunction();
-      },
+        updateAnalyser();
+      }, 50);
     });
-    state.howl.play();
-    state.playing = true;
   };
 
   const stop = () => {
@@ -71,7 +84,7 @@ export default function useNewAudioPlayer() {
     return state.powerDecibels;
   };
 
-  const changeCurrentTime = (time: number) => {
+  const changePlaybackTime = (time: number) => {
     const percent = time / state.duration;
     state.howl.seek(state.duration * percent);
   };
@@ -91,7 +104,6 @@ export default function useNewAudioPlayer() {
       sumOfSquares += x ** 2;
     }
     state.powerDecibels = Math.round(10 * Math.log10(sumOfSquares / sampleBuffer.length));
-    console.log(state.powerDecibels);
   };
 
   const arrayBufferToBase64 = (buffer: ArrayBuffer) => {
@@ -105,6 +117,6 @@ export default function useNewAudioPlayer() {
   };
 
   return {
-    start, stop, getPlaybackTime, getDuration, changeCurrentTime, isPlaying, getPowerDecibels,
+    start, stop, getPlaybackTime, getDuration, changePlaybackTime, isPlaying, getPowerDecibels,
   };
 }

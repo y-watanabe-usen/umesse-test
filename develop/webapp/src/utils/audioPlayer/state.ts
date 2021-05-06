@@ -1,6 +1,6 @@
 import { Howl } from "howler";
 
-export interface NewAudioPlayerState {
+export interface AudioPlayerState {
   playing: boolean;
   powerDecibels: number;
   playbackTime: number;

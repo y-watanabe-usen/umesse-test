@@ -134,6 +134,7 @@
               :duration="duration"
               @play="play()"
               @stop="stop"
+              :oninput="seekAudioPlayerProgressBar"
             />
           </FormGroup>
           <FormGroup title="">
@@ -382,13 +383,13 @@ export default defineComponent({
         state.isDownloading = true;
         console.log("play", state.playLang);
         const data = await ttsStore.getTtsData(state.playLang);
-        const audioBuffer = await audioService.getByUrl(<string>data?.url);
+        const arrayBuffer = await audioService.getArrayBufferByUrl(<string>data?.url);
         analytics.pressButtonPlayTrial(
           <string>data?.url,
           Constants.CATEGORY.TEMPLATE,
           Constants.SCREEN.VOICE_TEMPLATE_DETAIL
         );
-        audioPlayer.start(audioBuffer);
+        audioPlayer.start(arrayBuffer);
       } catch (e) {
         openErrorModal(e);
       } finally {
@@ -565,6 +566,11 @@ export default defineComponent({
     onMounted(() => {
       analytics.screenView(Constants.SCREEN.VOICE_TEMPLATE_DETAIL);
     });
+    const seekAudioPlayerProgressBar = (e: Event) => {
+      if (e.target instanceof HTMLInputElement) {
+        audioPlayer.changePlaybackTime(+e.target.value);
+      }
+    };
     return {
       ...toRefs(state),
       ttsSpeakers,
@@ -587,6 +593,7 @@ export default defineComponent({
       isVisibleMinutes,
       isVisiblePoint,
       getLangsTitle,
+      seekAudioPlayerProgressBar,
       isModalAppear,
       openModal,
       closeModal,

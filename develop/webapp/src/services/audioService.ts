@@ -7,66 +7,53 @@ export function useAudioService(
   audioRepository: AudioRepository,
   resourcesRepository: ResourcesApi,
   audioCache: AudioCache,
-  audioContext: AudioContext,
 ) {
 
-  const getById = async (id: string, category: string) => {
-    const cacheKey = `audioService/getById/${category}/${id}`;
-    const cacheData = audioCache.get(cacheKey);
+  const getArrayBufferById = async (id: string, category: string): Promise<ArrayBuffer> => {
+    const cacheKey = `audioService/getArrayBufferById/${category}/${id}`;
+    const cacheData = <ArrayBuffer>audioCache.get(cacheKey);
     if (cacheData) return cacheData;
     try {
       const resourcesRepositoryResponse = await resourcesRepository.getSignedUrl(id, category);
       const audioRepositoryResponse = await audioRepository.download(resourcesRepositoryResponse.data.url);
-      const audio = await audioContext.decodeAudioData(audioRepositoryResponse.data);
-      audioCache.set(cacheKey, audio);
-      return audio;
-    } catch (e) {
-      throw UMesseErrorFromApiFactory(e);
-    }
-  };
-
-  const getByIdArrayBuffer = async (id: string, category: string) => {
-    // const cacheKey = `audioService/getByIdArrayBuffer/${category}/${id}`;
-    // const cacheData = audioCache.get(cacheKey);
-    // if (cacheData) return cacheData;
-    try {
-      const resourcesRepositoryResponse = await resourcesRepository.getSignedUrl(id, category);
-      const audioRepositoryResponse = await audioRepository.download(resourcesRepositoryResponse.data.url);
-      // const audio = await audioContext.decodeAudioData(audioRepositoryResponse.data);
-      // audioCache.set(cacheKey, audioRepositoryResponse.data);
+      console.log(resourcesRepositoryResponse.data.url);
+      audioCache.set(cacheKey, audioRepositoryResponse.data);
       return audioRepositoryResponse.data;
     } catch (e) {
       throw UMesseErrorFromApiFactory(e);
     }
   };
 
-  const getByUrl = async (url: string) => {
-    const cacheKey = `audioService/getByUrl/${url}`;
+  const getUrlById = async (id: string, category: string) => {
+    const cacheKey = `audioService/getUrlById/${category}/${id}`;
     const cacheData = audioCache.get(cacheKey);
     if (cacheData) return cacheData;
     try {
-      const audioRepositoryResponse = await audioRepository.download(url);
-      const audio = await audioContext.decodeAudioData(audioRepositoryResponse.data);
-      audioCache.set(cacheKey, audio);
-      return audio;
-    } catch (e) {
-      throw UMesseErrorFromApiFactory(e);
-    }
-  };
-
-  const downloadById = async (id: string, category: string) => {
-    try {
       const resourcesRepositoryResponse = await resourcesRepository.getSignedUrl(id, category);
+      audioCache.set(cacheKey, resourcesRepositoryResponse.data.url);
       return resourcesRepositoryResponse.data.url;
     } catch (e) {
       throw UMesseErrorFromApiFactory(e);
     }
   };
 
+  const getArrayBufferByUrl = async (url: string): Promise<ArrayBuffer> => {
+    const cacheKey = `audioService/getArrayBufferByUrl/${url}`;
+    const cacheData = <ArrayBuffer>audioCache.get(cacheKey);
+    if (cacheData) return cacheData;
+    try {
+      const audioRepositoryResponse = await audioRepository.download(url);
+      audioCache.set(cacheKey, audioRepositoryResponse.data);
+      return audioRepositoryResponse.data;
+    } catch (e) {
+      throw UMesseErrorFromApiFactory(e);
+    }
+  };
+
+
   return {
-    getById,
-    getByIdArrayBuffer,
-    getByUrl,
-    downloadById,
+    getArrayBufferById,
+    getUrlById,
+    getArrayBufferByUrl,
   };
 }

@@ -189,10 +189,10 @@
           <ModalHeader title="試聴" @close="stopAndClosePlayModal" />
         </template>
         <template #contents>
-          <NewPlayDialogContents
+          <PlayDialogContents
             :isLoading="isDownloading"
             :isPlaying="isPlaying"
-            :currentTime="playbackTime"
+            :playbackTime="playbackTime"
             :duration="duration"
             :isDownload="isDownload"
             @download="download(selectedNarration)"
@@ -359,7 +359,6 @@
 <script lang="ts">
 import { defineComponent, computed, onMounted, reactive, toRefs } from "vue";
 import useAudioPlayer from "@/utils/audioPlayer";
-import useNewAudioPlayer from "@/utils/newAudioPlayer";
 import * as common from "@/utils/common";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
@@ -375,7 +374,7 @@ import ModalDialog from "@/components/organisms/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
 import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
-import NewPlayDialogContents from "@/components/molecules/NewPlayDialogContents.vue";
+import PlayDialogContents from "@/components/molecules/PlayDialogContents.vue";
 import TextDialogContents from "@/components/molecules/TextDialogContents.vue";
 import DropdownMenu from "@/components/molecules/DropdownMenu.vue";
 import { NarrationItem } from "umesseapi/models";
@@ -402,7 +401,6 @@ import useModalController from "@/mixins/modalController";
 import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
 import { useCmStore } from "@/store/cm";
-import { resourcesRepository } from "@/repository/api";
 
 export default defineComponent({
   components: {
@@ -421,7 +419,7 @@ export default defineComponent({
     ModalFooter,
     ModalErrorDialog,
     ModalLoading,
-    NewPlayDialogContents,
+    PlayDialogContents,
     TextDialogContents,
     DropdownMenu,
     FormGroup,
@@ -431,7 +429,6 @@ export default defineComponent({
   },
   setup() {
     const audioPlayer = useAudioPlayer();
-    const newAudioPlayer = useNewAudioPlayer();
     const { auth } = useGlobalStore();
     const cm = useCmStore();
     const authToken = <string>auth.getToken();
@@ -498,10 +495,10 @@ export default defineComponent({
       narrations: [] as NarrationItem[],
       scenes: [] as Scene[],
       selectedNarration: null as NarrationItem | null,
-      isPlaying: computed(() => newAudioPlayer.isPlaying()),
+      isPlaying: computed(() => audioPlayer.isPlaying()),
       isDownloading: false,
-      playbackTime: computed(() => newAudioPlayer.getPlaybackTime()),
-      duration: computed(() => newAudioPlayer.getDuration()),
+      playbackTime: computed(() => audioPlayer.getPlaybackTime()),
+      duration: computed(() => audioPlayer.getDuration()),
       dropdownNarrationId: "",
       title: "",
       description: "",
@@ -582,32 +579,11 @@ export default defineComponent({
     const play = async (narration: NarrationItem) => {
       try {
         state.isDownloading = true;
-        // const response = await resourcesRepository.getSignedUrl(
-        //   narration.id,
-        //   narration.category
-        // );
-        // const url = response.data.url ?? "";
-        // analytics.pressButtonPlayTrial(
-        //   narration.id,
-        //   Constants.CATEGORY.NARRATION,
-        //   Constants.SCREEN.NARRATION
-        // );
-
-        // NOW
-        // const audioBuffer = await audioService.getById(
-        //   narration.id,
-        //   narration.category
-        // );
-        // await audioPlayer.start(audioBuffer);
-        // NOW
-
-        // NEW
-        const arrayBuffer = await audioService.getByIdArrayBuffer(
+        const url = await audioService.getUrlById(
           narration.id,
           narration.category
         );
-        newAudioPlayer.start(arrayBuffer);
-        // NEW
+        await audioPlayer.start(url);
       } catch (e) {
         openErrorModal(e);
       } finally {
@@ -617,12 +593,12 @@ export default defineComponent({
 
     const download = async (narration: NarrationItem) => {
       try {
-        const downloAdudioUrl = await audioService.downloadById(
+        const url = await audioService.getUrlById(
           narration.id,
           narration.category
         );
         const fileLink = document.createElement("a");
-        fileLink.href = downloAdudioUrl;
+        fileLink.href = url;
         fileLink.click();
       } catch (e) {
         openErrorModal(e);
@@ -630,8 +606,7 @@ export default defineComponent({
     };
 
     const stop = () => {
-      // if (state.isPlaying) audioPlayer.stop();
-      if (state.isPlaying) newAudioPlayer.stop();
+      if (state.isPlaying) audioPlayer.stop();
     };
 
     const selectNarrationAndOpenDocumentModal = (narration: NarrationItem) => {
@@ -750,7 +725,7 @@ export default defineComponent({
 
     const seekAudioPlayerProgressBar = (e: Event) => {
       if (e.target instanceof HTMLInputElement) {
-        newAudioPlayer.changeCurrentTime(+e.target.value);
+        audioPlayer.changePlaybackTime(+e.target.value);
       }
     };
 

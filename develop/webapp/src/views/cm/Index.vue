@@ -385,6 +385,7 @@
             :duration="duration"
             @play="playGenerateCm()"
             @stop="stop"
+            :oninput="seekAudioPlayerProgressBar"
           />
         </template>
         <template #footer>
@@ -412,6 +413,7 @@
             :duration="duration"
             @play="playStartChime()"
             @stop="stop"
+            :oninput="seekAudioPlayerProgressBar"
           />
         </template>
         <template #footer>
@@ -439,6 +441,7 @@
             :duration="duration"
             @play="playNarration()"
             @stop="stop"
+            :oninput="seekAudioPlayerProgressBar"
           />
         </template>
         <template #footer>
@@ -466,6 +469,7 @@
             :duration="duration"
             @play="playBgm()"
             @stop="stop"
+            :oninput="seekAudioPlayerProgressBar"
           />
         </template>
         <template #footer>
@@ -493,6 +497,7 @@
             :duration="duration"
             @play="playEndChime()"
             @stop="stop"
+            :oninput="seekAudioPlayerProgressBar"
           />
         </template>
         <template #footer>
@@ -808,9 +813,9 @@ export default defineComponent({
       stop();
       try {
         state.isDownloading = true;
-        const audioBuffer = await audioService.getById(id, category);
+        const url = await audioService.getUrlById(id, category);
         analytics.pressButtonPlayTrial(id, type, Constants.SCREEN.CM);
-        audioPlayer.start(audioBuffer);
+        await audioPlayer.start(url);
       } catch (e) {
         openErrorModal(e);
       } finally {
@@ -822,9 +827,12 @@ export default defineComponent({
       if (!cm.url) return;
       try {
         state.isDownloading = true;
-        const audioBuffer = await audioService.getByUrl(cm.url);
-        analytics.pressButtonPlayTrial(cm.url, Constants.CATEGORY.CM, Constants.SCREEN.CM);
-        audioPlayer.start(audioBuffer);
+        analytics.pressButtonPlayTrial(
+          cm.url,
+          Constants.CATEGORY.CM,
+          Constants.SCREEN.CM
+        );
+        await audioPlayer.start(cm.url);
       } catch (e) {
         openErrorModal(e);
       } finally {
@@ -1170,6 +1178,12 @@ export default defineComponent({
       return aboutCmTime;
     };
 
+    const seekAudioPlayerProgressBar = (e: Event) => {
+      if (e.target instanceof HTMLInputElement) {
+        audioPlayer.changePlaybackTime(+e.target.value);
+      }
+    };
+
     return {
       ...toRefs(state),
       clearNarration,
@@ -1222,6 +1236,7 @@ export default defineComponent({
       changeCmEndChime,
       changeCmBgm,
       clickConfirm,
+      seekAudioPlayerProgressBar,
       isPlayModalAppear,
       openPlayModal,
       closePlayModal,

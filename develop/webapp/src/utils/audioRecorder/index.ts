@@ -69,43 +69,17 @@ export default function useAudioRecorder() {
   };
   const reset = () => state.chunks = [];
 
-
-  const getAudioBuffer = async () => {
-
-    if (!hasRecording()) {
-      return undefined;
-    }
-    const blob = new Blob(state.chunks);
-    const context = new window.AudioContext();
-
-    return new Promise<AudioBuffer>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => {
-        context.decodeAudioData(reader.result as ArrayBuffer, (buffer) => {
-          resolve(buffer);
-        });
-      };
-      reader.onerror = (event: Event) => {
-        reject(event);
-      };
-      reader.readAsArrayBuffer(blob);
-    });
-  };
-
   const getArrayBuffer = async () => {
 
     if (!hasRecording()) {
       return undefined;
     }
     const blob = new Blob(state.chunks);
-    // const context = new window.AudioContext();
 
     return new Promise<ArrayBuffer>((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = () => {
         resolve(reader.result as ArrayBuffer);
-        // context.decodeAudioData(reader.result as ArrayBuffer, (buffer) => {
-        // });
       };
       reader.onerror = (event: Event) => {
         reject(event);
@@ -115,17 +89,19 @@ export default function useAudioRecorder() {
   };
 
   const getWaveBlob = async () => {
-    const audioBuffer = await getAudioBuffer();
-    if (audioBuffer) {
-      return useWaveEncoder.encode(audioBuffer);
+    const arrayBuffer = await getArrayBuffer();
+    if (arrayBuffer) {
+      const context = new window.AudioContext();
+      return useWaveEncoder.encode(await context.decodeAudioData(arrayBuffer));
     }
     return undefined;
   };
 
   const getMp3Blob = async () => {
-    const audioBuffer = await getAudioBuffer();
-    if (audioBuffer) {
-      return useMp3Encoder.encode(audioBuffer);
+    const arrayBuffer = await getArrayBuffer();
+    if (arrayBuffer) {
+      const context = new window.AudioContext();
+      return useMp3Encoder.encode(await context.decodeAudioData(arrayBuffer));
     }
     return undefined;
   };
@@ -144,7 +120,7 @@ export default function useAudioRecorder() {
   };
 
   return {
-    start, stop, reset, isRecording, hasRecording, getArrayBuffer,
-    getWaveBlob, getMp3Blob, getAudioBuffer, getPowerDecibels, getRecordingTime
+    start, stop, reset, isRecording, hasRecording,
+    getWaveBlob, getMp3Blob, getArrayBuffer, getPowerDecibels, getRecordingTime
   };
 }

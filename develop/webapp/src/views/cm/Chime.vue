@@ -59,6 +59,7 @@
             :duration="duration"
             @play="play(selectedChime)"
             @stop="stop"
+            :oninput="seekAudioPlayerProgressBar"
           />
         </template>
         <template #footer>
@@ -194,7 +195,7 @@ export default defineComponent({
     const play = async (chime: ChimeItem) => {
       try {
         state.isDownloading = true;
-        const audioBuffer = await audioService.getById(
+        const url = await audioService.getUrlById(
           chime.id,
           chime.category
         );
@@ -203,7 +204,7 @@ export default defineComponent({
           Constants.CATEGORY.CHIME,
           Constants.SCREEN.CHIME
         );
-        audioPlayer.start(audioBuffer);
+        await audioPlayer.start(url);
       } catch (e) {
         openErrorModal(e);
       } finally {
@@ -224,6 +225,12 @@ export default defineComponent({
       closePlayModal();
     };
 
+    const seekAudioPlayerProgressBar = (e: Event) => {
+      if (e.target instanceof HTMLInputElement) {
+        audioPlayer.changePlaybackTime(+e.target.value);
+      }
+    };
+
     onMounted(async () => {
       analytics.screenView(Constants.SCREEN.CHIME);
       fetchChime();
@@ -240,6 +247,7 @@ export default defineComponent({
       selectChimeAndOpenPlayModal,
       stopAndClosePlayModal,
       fetchChime,
+      seekAudioPlayerProgressBar,
       isPlayModalAppear,
       openPlayModal,
       closePlayModal,

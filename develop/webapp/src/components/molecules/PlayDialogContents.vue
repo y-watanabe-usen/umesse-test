@@ -24,13 +24,28 @@
         </Button>
       </template>
       <template v-else>
-        <Button v-show="isDownload" class="btn-download" type="secondary" @click="$emit('download')">
+        <Button
+          v-show="isDownload"
+          class="btn-download"
+          type="secondary"
+          @click="$emit('download')"
+        >
           ダウンロード
         </Button>
-        <Button v-show="!isPlaying" class="btn-play" type="secondary" @click="$emit('play')">
+        <Button
+          v-show="!isPlaying"
+          class="btn-play"
+          type="secondary"
+          @click="$emit('play')"
+        >
           <img src="@/assets/icon_sound.svg" />再生
         </Button>
-        <Button v-show="isPlaying" class="btn-stop" type="secondary" @click="$emit('stop')">
+        <Button
+          v-show="isPlaying"
+          class="btn-stop"
+          type="secondary"
+          @click="$emit('stop')"
+        >
           <img src="@/assets/icon_stop.svg" />停止
         </Button>
       </template>
@@ -43,7 +58,15 @@
             {{ convertNumberToTime(duration) }}
           </div>
         </div>
-        <meter min="0" :max="duration" :value="playbackTime"></meter>
+        <input
+          type="range"
+          min="0"
+          :max="duration"
+          :value="playbackTime"
+          step="0.001"
+          :oninput="$emit('oninput')"
+          :disabled="!isPlaying"
+        />
       </div>
     </div>
   </div>
@@ -140,8 +163,9 @@ export default {
   .meter-wrapper {
     width: 430px;
     margin-left: 50px;
-    meter {
+    input[type="range"] {
       width: 100%;
+      background-color: #ccc;
       margin-top: 8px;
       margin-bottom: 8px;
       &::-webkit-meter-bar {

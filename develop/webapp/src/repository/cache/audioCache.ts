@@ -1,10 +1,10 @@
 import LRUCache from "lru-cache";
 
 export class AudioCache {
-  private cache: LRUCache<string, AudioBuffer>;
+  private cache: LRUCache<string, ArrayBuffer | string>;
 
   constructor() {
-    this.cache = new LRUCache<string, AudioBuffer>({
+    this.cache = new LRUCache<string, ArrayBuffer | string>({
       max: 50,
       maxAge: 1000 * 60 * 5 // 5分
     });
@@ -18,7 +18,7 @@ export class AudioCache {
     return this.cache.get(key);
   }
 
-  set(key: string, value: AudioBuffer) {
+  set(key: string, value: ArrayBuffer | string) {
     this.cache.set(key, value);
   }
 

@@ -64,12 +64,21 @@
                       <p>{{ convertNumberToTime(playbackTime) }}</p>
                       <p>{{ convertNumberToTime(duration) }}</p>
                     </div>
-                    <meter
+                    <!-- <meter
                       min="0"
                       :max="duration"
                       class="progress-meter"
                       :value="playbackTime"
-                    ></meter>
+                    ></meter> -->
+                    <input
+                      type="range"
+                      min="0"
+                      :max="duration"
+                      :value="playbackTime"
+                      step="0.001"
+                      :oninput="seekAudioPlayerProgressBar"
+                      :disabled="!isPlaying"
+                    />
                   </template>
                   <template v-else-if="isRecording">
                     <div class="time">
@@ -191,7 +200,6 @@ import {
 } from "vue";
 import useAudioRecorder from "@/utils/audioRecorder";
 import useAudioPlayer from "@/utils/audioPlayer";
-import useNewAudioPlayer from "@/utils/newAudioPlayer";
 import { RecordingFile } from "@/services/recordingService";
 import provideRecordingStore from "@/store/recording";
 import { convertNumberToTime } from "@/utils/formatDate";
@@ -236,7 +244,6 @@ export default defineComponent({
     const recordingStore = provideRecordingStore(); //FIXME: provide name.
     const audioRecorder = useAudioRecorder();
     const audioPlayer = useAudioPlayer();
-    const newAudioPlayer = useNewAudioPlayer();
     const cm = useCmStore();
     const {
       isApper: isLoading,
@@ -264,15 +271,15 @@ export default defineComponent({
         if (audioRecorder.isRecording()) {
           if (audioRecorder.getPowerDecibels() === -Infinity) return -60;
           return audioRecorder.getPowerDecibels();
-        } else if (newAudioPlayer.isPlaying()) {
-          if (newAudioPlayer.getPowerDecibels() === -Infinity) return -60;
-          return newAudioPlayer.getPowerDecibels();
+        } else if (audioPlayer.isPlaying()) {
+          if (audioPlayer.getPowerDecibels() === -Infinity) return -60;
+          return audioPlayer.getPowerDecibels();
         }
         return -60;
       }),
-      isPlaying: computed(() => newAudioPlayer.isPlaying()),
-      playbackTime: computed(() => newAudioPlayer.getPlaybackTime()),
-      duration: computed(() => newAudioPlayer.getDuration()),
+      isPlaying: computed(() => audioPlayer.isPlaying()),
+      playbackTime: computed(() => audioPlayer.getPlaybackTime()),
+      duration: computed(() => audioPlayer.getDuration()),
       recordingTime: computed(() => audioRecorder.getRecordingTime()),
       timerId: 0,
     });
@@ -281,14 +288,14 @@ export default defineComponent({
       if (audioRecorder.isRecording()) {
         audioRecorder.stop();
       }
-      if (newAudioPlayer.isPlaying()) {
-        newAudioPlayer.stop();
+      if (audioPlayer.isPlaying()) {
+        audioPlayer.stop();
       }
     });
 
     // toggle voice recorder.
     const toggleVoiceRecorder = async () => {
-      if (newAudioPlayer.isPlaying()) newAudioPlayer.stop();
+      if (audioPlayer.isPlaying()) audioPlayer.stop();
       if (audioRecorder.isRecording()) {
         audioRecorder.stop();
         clearTimeout(state.timerId);
@@ -304,11 +311,10 @@ export default defineComponent({
     // toggle voice player.
     const toggleVoicePlayer = async () => {
       if (state.isPlaying) {
-        newAudioPlayer.stop();
+        audioPlayer.stop();
       } else {
-        // const audioBuffer = await audioRecorder.getAudioBuffer();
         const arrayBuffer = await audioRecorder.getArrayBuffer();
-        if (arrayBuffer) newAudioPlayer.start(arrayBuffer);
+        if (arrayBuffer) audioPlayer.start(arrayBuffer);
       }
     };
 
@@ -332,6 +338,11 @@ export default defineComponent({
         closeLoadingModal();
       }
     };
+    const seekAudioPlayerProgressBar = (e: Event) => {
+      if (e.target instanceof HTMLInputElement) {
+        audioPlayer.changePlaybackTime(+e.target.value);
+      }
+    };
     onMounted(() => {
       analytics.screenView(Constants.SCREEN.RECORDING);
     });
@@ -343,6 +354,7 @@ export default defineComponent({
       uploadRecordingFile,
       UPLOAD_RECORDING_STATE,
       convertNumberToTime,
+      seekAudioPlayerProgressBar,
       isModalAppear,
       openModal,
       closeModal,
@@ -442,6 +454,42 @@ export default defineComponent({
         }
       }
       meter {
+        width: 630px;
+        margin-top: 8px;
+        margin-bottom: 8px;
+        &::-webkit-meter-bar {
+          background-color: rgba(0, 0, 0, 0.15);
+          border: none;
+          border-radius: 0;
+        }
+        &.volume-meter {
+          height: 18px;
+          &::-webkit-meter-bar {
+            height: 18px;
+          }
+          &::-webkit-meter-optimum-value {
+            background-color: rgb(78, 203, 136);
+          }
+          &::-webkit-meter-suboptimum-value {
+            background-color: rgb(204, 209, 79);
+          }
+          &::-webkit-meter-even-less-good-value {
+            background-color: rgb(209, 79, 79);
+          }
+        }
+        &.progress-meter {
+          height: 6px;
+          &::-webkit-meter-bar {
+            height: 6px;
+            border-radius: 3px;
+          }
+          &::-webkit-meter-optimum-value {
+            background-color: rgb(0, 206, 255);
+          }
+        }
+      }
+      input[type="range"] {
+        background-color: #aaa;
         width: 630px;
         margin-top: 8px;
         margin-bottom: 8px;
