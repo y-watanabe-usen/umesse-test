@@ -61,7 +61,7 @@ export default function useAudioRecorder() {
     timer = setInterval(() => {
       updateAnalyser();
       updateRecordingTime();
-    }, 100);
+    }, 50);
     state.recording = true;
   };
   const stop = async () => {
@@ -84,6 +84,28 @@ export default function useAudioRecorder() {
         context.decodeAudioData(reader.result as ArrayBuffer, (buffer) => {
           resolve(buffer);
         });
+      };
+      reader.onerror = (event: Event) => {
+        reject(event);
+      };
+      reader.readAsArrayBuffer(blob);
+    });
+  };
+
+  const getArrayBuffer = async () => {
+
+    if (!hasRecording()) {
+      return undefined;
+    }
+    const blob = new Blob(state.chunks);
+    // const context = new window.AudioContext();
+
+    return new Promise<ArrayBuffer>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        resolve(reader.result as ArrayBuffer);
+        // context.decodeAudioData(reader.result as ArrayBuffer, (buffer) => {
+        // });
       };
       reader.onerror = (event: Event) => {
         reject(event);
@@ -122,7 +144,7 @@ export default function useAudioRecorder() {
   };
 
   return {
-    start, stop, reset, isRecording, hasRecording,
+    start, stop, reset, isRecording, hasRecording, getArrayBuffer,
     getWaveBlob, getMp3Blob, getAudioBuffer, getPowerDecibels, getRecordingTime
   };
 }

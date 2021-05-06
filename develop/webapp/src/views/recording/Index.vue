@@ -191,6 +191,7 @@ import {
 } from "vue";
 import useAudioRecorder from "@/utils/audioRecorder";
 import useAudioPlayer from "@/utils/audioPlayer";
+import useNewAudioPlayer from "@/utils/newAudioPlayer";
 import { RecordingFile } from "@/services/recordingService";
 import provideRecordingStore from "@/store/recording";
 import { convertNumberToTime } from "@/utils/formatDate";
@@ -235,6 +236,7 @@ export default defineComponent({
     const recordingStore = provideRecordingStore(); //FIXME: provide name.
     const audioRecorder = useAudioRecorder();
     const audioPlayer = useAudioPlayer();
+    const newAudioPlayer = useNewAudioPlayer();
     const cm = useCmStore();
     const {
       isApper: isLoading,
@@ -262,15 +264,15 @@ export default defineComponent({
         if (audioRecorder.isRecording()) {
           if (audioRecorder.getPowerDecibels() === -Infinity) return -60;
           return audioRecorder.getPowerDecibels();
-        } else if (audioPlayer.isPlaying()) {
-          if (audioPlayer.getPowerDecibels() === -Infinity) return -60;
-          return audioPlayer.getPowerDecibels();
+        } else if (newAudioPlayer.isPlaying()) {
+          if (newAudioPlayer.getPowerDecibels() === -Infinity) return -60;
+          return newAudioPlayer.getPowerDecibels();
         }
         return -60;
       }),
-      isPlaying: computed(() => audioPlayer.isPlaying()),
-      playbackTime: computed(() => audioPlayer.getPlaybackTime()),
-      duration: computed(() => audioPlayer.getDuration()),
+      isPlaying: computed(() => newAudioPlayer.isPlaying()),
+      playbackTime: computed(() => newAudioPlayer.getCurrentTime()),
+      duration: computed(() => newAudioPlayer.getDuration()),
       recordingTime: computed(() => audioRecorder.getRecordingTime()),
       timerId: 0,
     });
@@ -279,14 +281,14 @@ export default defineComponent({
       if (audioRecorder.isRecording()) {
         audioRecorder.stop();
       }
-      if (audioPlayer.isPlaying()) {
-        audioPlayer.stop();
+      if (newAudioPlayer.isPlaying()) {
+        newAudioPlayer.stop();
       }
     });
 
     // toggle voice recorder.
     const toggleVoiceRecorder = async () => {
-      if (audioPlayer.isPlaying()) audioPlayer.stop();
+      if (newAudioPlayer.isPlaying()) newAudioPlayer.stop();
       if (audioRecorder.isRecording()) {
         audioRecorder.stop();
         clearTimeout(state.timerId);
@@ -302,10 +304,11 @@ export default defineComponent({
     // toggle voice player.
     const toggleVoicePlayer = async () => {
       if (state.isPlaying) {
-        audioPlayer.stop();
+        newAudioPlayer.stop();
       } else {
-        const audioBuffer = await audioRecorder.getAudioBuffer();
-        if (audioBuffer) audioPlayer.start(audioBuffer);
+        // const audioBuffer = await audioRecorder.getAudioBuffer();
+        const arrayBuffer = await audioRecorder.getArrayBuffer();
+        if (arrayBuffer) newAudioPlayer.startBuffer(arrayBuffer);
       }
     };
 

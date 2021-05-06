@@ -25,6 +25,21 @@ export function useAudioService(
     }
   };
 
+  const getByIdArrayBuffer = async (id: string, category: string) => {
+    // const cacheKey = `audioService/getByIdArrayBuffer/${category}/${id}`;
+    // const cacheData = audioCache.get(cacheKey);
+    // if (cacheData) return cacheData;
+    try {
+      const resourcesRepositoryResponse = await resourcesRepository.getSignedUrl(id, category);
+      const audioRepositoryResponse = await audioRepository.download(resourcesRepositoryResponse.data.url);
+      // const audio = await audioContext.decodeAudioData(audioRepositoryResponse.data);
+      // audioCache.set(cacheKey, audioRepositoryResponse.data);
+      return audioRepositoryResponse.data;
+    } catch (e) {
+      throw UMesseErrorFromApiFactory(e);
+    }
+  };
+
   const getByUrl = async (url: string) => {
     const cacheKey = `audioService/getByUrl/${url}`;
     const cacheData = audioCache.get(cacheKey);
@@ -50,6 +65,7 @@ export function useAudioService(
 
   return {
     getById,
+    getByIdArrayBuffer,
     getByUrl,
     downloadById,
   };

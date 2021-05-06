@@ -358,6 +358,7 @@
 
 <script lang="ts">
 import { defineComponent, computed, onMounted, reactive, toRefs } from "vue";
+import useAudioPlayer from "@/utils/audioPlayer";
 import useNewAudioPlayer from "@/utils/newAudioPlayer";
 import * as common from "@/utils/common";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
@@ -429,7 +430,8 @@ export default defineComponent({
     MessageDialogContents,
   },
   setup() {
-    const audioPlayer = useNewAudioPlayer();
+    const audioPlayer = useAudioPlayer();
+    const newAudioPlayer = useNewAudioPlayer();
     const { auth } = useGlobalStore();
     const cm = useCmStore();
     const authToken = <string>auth.getToken();
@@ -496,10 +498,10 @@ export default defineComponent({
       narrations: [] as NarrationItem[],
       scenes: [] as Scene[],
       selectedNarration: null as NarrationItem | null,
-      isPlaying: computed(() => audioPlayer.isPlaying()),
+      isPlaying: computed(() => newAudioPlayer.isPlaying()),
       isDownloading: false,
-      currentTime: computed(() => audioPlayer.getCurrentTime()),
-      duration: computed(() => audioPlayer.getDuration()),
+      currentTime: computed(() => newAudioPlayer.getCurrentTime()),
+      duration: computed(() => newAudioPlayer.getDuration()),
       dropdownNarrationId: "",
       title: "",
       description: "",
@@ -580,21 +582,32 @@ export default defineComponent({
     const play = async (narration: NarrationItem) => {
       try {
         state.isDownloading = true;
+        // const response = await resourcesRepository.getSignedUrl(
+        //   narration.id,
+        //   narration.category
+        // );
+        // const url = response.data.url ?? "";
+        // analytics.pressButtonPlayTrial(
+        //   narration.id,
+        //   Constants.CATEGORY.NARRATION,
+        //   Constants.SCREEN.NARRATION
+        // );
+
+        // NOW
         // const audioBuffer = await audioService.getById(
         //   narration.id,
         //   narration.category
         // );
-        const response = await resourcesRepository.getSignedUrl(
+        // await audioPlayer.start(audioBuffer);
+        // NOW
+
+        // NEW
+        const arrayBuffer = await audioService.getByIdArrayBuffer(
           narration.id,
           narration.category
         );
-        const url = response.data.url ?? "";
-        analytics.pressButtonPlayTrial(
-          narration.id,
-          Constants.CATEGORY.NARRATION,
-          Constants.SCREEN.NARRATION
-        );
-        await audioPlayer.start(url);
+        await newAudioPlayer.startBuffer(arrayBuffer);
+        // NEW
       } catch (e) {
         openErrorModal(e);
       } finally {
@@ -617,7 +630,8 @@ export default defineComponent({
     };
 
     const stop = () => {
-      if (state.isPlaying) audioPlayer.stop();
+      // if (state.isPlaying) audioPlayer.stop();
+      if (state.isPlaying) newAudioPlayer.stop();
     };
 
     const selectNarrationAndOpenDocumentModal = (narration: NarrationItem) => {
@@ -736,7 +750,7 @@ export default defineComponent({
 
     const seekAudioPlayerProgressBar = (e: Event) => {
       if (e.target instanceof HTMLInputElement) {
-        audioPlayer.changeCurrentTime(+e.target.value);
+        newAudioPlayer.changeCurrentTime(+e.target.value);
       }
     };
 

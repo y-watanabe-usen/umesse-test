@@ -54,7 +54,7 @@ export default function useAudioPlayer() {
     timer = setInterval(() => {
       updateAnalyser();
       updatePlaybackTime();
-    }, 100);
+    }, 50);
   };
   const stop = () => {
     source.stop();
@@ -66,6 +66,7 @@ export default function useAudioPlayer() {
       sumOfSquares += x ** 2;
     }
     state.powerDecibels = Math.round(10 * Math.log10(sumOfSquares / sampleBuffer.length));
+    console.log(state.powerDecibels);
   };
 
   const updatePlaybackTime = () => {
