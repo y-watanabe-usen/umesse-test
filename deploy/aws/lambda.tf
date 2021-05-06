@@ -61,15 +61,16 @@ resource "aws_lambda_function" "umesse_api_function" {
   filename         = data.archive_file.umesse_api_file.output_path
   source_code_hash = data.archive_file.umesse_api_file.output_base64sha256
   memory_size      = "300"
-  timeout          = "60"
+  timeout          = "30"
   layers           = [aws_lambda_layer_version.umesse_layer.arn]
 
+  # FIXME: prod, stgはgithub actionsのtagで設定する
   environment {
     variables = {
       "debug"                   = true
       "environment"             = "dev"
-      "CONVERTER_SQS_QUEUE_URL" = aws_sqs_queue.umesse_converter_queue.id
-      "GENERATE_SQS_QUEUE_URL"  = aws_sqs_queue.umesse_generate_queue.id
+      "CONVERTER_SQS_QUEUE_URL" = aws_sqs_queue.umesse_converter_queue["dev-umesse"].id
+      "GENERATE_SQS_QUEUE_URL"  = aws_sqs_queue.umesse_generate_queue["dev-umesse"].id
     }
   }
 
@@ -86,9 +87,10 @@ resource "aws_lambda_function" "umesse_converter_function" {
   filename         = data.archive_file.umesse_converter_file.output_path
   source_code_hash = data.archive_file.umesse_converter_file.output_base64sha256
   memory_size      = "300"
-  timeout          = "180"
+  timeout          = "300"
   layers           = [aws_lambda_layer_version.umesse_layer.arn]
 
+  # FIXME: prod, stgはgithub actionsのtagで設定する
   environment {
     variables = {
       "debug"       = true
@@ -109,9 +111,10 @@ resource "aws_lambda_function" "umesse_generate_function" {
   filename         = data.archive_file.umesse_generate_file.output_path
   source_code_hash = data.archive_file.umesse_generate_file.output_base64sha256
   memory_size      = "300"
-  timeout          = "180"
+  timeout          = "300"
   layers           = [aws_lambda_layer_version.umesse_layer.arn]
 
+  # FIXME: prod, stgはgithub actionsのtagで設定する
   environment {
     variables = {
       "debug"       = true
@@ -132,7 +135,7 @@ resource "aws_lambda_function" "umesse_sync_function" {
   filename         = data.archive_file.umesse_sync_file.output_path
   source_code_hash = data.archive_file.umesse_sync_file.output_base64sha256
   memory_size      = "300"
-  timeout          = "180"
+  timeout          = "300"
   layers           = [aws_lambda_layer_version.umesse_layer.arn]
 
   vpc_config {
@@ -140,6 +143,7 @@ resource "aws_lambda_function" "umesse_sync_function" {
     security_group_ids = ["sg-08c39a651fac3ef3b"]
   }
 
+  # FIXME: prod, stgはgithub actionsのtagで設定する
   environment {
     variables = {
       "debug"       = true
@@ -160,31 +164,51 @@ resource "aws_lambda_layer_version" "umesse_layer" {
   compatible_runtimes = ["nodejs12.x"]
 }
 
-# # Lambda Aliace
-# resource "aws_lambda_alias" "umesse_api_dev" {
-#   name             = "UMesseApiAliaceDev"
-#   description      = "umesse api development aliace"
-#   function_name    = aws_lambda_function.umesse_api_function.arn
-#   function_version = "LATEST"
-# }
+# Lambda Aliace
+resource "aws_lambda_alias" "umesse_api_alias" {
+  for_each         = toset(var.name)
+  name             = lookup(var.alias, each.key)
+  description      = format("umesse api %s aliace", lookup(var.alias, each.key))
+  function_name    = aws_lambda_function.umesse_api_function.arn
+  function_version = "$LATEST"
 
-# resource "aws_lambda_alias" "umesse_api_stg" {
-#   name             = "UMesseApiAliaceStg"
-#   description      = "umesse api staging aliace"
-#   function_name    = aws_lambda_function.umesse_api_function.arn
-#   function_version = "LATEST"
-# }
+  lifecycle {
+    ignore_changes = [function_version]
+  }
+}
 
-# resource "aws_lambda_alias" "umesse_converter_dev" {
-#   name             = "UMesseConverterAliaceDev"
-#   description      = "umesse converter development aliace"
-#   function_name    = aws_lambda_function.umesse_converter_function.arn
-#   function_version = "LATEST"
-# }
+resource "aws_lambda_alias" "umesse_converter_alias" {
+  for_each         = toset(var.name)
+  name             = lookup(var.alias, each.key)
+  description      = format("umesse converter %s aliace", lookup(var.alias, each.key))
+  function_name    = aws_lambda_function.umesse_converter_function.arn
+  function_version = "$LATEST"
 
-# resource "aws_lambda_alias" "umesse_converter_staging" {
-#   name             = "UMesseConverterAliaceStg"
-#   description      = "umesse converter staging aliace"
-#   function_name    = aws_lambda_function.umesse_converter_function.arn
-#   function_version = "LATEST"
-# }
+  lifecycle {
+    ignore_changes = [function_version]
+  }
+}
+
+resource "aws_lambda_alias" "umesse_generate_alias" {
+  for_each         = toset(var.name)
+  name             = lookup(var.alias, each.key)
+  description      = format("umesse generate %s aliace", lookup(var.alias, each.key))
+  function_name    = aws_lambda_function.umesse_generate_function.arn
+  function_version = "$LATEST"
+
+  lifecycle {
+    ignore_changes = [function_version]
+  }
+}
+
+resource "aws_lambda_alias" "umesse_sync_alias" {
+  for_each         = toset(var.name)
+  name             = lookup(var.alias, each.key)
+  description      = format("umesse sync %s aliace", lookup(var.alias, each.key))
+  function_name    = aws_lambda_function.umesse_sync_function.arn
+  function_version = "$LATEST"
+
+  lifecycle {
+    ignore_changes = [function_version]
+  }
+}
