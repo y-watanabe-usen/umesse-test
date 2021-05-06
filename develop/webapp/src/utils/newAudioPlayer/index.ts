@@ -1,5 +1,6 @@
 import { reactive } from 'vue';
 import { NewAudioPlayerState } from '@/utils/newAudioPlayer/state';
+import { Howl, Howler } from 'howler';
 
 export default function useNewAudioPlayer() {
   const state = reactive<NewAudioPlayerState>({
@@ -7,22 +8,53 @@ export default function useNewAudioPlayer() {
     powerDecibels: -100,
     currentTime: 0,
     duration: 0,
+    sound: new Howl({}),
   });
-
+  let timer: number | undefined;
   const audio = new window.Audio();
 
   const start = async (src?: string) => {
-    if (src) {
-      audio.src = src;
-    }
-    if (!audio.src) return;
-    await audio.play();
+    state.sound = new Howl({
+      src: src,
+      onplay: function () {
+        state.currentTime = 0;
+        state.duration = state.sound.duration();
+        state.playing = true;
+      },
+      onpause: function () {
+        state.currentTime = <number>state.sound.seek();
+      },
+      onseek: function () {
+        console.log("onseek");
+        // state.currentTime = <number>state.sound.seek();
+      },
+      onstop: function () {
+        state.currentTime = 0;
+        state.playing = false;
+      },
+      onend: function () {
+        state.currentTime = 0;
+        state.playing = false;
+      },
+    });
+    state.sound.play();
+    // if (src) {
+    //   audio.src = src;
+    // }
+    // if (!audio.src) return;
+    // await audio.play();
+    timer = setInterval(() => {
+      // updatePlaybackTime();
+      state.currentTime = <number>state.sound.seek();
+    }, 50);
     state.playing = true;
   };
 
   const stop = () => {
-    audio.pause();
-    audio.currentTime = 0;
+    state.sound?.stop();
+    clearInterval(timer);
+    // audio.pause();
+    // audio.currentTime = 0;
     state.playing = false;
   };
 
@@ -35,7 +67,11 @@ export default function useNewAudioPlayer() {
   };
 
   const changeCurrentTime = (time: number) => {
-    audio.currentTime = time;
+    // audio.currentTime = time;
+    const per = time / state.duration;
+    // state.sound.pause();
+    state.sound.seek(state.duration * per);
+    // state.sound.play();
   };
 
   audio.addEventListener("timeupdate", () => {
