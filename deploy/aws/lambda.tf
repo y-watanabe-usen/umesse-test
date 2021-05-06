@@ -173,38 +173,38 @@ resource "aws_lambda_alias" "umesse_api_alias" {
   }
 }
 
-# resource "aws_lambda_alias" "umesse_converter_alias" {
-#   for_each         = toset(var.name)
-#   name             = lookup(var.alias, each.key)
-#   description      = format("umesse converter %s aliace", lookup(var.alias, each.key))
-#   function_name    = aws_lambda_function.umesse_converter_function.arn
-#   function_version = "$LATEST"
+resource "aws_lambda_alias" "umesse_converter_alias" {
+  for_each         = toset(var.name)
+  name             = lookup(var.alias, each.key)
+  description      = format("umesse converter %s aliace", lookup(var.alias, each.key))
+  function_name    = aws_lambda_function.umesse_converter_function.arn
+  function_version = "$LATEST"
 
-#   lifecycle {
-#     ignore_changes = [function_version]
-#   }
-# }
+  lifecycle {
+    ignore_changes = [function_version]
+  }
+}
 
-# resource "aws_lambda_alias" "umesse_generate_alias" {
-#   for_each         = toset(var.name)
-#   name             = lookup(var.alias, each.key)
-#   description      = format("umesse generate %s aliace", lookup(var.alias, each.key))
-#   function_name    = aws_lambda_function.umesse_generate_function.arn
-#   function_version = "$LATEST"
+resource "aws_lambda_alias" "umesse_generate_alias" {
+  for_each         = toset(var.name)
+  name             = lookup(var.alias, each.key)
+  description      = format("umesse generate %s aliace", lookup(var.alias, each.key))
+  function_name    = aws_lambda_function.umesse_generate_function.arn
+  function_version = "$LATEST"
 
-#   lifecycle {
-#     ignore_changes = [function_version]
-#   }
-# }
+  lifecycle {
+    ignore_changes = [function_version]
+  }
+}
 
-# resource "aws_lambda_alias" "umesse_sync_alias" {
-#   for_each         = toset(var.name)
-#   name             = lookup(var.alias, each.key)
-#   description      = format("umesse sync %s aliace", lookup(var.alias, each.key))
-#   function_name    = aws_lambda_function.umesse_sync_function.arn
-#   function_version = "$LATEST"
+resource "aws_lambda_alias" "umesse_sync_alias" {
+  for_each         = toset(var.name)
+  name             = lookup(var.alias, each.key)
+  description      = format("umesse sync %s aliace", lookup(var.alias, each.key))
+  function_name    = aws_lambda_function.umesse_sync_function.arn
+  function_version = "$LATEST"
 
-#   lifecycle {
-#     ignore_changes = [function_version]
-#   }
-# }
+  lifecycle {
+    ignore_changes = [function_version]
+  }
+}
