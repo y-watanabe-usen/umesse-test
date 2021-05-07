@@ -214,6 +214,11 @@ export default defineComponent({
 
     const play = async () => {
       if (state.isPlaying) return;
+      analytics.pressButtonPlayTrial(
+        state.selectedBgm?.id ?? "undefind",
+        Constants.CATEGORY.BGM,
+        Constants.SCREEN.BGM
+      );
       await audioPlayer.start();
     };
 
@@ -227,11 +232,6 @@ export default defineComponent({
         state.isDownloading = true;
         openPlayModal();
         const url = await audioService.getUrlById(bgm.id, bgm.category);
-        analytics.pressButtonPlayTrial(
-          bgm.id,
-          Constants.CATEGORY.BGM,
-          Constants.SCREEN.BGM
-        );
         await audioPlayer.load(url);
       } catch (e) {
         openErrorModal(e);

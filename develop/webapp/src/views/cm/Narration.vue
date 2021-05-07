@@ -578,6 +578,11 @@ export default defineComponent({
 
     const play = async () => {
       if (state.isPlaying) return;
+      analytics.pressButtonPlayTrial(
+        state.selectedNarration?.id ?? "undefind",
+        Constants.CATEGORY.NARRATION,
+        Constants.SCREEN.NARRATION
+      );
       await audioPlayer.start();
     };
 
@@ -615,11 +620,6 @@ export default defineComponent({
         const url = await audioService.getUrlById(
           narration.id,
           narration.category
-        );
-        analytics.pressButtonPlayTrial(
-          narration.id,
-          Constants.CATEGORY.NARRATION,
-          Constants.SCREEN.NARRATION
         );
         await audioPlayer.load(url);
       } catch (e) {
