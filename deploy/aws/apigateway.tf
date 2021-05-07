@@ -60,33 +60,26 @@ resource "aws_lambda_permission" "umesse" {
 
 # API Gateway API Key
 resource "aws_api_gateway_api_key" "umesse_key" {
-  name    = "umesse_key"
-  enabled = true
+  for_each = toset(var.name)
+  name     = format("%s-key", each.key)
+  enabled  = true
 }
 
 resource "aws_api_gateway_usage_plan" "umesse_plan" {
-  name = "umesse_plan"
+  for_each = toset(var.name)
+  name     = format("%s-plan", each.key)
 
   api_stages {
-    api_id = aws_api_gateway_rest_api.umesse["dev-umesse"].id
-    stage  = aws_api_gateway_deployment.umesse_v1["dev-umesse"].stage_name
-  }
-
-  api_stages {
-    api_id = aws_api_gateway_rest_api.umesse["stg-umesse"].id
-    stage  = aws_api_gateway_deployment.umesse_v1["stg-umesse"].stage_name
-  }
-
-  api_stages {
-    api_id = aws_api_gateway_rest_api.umesse["umesse"].id
-    stage  = aws_api_gateway_deployment.umesse_v1["umesse"].stage_name
+    api_id = aws_api_gateway_rest_api.umesse[each.key].id
+    stage  = aws_api_gateway_deployment.umesse_v1[each.key].stage_name
   }
 }
 
 resource "aws_api_gateway_usage_plan_key" "umesse_plan_key" {
-  key_id        = aws_api_gateway_api_key.umesse_key.id
+  for_each      = toset(var.name)
+  key_id        = aws_api_gateway_api_key.umesse_key[each.key].id
   key_type      = "API_KEY"
-  usage_plan_id = aws_api_gateway_usage_plan.umesse_plan.id
+  usage_plan_id = aws_api_gateway_usage_plan.umesse_plan[each.key].id
 }
 
 # CROS
