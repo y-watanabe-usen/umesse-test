@@ -1,7 +1,6 @@
 "use strict";
 
 const assert = require("assert");
-const fs = require("fs");
 const https = require("https");
 const { constants, debuglog, errorlog } = require("umesse-lib/constants");
 const {
@@ -10,7 +9,6 @@ const {
   InternalServerError,
 } = require("umesse-lib/error");
 const { dynamodbManager } = require("umesse-lib/utils/dynamodbManager");
-const file = "./lastdate";
 
 exports.handler = async (event, context) => {
   debuglog(
@@ -21,14 +19,8 @@ exports.handler = async (event, context) => {
   );
 
   // lastdateの取得
-  let lastdate;
-  try {
-    lastdate = fs.readFileSync(file);
-    if (!lastdate || lastdate == "") throw "unknown file";
-  } catch (e) {
-    lastdate = targetDate(60 * 60);
-  }
-
+  let lastdate = targetDate(60 * 60);
+  if (process.env.lastdate) lastdate = process.env.lastdate;
   debuglog(`Start Sync: ${lastdate} -----`);
 
   // UDS API リクエスト
@@ -113,7 +105,6 @@ exports.handler = async (event, context) => {
     }
   }
 
-  fs.writeFileSync(file, targetDate(0));
   return { code: "200", message: "complete" };
 };
 
