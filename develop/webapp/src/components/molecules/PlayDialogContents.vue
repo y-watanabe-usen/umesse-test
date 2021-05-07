@@ -8,28 +8,7 @@
           type="primary"
           @click="$emit('play')"
         >
-          <div class="spinner">
-            <loading
-              v-if="isLoadingOverlay"
-              color="#fff"
-              :active="true"
-              :can-cancel="false"
-              :is-full-page="true"
-              :height="23"
-              :widht="23"
-              :background-color="transparent"
-              :opacity="0"
-            ></loading>
-            <SimpleSpinner
-              v-else
-              size="20"
-              speed="0.9"
-              spacing="8"
-              line-fg-color="#fff"
-              line-bg-color="#BBBBBB"
-            ></SimpleSpinner>
-          </div>
-          再生
+          <img src="@/assets/icon_audio_loading.svg" /> 再生
         </Button>
       </template>
       <template v-else>
@@ -85,16 +64,11 @@
 import { reactive } from "vue";
 import { convertNumberToTime } from "@/utils/formatDate";
 import Button from "@/components/atoms/Button.vue";
-import Loading from "vue3-loading-overlay";
-import "vue3-loading-overlay/dist/vue3-loading-overlay.css";
-import SimpleSpinner from "vue-simple-spinner/src/components/Spinner.vue";
 
 export default {
   name: "PlayDialogContents",
   components: {
     Button,
-    Loading,
-    SimpleSpinner,
   },
   props: {
     isLoading: {

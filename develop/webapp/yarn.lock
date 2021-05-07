@@ -10683,11 +10683,6 @@ vue-router@^4.0.0-0:
   resolved "https://registry.npmjs.org/vue-router/-/vue-router-4.0.0-beta.12.tgz"
   integrity sha512-prbqAs2hSlKGt3U/Iyq8G62q/oprwmEd//a6x5M1uqP1aZxwjq0s27ZG8hfUSOOPB7SYg4NOydwy6zi/b3S2Ww==
 
-vue-simple-spinner@^1.2.10:
-  version "1.2.10"
-  resolved "https://registry.yarnpkg.com/vue-simple-spinner/-/vue-simple-spinner-1.2.10.tgz#d5b15e74f82848b2f4e1c8e8d54338701b9e7c90"
-  integrity sha512-hrDT+HVSBnesLXBni9SRSvZdiiJhbOFbRbASWcGXqNQpONoLIshEdG4BFv0l80Q7ysj46mGqI86my4gXHkDpCw==
-
 vue-slider-component@^4.0.0-beta.3:
   version "4.0.0-beta.3"
   resolved "https://registry.yarnpkg.com/vue-slider-component/-/vue-slider-component-4.0.0-beta.3.tgz#f1c0c716f36e68b148acc4b34a3a41dd1afc7abe"
@@ -10695,11 +10690,6 @@ vue-slider-component@^4.0.0-beta.3:
   dependencies:
     core-js "^3.6.5"
     vue-property-decorator "^9.0.2"
-
-vue-spinner@^1.0.4:
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/vue-spinner/-/vue-spinner-1.0.4.tgz#0e794d9d93acb23b5b6564042157a531e7ce413b"
-  integrity sha512-GNG2F+8BLX201JT/jUX+84Gsi3ZteVQwt9K7mues3ts9FcQ95dGn7uu6a5ndSxdYYUEzfh1KngZiOE0u+l4itA==
 
 vue-style-loader@^4.1.0, vue-style-loader@^4.1.2:
   version "4.1.2"
