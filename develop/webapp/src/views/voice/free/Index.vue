@@ -117,7 +117,6 @@ import SelectBox from "@/components/atoms/SelectBox.vue";
 import Constants from "@/utils/constants";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { displayCache } from "@/repository/cache";
-import { audioService } from "@/services";
 import analytics from "@/utils/firebaseAnalytics";
 import useModalController from "@/mixins/modalController";
 import useLoadingModalController from "@/mixins/loadingModalController";
@@ -188,13 +187,13 @@ export default defineComponent({
     const play = async () => {
       console.log("play");
       const data = await ttsStore.getTtsData(lang);
-      const arrayBuffer = await audioService.getArrayBufferByUrl(<string>data?.url);
       analytics.pressButtonPlayTrial(
         <string>data?.url,
         Constants.CATEGORY.FREE,
         Constants.SCREEN.VOICE_FREE
       );
-      await audioPlayer.start(arrayBuffer);
+      await audioPlayer.load(<string>data?.url);
+      await audioPlayer.start();
     };
     const stop = () => {
       if (state.isPlaying) audioPlayer.stop();

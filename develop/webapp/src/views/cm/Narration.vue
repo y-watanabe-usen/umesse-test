@@ -504,7 +504,6 @@ export default defineComponent({
       description: "",
       isDownload: false,
       isVisibleDownload: false,
-      url: "",
     });
 
     const setNarration = (narration: NarrationItem) => {
@@ -579,7 +578,7 @@ export default defineComponent({
 
     const play = async () => {
       if (state.isPlaying) return;
-      await audioPlayer.start(state.url);
+      await audioPlayer.start();
     };
 
     const download = async (narration: NarrationItem) => {
@@ -613,8 +612,7 @@ export default defineComponent({
         selectNarration(narration);
         state.isDownloading = true;
         openPlayModal();
-        InitializeUrl();
-        state.url = await audioService.getUrlById(
+        const url = await audioService.getUrlById(
           narration.id,
           narration.category
         );
@@ -623,6 +621,7 @@ export default defineComponent({
           Constants.CATEGORY.NARRATION,
           Constants.SCREEN.NARRATION
         );
+        await audioPlayer.load(url);
       } catch (e) {
         openErrorModal(e);
       } finally {
@@ -737,9 +736,6 @@ export default defineComponent({
       if (e.target instanceof HTMLInputElement) {
         audioPlayer.changePlaybackTime(+e.target.value);
       }
-    };
-    const InitializeUrl = () => {
-      state.url = "";
     };
 
     return {

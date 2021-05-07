@@ -14,7 +14,7 @@ export default function useAudioPlayer() {
   let analyser: AnalyserNode;
   let sampleBuffer: Float32Array;
 
-  const start = async (urlOrBuffer: string | ArrayBuffer) => {
+  const load = async (urlOrBuffer: string | ArrayBuffer) => {
     return new Promise<void>(function (resolve, reject) {
       let howlSource: string | string[];
       if (typeof (urlOrBuffer) === "string") {
@@ -24,27 +24,35 @@ export default function useAudioPlayer() {
       }
       state.howl = new Howl({
         src: howlSource,
-        onplay: function () {
-          state.playbackTime = 0;
-          state.duration = state.howl.duration();
-          state.playing = true;
+        onload: () => {
           resolve();
         },
-        onloaderror: function () {
+        onloaderror: () => {
           reject();
         },
-        onplayerror: function () {
-          reject();
-        },
-        onpause: function () {
+        onpause: () => {
           updatePlaybackTime();
         },
-        onstop: function () {
+        onstop: () => {
           stopFunction();
         },
-        onend: function () {
+        onend: () => {
           stopFunction();
         },
+      });
+      state.howl.load();
+    });
+  };
+
+  const start = async () => {
+    return new Promise<void>(function (resolve, reject) {
+      state.howl.on("play", () => {
+        state.playbackTime = 0;
+        state.duration = state.howl.duration();
+        state.playing = true;
+        resolve();
+      }).on("playerror", () => {
+        reject();
       });
       state.howl.play();
       Howler.usingWebAudio = true;
@@ -118,6 +126,6 @@ export default function useAudioPlayer() {
   };
 
   return {
-    start, stop, getPlaybackTime, getDuration, changePlaybackTime, isPlaying, getPowerDecibels,
+    load, start, stop, getPlaybackTime, getDuration, changePlaybackTime, isPlaying, getPowerDecibels,
   };
 }

@@ -104,9 +104,9 @@
               :key="narration.contentsId"
               :title="
                 'ナレーション ' +
-                  `${index + 1}` +
-                  '/' +
-                  `${MAX_NARRATION_COUNT}`
+                `${index + 1}` +
+                '/' +
+                `${MAX_NARRATION_COUNT}`
               "
               size="flexible"
               :contentTitle="`${narration.title}`"
@@ -185,9 +185,9 @@
               <CmItem
                 :title="
                   'ナレーション ' +
-                    `${narrations.length + 1}` +
-                    '/' +
-                    `${MAX_NARRATION_COUNT}`
+                  `${narrations.length + 1}` +
+                  '/' +
+                  `${MAX_NARRATION_COUNT}`
                 "
                 :isEmpty="true"
                 :contentTitleName="'narration' + `${narrations.length}`"
@@ -792,7 +792,6 @@ export default defineComponent({
       isFocus: false,
       isIndicateCmTime: cm.isEdit,
       isLoadingOverlay: false,
-      url: "",
     });
 
     const inputFocusBlur = (isFocus: boolean) => {
@@ -803,8 +802,7 @@ export default defineComponent({
       try {
         state.isDownloading = true;
         openPlayStartChimeModal();
-        InitializeUrl();
-        state.url = await audioService.getUrlById(
+        const url = await audioService.getUrlById(
           cm.startChime.id,
           cm.startChime.category
         );
@@ -813,6 +811,7 @@ export default defineComponent({
           Constants.CATEGORY.CHIME,
           Constants.SCREEN.CM
         );
+        await audioPlayer.load(url);
       } catch (e) {
         openErrorModal(e);
       } finally {
@@ -824,8 +823,7 @@ export default defineComponent({
       try {
         state.isDownloading = true;
         openPlayEndChimeModal();
-        InitializeUrl();
-        state.url = await audioService.getUrlById(
+        const url = await audioService.getUrlById(
           cm.endChime.id,
           cm.endChime.category
         );
@@ -834,6 +832,7 @@ export default defineComponent({
           Constants.CATEGORY.CHIME,
           Constants.SCREEN.CM
         );
+        await audioPlayer.load(url);
       } catch (e) {
         openErrorModal(e);
       } finally {
@@ -847,8 +846,7 @@ export default defineComponent({
       try {
         state.isDownloading = true;
         openPlayNarrationModal();
-        InitializeUrl();
-        state.url = await audioService.getUrlById(
+        const url = await audioService.getUrlById(
           narration.id,
           narration.category
         );
@@ -857,6 +855,7 @@ export default defineComponent({
           Constants.CATEGORY.NARRATION,
           Constants.SCREEN.CM
         );
+        await audioPlayer.load(url);
       } catch (e) {
         openErrorModal(e);
       } finally {
@@ -868,16 +867,13 @@ export default defineComponent({
       try {
         state.isDownloading = true;
         openPlayBgmModal();
-        InitializeUrl();
-        state.url = await audioService.getUrlById(
-          cm.bgm.id,
-          cm.bgm.category
-        );
+        const url = await audioService.getUrlById(cm.bgm.id, cm.bgm.category);
         analytics.pressButtonPlayTrial(
           cm.bgm.id,
           Constants.CATEGORY.BGM,
           Constants.SCREEN.CM
         );
+        await audioPlayer.load(url);
       } catch (e) {
         openErrorModal(e);
       } finally {
@@ -886,7 +882,7 @@ export default defineComponent({
     };
     const play = async () => {
       if (state.isPlaying) return;
-      await audioPlayer.start(state.url);
+      await audioPlayer.start();
     };
 
     const playGenerateCm = async () => {
@@ -898,7 +894,8 @@ export default defineComponent({
           Constants.CATEGORY.CM,
           Constants.SCREEN.CM
         );
-        await audioPlayer.start(cm.url);
+        await audioPlayer.load(cm.url);
+        await audioPlayer.start();
       } catch (e) {
         openErrorModal(e);
       } finally {
@@ -1253,9 +1250,6 @@ export default defineComponent({
       if (e.target instanceof HTMLInputElement) {
         audioPlayer.changePlaybackTime(+e.target.value);
       }
-    };
-    const InitializeUrl = () => {
-      state.url = "";
     };
 
     return {

@@ -178,7 +178,6 @@ export default defineComponent({
       isDownloading: false,
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       duration: computed(() => audioPlayer.getDuration()),
-      url: "",
     });
 
     const setBgm = (bgm: BgmItem) => {
@@ -215,7 +214,7 @@ export default defineComponent({
 
     const play = async () => {
       if (state.isPlaying) return;
-      await audioPlayer.start(state.url);
+      await audioPlayer.start();
     };
 
     const stop = () => {
@@ -227,13 +226,13 @@ export default defineComponent({
         selectBgm(bgm);
         state.isDownloading = true;
         openPlayModal();
-        InitializeUrl();
-        state.url = await audioService.getUrlById(bgm.id, bgm.category);
+        const url = await audioService.getUrlById(bgm.id, bgm.category);
         analytics.pressButtonPlayTrial(
           bgm.id,
           Constants.CATEGORY.BGM,
           Constants.SCREEN.BGM
         );
+        await audioPlayer.load(url);
       } catch (e) {
         openErrorModal(e);
       } finally {
@@ -255,10 +254,6 @@ export default defineComponent({
       analytics.screenView(Constants.SCREEN.BGM);
       fetchBgm();
     });
-
-    const InitializeUrl = () => {
-      state.url = "";
-    };
 
     return {
       ...toRefs(state),

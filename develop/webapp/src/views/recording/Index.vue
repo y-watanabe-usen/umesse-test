@@ -308,7 +308,10 @@ export default defineComponent({
         audioPlayer.stop();
       } else {
         const arrayBuffer = await audioRecorder.getArrayBuffer();
-        if (arrayBuffer) await audioPlayer.start(arrayBuffer);
+        if (arrayBuffer) {
+          await audioPlayer.load(arrayBuffer);
+          await audioPlayer.start();
+        }
       }
     };
 

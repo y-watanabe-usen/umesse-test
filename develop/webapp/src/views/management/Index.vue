@@ -557,7 +557,6 @@ export default defineComponent({
           ? "U MUSICにアップロード"
           : "S'Senceにアップロード",
       isDownload: false,
-      url: "",
     });
     const fetchScene = async () => {
       try {
@@ -593,14 +592,11 @@ export default defineComponent({
     };
     const play = async () => {
       if (state.isPlaying) return;
-      await audioPlayer.start(state.url);
+      await audioPlayer.start();
     };
     const download = async (cm: CmItem) => {
       try {
-        const url = await audioService.getUrlById(
-          cm.id,
-          cm.category
-        );
+        const url = await audioService.getUrlById(cm.id, cm.category);
         const fileLink = document.createElement("a");
         fileLink.href = url;
         fileLink.click();
@@ -664,13 +660,13 @@ export default defineComponent({
         selectCm(cm);
         state.isDownloading = true;
         openPlayModal();
-        InitializeUrl();
-        state.url = await audioService.getUrlById(cm.id, Constants.CATEGORY.CM);
+        const url = await audioService.getUrlById(cm.id, Constants.CATEGORY.CM);
         analytics.pressButtonPlayTrial(
           cm.id,
           Constants.CATEGORY.CM,
           Constants.SCREEN.MANAGEMENT
         );
+        await audioPlayer.load(url);
       } catch (e) {
         openErrorModal(e);
       } finally {
@@ -805,9 +801,7 @@ export default defineComponent({
         audioPlayer.changePlaybackTime(+e.target.value);
       }
     };
-    const InitializeUrl = () => {
-      state.url = "";
-    };
+
     return {
       ...toRefs(state),
       inputScenesList,

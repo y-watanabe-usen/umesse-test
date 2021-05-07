@@ -163,7 +163,6 @@ export default defineComponent({
       isDownloading: false,
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       duration: computed(() => audioPlayer.getDuration()),
-      url: "",
     });
 
     const setChime = (chime: ChimeItem) => {
@@ -195,7 +194,7 @@ export default defineComponent({
 
     const play = async () => {
       if (state.isPlaying) return;
-      await audioPlayer.start(state.url);
+      await audioPlayer.start();
     };
 
     const stop = () => {
@@ -207,16 +206,13 @@ export default defineComponent({
         selectChime(chime);
         state.isDownloading = true;
         openPlayModal();
-        InitializeUrl();
-        state.url = await audioService.getUrlById(
-          chime.id,
-          chime.category
-        );
+        const url = await audioService.getUrlById(chime.id, chime.category);
         analytics.pressButtonPlayTrial(
           chime.id,
           Constants.CATEGORY.CHIME,
           Constants.SCREEN.CHIME
         );
+        await audioPlayer.load(url);
       } catch (e) {
         openErrorModal(e);
       } finally {
@@ -238,10 +234,6 @@ export default defineComponent({
       analytics.screenView(Constants.SCREEN.CHIME);
       fetchChime();
     });
-
-    const InitializeUrl = () => {
-      state.url = "";
-    };
 
     return {
       ...toRefs(state),
