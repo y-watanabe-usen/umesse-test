@@ -42,7 +42,7 @@
               :volume="startChime.volume"
               :contentTitleName="'chime'"
               @toggleSlider="toggleStartChimeSlider"
-              @click="openPlayStartChimeModal"
+              @click="clickStartChimeAndOpenPlayModal"
             >
               <template #volume>
                 <transition>
@@ -114,7 +114,7 @@
               :volume="narration.volume"
               :contentTitleName="'narration' + `${narrations.length}`"
               @toggleSlider="toggleNarrationSlider(index)"
-              @click="clickPlayNarration(index)"
+              @click="clickNarrationAndOpenPlayModal(index)"
             >
               <template #volume>
                 <transition>
@@ -244,7 +244,7 @@
               :volume="bgm.volume"
               :contentTitleName="'bgm'"
               @toggleSlider="toggleBgmSlider"
-              @click="openPlayBgmModal"
+              @click="clickBgmAndOpenPlayModal"
             >
               <template #volume>
                 <transition>
@@ -310,7 +310,7 @@
               :volume="endChime.volume"
               :contentTitleName="'chime'"
               @toggleSlider="toggleEndChimeSlider"
-              @click="openPlayEndChimeModal"
+              @click="clickEndChimeAndOpenPlayModal"
             >
               <template #volume>
                 <transition>
@@ -411,7 +411,7 @@
             :isPlaying="isPlaying"
             :playbackTime="playbackTime"
             :duration="duration"
-            @play="playStartChime()"
+            @play="play"
             @stop="stop"
             :oninput="seekAudioPlayerProgressBar"
           />
@@ -439,7 +439,7 @@
             :isPlaying="isPlaying"
             :playbackTime="playbackTime"
             :duration="duration"
-            @play="playNarration()"
+            @play="play"
             @stop="stop"
             :oninput="seekAudioPlayerProgressBar"
           />
@@ -467,7 +467,7 @@
             :isPlaying="isPlaying"
             :playbackTime="playbackTime"
             :duration="duration"
-            @play="playBgm()"
+            @play="play"
             @stop="stop"
             :oninput="seekAudioPlayerProgressBar"
           />
@@ -495,7 +495,7 @@
             :isPlaying="isPlaying"
             :playbackTime="playbackTime"
             :duration="duration"
-            @play="playEndChime()"
+            @play="play"
             @stop="stop"
             :oninput="seekAudioPlayerProgressBar"
           />
@@ -598,8 +598,10 @@
         :errorMessage="errorMessage"
       />
     </transition>
-    <ModalLoading v-if="isLoading" title="音源の合成中" />
-
+    <ModalLoading
+      v-if="isLoading || isCreateCmLoadingModalAppear"
+      title="音源の合成中（CMの長さによっては、処理に数分かかる場合があります。）"
+    />
     <transition>
       <ModalDialog
         v-if="isConfirmBackHomeModalAppear"
@@ -739,6 +741,11 @@ export default defineComponent({
       close: closeConfirmBackHomeModal,
     } = useModalController();
     const {
+      isApper: isCreateCmLoadingModalAppear,
+      open: openCreateCmLoadingModal,
+      close: closeCreateCmLoadingModal,
+    } = useModalController();
+    const {
       isApper: isLoading,
       loadingMessage,
       open: openLoadingModal,
@@ -788,39 +795,92 @@ export default defineComponent({
     const inputFocusBlur = (isFocus: boolean) => {
       state.isFocus = isFocus;
     };
-    const playStartChime = async () => {
+    const clickStartChimeAndOpenPlayModal = async () => {
       if (!cm.startChime) return;
-      playById(
-        cm.startChime.id,
-        cm.startChime.category,
-        Constants.CATEGORY.CHIME
-      );
-    };
-    const playEndChime = async () => {
-      if (!cm.endChime) return;
-      playById(cm.endChime.id, cm.endChime.category, Constants.CATEGORY.CHIME);
-    };
-    const playNarration = () => {
-      const narration = cm.narration(state.narrationIndex);
-      if (!narration) return;
-      playById(narration.id, narration.category, Constants.CATEGORY.NARRATION);
-    };
-    const playBgm = () => {
-      if (!cm.bgm) return;
-      playById(cm.bgm.id, cm.bgm.category, Constants.CATEGORY.BGM);
-    };
-    const playById = async (id: string, category: string, type: string) => {
-      stop();
       try {
         state.isDownloading = true;
-        const url = await audioService.getUrlById(id, category);
-        analytics.pressButtonPlayTrial(id, type, Constants.SCREEN.CM);
-        await audioPlayer.start(url);
+        openPlayStartChimeModal();
+        const url = await audioService.getUrlById(
+          cm.startChime.id,
+          cm.startChime.category
+        );
+        analytics.pressButtonPlayTrial(
+          cm.startChime.id,
+          Constants.CATEGORY.CHIME,
+          Constants.SCREEN.CM
+        );
+        await audioPlayer.load(url);
       } catch (e) {
         openErrorModal(e);
       } finally {
         state.isDownloading = false;
       }
+    };
+    const clickEndChimeAndOpenPlayModal = async () => {
+      if (!cm.endChime) return;
+      try {
+        state.isDownloading = true;
+        openPlayEndChimeModal();
+        const url = await audioService.getUrlById(
+          cm.endChime.id,
+          cm.endChime.category
+        );
+        analytics.pressButtonPlayTrial(
+          cm.endChime.id,
+          Constants.CATEGORY.CHIME,
+          Constants.SCREEN.CM
+        );
+        await audioPlayer.load(url);
+      } catch (e) {
+        openErrorModal(e);
+      } finally {
+        state.isDownloading = false;
+      }
+    };
+    const clickNarrationAndOpenPlayModal = async (index: number) => {
+      state.narrationIndex = index;
+      const narration = cm.narration(state.narrationIndex);
+      if (!narration) return;
+      try {
+        state.isDownloading = true;
+        openPlayNarrationModal();
+        const url = await audioService.getUrlById(
+          narration.id,
+          narration.category
+        );
+        analytics.pressButtonPlayTrial(
+          narration.id,
+          Constants.CATEGORY.NARRATION,
+          Constants.SCREEN.CM
+        );
+        await audioPlayer.load(url);
+      } catch (e) {
+        openErrorModal(e);
+      } finally {
+        state.isDownloading = false;
+      }
+    };
+    const clickBgmAndOpenPlayModal = async () => {
+      if (!cm.bgm) return;
+      try {
+        state.isDownloading = true;
+        openPlayBgmModal();
+        const url = await audioService.getUrlById(cm.bgm.id, cm.bgm.category);
+        analytics.pressButtonPlayTrial(
+          cm.bgm.id,
+          Constants.CATEGORY.BGM,
+          Constants.SCREEN.CM
+        );
+        await audioPlayer.load(url);
+      } catch (e) {
+        openErrorModal(e);
+      } finally {
+        state.isDownloading = false;
+      }
+    };
+    const play = async () => {
+      if (state.isPlaying) return;
+      await audioPlayer.start();
     };
 
     const playGenerateCm = async () => {
@@ -832,7 +892,8 @@ export default defineComponent({
           Constants.CATEGORY.CM,
           Constants.SCREEN.CM
         );
-        await audioPlayer.start(cm.url);
+        await audioPlayer.load(cm.url);
+        await audioPlayer.start();
       } catch (e) {
         openErrorModal(e);
       } finally {
@@ -881,11 +942,6 @@ export default defineComponent({
       state.isIndicateCmTime = false;
     };
 
-    const clickPlayNarration = (index: number) => {
-      state.narrationIndex = index;
-      openPlayNarrationModal();
-    };
-
     const clickConfirm = async () => {
       try {
         openLoadingModal();
@@ -903,16 +959,20 @@ export default defineComponent({
 
     const createAndOpenPlayModal = async () => {
       try {
-        openPlayModal();
+        openCreateCmLoadingModal();
         await cm.create();
+        closeCreateCmLoadingModal();
+        openPlayModal();
         state.isIndicateCmTime = true;
       } catch (e) {
+        closeCreateCmLoadingModal();
         closePlayModal();
         openErrorModal(e);
         state.isIndicateCmTime = false;
       }
     };
     const stopAndClosePlayModal = () => {
+      state.isDownloading = false;
       stop();
       closePlayModal();
     };
@@ -935,18 +995,22 @@ export default defineComponent({
       }
     };
     const stopAndClosePlayStartChimeModal = () => {
+      state.isDownloading = false;
       stop();
       closePlayStartChimeModal();
     };
     const stopAndClosePlayNarrationModal = () => {
+      state.isDownloading = false;
       stop();
       closePlayNarrationModal();
     };
     const stopAndClosePlayBgmModal = () => {
+      state.isDownloading = false;
       stop();
       closePlayBgmModal();
     };
     const stopAndClosePlayEndChimeModal = () => {
+      state.isDownloading = false;
       stop();
       closePlayEndChimeModal();
     };
@@ -1192,7 +1256,6 @@ export default defineComponent({
       clearBgm,
       playGenerateCm,
       stop,
-      clickPlayNarration,
       createAndOpenPlayModal,
       stopAndClosePlayModal,
       updateAndOpenSavedModal,
@@ -1212,10 +1275,11 @@ export default defineComponent({
       changeVoiceFree,
       UPLOAD_CM_STATE,
       MAX_NARRATION_COUNT,
-      playNarration,
-      playStartChime,
-      playEndChime,
-      playBgm,
+      clickStartChimeAndOpenPlayModal,
+      clickEndChimeAndOpenPlayModal,
+      clickBgmAndOpenPlayModal,
+      clickNarrationAndOpenPlayModal,
+      play,
       toHome,
       getAboutCmTime,
       closeAllDropdownMenu,
@@ -1273,6 +1337,7 @@ export default defineComponent({
       backScreenName,
       toBackFunction,
       inputFocusBlur,
+      isCreateCmLoadingModalAppear,
     };
   },
 });

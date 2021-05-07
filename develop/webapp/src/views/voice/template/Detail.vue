@@ -205,7 +205,6 @@ import Constants from "@/utils/constants";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { lang, speaker, TemplateDetailItem } from "@/models/templateDetailItem";
 import validator from "@/utils/validator";
-import { audioService } from "@/services";
 import { displayCache } from "@/repository/cache";
 import Percentage from "@/components/molecules/Percentage.vue";
 import Count from "@/components/molecules/Count.vue";
@@ -383,13 +382,13 @@ export default defineComponent({
         state.isDownloading = true;
         console.log("play", state.playLang);
         const data = await ttsStore.getTtsData(state.playLang);
-        const arrayBuffer = await audioService.getArrayBufferByUrl(<string>data?.url);
         analytics.pressButtonPlayTrial(
           <string>data?.url,
           Constants.CATEGORY.TEMPLATE,
           Constants.SCREEN.VOICE_TEMPLATE_DETAIL
         );
-        await audioPlayer.start(arrayBuffer);
+        await audioPlayer.load(<string>data?.url);
+        await audioPlayer.start();
       } catch (e) {
         openErrorModal(e);
       } finally {

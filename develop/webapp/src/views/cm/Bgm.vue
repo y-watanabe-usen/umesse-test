@@ -69,7 +69,7 @@
             :isPlaying="isPlaying"
             :playbackTime="playbackTime"
             :duration="duration"
-            @play="play(selectedBgm)"
+            @play="play"
             @stop="stop"
             :oninput="seekAudioPlayerProgressBar"
           />
@@ -212,30 +212,32 @@ export default defineComponent({
       }
     };
 
-    const play = async (bgm: BgmItem) => {
-      try {
-        state.isDownloading = true;
-        const url = await audioService.getUrlById(bgm.id, bgm.category);
-        analytics.pressButtonPlayTrial(
-          bgm.id,
-          Constants.CATEGORY.BGM,
-          Constants.SCREEN.BGM
-        );
-        await audioPlayer.start(url);
-      } catch (e) {
-        openErrorModal(e);
-      } finally {
-        state.isDownloading = false;
-      }
+    const play = async () => {
+      if (state.isPlaying) return;
+      await audioPlayer.start();
     };
 
     const stop = () => {
       if (state.isPlaying) audioPlayer.stop();
     };
 
-    const selectBgmAndOpenPlayModal = (bgm: BgmItem) => {
-      selectBgm(bgm);
-      openPlayModal();
+    const selectBgmAndOpenPlayModal = async (bgm: BgmItem) => {
+      try {
+        selectBgm(bgm);
+        state.isDownloading = true;
+        openPlayModal();
+        const url = await audioService.getUrlById(bgm.id, bgm.category);
+        analytics.pressButtonPlayTrial(
+          bgm.id,
+          Constants.CATEGORY.BGM,
+          Constants.SCREEN.BGM
+        );
+        await audioPlayer.load(url);
+      } catch (e) {
+        openErrorModal(e);
+      } finally {
+        state.isDownloading = false;
+      }
     };
     const stopAndClosePlayModal = () => {
       stop();

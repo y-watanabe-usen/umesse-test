@@ -57,7 +57,7 @@
             :isPlaying="isPlaying"
             :playbackTime="playbackTime"
             :duration="duration"
-            @play="play(selectedChime)"
+            @play="play"
             @stop="stop"
             :oninput="seekAudioPlayerProgressBar"
           />
@@ -192,33 +192,32 @@ export default defineComponent({
       }
     };
 
-    const play = async (chime: ChimeItem) => {
-      try {
-        state.isDownloading = true;
-        const url = await audioService.getUrlById(
-          chime.id,
-          chime.category
-        );
-        analytics.pressButtonPlayTrial(
-          chime.id,
-          Constants.CATEGORY.CHIME,
-          Constants.SCREEN.CHIME
-        );
-        await audioPlayer.start(url);
-      } catch (e) {
-        openErrorModal(e);
-      } finally {
-        state.isDownloading = false;
-      }
+    const play = async () => {
+      if (state.isPlaying) return;
+      await audioPlayer.start();
     };
 
     const stop = () => {
       if (state.isPlaying) audioPlayer.stop();
     };
 
-    const selectChimeAndOpenPlayModal = (chime: ChimeItem) => {
-      selectChime(chime);
-      openPlayModal();
+    const selectChimeAndOpenPlayModal = async (chime: ChimeItem) => {
+      try {
+        selectChime(chime);
+        state.isDownloading = true;
+        openPlayModal();
+        const url = await audioService.getUrlById(chime.id, chime.category);
+        analytics.pressButtonPlayTrial(
+          chime.id,
+          Constants.CATEGORY.CHIME,
+          Constants.SCREEN.CHIME
+        );
+        await audioPlayer.load(url);
+      } catch (e) {
+        openErrorModal(e);
+      } finally {
+        state.isDownloading = false;
+      }
     };
     const stopAndClosePlayModal = () => {
       stop();

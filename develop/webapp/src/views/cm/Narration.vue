@@ -196,7 +196,7 @@
             :duration="duration"
             :isDownload="isDownload"
             @download="download(selectedNarration)"
-            @play="play(selectedNarration)"
+            @play="play"
             @stop="stop"
             :oninput="seekAudioPlayerProgressBar"
           />
@@ -576,19 +576,9 @@ export default defineComponent({
       }
     };
 
-    const play = async (narration: NarrationItem) => {
-      try {
-        state.isDownloading = true;
-        const url = await audioService.getUrlById(
-          narration.id,
-          narration.category
-        );
-        await audioPlayer.start(url);
-      } catch (e) {
-        openErrorModal(e);
-      } finally {
-        state.isDownloading = false;
-      }
+    const play = async () => {
+      if (state.isPlaying) return;
+      await audioPlayer.start();
     };
 
     const download = async (narration: NarrationItem) => {
@@ -615,9 +605,28 @@ export default defineComponent({
       analytics.pressButtonManuscript(narration.id, Constants.SCREEN.NARRATION);
       openDocumentModal();
     };
-    const selectNarrationAndOpenPlayModal = (narration: NarrationItem) => {
-      selectNarration(narration);
-      openPlayModal();
+    const selectNarrationAndOpenPlayModal = async (
+      narration: NarrationItem
+    ) => {
+      try {
+        selectNarration(narration);
+        state.isDownloading = true;
+        openPlayModal();
+        const url = await audioService.getUrlById(
+          narration.id,
+          narration.category
+        );
+        analytics.pressButtonPlayTrial(
+          narration.id,
+          Constants.CATEGORY.NARRATION,
+          Constants.SCREEN.NARRATION
+        );
+        await audioPlayer.load(url);
+      } catch (e) {
+        openErrorModal(e);
+      } finally {
+        state.isDownloading = false;
+      }
     };
     const stopAndClosePlayModal = () => {
       stop();

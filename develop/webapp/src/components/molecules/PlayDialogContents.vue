@@ -8,19 +8,7 @@
           type="primary"
           @click="$emit('play')"
         >
-          <div class="spinner">
-            <loading
-              color="#fff"
-              :active="true"
-              :can-cancel="false"
-              :is-full-page="true"
-              :height="23"
-              :widht="23"
-              :background-color="transparent"
-              :opacity="0"
-            ></loading>
-          </div>
-          再生
+          <img src="@/assets/icon_audio_loading.svg" /> 再生
         </Button>
       </template>
       <template v-else>
@@ -76,14 +64,11 @@
 import { reactive } from "vue";
 import { convertNumberToTime } from "@/utils/formatDate";
 import Button from "@/components/atoms/Button.vue";
-import Loading from "vue3-loading-overlay";
-import "vue3-loading-overlay/dist/vue3-loading-overlay.css";
 
 export default {
   name: "PlayDialogContents",
   components: {
     Button,
-    Loading,
   },
   props: {
     isLoading: {
@@ -135,6 +120,7 @@ export default {
     img,
     .spinner {
       margin-right: 10px;
+      margin-bottom: 3px;
     }
   }
   .btn-play {
