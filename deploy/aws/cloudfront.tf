@@ -125,8 +125,12 @@ resource "aws_lambda_function" "umesse_webapp_function" {
   memory_size      = "128"
   timeout          = "5"
   provider         = aws.us_east_1
-  # 毎回TAG付されてしまうので、更新があった場合のみ実施
-  # publish          = true
+  publish          = true
+
+  lifecycle {
+    # 毎回TAG付されてしまうので、更新があった場合のみ実施
+    ignore_changes = [publish]
+  }
 }
 
 resource "aws_iam_role" "umesse_webapp_lambda_role" {
