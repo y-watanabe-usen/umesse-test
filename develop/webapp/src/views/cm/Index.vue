@@ -894,7 +894,6 @@ export default defineComponent({
           Constants.CATEGORY.CM,
           Constants.SCREEN.CM
         );
-        await audioPlayer.load(cm.url);
         await audioPlayer.start();
       } catch (e) {
         openErrorModal(e);
@@ -966,6 +965,7 @@ export default defineComponent({
         closeCreateCmLoadingModal();
         openPlayModal();
         state.isIndicateCmTime = true;
+        await audioPlayer.load(cm.url);
       } catch (e) {
         closeCreateCmLoadingModal();
         closePlayModal();
