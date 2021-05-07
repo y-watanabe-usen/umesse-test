@@ -150,7 +150,7 @@
             :duration="duration"
             :isDownload="isDownload"
             @download="download(selectedCm)"
-            @play="play(selectedCm)"
+            @play="play"
             @stop="stop"
             :oninput="seekAudioPlayerProgressBar"
           />
@@ -557,6 +557,7 @@ export default defineComponent({
           ? "U MUSICにアップロード"
           : "S'Senceにアップロード",
       isDownload: false,
+      url: "",
     });
     const fetchScene = async () => {
       try {
@@ -590,25 +591,9 @@ export default defineComponent({
       state.selectedCm = cm;
       state.isDownload = common.isVisibleDownload();
     };
-    const play = async (cm: CmItem) => {
+    const play = async () => {
       if (state.isPlaying) return;
-      try {
-        state.isDownloading = true;
-        const url = await audioService.getUrlById(
-          cm.id,
-          Constants.CATEGORY.CM
-        );
-        analytics.pressButtonPlayTrial(
-          cm.id,
-          Constants.CATEGORY.CM,
-          Constants.SCREEN.MANAGEMENT
-        );
-        await audioPlayer.start(url);
-      } catch (e) {
-        openErrorModal(e);
-      } finally {
-        state.isDownloading = false;
-      }
+      await audioPlayer.start(state.url);
     };
     const download = async (cm: CmItem) => {
       try {
@@ -674,9 +659,23 @@ export default defineComponent({
       await cmService.remove(authToken, cmId);
       fetchScene();
     };
-    const selectCmAndOpenPlayModal = (cm: CmItem) => {
-      selectCm(cm);
-      openPlayModal();
+    const selectCmAndOpenPlayModal = async (cm: CmItem) => {
+      try {
+        selectCm(cm);
+        state.isDownloading = true;
+        openPlayModal();
+        InitializeUrl();
+        state.url = await audioService.getUrlById(cm.id, Constants.CATEGORY.CM);
+        analytics.pressButtonPlayTrial(
+          cm.id,
+          Constants.CATEGORY.CM,
+          Constants.SCREEN.MANAGEMENT
+        );
+      } catch (e) {
+        openErrorModal(e);
+      } finally {
+        state.isDownloading = false;
+      }
     };
     const selectCmAndOpenSaveModal = (cm: CmItem) => {
       analytics.pressButtonEditTitleAndDescription(
@@ -805,6 +804,9 @@ export default defineComponent({
       if (e.target instanceof HTMLInputElement) {
         audioPlayer.changePlaybackTime(+e.target.value);
       }
+    };
+    const InitializeUrl = () => {
+      state.url = "";
     };
     return {
       ...toRefs(state),

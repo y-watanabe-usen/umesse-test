@@ -57,7 +57,7 @@
             :isPlaying="isPlaying"
             :playbackTime="playbackTime"
             :duration="duration"
-            @play="play(selectedChime)"
+            @play="play"
             @stop="stop"
             :oninput="seekAudioPlayerProgressBar"
           />
@@ -163,6 +163,7 @@ export default defineComponent({
       isDownloading: false,
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       duration: computed(() => audioPlayer.getDuration()),
+      url: "",
     });
 
     const setChime = (chime: ChimeItem) => {
@@ -192,10 +193,22 @@ export default defineComponent({
       }
     };
 
-    const play = async (chime: ChimeItem) => {
+    const play = async () => {
+      if (state.isPlaying) return;
+      await audioPlayer.start(state.url);
+    };
+
+    const stop = () => {
+      if (state.isPlaying) audioPlayer.stop();
+    };
+
+    const selectChimeAndOpenPlayModal = async (chime: ChimeItem) => {
       try {
+        selectChime(chime);
         state.isDownloading = true;
-        const url = await audioService.getUrlById(
+        openPlayModal();
+        InitializeUrl();
+        state.url = await audioService.getUrlById(
           chime.id,
           chime.category
         );
@@ -204,21 +217,11 @@ export default defineComponent({
           Constants.CATEGORY.CHIME,
           Constants.SCREEN.CHIME
         );
-        await audioPlayer.start(url);
       } catch (e) {
         openErrorModal(e);
       } finally {
         state.isDownloading = false;
       }
-    };
-
-    const stop = () => {
-      if (state.isPlaying) audioPlayer.stop();
-    };
-
-    const selectChimeAndOpenPlayModal = (chime: ChimeItem) => {
-      selectChime(chime);
-      openPlayModal();
     };
     const stopAndClosePlayModal = () => {
       stop();
@@ -235,6 +238,10 @@ export default defineComponent({
       analytics.screenView(Constants.SCREEN.CHIME);
       fetchChime();
     });
+
+    const InitializeUrl = () => {
+      state.url = "";
+    };
 
     return {
       ...toRefs(state),

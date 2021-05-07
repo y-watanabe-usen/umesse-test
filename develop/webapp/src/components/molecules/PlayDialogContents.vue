@@ -10,6 +10,7 @@
         >
           <div class="spinner">
             <loading
+              v-if="isLoadingOverlay"
               color="#fff"
               :active="true"
               :can-cancel="false"
@@ -19,6 +20,14 @@
               :background-color="transparent"
               :opacity="0"
             ></loading>
+            <SimpleSpinner
+              v-else
+              size="20"
+              speed="0.9"
+              spacing="8"
+              line-fg-color="#fff"
+              line-bg-color="#BBBBBB"
+            ></SimpleSpinner>
           </div>
           再生
         </Button>
@@ -78,12 +87,14 @@ import { convertNumberToTime } from "@/utils/formatDate";
 import Button from "@/components/atoms/Button.vue";
 import Loading from "vue3-loading-overlay";
 import "vue3-loading-overlay/dist/vue3-loading-overlay.css";
+import SimpleSpinner from "vue-simple-spinner/src/components/Spinner.vue";
 
 export default {
   name: "PlayDialogContents",
   components: {
     Button,
     Loading,
+    SimpleSpinner,
   },
   props: {
     isLoading: {
@@ -105,6 +116,10 @@ export default {
     isDownload: {
       type: Boolean,
       required: true,
+    },
+    isLoadingOverlay: {
+      type: Boolean,
+      default: false,
     },
   },
   setup() {
@@ -135,6 +150,7 @@ export default {
     img,
     .spinner {
       margin-right: 10px;
+      margin-bottom: 3px;
     }
   }
   .btn-play {
