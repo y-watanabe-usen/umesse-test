@@ -104,9 +104,9 @@
               :key="narration.contentsId"
               :title="
                 'ナレーション ' +
-                `${index + 1}` +
-                '/' +
-                `${MAX_NARRATION_COUNT}`
+                  `${index + 1}` +
+                  '/' +
+                  `${MAX_NARRATION_COUNT}`
               "
               size="flexible"
               :contentTitle="`${narration.title}`"
@@ -185,9 +185,9 @@
               <CmItem
                 :title="
                   'ナレーション ' +
-                  `${narrations.length + 1}` +
-                  '/' +
-                  `${MAX_NARRATION_COUNT}`
+                    `${narrations.length + 1}` +
+                    '/' +
+                    `${MAX_NARRATION_COUNT}`
                 "
                 :isEmpty="true"
                 :contentTitleName="'narration' + `${narrations.length}`"
@@ -411,7 +411,7 @@
             :isPlaying="isPlaying"
             :playbackTime="playbackTime"
             :duration="duration"
-            @play="play"
+            @play="play(startChime.id, Constants.CATEGORY.CHIME)"
             @stop="stop"
             :oninput="seekAudioPlayerProgressBar"
           />
@@ -439,7 +439,7 @@
             :isPlaying="isPlaying"
             :playbackTime="playbackTime"
             :duration="duration"
-            @play="play"
+            @play="play(narrationIndex, Constants.CATEGORY.NARRATION)"
             @stop="stop"
             :oninput="seekAudioPlayerProgressBar"
           />
@@ -467,7 +467,7 @@
             :isPlaying="isPlaying"
             :playbackTime="playbackTime"
             :duration="duration"
-            @play="play"
+            @play="play(bgm.id, Constants.CATEGORY.BGM)"
             @stop="stop"
             :oninput="seekAudioPlayerProgressBar"
           />
@@ -495,7 +495,7 @@
             :isPlaying="isPlaying"
             :playbackTime="playbackTime"
             :duration="duration"
-            @play="play"
+            @play="play(endChime.id, Constants.CATEGORY.CHIME)"
             @stop="stop"
             :oninput="seekAudioPlayerProgressBar"
           />
@@ -878,8 +878,10 @@ export default defineComponent({
         state.isDownloading = false;
       }
     };
-    const play = async () => {
+
+    const play = async (id: string, category: string) => {
       if (state.isPlaying) return;
+      analytics.pressButtonPlayTrial(id, category, Constants.SCREEN.CM);
       await audioPlayer.start();
     };
 
@@ -892,7 +894,6 @@ export default defineComponent({
           Constants.CATEGORY.CM,
           Constants.SCREEN.CM
         );
-        await audioPlayer.load(cm.url);
         await audioPlayer.start();
       } catch (e) {
         openErrorModal(e);
@@ -964,6 +965,7 @@ export default defineComponent({
         closeCreateCmLoadingModal();
         openPlayModal();
         state.isIndicateCmTime = true;
+        await audioPlayer.load(cm.url);
       } catch (e) {
         closeCreateCmLoadingModal();
         closePlayModal();

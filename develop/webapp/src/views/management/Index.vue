@@ -592,6 +592,11 @@ export default defineComponent({
     };
     const play = async () => {
       if (state.isPlaying) return;
+      analytics.pressButtonPlayTrial(
+        state.selectedCm?.id ?? "undefind",
+        Constants.CATEGORY.CM,
+        Constants.SCREEN.MANAGEMENT
+      );
       await audioPlayer.start();
     };
     const download = async (cm: CmItem) => {
@@ -661,11 +666,6 @@ export default defineComponent({
         state.isDownloading = true;
         openPlayModal();
         const url = await audioService.getUrlById(cm.id, Constants.CATEGORY.CM);
-        analytics.pressButtonPlayTrial(
-          cm.id,
-          Constants.CATEGORY.CM,
-          Constants.SCREEN.MANAGEMENT
-        );
         await audioPlayer.load(url);
       } catch (e) {
         openErrorModal(e);
