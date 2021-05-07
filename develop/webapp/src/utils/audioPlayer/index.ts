@@ -15,7 +15,7 @@ export default function useAudioPlayer() {
   let sampleBuffer: Float32Array;
 
   const load = async (urlOrBuffer: string | ArrayBuffer) => {
-    return new Promise<void>(function (resolve, reject) {
+    return new Promise<void>((resolve, reject) => {
       let howlSource: string | string[];
       if (typeof (urlOrBuffer) === "string") {
         howlSource = urlOrBuffer;
@@ -45,7 +45,7 @@ export default function useAudioPlayer() {
   };
 
   const start = async () => {
-    return new Promise<void>(function (resolve, reject) {
+    return new Promise<void>((resolve, reject) => {
       state.howl.on("play", () => {
         state.playbackTime = 0;
         state.duration = state.howl.duration();
