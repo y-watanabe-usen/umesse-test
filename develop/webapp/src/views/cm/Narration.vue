@@ -198,6 +198,7 @@
             @download="download(selectedNarration)"
             @play="play(selectedNarration)"
             @stop="stop"
+            :oninput="seekAudioPlayerProgressBar"
           />
         </template>
         <template #footer>
@@ -578,16 +579,11 @@ export default defineComponent({
     const play = async (narration: NarrationItem) => {
       try {
         state.isDownloading = true;
-        const audioBuffer = await audioService.getById(
+        const url = await audioService.getUrlById(
           narration.id,
           narration.category
         );
-        analytics.pressButtonPlayTrial(
-          narration.id,
-          Constants.CATEGORY.NARRATION,
-          Constants.SCREEN.NARRATION
-        );
-        audioPlayer.start(audioBuffer);
+        await audioPlayer.start(url);
       } catch (e) {
         openErrorModal(e);
       } finally {
@@ -597,12 +593,12 @@ export default defineComponent({
 
     const download = async (narration: NarrationItem) => {
       try {
-        const downloAdudioUrl = await audioService.downloadById(
+        const url = await audioService.getUrlById(
           narration.id,
           narration.category
         );
         const fileLink = document.createElement("a");
-        fileLink.href = downloAdudioUrl;
+        fileLink.href = url;
         fileLink.click();
       } catch (e) {
         openErrorModal(e);
@@ -727,6 +723,12 @@ export default defineComponent({
       fetchNarration();
     };
 
+    const seekAudioPlayerProgressBar = (e: Event) => {
+      if (e.target instanceof HTMLInputElement) {
+        audioPlayer.changePlaybackTime(+e.target.value);
+      }
+    };
+
     return {
       ...toRefs(state),
       sortList,
@@ -750,6 +752,7 @@ export default defineComponent({
       saveAndOpenSavedModal,
       selectNarrationAndOpenRemoveModal,
       removeAndOpenRemovedModal,
+      seekAudioPlayerProgressBar,
       isPlayModalAppear,
       openPlayModal,
       closePlayModal,

@@ -64,6 +64,7 @@
               :duration="duration"
               @play="play(selectedBgm)"
               @stop="stop"
+              :oninput="seekAudioPlayerProgressBar"
             />
           </FormGroup>
           <FormGroup title="タイトル" :required="true">
@@ -187,13 +188,13 @@ export default defineComponent({
     const play = async () => {
       console.log("play");
       const data = await ttsStore.getTtsData(lang);
-      const audioBuffer = await audioService.getByUrl(<string>data?.url);
+      const arrayBuffer = await audioService.getArrayBufferByUrl(<string>data?.url);
       analytics.pressButtonPlayTrial(
         <string>data?.url,
         Constants.CATEGORY.FREE,
         Constants.SCREEN.VOICE_FREE
       );
-      audioPlayer.start(audioBuffer);
+      await audioPlayer.start(arrayBuffer);
     };
     const stop = () => {
       if (state.isPlaying) audioPlayer.stop();
@@ -252,6 +253,11 @@ export default defineComponent({
     onMounted(() => {
       analytics.screenView(Constants.SCREEN.VOICE_FREE);
     });
+    const seekAudioPlayerProgressBar = (e: Event) => {
+      if (e.target instanceof HTMLInputElement) {
+        audioPlayer.changePlaybackTime(+e.target.value);
+      }
+    };
     return {
       ttsSpeakers,
       ...toRefs(state),
@@ -260,6 +266,7 @@ export default defineComponent({
       generateTts,
       createTts,
       stopAndCloseModal,
+      seekAudioPlayerProgressBar,
       isModalAppear,
       openModal,
       closeModal,

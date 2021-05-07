@@ -71,6 +71,7 @@
             :duration="duration"
             @play="play(selectedBgm)"
             @stop="stop"
+            :oninput="seekAudioPlayerProgressBar"
           />
         </template>
         <template #footer>
@@ -214,13 +215,13 @@ export default defineComponent({
     const play = async (bgm: BgmItem) => {
       try {
         state.isDownloading = true;
-        const audioBuffer = await audioService.getById(bgm.id, bgm.category);
+        const url = await audioService.getUrlById(bgm.id, bgm.category);
         analytics.pressButtonPlayTrial(
           bgm.id,
           Constants.CATEGORY.BGM,
           Constants.SCREEN.BGM
         );
-        audioPlayer.start(audioBuffer);
+        await audioPlayer.start(url);
       } catch (e) {
         openErrorModal(e);
       } finally {
@@ -241,6 +242,12 @@ export default defineComponent({
       closePlayModal();
     };
 
+    const seekAudioPlayerProgressBar = (e: Event) => {
+      if (e.target instanceof HTMLInputElement) {
+        audioPlayer.changePlaybackTime(+e.target.value);
+      }
+    };
+
     onMounted(async () => {
       analytics.screenView(Constants.SCREEN.BGM);
       fetchBgm();
@@ -257,6 +264,7 @@ export default defineComponent({
       selectBgmAndOpenPlayModal,
       stopAndClosePlayModal,
       fetchBgm,
+      seekAudioPlayerProgressBar,
       isPlayModalAppear,
       openPlayModal,
       closePlayModal,

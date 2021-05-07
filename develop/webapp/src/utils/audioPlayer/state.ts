@@ -1,10 +1,9 @@
-
+import { Howl } from "howler";
 
 export interface AudioPlayerState {
   playing: boolean;
-  mediaRecorder: MediaRecorder | null;
   powerDecibels: number;
-  startedTime: number;
   playbackTime: number;
   duration: number;
+  howl: Howl;
 }

@@ -64,12 +64,15 @@
                       <p>{{ convertNumberToTime(playbackTime) }}</p>
                       <p>{{ convertNumberToTime(duration) }}</p>
                     </div>
-                    <meter
+                    <input
+                      type="range"
                       min="0"
                       :max="duration"
-                      class="progress-meter"
                       :value="playbackTime"
-                    ></meter>
+                      step="0.001"
+                      :oninput="seekAudioPlayerProgressBar"
+                      :disabled="!isPlaying"
+                    />
                   </template>
                   <template v-else-if="isRecording">
                     <div class="time">
@@ -304,8 +307,8 @@ export default defineComponent({
       if (state.isPlaying) {
         audioPlayer.stop();
       } else {
-        const audioBuffer = await audioRecorder.getAudioBuffer();
-        if (audioBuffer) audioPlayer.start(audioBuffer);
+        const arrayBuffer = await audioRecorder.getArrayBuffer();
+        if (arrayBuffer) await audioPlayer.start(arrayBuffer);
       }
     };
 
@@ -329,6 +332,11 @@ export default defineComponent({
         closeLoadingModal();
       }
     };
+    const seekAudioPlayerProgressBar = (e: Event) => {
+      if (e.target instanceof HTMLInputElement) {
+        audioPlayer.changePlaybackTime(+e.target.value);
+      }
+    };
     onMounted(() => {
       analytics.screenView(Constants.SCREEN.RECORDING);
     });
@@ -340,6 +348,7 @@ export default defineComponent({
       uploadRecordingFile,
       UPLOAD_RECORDING_STATE,
       convertNumberToTime,
+      seekAudioPlayerProgressBar,
       isModalAppear,
       openModal,
       closeModal,
@@ -439,6 +448,42 @@ export default defineComponent({
         }
       }
       meter {
+        width: 630px;
+        margin-top: 8px;
+        margin-bottom: 8px;
+        &::-webkit-meter-bar {
+          background-color: rgba(0, 0, 0, 0.15);
+          border: none;
+          border-radius: 0;
+        }
+        &.volume-meter {
+          height: 18px;
+          &::-webkit-meter-bar {
+            height: 18px;
+          }
+          &::-webkit-meter-optimum-value {
+            background-color: rgb(78, 203, 136);
+          }
+          &::-webkit-meter-suboptimum-value {
+            background-color: rgb(204, 209, 79);
+          }
+          &::-webkit-meter-even-less-good-value {
+            background-color: rgb(209, 79, 79);
+          }
+        }
+        &.progress-meter {
+          height: 6px;
+          &::-webkit-meter-bar {
+            height: 6px;
+            border-radius: 3px;
+          }
+          &::-webkit-meter-optimum-value {
+            background-color: rgb(0, 206, 255);
+          }
+        }
+      }
+      input[type="range"] {
+        background-color: #ccc;
         width: 630px;
         margin-top: 8px;
         margin-bottom: 8px;

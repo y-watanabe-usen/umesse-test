@@ -8,14 +8,12 @@ import { audioCache, cmCache, ttsCache } from "@/repository/cache";
 import { useUserService } from "@/services/userService";
 import { useUploadService } from "@/services/uploadService";
 
-const audioContext = new AudioContext();
-
 const userService = useUserService(authRepository, userRepository);
 const resourcesService = useResourcesService(resourcesRepository, recordingRepository, ttsRepository);
 const recordingService = useRecordingService(resourcesRepository, recordingRepository);
 const cmService = useCmService(cmRepository, cmCache);
 const ttsService = useTtsService(ttsRepository, ttsCache);
-const audioService = useAudioService(audioRepository, resourcesRepository, audioCache, audioContext);
+const audioService = useAudioService(audioRepository, resourcesRepository, audioCache);
 const uploadService = useUploadService(uploadRepository);
 
 export { userService, resourcesService, recordingService, cmService, ttsService, audioService, uploadService };

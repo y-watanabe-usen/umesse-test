@@ -9,118 +9,148 @@ import * as umesseapi from "umesseapi";
 const audioRepository = new AudioRepository(axios);
 const resourcesRepository = new umesseapi.ResourcesApi(undefined, "", axios);
 const audioCache = new AudioCache();
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const audioContext: any = new class {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  decodeAudioData = async (data: any) => {
-    if (data != "DownloadedAudioFile") {
-      throw new Error("err");
-    }
-    return "DecodedAudioBuffer";
-  };
-};
 
-const audioService = useAudioService(audioRepository, resourcesRepository, audioCache, audioContext);
+const audioService = useAudioService(audioRepository, resourcesRepository, audioCache);
 
-describe("getByIdのテスト", () => {
+describe("getArrayBufferByIdのテスト", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    jest.clearAllMocks().resetAllMocks();
     audioCache.removeAll();
   });
 
   const id = "123456789";
   const category = "bgm";
-  const cacheKey = `audioService/getById/${category}/${id}`;
+  const cacheKey = `audioService/getArrayBufferById/${category}/${id}`;
 
-  test(`正常終了の場合、AudioBufferがキャッシュにセットされ返ること`, async () => {
+  test(`正常終了の場合、ArrayBufferがキャッシュにセットされ返ること`, async () => {
     jest.spyOn(axios, 'request').mockResolvedValue({ data: { url: "https://example.com" } });
-    jest.spyOn(axios, 'get').mockResolvedValue({ data: "DownloadedAudioFile" });
+    jest.spyOn(axios, 'get').mockResolvedValue({ data: "DownloadedArrayBuffer" });
 
-    const response = await audioService.getById(id, category);
+    const response = await audioService.getArrayBufferById(id, category);
 
-    expect(audioCache.get(cacheKey)).toBe("DecodedAudioBuffer");
-    expect(response).toBe("DecodedAudioBuffer");
+    expect(audioCache.get(cacheKey)).toBe("DownloadedArrayBuffer");
+    expect(response).toBe("DownloadedArrayBuffer");
   });
 
   test(`キャッシュがある場合、キャッシュの中身が返ること`, async () => {
     jest.spyOn(axios, 'request').mockResolvedValue({ data: { url: "https://example.com" } });
-    jest.spyOn(axios, 'get').mockResolvedValue({ data: "DownloadedAudioFile" });
+    jest.spyOn(axios, 'get').mockResolvedValue({ data: "DownloadedArrayBuffer" });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    audioCache.set(cacheKey, <any>"CacheAudioBuffer");
+    audioCache.set(cacheKey, <any>"CacheArrayBuffer");
 
-    const response = await audioService.getById(id, category);
+    const response = await audioService.getArrayBufferById(id, category);
 
-    expect(response).toBe("CacheAudioBuffer");
+    expect(response).toBe("CacheArrayBuffer");
   });
 
   test(`想定外の値が返却された場合、UMesseErrorがthrowされること`, async () => {
+    jest.spyOn(axios, 'request').mockResolvedValue({});
     jest.spyOn(axios, 'get').mockResolvedValue({ data: "aaaaaaaaaaaaaaaaa" });
     const expoectedError = new UMesseError(ERROR_CODE.A0001, ERROR_PATTERN.A0001, "");
 
-    await expect(audioService.getById(id, category)).rejects.toThrowError(expoectedError);
+    await expect(audioService.getArrayBufferById(id, category)).rejects.toThrowError(expoectedError);
   });
 
   test(`404エラーの場合、UMesseErrorがthrowされること`, async () => {
+    jest.spyOn(axios, 'request').mockResolvedValue({ data: { url: "https://example.com" } });
     jest.spyOn(axios, 'get').mockRejectedValue({ response: { status: 404 } });
     const expoectedError = new UMesseError(ERROR_CODE.A3000, ERROR_PATTERN.A3000, "");
 
-    await expect(audioService.getById(id, category)).rejects.toThrowError(expoectedError);
+    await expect(audioService.getArrayBufferById(id, category)).rejects.toThrowError(expoectedError);
   });
 
   test(`500エラーの場合、UMesseErrorがthrowされること`, async () => {
+    jest.spyOn(axios, 'request').mockResolvedValue({ data: { url: "https://example.com" } });
     jest.spyOn(axios, 'get').mockRejectedValue({ response: { status: 500 } });
     const expoectedError = new UMesseError(ERROR_CODE.A3999, ERROR_PATTERN.A3999, "");
 
-    await expect(audioService.getById(id, category)).rejects.toThrowError(expoectedError);
+    await expect(audioService.getArrayBufferById(id, category)).rejects.toThrowError(expoectedError);
   });
 });
 
-describe("getByUrlのテスト", () => {
+describe("getUrlByIdのテスト", () => {
   beforeEach(() => {
-    jest.clearAllMocks();
+    jest.clearAllMocks().resetAllMocks();
+    audioCache.removeAll();
+  });
+
+  const id = "123456789";
+  const category = "bgm";
+  const cacheKey = `audioService/getUrlById/${category}/${id}`;
+
+  test(`正常終了の場合、Urlがキャッシュにセットされ返ること`, async () => {
+    jest.spyOn(axios, 'request').mockResolvedValue({ data: { url: "https://example.com" } });
+
+    const response = await audioService.getUrlById(id, category);
+
+    expect(audioCache.get(cacheKey)).toBe("https://example.com");
+    expect(response).toBe("https://example.com");
+  });
+
+  test(`キャッシュがある場合、キャッシュの中身が返ること`, async () => {
+    jest.spyOn(axios, 'request').mockResolvedValue({ data: { url: "https://example.com" } });
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    audioCache.set(cacheKey, <any>"https://example.co.jp");
+
+    const response = await audioService.getUrlById(id, category);
+
+    expect(response).toBe("https://example.co.jp");
+  });
+
+  test(`404エラーの場合、UMesseErrorがthrowされること`, async () => {
+    jest.spyOn(axios, 'request').mockRejectedValue({ response: { status: 404 } });
+    const expoectedError = new UMesseError(ERROR_CODE.A3000, ERROR_PATTERN.A3000, "");
+
+    await expect(audioService.getUrlById(id, category)).rejects.toThrowError(expoectedError);
+  });
+
+  test(`500エラーの場合、UMesseErrorがthrowされること`, async () => {
+    jest.spyOn(axios, 'request').mockRejectedValue({ response: { status: 500 } });
+    const expoectedError = new UMesseError(ERROR_CODE.A3999, ERROR_PATTERN.A3999, "");
+
+    await expect(audioService.getUrlById(id, category)).rejects.toThrowError(expoectedError);
+  });
+});
+
+describe("getArrayBufferByUrlのテスト", () => {
+  beforeEach(() => {
+    jest.clearAllMocks().resetAllMocks();
     audioCache.removeAll();
   });
 
   const url = "https://example.com";
-  const cacheKey = `audioService/getByUrl/${url}`;
+  const cacheKey = `audioService/getArrayBufferByUrl/${url}`;
 
-  test(`正常終了の場合、AudioBufferがキャッシュにセットされ返ること`, async () => {
-    jest.spyOn(axios, 'get').mockResolvedValue({ data: "DownloadedAudioFile" });
+  test(`正常終了の場合、ArrayBufferがキャッシュにセットされ返ること`, async () => {
+    jest.spyOn(axios, 'get').mockResolvedValue({ data: "DownloadedArrayBuffer" });
 
-    const response = await audioService.getByUrl(url);
+    const response = await audioService.getArrayBufferByUrl(url);
 
-    expect(audioCache.get(cacheKey)).toBe("DecodedAudioBuffer");
-    expect(response).toBe("DecodedAudioBuffer");
+    expect(audioCache.get(cacheKey)).toBe("DownloadedArrayBuffer");
+    expect(response).toBe("DownloadedArrayBuffer");
   });
 
   test(`キャッシュがある場合、キャッシュの中身が返ること`, async () => {
-    jest.spyOn(axios, 'get').mockResolvedValue({ data: "DownloadedAudioFile" });
+    jest.spyOn(axios, 'get').mockResolvedValue({ data: "DownloadedArrayBuffer" });
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    audioCache.set(cacheKey, <any>"CacheAudioBuffer");
+    audioCache.set(cacheKey, <any>"CacheArrayBuffer");
 
-    const response = await audioService.getByUrl(url);
+    const response = await audioService.getArrayBufferByUrl(url);
 
-    expect(response).toBe("CacheAudioBuffer");
-  });
-
-  test(`想定外の値が返却された場合、UMesseErrorがthrowされること`, async () => {
-    jest.spyOn(axios, 'get').mockResolvedValue({ data: "aaaaaaaaaaaaaaaaa" });
-    const expoectedError = new UMesseError(ERROR_CODE.A0001, ERROR_PATTERN.A0001, "");
-
-    await expect(audioService.getByUrl(url)).rejects.toThrowError(expoectedError);
+    expect(response).toBe("CacheArrayBuffer");
   });
 
   test(`404エラーの場合、UMesseErrorがthrowされること`, async () => {
     jest.spyOn(axios, 'get').mockRejectedValue({ response: { status: 404 } });
     const expoectedError = new UMesseError(ERROR_CODE.A3000, ERROR_PATTERN.A3000, "");
 
-    await expect(audioService.getByUrl(url)).rejects.toThrowError(expoectedError);
+    await expect(audioService.getArrayBufferByUrl(url)).rejects.toThrowError(expoectedError);
   });
 
   test(`500エラーの場合、UMesseErrorがthrowされること`, async () => {
     jest.spyOn(axios, 'get').mockRejectedValue({ response: { status: 500 } });
     const expoectedError = new UMesseError(ERROR_CODE.A3999, ERROR_PATTERN.A3999, "");
 
-    await expect(audioService.getByUrl(url)).rejects.toThrowError(expoectedError);
+    await expect(audioService.getArrayBufferByUrl(url)).rejects.toThrowError(expoectedError);
   });
 });

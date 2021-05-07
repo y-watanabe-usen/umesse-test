@@ -61,7 +61,7 @@ export default function useAudioRecorder() {
     timer = setInterval(() => {
       updateAnalyser();
       updateRecordingTime();
-    }, 100);
+    }, 50);
     state.recording = true;
   };
   const stop = async () => {
@@ -69,21 +69,17 @@ export default function useAudioRecorder() {
   };
   const reset = () => state.chunks = [];
 
-
-  const getAudioBuffer = async () => {
+  const getArrayBuffer = async () => {
 
     if (!hasRecording()) {
       return undefined;
     }
     const blob = new Blob(state.chunks);
-    const context = new window.AudioContext();
 
-    return new Promise<AudioBuffer>((resolve, reject) => {
+    return new Promise<ArrayBuffer>((resolve, reject) => {
       const reader = new FileReader();
       reader.onload = () => {
-        context.decodeAudioData(reader.result as ArrayBuffer, (buffer) => {
-          resolve(buffer);
-        });
+        resolve(reader.result as ArrayBuffer);
       };
       reader.onerror = (event: Event) => {
         reject(event);
@@ -93,17 +89,19 @@ export default function useAudioRecorder() {
   };
 
   const getWaveBlob = async () => {
-    const audioBuffer = await getAudioBuffer();
-    if (audioBuffer) {
-      return useWaveEncoder.encode(audioBuffer);
+    const arrayBuffer = await getArrayBuffer();
+    if (arrayBuffer) {
+      const context = new window.AudioContext();
+      return useWaveEncoder.encode(await context.decodeAudioData(arrayBuffer));
     }
     return undefined;
   };
 
   const getMp3Blob = async () => {
-    const audioBuffer = await getAudioBuffer();
-    if (audioBuffer) {
-      return useMp3Encoder.encode(audioBuffer);
+    const arrayBuffer = await getArrayBuffer();
+    if (arrayBuffer) {
+      const context = new window.AudioContext();
+      return useMp3Encoder.encode(await context.decodeAudioData(arrayBuffer));
     }
     return undefined;
   };
@@ -123,6 +121,6 @@ export default function useAudioRecorder() {
 
   return {
     start, stop, reset, isRecording, hasRecording,
-    getWaveBlob, getMp3Blob, getAudioBuffer, getPowerDecibels, getRecordingTime
+    getWaveBlob, getMp3Blob, getArrayBuffer, getPowerDecibels, getRecordingTime
   };
 }

@@ -152,6 +152,7 @@
             @download="download(selectedCm)"
             @play="play(selectedCm)"
             @stop="stop"
+            :oninput="seekAudioPlayerProgressBar"
           />
         </template>
         <template #footer>
@@ -593,7 +594,7 @@ export default defineComponent({
       if (state.isPlaying) return;
       try {
         state.isDownloading = true;
-        const audioBuffer = await audioService.getById(
+        const url = await audioService.getUrlById(
           cm.id,
           Constants.CATEGORY.CM
         );
@@ -602,7 +603,7 @@ export default defineComponent({
           Constants.CATEGORY.CM,
           Constants.SCREEN.MANAGEMENT
         );
-        audioPlayer.start(audioBuffer);
+        await audioPlayer.start(url);
       } catch (e) {
         openErrorModal(e);
       } finally {
@@ -611,12 +612,12 @@ export default defineComponent({
     };
     const download = async (cm: CmItem) => {
       try {
-        const downloAdudioUrl = await audioService.downloadById(
+        const url = await audioService.getUrlById(
           cm.id,
           cm.category
         );
         const fileLink = document.createElement("a");
-        fileLink.href = downloAdudioUrl;
+        fileLink.href = url;
         fileLink.click();
       } catch (e) {
         openErrorModal(e);
@@ -800,6 +801,11 @@ export default defineComponent({
     const closeCmAbsentModal = () => {
       toHome();
     };
+    const seekAudioPlayerProgressBar = (e: Event) => {
+      if (e.target instanceof HTMLInputElement) {
+        audioPlayer.changePlaybackTime(+e.target.value);
+      }
+    };
     return {
       ...toRefs(state),
       inputScenesList,
@@ -830,6 +836,7 @@ export default defineComponent({
       getStatusClass,
       upload,
       unUpload,
+      seekAudioPlayerProgressBar,
       isPlayModalAppear,
       openPlayModal,
       closePlayModal,
