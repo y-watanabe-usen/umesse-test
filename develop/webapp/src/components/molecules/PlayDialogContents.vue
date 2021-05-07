@@ -91,10 +91,6 @@ export default {
       type: Boolean,
       required: true,
     },
-    isLoadingOverlay: {
-      type: Boolean,
-      default: false,
-    },
   },
   setup() {
     const state = reactive({});

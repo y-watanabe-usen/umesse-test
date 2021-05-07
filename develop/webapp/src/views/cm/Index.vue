@@ -383,7 +383,6 @@
             :isPlaying="isPlaying"
             :playbackTime="playbackTime"
             :duration="duration"
-            :isLoadingOverlay="isLoadingOverlay"
             @play="playGenerateCm()"
             @stop="stop"
             :oninput="seekAudioPlayerProgressBar"
@@ -791,7 +790,6 @@ export default defineComponent({
       narrationIndex: 0,
       isFocus: false,
       isIndicateCmTime: cm.isEdit,
-      isLoadingOverlay: false,
     });
 
     const inputFocusBlur = (isFocus: boolean) => {
@@ -962,7 +960,6 @@ export default defineComponent({
     const createAndOpenPlayModal = async () => {
       try {
         openCreateCmLoadingModal();
-        state.isLoadingOverlay = true;
         await cm.create();
         closeCreateCmLoadingModal();
         openPlayModal();
@@ -976,7 +973,6 @@ export default defineComponent({
     };
     const stopAndClosePlayModal = () => {
       state.isDownloading = false;
-      state.isLoadingOverlay = false;
       stop();
       closePlayModal();
     };
