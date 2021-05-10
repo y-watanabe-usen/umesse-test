@@ -53,7 +53,7 @@
                     convertDatestringToDate(cm.timestamp)
                   }}</span>
                   <span class="status" :class="getStatusClass(cm.status)">{{
-                    Constants.CM_STATUS.find((v) => v.cd == cm.status).name
+                    getCmStatusName(cm.status)
                   }}</span>
                 </p>
               </template>
@@ -559,6 +559,10 @@ export default defineComponent({
         authUser.serviceCd === Constants.SERVICE_CD_UMUSIC
           ? "U MUSICにアップロード"
           : "S'Senceにアップロード",
+      uploadSystem:
+        authUser.serviceCd === Constants.SERVICE_CD_UMUSIC
+          ? "U MUSIC"
+          : "S'Sence",
       isDownload: false,
     });
     const fetchScene = async () => {
@@ -805,6 +809,22 @@ export default defineComponent({
         audioPlayer.changePlaybackTime(+e.target.value);
       }
     };
+    const getCmStatusName = (status: string) => {
+      let name = "";
+      Constants.CM_STATUS.forEach((v) => {
+        if (v.cd == status)
+          if (
+            status == Constants.CM_STATUS_EXTERNAL_UPLOADING ||
+            status == Constants.CM_STATUS_EXTERNAL_UPLOADING ||
+            status == Constants.CM_STATUS_EXTERNAL_UPLOADING
+          ) {
+            name = state.uploadSystem + v.name;
+          } else {
+            name = v.name;
+          }
+      });
+      return name;
+    };
 
     return {
       ...toRefs(state),
@@ -875,6 +895,7 @@ export default defineComponent({
       closeCmAbsentModal,
       download,
       toHome,
+      getCmStatusName,
     };
   },
 });
