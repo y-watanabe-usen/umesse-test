@@ -574,7 +574,7 @@
       </ModalDialog>
     </transition>
     <transition>
-      <ModalDialog v-if="isSavedModalAppear" @close="closeSavedModal">
+      <ModalDialog v-if="isSavedModalAppear" @close="toBackFunction">
         <template #contents>
           <MessageDialogContents>
             作成が完了いたしました。
@@ -582,9 +582,6 @@
         </template>
         <template #footer>
           <ModalFooter>
-            <Button type="secondary" @click="closeSavedModal"
-              >編集の続きをする</Button
-            >
             <Button type="primary" @click="toBackFunction">終了する</Button>
           </ModalFooter>
         </template>
@@ -733,7 +730,6 @@ export default defineComponent({
     const {
       isApper: isSavedModalAppear,
       open: openSavedModal,
-      close: closeSavedModal,
     } = useModalController();
     const {
       isApper: isConfirmBackHomeModalAppear,
@@ -1327,7 +1323,6 @@ export default defineComponent({
       closeSaveModal,
       isSavedModalAppear,
       openSavedModal,
-      closeSavedModal,
       isConfirmBackHomeModalAppear,
       openConfirmBackHomeModal,
       closeConfirmBackHomeModal,
