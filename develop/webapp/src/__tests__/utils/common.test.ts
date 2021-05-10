@@ -496,10 +496,9 @@ describe("getManagementScenesのテスト", () => {
 
 describe("getSettingAppInformationsのテスト", () => {
   const expected = [
-    { cd: "01", name: "バージョン" },
-    { cd: "02", name: "U MESSE利用規約" },
-    { cd: "03", name: "アナウンス発注の利用規約" },
-    { cd: "04", name: "お客様情報" },
+    { cd: "01", name: "お客様情報" },
+    { cd: "02", name: "アプリ情報" },
+    { cd: "03", name: "注意事項" },
   ];
   test(`全設定項目が返ること`, () => {
     expect(common.getSettingAppInformations()).toEqual(expected);

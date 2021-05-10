@@ -2,7 +2,7 @@
   <BasicLayout>
     <template #header>
       <Header>
-        <template #title>アプリ情報</template>
+        <template #title>情報</template>
       </Header>
     </template>
     <template #contents>
@@ -21,38 +21,51 @@
         </template>
         <div class="content">
           <div v-if="activeAppInformationCd === '01'" class="version">
-            <h2>U MESSE Ver{{ version }}</h2>
+            <List>
+              <SettingListItem>
+                <template #title>グループCD</template>
+                <template #description>1234567890</template>
+              </SettingListItem>
+              <SettingListItem>
+                <template #title>UNIS顧客CD</template>
+                <template #description>1234567890</template>
+              </SettingListItem>
+              <SettingListItem>
+                <template #title>店名</template>
+                <template #description>Megro cafe</template>
+              </SettingListItem>
+              <SettingListItem>
+                <template #title>サービスCD</template>
+                <template #description>1234567890</template>
+              </SettingListItem>
+              <SettingListItem>
+                <template #title>サービス名</template>
+                <template #description>Xxxxxxxxxxxx</template>
+              </SettingListItem>
+            </List>
           </div>
           <div v-if="activeAppInformationCd === '02'">
-            <h2>U MESSE利用規約</h2>
-            <p>
-              xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br />
-              xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br />
-              xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-            </p>
+            <List>
+              <SettingListItem>
+                <template #title>バージョン</template>
+                <template #description>0.111111</template>
+              </SettingListItem>
+              <h2>ライセンス</h2>
+              <p>
+                XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX<br />
+                XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX<br />
+                XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX<br />
+                XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+              </p>
+            </List>
           </div>
           <div v-if="activeAppInformationCd === '03'">
-            <h2>アナウンス発注の利用規約</h2>
             <p>
-              xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br />
-              xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<br />
-              xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+              XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX<br />
+              XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX<br />
+              XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX<br />
+              XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
             </p>
-          </div>
-          <div v-if="activeAppInformationCd === '04'">
-            <h2>お客様ID：{{ token }}</h2>
-            <h4>contractStatusName:{{ authUser.contractStatusName }}</h4>
-            <h4>contractStatusCd:{{ authUser.contractStatusCd }}</h4>
-            <h4>customerGroupName: {{ authUser.customerGroupName }}</h4>
-            <h4>contractCd: {{ authUser.contractCd }}</h4>
-            <h4>customerNameKana:{{ authUser.customerNameKana }}</h4>
-            <h4>unisCustomerCd:{{ authUser.unisCustomerCd }}</h4>
-            <h4>serviceCd:{{ authUser.serviceCd }}</h4>
-            <h4>renewalDate:{{ authUser.renewalDate }}</h4>
-            <h4>serviceName:{{ authUser.serviceName }}</h4>
-            <h4>customerGroupCd:{{ authUser.customerGroupCd }}</h4>
-            <h4>customerName:{{ authUser.customerName }}</h4>
-            <h4>createDate:{{ authUser.createDate }}</h4>
           </div>
         </div>
       </ContentsBase>
@@ -69,6 +82,8 @@ import ContentsBase from "@/components/templates/ContentsBase.vue";
 import Header from "@/components/organisms/Header.vue";
 import SubMenu from "@/components/organisms/SubMenu.vue";
 import SubMenuItem from "@/components/molecules/SubMenuItem.vue";
+import List from "@/components/organisms/List.vue";
+import SettingListItem from "@/components/molecules/SettingListItem.vue";
 import {
   convertDatestringToDateJp,
   convertNumberToTime,
@@ -83,6 +98,8 @@ export default defineComponent({
     Header,
     SubMenu,
     SubMenuItem,
+    List,
+    SettingListItem,
   },
   setup() {
     const { auth } = useGlobalStore();
@@ -126,21 +143,22 @@ export default defineComponent({
   height: 100%;
   caret-color: transparent;
   h2 {
+    color: black;
     font-size: 20px;
     font-weight: $font_weight_bold;
-    text-align: center;
-    margin: 34px;
+    margin-left: 34px;
+    line-height: 80px;
   }
   p {
+    color: rgb(92, 92, 92);
     font-size: 20px;
-    line-height: 1.6em;
-    margin-top: 76px;
-    margin-left: 75px;
-    margin-right: 75px;
-  }
-  .version {
-    @include flex_center;
-    height: 90%;
+    line-height: 1.8em;
+    margin-top: -10px;
+    margin-left: 34px;
+    margin-right: 30px;
+    &:first-child {
+      margin-top: 40px;
+    }
   }
 }
 </style>
