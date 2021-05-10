@@ -233,7 +233,7 @@ export function useCmService(api: UMesseApi.CmApi, cmCache: CmCache) {
             resolve(value.data);
           }
         });
-      }, Constants.TIME_INTERVAL_GET_USER_CM);
+      }, Constants.TIME_INTERVAL_GET_USER_CM * 1000);
     });
   };
 
