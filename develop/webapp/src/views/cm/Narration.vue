@@ -623,6 +623,7 @@ export default defineComponent({
         );
         await audioPlayer.load(url);
       } catch (e) {
+        closePlayModal();
         openErrorModal(e);
       } finally {
         state.isDownloading = false;
