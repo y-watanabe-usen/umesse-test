@@ -150,8 +150,7 @@ jobs:
     - name: Sync Lambda Function create version & Alias update version
       run: |
         aws lambda update-function-configuration --function-name $FunctionName --environment Variables='{environment=stg,debug=true}'
-        Version=$(aws lambda publish-version --function-name $FunctionName --description '${{ steps.variables.outputs.version }}' | jq '.Version')
-        echo $Version
+        Version=$(aws lambda publish-version --function-name $FunctionName --description '${{ steps.variables.outputs.version }}' | jq -r '.Version')
         aws lambda update-function-configuration --function-name $FunctionName --environment Variables='{environment=dev,debug=true}'
         aws lambda update-alias --function-name $FunctionName --name $AliasName --function-version $Version
       env:
