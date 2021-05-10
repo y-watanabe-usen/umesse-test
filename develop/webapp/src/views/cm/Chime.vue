@@ -214,6 +214,7 @@ export default defineComponent({
         const url = await audioService.getUrlById(chime.id, chime.category);
         await audioPlayer.load(url);
       } catch (e) {
+        closePlayModal();
         openErrorModal(e);
       } finally {
         state.isDownloading = false;

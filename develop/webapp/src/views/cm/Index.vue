@@ -811,6 +811,7 @@ export default defineComponent({
         );
         await audioPlayer.load(url);
       } catch (e) {
+        closePlayStartChimeModal();
         openErrorModal(e);
       } finally {
         state.isDownloading = false;
@@ -832,6 +833,7 @@ export default defineComponent({
         );
         await audioPlayer.load(url);
       } catch (e) {
+        closePlayEndChimeModal();
         openErrorModal(e);
       } finally {
         state.isDownloading = false;
@@ -855,6 +857,7 @@ export default defineComponent({
         );
         await audioPlayer.load(url);
       } catch (e) {
+        closePlayNarrationModal();
         openErrorModal(e);
       } finally {
         state.isDownloading = false;
@@ -873,6 +876,7 @@ export default defineComponent({
         );
         await audioPlayer.load(url);
       } catch (e) {
+        closePlayBgmModal();
         openErrorModal(e);
       } finally {
         state.isDownloading = false;

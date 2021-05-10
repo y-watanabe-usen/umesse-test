@@ -668,6 +668,7 @@ export default defineComponent({
         const url = await audioService.getUrlById(cm.id, Constants.CATEGORY.CM);
         await audioPlayer.load(url);
       } catch (e) {
+        closePlayModal();
         openErrorModal(e);
       } finally {
         state.isDownloading = false;
