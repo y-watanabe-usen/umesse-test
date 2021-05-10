@@ -250,7 +250,7 @@ export default class Constants {
   public static readonly CUSTOMER_NAME_MAX_LENGTH: number = 30;
   public static readonly MANUSCRIPT_MAX_LENGTH: number = 2000;
 
-  public static readonly MAX_RECORDING_TIME = 120; // 2分
+  public static readonly MAX_RECORDING_TIME = 90; // 1分30秒
 }
 
 export const ERROR_CODE = {
