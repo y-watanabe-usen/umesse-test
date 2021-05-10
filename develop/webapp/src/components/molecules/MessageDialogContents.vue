@@ -28,6 +28,7 @@ export default {
     font-weight: $font_weight_bold;
     text-align: center;
     line-height: 1.7em;
+    white-space: pre-wrap;
   }
 }
 </style>
