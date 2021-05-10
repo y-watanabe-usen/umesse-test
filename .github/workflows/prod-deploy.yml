@@ -94,6 +94,69 @@ jobs:
         yarn build --mode production
         aws s3 sync --exact-timestamps --delete ./dist/ s3://umesse-webapp/
 
+  api:
+    name: Api
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-northeast-1
+
+    - name: Setup variables
+      id: variables
+      run: echo "::set-output name=version::${GITHUB_REF##*/}"
+
+    - name: Api Lambda Function create version & Alias update version
+      run: |
+        aws lambda update-function-configuration --function-name $FunctionName --environment Variables='{environment=prod,debug=true,GENERATE_SQS_QUEUE_URL=https://sqs.ap-northeast-1.amazonaws.com/527816979470/UMesseGenerateQueueProd,CONVERTER_SQS_QUEUE_URL=https://sqs.ap-northeast-1.amazonaws.com/527816979470/UMesseConverterQueueProd}'
+        Version=$(aws lambda publish-version --function-name $FunctionName --description '${{ steps.variables.outputs.version }}' | jq -r '.Version')
+        aws lambda update-function-configuration --function-name $FunctionName --environment Variables='{environment=dev,debug=true,GENERATE_SQS_QUEUE_URL=https://sqs.ap-northeast-1.amazonaws.com/527816979470/UMesseGenerateQueueDev,CONVERTER_SQS_QUEUE_URL=https://sqs.ap-northeast-1.amazonaws.com/527816979470/UMesseConverterQueueDev}'
+        aws lambda update-alias --function-name $FunctionName --name $AliasName --function-version $Version
+      env:
+        FunctionName: UMesseApiFunction
+        AliasName: Prod
+
+    - name: Converter Lambda Function create version & Alias update version
+      run: |
+        aws lambda update-function-configuration --function-name $FunctionName --environment Variables='{environment=prod,debug=true}'
+        Version=$(aws lambda publish-version --function-name $FunctionName --description '${{ steps.variables.outputs.version }}' | jq -r '.Version')
+        aws lambda update-function-configuration --function-name $FunctionName --environment Variables='{environment=dev,debug=true}'
+        aws lambda update-alias --function-name $FunctionName --name $AliasName --function-version $Version
+      env:
+        FunctionName: UMesseConverterFunction
+        AliasName: Prod
+
+    - name: Generate Lambda Function create version & Alias update version
+      run: |
+        aws lambda update-function-configuration --function-name $FunctionName --environment Variables='{environment=prod,debug=true}'
+        Version=$(aws lambda publish-version --function-name $FunctionName --description '${{ steps.variables.outputs.version }}' | jq -r '.Version')
+        aws lambda update-function-configuration --function-name $FunctionName --environment Variables='{environment=dev,debug=true}'
+        aws lambda update-alias --function-name $FunctionName --name $AliasName --function-version $Version
+      env:
+        FunctionName: UMesseGenerateFunction
+        AliasName: Prod
+
+    - name: Sync Lambda Function create version & Alias update version
+      run: |
+        aws lambda update-function-configuration --function-name $FunctionName --environment Variables='{environment=prod,debug=true}'
+        Version=$(aws lambda publish-version --function-name $FunctionName --description '${{ steps.variables.outputs.version }}' | jq -r '.Version')
+        aws lambda update-function-configuration --function-name $FunctionName --environment Variables='{environment=dev,debug=true}'
+        aws lambda update-alias --function-name $FunctionName --name $AliasName --function-version $Version
+      env:
+        FunctionName: UMesseSyncFunction
+        AliasName: Prod
+
   twa:
     name: Twa
     runs-on: ubuntu-latest

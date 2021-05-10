@@ -117,35 +117,35 @@ jobs:
       id: variables
       run: echo "::set-output name=version::${GITHUB_REF##*/}"
 
-    # - name: Api Lambda Function create version & Alias update version
-    #   run: |
-    #     aws lambda update-function-configuration --function-name $FunctionName --environment Variables='{environment=stg,debug=true,GENERATE_SQS_QUEUE_URL=https://sqs.ap-northeast-1.amazonaws.com/527816979470/UMesseGenerateQueueStg,CONVERTER_SQS_QUEUE_URL=https://sqs.ap-northeast-1.amazonaws.com/527816979470/UMesseConverterQueueStg}'
-    #     Version=$(aws lambda publish-version --function-name $FunctionName --description 'stg ${{ steps.variables.outputs.version }}')
-    #     aws lambda update-function-configuration --function-name $FunctionName --environment Variables='{environment=dev,debug=true,GENERATE_SQS_QUEUE_URL=https://sqs.ap-northeast-1.amazonaws.com/527816979470/UMesseGenerateQueueDev,CONVERTER_SQS_QUEUE_URL=https://sqs.ap-northeast-1.amazonaws.com/527816979470/UMesseConverterQueueDev}'
-    #     aws lambda update-alias --function-name $FunctionName --name $AliasName --function-version $Version
-    #   env:
-    #     FunctionName: UMesseApiFunction
-    #     AliasName: Stg
+    - name: Api Lambda Function create version & Alias update version
+      run: |
+        aws lambda update-function-configuration --function-name $FunctionName --environment Variables='{environment=stg,debug=true,GENERATE_SQS_QUEUE_URL=https://sqs.ap-northeast-1.amazonaws.com/527816979470/UMesseGenerateQueueStg,CONVERTER_SQS_QUEUE_URL=https://sqs.ap-northeast-1.amazonaws.com/527816979470/UMesseConverterQueueStg}'
+        Version=$(aws lambda publish-version --function-name $FunctionName --description '${{ steps.variables.outputs.version }}' | jq -r '.Version')
+        aws lambda update-function-configuration --function-name $FunctionName --environment Variables='{environment=dev,debug=true,GENERATE_SQS_QUEUE_URL=https://sqs.ap-northeast-1.amazonaws.com/527816979470/UMesseGenerateQueueDev,CONVERTER_SQS_QUEUE_URL=https://sqs.ap-northeast-1.amazonaws.com/527816979470/UMesseConverterQueueDev}'
+        aws lambda update-alias --function-name $FunctionName --name $AliasName --function-version $Version
+      env:
+        FunctionName: UMesseApiFunction
+        AliasName: Stg
 
-    # - name: Converter Lambda Function create version & Alias update version
-    #   run: |
-    #     aws lambda update-function-configuration --function-name $FunctionName --environment Variables='{environment=stg,debug=true}'
-    #     Version=$(aws lambda publish-version --function-name $FunctionName --description 'stg ${{ steps.variables.outputs.version }}')
-    #     aws lambda update-function-configuration --function-name $FunctionName --environment Variables='{environment=dev,debug=true}'
-    #     aws lambda update-alias --function-name $FunctionName --name $AliasName --function-version $Version
-    #   env:
-    #     FunctionName: UMesseConverterFunction
-    #     AliasName: Stg
+    - name: Converter Lambda Function create version & Alias update version
+      run: |
+        aws lambda update-function-configuration --function-name $FunctionName --environment Variables='{environment=stg,debug=true}'
+        Version=$(aws lambda publish-version --function-name $FunctionName --description '${{ steps.variables.outputs.version }}' | jq -r '.Version')
+        aws lambda update-function-configuration --function-name $FunctionName --environment Variables='{environment=dev,debug=true}'
+        aws lambda update-alias --function-name $FunctionName --name $AliasName --function-version $Version
+      env:
+        FunctionName: UMesseConverterFunction
+        AliasName: Stg
 
-    # - name: Generate Lambda Function create version & Alias update version
-    #   run: |
-    #     aws lambda update-function-configuration --function-name $FunctionName --environment Variables='{environment=stg,debug=true}'
-    #     Version=$(aws lambda publish-version --function-name $FunctionName --description 'stg ${{ steps.variables.outputs.version }}')
-    #     aws lambda update-function-configuration --function-name $FunctionName --environment Variables='{environment=dev,debug=true}'
-    #     aws lambda update-alias --function-name $FunctionName --name $AliasName --function-version $Version
-    #   env:
-    #     FunctionName: UMesseGenerateFunction
-    #     AliasName: Stg
+    - name: Generate Lambda Function create version & Alias update version
+      run: |
+        aws lambda update-function-configuration --function-name $FunctionName --environment Variables='{environment=stg,debug=true}'
+        Version=$(aws lambda publish-version --function-name $FunctionName --description '${{ steps.variables.outputs.version }}' | jq -r '.Version')
+        aws lambda update-function-configuration --function-name $FunctionName --environment Variables='{environment=dev,debug=true}'
+        aws lambda update-alias --function-name $FunctionName --name $AliasName --function-version $Version
+      env:
+        FunctionName: UMesseGenerateFunction
+        AliasName: Stg
 
     - name: Sync Lambda Function create version & Alias update version
       run: |
