@@ -730,7 +730,6 @@ export default defineComponent({
     const {
       isApper: isSavedModalAppear,
       open: openSavedModal,
-      close: closeSavedModal,
     } = useModalController();
     const {
       isApper: isConfirmBackHomeModalAppear,
