@@ -226,14 +226,14 @@ export function useCmService(api: UMesseApi.CmApi, cmCache: CmCache) {
             console.log("getUserCm", value.data);
             resolve(value.data);
           }
-          if (count++ > Constants.TIMER_COUNT) {
+          if (count++ > Constants.MAX_COUNT_TIME_INTERVAL_GET_USER_CM) {
             clearInterval(timer);
             console.log("resolve timeout");
             console.log("getUserCm", value.data);
             resolve(value.data);
           }
         });
-      }, Constants.TIMER);
+      }, Constants.TIME_INTERVAL_GET_USER_CM);
     });
   };
 

@@ -241,14 +241,13 @@ export default class Constants {
     { cd: "1", name: "女性" },
   ];
 
-  public static readonly TIMER: number = 10000;
-  public static readonly TIMER_COUNT: number = 10;
+  public static readonly TIME_INTERVAL_GET_USER_CM = 10; // 10秒
+  public static readonly MAX_COUNT_TIME_INTERVAL_GET_USER_CM = 10;
 
-  public static readonly TITLE_MAX_LENGTH: number = 200;
-  public static readonly DESCRIPTION_MAX_LENGTH: number = 200;
-  public static readonly TTS_FREE_MAX_LENGTH: number = 500;
-  public static readonly CUSTOMER_NAME_MAX_LENGTH: number = 30;
-  public static readonly MANUSCRIPT_MAX_LENGTH: number = 2000;
+  public static readonly MAX_LENGTH_TITLE = 200;
+  public static readonly MAX_LENGTH_DESCRIPTION = 200;
+  public static readonly MAX_LENGTH_TTS_FREE = 350;
+  public static readonly MAX_LENGTH_CUSTOMER_NAME = 30;
 
   public static readonly MAX_RECORDING_TIME = 90; // 1分30秒
 }
