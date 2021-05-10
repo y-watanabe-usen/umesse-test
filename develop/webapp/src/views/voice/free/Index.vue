@@ -58,7 +58,7 @@
         <template #contents>
           <FormGroup title="試聴" class="play-form-group">
             <PlayDialogContents
-              :isLoading="isGenerating"
+              :isLoading="isGenerating || isDownloading"
               :isPlaying="isPlaying"
               :playbackTime="playbackTime"
               :duration="duration"
@@ -170,6 +170,7 @@ export default defineComponent({
       isGenerating: computed(() => ttsStore.isGenerating()),
       isCreating: computed(() => ttsStore.isCreating()),
       isPlaying: computed(() => audioPlayer.isPlaying()),
+      isDownloading: false,
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       duration: computed(() => audioPlayer.getDuration()),
       text:
@@ -185,6 +186,8 @@ export default defineComponent({
     });
 
     const play = async () => {
+      try {
+      state.isDownloading = true;
       console.log("play");
       const data = await ttsStore.getTtsData(lang);
       analytics.pressButtonPlayTrial(
@@ -194,6 +197,11 @@ export default defineComponent({
       );
       await audioPlayer.load(<string>data?.url);
       await audioPlayer.start();
+      } catch (e) {
+        openErrorModal(e);
+      } finally {
+        state.isDownloading = false;
+      }
     };
     const stop = () => {
       if (state.isPlaying) audioPlayer.stop();
