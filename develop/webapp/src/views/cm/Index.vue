@@ -523,7 +523,7 @@
           <FormGroup title="タイトル" :required="true">
             <TextBox
               v-model="title"
-              :maxLength="Constants.TITLE_MAX_LENGTH"
+              :maxLength="Constants.MAX_LENGTH_TITLE"
               @focus="inputFocusBlur(true)"
               @blur="inputFocusBlur(false)"
             />
@@ -531,7 +531,7 @@
           <FormGroup title="説明">
             <TextArea
               v-model="description"
-              :maxLength="Constants.DESCRIPTION_MAX_LENGTH"
+              :maxLength="Constants.MAX_LENGTH_DESCRIPTION"
               @focus="inputFocusBlur(true)"
               @blur="inputFocusBlur(false)"
             />

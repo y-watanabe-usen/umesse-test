@@ -221,12 +221,12 @@
         </template>
         <template #contents>
           <FormGroup title="タイトル" :required="true">
-            <TextBox v-model="title" :maxLength="Constants.TITLE_MAX_LENGTH" />
+            <TextBox v-model="title" :maxLength="Constants.MAX_LENGTH_TITLE" />
           </FormGroup>
           <FormGroup title="説明">
             <TextArea
               v-model="description"
-              :maxLength="Constants.DESCRIPTION_MAX_LENGTH"
+              :maxLength="Constants.MAX_LENGTH_DESCRIPTION"
             />
           </FormGroup>
         </template>
