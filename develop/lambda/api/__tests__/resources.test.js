@@ -699,7 +699,7 @@ describe("TTS音声作成", () => {
         category: "template",
         details: [
           {
-            text: "あ".repeat(351),
+            text: "あ".repeat(801),
             speaker: "0",
             lang: "ja",
           },
