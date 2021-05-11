@@ -1172,8 +1172,12 @@ export default defineComponent({
     };
 
     const handleBackButton = () => {
-      openConfirmBackHomeModal();
-      history.go(1);
+      if (isCreateCmLoadingModalAppear.value || isLoading.value) {
+        history.pushState(null, "", location.href);
+      } else {
+        openConfirmBackHomeModal();
+        history.go(1);
+      }
     };
     onMounted(() => {
       analytics.screenView(Constants.SCREEN.CM);
