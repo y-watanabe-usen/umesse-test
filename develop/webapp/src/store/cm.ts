@@ -59,12 +59,18 @@ export default function cmStore() {
     title: string,
     description: string | null,
     sceneCd: string,
-    uploadSystem: string,
+    uploadSystem: string
   ) => {
     try {
       let manuscript = "";
-      state.displayCmItem.materials.narrations.forEach(v => {
-        manuscript += 'manuscript' in v ? v.manuscript : "";
+      let cnt = 1;
+      state.displayCmItem.materials.narrations.forEach((v) => {
+        const line =
+          state.displayCmItem.materials.narrations.length <= cnt
+            ? ""
+            : "\r\n".repeat(3);
+        manuscript += "manuscript" in v ? v.manuscript + line : "";
+        cnt++;
       });
       state.status = UPLOAD_CM_STATE.UPDATING;
       await cmService.update(
@@ -74,7 +80,7 @@ export default function cmStore() {
         description,
         sceneCd,
         uploadSystem,
-        manuscript,
+        manuscript
       );
       state.displayCmItem.isEdit = true;
       state.status = UPLOAD_CM_STATE.UPDATED;
@@ -134,7 +140,7 @@ export default function cmStore() {
       narrationItem.title,
       narrationItem.description,
       narrationItem.manuscript,
-      'seconds' in narrationItem ? narrationItem.seconds : 0,
+      "seconds" in narrationItem ? narrationItem.seconds : 0,
       narrationItem.timestamp
     );
     unSelectNarrationIndex();
