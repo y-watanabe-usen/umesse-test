@@ -53,7 +53,7 @@
                     convertDatestringToDate(cm.timestamp)
                   }}</span>
                   <span class="status" :class="getStatusClass(cm.status)">{{
-                    Constants.CM_STATUS.find((v) => v.cd == cm.status).name
+                    getCmStatusName(cm.status)
                   }}</span>
                 </p>
               </template>
@@ -805,6 +805,16 @@ export default defineComponent({
         audioPlayer.changePlaybackTime(+e.target.value);
       }
     };
+    const getCmStatusName = (status: string) => {
+      const uploadSystem =
+        authUser.serviceCd === Constants.SERVICE_CD_UMUSIC
+          ? "U MUSIC"
+          : "S'Sence";
+      return Constants.CM_STATUS.find((v) => v.cd == status)?.name.replace(
+        "外部システム",
+        uploadSystem
+      );
+    };
 
     return {
       ...toRefs(state),
@@ -875,6 +885,7 @@ export default defineComponent({
       closeCmAbsentModal,
       download,
       toHome,
+      getCmStatusName,
     };
   },
 });
