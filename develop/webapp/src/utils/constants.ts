@@ -159,17 +159,17 @@ export default class Constants {
     {
       cd: "11",
       status: "EXTERNAL_UPLOADING",
-      name: "アップロード中",
+      name: "外部システムアップロード中",
     },
     {
       cd: "12",
       status: "EXTERNAL_COMPLETE",
-      name: "アップロード完了",
+      name: "外部システムアップロード完了",
     },
     {
       cd: "19",
       status: "EXTERNAL_ERROR",
-      name: "アップロードエラー",
+      name: "外部システムアップロードエラー",
     },
   ];
 

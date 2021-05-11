@@ -559,10 +559,6 @@ export default defineComponent({
         authUser.serviceCd === Constants.SERVICE_CD_UMUSIC
           ? "U MUSICにアップロード"
           : "S'Senceにアップロード",
-      uploadSystem:
-        authUser.serviceCd === Constants.SERVICE_CD_UMUSIC
-          ? "U MUSIC"
-          : "S'Sence",
       isDownload: false,
     });
     const fetchScene = async () => {
@@ -810,20 +806,14 @@ export default defineComponent({
       }
     };
     const getCmStatusName = (status: string) => {
-      let name = "";
-      Constants.CM_STATUS.forEach((v) => {
-        if (v.cd == status)
-          if (
-            status == Constants.CM_STATUS_EXTERNAL_UPLOADING ||
-            status == Constants.CM_STATUS_EXTERNAL_UPLOADING ||
-            status == Constants.CM_STATUS_EXTERNAL_UPLOADING
-          ) {
-            name = state.uploadSystem + v.name;
-          } else {
-            name = v.name;
-          }
-      });
-      return name;
+      const uploadSystem =
+        authUser.serviceCd === Constants.SERVICE_CD_UMUSIC
+          ? "U MUSIC"
+          : "S'Sence";
+      return Constants.CM_STATUS.find((v) => v.cd == status)?.name.replace(
+        "外部システム",
+        uploadSystem
+      );
     };
 
     return {
