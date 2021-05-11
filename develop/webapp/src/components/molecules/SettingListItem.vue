@@ -41,7 +41,10 @@ export default {
       font-weight: $font_weight_bold;
     }
     &.description {
+      @include ellipsis;
       color: rgb(92, 92, 92);
+      width: 730px;
+      text-align: right;
     }
   }
 }
