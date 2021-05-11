@@ -20,35 +20,31 @@
           </SubMenu>
         </template>
         <div class="content">
-          <div v-if="activeAppInformationCd === '01'" class="version">
+          <div v-if="activeAppInformationCd === '01'">
             <List>
               <SettingListItem>
-                <template #title>グループCD</template>
-                <template #description>1234567890</template>
+                <template #title>店名</template>
+                <template #description>{{ authUser.customerName }}</template>
               </SettingListItem>
               <SettingListItem>
                 <template #title>UNIS顧客CD</template>
-                <template #description>1234567890</template>
-              </SettingListItem>
-              <SettingListItem>
-                <template #title>店名</template>
-                <template #description>Megro cafe</template>
+                <template #description>{{ authUser.unisCustomerCd }}</template>
               </SettingListItem>
               <SettingListItem>
                 <template #title>サービスCD</template>
-                <template #description>1234567890</template>
+                <template #description>{{ authUser.serviceCd }}</template>
               </SettingListItem>
               <SettingListItem>
                 <template #title>サービス名</template>
-                <template #description>Xxxxxxxxxxxx</template>
+                <template #description>{{ authUser.serviceName }}</template>
               </SettingListItem>
             </List>
           </div>
-          <div v-if="activeAppInformationCd === '02'">
+          <div v-if="activeAppInformationCd === '02'" class="version">
             <List>
               <SettingListItem>
                 <template #title>バージョン</template>
-                <template #description>0.111111</template>
+                <template #description>{{ version }}</template>
               </SettingListItem>
               <h2>ライセンス</h2>
               <p>
