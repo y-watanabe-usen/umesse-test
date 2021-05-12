@@ -47,7 +47,7 @@
                 <template #description>{{ version }}</template>
               </SettingListItem>
               <h2>ライセンス</h2>
-              <p>
+              <p class="lisence">
                 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX<br />
                 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX<br />
                 XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX<br />
@@ -56,7 +56,7 @@
             </List>
           </div>
           <div v-if="activeAppInformationCd === '03'">
-            <p>
+            <p class="cautions">
               XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX<br />
               XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX<br />
               XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX<br />
@@ -152,9 +152,18 @@ export default defineComponent({
     margin-top: -10px;
     margin-left: 34px;
     margin-right: 30px;
+    overflow: hidden;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
     &:first-child {
       margin-top: 40px;
     }
+  }
+  .lisence {
+    height: 56vh;
+  }
+  .cautions {
+    height: 69vh;
   }
 }
 </style>
