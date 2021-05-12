@@ -23,6 +23,11 @@
                   "
                 />
               </FormGroup>
+              <div class="form-center">
+                <div class="text-length">
+                  {{inputTextCount}} / {{Constants.MAX_LENGTH_TTS_FREE}}
+                </div>
+              </div>
               <Button
                 class="btn-document"
                 type="rectangle"
@@ -183,6 +188,10 @@ export default defineComponent({
         ) ?? "1", // 女性
       title: "",
       description: "",
+      inputTextCount: computed(() => {
+        const inputText: number = state.text.length;
+        return inputText;
+      }),      
     });
 
     const play = async () => {
@@ -313,6 +322,15 @@ export default defineComponent({
       .input-wrapper {
         width: 180px;
       }
+    }
+  }
+  .form-center {
+    width: 55%;
+    .text-length {
+      font-size: 20px;
+      font-weight: $font_weight_bold;
+      text-align: right;
+      margin-top: 30px;
     }
   }
   .btn-document {
