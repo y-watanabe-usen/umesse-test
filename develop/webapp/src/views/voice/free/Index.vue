@@ -330,7 +330,7 @@ export default defineComponent({
       font-size: 20px;
       font-weight: $font_weight_bold;
       text-align: right;
-      margin-top: 30px;
+      margin-top: 20px;
     }
   }
   .btn-document {
