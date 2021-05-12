@@ -70,9 +70,9 @@ RUN cd ~/ffmpeg_sources && \
   --extra-ldflags="-L$HOME/ffmpeg_build/lib" \
   --extra-libs="-lm -lpthread" \
   --bindir="$HOME/bin" \
-  --enable-gpl \
+  --disable-gpl \
   --enable-version3 \
-  --enable-nonfree \
+  --disable-nonfree \
   --enable-static \
   --enable-cross-compile \
   --enable-small \
