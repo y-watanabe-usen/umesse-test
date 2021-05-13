@@ -5,6 +5,7 @@
         "Item": {
           "unisCustomerCd": { "S": "040000000" },
           "customerGroupCd": { "S": "G040000000" },
+          "contractStatusCd": { "S": "2" },
           "cm": {
             "L": [
               {
