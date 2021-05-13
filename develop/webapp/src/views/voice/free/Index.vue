@@ -191,7 +191,7 @@ export default defineComponent({
       inputTextCount: computed(() => {
         const inputText: number = state.text.length;
         return inputText;
-      }),      
+      }),
     });
 
     const play = async () => {

@@ -182,7 +182,7 @@ export default function ttsStore() {
     title: string,
     description: string,
     langs: string[],
-    manuscript: string[],
+    manuscript: string[]
   ) => {
     try {
       state.creating = true;
@@ -192,10 +192,9 @@ export default function ttsStore() {
           title: title,
           description: description,
           lang: v,
-          manuscript: manuscript[index],
+          manuscript: manuscript[index].replace(/\n/g, "\r\n"),
         });
       });
-
       const requestModel: CreateUserTtsRequestItem = {
         // idとcategoryは後々のバージョンアップで使う予定
         id: "dummy",
