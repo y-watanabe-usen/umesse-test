@@ -31,6 +31,9 @@ module.exports = {
     );
     debuglog(JSON.stringify(ret));
     if (!ret || !ret.Item) throw new NotFoundError(ERROR_CODE.E0000404);
+    // 1:受注、2:確定 以外はサービス無効
+    if (!(ret.Item.contractStatusCd == 1 || ret.Item.contractStatusCd == 2))
+      throw new NotFoundError(ERROR_CODE.E0000404);
     return ret.Item;
   },
 

@@ -17,6 +17,60 @@
           "renewalDate": { "S": "2019-09-01T09:00:00+09:00" }
         }
       }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "unisCustomerCd": { "S": "010000001" },
+          "contractCd": { "S": "N0100000001" },
+          "serviceCd": { "S": "U01" },
+          "serviceName": { "S": "U∞MUSNC" },
+          "customerName": { "S": "テスト01" },
+          "customerNameKana": { "S": "テスト01" },
+          "customerGroupCd": { "S": "010000000" },
+          "customerGroupName": { "S": "テスト01グループ" },
+          "contractStatusCd": { "S": "1" },
+          "contractStatusName": { "S": "受注" },
+          "createDate": { "S": "2019-09-01T09:00:00+09:00" },
+          "renewalDate": { "S": "2019-09-01T09:00:00+09:00" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "unisCustomerCd": { "S": "010000002" },
+          "contractCd": { "S": "N0100000002" },
+          "serviceCd": { "S": "U01" },
+          "serviceName": { "S": "U∞MUSNC" },
+          "customerName": { "S": "テスト01" },
+          "customerNameKana": { "S": "テスト01" },
+          "customerGroupCd": { "S": "010000000" },
+          "customerGroupName": { "S": "テスト01グループ" },
+          "contractStatusCd": { "S": "3" },
+          "contractStatusName": { "S": "キャンセル" },
+          "createDate": { "S": "2019-09-01T09:00:00+09:00" },
+          "renewalDate": { "S": "2019-09-01T09:00:00+09:00" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "unisCustomerCd": { "S": "010000003" },
+          "contractCd": { "S": "N0100000003" },
+          "serviceCd": { "S": "U01" },
+          "serviceName": { "S": "U∞MUSNC" },
+          "customerName": { "S": "テスト01" },
+          "customerNameKana": { "S": "テスト01" },
+          "customerGroupCd": { "S": "010000000" },
+          "customerGroupName": { "S": "テスト01グループ" },
+          "contractStatusCd": { "S": "4" },
+          "contractStatusName": { "S": "解約" },
+          "createDate": { "S": "2019-09-01T09:00:00+09:00" },
+          "renewalDate": { "S": "2019-09-01T09:00:00+09:00" }
+        }
+      }
     }
   ]
 }

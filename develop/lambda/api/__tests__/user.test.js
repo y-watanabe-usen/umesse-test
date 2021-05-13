@@ -12,8 +12,8 @@ const { getUser, authUser } = require("../umesse/user");
 
 // test data
 const json = require("./data/user.test.json");
-const data = aws.DynamoDB.Converter.unmarshall(
-  json["umesse-users"][0].PutRequest.Item
+const data = json["umesse-users"].map((item) =>
+  aws.DynamoDB.Converter.unmarshall(item.PutRequest.Item)
 );
 
 console.warn = jest.fn();
@@ -24,8 +24,24 @@ beforeAll(() => {
 
 // ユーザーデータ取得
 describe("ユーザーデータ", () => {
-  test("[success] ユーザーデータ取得", async () => {
-    await expect(getUser(data.unisCustomerCd)).resolves.toEqual(data);
+  test("[success] ユーザーデータ取得　確定", async () => {
+    await expect(getUser(data[0].unisCustomerCd)).resolves.toEqual(data[0]);
+  });
+
+  test("[success] ユーザーデータ取得　受注", async () => {
+    await expect(getUser(data[1].unisCustomerCd)).resolves.toEqual(data[1]);
+  });
+
+  test("[error] ユーザーデータ取得　キャンセル", async () => {
+    await expect(getUser(data[2].unisCustomerCd)).rejects.toThrow(
+      new NotFoundError(ERROR_CODE.E0000404)
+    );
+  });
+
+  test("[error] ユーザーデータ取得　解約", async () => {
+    await expect(getUser(data[3].unisCustomerCd)).rejects.toThrow(
+      new NotFoundError(ERROR_CODE.E0000404)
+    );
   });
 
   test("[error] ユーザーデータ取得　データ存在しない", async () => {
@@ -58,9 +74,9 @@ describe("ユーザー認証", () => {
   test("[success] ユーザー認証", async () => {
     await expect(
       authUser({
-        unisCustomerCd: data.unisCustomerCd,
+        unisCustomerCd: data[0].unisCustomerCd,
       })
-    ).resolves.toEqual({ token: data.unisCustomerCd });
+    ).resolves.toEqual({ token: data[0].unisCustomerCd });
   });
 
   test("[error] ユーザー認証　データ存在しない", async () => {
