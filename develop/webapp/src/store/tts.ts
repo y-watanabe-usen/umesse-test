@@ -192,7 +192,9 @@ export default function ttsStore() {
           title: title,
           description: description,
           lang: v,
-          manuscript: manuscript[index].replace(/\n/g, "\r\n"),
+          manuscript: manuscript[index]
+            .replace(/\r\n/g, "\n")
+            .replace(/\n/g, "\r\n"),
         });
       });
       const requestModel: CreateUserTtsRequestItem = {
