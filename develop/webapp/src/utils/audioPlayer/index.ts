@@ -8,7 +8,7 @@ export default function useAudioPlayer() {
     powerDecibels: -100,
     playbackTime: 0,
     duration: 0,
-    howl: new Howl({}),
+    howl: null,
   });
   let timer: number | undefined;
   let analyser: AnalyserNode;
@@ -33,9 +33,6 @@ export default function useAudioPlayer() {
         onpause: () => {
           updatePlaybackTime();
         },
-        onstop: () => {
-          stopFunction();
-        },
         onend: () => {
           stopFunction();
         },
@@ -46,9 +43,10 @@ export default function useAudioPlayer() {
 
   const start = async () => {
     return new Promise<void>((resolve, reject) => {
+      if (!state.howl) return;
       state.howl.on("play", () => {
         state.playbackTime = 0;
-        state.duration = state.howl.duration();
+        state.duration = state.howl?.duration() ?? 0;
         state.playing = true;
         resolve();
       }).on("playerror", () => {
@@ -69,16 +67,19 @@ export default function useAudioPlayer() {
   };
 
   const stop = () => {
+    if (!state.howl) return;
     state.howl.stop();
+    stopFunction();
   };
 
   const stopFunction = () => {
+    console.log("stopFunction");
     clearInterval(timer);
     state.playbackTime = 0;
     state.powerDecibels = -100;
     state.playing = false;
-    Howler.masterGain.disconnect(analyser);
     analyser.disconnect(Howler.ctx.destination);
+    Howler.masterGain.disconnect(analyser);
   };
 
   const getPlaybackTime = () => {
@@ -94,6 +95,7 @@ export default function useAudioPlayer() {
   };
 
   const changePlaybackTime = (time: number) => {
+    if (!state.howl) return;
     const percent = time / state.duration;
     state.howl.seek(state.duration * percent);
   };
@@ -103,6 +105,7 @@ export default function useAudioPlayer() {
   };
 
   const updatePlaybackTime = () => {
+    if (!state.howl) return;
     state.playbackTime = <number>state.howl.seek();
   };
 

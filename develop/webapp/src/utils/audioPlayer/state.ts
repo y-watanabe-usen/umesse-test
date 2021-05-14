@@ -5,5 +5,5 @@ export interface AudioPlayerState {
   powerDecibels: number;
   playbackTime: number;
   duration: number;
-  howl: Howl;
+  howl: Howl | null;
 }
