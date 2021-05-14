@@ -58,6 +58,7 @@ describe("convert", () => {
       ...data.cm[0],
       seconds: expect.anything(),
       status: "01",
+      progress: 100,
       timestamp: expect.anything(),
     });
 

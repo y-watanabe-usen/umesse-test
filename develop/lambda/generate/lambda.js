@@ -87,8 +87,36 @@ exports.handler = async (event, context) => {
 
   // CMコンバート処理
   let seconds;
+  let count = 0;
   try {
-    seconds = await generateCm(unisCustomerCd, id, materials);
+    seconds = await generateCm(unisCustomerCd, id, materials, async (data) => {
+      // 全て書き込むのはコストがかかるので、5回に1回データ登録
+      if (++count >= 5) {
+        count = 0;
+        debuglog(data);
+        cm.progress = parseInt(
+          (data.progress.duration / data.totalDuration) * 100
+        );
+        cm.timestamp = timestamp();
+        options = {
+          UpdateExpression: `SET cm[${index}] = :cm`,
+          ExpressionAttributeValues: {
+            ":cm": cm,
+          },
+          ReturnValues: "UPDATED_NEW",
+        };
+        debuglog(JSON.stringify({ key: key, options: options }));
+        try {
+          ret = await dynamodbManager.update(
+            constants.dynamoDbTable().users,
+            key,
+            options
+          );
+        } catch (e) {
+          throw e;
+        }
+      }
+    });
   } catch (e) {
     errorlog(JSON.stringify(e.message));
     return errorResponse(new InternalServerError(e.message));
@@ -97,6 +125,7 @@ exports.handler = async (event, context) => {
   // DynamoDbデータ更新
   cm.seconds = seconds;
   cm.status = constants.cmStatus.CREATING;
+  cm.progress = 100;
   cm.timestamp = timestamp();
   options = {
     UpdateExpression: `SET cm[${index}] = :cm`,
@@ -122,7 +151,7 @@ exports.handler = async (event, context) => {
 };
 
 // CM結合処理
-async function generateCm(unisCustomerCd, id, materials) {
+async function generateCm(unisCustomerCd, id, materials, progressCallback) {
   try {
     // UMesseConverter.
     const converter = new UMesseConverter(s3Manager);
@@ -132,7 +161,13 @@ async function generateCm(unisCustomerCd, id, materials) {
     const output = path.join(workDir, `${id}.mp3`);
 
     // CM作成.
-    await converter.generateCm(unisCustomerCd, id, materials, output);
+    await converter.generateCm(
+      unisCustomerCd,
+      id,
+      materials,
+      output,
+      progressCallback
+    );
 
     // CMのduration取得.
     const seconds = await converter.getDuration(output);
