@@ -1,12 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
-
-def VERSION_CODE = 4
-def VERSION_NAME = "1.0"
-def VERSION_NAME_DEBUG = "0.1.2"
-def PACKAGE_NAME = "com.usen.umembers"
+apply plugin: 'kotlin-kapt'
 
 android {
     signingConfigs {
@@ -17,138 +12,67 @@ android {
             storePassword 'android'
         }
         release {
-            keyAlias 'umembers'
-            keyPassword 'usen440'
-            storeFile file('release.keystore')
-            storePassword 'usen440'
         }
     }
-    compileSdkVersion rootProject.ext.compileSdkVersion
-    buildToolsVersion rootProject.ext.buildToolsVersion
+    compileSdkVersion 29
 
     defaultConfig {
-        vectorDrawables.useSupportLibrary
-        applicationId PACKAGE_NAME
-        minSdkVersion rootProject.ext.minSdkVersion
-        targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode VERSION_CODE
-        versionName VERSION_NAME
+        applicationId "com.usen.umesse"
+        minSdkVersion 19
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0.0"
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         debug {
-            buildConfigField "String", "BUILD_TYPES", "\"dev\""
-            buildConfigField "String", "API_HOST", "\"api-dev.ueyes.usen.com\""
-            buildConfigField "String", "API_KEY", "\"JadUq72pR44wlPDXJAsjq4b55L8AGinE8i9lwIeg\""
-            buildConfigField "String", "WEB_URL_UEYES", "\"analytics-stg.ueyes.usen.com\""
-            buildConfigField "String", "WEB_URL_UCART", "\"52.193.102.73\""
-            buildConfigField "String", "WEB_URL_SUBSIDY", "\"aid-jsystem.jp\""
-            buildConfigField "String", "WEB_URL_IOT", "\"iot.usen.com\""
-            buildConfigField "String", "WEB_URL_SUPPORT", "\"support.usen.com\""
+            buildConfigField "String", "buildType", "\"debug\""
             debuggable true
             minifyEnabled false
-//TODO: アプリは環境ごとにインストールできない。MDMの仕様でapplicationIdSuffixをつけるとMDM受け取れないっぽい。
-//            applicationIdSuffix ".debug"
-            signingConfig signingConfigs.debug
-        }
-        staging {
-            buildConfigField "String", "BUILD_TYPES", "\"stg\""
-            buildConfigField "String", "API_HOST", "\"api-stg.ueyes.usen.com\""
-            buildConfigField "String", "API_KEY", "\"JadUq72pR44wlPDXJAsjq4b55L8AGinE8i9lwIeg\""
-            buildConfigField "String", "WEB_URL_UEYES", "\"analytics-stg.ueyes.usen.com\""
-            buildConfigField "String", "WEB_URL_UCART", "\"52.193.102.73\""
-            buildConfigField "String", "WEB_URL_SUBSIDY", "\"aid-jsystem.jp\""
-            buildConfigField "String", "WEB_URL_IOT", "\"iot.usen.com\""
-            buildConfigField "String", "WEB_URL_SUPPORT", "\"support.usen.com\""
-            debuggable true
-            minifyEnabled false
-//TODO: アプリは環境ごとにインストールできない。MDMの仕様でapplicationIdSuffixをつけるとMDM受け取れないっぽい。
-//            applicationIdSuffix ".stg"
             signingConfig signingConfigs.debug
         }
         release {
-            buildConfigField "String", "BUILD_TYPES", "\"release\""
-            buildConfigField "String", "API_HOST", "\"api.ueyes.usen.com\""
-            buildConfigField "String", "API_KEY", "\"Tl0IFDlgkE62UoReizoyy6xf1emN5puf7U66LOnw\""
-            buildConfigField "String", "WEB_URL_UEYES", "\"analytics.ueyes.usen.com\""
-            buildConfigField "String", "WEB_URL_UCART", "\"cart.usen.com\""
-            buildConfigField "String", "WEB_URL_SUBSIDY", "\"aid-jsystem.jp\""
-            buildConfigField "String", "WEB_URL_IOT", "\"iot.usen.com\""
-            buildConfigField "String", "WEB_URL_SUPPORT", "\"support.usen.com\""
+            buildConfigField "String", "buildType", "\"release\""
             debuggable false
             minifyEnabled true
+            signingConfig signingConfigs.debug
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.release
         }
     }
-    flavorDimensions "umembers"
+
+    flavorDimensions "umesse"
     productFlavors {
-        tablet {
-            dimension "umembers"
-            applicationId "${PACKAGE_NAME}"
-            versionCode VERSION_CODE
-            versionName "${VERSION_NAME}"
-            buildConfigField "String", "OS_DIV", "\"1\""
+        dev {
+            dimension "umesse"
+            getIsDefault().set(true)
+            resValue "string", "launchUrl", 'https://umesse:webapp@web-dev.umesse.usen.com/'
         }
-        mobile {
-            dimension "umembers"
-            applicationId "${PACKAGE_NAME}"
-            versionCode VERSION_CODE
-            versionName "${VERSION_NAME}"
-            buildConfigField "String", "OS_DIV", "\"2\""
+        stg {
+            dimension "umesse"
+            resValue "string", "launchUrl", 'https://umesse:webapp@web-stg.umesse.usen.com/'
+        }
+        prod {
+            dimension "umesse"
+            resValue "string", "launchUrl", 'https://umesse:webapp@web.umesse.usen.com/'
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
-    buildFeatures {
-        dataBinding true
-    }
-    sourceSets {
-        main {
-            jni.srcDirs = []
-        }
-        tablet {
-            java.srcDirs = ['src/tablet/java']
-            res.srcDirs = ['src/tablet/res']
-        }
-        mobile {
-            java.srcDirs = ['src/mobile/java']
-            res.srcDirs = ['src/mobile/res']
-        }
-    }
-
-
-    applicationVariants.all { variant ->
-        if (variant.buildType.name != 'release') {
-            variant.outputs.each { output ->
-                output.versionNameOverride = "${VERSION_NAME_DEBUG}"
-            }
-        }
     }
 }
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$rootProject.ext.kotlin_version"
-    implementation "androidx.core:core-ktx:$rootProject.ext.androidxCoreVersion"
-    implementation "androidx.appcompat:appcompat:$rootProject.ext.androidxAppcompatVersion"
-    implementation "androidx.constraintlayout:constraintlayout:$rootProject.ext.constraintLayoutVersion"
-    implementation "com.google.android.material:material:$rootProject.ext.materialVersion"
-    implementation "com.google.code.gson:gson:$rootProject.ext.gsonVersion"
-    implementation "androidx.legacy:legacy-support-v4:$rootProject.ext.androidxLegacyV4"
-    implementation "androidx.navigation:navigation-fragment-ktx:$rootProject.ext.androidxNavigation"
-    implementation "androidx.navigation:navigation-ui-ktx:$rootProject.ext.androidxNavigation"
-    implementation "com.squareup.picasso:picasso:$rootProject.ext.picassoVersion"
-    implementation "com.squareup.retrofit2:retrofit:$rootProject.ext.retrofitVersion"
-    implementation "com.squareup.retrofit2:converter-gson:$rootProject.ext.retrofitVersion"
-    implementation "com.squareup.okhttp:okhttp:$rootProject.ext.okhttpVersion"
-    testImplementation "junit:junit:$rootProject.ext.junitVersion"
-    androidTestImplementation "androidx.test.ext:junit:$rootProject.ext.androidxJunitVersion"
-    androidTestImplementation "androidx.test.espresso:espresso-core:$rootProject.ext.androidxExpressoVersion"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation 'androidx.core:core-ktx:1.3.2'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+
 }
