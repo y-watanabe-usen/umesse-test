@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">U MEMBERS</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_full_screen_movie">FullScreenMovieActivity</string>
+    <string name="dialog_close">閉じる</string>
+    <string name="error_message">%s(%s)</string>
+    <string name="action_custom_cd">custom_action_request_usen_cd</string>
+    <string name="package_name_mdm">com.neoidm.mdmclient</string>
+    <string name="class_name_mdm_cd_broadcast">com.neoidm.mdmclient.usen.CdRequestReceiver</string>
+    <string name="broadcast_key_caller">caller</string>
+    <string name="broadcast_value_caller">U MEMBERS</string>
+    <string name="custom_action_response_usen_cd">com.usen.umembers.custom_action_response_usen_cd</string>
+    <string name="extras">extras</string>
+    <!-- Strings used for fragments for navigation -->
+    <!-- FIXME Move to Class Constant values-->
+    <string name="contract_cd">contract_cd</string>
+    <string name="unis_customer_cd">unis_customer_cd</string>
+    <string name="customer_name">customer_name</string>
+    <string name="customer_zip_cd">customer_zip_cd</string>
+    <string name="customer_state_name">customer_state_name</string>
+    <string name="customer_address1">customer_address1</string>
+    <string name="customer_address2">customer_address2</string>
+    <string name="customer_address3">customer_address3</string>
+    <string name="umembers_key">umembers_key</string>
+    <string name="create_date">create_date</string>
+    <string name="renewal_date">renewal_date</string>
+</resources>

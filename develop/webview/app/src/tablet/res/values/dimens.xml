@@ -1,0 +1,18 @@
+<resources>
+    <dimen name="header_height">40dp</dimen>
+    <dimen name="activity_header_button_home_width">49dp</dimen>
+    <dimen name="activity_header_button_icon_size">27dp</dimen>
+    <dimen name="activity_header_button_account_icon_size">40dp</dimen>
+    <dimen name="activity_header_button_height">29dp</dimen>
+    <dimen name="activity_header_button_home_margin_start">3dp</dimen>
+    <dimen name="activity_header_button_margin_start">3dp</dimen>
+    <dimen name="activity_header_button_account_padding_start">7dp</dimen>
+    <dimen name="activity_header_button_padding_start">6dp</dimen>
+    <dimen name="activity_header_button_padding_end">8dp</dimen>
+    <dimen name="activity_header_button_account_margin_end">17dp</dimen>
+    <dimen name="activity_header_button_margin_top">3dp</dimen>
+    <dimen name="activity_header_button_margin_bottom">7dp</dimen>
+    <dimen name="activity_header_button_font_size">13sp</dimen>
+    <dimen name="activity_header_button_account_font_size">9sp</dimen>
+
+</resources>

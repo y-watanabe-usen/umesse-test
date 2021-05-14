@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+  <color name="colorPrimary">#2F7C9B</color>
+  <color name="colorPrimaryDark">#2F7C9B</color>
+  <color name="colorAccent">#03DAC5</color>
+  <color name="black">#000000</color>
+  <color name="munsell">#f0f0f0</color>
+  <color name="lightgray">#d0d0d0</color>
+  <color name="palecarmine">#b83838</color>
+  <color name="mauvelous">#f2989d</color>
+  <color name="timberwolf">#d8d8d8</color>
+  <color name="celestialblue">#4bb5e3</color>
+  <color name="platinum">#e2f1e3</color>
+  <color name="white">#ffffff</color>
+  <color name="celestialblue_1">#39a0d2</color>
+  <color name="aliceblue">#e5f7ff</color>
+  <color name="linen">#ffe9ea</color>
+  <color name="aliceblue_1">#eaf6ff</color>
+  <color name="palepink">#ffdddd</color>
+  <color name="unitednationsblue">#588fd9</color>
+  <color name="battleshipgrey">#828282</color>
+  <color name="outerspace">#464646</color>
+  <color name="munsell_1">#ebf1f2</color>
+  <color name="palegold">#d8cd9a</color>
+  <color name="pastelbrown">#846f58</color>
+  <color name="palelavender">#dae0f5</color>
+  <color name="wenge">#67605b</color>
+  <color name="platinum_1">#e5e5e4</color>
+  <color name="desertsand">#efcdb5</color>
+  <color name="tan">#dcb39c</color>
+  <color name="mediumjunglegreen">#323232</color>
+  <color name="ashgrey">#b1b1b1</color>
+  <color name="kellygreen">#5ab838</color>
+  <color name="manatee">#979797</color>
+  <color name="cerulean">#137bab</color>
+  <color name="darkgray">#a2a2a2</color>
+  <color name="magenta">#ff00fc</color>
+  <color name="palelavender_1">#d3def2</color>
+  <color name="gainsboro">#dcdcdc</color>
+  <color name="manatee_1">#989898</color>
+  <color name="trolleygrey">#787878</color>
+  <color name="oldrose">#ac8585</color>
+  <color name="lapislazuli">#2f568a</color>
+  <color name="battleshipgrey_1">#858585</color>
+  <color name="battleshipgrey_2">#4db1b1b1</color>
+</resources>
+
