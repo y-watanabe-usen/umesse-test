@@ -45,17 +45,17 @@ android {
     flavorDimensions "umesse"
     productFlavors {
         dev {
-            dimension "umesse"
             getIsDefault().set(true)
-            resValue "string", "launchUrl", 'https://umesse:webapp@web-dev.umesse.usen.com/'
+            dimension "umesse"
+            buildConfigField "String", "LAUNCH_URL", "\"https://umesse:webapp@web-dev.umesse.usen.com\""
         }
         stg {
             dimension "umesse"
-            resValue "string", "launchUrl", 'https://umesse:webapp@web-stg.umesse.usen.com/'
+            buildConfigField "String", "LAUNCH_URL", "\"https://umesse:webapp@web-stg.umesse.usen.com\""
         }
         prod {
             dimension "umesse"
-            resValue "string", "launchUrl", 'https://umesse:webapp@web.umesse.usen.com/'
+            buildConfigField "String", "LAUNCH_URL", "\"https://umesse:webapp@web.umesse.usen.com\""
         }
     }
 
