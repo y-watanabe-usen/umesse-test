@@ -565,7 +565,6 @@ export default defineComponent({
       try {
         openLoadingModal("");
         const response = await cmService.fetch(authToken, state.sort);
-        console.log("fetchScene", response);
         state.sceneList = response[0];
         state.cmList = response[1];
         if (!state.cmList.length) {
@@ -638,7 +637,6 @@ export default defineComponent({
         await uploadService.create(authToken, cm.id, uploadSystem);
         openUploadedModal();
       } catch (e) {
-        console.log(e.message);
         openErrorModal(e);
       } finally {
         closeLoadingModal();
@@ -652,7 +650,6 @@ export default defineComponent({
         await uploadService.remove(cmId, authToken);
         openUnUploadedModal();
       } catch (e) {
-        console.log(e.message);
         openErrorModal(e);
       } finally {
         closeLoadingModal();
@@ -687,7 +684,6 @@ export default defineComponent({
       state.title = cm.title;
       state.description = cm.description;
       state.scene = cm.scene.sceneCd;
-      console.log(state.title);
       openSaveModal();
     };
     const selectCmAndOpenRemoveModal = (cm: CmItem) => {
@@ -719,7 +715,6 @@ export default defineComponent({
         closeSaveModal();
         openSavedModal();
       } catch (e) {
-        console.log(e.message);
         openErrorModal(e);
       } finally {
         closeLoadingModal();
@@ -739,7 +734,6 @@ export default defineComponent({
         openRemovedModal();
       } catch (e) {
         closeRemoveModal();
-        console.log(e.message);
         openErrorModal(e);
       } finally {
         closeLoadingModal();
@@ -748,7 +742,6 @@ export default defineComponent({
     const toEditCm = (cmItem: CmItem) => {
       analytics.pressButtonEditContent(cmItem.id, Constants.SCREEN.MANAGEMENT);
       closeAllDropdownMenu();
-      console.log(cmItem);
       cm.setCm(cmItem, true);
       router.push({ name: "Cm" });
     };
@@ -756,7 +749,6 @@ export default defineComponent({
       router.go(1 - history.length); // gohome.
     };
     const handleBackButton = () => {
-      console.log("hadleBackButton", history.length);
       router.go(1);
       toHome();
     };

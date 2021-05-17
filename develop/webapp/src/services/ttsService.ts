@@ -15,11 +15,9 @@ export function useTtsService(
       ttsApi
         .listUserTts(authToken)
         .then((value) => {
-          console.log("resolve");
           resolve(value.data);
         })
         .catch((e) => {
-          console.log("reject", e);
           reject(UMesseErrorFromApiFactory(e));
         });
     });
@@ -34,12 +32,10 @@ export function useTtsService(
       ttsApi
         .generateUserTts(authToken, requestModel)
         .then((value) => {
-          console.log("resolve");
           ttsCache.set<GenerateTtsItem>(cacheKey, value.data);
           resolve(value.data);
         })
         .catch((e) => {
-          console.log("reject", e);
           reject(UMesseErrorFromApiFactory(e));
         });
     });
@@ -50,11 +46,9 @@ export function useTtsService(
       ttsApi
         .createUserTts(authToken, requestModel)
         .then((value) => {
-          console.log("resolve");
           resolve(value.data);
         })
         .catch((e) => {
-          console.log("reject", e);
           reject(UMesseErrorFromApiFactory(e));
         });
     });
@@ -68,11 +62,9 @@ export function useTtsService(
           description: description,
         })
         .then((value) => {
-          console.log("resolve");
           resolve(value.data);
         })
         .catch((e) => {
-          console.log("reject", e);
           reject(UMesseErrorFromApiFactory(e));
         });
     });
@@ -83,11 +75,9 @@ export function useTtsService(
       ttsApi
         .deleteUserTts(id, authToken)
         .then((value) => {
-          console.log("resolve");
           resolve(value.data);
         })
         .catch((e) => {
-          console.log("reject", e);
           reject(UMesseErrorFromApiFactory(e));
         });
     });

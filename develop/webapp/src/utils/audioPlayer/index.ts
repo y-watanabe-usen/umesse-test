@@ -73,7 +73,6 @@ export default function useAudioPlayer() {
   };
 
   const stopFunction = () => {
-    console.log("stopFunction");
     clearInterval(timer);
     state.playbackTime = 0;
     state.powerDecibels = -100;

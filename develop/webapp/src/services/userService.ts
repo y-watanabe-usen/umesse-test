@@ -7,7 +7,6 @@ export function useUserService(
 ) {
   const auth = async (unisCustomerCd: string): Promise<string> => {
     try {
-      console.log(unisCustomerCd);
       const requestModel = {
         unisCustomerCd: unisCustomerCd
       };
