@@ -380,7 +380,6 @@ export default defineComponent({
     const play = async () => {
       try {
         state.isDownloading = true;
-        console.log("play", state.playLang);
         const data = await ttsStore.getTtsData(state.playLang);
         analytics.pressButtonPlayTrial(
           <string>data?.url,

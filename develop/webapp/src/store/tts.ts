@@ -132,13 +132,10 @@ export default function ttsStore() {
         details: details,
       };
 
-      console.log("generateUserTts", token(), requestModel);
       const response = await ttsService.generate(token(), requestModel);
-      console.log(response);
       state.ttsDatas = response.details;
       // throw new e;
     } catch (err) {
-      console.log(err);
       state.error = err.message;
       throw err;
     } finally {
@@ -166,13 +163,11 @@ export default function ttsStore() {
         ],
       };
       const response = await ttsService.generate(token(), requestModel);
-      console.log(response);
       state.ttsDatas = response.details;
       // throw new e;
     } catch (err) {
-      console.log(err);
-      throw err;
       state.error = err.message;
+      throw err;
     } finally {
       state.generating = false;
     }
@@ -206,13 +201,11 @@ export default function ttsStore() {
 
       try {
         const response = await ttsService.create(token(), requestModel);
-        console.log(response);
         return response;
       } catch (e) {
         // throw new e;
       }
     } catch (err) {
-      console.log(err);
       state.error = err.message;
     } finally {
       state.creating = false;

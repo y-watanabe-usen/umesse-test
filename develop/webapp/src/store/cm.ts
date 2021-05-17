@@ -47,7 +47,6 @@ export default function cmStore() {
       state.displayCmItem.bgm,
       state.displayCmItem.id
     );
-    console.log(response);
     state.displayCmItem.id = response.id;
     state.displayCmItem.timestamp = response.timestamp;
     state.displayCmItem.seconds = response.seconds;
@@ -131,7 +130,6 @@ export default function cmStore() {
       // ナレーションがMAX_NARRATION_COUNT数分あるのに、更に末尾に追加しようとしたら何もしない
       return;
     }
-    console.log(narrationItem);
 
     state.displayCmItem.setNarraion(
       state.selectedNarrationIndex,

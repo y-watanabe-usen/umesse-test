@@ -38,7 +38,6 @@ export function useCmService(api: UMesseApi.CmApi, cmCache: CmCache) {
           resolve([scenes, cms]);
         })
         .catch((e) => {
-          console.log("reject", e);
           reject(UMesseErrorFromApiFactory(e));
         });
     });
@@ -68,11 +67,8 @@ export function useCmService(api: UMesseApi.CmApi, cmCache: CmCache) {
     if (cacheValue) return cacheValue;
 
     try {
-      console.log("requestModel", JSON.stringify(requestModel));
       const createUserCmResponse = await api.createUserCm(authToken, requestModel);
-      console.log("createUserCmResponse", JSON.stringify(createUserCmResponse.data));
       const waitForCreateCompletedResponse = await waitForCreateCompleted(authToken, createUserCmResponse.data.id);
-      console.log(JSON.stringify(waitForCreateCompletedResponse));
       cmCache.set<CreateUserCmResponseItem>(cacheKey, waitForCreateCompletedResponse);
       return waitForCreateCompletedResponse;
     } catch (e) {
@@ -104,13 +100,10 @@ export function useCmService(api: UMesseApi.CmApi, cmCache: CmCache) {
       api
         .updateUserCm(authToken, id, requestModel)
         .then((value) => {
-          console.log("resolve");
-          console.log("updateUserCm", value.data);
           removeCacheAll();
           resolve(value.data);
         })
         .catch((e) => {
-          console.log("reject", e);
           reject(UMesseErrorFromApiFactory(e));
         });
     });
@@ -122,12 +115,9 @@ export function useCmService(api: UMesseApi.CmApi, cmCache: CmCache) {
       api
         .deleteUserCm(id, authToken)
         .then((value) => {
-          console.log("resolve");
-          console.log("deleteUserCm", value.data);
           resolve(value.data);
         })
         .catch((e) => {
-          console.log("reject", e);
           reject(UMesseErrorFromApiFactory(e));
         });
     });
@@ -147,16 +137,12 @@ export function useCmService(api: UMesseApi.CmApi, cmCache: CmCache) {
                 status: 408,
               },
             };
-            console.log("timeout", response);
             reject(UMesseErrorFromApiFactory(e));
           }
-          console.log("resolve");
-          console.log("_getUserCm", response);
           resolve(response);
         })
         .catch((e) => {
           clearInterval(timer);
-          console.log("reject", e);
           reject(UMesseErrorFromApiFactory(e));
         });
     });
@@ -178,7 +164,6 @@ export function useCmService(api: UMesseApi.CmApi, cmCache: CmCache) {
         bgm: bgm ?? undefined,
       },
     };
-    console.log("createUserCmRequestModel", Convert.createUserCmRequestItemToJson(requestModel));
     return requestModel;
   };
 
@@ -214,22 +199,16 @@ export function useCmService(api: UMesseApi.CmApi, cmCache: CmCache) {
     let count = 0;
     return new Promise(function (resolve) {
       timer = setInterval(async () => {
-        console.log("getUserCm", id);
         api.getUserCm(id, authToken).then((value) => {
-          console.log(count);
           if (
             value.data.status &&
             value.data.status === Constants.CM_STATUS_CREATING
           ) {
             clearInterval(timer);
-            console.log("resolve");
-            console.log("getUserCm", value.data);
             resolve(value.data);
           }
           if (count++ > Constants.MAX_COUNT_TIME_INTERVAL_GET_USER_CM) {
             clearInterval(timer);
-            console.log("resolve timeout");
-            console.log("getUserCm", value.data);
             resolve(value.data);
           }
         });

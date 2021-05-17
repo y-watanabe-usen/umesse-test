@@ -33,15 +33,11 @@ export default function authStore() {
       throw new UMesseError(ERROR_CODE.A4002, ERROR_PATTERN.A4002, "");
     }
 
-    console.log(`requestAuthorization`);
     try {
       state.authenticating = true;
       state.token = await userService.auth(unisCustomerCd);
       state.user = await userService.getInfo(state.token);
       analytics.setUserId(state.user.unisCustomerCd);
-    } catch (e) {
-      console.log(e);
-      throw e;
     } finally {
       state.authenticating = false;
     }

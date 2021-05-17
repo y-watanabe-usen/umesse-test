@@ -608,7 +608,6 @@ function getUploadDestination(cdList: string[]) {
     const uploadSystem = Constants.UPLOAD_SYSTEMS.find((vv) => vv.cd == v);
     if (uploadSystem) result.push(uploadSystem);
   });
-  console.log(result);
 
   return result;
 }

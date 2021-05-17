@@ -36,12 +36,9 @@ export function useRecordingService(
           file.description
         )
         .then((value) => {
-          console.log("resolve");
-          console.log("createUserRecording", <RecordingItem>value.data);
           resolve(<RecordingItem>value.data);
         })
         .catch((e) => {
-          console.log("reject", e);
           reject(UMesseErrorFromApiFactory(e));
         });
     });
@@ -83,8 +80,7 @@ export function useRecordingService(
               'Content-Length': file.blob.size
             }
           })
-          .then(res => {
-            console.log(res);
+          .then(() => {
             resolve();
           })
           .catch(err => reject(err));

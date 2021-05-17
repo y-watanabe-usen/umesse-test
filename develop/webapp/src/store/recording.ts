@@ -65,7 +65,6 @@ export default function recordingStore() {
       state.status = UPLOAD_RECORDING_STATE.UPLOADED;
       return response;
     } catch (e) {
-      console.log("error", e);
       state.status = UPLOAD_RECORDING_STATE.ERROR;
       throw e;
     }

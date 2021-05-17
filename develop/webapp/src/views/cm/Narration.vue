@@ -676,7 +676,6 @@ export default defineComponent({
         closeSaveModal();
         openSavedModal();
       } catch (e) {
-        console.log(e.message);
         openErrorModal(e);
       } finally {
         closeLoadingModal();
@@ -720,7 +719,6 @@ export default defineComponent({
         openRemovedModal();
       } catch (e) {
         closeRemoveModal();
-        console.log(e.message);
         openErrorModal(e);
       } finally {
         closeLoadingModal();
