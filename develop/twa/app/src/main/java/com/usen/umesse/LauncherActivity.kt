@@ -19,12 +19,21 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import com.google.androidbrowserhelper.trusted.LauncherActivity
+import com.usen.umesse.data.LocalDataRepository
+import com.usen.umesse.data.local.UMesseSharedPreferences
+import com.usen.umesse.mdm.MdmClient
 
 class LauncherActivity : LauncherActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate.")
+
+        mdmClient = MdmClient(applicationContext).apply {
+            registerMdmReceiver()
+            if (LocalDataRepository(UMesseSharedPreferences(applicationContext)).unisCustomerCd == null)
+                requestCustomerInfo()
+        }
     }
 
     override fun getLaunchingUrl(): Uri {
@@ -32,20 +41,19 @@ class LauncherActivity : LauncherActivity() {
         Log.d(TAG, "getLaunchingUrl. $uri")
 
         val unisCustomerCd = Application.localData!!.unisCustomerCd
-
         Log.d(TAG, "unisCustomerCd = $unisCustomerCd")
-        if (unisCustomerCd.isNullOrEmpty()) {
-            finish()
-        }
         return uri.buildUpon().appendQueryParameter("unisCustomerCd", unisCustomerCd).build()
     }
 
     override fun onDestroy() {
         Log.d(TAG, "onDestroy.")
+        if (mdmClient != null)
+            mdmClient.unregisterMdmReceiver()
         super.onDestroy()
     }
 
     companion object {
         private const val TAG = "LauncherActivity"
+        private lateinit var mdmClient: MdmClient
     }
 }
