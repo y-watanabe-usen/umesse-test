@@ -26,15 +26,12 @@ class Application : Application() {
     override fun onCreate() {
         super.onCreate()
         Log.d(TAG, "onCreate.")
-        if (localDataRepository == null)
-            localDataRepository = LocalDataRepository(UMesseSharedPreferences(applicationContext))
-
+        localDataRepository = LocalDataRepository(UMesseSharedPreferences(applicationContext))
         mdmClient = MdmClient(applicationContext).apply {
             registerMdmReceiver()
-            if (LocalDataRepository(UMesseSharedPreferences(applicationContext)).unisCustomerCd == null)
-                requestCustomerInfo()
         }
     }
+
 
     override fun onTerminate() {
         Log.d(TAG, "onTerminate.")
@@ -44,9 +41,11 @@ class Application : Application() {
 
     companion object {
         private const val TAG = "Application"
-        private lateinit var mdmClient: MdmClient
-        private var localDataRepository: LocalDataRepository? = null
-        val localData: LocalDataRepository?
+        private lateinit var localDataRepository: LocalDataRepository
+        val localData: LocalDataRepository
             get() = localDataRepository
+        private lateinit var mdmClient: MdmClient
+        val mdm: MdmClient
+            get() = mdmClient
     }
 }
