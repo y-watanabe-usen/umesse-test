@@ -19,20 +19,33 @@ import android.app.Application
 import android.util.Log
 import com.usen.umesse.data.LocalDataRepository
 import com.usen.umesse.data.local.UMesseSharedPreferences
+import com.usen.umesse.mdm.MdmClient
 
 class Application : Application() {
 
     override fun onCreate() {
         super.onCreate()
         Log.d(TAG, "onCreate.")
-        if (localDataRepository == null)
-            localDataRepository = LocalDataRepository(UMesseSharedPreferences(applicationContext))
+        localDataRepository = LocalDataRepository(UMesseSharedPreferences(applicationContext))
+        mdmClient = MdmClient(applicationContext).apply {
+            registerMdmReceiver()
+        }
+    }
+
+
+    override fun onTerminate() {
+        Log.d(TAG, "onTerminate.")
+        mdmClient.unregisterMdmReceiver()
+        super.onTerminate()
     }
 
     companion object {
         private const val TAG = "Application"
-        private var localDataRepository: LocalDataRepository? = null
-        val localData: LocalDataRepository?
+        private lateinit var localDataRepository: LocalDataRepository
+        val localData: LocalDataRepository
             get() = localDataRepository
+        private lateinit var mdmClient: MdmClient
+        val mdm: MdmClient
+            get() = mdmClient
     }
 }
