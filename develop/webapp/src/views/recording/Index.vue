@@ -64,13 +64,10 @@
                       <p>{{ convertNumberToTime(playbackTime) }}</p>
                       <p>{{ convertNumberToTime(duration) }}</p>
                     </div>
-                    <input
-                      type="range"
-                      min="0"
-                      :max="duration"
-                      :value="playbackTime"
-                      step="0.001"
-                      :oninput="seekAudioPlayerProgressBar"
+                    <AudioPlayerSlider
+                      v-model="playbackTime"
+                      :duration="duration"
+                      @change="changeAudioPlayerSlider"
                       :disabled="!isPlaying"
                     />
                   </template>
@@ -210,6 +207,7 @@ import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
 import router from "@/router";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
+import AudioPlayerSlider from "@/components/molecules/AudioPlayerSlider.vue";
 import { UPLOAD_RECORDING_STATE } from "@/store/recording";
 import analytics from "@/utils/firebaseAnalytics";
 import useModalController from "@/mixins/modalController";
@@ -232,6 +230,7 @@ export default defineComponent({
     TextBox,
     TextArea,
     ModalLoading,
+    AudioPlayerSlider,
   },
   name: "RecordingStart",
   setup() {
@@ -335,11 +334,11 @@ export default defineComponent({
         closeLoadingModal();
       }
     };
-    const seekAudioPlayerProgressBar = (e: Event) => {
-      if (e.target instanceof HTMLInputElement) {
-        audioPlayer.changePlaybackTime(+e.target.value);
-      }
+
+    const changeAudioPlayerSlider = (value: number) => {
+      audioPlayer.changePlaybackTime(value);
     };
+
     onMounted(() => {
       analytics.screenView(Constants.SCREEN.RECORDING);
     });
@@ -351,7 +350,7 @@ export default defineComponent({
       uploadRecordingFile,
       UPLOAD_RECORDING_STATE,
       convertNumberToTime,
-      seekAudioPlayerProgressBar,
+      changeAudioPlayerSlider,
       isModalAppear,
       openModal,
       closeModal,

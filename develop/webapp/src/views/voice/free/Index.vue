@@ -25,7 +25,7 @@
               </FormGroup>
               <div class="form-center">
                 <div class="text-length">
-                  {{inputTextCount}} / {{Constants.MAX_LENGTH_TTS_FREE}}
+                  {{ inputTextCount }} / {{ Constants.MAX_LENGTH_TTS_FREE }}
                 </div>
               </div>
               <Button
@@ -69,7 +69,7 @@
               :duration="duration"
               @play="play(selectedBgm)"
               @stop="stop"
-              :oninput="seekAudioPlayerProgressBar"
+              @change="changeAudioPlayerSlider"
             />
           </FormGroup>
           <FormGroup title="タイトル" :required="true">
@@ -196,15 +196,15 @@ export default defineComponent({
 
     const play = async () => {
       try {
-      state.isDownloading = true;
-      const data = await ttsStore.getTtsData(lang);
-      analytics.pressButtonPlayTrial(
-        <string>data?.url,
-        Constants.CATEGORY.FREE,
-        Constants.SCREEN.VOICE_FREE
-      );
-      await audioPlayer.load(<string>data?.url);
-      await audioPlayer.start();
+        state.isDownloading = true;
+        const data = await ttsStore.getTtsData(lang);
+        analytics.pressButtonPlayTrial(
+          <string>data?.url,
+          Constants.CATEGORY.FREE,
+          Constants.SCREEN.VOICE_FREE
+        );
+        await audioPlayer.load(<string>data?.url);
+        await audioPlayer.start();
       } catch (e) {
         openErrorModal(e);
       } finally {
@@ -268,11 +268,11 @@ export default defineComponent({
     onMounted(() => {
       analytics.screenView(Constants.SCREEN.VOICE_FREE);
     });
-    const seekAudioPlayerProgressBar = (e: Event) => {
-      if (e.target instanceof HTMLInputElement) {
-        audioPlayer.changePlaybackTime(+e.target.value);
-      }
+
+    const changeAudioPlayerSlider = (value: number) => {
+      audioPlayer.changePlaybackTime(value);
     };
+
     return {
       ttsSpeakers,
       ...toRefs(state),
@@ -281,7 +281,7 @@ export default defineComponent({
       generateTts,
       createTts,
       stopAndCloseModal,
-      seekAudioPlayerProgressBar,
+      changeAudioPlayerSlider,
       isModalAppear,
       openModal,
       closeModal,

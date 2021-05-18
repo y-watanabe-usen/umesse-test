@@ -155,7 +155,7 @@
             @download="download(selectedCm)"
             @play="play"
             @stop="stop"
-            :oninput="seekAudioPlayerProgressBar"
+            @change="changeAudioPlayerSlider"
           />
         </template>
         <template #footer>
@@ -792,11 +792,11 @@ export default defineComponent({
     const closeCmAbsentModal = () => {
       toHome();
     };
-    const seekAudioPlayerProgressBar = (e: Event) => {
-      if (e.target instanceof HTMLInputElement) {
-        audioPlayer.changePlaybackTime(+e.target.value);
-      }
+
+    const changeAudioPlayerSlider = (value: number) => {
+      audioPlayer.changePlaybackTime(value);
     };
+
     const getCmStatusName = (status: string) => {
       const uploadSystem =
         authUser.serviceCd === Constants.SERVICE_CD_UMUSIC
@@ -838,7 +838,7 @@ export default defineComponent({
       getStatusClass,
       upload,
       unUpload,
-      seekAudioPlayerProgressBar,
+      changeAudioPlayerSlider,
       isPlayModalAppear,
       openPlayModal,
       closePlayModal,

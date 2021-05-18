@@ -46,13 +46,10 @@
             {{ convertNumberToTime(duration) }}
           </div>
         </div>
-        <input
-          type="range"
-          min="0"
-          :max="duration"
-          :value="playbackTime"
-          step="0.001"
-          :oninput="$emit('oninput')"
+        <AudioPlayerSlider
+          v-model="state.playbackTime"
+          :duration="duration"
+          @change="onChange"
           :disabled="!isPlaying"
         />
       </div>
@@ -61,14 +58,16 @@
 </template>
 
 <script lang="ts">
-import { reactive } from "vue";
+import { computed, reactive } from "vue";
 import { convertNumberToTime } from "@/utils/formatDate";
 import Button from "@/components/atoms/Button.vue";
+import AudioPlayerSlider from "@/components/molecules/AudioPlayerSlider.vue";
 
 export default {
   name: "PlayDialogContents",
   components: {
     Button,
+    AudioPlayerSlider,
   },
   props: {
     isLoading: {
@@ -91,9 +90,16 @@ export default {
       type: Boolean,
       required: true,
     },
+    onChange: {
+      type: Function,
+      required: true,
+    },
   },
-  setup() {
-    const state = reactive({});
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  setup(props: any) {
+    const state = reactive({
+      playbackTime: computed(() => props.playbackTime),
+    });
     return {
       state,
       convertNumberToTime,
@@ -149,21 +155,6 @@ export default {
   .meter-wrapper {
     width: 430px;
     margin-left: 50px;
-    input[type="range"] {
-      width: 100%;
-      background-color: #ccc;
-      margin-top: 8px;
-      margin-bottom: 8px;
-      &::-webkit-meter-bar {
-        background-color: rgba(0, 0, 0, 0.15);
-        border: none;
-        border-radius: 3px;
-        height: 6px;
-      }
-      &::-webkit-meter-optimum-value {
-        background-color: $color_blue;
-      }
-    }
     .time {
       font-size: 16px;
       color: rgb(88, 88, 88);

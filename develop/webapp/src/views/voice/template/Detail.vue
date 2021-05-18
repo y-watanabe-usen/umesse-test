@@ -134,7 +134,7 @@
               :duration="duration"
               @play="play()"
               @stop="stop"
-              :oninput="seekAudioPlayerProgressBar"
+              @change="changeAudioPlayerSlider"
             />
           </FormGroup>
           <FormGroup title="">
@@ -564,11 +564,11 @@ export default defineComponent({
     onMounted(() => {
       analytics.screenView(Constants.SCREEN.VOICE_TEMPLATE_DETAIL);
     });
-    const seekAudioPlayerProgressBar = (e: Event) => {
-      if (e.target instanceof HTMLInputElement) {
-        audioPlayer.changePlaybackTime(+e.target.value);
-      }
+
+    const changeAudioPlayerSlider = (value: number) => {
+      audioPlayer.changePlaybackTime(value);
     };
+
     return {
       ...toRefs(state),
       ttsSpeakers,
@@ -591,7 +591,7 @@ export default defineComponent({
       isVisibleMinutes,
       isVisiblePoint,
       getLangsTitle,
-      seekAudioPlayerProgressBar,
+      changeAudioPlayerSlider,
       isModalAppear,
       openModal,
       closeModal,

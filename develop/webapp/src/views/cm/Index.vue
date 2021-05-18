@@ -104,9 +104,9 @@
               :key="narration.contentsId"
               :title="
                 'ナレーション ' +
-                  `${index + 1}` +
-                  '/' +
-                  `${MAX_NARRATION_COUNT}`
+                `${index + 1}` +
+                '/' +
+                `${MAX_NARRATION_COUNT}`
               "
               size="flexible"
               :contentTitle="`${narration.title}`"
@@ -185,9 +185,9 @@
               <CmItem
                 :title="
                   'ナレーション ' +
-                    `${narrations.length + 1}` +
-                    '/' +
-                    `${MAX_NARRATION_COUNT}`
+                  `${narrations.length + 1}` +
+                  '/' +
+                  `${MAX_NARRATION_COUNT}`
                 "
                 :isEmpty="true"
                 :contentTitleName="'narration' + `${narrations.length}`"
@@ -385,7 +385,7 @@
             :duration="duration"
             @play="playGenerateCm()"
             @stop="stop"
-            :oninput="seekAudioPlayerProgressBar"
+            @change="changeAudioPlayerSlider"
           />
         </template>
         <template #footer>
@@ -413,7 +413,7 @@
             :duration="duration"
             @play="play(startChime.id, Constants.CATEGORY.CHIME)"
             @stop="stop"
-            :oninput="seekAudioPlayerProgressBar"
+            @change="changeAudioPlayerSlider"
           />
         </template>
         <template #footer>
@@ -441,7 +441,7 @@
             :duration="duration"
             @play="play(narrationIndex, Constants.CATEGORY.NARRATION)"
             @stop="stop"
-            :oninput="seekAudioPlayerProgressBar"
+            @change="changeAudioPlayerSlider"
           />
         </template>
         <template #footer>
@@ -469,7 +469,7 @@
             :duration="duration"
             @play="play(bgm.id, Constants.CATEGORY.BGM)"
             @stop="stop"
-            :oninput="seekAudioPlayerProgressBar"
+            @change="changeAudioPlayerSlider"
           />
         </template>
         <template #footer>
@@ -497,7 +497,7 @@
             :duration="duration"
             @play="play(endChime.id, Constants.CATEGORY.CHIME)"
             @stop="stop"
-            :oninput="seekAudioPlayerProgressBar"
+            @change="changeAudioPlayerSlider"
           />
         </template>
         <template #footer>
@@ -1248,10 +1248,8 @@ export default defineComponent({
       return aboutCmTime;
     };
 
-    const seekAudioPlayerProgressBar = (e: Event) => {
-      if (e.target instanceof HTMLInputElement) {
-        audioPlayer.changePlaybackTime(+e.target.value);
-      }
+    const changeAudioPlayerSlider = (value: number) => {
+      audioPlayer.changePlaybackTime(value);
     };
 
     return {
@@ -1306,7 +1304,7 @@ export default defineComponent({
       changeCmEndChime,
       changeCmBgm,
       clickConfirm,
-      seekAudioPlayerProgressBar,
+      changeAudioPlayerSlider,
       isPlayModalAppear,
       openPlayModal,
       closePlayModal,
