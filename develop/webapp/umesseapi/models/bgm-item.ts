@@ -59,4 +59,10 @@ export interface BgmItem {
      * @memberof BgmItem
      */
     timestamp?: any;
+    /**
+     * 音量
+     * @type {number}
+     * @memberof BgmItem
+     */
+    volume?: any;
 }

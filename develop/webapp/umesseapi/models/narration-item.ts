@@ -71,4 +71,10 @@ export interface NarrationItem {
      * @memberof NarrationItem
      */
     timestamp?: any;
+    /**
+     * 音量
+     * @type {number}
+     * @memberof NarrationItem
+     */
+    volume?: any;
 }

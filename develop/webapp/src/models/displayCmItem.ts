@@ -151,7 +151,7 @@ export default class DisplayCmItem {
     this.seconds = cmItem.seconds;
     if (cmItem.materials.narrations.length > 0) {
       cmItem.materials.narrations.forEach((v: NarrationItem) => {
-        this.setNarraion(null, v.category, v.id, v.title, v.description, v.manuscript, v.seconds, v.timestamp);
+        this.setNarraion(null, v.category, v.id, v.title, v.description, v.manuscript, v.seconds, v.timestamp, v.volume);
       });
     }
     if (cmItem.materials.startChime) {
@@ -161,7 +161,8 @@ export default class DisplayCmItem {
         chime.title,
         chime.description,
         chime.seconds,
-        chime.timestamp
+        chime.timestamp,
+        chime.volume
       );
     }
     if (cmItem.materials.endChime) {
@@ -171,7 +172,8 @@ export default class DisplayCmItem {
         chime.title,
         chime.description,
         chime.seconds,
-        chime.timestamp
+        chime.timestamp,
+        chime.volume
       );
     }
     if (cmItem.materials.bgm) {
@@ -181,7 +183,8 @@ export default class DisplayCmItem {
         bgm.title,
         bgm.description,
         bgm.seconds,
-        bgm.timestamp
+        bgm.timestamp,
+        bgm.volume
       );
     }
     this.startDate = cmItem.startDate;
