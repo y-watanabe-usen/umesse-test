@@ -94,9 +94,12 @@ exports.handler = async (event, context) => {
       if (++count >= 5) {
         count = 0;
         debuglog(data);
-        cm.progress = parseInt(
+        let progress = parseInt(
           (data.progress.duration / data.totalDuration) * 100
         );
+        // 算出上100を超える可能性があるので、95以上の場合は固定値
+        if (progress >= 95) progress = 95;
+        cm.progress = progress;
         cm.timestamp = timestamp();
         options = {
           UpdateExpression: `SET cm[${index}] = :cm`,
