@@ -71,7 +71,7 @@
             :duration="duration"
             @play="play"
             @stop="stop"
-            :oninput="seekAudioPlayerProgressBar"
+            @change="changeAudioPlayerSlider"
           />
         </template>
         <template #footer>
@@ -245,10 +245,8 @@ export default defineComponent({
       closePlayModal();
     };
 
-    const seekAudioPlayerProgressBar = (e: Event) => {
-      if (e.target instanceof HTMLInputElement) {
-        audioPlayer.changePlaybackTime(+e.target.value);
-      }
+    const changeAudioPlayerSlider = (value: number) => {
+      audioPlayer.changePlaybackTime(value);
     };
 
     onMounted(async () => {
@@ -267,7 +265,7 @@ export default defineComponent({
       selectBgmAndOpenPlayModal,
       stopAndClosePlayModal,
       fetchBgm,
-      seekAudioPlayerProgressBar,
+      changeAudioPlayerSlider,
       isPlayModalAppear,
       openPlayModal,
       closePlayModal,

@@ -198,7 +198,7 @@
             @download="download(selectedNarration)"
             @play="play"
             @stop="stop"
-            :oninput="seekAudioPlayerProgressBar"
+            @change="changeAudioPlayerSlider"
           />
         </template>
         <template #footer>
@@ -377,6 +377,7 @@ import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
 import PlayDialogContents from "@/components/molecules/PlayDialogContents.vue";
 import TextDialogContents from "@/components/molecules/TextDialogContents.vue";
 import DropdownMenu from "@/components/molecules/DropdownMenu.vue";
+
 import { NarrationItem } from "umesseapi/models";
 import { useGlobalStore } from "@/store";
 import router from "@/router";
@@ -731,10 +732,8 @@ export default defineComponent({
       fetchNarration();
     };
 
-    const seekAudioPlayerProgressBar = (e: Event) => {
-      if (e.target instanceof HTMLInputElement) {
-        audioPlayer.changePlaybackTime(+e.target.value);
-      }
+    const changeAudioPlayerSlider = (value: number) => {
+      audioPlayer.changePlaybackTime(value);
     };
 
     return {
@@ -760,7 +759,7 @@ export default defineComponent({
       saveAndOpenSavedModal,
       selectNarrationAndOpenRemoveModal,
       removeAndOpenRemovedModal,
-      seekAudioPlayerProgressBar,
+      changeAudioPlayerSlider,
       isPlayModalAppear,
       openPlayModal,
       closePlayModal,
