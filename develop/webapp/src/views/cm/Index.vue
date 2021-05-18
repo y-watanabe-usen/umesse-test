@@ -597,7 +597,11 @@
     </transition>
     <ModalLoading
       v-if="isLoading || isCreateCmLoadingModalAppear"
-      title="音源の合成中（CMの長さによっては、処理に数分かかる場合があります。）"
+      :title="
+        '音源の合成中（CMの長さによっては、処理に数分かかる場合があります。）      ' +
+          `${progress}` +
+          '％'
+      "
     />
     <transition>
       <ModalDialog
@@ -786,6 +790,7 @@ export default defineComponent({
       narrationIndex: 0,
       isFocus: false,
       isIndicateCmTime: cm.isEdit,
+      progress: computed(() => cm.progress),
     });
 
     const inputFocusBlur = (isFocus: boolean) => {

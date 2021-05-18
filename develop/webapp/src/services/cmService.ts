@@ -8,16 +8,16 @@ import {
 } from "@/models/createUserCmRequestItem";
 import { CreateUserCmResponseItem } from "@/models/createUserCmResponseItem";
 import { UpdateUserCmRequestItem } from "@/models/updateUserCmRequestItem";
-import Constants, { Scene } from "@/utils/constants";
+import Constants, { ERROR_CODE, ERROR_PATTERN, Scene } from "@/utils/constants";
 import * as UMesseApi from "umesseapi";
 import { Recording, Tts } from "@/models/displayCmItem";
 import { CmItem } from "umesseapi/models/cm-item";
 import { UMesseError, UMesseErrorFromApiFactory } from "@/models/umesseError";
 import { CmCache } from "@/repository/cache/cmCache";
 import { CmListItemInner } from "umesseapi/models";
+import { AxiosResponse } from "axios";
 
 export function useCmService(api: UMesseApi.CmApi, cmCache: CmCache) {
-  let timer: number | undefined;
 
   const fetch = async (
     authToken: string,
@@ -43,14 +43,14 @@ export function useCmService(api: UMesseApi.CmApi, cmCache: CmCache) {
     });
   };
 
-  const create = async (
+  const createGenerator = async function* (
     authToken: string,
     narrations: (Narration | Recording | Tts)[],
     startChime: StartChime | null,
     endChime: EndChime | null,
     bgm: Bgm | null,
     id?: string
-  ): Promise<CreateUserCmResponseItem> => {
+  ) {
     const requestModel = getCreateUserCmRequestModel(
       narrations,
       startChime,
@@ -64,13 +64,29 @@ export function useCmService(api: UMesseApi.CmApi, cmCache: CmCache) {
     const cacheKey = Convert.createUserCmRequestItemToJson(tmp);
     cmCache.removeOther(cacheKey);
     const cacheValue = cmCache.get<CreateUserCmResponseItem | undefined>(cacheKey);
-    if (cacheValue) return cacheValue;
+    if (cacheValue) {
+      yield cacheValue;
+      return;
+    }
 
     try {
       const createUserCmResponse = await api.createUserCm(authToken, requestModel);
-      const waitForCreateCompletedResponse = await waitForCreateCompleted(authToken, createUserCmResponse.data.id);
-      cmCache.set<CreateUserCmResponseItem>(cacheKey, waitForCreateCompletedResponse);
-      return waitForCreateCompletedResponse;
+      let response: CreateUserCmResponseItem | undefined = undefined;
+      for (let i = 0; i < Constants.MAX_COUNT_TIME_INTERVAL_GET_USER_CM; i++) {
+        await new Promise(resolve => setTimeout(resolve, Constants.TIME_INTERVAL_GET_USER_CM * 1000)); // sleep
+        const getUserCmResponse: AxiosResponse<CreateUserCmResponseItem> = await api.getUserCm(createUserCmResponse.data.id, authToken);
+        if (getUserCmResponse.data.status === Constants.CM_STATUS_CREATING) {
+          response = getUserCmResponse.data;
+          break;
+        } else {
+          yield getUserCmResponse.data;
+        }
+      }
+      if (!response) {
+        throw new UMesseError(ERROR_CODE.A3003, ERROR_PATTERN.A3003, "");
+      }
+      cmCache.set<CreateUserCmResponseItem>(cacheKey, response);
+      yield response;
     } catch (e) {
       if (e instanceof UMesseError) {
         throw e;
@@ -127,27 +143,6 @@ export function useCmService(api: UMesseApi.CmApi, cmCache: CmCache) {
     cmCache.removeAll();
   };
 
-  const waitForCreateCompleted = async (authToken: string, id: string): Promise<CmItem> => {
-    return new Promise(function (resolve, reject) {
-      _getUserCm(authToken, id)
-        .then((response) => {
-          if (response.status !== Constants.CM_STATUS_CREATING) {
-            const e = {
-              response: {
-                status: 408,
-              },
-            };
-            reject(UMesseErrorFromApiFactory(e));
-          }
-          resolve(response);
-        })
-        .catch((e) => {
-          clearInterval(timer);
-          reject(UMesseErrorFromApiFactory(e));
-        });
-    });
-  };
-
   const getCreateUserCmRequestModel = (
     narrations: (Narration | Recording | Tts)[],
     startChime: StartChime | null,
@@ -194,31 +189,9 @@ export function useCmService(api: UMesseApi.CmApi, cmCache: CmCache) {
     return requestModel;
   };
 
-  const _getUserCm = async (authToken: string, id: string): Promise<CmItem> => {
-    clearInterval(timer);
-    let count = 0;
-    return new Promise(function (resolve) {
-      timer = setInterval(async () => {
-        api.getUserCm(id, authToken).then((value) => {
-          if (
-            value.data.status &&
-            value.data.status === Constants.CM_STATUS_CREATING
-          ) {
-            clearInterval(timer);
-            resolve(value.data);
-          }
-          if (count++ > Constants.MAX_COUNT_TIME_INTERVAL_GET_USER_CM) {
-            clearInterval(timer);
-            resolve(value.data);
-          }
-        });
-      }, Constants.TIME_INTERVAL_GET_USER_CM * 1000);
-    });
-  };
-
   return {
     fetch,
-    create,
+    createGenerator,
     update,
     remove,
     removeCacheAll,
