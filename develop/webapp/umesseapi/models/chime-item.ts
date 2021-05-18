@@ -53,10 +53,4 @@ export interface ChimeItem {
      * @memberof ChimeItem
      */
     timestamp?: any;
-    /**
-     * 音量
-     * @type {number}
-     * @memberof ChimeItem
-     */
-    volume?: any;
 }

@@ -1,5 +1,15 @@
 import Constants from "@/utils/constants";
-import { BgmItem, ChimeItem, CmItem, NarrationItem, SceneItem } from "umesseapi/models";
+import {
+  BgmItem,
+  ChimeItem,
+  CmItem,
+  NarrationItem,
+  SceneItem,
+  CmMaterialListItemBgm,
+  CmMaterialListItemStartChime,
+  CmMaterialListItemEndChime,
+  CmMaterialListItemNarrations
+} from "umesseapi/models";
 
 export default class DisplayCmItem {
   id = "";
@@ -150,12 +160,12 @@ export default class DisplayCmItem {
     this.description = cmItem.description;
     this.seconds = cmItem.seconds;
     if (cmItem.materials.narrations.length > 0) {
-      cmItem.materials.narrations.forEach((v: NarrationItem) => {
+      cmItem.materials.narrations.forEach((v: NarrationItem & CmMaterialListItemNarrations) => {
         this.setNarraion(null, v.category, v.id, v.title, v.description, v.manuscript, v.seconds, v.timestamp, v.volume);
       });
     }
     if (cmItem.materials.startChime) {
-      const chime = <ChimeItem>cmItem.materials.startChime;
+      const chime = <ChimeItem & CmMaterialListItemStartChime>cmItem.materials.startChime;
       this.setStartChime(
         chime.id,
         chime.title,
@@ -166,7 +176,7 @@ export default class DisplayCmItem {
       );
     }
     if (cmItem.materials.endChime) {
-      const chime = <ChimeItem>cmItem.materials.endChime;
+      const chime = <ChimeItem & CmMaterialListItemEndChime>cmItem.materials.endChime;
       this.setEndChime(
         chime.id,
         chime.title,
@@ -177,7 +187,7 @@ export default class DisplayCmItem {
       );
     }
     if (cmItem.materials.bgm) {
-      const bgm = <BgmItem>cmItem.materials.bgm;
+      const bgm = <BgmItem & CmMaterialListItemBgm>cmItem.materials.bgm;
       this.setBgm(
         bgm.id,
         bgm.title,
