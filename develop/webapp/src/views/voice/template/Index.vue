@@ -85,23 +85,6 @@
     </BasicLayout>
     <!-- modal -->
     <transition>
-      <ModalDialog v-if="isDocumentModalAppear" @close="closeDocumentModal">
-        <template #header>
-          <ModalHeader title="原稿" @close="closeDocumentModal" />
-        </template>
-        <template #contents>
-          <TextDialogContents>
-            {{ selectedTemplate?.manuscript }}
-          </TextDialogContents>
-        </template>
-        <template #footer>
-          <ModalFooter>
-            <Button type="secondary" @click="closeDocumentModal">閉じる</Button>
-          </ModalFooter>
-        </template>
-      </ModalDialog>
-    </transition>
-    <transition>
       <ModalErrorDialog
         v-if="isErrorModalApper"
         @close="closeErrorModal"
@@ -129,13 +112,9 @@ import { TemplateItem } from "umesseapi/models";
 import * as common from "@/utils/common";
 import router from "@/router";
 import { convertDatestringToDate } from "@/utils/formatDate";
-import ModalDialog from "@/components/organisms/ModalDialog.vue";
-import ModalHeader from "@/components/molecules/ModalHeader.vue";
-import ModalFooter from "@/components/molecules/ModalFooter.vue";
 import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
 import { resourcesService } from "@/services";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
-import TextDialogContents from "@/components/molecules/TextDialogContents.vue";
 import { displayCache } from "@/repository/cache";
 import analytics from "@/utils/firebaseAnalytics";
 import useLoadingModalController from "@/mixins/loadingModalController";
@@ -155,12 +134,8 @@ export default defineComponent({
     List,
     ListHeader,
     ListItem,
-    ModalDialog,
-    ModalHeader,
-    ModalFooter,
     ModalErrorDialog,
     ModalLoading,
-    TextDialogContents,
   },
   setup() {
     const sortList = common.getSort();
