@@ -10,7 +10,6 @@
             :is-full-page="true"
             :height="100"
             :widht="100"
-            :background-color="transparent"
             :opacity="0"
           ></loading>
         </div>
