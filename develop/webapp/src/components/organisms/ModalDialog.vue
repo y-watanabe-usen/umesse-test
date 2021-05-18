@@ -11,9 +11,9 @@
 </template>
 
 <script lang="ts">
-import { reactive, SetupContext } from "vue";
+import { defineComponent, reactive, SetupContext } from "vue";
 
-export default {
+export default defineComponent({
   name: "ModalDialog",
   props: {
     size: {
@@ -29,8 +29,7 @@ export default {
       default: false,
     },
   },
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  setup(props: any, context: SetupContext) {
+  setup(props, context: SetupContext) {
     const state = reactive({});
     const onClick = (event: Event) => {
       if (
@@ -45,7 +44,7 @@ export default {
       onClick,
     };
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

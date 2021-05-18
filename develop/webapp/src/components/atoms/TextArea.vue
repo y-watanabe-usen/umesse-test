@@ -12,9 +12,9 @@
 </template>
 
 <script lang="ts">
-import { reactive, SetupContext } from "vue";
+import { defineComponent, reactive, SetupContext } from "vue";
 
-export default {
+export default defineComponent({
   name: "TextArea",
   props: {
     modelValue: {
@@ -34,8 +34,7 @@ export default {
       required: true,
     },
   },
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  setup(props: any, context: SetupContext) {
+  setup(props, context: SetupContext) {
     const state = reactive({});
     const onUpdate = (event: Event) => {
       if (event.target instanceof HTMLTextAreaElement) {
@@ -47,7 +46,7 @@ export default {
       onUpdate,
     };
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

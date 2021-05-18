@@ -13,9 +13,9 @@
 </template>
 
 <script lang="ts">
-import { reactive, SetupContext } from "vue";
+import { defineComponent, reactive, SetupContext } from "vue";
 
-export default {
+export default defineComponent({
   name: "SelectBox",
   props: {
     modelValue: {
@@ -26,8 +26,7 @@ export default {
       required: true,
     },
   },
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  setup(props: any, context: SetupContext) {
+  setup(props, context: SetupContext) {
     const state = reactive({});
     const onChange = (event: Event) => {
       if (event.target instanceof HTMLSelectElement) {
@@ -39,7 +38,7 @@ export default {
       onChange,
     };
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

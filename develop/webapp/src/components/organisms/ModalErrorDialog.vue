@@ -18,14 +18,14 @@
 </template>
 
 <script lang="ts">
-import { reactive } from "vue";
+import { defineComponent, reactive } from "vue";
 import Button from "@/components/atoms/Button.vue";
 import ModalDialog from "@/components/organisms/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
 import MessageDialogContents from "@/components/molecules/MessageDialogContents.vue";
 
-export default {
+export default defineComponent({
   name: "ModalErrorDialog",
   components: {
     Button,
@@ -50,7 +50,7 @@ export default {
       state,
     };
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

@@ -44,10 +44,10 @@
 </template>
 
 <script lang="ts">
-import { reactive } from "vue";
+import { defineComponent, reactive } from "vue";
 import MainMenuItem from "@/components/molecules/MainMenuItem.vue";
 
-export default {
+export default defineComponent({
   components: {
     MainMenuItem,
   },
@@ -58,7 +58,7 @@ export default {
       state,
     };
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

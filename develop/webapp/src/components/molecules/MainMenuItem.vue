@@ -11,10 +11,10 @@
 </template>
 
 <script lang="ts">
-import { reactive } from "vue";
+import { defineComponent, reactive } from "vue";
 import { useRouter } from "vue-router";
 
-export default {
+export default defineComponent({
   name: "MainMenuItem",
   props: {
     to: {
@@ -26,8 +26,7 @@ export default {
       default: false,
     },
   },
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  setup(props: any) {
+  setup(props) {
     const router = useRouter();
     const state = reactive({});
     const onClick = () => {
@@ -38,7 +37,7 @@ export default {
       onClick,
     };
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

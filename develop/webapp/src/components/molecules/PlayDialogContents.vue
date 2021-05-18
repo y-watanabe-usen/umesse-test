@@ -58,12 +58,12 @@
 </template>
 
 <script lang="ts">
-import { computed, reactive } from "vue";
+import { computed, defineComponent, reactive } from "vue";
 import { convertNumberToTime } from "@/utils/formatDate";
 import Button from "@/components/atoms/Button.vue";
 import AudioPlayerSlider from "@/components/molecules/AudioPlayerSlider.vue";
 
-export default {
+export default defineComponent({
   name: "PlayDialogContents",
   components: {
     Button,
@@ -95,8 +95,7 @@ export default {
       required: true,
     },
   },
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  setup(props: any) {
+  setup(props) {
     const state = reactive({
       playbackTime: computed(() => props.playbackTime),
     });
@@ -105,7 +104,7 @@ export default {
       convertNumberToTime,
     };
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

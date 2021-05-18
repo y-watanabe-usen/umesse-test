@@ -16,11 +16,11 @@
 </template>
 
 <script lang="ts">
-import { SetupContext } from "vue";
+import { defineComponent, SetupContext } from "vue";
 import SelectBox from "@/components/atoms/SelectBox.vue";
 import { range } from "@/utils/common";
 
-export default {
+export default defineComponent({
   name: "Minutes",
   components: {
     SelectBox,
@@ -30,8 +30,7 @@ export default {
       required: true,
     },
   },
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  setup(props: any, context: SetupContext) {
+  setup(props, context: SetupContext) {
     const values = range(1, 61);
     const onChange = (event: Event) => {
       context.emit("update:modelValue", event);
@@ -41,7 +40,7 @@ export default {
       onChange,
     };
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

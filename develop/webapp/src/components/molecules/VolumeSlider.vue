@@ -19,11 +19,11 @@
 </template>
 
 <script lang="ts">
-import { computed, reactive } from "vue";
-import VueSlider from 'vue-slider-component';
-import 'vue-slider-component/theme/default.css';
+import { computed, defineComponent, reactive } from "vue";
+import VueSlider from "vue-slider-component";
+import "vue-slider-component/theme/default.css";
 
-export default {
+export default defineComponent({
   name: "VolumeSlider",
   components: {
     VueSlider,
@@ -52,17 +52,18 @@ export default {
     direction: {
       type: String,
       default: "down",
-    }
+    },
   },
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  setup(props: any) {
+  setup(props) {
     const state = reactive({
       value: 0,
       style: computed(() => {
         return {
           width: props.width + "px",
-          top: props.direction == "down" ? (props.targetHeight + 24) + "px" : "auto",
-          bottom: props.direction == "up" ? (props.targetHeight + 24) + "px" : "auto",
+          top:
+            props.direction == "down" ? props.targetHeight + 24 + "px" : "auto",
+          bottom:
+            props.direction == "up" ? props.targetHeight + 24 + "px" : "auto",
           left: -15 + props.offset + "px",
         };
       }),
@@ -70,7 +71,7 @@ export default {
         return {
           top: props.direction == "down" ? "-12px" : "auto",
           bottom: props.direction == "up" ? "-12px" : "auto",
-          left: (((props.targetWidth - 25) / 2) + 15 - props.offset) + "px",
+          left: (props.targetWidth - 25) / 2 + 15 - props.offset + "px",
         };
       }),
     });
@@ -78,11 +79,11 @@ export default {
       state,
     };
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/_variables.scss';
+@import "@/scss/_variables.scss";
 
 .volume-slider {
   position: absolute;
@@ -99,7 +100,8 @@ export default {
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.5);
     border-radius: 8px;
     margin-bottom: 0;
-    .slider, img {
+    .slider,
+    img {
       position: relative;
       z-index: 3;
     }
@@ -115,7 +117,7 @@ export default {
       flex-shrink: 0;
     }
     &::after {
-      content: '';
+      content: "";
       position: absolute;
       top: 0;
       left: 0;
