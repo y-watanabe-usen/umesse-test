@@ -595,13 +595,9 @@
         :errorMessage="errorMessage"
       />
     </transition>
-    <ModalLoading
+    <ModalCreateLoading
       v-if="isLoading || isCreateCmLoadingModalAppear"
-      :title="
-        '音源の合成中（CMの長さによっては、処理に数分かかる場合があります。）      ' +
-          `${progress}` +
-          '％'
-      "
+      :progress="progress"
     />
     <transition>
       <ModalDialog
@@ -662,7 +658,7 @@ import DropdownMenu from "@/components/molecules/DropdownMenu.vue";
 import VolumeSlider from "@/components/molecules/VolumeSlider.vue";
 import { MAX_NARRATION_COUNT, UPLOAD_CM_STATE, useCmStore } from "@/store/cm";
 import router from "@/router";
-import ModalLoading from "@/components/organisms/ModalLoading.vue";
+import ModalCreateLoading from "@/components/organisms/ModalCreateLoading.vue";
 import { audioService } from "@/services";
 import * as common from "@/utils/common";
 import { User } from "umesseapi/models";
@@ -692,7 +688,7 @@ export default defineComponent({
     CmItem,
     DropdownMenu,
     VolumeSlider,
-    ModalLoading,
+    ModalCreateLoading,
   },
   setup() {
     const audioPlayer = useAudioPlayer();
