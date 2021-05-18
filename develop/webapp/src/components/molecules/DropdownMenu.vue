@@ -15,9 +15,9 @@
 </template>
 
 <script lang="ts">
-import { computed, reactive } from "vue";
+import { computed, defineComponent, reactive } from "vue";
 
-export default {
+export default defineComponent({
   name: "DropdownMenu",
   props: {
     params: {
@@ -43,28 +43,32 @@ export default {
     direction: {
       type: String,
       default: "down",
-    }
+    },
   },
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  setup(props: any) {
+  setup(props) {
     const state = reactive({
       style: computed(() => {
         return {
           width: props.width + "px",
-          top: props.direction == "down" ? (props.targetHeight + 24) + "px" : "auto",
-          bottom: props.direction == "up" ? (props.targetHeight + 24) + "px" : "auto",
-          left: (((props.targetWidth - props.width) / 2) + props.offset) + "px",
+          top:
+            props.direction == "down" ? props.targetHeight + 24 + "px" : "auto",
+          bottom:
+            props.direction == "up" ? props.targetHeight + 24 + "px" : "auto",
+          left: (props.targetWidth - props.width) / 2 + props.offset + "px",
         };
       }),
       arrowStyle: computed(() => {
         return {
           top: props.direction == "down" ? "-12px" : "auto",
           bottom: props.direction == "up" ? "-12px" : "auto",
-          left: (((props.width - 25) / 2) - props.offset) + "px",
+          left: (props.width - 25) / 2 - props.offset + "px",
         };
       }),
     });
-    const onClick = (param: { action: () => void, isDisabled: boolean | undefined }) => {
+    const onClick = (param: {
+      action: () => void;
+      isDisabled: boolean | undefined;
+    }) => {
       if (!param.isDisabled) {
         param.action();
       }
@@ -74,11 +78,11 @@ export default {
       onClick,
     };
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>
-@import '@/scss/_variables.scss';
+@import "@/scss/_variables.scss";
 
 .dropdown-menu {
   display: block;
@@ -121,7 +125,7 @@ export default {
       }
     }
     &::after {
-      content: '';
+      content: "";
       position: absolute;
       top: 0;
       left: 0;

@@ -11,10 +11,10 @@
 </template>
 
 <script lang="ts">
-import { reactive } from "vue";
+import { defineComponent, reactive } from "vue";
 import { useRouter } from "vue-router";
 
-export default {
+export default defineComponent({
   name: "Header",
   props: {
     clickBack: {
@@ -23,8 +23,7 @@ export default {
       required: false,
     },
   },
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  setup(props: any) {
+  setup(props) {
     const router = useRouter();
     const state = reactive({});
     const back = () => {
@@ -39,7 +38,7 @@ export default {
       back,
     };
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

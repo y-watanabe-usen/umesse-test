@@ -17,11 +17,11 @@
 </template>
 
 <script lang="ts">
-import { computed, reactive } from "vue";
+import { computed, defineComponent, reactive } from "vue";
 import VueSlider from "vue-slider-component";
 import "vue-slider-component/theme/default.css";
 
-export default {
+export default defineComponent({
   name: "AudioPlayerSlider",
   components: {
     VueSlider,
@@ -40,16 +40,15 @@ export default {
       required: true,
     },
   },
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  setup(props: any) {
+  setup(props) {
     const state = reactive({
-      duration: computed(() => Number.parseFloat(props.duration).toFixed(3)),
+      duration: computed(() => Number.parseFloat(`${props.duration}`).toFixed(3)),
     });
     return {
       state,
     };
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

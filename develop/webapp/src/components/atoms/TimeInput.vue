@@ -9,9 +9,9 @@
 </template>
 
 <script lang="ts">
-import { reactive, SetupContext } from "vue";
+import { defineComponent, reactive, SetupContext } from "vue";
 
-export default {
+export default defineComponent({
   name: "TimeInput",
   props: {
     modelValue: {
@@ -23,8 +23,7 @@ export default {
       default: false,
     },
   },
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  setup(props: any, context: SetupContext) {
+  setup(props, context: SetupContext) {
     const state = reactive({});
     const onUpdate = (event: Event) => {
       if (event.target instanceof HTMLInputElement) {
@@ -42,7 +41,7 @@ export default {
       onChange,
     };
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

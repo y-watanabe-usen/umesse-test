@@ -14,9 +14,9 @@
 </template>
 
 <script lang="ts">
-import { reactive } from "vue";
+import { defineComponent, reactive } from "vue";
 
-export default {
+export default defineComponent({
   name: "ListItem",
   setup() {
     const state = reactive({});
@@ -24,7 +24,7 @@ export default {
       state,
     };
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>

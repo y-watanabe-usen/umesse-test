@@ -3,9 +3,9 @@
 </template>
 
 <script lang="ts">
-import { reactive } from "vue";
+import { defineComponent, reactive } from "vue";
 
-export default {
+export default defineComponent({
   name: "Button",
   props: {
     type: {
@@ -23,7 +23,7 @@ export default {
       state,
     };
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>
