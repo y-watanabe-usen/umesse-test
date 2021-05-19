@@ -56,11 +56,16 @@
             </List>
           </div>
           <div v-if="activeAppInformationCd === '03'">
+            <h2>禁止事項</h2>
             <p class="cautions">
-              XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX<br />
-              XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX<br />
-              XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX<br />
-              XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+              ・当社もしくは第三者の著作権、商標権などの知的財産権その他の権利を侵害する行為、または侵害する恐れのある行為<br />
+              ・他人の名誉、社会的信用、プライバシーを侵害する恐れのある音声を送信する行為<br />
+              ・法令若しくは公序良俗に違反し、当社若しくは第三者に不利益を与える行為<br />
+              ・第三者になりすまして本サービスを利用する行為<br />
+              ・第三者が嫌悪感を抱く、もしくはその恐れのある音声を送信する行為<br />
+              ・本サービスの利用若しくは運営に支障を与える行為、または与える恐れのある行為<br />
+              ※上記の様な事項に該当する場合、サービス利用停止の措置を取らせていただきます。<br />
+              &emsp;詳細内容は、「USEN IoT PLATFORMサービス契約約款」をご確認ください。<br />
             </p>
           </div>
         </div>
