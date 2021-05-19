@@ -26,6 +26,7 @@ export default class DisplayCmItem {
   timestamp = "";
   url = "";
   isEdit = false; // 新規作成: false, 編集: true
+  progress = 0;
 
   narration(index: number): Narration | Recording | Tts {
     return this.materials.narrations[index];

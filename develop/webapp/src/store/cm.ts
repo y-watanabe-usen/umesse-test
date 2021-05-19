@@ -8,6 +8,7 @@ import { cmService } from "@/services";
 import { UMesseError } from "@/models/umesseError";
 import { ERROR_CODE, ERROR_PATTERN } from "@/utils/constants";
 import { useGlobalStore } from "@/store";
+import { CreateUserCmResponseItem } from "@/models/createUserCmResponseItem";
 
 export const MAX_NARRATION_COUNT = 4;
 
@@ -39,7 +40,9 @@ export default function cmStore() {
     }
     // TODO: check arguments here.
     state.status = UPLOAD_CM_STATE.CREATING;
-    const response = await cmService.create(
+    state.displayCmItem.progress = 0;
+
+    const iterator = cmService.createGenerator(
       token(),
       state.displayCmItem.narrations,
       state.displayCmItem.startChime,
@@ -47,6 +50,11 @@ export default function cmStore() {
       state.displayCmItem.bgm,
       state.displayCmItem.id
     );
+
+    let response!: CreateUserCmResponseItem;
+    for await (response of iterator) {
+      state.displayCmItem.progress = response.progress ?? 0;
+    }
     state.displayCmItem.id = response.id;
     state.displayCmItem.timestamp = response.timestamp;
     state.displayCmItem.seconds = response.seconds;
@@ -213,6 +221,9 @@ export default function cmStore() {
     },
     get scene() {
       return state.displayCmItem.scene;
+    },
+    get progress() {
+      return state.displayCmItem.progress;
     },
     clearNarration,
     clearAllNarration,
