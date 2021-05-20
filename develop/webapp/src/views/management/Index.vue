@@ -703,8 +703,8 @@ export default defineComponent({
     };
     const saveAndOpenSavedModal = async () => {
       try {
-        openLoadingModal("音源の合成中");
         if (!state.selectedCm) return;
+        openLoadingModal();
         await save(state.selectedCm);
         await fetchScene();
         analytics.pressButtonSaveEdit(
@@ -715,6 +715,7 @@ export default defineComponent({
         closeSaveModal();
         openSavedModal();
       } catch (e) {
+        closeSaveModal();
         openErrorModal(e);
       } finally {
         closeLoadingModal();
@@ -727,7 +728,7 @@ export default defineComponent({
         Constants.SCREEN.MANAGEMENT
       );
       try {
-        openLoadingModal("音源の削除中");
+        openLoadingModal();
         await remove(state.selectedCm?.id);
         closeLoadingModal();
         closeRemoveModal();

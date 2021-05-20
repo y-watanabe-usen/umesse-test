@@ -25,11 +25,11 @@
 </template>
 
 <script lang="ts">
-import { reactive } from "vue";
+import { defineComponent, reactive } from "vue";
 import VueSlider from "vue-slider-component";
 import "vue-slider-component/theme/default.css";
 
-export default {
+export default defineComponent({
   components: {
     VueSlider,
   },
@@ -46,14 +46,11 @@ export default {
       state,
     };
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>
 @import "@/scss/_variables.scss";
-.slider {
-  width: 330px;
-}
 .modal-create-uploading {
   @include flex_center;
   position: fixed;

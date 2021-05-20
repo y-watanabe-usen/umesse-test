@@ -176,7 +176,7 @@
         :errorMessage="errorMessage"
       />
     </transition>
-    <ModalLoading v-if="isLoading" title="音源の合成中" />
+    <ModalLoading v-if="isLoading" />
   </div>
 </template>
 

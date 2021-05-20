@@ -113,14 +113,6 @@
     </BasicLayout>
     <!-- modal -->
     <transition>
-      <ModalErrorDialog
-        v-if="isErrorModalApper"
-        @close="closeErrorModal"
-        :errorCode="errorCode"
-        :errorMessage="errorMessage"
-      />
-    </transition>
-    <transition>
       <ModalDialog v-if="isModalAppear" @close="stopAndCloseModal">
         <template #header>
           <ModalHeader title="保存しますか？" @close="stopAndCloseModal" />
@@ -177,7 +169,15 @@
         </template>
       </ModalDialog>
     </transition>
-    <ModalLoading v-if="isLoading" title="音源の合成中" />
+    <ModalLoading v-if="isLoading" />
+    <transition>
+      <ModalErrorDialog
+        v-if="isErrorModalApper"
+        @close="closeErrorModal"
+        :errorCode="errorCode"
+        :errorMessage="errorMessage"
+      />
+    </transition>
   </div>
 </template>
 
@@ -399,49 +399,54 @@ export default defineComponent({
     };
 
     const createTts = async () => {
-      stop();
-      openLoadingModal();
+      try {
+        stop();
+        openLoadingModal();
 
-      let manuscripts: string[] = [];
-      state.langs.forEach((lang) => {
-        templateDetails.forEach((templateDetail) => {
-          if (
-            templateDetail.lang == lang &&
-            templateDetail.speaker == state.speaker
-          ) {
-            const manuscript = ttsTextConverter.convertManuscript(
-              templateDetail.text,
-              lang,
-              state.customerName,
-              state.time,
-              state.percentage,
-              state.count,
-              state.endYearDate,
-              state.newYearDate,
-              state.age,
-              state.minutes,
-              state.point
-            );
-            manuscripts.push(manuscript);
-          }
+        let manuscripts: string[] = [];
+        state.langs.forEach((lang) => {
+          templateDetails.forEach((templateDetail) => {
+            if (
+              templateDetail.lang == lang &&
+              templateDetail.speaker == state.speaker
+            ) {
+              const manuscript = ttsTextConverter.convertManuscript(
+                templateDetail.text,
+                lang,
+                state.customerName,
+                state.time,
+                state.percentage,
+                state.count,
+                state.endYearDate,
+                state.newYearDate,
+                state.age,
+                state.minutes,
+                state.point
+              );
+              manuscripts.push(manuscript);
+            }
+          });
         });
-      });
 
-      const response = await ttsStore.createTtsData(
-        state.title,
-        state.description,
-        state.langs,
-        manuscripts
-      );
+        const response = await ttsStore.createTtsData(
+          state.title,
+          state.description,
+          state.langs,
+          manuscripts
+        );
 
-      var idString = "";
-      response?.forEach((element) => {
-        cm.setNarration(element);
-        idString += element.id + ",";
-      });
-      analytics.setTts(idString);
-      router.push({ name: "Cm" });
-      closeLoadingModal();
+        var idString = "";
+        response?.forEach((element) => {
+          cm.setNarration(element);
+          idString += element.id + ",";
+        });
+        analytics.setTts(idString);
+        router.push({ name: "Cm" });
+      } catch (e) {
+        openErrorModal(e);
+      } finally {
+        closeLoadingModal();
+      }
     };
 
     const generateTts = async () => {
