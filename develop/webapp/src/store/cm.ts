@@ -38,28 +38,33 @@ export default function cmStore() {
     if (state.status === UPLOAD_CM_STATE.CREATING) {
       throw new UMesseError(ERROR_CODE.A0001, ERROR_PATTERN.A0001, "");
     }
-    // TODO: check arguments here.
-    state.status = UPLOAD_CM_STATE.CREATING;
-    state.displayCmItem.progress = 0;
+    try {
+      // TODO: check arguments here.
+      state.status = UPLOAD_CM_STATE.CREATING;
+      state.displayCmItem.progress = 0;
 
-    const iterator = cmService.createGenerator(
-      token(),
-      state.displayCmItem.narrations,
-      state.displayCmItem.startChime,
-      state.displayCmItem.endChime,
-      state.displayCmItem.bgm,
-      state.displayCmItem.id
-    );
+      const iterator = cmService.createGenerator(
+        token(),
+        state.displayCmItem.narrations,
+        state.displayCmItem.startChime,
+        state.displayCmItem.endChime,
+        state.displayCmItem.bgm,
+        state.displayCmItem.id
+      );
 
-    let response!: CreateUserCmResponseItem;
-    for await (response of iterator) {
-      state.displayCmItem.progress = response.progress ?? 0;
+      let response!: CreateUserCmResponseItem;
+      for await (response of iterator) {
+        state.displayCmItem.progress = response.progress ?? 0;
+      }
+      state.displayCmItem.id = response.id;
+      state.displayCmItem.timestamp = response.timestamp;
+      state.displayCmItem.seconds = response.seconds;
+      state.displayCmItem.url = response.url ?? "";
+      state.status = UPLOAD_CM_STATE.CREATED;
+    } catch (e) {
+      state.status = UPLOAD_CM_STATE.ERROR;
+      throw e;
     }
-    state.displayCmItem.id = response.id;
-    state.displayCmItem.timestamp = response.timestamp;
-    state.displayCmItem.seconds = response.seconds;
-    state.displayCmItem.url = response.url ?? "";
-    state.status = UPLOAD_CM_STATE.CREATED;
   };
 
   const update = async (

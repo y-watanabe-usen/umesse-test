@@ -596,9 +596,10 @@
       />
     </transition>
     <ModalCreateLoading
-      v-if="isLoading || isCreateCmLoadingModalAppear"
+      v-if="isCreateCmLoadingModalAppear"
       :progress="progress"
     />
+    <ModalLoading v-if="isLoading" title="" />
     <transition>
       <ModalDialog
         v-if="isConfirmBackHomeModalAppear"
@@ -658,6 +659,7 @@ import DropdownMenu from "@/components/molecules/DropdownMenu.vue";
 import VolumeSlider from "@/components/molecules/VolumeSlider.vue";
 import { MAX_NARRATION_COUNT, UPLOAD_CM_STATE, useCmStore } from "@/store/cm";
 import router from "@/router";
+import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import ModalCreateLoading from "@/components/organisms/ModalCreateLoading.vue";
 import { audioService } from "@/services";
 import * as common from "@/utils/common";
@@ -688,6 +690,7 @@ export default defineComponent({
     CmItem,
     DropdownMenu,
     VolumeSlider,
+    ModalLoading,
     ModalCreateLoading,
   },
   setup() {
@@ -946,16 +949,16 @@ export default defineComponent({
 
     const clickConfirm = async () => {
       try {
-        openLoadingModal();
+        openCreateCmLoadingModal();
         await cm.create();
         state.isIndicateCmTime = true;
-        closeLoadingModal();
+        closeCreateCmLoadingModal();
         openSaveModal();
       } catch (e) {
         openErrorModal(e);
         state.isIndicateCmTime = false;
       } finally {
-        closeLoadingModal();
+        closeCreateCmLoadingModal();
       }
     };
 
