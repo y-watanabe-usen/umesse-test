@@ -48,14 +48,6 @@
     </BasicLayout>
     <!-- modal -->
     <transition>
-      <ModalErrorDialog
-        v-if="isErrorModalApper"
-        @close="closeErrorModal"
-        :errorCode="errorCode"
-        :errorMessage="errorMessage"
-      />
-    </transition>
-    <transition>
       <ModalDialog v-if="isModalAppear" @close="stopAndCloseModal">
         <template #header>
           <ModalHeader title="保存しますか？" @close="stopAndCloseModal" />
@@ -97,7 +89,15 @@
         </template>
       </ModalDialog>
     </transition>
-    <ModalLoading v-if="isLoading" title="音源の合成中" />
+    <ModalLoading v-if="isLoading" />
+    <transition>
+      <ModalErrorDialog
+        v-if="isErrorModalApper"
+        @close="closeErrorModal"
+        :errorCode="errorCode"
+        :errorMessage="errorMessage"
+      />
+    </transition>
   </div>
 </template>
 
@@ -216,25 +216,30 @@ export default defineComponent({
     };
 
     const createTts = async () => {
-      displayCache.remove(DISPLAY_CACHE_KEY.VOICE_FREE_INDEX_SELECT_TEXT);
-      displayCache.remove(DISPLAY_CACHE_KEY.VOICE_FREE_INDEX_SELECT_SPEAKER);
-      stop();
-      openLoadingModal();
-      const response = await ttsStore.createTtsData(
-        state.title,
-        state.description,
-        [lang],
-        [state.text]
-      );
+      try {
+        displayCache.remove(DISPLAY_CACHE_KEY.VOICE_FREE_INDEX_SELECT_TEXT);
+        displayCache.remove(DISPLAY_CACHE_KEY.VOICE_FREE_INDEX_SELECT_SPEAKER);
+        stop();
+        openLoadingModal();
+        const response = await ttsStore.createTtsData(
+          state.title,
+          state.description,
+          [lang],
+          [state.text]
+        );
 
-      var idString = "";
-      response?.forEach((element) => {
-        cm.setNarration(element);
-        idString += element.id + ",";
-      });
-      analytics.setTts(idString);
-      router.push({ name: "Cm" });
-      closeLoadingModal();
+        var idString = "";
+        response?.forEach((element) => {
+          cm.setNarration(element);
+          idString += element.id + ",";
+        });
+        analytics.setTts(idString);
+        router.push({ name: "Cm" });
+      } catch (e) {
+        openErrorModal(e);
+      } finally {
+        closeLoadingModal();
+      }
     };
 
     const generateTts = async () => {

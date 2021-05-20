@@ -3,18 +3,36 @@
     <div class="base">
       <p class="title">CMの長さによっては、処理に数分かかる場合があります。</p>
       <div class="row">
-        <progress class="progress" :value="progress" max="100"></progress>
-        <p class="title">{{ `${progress}` + "％" }}</p>
+        <vue-slider
+          class="slider"
+          :width="430"
+          :modelValue="progress"
+          :dotSize="0"
+          :min="0"
+          :max="100"
+          :interval="1"
+          :duration="1"
+          tooltip="none"
+          :clickable="false"
+          :dragOnClick="false"
+          :railStyle="{ backgroundColor: 'rgb(186, 186, 186)' }"
+          :processStyle="{ backgroundColor: 'rgb(87, 142, 217)' }"
+        />
+        <p class="percent">{{ progress }}％</p>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { reactive } from "vue";
+import { defineComponent, reactive } from "vue";
+import VueSlider from "vue-slider-component";
+import "vue-slider-component/theme/default.css";
 
-export default {
-  components: {},
+export default defineComponent({
+  components: {
+    VueSlider,
+  },
   name: "ModalCreateLoding",
   props: {
     progress: {
@@ -28,7 +46,7 @@ export default {
       state,
     };
   },
-};
+});
 </script>
 
 <style lang="scss" scoped>
@@ -61,26 +79,15 @@ export default {
       line-height: 80px;
       margin-left: 20px;
     }
+    .percent {
+      color: #5c5c5c;
+      font-size: 16px;
+      line-height: 80px;
+      margin-left: 20px;
+    }
     .row {
       @include flex_center;
       height: 35px;
-    }
-    progress {
-      -webkit-appearance: none;
-      width: 330px;
-      height: 7px;
-      border-radius: 15px;
-      background-color: rgba(211, 211, 211, 0.85);
-    }
-    ::-webkit-progress-bar {
-      height: 7px;
-      border-radius: 15px;
-      background-color: rgba(211, 211, 211, 0.85);
-    }
-    ::-webkit-progress-value {
-      height: 7px;
-      background-color: #578ed9;
-      border-radius: 15px;
     }
   }
 }

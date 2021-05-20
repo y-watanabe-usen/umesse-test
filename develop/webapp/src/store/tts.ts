@@ -199,14 +199,11 @@ export default function ttsStore() {
         details: details,
       };
 
-      try {
-        const response = await ttsService.create(token(), requestModel);
-        return response;
-      } catch (e) {
-        // throw new e;
-      }
-    } catch (err) {
-      state.error = err.message;
+      const response = await ttsService.create(token(), requestModel);
+      return response;
+    } catch (e) {
+      state.error = e.message;
+      throw e;
     } finally {
       state.creating = false;
     }
