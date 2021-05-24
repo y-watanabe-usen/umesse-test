@@ -87,10 +87,15 @@ jobs:
       with:
         node-version: '14'
 
+    - name: Setup variables
+      id: variables
+      run: echo "::set-output name=version::${GITHUB_REF##*/}"
+
     - name: Build Webapp & Upload s3
       working-directory: ./develop/webapp
       run: |
         yarn install
+        yarn version --no-git-tag-version --new-version ${{ steps.variables.outputs.version }}
         yarn build --mode production
         aws s3 sync --exact-timestamps --delete ./dist/ s3://umesse-webapp/
 
