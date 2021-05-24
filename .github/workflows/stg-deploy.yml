@@ -95,7 +95,7 @@ jobs:
       working-directory: ./develop/webapp
       run: |
         yarn install
-        yarn version --new-version ${{ steps.variables.outputs.version }}
+        yarn version --no-git-tag-version --new-version ${{ steps.variables.outputs.version }}
         yarn build --mode staging
         aws s3 sync --exact-timestamps --delete ./dist/ s3://stg-umesse-webapp/
 
