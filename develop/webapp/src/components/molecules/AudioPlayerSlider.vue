@@ -42,7 +42,7 @@ export default defineComponent({
   },
   setup(props) {
     const state = reactive({
-      duration: computed(() => Number.parseFloat(`${props.duration}`).toFixed(3)),
+      duration: computed(() => Number(Number.parseFloat(`${props.duration}`).toFixed(3))),
     });
     return {
       state,
