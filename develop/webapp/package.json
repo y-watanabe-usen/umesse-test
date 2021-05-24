@@ -1,6 +1,6 @@
 {
   "name": "webapp",
-  "version": "v1.1.10.stg",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "serve": "npm run serve:development",
