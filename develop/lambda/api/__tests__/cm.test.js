@@ -118,6 +118,7 @@ describe("CM新規作成", () => {
       ...data.cm[0],
       productionType: "02",
       status: "05",
+      progress: 0,
       ...body,
       timestamp: expect.anything(),
     });
