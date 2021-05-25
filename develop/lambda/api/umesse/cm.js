@@ -171,6 +171,7 @@ exports.createCm = async (unisCustomerCd, body) => {
         ? constants.cmProductionType.MUSIC
         : constants.cmProductionType.NONE;
     cm.status = constants.cmStatus.GENERATE;
+    cm.progress = 0;
     cm.timestamp = timestamp();
     try {
       ret = await db.User.updateCm(unisCustomerCd, index, cm);
