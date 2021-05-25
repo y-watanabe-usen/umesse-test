@@ -105,6 +105,17 @@ exports.createCm = async (unisCustomerCd, body) => {
   );
   if (checkError) throw new BadRequestError(checkError);
 
+  // CMが100件を超える場合はエラー
+  let allCm;
+  try {
+    allCm = await db.User.findCm(unisCustomerCd);
+  } catch (e) {
+    if (e instanceof NotFoundError) throw e;
+    errorlog(JSON.stringify(e));
+    throw new InternalServerError(ERROR_CODE.E0000500);
+  }
+  if (allCm.length >= 100) throw new BadRequestError(ERROR_CODE.E0200010);
+
   let id, cm, index;
   if (body.id) {
     // CMIDが存在している場合は更新する
