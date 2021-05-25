@@ -240,8 +240,8 @@ export default class Constants {
     { cd: "1", name: "女性" },
   ];
 
-  public static readonly TIME_INTERVAL_GET_USER_CM = 5; // 5秒
-  public static readonly MAX_COUNT_TIME_INTERVAL_GET_USER_CM = 20;
+  public static readonly TIME_INTERVAL_GET_USER_CM = 3; // 3秒
+  public static readonly MAX_COUNT_TIME_INTERVAL_GET_USER_CM = 35;
 
   public static readonly MAX_LENGTH_TITLE = 200;
   public static readonly MAX_LENGTH_DESCRIPTION = 200;
