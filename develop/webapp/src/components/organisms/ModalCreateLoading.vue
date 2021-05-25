@@ -80,6 +80,7 @@ export default defineComponent({
       margin-left: 20px;
     }
     .percent {
+      width: 35px;
       color: #5c5c5c;
       font-size: 16px;
       line-height: 80px;
