@@ -96,6 +96,24 @@ export interface CmItem {
      */
     uploadSystem?: any;
     /**
+     * 
+     * @type {number}
+     * @memberof CmItem
+     */
+    uploadError?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof CmItem
+     */
+    uploadErrorMessage?: any;
+    /**
+     * 
+     * @type {number}
+     * @memberof CmItem
+     */
+    progress?: any;
+    /**
      * CMステータス
      * @type {string}
      * @memberof CmItem

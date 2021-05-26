@@ -2238,6 +2238,15 @@ components:
         uploadSystem:
           type: string
           example: "01: センター, 02: S'sence"
+        uploadError:
+          type: integer
+          example: 1
+        uploadErrorMessage:
+          type: string
+          example: 編成で利用中のため解除できませんでした
+        progress:
+          type: integer
+          example: 100
         status:
           type: string
           description: CMステータス
@@ -2248,12 +2257,14 @@ components:
           example: 2019-09-01T09:00:00+9:00
       example:
         endDate: 9999-12-31T23:59:59+09:00
+        uploadErrorMessage: 編成で利用中のため解除できませんでした
         productionType: "01: 音楽系, 02: 素ナレ"
         description: タイムセールサンプル１
         industry:
           industryName: 業種名
           industryCd: "01"
         title: タイムセール
+        uploadError: 1
         scene:
           sceneCd: "01"
           sceneName: シーン名
@@ -2299,6 +2310,7 @@ components:
             id: サンプル01
             category: bgm
         uploadSystem: "01: センター, 02: S'sence"
+        progress: 100
         id: 123456789-c-12345678
         category: cm
         startDate: 2019-09-01T09:00:00+9:00
@@ -2327,6 +2339,9 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/CmMaterialListItem'
+        progress:
+          type: integer
+          example: 100
         status:
           type: string
           description: CMステータス
@@ -2376,6 +2391,7 @@ components:
             id: サンプル01
             category: bgm
         productionType: "01: 音楽系, 02: 素ナレ"
+        progress: 100
         id: 123456789-c-12345678
         category: cm
         status: "01: CM作成中"
@@ -3021,12 +3037,14 @@ components:
         sceneName: シーン名
         details:
         - endDate: 9999-12-31T23:59:59+09:00
+          uploadErrorMessage: 編成で利用中のため解除できませんでした
           productionType: "01: 音楽系, 02: 素ナレ"
           description: タイムセールサンプル１
           industry:
             industryName: 業種名
             industryCd: "01"
           title: タイムセール
+          uploadError: 1
           scene:
             sceneCd: "01"
             sceneName: シーン名
@@ -3072,6 +3090,7 @@ components:
               id: サンプル01
               category: bgm
           uploadSystem: "01: センター, 02: S'sence"
+          progress: 100
           id: 123456789-c-12345678
           category: cm
           startDate: 2019-09-01T09:00:00+9:00
@@ -3079,12 +3098,14 @@ components:
             成中, 09: CM作成エラー, 11: 外部システム連携中, 12: 外部システム連携完了, 19: 外部システム連携エラー"
           timestamp: 2019-09-01T09:00:00+9:00
         - endDate: 9999-12-31T23:59:59+09:00
+          uploadErrorMessage: 編成で利用中のため解除できませんでした
           productionType: "01: 音楽系, 02: 素ナレ"
           description: タイムセールサンプル１
           industry:
             industryName: 業種名
             industryCd: "01"
           title: タイムセール
+          uploadError: 1
           scene:
             sceneCd: "01"
             sceneName: シーン名
@@ -3130,6 +3151,7 @@ components:
               id: サンプル01
               category: bgm
           uploadSystem: "01: センター, 02: S'sence"
+          progress: 100
           id: 123456789-c-12345678
           category: cm
           startDate: 2019-09-01T09:00:00+9:00

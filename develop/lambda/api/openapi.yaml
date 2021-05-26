@@ -1285,6 +1285,15 @@ components:
         uploadSystem:
           type: string
           example: "01: センター, 02: S'sence"
+        uploadError:
+          type: integer
+          example: 1
+        uploadErrorMessage:
+          type: string
+          example: "編成で利用中のため解除できませんでした"
+        progress:
+          type: integer
+          example: 100
         status:
           type: string
           description: CMステータス
@@ -1313,6 +1322,9 @@ components:
         materials:
           items:
             $ref: "#/components/schemas/CmMaterialListItem"
+        progress:
+          type: integer
+          example: 100
         status:
           type: string
           description: CMステータス

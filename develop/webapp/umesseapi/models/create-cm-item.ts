@@ -48,6 +48,12 @@ export interface CreateCmItem {
      */
     materials?: any;
     /**
+     * 
+     * @type {number}
+     * @memberof CreateCmItem
+     */
+    progress?: any;
+    /**
      * CMステータス
      * @type {string}
      * @memberof CreateCmItem
