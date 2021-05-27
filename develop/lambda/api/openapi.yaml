@@ -1288,9 +1288,12 @@ components:
         uploadError:
           type: integer
           example: 1
+        uploadErrorCode:
+          type: string
+          example: "E0001"
         uploadErrorMessage:
           type: string
-          example: "編成で利用中のため解除できませんでした"
+          example: "CM名に規定外の文字が使用されています"
         progress:
           type: integer
           example: 100
@@ -1770,7 +1773,7 @@ components:
         errorCode:
           type: string
           example: "E0001"
-        errorMessege:
+        errorMessage:
           type: string
           example: "CM名に規定外の文字が使用されています"
     Error:
@@ -1779,7 +1782,7 @@ components:
       properties:
         code:
           type: string
-          example: "erorr code"
+          example: "error code"
         message:
           type: string
           example: "error message"
@@ -1944,7 +1947,7 @@ components:
               errorCode:
                 type: string
                 example: "E0001"
-              errorMessege:
+              errorMessage:
                 type: string
                 example: "CM名に規定外の文字が使用されています"
 

@@ -106,6 +106,12 @@ export interface CmItem {
      * @type {string}
      * @memberof CmItem
      */
+    uploadErrorCode?: any;
+    /**
+     * 
+     * @type {string}
+     * @memberof CmItem
+     */
     uploadErrorMessage?: any;
     /**
      * 

@@ -40,5 +40,5 @@ export interface ExternalCompleteItem {
      * @type {string}
      * @memberof ExternalCompleteItem
      */
-    errorMessege?: any;
+    errorMessage?: any;
 }
