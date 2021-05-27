@@ -55,6 +55,13 @@
                   <span class="status" :class="getStatusClass(cm.status)">{{
                     getCmStatusName(cm.status)
                   }}</span>
+                  <span
+                    v-if="cm.uploadError && cm.uploadError == 1"
+                    class="uploadError"
+                    @click="errorUpload(cm)"
+                  >
+                    Upload Error
+                  </span>
                 </p>
               </template>
               <template #operations>
@@ -348,6 +355,22 @@
         </template>
       </ModalDialog>
     </transition>
+    <transition>
+      <ModalDialog v-if="isUploadErrorApper" @close="closeUploadErrorModal">
+        <template #contents>
+          <MessageDialogContents>
+            {{ uploadErrorMessage + "[ " + uploadErrorCode + " ]" }}
+          </MessageDialogContents>
+        </template>
+        <template #footer>
+          <ModalFooter>
+            <Button type="secondary" @click="closeUploadErrorModal"
+              >閉じる</Button
+            >
+          </ModalFooter>
+        </template>
+      </ModalDialog>
+    </transition>
   </div>
 </template>
 
@@ -537,6 +560,11 @@ export default defineComponent({
       isApper: isCmAbsentApper,
       open: openCmAbsentModal,
     } = useModalController();
+    const {
+      isApper: isUploadErrorApper,
+      open: openUploadErrorModal,
+      close: closeUploadErrorModal,
+    } = useModalController();
     const state = reactive({
       activeSceneCd: "",
       sceneList: [] as Scene[],
@@ -560,6 +588,8 @@ export default defineComponent({
           ? "U MUSICにアップロード"
           : "S'Senceにアップロード",
       isDownload: false,
+      uploadErrorCode: "",
+      uploadErrorMessage: "",
     });
     const fetchScene = async () => {
       try {
@@ -809,6 +839,12 @@ export default defineComponent({
       );
     };
 
+    const errorUpload = (cm: CmItem) => {
+      state.uploadErrorCode = cm.uploadErrorCode;
+      state.uploadErrorMessage = cm.uploadErrorMessage;
+      openUploadErrorModal();
+    };
+
     return {
       ...toRefs(state),
       inputScenesList,
@@ -879,6 +915,9 @@ export default defineComponent({
       download,
       toHome,
       getCmStatusName,
+      isUploadErrorApper,
+      closeUploadErrorModal,
+      errorUpload,
     };
   },
 });
@@ -892,5 +931,18 @@ export default defineComponent({
 }
 .dropdown-toggle::after {
   content: none;
+}
+.uploadError {
+  display: inline-block;
+  margin-right: 20px;
+  margin-left: 14px;
+  font-weight: $font_weight_bold;
+  height: 30px;
+  line-height: 30px;
+  padding-left: 20px;
+  padding-right: 20px;
+  border-radius: 15px;
+  color: rgb(186, 48, 48);
+  background-color: rgb(255, 229, 229);
 }
 </style>
