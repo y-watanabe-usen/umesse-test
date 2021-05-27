@@ -50,7 +50,9 @@ exports.getExternalCm = async (unisCustomerCd, external) => {
   if (!ret || !ret.length) throw new NotFoundError(ERROR_CODE.E0000404);
 
   // レスポンスの成形
-  const customers = Array.from(new Set(ret.map((item) => item.unisCustomerCd)));
+  const customers = Array.from(
+    new Set(ret.map((item) => item.unisCustomerCd))
+  ).sort();
   let json = { unisCustomers: [] };
   for (const customer of customers) {
     let data = ret.filter((item) => item.unisCustomerCd === customer);
@@ -108,43 +110,10 @@ exports.completeExternalCm = async (unisCustomerCd, external, body) => {
     }
   }
 
-  if (!cm) {
-    // 該当CMが存在していない場合、外部連携をエラーにする
-    let data = {
-      ":status": "9",
-      ":errorCode": "U990",
-      ":errorMessage": ERROR_CODE.E0000404,
-      ":timestamp": timestamp(),
-    };
+  if (!cm || cm.status !== constants.cmStatus.EXTERNAL_UPLOADING) {
+    // 該当CMが存在していない場合、整合性が合っていない場合、連携データを削除して終了
     try {
-      const _ = await db.External.updateErrorData(unisCustomerCd, data);
-    } catch (e) {
-      errorlog(JSON.stringify(e));
-      throw new InternalServerError(ERROR_CODE.E0000500);
-    }
-
-    return body;
-  }
-
-  // CMステータスのチェック
-  if (cm.status !== constants.cmStatus.EXTERNAL_UPLOADING) {
-    // 整合性が合っていない状態の場合、外部連携をエラーにする
-    let data = {
-      ":status": "9",
-      ":errorCode": "U991",
-      ":errorMessage": ERROR_CODE.E0002000,
-      ":timestamp": timestamp(),
-    };
-    try {
-      const _ = await db.External.updateErrorData(unisCustomerCd, data);
-    } catch (e) {
-      errorlog(JSON.stringify(e));
-      throw new InternalServerError(ERROR_CODE.E0000500);
-    }
-
-    cm.status = constants.cmStatus.EXTERNAL_ERROR;
-    try {
-      const _ = await db.User.updateCm(unisCustomerCd, index, cm);
+      await db.External.delete(unisCustomerCd);
     } catch (e) {
       errorlog(JSON.stringify(e));
       throw new InternalServerError(ERROR_CODE.E0000500);
@@ -163,35 +132,31 @@ exports.completeExternalCm = async (unisCustomerCd, external, body) => {
     throw new InternalServerError(ERROR_CODE.E0000500);
   }
 
-  if (body.dataProcessType == constants.cmDataProcessType.ERROR) {
+  if (body.dataProcessType === constants.cmDataProcessType.ERROR) {
     // エラー終了の場合
-    let data = {
-      ":status": "9",
-      ":errorCode": body.errorCode,
-      ":errorMessage": body.errorMessage,
-      ":timestamp": timestamp(),
-    };
-    try {
-      const _ = await db.External.updateErrorData(unisCustomerCd, data);
-    } catch (e) {
-      errorlog(JSON.stringify(e));
-      throw new InternalServerError(ERROR_CODE.E0000500);
-    }
-    cm.status = constants.cmStatus.EXTERNAL_ERROR;
+    cm.uploadError = 1;
+    cm.uploadErrorCode = body.errorCode;
+    cm.uploadErrorMessage = body.errorMessage;
+    // ステータスは元に戻す
+    cm.status =
+      ret.dataProcessType === constants.cmDataProcessType.ADD
+        ? constants.cmStatus.COMPLETE
+        : constants.cmStatus.EXTERNAL_COMPLETE;
   } else {
     // 正常完了の場合
     if (ret.dataProcessType === constants.cmDataProcessType.DELETE) {
-      // 連携解除の場合、各連携システム側で制御できないので、CMIDを新たに降りなおす
+      // 連携解除の場合、各連携システム側で制御できないので、cmIdを新たに降りなおす
       const id = generateId(unisCustomerCd, constants.resourceCategory.CM);
       const path = `users/${unisCustomerCd}/${constants.resourceCategory.CM}`;
-      let res;
       try {
-        res = await s3Manager.copy(
+        // 新cmIdでコピーを作成
+        await s3Manager.copy(
           constants.s3Bucket().users,
           `${path}/${id}.aac`,
           `${constants.s3Bucket().users}/${path}/${cm.cmId}.aac`
         );
-        const _ = await s3Manager.delete(
+        // 元のcmを削除
+        await s3Manager.delete(
           constants.s3Bucket().users,
           `${path}/${cm.cmId}.aac`
         );
@@ -206,19 +171,20 @@ exports.completeExternalCm = async (unisCustomerCd, external, body) => {
     } else {
       cm.status = constants.cmStatus.EXTERNAL_COMPLETE;
     }
-
-    try {
-      const _ = await db.External.delete(unisCustomerCd);
-    } catch (e) {
-      errorlog(JSON.stringify(e));
-      throw new InternalServerError(ERROR_CODE.E0000500);
-    }
   }
   cm.timestamp = timestamp();
 
   // DynamoDBのデータ更新
   try {
-    const _ = await db.User.updateCm(unisCustomerCd, index, cm);
+    await db.User.updateCm(unisCustomerCd, index, cm);
+  } catch (e) {
+    errorlog(JSON.stringify(e));
+    throw new InternalServerError(ERROR_CODE.E0000500);
+  }
+
+  // 外部連携データ削除
+  try {
+    await db.External.delete(unisCustomerCd);
   } catch (e) {
     errorlog(JSON.stringify(e));
     throw new InternalServerError(ERROR_CODE.E0000500);
