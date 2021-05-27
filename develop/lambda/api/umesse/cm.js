@@ -173,6 +173,7 @@ exports.createCm = async (unisCustomerCd, body) => {
     cm.status = constants.cmStatus.GENERATE;
     cm.progress = 0;
     cm.timestamp = timestamp();
+    if (cm.uploadError) cm.uploadError = 0;
     try {
       ret = await db.User.updateCm(unisCustomerCd, index, cm);
     } catch (e) {
@@ -327,6 +328,7 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
     if (key == "endDate") cm[key] = "";
   });
   cm.timestamp = timestamp();
+  if (cm.uploadError) cm.uploadError = 0;
 
   let ret;
   try {
@@ -375,6 +377,7 @@ exports.deleteCm = async (unisCustomerCd, id) => {
   // DynamoDBのデータ更新
   cm.status = constants.cmStatus.DELETE;
   cm.timestamp = timestamp();
+  if (cm.uploadError) cm.uploadError = 0;
 
   let ret;
   try {

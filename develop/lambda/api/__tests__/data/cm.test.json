@@ -74,8 +74,19 @@
               {
                 "M": {
                   "cmId": { "S": "020000000-c-00000006" },
+                  "scene": {
+                    "M": {
+                      "sceneCd": { "S": "01" },
+                      "sceneName": { "S": "シーン01" }
+                    }
+                  },
                   "status": { "S": "12" },
                   "uploadSystem": { "S": "01" },
+                  "uploadError": { "N": "1" },
+                  "uploadErrorCode": { "S": "C012" },
+                  "uploadErrorMessage": {
+                    "S": "U MESSE内CM管理ID[020000000-c-00000006]の削除に失敗しました。[該当CMが編成で使用されているため、削除できません。]"
+                  },
                   "timestamp": { "S": "2019-09-01T09:00:00+09:00" }
                 }
               }

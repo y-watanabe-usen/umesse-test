@@ -43,7 +43,7 @@ describe("CMデータ取得", () => {
       {
         sceneCd: data.cm[0].scene.sceneCd,
         sceneName: data.cm[0].scene.sceneName,
-        details: [data.cm[0], data.cm[1]],
+        details: [data.cm[0], data.cm[1], data.cm[5]],
       },
     ]);
   });
@@ -345,6 +345,7 @@ describe("CMデータ更新", () => {
     ).resolves.toEqual({
       ...data.cm[5],
       ...body,
+      uploadError: 0,
       status: "11",
       timestamp: expect.anything(),
     });

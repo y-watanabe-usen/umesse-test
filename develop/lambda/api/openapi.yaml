@@ -1285,6 +1285,18 @@ components:
         uploadSystem:
           type: string
           example: "01: センター, 02: S'sence"
+        uploadError:
+          type: integer
+          example: 1
+        uploadErrorCode:
+          type: string
+          example: "E0001"
+        uploadErrorMessage:
+          type: string
+          example: "CM名に規定外の文字が使用されています"
+        progress:
+          type: integer
+          example: 100
         status:
           type: string
           description: CMステータス
@@ -1313,6 +1325,9 @@ components:
         materials:
           items:
             $ref: "#/components/schemas/CmMaterialListItem"
+        progress:
+          type: integer
+          example: 100
         status:
           type: string
           description: CMステータス
@@ -1758,7 +1773,7 @@ components:
         errorCode:
           type: string
           example: "E0001"
-        errorMessege:
+        errorMessage:
           type: string
           example: "CM名に規定外の文字が使用されています"
     Error:
@@ -1767,7 +1782,7 @@ components:
       properties:
         code:
           type: string
-          example: "erorr code"
+          example: "error code"
         message:
           type: string
           example: "error message"
@@ -1932,7 +1947,7 @@ components:
               errorCode:
                 type: string
                 example: "E0001"
-              errorMessege:
+              errorMessage:
                 type: string
                 example: "CM名に規定外の文字が使用されています"
 

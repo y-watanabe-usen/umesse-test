@@ -130,6 +130,7 @@ exports.createUploadCm = async (unisCustomerCd, id, body) => {
   cm.uploadSystem = body.uploadSystem;
   cm.status = constants.cmStatus.EXTERNAL_UPLOADING;
   cm.timestamp = timestamp();
+  if (cm.uploadError) cm.uploadError = 0;
 
   let ret;
   try {
@@ -201,6 +202,7 @@ exports.deleteUploadCm = async (unisCustomerCd, id) => {
   // DynamoDBのデータ更新
   cm.status = constants.cmStatus.EXTERNAL_UPLOADING;
   cm.timestamp = timestamp();
+  if (cm.uploadError) cm.uploadError = 0;
 
   let ret;
   try {

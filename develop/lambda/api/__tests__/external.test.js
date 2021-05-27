@@ -31,38 +31,6 @@ describe("外部連携CMデータ", () => {
     const data = {
       unisCustomers: [
         {
-          unisCustomerCd: "060000010",
-          cmMetas: [
-            {
-              dataProcessType: "02",
-              cmId: "060000010-c-00000001",
-              cmName: "時報A",
-              description: "テストCMです",
-              sceneCd: "01",
-            },
-          ],
-        },
-        {
-          unisCustomerCd: "060000002",
-          cmMetas: [
-            {
-              dataProcessType: "02",
-              cmId: "060000002-c-00000001",
-              cmName: "時報A",
-              cmCommentManuscript: "テストCMです",
-            },
-          ],
-        },
-        {
-          unisCustomerCd: "060000020",
-          cmMetas: [
-            {
-              dataProcessType: "03",
-              cmId: "060000020-c-00000001",
-            },
-          ],
-        },
-        {
           unisCustomerCd: "060000000",
           cmMetas: [
             {
@@ -78,6 +46,78 @@ describe("外部連携CMデータ", () => {
               sceneCd: "01",
               url: expect.anything(),
               fileName: "060000000-c-00000001.aac",
+            },
+          ],
+        },
+        {
+          unisCustomerCd: "060000002",
+          cmMetas: [
+            {
+              dataProcessType: "02",
+              cmId: "060000002-c-00000001",
+              cmName: "時報A",
+              cmCommentManuscript: "テストCMです",
+            },
+          ],
+        },
+        {
+          unisCustomerCd: "060000010",
+          cmMetas: [
+            {
+              dataProcessType: "02",
+              cmId: "060000010-c-00000001",
+              cmName: "時報A",
+              description: "テストCMです",
+              sceneCd: "01",
+            },
+          ],
+        },
+        {
+          unisCustomerCd: "060000020",
+          cmMetas: [
+            {
+              dataProcessType: "03",
+              cmId: "060000020-c-00000001",
+            },
+          ],
+        },
+        {
+          unisCustomerCd: "060000100",
+          cmMetas: [
+            {
+              dataProcessType: "01",
+              cmId: "060000100-c-00000001",
+              cmName: "時報A",
+              description: "テストCMです",
+              cmCommentManuscript: "テストCMです",
+              startDatetime: "2020-01-01T12:34:56+09:00",
+              endDatetime: "9999-12-31T23:59:59+09:00",
+              productionType: "01",
+              contentTime: 60,
+              sceneCd: "01",
+              url: expect.anything(),
+              fileName: "060000100-c-00000001.aac",
+            },
+          ],
+        },
+        {
+          unisCustomerCd: "060000110",
+          cmMetas: [
+            {
+              dataProcessType: "02",
+              cmId: "060000110-c-00000001",
+              cmName: "時報A",
+              description: "テストCMです",
+              sceneCd: "01",
+            },
+          ],
+        },
+        {
+          unisCustomerCd: "060000120",
+          cmMetas: [
+            {
+              dataProcessType: "03",
+              cmId: "060000120-c-00000001",
             },
           ],
         },
@@ -228,6 +268,114 @@ describe("外部連携CMデータ連携完了", () => {
       `users/${cmData[2].unisCustomerCd}/cm/${cmId}.aac`
     );
     expect(ret).toEqual(expect.anything());
+  });
+
+  test("[error] 外部連携CMデータ連携完了　作成失敗", async () => {
+    const data = {
+      dataProcessType: "09",
+      cmId: cmData[3].cm[0].cmId,
+      errorCode: "E001",
+      errorMessage: "CMの追加に失敗しました",
+    };
+    await expect(
+      completeExternalCm(cmData[3].unisCustomerCd, "center", data)
+    ).resolves.toEqual(data);
+
+    let ret;
+    // CMステータスの確認
+    ret = await dynamodbManager.get(
+      constants.dynamoDbTable().users,
+      { unisCustomerCd: cmData[3].unisCustomerCd },
+      { ProjectionExpression: "cm" }
+    );
+    expect(ret.Item.cm[0]).toEqual({
+      ...cmData[3].cm[0],
+      uploadError: 1,
+      uploadErrorCode: data.errorCode,
+      uploadErrorMessage: data.errorMessage,
+      status: "02",
+      timestamp: expect.anything(),
+    });
+
+    // 外部連携ステータスの確認
+    ret = await dynamodbManager.get(
+      constants.dynamoDbTable().external,
+      { unisCustomerCd: cmData[3].unisCustomerCd },
+      {}
+    );
+    expect(ret).toEqual({});
+  });
+
+  test("[error] 外部連携CMデータ連携完了　更新失敗", async () => {
+    const data = {
+      dataProcessType: "09",
+      cmId: cmData[4].cm[0].cmId,
+      errorCode: "E002",
+      errorMessage: "CMの更新に失敗しました",
+    };
+    await expect(
+      completeExternalCm(cmData[4].unisCustomerCd, "center", data)
+    ).resolves.toEqual(data);
+
+    let ret;
+    // CMステータスの確認
+    ret = await dynamodbManager.get(
+      constants.dynamoDbTable().users,
+      { unisCustomerCd: cmData[4].unisCustomerCd },
+      { ProjectionExpression: "cm" }
+    );
+    expect(ret.Item.cm[0]).toEqual({
+      ...cmData[4].cm[0],
+      uploadError: 1,
+      uploadErrorCode: data.errorCode,
+      uploadErrorMessage: data.errorMessage,
+      status: "12",
+      timestamp: expect.anything(),
+    });
+
+    // 外部連携ステータスの確認
+    ret = await dynamodbManager.get(
+      constants.dynamoDbTable().external,
+      { unisCustomerCd: cmData[4].unisCustomerCd },
+      {}
+    );
+    expect(ret).toEqual({});
+  });
+
+  test("[error] 外部連携CMデータ連携完了　解除失敗", async () => {
+    const data = {
+      dataProcessType: "09",
+      cmId: cmData[5].cm[0].cmId,
+      errorCode: "E003",
+      errorMessage: "CMの解除に失敗しました",
+    };
+    await expect(
+      completeExternalCm(cmData[5].unisCustomerCd, "center", data)
+    ).resolves.toEqual(data);
+
+    let ret;
+    // CMステータスの確認
+    ret = await dynamodbManager.get(
+      constants.dynamoDbTable().users,
+      { unisCustomerCd: cmData[5].unisCustomerCd },
+      { ProjectionExpression: "cm" }
+    );
+    expect(ret.Item.cm[0]).toEqual({
+      ...cmData[5].cm[0],
+      uploadError: 1,
+      uploadErrorCode: data.errorCode,
+      uploadErrorMessage: data.errorMessage,
+      status: "12",
+      timestamp: expect.anything(),
+    });
+
+    // 外部連携ステータスの確認
+    ret = await dynamodbManager.get(
+      constants.dynamoDbTable().external,
+      { unisCustomerCd: cmData[4].unisCustomerCd },
+      {}
+    );
+    expect(ret).toEqual({});
   });
 
   test("[error] 外部連携CMデータ連携完了　データ存在しない", async () => {
