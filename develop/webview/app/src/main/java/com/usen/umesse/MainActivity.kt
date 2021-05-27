@@ -32,10 +32,8 @@ class MainActivity : Activity() {
             }
         }
 
-//        val url: String =
-//            BuildConfig.LAUNCH_URL + "?unisCustomerCd=${Application.localData.unisCustomerCd}"
         val url: String =
-            BuildConfig.LAUNCH_URL + "?unisCustomerCd=300000000"
+            BuildConfig.LAUNCH_URL + "?unisCustomerCd=${Application.localData.unisCustomerCd}"
         Log.d(TAG, "launch url: $url")
         webView.loadUrl(url)
     }
