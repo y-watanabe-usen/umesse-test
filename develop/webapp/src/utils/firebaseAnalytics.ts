@@ -1,6 +1,6 @@
-import firebase from 'firebase/app';
-import 'firebase/app';
-import 'firebase/analytics';
+import firebase from "firebase/app";
+import "firebase/app";
+import "firebase/analytics";
 import Constants from "@/utils/constants";
 import * as formatDate from "@/utils/formatDate";
 
@@ -37,6 +37,7 @@ const selectNarration = (id: string) => {
     content_type: Constants.CATEGORY.NARRATION,
     content_id: id,
     timestamp: formatDate.convertDatestringToDateTime(now),
+    env: process.env.NODE_ENV,
   });
 };
 
@@ -47,6 +48,7 @@ const selectStartChime = (id: string) => {
     content_type: "start-chime",
     content_id: id,
     timestamp: formatDate.convertDatestringToDateTime(now),
+    env: process.env.NODE_ENV,
   });
 };
 
@@ -57,6 +59,7 @@ const selectEndChime = (id: string) => {
     content_type: "end-chime",
     content_id: id,
     timestamp: formatDate.convertDatestringToDateTime(now),
+    env: process.env.NODE_ENV,
   });
 };
 
@@ -67,6 +70,7 @@ const selectBgm = (id: string) => {
     content_type: Constants.CATEGORY.BGM,
     content_id: id,
     timestamp: formatDate.convertDatestringToDateTime(now),
+    env: process.env.NODE_ENV,
   });
 };
 
@@ -77,6 +81,7 @@ const selectTemplate = (id: string) => {
     content_type: Constants.CATEGORY.TEMPLATE,
     content_id: id,
     timestamp: formatDate.convertDatestringToDateTime(now),
+    env: process.env.NODE_ENV,
   });
 };
 
@@ -87,6 +92,7 @@ const selectFree = (id: string) => {
     content_type: Constants.CATEGORY.FREE,
     content_id: id,
     timestamp: formatDate.convertDatestringToDateTime(now),
+    env: process.env.NODE_ENV,
   });
 };
 
@@ -97,6 +103,7 @@ const setRecording = (id: string) => {
     content_type: Constants.CATEGORY.RECORDING,
     content_id: id,
     timestamp: formatDate.convertDatestringToDateTime(now),
+    env: process.env.NODE_ENV,
   });
 };
 
@@ -107,6 +114,7 @@ const setTts = (id: string) => {
     content_type: Constants.CATEGORY.TTS,
     content_id: id,
     timestamp: formatDate.convertDatestringToDateTime(now),
+    env: process.env.NODE_ENV,
   });
 };
 
@@ -119,6 +127,7 @@ const pressButtonPlayTrial = (id: string, type: string, screen: string) => {
     type: type,
     content_id: id,
     timestamp: formatDate.convertDatestringToDateTime(now),
+    env: process.env.NODE_ENV,
   });
 };
 
@@ -130,6 +139,7 @@ const pressButtonManuscript = (id: string, screen: string) => {
     screen_name: screen,
     content_id: id,
     timestamp: formatDate.convertDatestringToDateTime(now),
+    env: process.env.NODE_ENV,
   });
 };
 
@@ -141,6 +151,7 @@ const pressButtonEditTitleAndDescription = (id: string, screen: string) => {
     screen_name: screen,
     content_id: id,
     timestamp: formatDate.convertDatestringToDateTime(now),
+    env: process.env.NODE_ENV,
   });
 };
 
@@ -153,6 +164,7 @@ const pressButtonChange = (id: string, type: string, screen: string) => {
     type: type,
     content_id: id,
     timestamp: formatDate.convertDatestringToDateTime(now),
+    env: process.env.NODE_ENV,
   });
 };
 
@@ -165,6 +177,7 @@ const pressButtonRemove = (id: string, type: string, screen: string) => {
     type: type,
     content_id: id,
     timestamp: formatDate.convertDatestringToDateTime(now),
+    env: process.env.NODE_ENV,
   });
 };
 
@@ -176,6 +189,7 @@ const pressButtonSave = (cm: SaveContents, screen: string) => {
     screen_name: screen,
     contents: cm,
     timestamp: formatDate.convertDatestringToDateTime(now),
+    env: process.env.NODE_ENV,
   });
 };
 
@@ -187,6 +201,7 @@ const pressButtonSaveEdit = (cm: string, screen: string) => {
     screen_name: screen,
     contents: cm,
     timestamp: formatDate.convertDatestringToDateTime(now),
+    env: process.env.NODE_ENV,
   });
 };
 
@@ -198,6 +213,7 @@ const pressButtonUpload = (id: string, screen: string) => {
     screen_name: screen,
     content_id: id,
     timestamp: formatDate.convertDatestringToDateTime(now),
+    env: process.env.NODE_ENV,
   });
 };
 
@@ -209,6 +225,7 @@ const pressButtonUnupload = (id: string, screen: string) => {
     screen_name: screen,
     content_id: id,
     timestamp: formatDate.convertDatestringToDateTime(now),
+    env: process.env.NODE_ENV,
   });
 };
 
@@ -220,6 +237,7 @@ const pressButtonEditContent = (id: string, screen: string) => {
     screen_name: screen,
     content_id: id,
     timestamp: formatDate.convertDatestringToDateTime(now),
+    env: process.env.NODE_ENV,
   });
 };
 
@@ -230,6 +248,7 @@ const screenView = (screen: string) => {
     app_name: "UMESSE",
     screen_name: screen,
     timestamp: formatDate.convertDatestringToDateTime(now),
+    env: process.env.NODE_ENV,
   });
 };
 
@@ -240,6 +259,7 @@ const selectIndustry = (industryCd: string, screen: string) => {
     industry_cd: industryCd,
     screen_name: screen,
     timestamp: formatDate.convertDatestringToDateTime(now),
+    env: process.env.NODE_ENV,
   });
 };
 
@@ -250,11 +270,9 @@ const selectScene = (sceneCd: string, screen: string) => {
     scene_cd: sceneCd,
     screen_name: screen,
     timestamp: formatDate.convertDatestringToDateTime(now),
+    env: process.env.NODE_ENV,
   });
 };
-
-// 試聴の再生、停止ボタン必要？
-// 原稿をコピーするボタン（フリー入力）
 
 const analytics = {
   setUserId,
