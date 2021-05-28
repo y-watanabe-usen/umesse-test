@@ -1,13 +1,13 @@
 package com.usen.umesse
 
-import android.app.Activity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.webkit.*
 import android.widget.LinearLayout
+import androidx.appcompat.app.AppCompatActivity
 
-class MainActivity : Activity() {
+class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate.")
