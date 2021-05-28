@@ -48,9 +48,6 @@ open class MdmIntentReceiver : BroadcastReceiver() {
 
         MdmClient.sendBroadcast(context, usenCustomer)
         Application.localData!!.unisCustomerCd = usenCustomer.unis_customer_cd
-        val intent = Intent(context, MainActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-        startActivity(context, intent, null)
     }
 
     companion object {
