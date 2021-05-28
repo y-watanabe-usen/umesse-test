@@ -160,5 +160,5 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: app-stg-release.apk
-        path: ./develop/twa/app/build/outputs/apk/stg/release/app-stg-release.apk
+        path: ./develop/webview/app/build/outputs/apk/stg/release/app-stg-release.apk
         retention-days: 3

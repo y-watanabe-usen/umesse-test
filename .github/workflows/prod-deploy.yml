@@ -160,5 +160,5 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: app-prod-release.apk
-        path: ./develop/twa/app/build/outputs/apk/prod/release/app-prod-release.apk
+        path: ./develop/webview/app/build/outputs/apk/prod/release/app-prod-release.apk
         retention-days: 3
