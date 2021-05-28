@@ -1,5 +1,6 @@
 package com.usen.umesse
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -22,12 +23,16 @@ class SplashScreen : AppCompatActivity() {
         )
 
         Handler().postDelayed(Runnable {
-            Application.mdm.requestCustomerInfo()
+            if (Application.localData.unisCustomerCd != null) {
+                val intent = Intent(applicationContext, MainActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent, null)
+                overridePendingTransition(0, 0)
+                this@SplashScreen.finish()
+            } else {
+                findViewById<TextView>(R.id.splashError).visibility = View.VISIBLE
+            }
         }, 3000)
-
-        Handler().postDelayed(Runnable {
-            findViewById<TextView>(R.id.splashError).visibility = View.VISIBLE
-        }, 10000)
     }
 
     override fun onDestroy() {

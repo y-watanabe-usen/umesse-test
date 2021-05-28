@@ -29,6 +29,7 @@ class Application : Application() {
         localDataRepository = LocalDataRepository(UMesseSharedPreferences(applicationContext))
         mdmClient = MdmClient(applicationContext).apply {
             registerMdmReceiver()
+            requestCustomerInfo()
         }
     }
 
