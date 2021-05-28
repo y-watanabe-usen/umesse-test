@@ -3,7 +3,9 @@ package com.usen.umesse
 import android.app.Activity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.webkit.*
+import android.widget.LinearLayout
 
 class MainActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,7 +26,21 @@ class MainActivity : Activity() {
             it.settings.loadWithOverviewMode = true
             it.settings.cacheMode = WebSettings.LOAD_NO_CACHE
             it.settings.setAppCacheEnabled(false)
-            it.webViewClient = WebViewClient()
+            it.webViewClient = object : WebViewClient() {
+                override fun shouldOverrideUrlLoading(webView: WebView?, url: String?): Boolean {
+                    return false
+                }
+
+                override fun onReceivedError(
+                    view: WebView?,
+                    errorCode: Int,
+                    description: String?,
+                    failingUrl: String?
+                ) {
+                    view?.visibility = View.GONE
+                    findViewById<LinearLayout>(R.id.webViewError).visibility = View.VISIBLE
+                }
+            }
             it.webChromeClient = object : WebChromeClient() {
                 override fun onPermissionRequest(request: PermissionRequest) {
                     request.grant(request.resources)

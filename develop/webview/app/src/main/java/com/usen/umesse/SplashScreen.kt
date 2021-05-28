@@ -4,8 +4,10 @@ import android.app.Activity
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
+import android.widget.TextView
 
 class SplashScreen : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,6 +24,10 @@ class SplashScreen : Activity() {
         Handler().postDelayed(Runnable {
             Application.mdm.requestCustomerInfo()
         }, 3000)
+
+        Handler().postDelayed(Runnable {
+            findViewById<TextView>(R.id.splashError).visibility = View.VISIBLE
+        }, 10000)
     }
 
     override fun onDestroy() {
