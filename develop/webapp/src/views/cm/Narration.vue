@@ -491,7 +491,7 @@ export default defineComponent({
 
     const state = reactive({
       sort: 1,
-      activeIndustryCd: "02",
+      activeIndustryCd: "10",
       activeSceneCd: null as string | null,
       narrations: [] as NarrationItem[],
       scenes: [] as Scene[],
