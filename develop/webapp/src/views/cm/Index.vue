@@ -582,7 +582,8 @@
         </template>
         <template #footer>
           <ModalFooter>
-            <Button type="primary" @click="toBackFunction">終了する</Button>
+            <Button type="secondary" @click="toHome">トップ画面に戻る</Button>
+            <Button type="primary" @click="toManagement">CM一覧を表示する</Button>
           </ModalFooter>
         </template>
       </ModalDialog>
@@ -1345,6 +1346,7 @@ export default defineComponent({
       toBackFunction,
       inputFocusBlur,
       isCreateCmLoadingModalAppear,
+      toManagement,
     };
   },
 });
