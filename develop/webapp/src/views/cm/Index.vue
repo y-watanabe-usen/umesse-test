@@ -138,33 +138,33 @@
                   <transition>
                     <DropdownMenu
                       v-if="isNarrationDropdownAppear[index]"
-                      :width="320"
+                      :width="360"
                       :targetWidth="30"
                       :targetHeight="30"
                       direction="down"
                       :params="[
                         {
-                          title: '自分で録音した音声と入れ替える',
+                          title: '録音して入れ替える',
                           action: () => {
                             changeRecording(index);
                           },
                         },
                         {
-                          title: '他のナレーションと入れ替える',
+                          title: 'テキスト音声合成(フリー入力)と入れ替える',
                           action: () => {
-                            changeNarration(index);
+                            changeVoiceFree(index);
                           },
                         },
                         {
-                          title: '音声合成(テンプレート)から入れ替える',
+                          title: 'テキスト音声合成(テンプレート)と入れ替える',
                           action: () => {
                             changeVoiceTemplate(index);
                           },
                         },
                         {
-                          title: '音声合成(フリー入力)から入れ替える',
+                          title: '既存素材と入れ替える',
                           action: () => {
-                            changeVoiceFree(index);
+                            changeNarration(index);
                           },
                         },
                         {
