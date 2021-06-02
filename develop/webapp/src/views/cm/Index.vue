@@ -204,27 +204,27 @@
                       direction="down"
                       :params="[
                         {
-                          title: '自分で録音して音声を追加',
+                          title: '録音を追加',
                           action: () => {
                             addRecording();
                           },
                         },
                         {
-                          title: '他のナレーションを追加',
+                          title: 'テキスト音声合成(フリー入力)を追加',
                           action: () => {
-                            addNarration();
+                            addVoiceFree();
                           },
                         },
                         {
-                          title: '音声合成(テンプレート)を追加',
+                          title: 'テキスト音声合成(テンプレート)を追加',
                           action: () => {
                             addVoiceTemplate();
                           },
                         },
                         {
-                          title: '音声合成(フリー入力)を追加',
+                          title: '既存素材を追加',
                           action: () => {
-                            addVoiceFree();
+                            addNarration();
                           },
                         },
                       ]"
