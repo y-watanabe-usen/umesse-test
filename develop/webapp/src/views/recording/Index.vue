@@ -23,7 +23,7 @@
               </p>
               <div class="right">
                 <div class="indicator-area">
-                  <h5 class="volume-unit">db</h5>
+                  <h5 class="volume-unit">dB</h5>
                   <div class="volume">
                     <h5>-60</h5>
                     <h5>-50</h5>
