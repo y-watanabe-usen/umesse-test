@@ -146,7 +146,7 @@ function requestUdsApi(serviceCd, lastdate) {
 function targetDate(interval) {
   const target = new Date().getTime() - interval;
   const time = new Date(target);
-  //UDS側が+9:00するので、UTCで渡す
+  time.setHours(time.getHours() + 9);
   return time.toISOString();
 }
 
