@@ -23,8 +23,8 @@ describe("getIndustryScenesのテスト", () => {
     {
       industryCd: "02",
       expected: [
-        { cd: "901", name: "録音" },
-        { cd: "902", name: "音声合成" },
+        { cd: "901", name: "過去に録音した素材" },
+        { cd: "902", name: "過去にテキスト音声合成した素材" },
       ],
     },
     {
@@ -486,8 +486,8 @@ describe("getManagementScenesのテスト", () => {
     { cd: "051", name: "営業終了案内" },
     { cd: "052", name: "コロナ関連" },
     { cd: "053", name: "誕生日演出" },
-    { cd: "901", name: "録音" },
-    { cd: "902", name: "音声合成" },
+    { cd: "901", name: "過去に録音した素材" },
+    { cd: "902", name: "過去にテキスト音声合成した素材" },
   ];
   test(`全シーン一覧が返ること`, () => {
     expect(common.getManagementScenes()).toEqual(expected);
