@@ -19,7 +19,7 @@ exports.handler = async (event, context) => {
   );
 
   // lastdateの取得
-  let lastdate = targetDate(60 * 60);
+  let lastdate = targetDate(60 * 60 * 1000); // 1h ago
   if (process.env.lastdate) lastdate = process.env.lastdate;
   debuglog(`Start Sync: ${lastdate} -----`);
 
