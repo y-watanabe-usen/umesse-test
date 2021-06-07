@@ -193,7 +193,7 @@
               :maxLength="Constants.MAX_LENGTH_DESCRIPTION"
             />
           </FormGroup>
-          <FormGroup title="シーン">
+          <FormGroup title="シーン" titleDescription="(振り分け保存先)">
             <SelectBox
               v-model="scene"
               :options="
@@ -926,6 +926,11 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import "@/scss/_variables.scss";
 @include fade_animation;
+
+::v-deep .form-group .title {
+  width: 162px;
+}
+
 .btn:focus {
   box-shadow: none;
 }

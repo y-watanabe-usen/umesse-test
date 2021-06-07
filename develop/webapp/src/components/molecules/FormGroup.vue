@@ -3,6 +3,9 @@
     <p class="title">
       {{ title }}
       <span class="required" v-if="required">※必須</span>
+      <span class="title-description" v-if="titleDescription != ''">
+        {{ titleDescription }}
+      </span>
     </p>
     <div class="input-wrapper">
       <slot />
@@ -28,6 +31,10 @@ export default defineComponent({
       default: false,
     },
     description: {
+      type: String,
+      default: "",
+    },
+    titleDescription: {
       type: String,
       default: "",
     },
@@ -68,6 +75,14 @@ export default defineComponent({
       color: rgb(0, 157, 255);
       font-size: 16px;
       font-weight: normal;
+      line-height: 1em;
+    }
+    .title-description {
+      position: absolute;
+      top: 50px;
+      left: 0;
+      font-size: 19px;
+      font-weight: $font_weight_bold;
       line-height: 1em;
     }
   }
