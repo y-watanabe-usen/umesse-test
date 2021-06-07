@@ -536,7 +536,7 @@
               @blur="inputFocusBlur(false)"
             />
           </FormGroup>
-          <FormGroup title="シーン">
+          <FormGroup title="シーン" titleDescription="(振り分け保存先)">
             <SelectBox
               v-model="scene"
               :options="
@@ -546,7 +546,7 @@
               "
             />
           </FormGroup>
-          <FormGroup title="アップロード先">
+          <FormGroup title="アップロード先" description="保存後に「音声CM一覧画面」からアップロード先を変更することができます。">
             <SelectBox
               v-model="uploadSystem"
               :options="
