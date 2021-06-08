@@ -4,7 +4,6 @@
       <h2>
         <img src="@/assets/logo_umesse.png" />
       </h2>
-      <p class="title">店内CMを作成する</p>
       <ul class="nav">
         <li>
           <router-link :to="{ name: 'Setting' }">
@@ -112,7 +111,7 @@ header {
   padding-left: 30px;
   padding-right: 30px;
   padding-top: 50px;
-  margin-bottom: 46px;
+  margin-bottom: 10px;
   height: 40px;
   h2 {
     min-width: 210px;
@@ -123,12 +122,6 @@ header {
       height: 32px;
       margin-right: 20px;
     }
-  }
-  .title {
-    color: white;
-    font-size: 23px;
-    font-weight: $font_weight_bold;
-    line-height: 40px;
   }
   .nav {
     @include flex_end;

@@ -1,12 +1,13 @@
 <template>
-  <li class="main-menu-item" :class="{ 'is-wide': isWide }">
+  <li class="main-menu-voice-item">
     <div class="base" @click="onClick">
       <h2>
         <span class="icon"><slot name="icon"/></span>
         <span class="title"><slot name="title"/></span>
+        <span class="subtitle"><slot name="subtitle"/></span>
       </h2>
     </div>
-    <p class="description">
+    <p class="description" :class="descriptionColor">
       <slot name="description" />
     </p>
   </li>
@@ -17,29 +18,21 @@ import { defineComponent, reactive } from "vue";
 import { useRouter } from "vue-router";
 
 export default defineComponent({
-  name: "MainMenuItem",
+  name: "MainMenuVoiceItem",
   props: {
     to: {
       type: String,
     },
-    isWide: {
-      type: Boolean,
-      default: false,
-    },
-    clickFunction: {
-      type: Function,
-      required: false,
+    descriptionColor: {
+      type: String,
+      default: "",
     },
   },
   setup(props) {
     const router = useRouter();
     const state = reactive({});
     const onClick = () => {
-      if (props.clickFunction) {
-        props.clickFunction();
-      } else {
-        router.push({ name: props.to });
-      }
+      router.push({ name: props.to });
     };
     return {
       state,
@@ -52,17 +45,18 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import "@/scss/_variables.scss";
 
-.main-menu-item {
+.main-menu-voice-item {
   margin-bottom: 36px;
+  width: calc((100% - 120px) / 2);
   .base {
     border-radius: 10px;
     background-color: white;
-    padding-top: 28px;
-    padding-bottom: 28px;
+    padding-top: 17px;
+    padding-bottom: 17px;
     padding-left: 24px;
     padding-right: 24px;
     box-shadow: $box_shadow;
-    min-height: 152px;
+    min-height: 180px;
     cursor: pointer;
     h2 {
       display: block;
@@ -88,6 +82,14 @@ export default defineComponent({
       line-height: 1.5em;
       text-align: center;
     }
+    .subtitle {
+      color: black;
+      display: block;
+      font-size: 15px;
+      font-weight: $font_weight_bold;
+      line-height: 1.6em;
+      text-align: center;
+    }
   }
   .description {
     color: white;
@@ -99,28 +101,6 @@ export default defineComponent({
   }
   .black {
     color: black;
-  }
-  &.is-wide {
-    margin-bottom: 20px;
-    .base {
-      h2 {
-        @include flex_center;
-        margin: 0 auto;
-      }
-      padding-top: 4px;
-      padding-bottom: 4px;
-      min-height: auto;
-      .icon {
-        margin-bottom: 0;
-        margin-left: 0;
-        margin-right: 6px;
-        width: 80px;
-        height: 80px;
-      }
-      .title {
-        line-height: 80px;
-      }
-    }
   }
 }
 </style>
