@@ -73,7 +73,7 @@ export default defineComponent({
     .title {
       color: black;
       display: block;
-      font-size: 23px;
+      font-size: 24px;
       font-weight: $font_weight_bold;
       line-height: 1.5em;
       text-align: center;
@@ -81,15 +81,15 @@ export default defineComponent({
     .subtitle {
       color: black;
       display: block;
-      font-size: 15px;
-      font-weight: $font_weight_bold;
+      font-size: 16px;
+      font-weight: 500;
       line-height: 1.6em;
       text-align: center;
     }
   }
   .description {
     color: black;
-    font-size: 15px;
+    font-size: 16px;
     font-weight: $font_weight_bold;
     line-height: 1.6em;
     text-align: center;

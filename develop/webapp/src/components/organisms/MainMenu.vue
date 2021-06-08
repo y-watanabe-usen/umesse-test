@@ -18,9 +18,9 @@
               <template #icon
                 ><img src="@/assets/icon_home_template.svg"
               /></template>
-              <template #title>テキスト音声合成</template>
+              <template #title>音声合成</template>
               <template #description
-                >テキスト音声読み上げして<br />ナレーションを作る</template
+                >テキストを音声読み上げして<br />ナレーションを作る</template
               >
             </MainMenuItem>
             <MainMenuItem to="Narration">
