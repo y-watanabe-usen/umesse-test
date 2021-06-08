@@ -138,7 +138,7 @@
                   <transition>
                     <DropdownMenu
                       v-if="isNarrationDropdownAppear[index]"
-                      :width="360"
+                      :width="300"
                       :targetWidth="30"
                       :targetHeight="30"
                       direction="down"
@@ -150,13 +150,13 @@
                           },
                         },
                         {
-                          title: 'テキスト音声合成(フリー入力)と入れ替える',
+                          title: '音声合成(フリー入力)と入れ替える',
                           action: () => {
                             changeVoiceFree(index);
                           },
                         },
                         {
-                          title: 'テキスト音声合成(テンプレート)と入れ替える',
+                          title: '音声合成(テンプレート)と入れ替える',
                           action: () => {
                             changeVoiceTemplate(index);
                           },
@@ -198,7 +198,7 @@
                   <transition>
                     <DropdownMenu
                       v-if="isNarrationDropdownAppear[narrations.length]"
-                      :width="320"
+                      :width="260"
                       :targetWidth="100"
                       :targetHeight="100"
                       direction="down"
@@ -210,13 +210,13 @@
                           },
                         },
                         {
-                          title: 'テキスト音声合成(フリー入力)を追加',
+                          title: '音声合成(フリー入力)を追加',
                           action: () => {
                             addVoiceFree();
                           },
                         },
                         {
-                          title: 'テキスト音声合成(テンプレート)を追加',
+                          title: '音声合成(テンプレート)を追加',
                           action: () => {
                             addVoiceTemplate();
                           },
