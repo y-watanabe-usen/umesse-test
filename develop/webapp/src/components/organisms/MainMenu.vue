@@ -65,7 +65,7 @@
           <MessageDialogContents>
             <div>
               <ul class="voice-item">
-                <MainMenuVoiceItem to="VoiceFree" descriptionColor="black">
+                <MainMenuVoiceItem to="VoiceFree">
                   <template #icon
                     ><img src="@/assets/icon_home_free.svg"
                   /></template>
@@ -74,7 +74,7 @@
                     >自由にテキストを入力して<br />音声読み上げする</template
                   >
                 </MainMenuVoiceItem>
-                <MainMenuVoiceItem to="VoiceTemplate" descriptionColor="black">
+                <MainMenuVoiceItem to="VoiceTemplate">
                   <template #icon
                     ><img src="@/assets/icon_home_template.svg"
                   /></template>

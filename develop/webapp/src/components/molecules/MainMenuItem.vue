@@ -97,9 +97,6 @@ export default defineComponent({
     text-align: center;
     margin-top: 16px;
   }
-  .black {
-    color: black;
-  }
   &.is-wide {
     margin-bottom: 20px;
     .base {

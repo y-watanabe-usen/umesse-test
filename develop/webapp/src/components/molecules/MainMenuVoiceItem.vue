@@ -7,7 +7,7 @@
         <span class="subtitle"><slot name="subtitle"/></span>
       </h2>
     </div>
-    <p class="description" :class="descriptionColor">
+    <p class="description">
       <slot name="description" />
     </p>
   </li>
@@ -22,10 +22,6 @@ export default defineComponent({
   props: {
     to: {
       type: String,
-    },
-    descriptionColor: {
-      type: String,
-      default: "",
     },
   },
   setup(props) {
@@ -92,15 +88,12 @@ export default defineComponent({
     }
   }
   .description {
-    color: white;
+    color: black;
     font-size: 15px;
     font-weight: $font_weight_bold;
     line-height: 1.6em;
     text-align: center;
     margin-top: 16px;
-  }
-  .black {
-    color: black;
   }
 }
 </style>
