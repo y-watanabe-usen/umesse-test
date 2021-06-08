@@ -83,7 +83,7 @@
                   >
                   <template #subtitle>※多言語対応あり</template>
                   <template #description
-                    >サンプルの原稿をベースに固有名詞などを<br />穴埋めして音声読み上げする<br />※一部コンテンツは多言語対応</template
+                    >サンプルの原稿をベースに固有名詞<br />などを穴埋めして音声読み上げする<br />※一部コンテンツは多言語対応</template
                   >
                 </MainMenuVoiceItem>
               </ul>
