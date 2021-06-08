@@ -7,7 +7,7 @@
         <slot name="line2" />
       </div>
     </div>
-    <div class="operations">
+    <div class="operations" :class="{'is-wide': isWide}">
       <slot name="operations" />
     </div>
   </li>
@@ -18,6 +18,12 @@ import { defineComponent, reactive } from "vue";
 
 export default defineComponent({
   name: "ListItem",
+  props: {
+    isWide: {
+      type: Boolean,
+      default: false,
+    },
+  },
   setup() {
     const state = reactive({});
     return {
@@ -119,6 +125,9 @@ export default defineComponent({
     padding-right: 0;
     flex-grow: 0;
     flex-shrink: 0;
+    &.is-wide {
+      width: 250px;
+    }
     ::v-deep button {
       width: 120px;
       font-size: 16px;

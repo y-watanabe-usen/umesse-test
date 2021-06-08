@@ -37,7 +37,7 @@
                 />
               </ListHeader>
             </template>
-            <ListItem v-for="cm in cms" :key="cm.id">
+            <ListItem :isWide="true" v-for="cm in cms" :key="cm.id">
               <template #title>
                 <h2>{{ cm.title }}</h2>
               </template>
