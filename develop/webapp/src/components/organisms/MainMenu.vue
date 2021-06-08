@@ -1,57 +1,55 @@
 <template>
   <div>
-    <BasicLayout>
-      <ul class="main-menu">
-        <div class="menu-item-center">
-          <div class="menu-item-title">音声CMの作成</div>
-          <div class="menu-item">
-            <MainMenuItem to="Recording">
-              <template #icon
-                ><img src="@/assets/icon_home_recording.svg"
-              /></template>
-              <template #title>録音</template>
-              <template #description
-                >声を録音して<br />ナレーションを作る</template
-              >
-            </MainMenuItem>
-            <MainMenuItem :clickFunction="openSelectVoiceModal">
-              <template #icon
-                ><img src="@/assets/icon_home_template.svg"
-              /></template>
-              <template #title>音声合成</template>
-              <template #description
-                >テキストを音声読み上げして<br />ナレーションを作る</template
-              >
-            </MainMenuItem>
-            <MainMenuItem to="Narration">
-              <template #icon
-                ><img src="@/assets/icon_home_narration.svg"
-              /></template>
-              <template #title>既存素材の選択</template>
-              <template #description
-                >過去に作成したナレーション、<br />USENが収録したナレーション<br />の中から素材を選択する</template
-              >
-            </MainMenuItem>
-          </div>
-        </div>
-        <div class="menu-item-bottom">
-          <MainMenuItem to="Management" :isWide="true">
+    <ul class="main-menu">
+      <div class="menu-item-center">
+        <div class="menu-item-title">音声CMの作成</div>
+        <div class="menu-item">
+          <MainMenuItem to="Recording">
             <template #icon
-              ><img src="@/assets/icon_home_management.svg"
+              ><img src="@/assets/icon_home_recording.svg"
             /></template>
-            <template #title>音声CM一覧</template>
-            <template #description>過去に作成した音声CMの管理をする</template>
+            <template #title>録音</template>
+            <template #description
+              >声を録音して<br />ナレーションを作る</template
+            >
           </MainMenuItem>
-          <!-- <MainMenuItem to="Home" :isWide="true">
+          <MainMenuItem :clickFunction="openSelectVoiceModal">
+            <template #icon
+              ><img src="@/assets/icon_home_template.svg"
+            /></template>
+            <template #title>音声合成</template>
+            <template #description
+              >テキストを音声読み上げして<br />ナレーションを作る</template
+            >
+          </MainMenuItem>
+          <MainMenuItem to="Narration">
+            <template #icon
+              ><img src="@/assets/icon_home_narration.svg"
+            /></template>
+            <template #title>既存素材の選択</template>
+            <template #description
+              >過去に作成したナレーション、<br />USENが収録したナレーション<br />の中から素材を選択する</template
+            >
+          </MainMenuItem>
+        </div>
+      </div>
+      <div class="menu-item-bottom">
+        <MainMenuItem to="Management" :isWide="true">
+          <template #icon
+            ><img src="@/assets/icon_home_management.svg"
+          /></template>
+          <template #title>音声CM一覧</template>
+          <template #description>過去に作成した音声CMの管理をする</template>
+        </MainMenuItem>
+        <!-- <MainMenuItem to="Home" :isWide="true">
           <template #icon><img src="@/assets/icon_home_order.svg"/></template>
           <template #title>発注する</template>
           <template #description
             >ご希望の内容で、弊社の制作チームに店内CMを発注します。<br />※発注は有料サービスになります。</template
           >
         </MainMenuItem> -->
-        </div>
-      </ul>
-    </BasicLayout>
+      </div>
+    </ul>
     <!-- modal -->
     <transition>
       <ModalDialog
@@ -78,9 +76,7 @@
                   <template #icon
                     ><img src="@/assets/icon_home_template.svg"
                   /></template>
-                  <template #title
-                    >テンプレートの選択</template
-                  >
+                  <template #title>テンプレートの選択</template>
                   <template #subtitle>※多言語対応あり</template>
                   <template #description
                     >サンプルの原稿をベースに固有名詞<br />などを穴埋めして音声読み上げする<br />※一部コンテンツは多言語対応</template
