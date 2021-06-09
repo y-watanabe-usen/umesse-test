@@ -56,11 +56,11 @@
                     getCmStatusName(cm.status)
                   }}</span>
                   <span
-                    v-if="cm.uploadError && cm.uploadError == 1"
-                    class="uploadError"
+                    class="upload-error"
                     @click="errorUpload(cm)"
                   >
-                    Upload Error
+                    <img src="@/assets/icon_error.svg" />
+                      エラー
                   </span>
                 </p>
               </template>
@@ -936,18 +936,5 @@ export default defineComponent({
 }
 .dropdown-toggle::after {
   content: none;
-}
-.uploadError {
-  display: inline-block;
-  margin-right: 20px;
-  margin-left: 14px;
-  font-weight: $font_weight_bold;
-  height: 30px;
-  line-height: 30px;
-  padding-left: 20px;
-  padding-right: 20px;
-  border-radius: 15px;
-  color: rgb(186, 48, 48);
-  background-color: rgb(255, 229, 229);
 }
 </style>

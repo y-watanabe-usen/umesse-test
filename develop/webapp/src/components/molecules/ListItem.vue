@@ -114,6 +114,19 @@ export default defineComponent({
             background-color: rgb(255, 229, 229);
           }
         }
+        .upload-error {
+          display: inline-block;
+          margin-right: 20px;
+          margin-left: 14px;
+          font-weight: $font_weight_bold;
+          height: 30px;
+          line-height: 30px;
+          padding-left: 20px;
+          padding-right: 20px;
+          border-radius: 15px;
+          color: rgb(186, 48, 48);
+          background-color: rgb(255, 229, 229);
+        }
       }
     }
   }
