@@ -1,8 +1,8 @@
 "use strict";
 
-const { execSync } = require("child_process");
-const fs = require("fs");
 const assert = require("assert");
+const fs = require("fs");
+const path = require("path");
 const {
   constants,
   debuglog,
@@ -166,87 +166,95 @@ exports.handler = async (event, context) => {
 };
 
 // CM音圧調整処理
-function convertCm(unisCustomerCd, id) {
-  return new Promise(async function (resolve, reject) {
-    const workDir = `/tmp/umesse/${unisCustomerCd}/convert`;
-    const ffmpeg = `ffmpeg -hide_banner`;
+async function convertCm(unisCustomerCd, id) {
+  try {
+    // UMesseConverter.
+    const converter = new UMesseConverter(s3Manager);
 
-    try {
-      execSync(`mkdir -p ${workDir} && rm -f ${workDir}/*`);
-
-      let path = `users/${unisCustomerCd}/${constants.resourceCategory.CM}/${id}`;
-      let ret = await s3Manager.get(constants.s3Bucket().users, `${path}.mp3`);
-      if (!ret || !ret.Body) throw "getObject failed";
-
-      fs.writeFileSync(`${workDir}/${id}.mp3`, ret.Body);
-
-      let command = "";
-      let data = "";
-
-      // 1. wav変換
-      command = `${ffmpeg} -y -i ${workDir}/${id}.mp3 \
-        -ar 44100 -acodec pcm_s16le -ac 2 -map_metadata -1 -flags +bitexact ${workDir}/tmp_1.wav`;
-      debuglog(command);
-      execSync(command);
-
-      // 2. ラウドネス値取得 (1回目)
-      command = `${ffmpeg} -i ${workDir}/tmp_1.wav \
-        -af loudnorm=I=-24.0:LRA=+20.0:tp=-2.0:print_format=json -f null - 2>&1 | tail -12`;
-      console.log(command);
-      ret = execSync(command);
-      data = JSON.parse(ret.toString());
-
-      // 3. ラウドネス調整 + 音圧調整
-      command = `${ffmpeg} -y -i ${workDir}/tmp_1.wav \
-        -af loudnorm=I=-24.0:LRA=+20.0:tp=-2.0:measured_I=${data.input_i}:measured_LRA=${data.input_lra}:measured_tp=${data.input_tp}:measured_thresh=${data.input_thresh}:offset=${data.target_offset},acompressor=threshold=-35dB:ratio=1.7:attack=200,alimiter=limit=-17dB:level=false:level_out=17dB \
-        -ar 44100 ${workDir}/tmp_2.wav`;
-      debuglog(command);
-      execSync(command);
-
-      // 4. ラウドネス値取得 (2回目)
-      command = `${ffmpeg} -i ${workDir}/tmp_2.wav \
-        -af loudnorm=I=-12.0:LRA=+10.0:tp=-2.0:print_format=json -f null - 2>&1 | tail -12`;
-      debuglog(command);
-      ret = execSync(command);
-      data = JSON.parse(ret.toString());
-
-      // 5. ラウドネス調整 + HE-AACv2化
-      command = `${ffmpeg} -y -i ${workDir}/tmp_2.wav \
-        -af volume=0dB -acodec libfdk_aac -profile:a aac_he_v2 -ab 48k -ar 48000 -ac 2 ${workDir}/${id}.aac`;
-      if (data.input_i > -17.5) {
-        command = `${ffmpeg} -y -i ${workDir}/tmp_2.wav \
-          -af volume=-${
-            parseFloat(data.input_i) + 17.5
-          }dB -acodec libfdk_aac -profile:a aac_he_v2 -ab 48k -ar 48000 -ac 2 ${workDir}/${id}.aac`;
-      }
-      debuglog(command);
-      execSync(command);
-
-      // S3へPUT
-      const fileStream = fs.createReadStream(`${workDir}/${id}.aac`);
-      fileStream.on("error", (e) => {
-        throw e;
-      });
-
-      path = `users/${unisCustomerCd}/${constants.resourceCategory.CM}/${id}`;
-      ret = await s3Manager.put(
-        constants.s3Bucket().users,
-        `${path}.aac`,
-        fileStream
-      );
-      if (!ret) throw "putObject failed";
-
-      const _ = await s3Manager.delete(
-        constants.s3Bucket().users,
-        `${path}.mp3`
-      );
-      debuglog("converter complete");
-      resolve();
-    } catch (e) {
-      errorlog(e);
-      reject("converter failed");
+    const workDir = converter.getWorkDir(unisCustomerCd, id);
+    // Initialized workdir.
+    if (!fs.existsSync(workDir)) {
+      fs.mkdirSync(workDir, { recursive: true });
     }
-  });
+
+    // 出力ファイルパス.
+    const output = path.join(workDir, `${id}.aac`);
+    const tmpOutput1 = path.join(workDir, `tmp_1.wav`);
+    const tmpOutput2 = path.join(workDir, `tmp_2.wav`);
+
+    // S3から該当CM取得
+    let target = `users/${unisCustomerCd}/${constants.resourceCategory.CM}/${id}`;
+    if (
+      !(await converter.getContents(
+        constants.s3Bucket().users,
+        `${target}.mp3`,
+        workDir,
+        `${id}.mp3`
+      ))
+    )
+      throw "getObject failed";
+
+    // 1. wav変換
+    debuglog(`1. converter to wav`);
+    await converter.toWav(`${workDir}/${id}.mp3`, tmpOutput1);
+
+    // 2. ラウドネス値取得 (1回目)
+    debuglog(`2. converter get loudnorm`);
+    let loudnorm = await converter.getLoudnorm(tmpOutput1, {
+      I: "-24.0",
+      LRA: "+20.0",
+      tp: "-2.0",
+    });
+    console.log(loudnorm);
+
+    // 3. ラウドネス調整 + 音圧調整
+    debuglog(`3. converter run loudnorm`);
+    await converter.runLoudnorm(tmpOutput1, tmpOutput2, {
+      I: "-24.0",
+      LRA: "+20.0",
+      tp: "-2.0",
+      input_I: loudnorm.input_i,
+      input_LRA: loudnorm.input_lra,
+      input_tp: loudnorm.input_tp,
+      input_thresh: loudnorm.input_thresh,
+      target_offset: loudnorm.target_offset,
+    });
+
+    // 4. ラウドネス値取得 (2回目)
+    debuglog(`4. converter get loudnorm`);
+    loudnorm = await converter.getLoudnorm(tmpOutput2, {
+      I: "-12.0",
+      LRA: "+10.0",
+      tp: "-2.0",
+    });
+    console.log(loudnorm);
+
+    // 5. ラウドネス調整 + HE-AACv2化
+    debuglog(`5. converter run loudnorm convert`);
+    await converter.runLoudnormConvert(tmpOutput2, output, {
+      input_I: loudnorm.input_i,
+    });
+
+    // S3へPUT
+    const fileStream = fs.createReadStream(output);
+    fileStream.on("error", (e) => {
+      throw e;
+    });
+
+    let ret = await s3Manager.put(
+      constants.s3Bucket().users,
+      `${target}.aac`,
+      fileStream
+    );
+    if (!ret) throw "putObject failed";
+
+    await s3Manager.delete(constants.s3Bucket().users, `${target}.mp3`);
+    debuglog("converter complete");
+    return;
+  } catch (e) {
+    errorlog(e.message);
+    return "converter failed";
+  }
 }
 
 function errorResponse(e) {
