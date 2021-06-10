@@ -5,6 +5,7 @@
     :disabled="isDisabled"
     @input="onUpdate"
     @change="onChange"
+    @click.prevent=""
   />
 </template>
 
