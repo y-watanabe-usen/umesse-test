@@ -5,7 +5,7 @@
     :disabled="isDisabled"
     @input="onUpdate"
     @change="onChange"
-    @click.prevent="onClick"
+    @click.prevent=""
   />
 </template>
 
@@ -36,14 +36,10 @@ export default defineComponent({
         context.emit("change", event.target.value);
       }
     };
-    const onClick = () => {
-      context.emit("click");
-    };
     return {
       state,
       onUpdate,
       onChange,
-      onClick,
     };
   },
 });
