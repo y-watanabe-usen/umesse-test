@@ -19,7 +19,7 @@ export default defineComponent({
   name: "ListItem",
   props: {
     isNarrow: {
-      type: String,
+      type: Boolean,
       default: false,
     },
   },
