@@ -64,7 +64,7 @@
               </div>
             </FormGroup>
             <FormGroup v-if="isVisibleTime" title="時間" class="time">
-              <TimeInput v-model="time" />
+              <TimeInput v-model="time" @click="openTimeModal" />
               <div>
                 <p class="errorMessage errorTime">
                   {{ errorMessageTime }}
@@ -169,6 +169,28 @@
         </template>
       </ModalDialog>
     </transition>
+    <transition>
+      <ModalDialog v-if="isTimeModalAppear" @close="closeTimeModal">
+        <template #header>
+          <ModalHeader title="時間設定" @close="closeTimeModal" />
+        </template>
+        <template #contents>
+          <TimeSelector v-model="tmpTime" />
+        </template>
+        <template #footer>
+          <ModalFooter>
+            <Button type="secondary" @click="closeTimeModal"
+              >キャンセル</Button
+            >
+            <Button
+              type="primary"
+              @click="confirmTime"
+              >確定</Button
+            >
+          </ModalFooter>
+        </template>
+      </ModalDialog>
+    </transition>
     <ModalLoading v-if="isLoading" />
     <transition>
       <ModalErrorDialog
@@ -200,6 +222,7 @@ import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
 import SelectBox from "@/components/atoms/SelectBox.vue";
 import TimeInput from "@/components/atoms/TimeInput.vue";
+import TimeSelector from "@/components/molecules/TimeSelector.vue";
 import { TemplateItem } from "umesseapi/models";
 import Constants from "@/utils/constants";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
@@ -239,6 +262,7 @@ export default defineComponent({
     TextArea,
     SelectBox,
     TimeInput,
+    TimeSelector,
     ModalLoading,
     Percentage,
     Count,
@@ -295,6 +319,11 @@ export default defineComponent({
       close: closeModal,
     } = useModalController();
     const {
+      isApper: isTimeModalAppear,
+      // open: openTimeModal,
+      close: closeTimeModal,
+    } = useModalController();
+    const {
       isApper: isLoading,
       loadingMessage,
       open: openLoadingModal,
@@ -317,6 +346,7 @@ export default defineComponent({
       duration: computed(() => audioPlayer.getDuration()),
       narrations: computed(() => cm.narrations),
       customerName: "",
+      tmpTime: "21:00",
       time: "21:00",
       percentage: 10,
       count: 3,
@@ -376,6 +406,10 @@ export default defineComponent({
       });
       state.playLang = selectLang[0].cd;
       isModalAppear.value = true;
+    };
+    const openTimeModal = () => {
+      state.tmpTime = state.time;
+      isTimeModalAppear.value = true;
     };
     const play = async () => {
       try {
@@ -574,6 +608,11 @@ export default defineComponent({
       audioPlayer.changePlaybackTime(value);
     };
 
+    const confirmTime = () => {
+      state.time = state.tmpTime;
+      closeTimeModal();
+    };
+
     return {
       ...toRefs(state),
       ttsSpeakers,
@@ -600,6 +639,9 @@ export default defineComponent({
       isModalAppear,
       openModal,
       closeModal,
+      isTimeModalAppear,
+      openTimeModal,
+      closeTimeModal,
       isLoading,
       loadingMessage,
       openLoadingModal,
@@ -609,6 +651,7 @@ export default defineComponent({
       errorMessage,
       openErrorModal,
       closeErrorModal,
+      confirmTime,
       Constants,
     };
   },
