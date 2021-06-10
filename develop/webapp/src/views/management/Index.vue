@@ -37,7 +37,7 @@
                 />
               </ListHeader>
             </template>
-            <ListItem :isWide="true" v-for="cm in cms" :key="cm.id">
+            <ListItem v-for="cm in cms" :key="cm.id" :isNarrow="true">
               <template #title>
                 <h2>{{ cm.title }}</h2>
               </template>
@@ -56,11 +56,12 @@
                     getCmStatusName(cm.status)
                   }}</span>
                   <span
+                    v-if="cm.uploadError && cm.uploadError == 1"
                     class="upload-error"
                     @click="errorUpload(cm)"
                   >
                     <img src="@/assets/icon_error.svg" />
-                      エラー
+                    エラー
                   </span>
                 </p>
               </template>
@@ -422,7 +423,6 @@ import useModalController from "@/mixins/modalController";
 import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
 import { useCmStore } from "@/store/cm";
-
 export default defineComponent({
   components: {
     BasicLayout,
@@ -654,7 +654,6 @@ export default defineComponent({
         Constants.UPLOAD_SYSTEMS[2].cd,
         cm.manuscript
       );
-
       fetchScene();
     };
     const upload = async (cm: CmItem) => {
@@ -823,11 +822,9 @@ export default defineComponent({
     const closeCmAbsentModal = () => {
       toHome();
     };
-
     const changeAudioPlayerSlider = (value: number) => {
       audioPlayer.changePlaybackTime(value);
     };
-
     const getCmStatusName = (status: string) => {
       const uploadSystem =
         authUser.serviceCd === Constants.SERVICE_CD_UMUSIC
@@ -838,13 +835,11 @@ export default defineComponent({
         uploadSystem
       );
     };
-
     const errorUpload = (cm: CmItem) => {
       state.uploadErrorCode = cm.uploadErrorCode;
       state.uploadErrorMessage = cm.uploadErrorMessage;
       openUploadErrorModal();
     };
-
     return {
       ...toRefs(state),
       inputScenesList,
@@ -926,11 +921,9 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import "@/scss/_variables.scss";
 @include fade_animation;
-
 ::v-deep .form-group .title {
   width: 162px;
 }
-
 .btn:focus {
   box-shadow: none;
 }
@@ -938,3 +931,4 @@ export default defineComponent({
   content: none;
 }
 </style>
+  

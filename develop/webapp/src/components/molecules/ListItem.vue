@@ -7,7 +7,7 @@
         <slot name="line2" />
       </div>
     </div>
-    <div class="operations" :class="{'is-wide': isWide}">
+    <div class="operations" :class="{ 'is-narrow': isNarrow }">
       <slot name="operations" />
     </div>
   </li>
@@ -15,12 +15,11 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from "vue";
-
 export default defineComponent({
   name: "ListItem",
   props: {
-    isWide: {
-      type: Boolean,
+    isNarrow: {
+      type: String,
       default: false,
     },
   },
@@ -35,7 +34,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 @import "@/scss/_variables.scss";
-
 .list-item {
   @include flex_between;
   width: 100%;
@@ -116,8 +114,7 @@ export default defineComponent({
         }
         .upload-error {
           display: inline-block;
-          margin-right: 20px;
-          margin-left: 14px;
+          margin-right: 14px;
           font-weight: $font_weight_bold;
           height: 30px;
           line-height: 30px;
@@ -126,6 +123,11 @@ export default defineComponent({
           border-radius: 15px;
           color: rgb(186, 48, 48);
           background-color: rgb(255, 229, 229);
+          img {
+            display: inline-block;
+            padding-top: 3px;
+            padding-bottom: 3px;
+          }
         }
       }
     }
@@ -138,9 +140,6 @@ export default defineComponent({
     padding-right: 0;
     flex-grow: 0;
     flex-shrink: 0;
-    &.is-wide {
-      width: 250px;
-    }
     ::v-deep button {
       width: 120px;
       font-size: 16px;
@@ -178,6 +177,9 @@ export default defineComponent({
           height: 30px;
         }
       }
+    }
+    &.is-narrow {
+      width: 260px;
     }
   }
 }
