@@ -240,7 +240,6 @@
               title="BGM"
               size="flexible"
               :contentTitle="bgm.title"
-              :duration="`${convertNumberToTime(bgm.seconds)}`"
               :volume="bgm.volume"
               :contentTitleName="'bgm'"
               @toggleSlider="toggleBgmSlider"
