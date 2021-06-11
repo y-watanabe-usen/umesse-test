@@ -7,7 +7,7 @@
         <slot name="line2" />
       </div>
     </div>
-    <div class="operations">
+    <div class="operations" :class="{ 'is-narrow': isNarrow }">
       <slot name="operations" />
     </div>
   </li>
@@ -15,9 +15,14 @@
 
 <script lang="ts">
 import { defineComponent, reactive } from "vue";
-
 export default defineComponent({
   name: "ListItem",
+  props: {
+    isNarrow: {
+      type: Boolean,
+      default: false,
+    },
+  },
   setup() {
     const state = reactive({});
     return {
@@ -29,7 +34,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 @import "@/scss/_variables.scss";
-
 .list-item {
   @include flex_between;
   width: 100%;
@@ -108,6 +112,23 @@ export default defineComponent({
             background-color: rgb(255, 229, 229);
           }
         }
+        .upload-error {
+          display: inline-block;
+          margin-right: 14px;
+          font-weight: $font_weight_bold;
+          height: 30px;
+          line-height: 30px;
+          padding-left: 20px;
+          padding-right: 20px;
+          border-radius: 15px;
+          color: rgb(186, 48, 48);
+          background-color: rgb(255, 229, 229);
+          img {
+            display: inline-block;
+            padding-top: 3px;
+            padding-bottom: 3px;
+          }
+        }
       }
     }
   }
@@ -156,6 +177,9 @@ export default defineComponent({
           height: 30px;
         }
       }
+    }
+    &.is-narrow {
+      width: 260px;
     }
   }
 }
