@@ -29,6 +29,13 @@
               <template #line1>
                 <p>{{ chime.description }}</p>
               </template>
+              <template #line2>
+                  <p>
+                    <span v-if="chime.seconds" class="duration">{{
+                      convertNumberToTime(chime.seconds)
+                    }}</span>
+                  </p>
+              </template>
               <template #operations>
                 <Button
                   class="btn-play"
@@ -102,6 +109,7 @@ import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
 import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
 import PlayDialogContents from "@/components/molecules/PlayDialogContents.vue";
+import { convertNumberToTime } from "@/utils/formatDate";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { audioService, resourcesService } from "@/services";
 import analytics from "@/utils/firebaseAnalytics";
@@ -243,6 +251,7 @@ export default defineComponent({
       play,
       stop,
       selectChimeAndOpenPlayModal,
+      convertNumberToTime,
       stopAndClosePlayModal,
       fetchChime,
       changeAudioPlayerSlider,
