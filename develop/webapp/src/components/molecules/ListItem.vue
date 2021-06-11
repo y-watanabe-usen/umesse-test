@@ -1,5 +1,5 @@
 <template>
-  <li class="list-item">
+  <li class="list-item" :class="{ 'is-selected': isSelected }">
     <div class="contents">
       <div class="wrapper">
         <slot name="title" />
@@ -22,6 +22,10 @@ export default defineComponent({
       type: Boolean,
       default: false,
     },
+    isSelected: {
+      type: Boolean,
+      default: false,
+    },
   },
   setup() {
     const state = reactive({});
@@ -39,6 +43,10 @@ export default defineComponent({
   width: 100%;
   height: 150px;
   border-bottom: 1px solid rgb(240, 240, 240);
+  &.is-selected {
+    background-color: rgb(216, 229, 242);
+  }
+
   &.scene {
     height: 92px;
     .contents {
