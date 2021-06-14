@@ -34,7 +34,12 @@
                 />
               </ListHeader>
             </template>
-            <ListItem v-for="bgm in bgms" :key="bgm.id">
+            <ListItem
+              v-for="bgm in bgms"
+              :key="bgm.id"
+              :isSelected="bgm.id === selectedBgm?.id"
+              @click="selectBgm(bgm)"
+            >
               <template #title>
                 <h2>{{ bgm.title }}</h2>
               </template>
@@ -193,6 +198,7 @@ export default defineComponent({
     const clickIndustry = (industryCd: string) => {
       if (state.activeIndustryCd !== industryCd) {
         state.activeIndustryCd = industryCd;
+        state.selectedBgm = null;
         fetchBgm();
       }
     };

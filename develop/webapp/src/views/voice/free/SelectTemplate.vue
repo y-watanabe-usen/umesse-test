@@ -55,6 +55,8 @@
               <ListItem
                 v-for="freeItem in freeItems"
                 :key="freeItem.contentsId"
+                :isSelected="freeItem.id === selectedFreeItem?.id"
+                @click="setManuscript(freeItem)"
               >
                 <template #title>
                   <h2>{{ freeItem.title }}</h2>
@@ -220,6 +222,7 @@ export default defineComponent({
         analytics.selectIndustry(industryCd, Constants.SCREEN.SELECT_TEMPLATE);
         state.activeIndustryCd = industryCd;
         state.activeSceneCd = null;
+        state.selectedFreeItem = null;
         fetchScene();
       }
     };
@@ -300,6 +303,7 @@ export default defineComponent({
       clickIndustry,
       clickScene,
       selectFreeTemplate,
+      setManuscript,
       setManuscriptAndOpenDocumentModal,
       convertDatestringToDate,
       convertNumberToTime,

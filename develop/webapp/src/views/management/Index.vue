@@ -37,7 +37,13 @@
                 />
               </ListHeader>
             </template>
-            <ListItem v-for="cm in cms" :key="cm.id" :isNarrow="true">
+            <ListItem
+              v-for="cm in cms"
+              :key="cm.id"
+              :isNarrow="true"
+              :isSelected="cm.id === selectedCm?.id"
+              @click="selectCm(cm)"
+            >
               <template #title>
                 <h2>{{ cm.title }}</h2>
               </template>
@@ -85,6 +91,7 @@
                   class="btn-more"
                   type="button"
                   @click.stop="toggleDropdown(cm.id)"
+                  @click="selectCm(cm)"
                 >
                   <img src="@/assets/icon_more_black.svg" />
                   <transition>
@@ -101,9 +108,10 @@
                           action: () => {
                             selectCmAndOpenSaveModal(cm);
                           },
-                          isDisabled: disabledEditTitleAndDescriptionStatus.includes(
-                            cm.status
-                          ),
+                          isDisabled:
+                            disabledEditTitleAndDescriptionStatus.includes(
+                              cm.status
+                            ),
                         },
                         {
                           title: 'コンテンツ編集',
@@ -556,10 +564,8 @@ export default defineComponent({
       open: openErrorModal,
       close: closeErrorModal,
     } = useErrorModalController();
-    const {
-      isApper: isCmAbsentApper,
-      open: openCmAbsentModal,
-    } = useModalController();
+    const { isApper: isCmAbsentApper, open: openCmAbsentModal } =
+      useModalController();
     const {
       isApper: isUploadErrorApper,
       open: openUploadErrorModal,
