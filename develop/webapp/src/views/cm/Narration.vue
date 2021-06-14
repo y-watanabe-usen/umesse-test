@@ -56,6 +56,7 @@
                 v-for="narration in narrations"
                 :key="narration.contentsId"
                 :isSelected="narration.id === selectedNarration?.id"
+                @click="selectNarration(narration)"
               >
                 <template #title>
                   <h2>{{ narration.title }}</h2>
