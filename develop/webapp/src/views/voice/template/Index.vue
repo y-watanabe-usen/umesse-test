@@ -55,6 +55,8 @@
               <ListItem
                 v-for="template in templates"
                 :key="template.contentsId"
+                :isSelected="template.id === selectedTemplate?.id"
+                @click="selectTemplate(template)"
               >
                 <template #title>
                   <h2>{{ template.title }}</h2>
@@ -182,6 +184,7 @@ export default defineComponent({
         analytics.selectIndustry(industryCd, Constants.SCREEN.VOICE_TEMPLATE);
         state.activeIndustryCd = industryCd;
         state.activeSceneCd = null;
+        state.selectedTemplate = null;
         fetchScene();
       }
     };

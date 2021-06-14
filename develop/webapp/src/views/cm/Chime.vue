@@ -22,7 +22,12 @@
                 />
               </ListHeader>
             </template>
-            <ListItem v-for="chime in chimes" :key="chime.id">
+            <ListItem
+              v-for="chime in chimes"
+              :key="chime.id"
+              :isSelected="chime.id === selectedChime?.id"
+              @click="selectChime(chime)"
+            >
               <template #title>
                 <h2>{{ chime.title }}</h2>
               </template>
@@ -30,11 +35,11 @@
                 <p>{{ chime.description }}</p>
               </template>
               <template #line2>
-                  <p>
-                    <span v-if="chime.seconds" class="duration">{{
-                      convertNumberToTime(chime.seconds)
-                    }}</span>
-                  </p>
+                <p>
+                  <span v-if="chime.seconds" class="duration">{{
+                    convertNumberToTime(chime.seconds)
+                  }}</span>
+                </p>
               </template>
               <template #operations>
                 <Button
