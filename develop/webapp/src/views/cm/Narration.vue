@@ -55,6 +55,8 @@
               <ListItem
                 v-for="narration in narrations"
                 :key="narration.contentsId"
+                :isSelected="narration.id === selectedNarration?.id"
+                @click="selectNarration(narration)"
               >
                 <template #title>
                   <h2>{{ narration.title }}</h2>
@@ -525,6 +527,7 @@ export default defineComponent({
         analytics.selectIndustry(industryCd, Constants.SCREEN.NARRATION);
         state.activeIndustryCd = industryCd;
         state.activeSceneCd = null;
+        state.selectedNarration = null;
         fetchScene();
       }
     };
