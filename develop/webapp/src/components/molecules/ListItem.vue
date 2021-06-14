@@ -44,7 +44,7 @@ export default defineComponent({
   height: 150px;
   border-bottom: 1px solid rgb(240, 240, 240);
   &.is-selected {
-    background-color: rgb(216, 229, 242);
+    background-color: rgb(231, 242, 251);
   }
 
   &.scene {
