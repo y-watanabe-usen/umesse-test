@@ -465,15 +465,15 @@ export default defineComponent({
           }
           &::-webkit-meter-optimum-value {
             background-color: rgb(78, 203, 136);
-            transition: width 200ms;
+            transition: width 1s;
           }
           &::-webkit-meter-suboptimum-value {
             background-color: rgb(204, 209, 79);
-            transition: width 200ms;
+            transition: width 1s;
           }
           &::-webkit-meter-even-less-good-value {
             background-color: rgb(209, 79, 79);
-            transition: width 200ms;
+            transition: width 1s;
           }
         }
         &.progress-meter {
@@ -504,15 +504,15 @@ export default defineComponent({
           }
           &::-webkit-meter-optimum-value {
             background-color: rgb(78, 203, 136);
-            transition: width 200ms;
+            transition: width 1s;
           }
           &::-webkit-meter-suboptimum-value {
             background-color: rgb(204, 209, 79);
-            transition: width 200ms;
+            transition: width 1s;
           }
           &::-webkit-meter-even-less-good-value {
             background-color: rgb(209, 79, 79);
-            transition: width 200ms;
+            transition: width 1s;
           }
         }
         &.progress-meter {
