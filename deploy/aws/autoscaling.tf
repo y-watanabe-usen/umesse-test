@@ -2,7 +2,7 @@
 ## umesse-users read
 resource "aws_appautoscaling_target" "umesse_users_read" {
   max_capacity       = 100
-  min_capacity       = 5
+  min_capacity       = 10
   resource_id        = "table/umesse-users"
   scalable_dimension = "dynamodb:table:ReadCapacityUnits"
   service_namespace  = "dynamodb"
@@ -26,7 +26,7 @@ resource "aws_appautoscaling_policy" "umesse_users_read_policy" {
 ## umesse-users write
 resource "aws_appautoscaling_target" "umesse_users_write" {
   max_capacity       = 100
-  min_capacity       = 5
+  min_capacity       = 10
   resource_id        = "table/umesse-users"
   scalable_dimension = "dynamodb:table:WriteCapacityUnits"
   service_namespace  = "dynamodb"
@@ -50,7 +50,7 @@ resource "aws_appautoscaling_policy" "umesse_users_write_policy" {
 ## umesse-contents read
 resource "aws_appautoscaling_target" "umesse_contents_read" {
   max_capacity       = 100
-  min_capacity       = 5
+  min_capacity       = 10
   resource_id        = "table/umesse-contents"
   scalable_dimension = "dynamodb:table:ReadCapacityUnits"
   service_namespace  = "dynamodb"
@@ -74,7 +74,7 @@ resource "aws_appautoscaling_policy" "umesse_contents_read_policy" {
 ## umesse-contents write
 resource "aws_appautoscaling_target" "umesse_contents_write" {
   max_capacity       = 100
-  min_capacity       = 5
+  min_capacity       = 10
   resource_id        = "table/umesse-contents"
   scalable_dimension = "dynamodb:table:WriteCapacityUnits"
   service_namespace  = "dynamodb"
@@ -98,7 +98,7 @@ resource "aws_appautoscaling_policy" "umesse_contents_write_policy" {
 ## umesse-external read
 resource "aws_appautoscaling_target" "umesse_external_read" {
   max_capacity       = 100
-  min_capacity       = 5
+  min_capacity       = 10
   resource_id        = "table/umesse-external"
   scalable_dimension = "dynamodb:table:ReadCapacityUnits"
   service_namespace  = "dynamodb"
@@ -122,7 +122,7 @@ resource "aws_appautoscaling_policy" "umesse_external_read_policy" {
 ## umesse-external write
 resource "aws_appautoscaling_target" "umesse_external_write" {
   max_capacity       = 100
-  min_capacity       = 5
+  min_capacity       = 10
   resource_id        = "table/umesse-external"
   scalable_dimension = "dynamodb:table:WriteCapacityUnits"
   service_namespace  = "dynamodb"
