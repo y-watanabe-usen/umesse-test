@@ -1,7 +1,7 @@
 <template>
   <div class="list">
     <slot name="header" />
-    <ul>
+    <ul id="list-scroll">
       <slot />
     </ul>
   </div>

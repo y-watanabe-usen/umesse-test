@@ -234,6 +234,10 @@ export default defineComponent({
         DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_SELECT_TEMPLATE,
         templateItem
       );
+      displayCache.set(
+        DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_NARRATION_SCROLL_POSITION,
+        document.getElementById("list-scroll")?.scrollTop
+      );
     };
     const removeDisplayCache = () => {
       displayCache.remove(DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_INDUSTRY_CD);
@@ -241,6 +245,9 @@ export default defineComponent({
       displayCache.remove(DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_TEMPLATES);
       displayCache.remove(DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_SCENES);
       displayCache.remove(DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_SORT);
+      displayCache.remove(
+        DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_NARRATION_SCROLL_POSITION
+      );
     };
 
     onMounted(async () => {
@@ -248,6 +255,16 @@ export default defineComponent({
       if (state.templates.length == 0) {
         fetchScene();
         await fetchTemplate();
+      }
+      const position =
+        displayCache.get<number>(
+          DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_NARRATION_SCROLL_POSITION
+        ) ?? 0;
+      const list = document.getElementById("list-scroll");
+      if (list != null || list != undefined) {
+        list.style.scrollBehavior = "auto";
+        list.scrollTo(0, position);
+        list.style.scrollBehavior = "smooth";
       }
     });
 
