@@ -3,7 +3,7 @@
     <BasicLayout>
       <template #header>
         <Header :clickBack="toHome">
-          <template #title>店内CMの管理</template>
+          <template #title>音声CM一覧</template>
           <template #buttons>
             <Button @click="fetchScene"> 更新 </Button>
           </template>
