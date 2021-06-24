@@ -49,7 +49,11 @@
               <h2>ライセンス</h2>
               <p class="lisence">
                 U MESSE<br />
-                Copyright © USEN CORPORATION All Rights Reserved.
+                Copyright © USEN CORPORATION All Rights Reserved.<br />
+                <br />
+                ReadSpeaker ® WebAPI<br />
+                「ReadSpeaker」は
+                HOYA株式会社またはHOYAグループ会社が保有する日本国およびその他の国における登録商標です。
               </p>
             </List>
           </div>
@@ -64,7 +68,8 @@
               ・本サービスの利用若しくは運営に支障を与える行為、または与える恐れのある行為<br />
               <br />
               ※上記の様な事項に該当する場合、サービス利用停止の措置を取らせていただきます。<br />
-              &emsp;詳細内容は、「USEN IoT PLATFORMサービス契約約款」をご確認ください。<br />
+              &emsp;詳細内容は、「USEN IoT
+              PLATFORMサービス契約約款」をご確認ください。<br />
             </p>
           </div>
         </div>
