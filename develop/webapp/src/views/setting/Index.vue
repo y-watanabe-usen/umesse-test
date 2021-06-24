@@ -50,6 +50,7 @@
               <p class="lisence">
                 U MESSE<br />
                 Copyright © USEN CORPORATION All Rights Reserved.<br />
+                <br />
                 ReadSpeaker ® WebAPI<br />
                 「ReadSpeaker」は
                 HOYA株式会社またはHOYAグループ会社が保有する日本国およびその他の国における登録商標です。
