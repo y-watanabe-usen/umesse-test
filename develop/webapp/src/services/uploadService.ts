@@ -5,6 +5,7 @@ import { UploadCreateRequestItem } from "@/models/uploadCreateRequestItem";
 export function useUploadService(uploadRepository: UploadApi) {
   const create = async (
     id: string,
+    unisCustomerCd: string,
     authToken: string,
     uploadSystem: string
   ) => {
@@ -14,6 +15,7 @@ export function useUploadService(uploadRepository: UploadApi) {
     try {
       const response = await uploadRepository.createUploadCm(
         id,
+        unisCustomerCd,
         authToken,
         requestModel
       );
@@ -23,9 +25,9 @@ export function useUploadService(uploadRepository: UploadApi) {
     }
   };
 
-  const remove = async (id: string, authToken: string) => {
+  const remove = async (id: string, unisCustomerCd: string, authToken: string) => {
     try {
-      const response = await uploadRepository.deleteUploadCm(id, authToken);
+      const response = await uploadRepository.deleteUploadCm(id, unisCustomerCd, authToken);
       return response.data;
     } catch (e) {
       throw UMesseErrorFromApiFactory(e);

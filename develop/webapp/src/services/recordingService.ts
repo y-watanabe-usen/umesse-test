@@ -14,9 +14,9 @@ export function useRecordingService(
   resourcesApi: UMesseApi.ResourcesApi,
   recordingApi: UMesseApi.RecordingApi
 ) {
-  const fetch = async (authToken: string) => {
+  const fetch = async (unisCustomerCd: string, authToken: string) => {
     try {
-      const response = await recordingApi.listUserRecording(authToken);
+      const response = await recordingApi.listUserRecording(unisCustomerCd, authToken);
       return response.data;
     } catch (e) {
       throw UMesseErrorFromApiFactory(e);
@@ -24,12 +24,14 @@ export function useRecordingService(
   };
 
   const upload = async (
+    unisCustomerCd: string,
     authToken: string,
     file: RecordingFile
   ): Promise<RecordingItem> => {
     return new Promise(function (resolve, reject) {
       recordingApi
         .createUserRecording(
+          unisCustomerCd,
           authToken,
           file.id,
           file.title,
@@ -45,13 +47,14 @@ export function useRecordingService(
   };
 
   const update = async (
+    unisCustomerCd: string,
     authToken: string,
     id: string,
     title: string,
     description: string
   ) => {
     try {
-      const response = await recordingApi.updateUserRecording(authToken, id, {
+      const response = await recordingApi.updateUserRecording(unisCustomerCd, authToken, id, {
         title: title,
         description: description,
       });
@@ -61,9 +64,9 @@ export function useRecordingService(
     }
   };
 
-  const remove = async (authToken: string, id: string) => {
+  const remove = async (unisCustomerCd: string, authToken: string, id: string) => {
     try {
-      const response = await recordingApi.deleteUserRecording(id, authToken);
+      const response = await recordingApi.deleteUserRecording(id, unisCustomerCd, authToken);
       return response.data;
     } catch (e) {
       throw UMesseErrorFromApiFactory(e);

@@ -394,6 +394,7 @@ import {
   recordingService,
   ttsService,
 } from "@/services";
+import { User } from "umesseapi/models";
 import analytics from "@/utils/firebaseAnalytics";
 import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
@@ -435,6 +436,7 @@ export default defineComponent({
     const { auth } = useGlobalStore();
     const cm = useCmStore();
     const authToken = <string>auth.getToken();
+    const authUser = <User>auth.getUserInfo();
     const sortList = common.getSort();
     const industries = common.getNarrationIndustries();
     const {
@@ -562,6 +564,7 @@ export default defineComponent({
       try {
         openLoadingModal();
         const response = await resourcesService.fetchNarration(
+          authUser.unisCustomerCd,
           authToken,
           state.activeIndustryCd,
           state.activeSceneCd,
@@ -688,12 +691,14 @@ export default defineComponent({
     const save = async (narration: NarrationItem) => {
       narration.category === Constants.CATEGORY.RECORDING
         ? await recordingService.update(
+            authUser.unisCustomerCd,
             authToken,
             narration.id,
             state.title,
             state.description
           )
         : await ttsService.update(
+            authUser.unisCustomerCd,
             authToken,
             narration.id,
             state.title,
@@ -730,8 +735,16 @@ export default defineComponent({
     };
     const remove = async (narrationId: string, narrationCategory: string) => {
       narrationCategory === Constants.CATEGORY.RECORDING
-        ? await recordingService.remove(authToken, narrationId)
-        : await ttsService.remove(authToken, narrationId);
+        ? await recordingService.remove(
+            authUser.unisCustomerCd,
+            authToken,
+            narrationId
+          )
+        : await ttsService.remove(
+            authUser.unisCustomerCd,
+            authToken,
+            narrationId
+          );
       fetchNarration();
     };
 

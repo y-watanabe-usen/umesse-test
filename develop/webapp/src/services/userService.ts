@@ -17,9 +17,9 @@ export function useUserService(
     }
   };
 
-  const getInfo = async (authToken: string) => {
+  const getInfo = async (unisCustomerCd: string, authToken: string) => {
     try {
-      const response = await userRepository.getUser(authToken);
+      const response = await userRepository.getUser(unisCustomerCd, authToken);
       return response.data;
     } catch (e) {
       throw UMesseErrorFromAuthFactory(e);

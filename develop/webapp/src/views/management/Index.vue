@@ -108,10 +108,9 @@
                           action: () => {
                             selectCmAndOpenSaveModal(cm);
                           },
-                          isDisabled:
-                            disabledEditTitleAndDescriptionStatus.includes(
-                              cm.status
-                            ),
+                          isDisabled: disabledEditTitleAndDescriptionStatus.includes(
+                            cm.status
+                          ),
                         },
                         {
                           title: 'コンテンツ編集',
@@ -564,8 +563,10 @@ export default defineComponent({
       open: openErrorModal,
       close: closeErrorModal,
     } = useErrorModalController();
-    const { isApper: isCmAbsentApper, open: openCmAbsentModal } =
-      useModalController();
+    const {
+      isApper: isCmAbsentApper,
+      open: openCmAbsentModal,
+    } = useModalController();
     const {
       isApper: isUploadErrorApper,
       open: openUploadErrorModal,
@@ -600,7 +601,11 @@ export default defineComponent({
     const fetchScene = async () => {
       try {
         openLoadingModal("");
-        const response = await cmService.fetch(authToken, state.sort);
+        const response = await cmService.fetch(
+          authUser.unisCustomerCd,
+          authToken,
+          state.sort
+        );
         state.sceneList = response[0];
         state.cmList = response[1];
         if (!state.cmList.length) {
@@ -652,6 +657,7 @@ export default defineComponent({
     };
     const save = async (cm: CmItem) => {
       await cmService.update(
+        authUser.unisCustomerCd,
         authToken,
         cm.id,
         state.title,
@@ -669,7 +675,12 @@ export default defineComponent({
           authUser.serviceCd === Constants.SERVICE_CD_UMUSIC
             ? Constants.UPLOAD_SYSTEM_UMUSIC
             : Constants.UPLOAD_SYSTEM_SSENCE;
-        await uploadService.create(authToken, cm.id, uploadSystem);
+        await uploadService.create(
+          cm.id,
+          authUser.unisCustomerCd,
+          authToken,
+          uploadSystem
+        );
         openUploadedModal();
       } catch (e) {
         openErrorModal(e);
@@ -682,7 +693,7 @@ export default defineComponent({
         if (!state.selectedCm) return;
         openLoadingModal("アップロード解除中");
         const cmId = state.selectedCm.id;
-        await uploadService.remove(cmId, authToken);
+        await uploadService.remove(cmId, authUser.unisCustomerCd, authToken);
         openUnUploadedModal();
       } catch (e) {
         openErrorModal(e);
@@ -692,7 +703,7 @@ export default defineComponent({
       }
     };
     const remove = async (cmId: string) => {
-      await cmService.remove(authToken, cmId);
+      await cmService.remove(authUser.unisCustomerCd, authToken, cmId);
       fetchScene();
     };
     const selectCmAndOpenPlayModal = async (cm: CmItem) => {
@@ -937,4 +948,3 @@ export default defineComponent({
   content: none;
 }
 </style>
-  

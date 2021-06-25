@@ -23,6 +23,7 @@ export enum UPLOAD_CM_STATE {
 
 export default function cmStore() {
   const { auth } = useGlobalStore();
+  const unisCustomerCd = () => <string>auth.getUserInfo()?.unisCustomerCd;
   const token = () => <string>auth.getToken();
 
   const state = reactive({
@@ -44,6 +45,7 @@ export default function cmStore() {
       state.displayCmItem.progress = 0;
 
       const iterator = cmService.createGenerator(
+        unisCustomerCd(),
         token(),
         state.displayCmItem.narrations,
         state.displayCmItem.startChime,
@@ -86,6 +88,7 @@ export default function cmStore() {
       });
       state.status = UPLOAD_CM_STATE.UPDATING;
       await cmService.update(
+        unisCustomerCd(),
         token(),
         state.displayCmItem.id,
         title,
@@ -119,7 +122,7 @@ export default function cmStore() {
   };
   const reset = () => {
     if (!state.displayCmItem.isEdit && state.displayCmItem.id) {
-      cmService.remove(token(), state.displayCmItem.id);
+      cmService.remove(unisCustomerCd(), token(), state.displayCmItem.id);
     }
     cmService.removeCacheAll();
     state.displayCmItem.reset();

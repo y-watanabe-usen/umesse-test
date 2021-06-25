@@ -36,6 +36,7 @@ describe("createのテスト", () => {
     const response = await uploadService.create(
       "123456789-c-12345678",
       "123456789",
+      "123456789",
       "01"
     );
 
@@ -54,7 +55,7 @@ describe("createのテスト", () => {
     jest.spyOn(axios, "request").mockRejectedValue({ data: responseJson });
 
     await expect(
-      uploadService.create("123456789-c-12345678", "123456789", "01")
+      uploadService.create("123456789-c-12345678", "123456789", "123456789", "01")
     ).rejects.toThrowError(expoectedError);
   });
 
@@ -70,7 +71,7 @@ describe("createのテスト", () => {
       .mockRejectedValue({ response: { status: 500 } });
 
     await expect(
-      uploadService.create("123456789-c-12345678", "123456789", "01")
+      uploadService.create("123456789-c-12345678", "123456789", "123456789", "01")
     ).rejects.toThrowError(expoectedError);
   });
 });
@@ -103,6 +104,7 @@ describe("removeのテスト", () => {
 
     const response = await uploadService.remove(
       "123456789-c-12345678",
+      "123456789",
       "123456789"
     );
 
@@ -121,7 +123,7 @@ describe("removeのテスト", () => {
     jest.spyOn(axios, "request").mockRejectedValue({ data: responseJson });
 
     await expect(
-      uploadService.remove("123456789-c-12345678", "123456789")
+      uploadService.remove("123456789-c-12345678", "123456789", "123456789")
     ).rejects.toThrowError(expoectedError);
   });
 
@@ -137,7 +139,7 @@ describe("removeのテスト", () => {
       .mockRejectedValue({ response: { status: 500 } });
 
     await expect(
-      uploadService.remove("123456789-c-12345678", "123456789")
+      uploadService.remove("123456789-c-12345678", "123456789", "123456789")
     ).rejects.toThrowError(expoectedError);
   });
 });

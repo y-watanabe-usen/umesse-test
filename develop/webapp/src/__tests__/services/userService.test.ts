@@ -74,7 +74,7 @@ describe("getInfoのテスト", () => {
     };
     jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
 
-    const response = await userService.getInfo("authToken");
+    const response = await userService.getInfo("unisCustomerCd", "authToken");
 
     expect(response.contractCd).toBe("N01234567890123456789");
   });
@@ -89,7 +89,7 @@ describe("getInfoのテスト", () => {
 
     jest.spyOn(axios, "request").mockRejectedValue({ data: responseJson });
 
-    await expect(userService.getInfo("authToken")).rejects.toThrowError(
+    await expect(userService.getInfo("unisCustomerCd", "authToken")).rejects.toThrowError(
       expoectedError
     );
   });
@@ -105,7 +105,7 @@ describe("getInfoのテスト", () => {
       .spyOn(axios, "request")
       .mockRejectedValue({ response: { status: 500 } });
 
-    await expect(userService.getInfo("authToken")).rejects.toThrowError(
+    await expect(userService.getInfo("unisCustomerCd", "authToken")).rejects.toThrowError(
       expoectedError
     );
   });

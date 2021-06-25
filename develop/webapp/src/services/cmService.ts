@@ -20,12 +20,13 @@ import { AxiosResponse } from "axios";
 export function useCmService(api: UMesseApi.CmApi, cmCache: CmCache) {
 
   const fetch = async (
+    unisCustomerCd: string,
     authToken: string,
     sort?: number
   ): Promise<[Scene[], CmItem[]]> => {
     return new Promise(function (resolve, reject) {
       api
-        .listUserCm(authToken, sort)
+        .listUserCm(unisCustomerCd, authToken, sort)
         .then((response) => {
           const scenes: Scene[] = [];
           const cms: CmItem[] = [];
@@ -44,6 +45,7 @@ export function useCmService(api: UMesseApi.CmApi, cmCache: CmCache) {
   };
 
   const createGenerator = async function* (
+    unisCustomerCd: string,
     authToken: string,
     narrations: (Narration | Recording | Tts)[],
     startChime: StartChime | null,
@@ -70,11 +72,11 @@ export function useCmService(api: UMesseApi.CmApi, cmCache: CmCache) {
     }
 
     try {
-      const createUserCmResponse = await api.createUserCm(authToken, requestModel);
+      const createUserCmResponse = await api.createUserCm(unisCustomerCd, authToken, requestModel);
       let response: CreateUserCmResponseItem | undefined = undefined;
       for (let i = 0; i < Constants.MAX_COUNT_TIME_INTERVAL_GET_USER_CM; i++) {
         await new Promise(resolve => setTimeout(resolve, Constants.TIME_INTERVAL_GET_USER_CM * 1000)); // sleep
-        const getUserCmResponse: AxiosResponse<CreateUserCmResponseItem> = await api.getUserCm(createUserCmResponse.data.id, authToken);
+        const getUserCmResponse: AxiosResponse<CreateUserCmResponseItem> = await api.getUserCm(createUserCmResponse.data.id, unisCustomerCd, authToken);
         if (getUserCmResponse.data.status === Constants.CM_STATUS_CREATING) {
           response = getUserCmResponse.data;
           break;
@@ -97,6 +99,7 @@ export function useCmService(api: UMesseApi.CmApi, cmCache: CmCache) {
   };
 
   const update = async (
+    unisCustomerCd: string,
     authToken: string,
     id: string,
     title: string,
@@ -114,7 +117,7 @@ export function useCmService(api: UMesseApi.CmApi, cmCache: CmCache) {
         manuscript
       );
       api
-        .updateUserCm(authToken, id, requestModel)
+        .updateUserCm(unisCustomerCd, authToken, id, requestModel)
         .then((value) => {
           removeCacheAll();
           resolve(value.data);
@@ -126,10 +129,10 @@ export function useCmService(api: UMesseApi.CmApi, cmCache: CmCache) {
   };
 
   // deleteは予約語なのでremove
-  const remove = async (authToken: string, id: string): Promise<CmItem> => {
+  const remove = async (unisCustomerCd: string, authToken: string, id: string): Promise<CmItem> => {
     return new Promise(function (resolve, reject) {
       api
-        .deleteUserCm(id, authToken)
+        .deleteUserCm(id, unisCustomerCd, authToken)
         .then((value) => {
           resolve(value.data);
         })
