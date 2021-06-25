@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import androidx.core.content.ContextCompat.startActivity
 import com.usen.umesse.mdm.MdmClient
 import com.usen.umesse.mdm.UsenCustomer
 
@@ -48,6 +47,7 @@ open class MdmIntentReceiver : BroadcastReceiver() {
 
         MdmClient.sendBroadcast(context, usenCustomer)
         Application.localData!!.unisCustomerCd = usenCustomer.unis_customer_cd
+        Application.localData!!.contractCd = usenCustomer.contract_cd
     }
 
     companion object {
