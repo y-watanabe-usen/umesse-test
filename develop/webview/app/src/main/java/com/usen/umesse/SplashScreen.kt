@@ -23,7 +23,7 @@ class SplashScreen : AppCompatActivity() {
         )
 
         Handler().postDelayed(Runnable {
-            if (Application.localData.unisCustomerCd != null) {
+            if (Application.localData.unisCustomerCd != null || Application.localData.contractCd != null) {
                 val intent = Intent(applicationContext, MainActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent, null)

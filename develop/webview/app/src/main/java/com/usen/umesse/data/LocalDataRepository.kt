@@ -9,4 +9,10 @@ class LocalDataRepository(private val uMessePrefs: UMesseSharedPreferences) {
         set(value) {
             uMessePrefs.unisCustomerCd = value
         }
+
+    var contractCd: String?
+        get() = uMessePrefs.contractCd
+        set(value) {
+            uMessePrefs.contractCd = value
+        }
 }

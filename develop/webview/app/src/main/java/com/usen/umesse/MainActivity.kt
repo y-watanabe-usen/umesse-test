@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         val url: String =
-            BuildConfig.LAUNCH_URL + "?unisCustomerCd=${Application.localData.unisCustomerCd}"
+            BuildConfig.LAUNCH_URL + "?unisCustomerCd=${Application.localData.unisCustomerCd}&contractCd=${Application.localData.contractCd}"
         Log.d(TAG, "launch url: $url")
         webView.loadUrl(url)
     }
