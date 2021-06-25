@@ -11,9 +11,10 @@ const { getUser } = require("../../umesse/user");
  * ユーザーの情報を取得する
  *
  * xUnisCustomerCd String UNIS顧客CD
+ * xToken String トークンID
  * returns User
  **/
-exports.getUser = function (xUnisCustomerCd) {
+exports.getUser = function (xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
       const json = await getUser(xUnisCustomerCd);

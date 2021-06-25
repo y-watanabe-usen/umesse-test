@@ -27,13 +27,18 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
          * ユーザーの情報を取得する
          * @summary ユーザー情報取得
          * @param {string} xUnisCustomerCd UNIS顧客CD
+         * @param {string} xToken トークンID
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getUser: async (xUnisCustomerCd: string, options: any = {}): Promise<RequestArgs> => {
+        getUser: async (xUnisCustomerCd: string, xToken: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'xUnisCustomerCd' is not null or undefined
             if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
                 throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling getUser.');
+            }
+            // verify required parameter 'xToken' is not null or undefined
+            if (xToken === null || xToken === undefined) {
+                throw new RequiredError('xToken','Required parameter xToken was null or undefined when calling getUser.');
             }
             const localVarPath = `/user`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -48,6 +53,10 @@ export const UserApiAxiosParamCreator = function (configuration?: Configuration)
 
             if (xUnisCustomerCd !== undefined && xUnisCustomerCd !== null) {
                 localVarHeaderParameter['x-unis-customer-cd'] = String(xUnisCustomerCd);
+            }
+
+            if (xToken !== undefined && xToken !== null) {
+                localVarHeaderParameter['x-token'] = String(xToken);
             }
 
             const query = new URLSearchParams(localVarUrlObj.search);
@@ -79,11 +88,12 @@ export const UserApiFp = function(configuration?: Configuration) {
          * ユーザーの情報を取得する
          * @summary ユーザー情報取得
          * @param {string} xUnisCustomerCd UNIS顧客CD
+         * @param {string} xToken トークンID
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getUser(xUnisCustomerCd: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
-            const localVarAxiosArgs = await UserApiAxiosParamCreator(configuration).getUser(xUnisCustomerCd, options);
+        async getUser(xUnisCustomerCd: string, xToken: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
+            const localVarAxiosArgs = await UserApiAxiosParamCreator(configuration).getUser(xUnisCustomerCd, xToken, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -102,11 +112,12 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
          * ユーザーの情報を取得する
          * @summary ユーザー情報取得
          * @param {string} xUnisCustomerCd UNIS顧客CD
+         * @param {string} xToken トークンID
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getUser(xUnisCustomerCd: string, options?: any): AxiosPromise<User> {
-            return UserApiFp(configuration).getUser(xUnisCustomerCd, options).then((request) => request(axios, basePath));
+        getUser(xUnisCustomerCd: string, xToken: string, options?: any): AxiosPromise<User> {
+            return UserApiFp(configuration).getUser(xUnisCustomerCd, xToken, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -122,11 +133,12 @@ export class UserApi extends BaseAPI {
      * ユーザーの情報を取得する
      * @summary ユーザー情報取得
      * @param {string} xUnisCustomerCd UNIS顧客CD
+     * @param {string} xToken トークンID
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof UserApi
      */
-    public getUser(xUnisCustomerCd: string, options?: any) {
-        return UserApiFp(this.configuration).getUser(xUnisCustomerCd, options).then((request) => request(this.axios, this.basePath));
+    public getUser(xUnisCustomerCd: string, xToken: string, options?: any) {
+        return UserApiFp(this.configuration).getUser(xUnisCustomerCd, xToken, options).then((request) => request(this.axios, this.basePath));
     }
 }

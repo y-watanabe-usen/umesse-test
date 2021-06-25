@@ -44,6 +44,8 @@ paths:
           $ref: "#/components/responses/BadRequest"
         401:
           $ref: "#/components/responses/Unauthorized"
+        403:
+          $ref: "#/components/responses/Forbidden"
         404:
           $ref: "#/components/responses/NotFound"
         5XX:
@@ -59,8 +61,8 @@ paths:
       # security:
       #   - ApiKeyAuth: []
       parameters:
-        # - $ref: "#/components/parameters/Token"
         - $ref: "#/components/parameters/UnisCustomerCd"
+        - $ref: "#/components/parameters/Token"
       responses:
         200:
           description: successful response
@@ -72,6 +74,8 @@ paths:
           $ref: "#/components/responses/BadRequest"
         401:
           $ref: "#/components/responses/Unauthorized"
+        403:
+          $ref: "#/components/responses/Forbidden"
         404:
           $ref: "#/components/responses/NotFound"
         5XX:
@@ -87,9 +91,9 @@ paths:
       # security:
       #   - ApiKeyAuth: []
       parameters:
-        # - $ref: "#/components/parameters/Token"
-        - $ref: "#/components/parameters/UnisCustomerCd"
         - $ref: "#/components/parameters/Sort"
+        - $ref: "#/components/parameters/UnisCustomerCd"
+        - $ref: "#/components/parameters/Token"
       responses:
         200:
           description: successful response
@@ -101,6 +105,8 @@ paths:
           $ref: "#/components/responses/BadRequest"
         401:
           $ref: "#/components/responses/Unauthorized"
+        403:
+          $ref: "#/components/responses/Forbidden"
         404:
           $ref: "#/components/responses/NotFound"
         5XX:
@@ -114,8 +120,8 @@ paths:
       # security:
       #   - ApiKeyAuth: []
       parameters:
-        # - $ref: "#/components/parameters/Token"
         - $ref: "#/components/parameters/UnisCustomerCd"
+        - $ref: "#/components/parameters/Token"
       requestBody:
         $ref: "#/components/requestBodies/CmCreateRequest"
       responses:
@@ -129,6 +135,8 @@ paths:
           $ref: "#/components/responses/BadRequest"
         401:
           $ref: "#/components/responses/Unauthorized"
+        403:
+          $ref: "#/components/responses/Forbidden"
         404:
           $ref: "#/components/responses/NotFound"
         5XX:
@@ -145,8 +153,8 @@ paths:
       #   - ApiKeyAuth: []
       parameters:
         - $ref: "#/components/parameters/CmId"
-        # - $ref: "#/components/parameters/Token"
         - $ref: "#/components/parameters/UnisCustomerCd"
+        - $ref: "#/components/parameters/Token"
       responses:
         200:
           description: successful response
@@ -158,6 +166,8 @@ paths:
           $ref: "#/components/responses/BadRequest"
         401:
           $ref: "#/components/responses/Unauthorized"
+        403:
+          $ref: "#/components/responses/Forbidden"
         404:
           $ref: "#/components/responses/NotFound"
         5XX:
@@ -172,8 +182,8 @@ paths:
       #   - ApiKeyAuth: []
       parameters:
         - $ref: "#/components/parameters/CmId"
-        # - $ref: "#/components/parameters/Token"
         - $ref: "#/components/parameters/UnisCustomerCd"
+        - $ref: "#/components/parameters/Token"
       requestBody:
         $ref: "#/components/requestBodies/CmUpdateRequest"
       responses:
@@ -187,6 +197,8 @@ paths:
           $ref: "#/components/responses/BadRequest"
         401:
           $ref: "#/components/responses/Unauthorized"
+        403:
+          $ref: "#/components/responses/Forbidden"
         404:
           $ref: "#/components/responses/NotFound"
         5XX:
@@ -201,8 +213,8 @@ paths:
       #   - ApiKeyAuth: []
       parameters:
         - $ref: "#/components/parameters/CmId"
-        # - $ref: "#/components/parameters/Token"
         - $ref: "#/components/parameters/UnisCustomerCd"
+        - $ref: "#/components/parameters/Token"
       responses:
         200:
           description: successful response
@@ -214,6 +226,8 @@ paths:
           $ref: "#/components/responses/BadRequest"
         401:
           $ref: "#/components/responses/Unauthorized"
+        403:
+          $ref: "#/components/responses/Forbidden"
         404:
           $ref: "#/components/responses/NotFound"
         5XX:
@@ -229,9 +243,9 @@ paths:
       # security:
       #   - ApiKeyAuth: []
       parameters:
-        # - $ref: "#/components/parameters/Token"
-        - $ref: "#/components/parameters/UnisCustomerCd"
         - $ref: "#/components/parameters/Sort"
+        - $ref: "#/components/parameters/UnisCustomerCd"
+        - $ref: "#/components/parameters/Token"
       responses:
         200:
           description: successful response
@@ -244,6 +258,8 @@ paths:
           $ref: "#/components/responses/BadRequest"
         401:
           $ref: "#/components/responses/Unauthorized"
+        403:
+          $ref: "#/components/responses/Forbidden"
         404:
           $ref: "#/components/responses/NotFound"
         5XX:
@@ -257,8 +273,8 @@ paths:
       # security:
       #   - ApiKeyAuth: []
       parameters:
-        # - $ref: "#/components/parameters/Token"
         - $ref: "#/components/parameters/UnisCustomerCd"
+        - $ref: "#/components/parameters/Token"
       requestBody:
         description: ユーザー素材データ作成リクエストBody
         content:
@@ -278,6 +294,8 @@ paths:
           $ref: "#/components/responses/BadRequest"
         401:
           $ref: "#/components/responses/Unauthorized"
+        403:
+          $ref: "#/components/responses/Forbidden"
         404:
           $ref: "#/components/responses/NotFound"
         5XX:
@@ -294,8 +312,8 @@ paths:
       #   - ApiKeyAuth: []
       parameters:
         - $ref: "#/components/parameters/RecordingId"
-        # - $ref: "#/components/parameters/Token"
         - $ref: "#/components/parameters/UnisCustomerCd"
+        - $ref: "#/components/parameters/Token"
       responses:
         200:
           description: successful response
@@ -307,6 +325,8 @@ paths:
           $ref: "#/components/responses/BadRequest"
         401:
           $ref: "#/components/responses/Unauthorized"
+        403:
+          $ref: "#/components/responses/Forbidden"
         404:
           $ref: "#/components/responses/NotFound"
         5XX:
@@ -321,8 +341,8 @@ paths:
       #   - ApiKeyAuth: []
       parameters:
         - $ref: "#/components/parameters/RecordingId"
-        # - $ref: "#/components/parameters/Token"
         - $ref: "#/components/parameters/UnisCustomerCd"
+        - $ref: "#/components/parameters/Token"
       requestBody:
         $ref: "#/components/requestBodies/UserResourceUpdateRequest"
       responses:
@@ -336,6 +356,8 @@ paths:
           $ref: "#/components/responses/BadRequest"
         401:
           $ref: "#/components/responses/Unauthorized"
+        403:
+          $ref: "#/components/responses/Forbidden"
         404:
           $ref: "#/components/responses/NotFound"
         5XX:
@@ -350,8 +372,8 @@ paths:
       #   - ApiKeyAuth: []
       parameters:
         - $ref: "#/components/parameters/RecordingId"
-        # - $ref: "#/components/parameters/Token"
         - $ref: "#/components/parameters/UnisCustomerCd"
+        - $ref: "#/components/parameters/Token"
       responses:
         200:
           description: successful response
@@ -363,6 +385,8 @@ paths:
           $ref: "#/components/responses/BadRequest"
         401:
           $ref: "#/components/responses/Unauthorized"
+        403:
+          $ref: "#/components/responses/Forbidden"
         404:
           $ref: "#/components/responses/NotFound"
         5XX:
@@ -378,9 +402,9 @@ paths:
       # security:
       #   - ApiKeyAuth: []
       parameters:
-        # - $ref: "#/components/parameters/Token"
-        - $ref: "#/components/parameters/UnisCustomerCd"
         - $ref: "#/components/parameters/Sort"
+        - $ref: "#/components/parameters/UnisCustomerCd"
+        - $ref: "#/components/parameters/Token"
       responses:
         200:
           description: successful response
@@ -393,6 +417,8 @@ paths:
           $ref: "#/components/responses/BadRequest"
         401:
           $ref: "#/components/responses/Unauthorized"
+        403:
+          $ref: "#/components/responses/Forbidden"
         404:
           $ref: "#/components/responses/NotFound"
         5XX:
@@ -406,8 +432,8 @@ paths:
       # security:
       #   - ApiKeyAuth: []
       parameters:
-        # - $ref: "#/components/parameters/Token"
         - $ref: "#/components/parameters/UnisCustomerCd"
+        - $ref: "#/components/parameters/Token"
       requestBody:
         $ref: "#/components/requestBodies/CreateTtsRequest"
       responses:
@@ -422,6 +448,8 @@ paths:
           $ref: "#/components/responses/BadRequest"
         401:
           $ref: "#/components/responses/Unauthorized"
+        403:
+          $ref: "#/components/responses/Forbidden"
         404:
           $ref: "#/components/responses/NotFound"
         5XX:
@@ -437,8 +465,8 @@ paths:
       # security:
       #   - ApiKeyAuth: []
       parameters:
-        # - $ref: "#/components/parameters/Token"
         - $ref: "#/components/parameters/UnisCustomerCd"
+        - $ref: "#/components/parameters/Token"
       requestBody:
         $ref: "#/components/requestBodies/GenerateTtsRequest"
       responses:
@@ -452,6 +480,8 @@ paths:
           $ref: "#/components/responses/BadRequest"
         401:
           $ref: "#/components/responses/Unauthorized"
+        403:
+          $ref: "#/components/responses/Forbidden"
         404:
           $ref: "#/components/responses/NotFound"
         5XX:
@@ -468,8 +498,8 @@ paths:
       #   - ApiKeyAuth: []
       parameters:
         - $ref: "#/components/parameters/TtsId"
-        # - $ref: "#/components/parameters/Token"
         - $ref: "#/components/parameters/UnisCustomerCd"
+        - $ref: "#/components/parameters/Token"
       responses:
         200:
           description: successful response
@@ -481,6 +511,8 @@ paths:
           $ref: "#/components/responses/BadRequest"
         401:
           $ref: "#/components/responses/Unauthorized"
+        403:
+          $ref: "#/components/responses/Forbidden"
         404:
           $ref: "#/components/responses/NotFound"
         5XX:
@@ -495,8 +527,8 @@ paths:
       #   - ApiKeyAuth: []
       parameters:
         - $ref: "#/components/parameters/TtsId"
-        # - $ref: "#/components/parameters/Token"
         - $ref: "#/components/parameters/UnisCustomerCd"
+        - $ref: "#/components/parameters/Token"
       requestBody:
         $ref: "#/components/requestBodies/UserResourceUpdateRequest"
       responses:
@@ -510,6 +542,8 @@ paths:
           $ref: "#/components/responses/BadRequest"
         401:
           $ref: "#/components/responses/Unauthorized"
+        403:
+          $ref: "#/components/responses/Forbidden"
         404:
           $ref: "#/components/responses/NotFound"
         5XX:
@@ -524,8 +558,8 @@ paths:
       #   - ApiKeyAuth: []
       parameters:
         - $ref: "#/components/parameters/TtsId"
-        # - $ref: "#/components/parameters/Token"
         - $ref: "#/components/parameters/UnisCustomerCd"
+        - $ref: "#/components/parameters/Token"
       responses:
         200:
           description: successful response
@@ -537,6 +571,8 @@ paths:
           $ref: "#/components/responses/BadRequest"
         401:
           $ref: "#/components/responses/Unauthorized"
+        403:
+          $ref: "#/components/responses/Forbidden"
         404:
           $ref: "#/components/responses/NotFound"
         5XX:
@@ -552,8 +588,8 @@ paths:
       # security:
       #   - ApiKeyAuth: []
       parameters:
-        # - $ref: "#/components/parameters/Token"
         - $ref: "#/components/parameters/UnisCustomerCd"
+        - $ref: "#/components/parameters/Token"
       responses:
         200:
           description: successful response
@@ -565,6 +601,8 @@ paths:
           $ref: "#/components/responses/BadRequest"
         401:
           $ref: "#/components/responses/Unauthorized"
+        403:
+          $ref: "#/components/responses/Forbidden"
         404:
           $ref: "#/components/responses/NotFound"
         5XX:
@@ -581,8 +619,8 @@ paths:
       #   - ApiKeyAuth: []
       parameters:
         - $ref: "#/components/parameters/CmId"
-        # - $ref: "#/components/parameters/Token"
         - $ref: "#/components/parameters/UnisCustomerCd"
+        - $ref: "#/components/parameters/Token"
       responses:
         200:
           description: successful response
@@ -594,6 +632,8 @@ paths:
           $ref: "#/components/responses/BadRequest"
         401:
           $ref: "#/components/responses/Unauthorized"
+        403:
+          $ref: "#/components/responses/Forbidden"
         404:
           $ref: "#/components/responses/NotFound"
         5XX:
@@ -608,8 +648,8 @@ paths:
       #   - ApiKeyAuth: []
       parameters:
         - $ref: "#/components/parameters/CmId"
-        # - $ref: "#/components/parameters/Token"
         - $ref: "#/components/parameters/UnisCustomerCd"
+        - $ref: "#/components/parameters/Token"
       requestBody:
         $ref: "#/components/requestBodies/UploadSystemRequest"
       responses:
@@ -623,6 +663,8 @@ paths:
           $ref: "#/components/responses/BadRequest"
         401:
           $ref: "#/components/responses/Unauthorized"
+        403:
+          $ref: "#/components/responses/Forbidden"
         404:
           $ref: "#/components/responses/NotFound"
         5XX:
@@ -637,8 +679,8 @@ paths:
       #   - ApiKeyAuth: []
       parameters:
         - $ref: "#/components/parameters/CmId"
-        # - $ref: "#/components/parameters/Token"
         - $ref: "#/components/parameters/UnisCustomerCd"
+        - $ref: "#/components/parameters/Token"
       responses:
         200:
           description: successful response
@@ -650,6 +692,8 @@ paths:
           $ref: "#/components/responses/BadRequest"
         401:
           $ref: "#/components/responses/Unauthorized"
+        403:
+          $ref: "#/components/responses/Forbidden"
         404:
           $ref: "#/components/responses/NotFound"
         5XX:
@@ -665,8 +709,8 @@ paths:
       # security:
       #   - ApiKeyAuth: []
       parameters:
-        # - $ref: "#/components/parameters/Token"
         - $ref: "#/components/parameters/UnisCustomerCd"
+        - $ref: "#/components/parameters/Token"
       responses:
         200:
           description: successful response
@@ -680,6 +724,8 @@ paths:
           $ref: "#/components/responses/BadRequest"
         401:
           $ref: "#/components/responses/Unauthorized"
+        403:
+          $ref: "#/components/responses/Forbidden"
         404:
           $ref: "#/components/responses/NotFound"
         5XX:
@@ -696,8 +742,8 @@ paths:
       #   - ApiKeyAuth: []
       parameters:
         - $ref: "#/components/parameters/CmId"
-        # - $ref: "#/components/parameters/Token"
         - $ref: "#/components/parameters/UnisCustomerCd"
+        - $ref: "#/components/parameters/Token"
       responses:
         200:
           description: successful response
@@ -709,6 +755,8 @@ paths:
           $ref: "#/components/responses/BadRequest"
         401:
           $ref: "#/components/responses/Unauthorized"
+        403:
+          $ref: "#/components/responses/Forbidden"
         404:
           $ref: "#/components/responses/NotFound"
         5XX:
@@ -723,8 +771,8 @@ paths:
       #   - ApiKeyAuth: []
       parameters:
         - $ref: "#/components/parameters/CmId"
-        # - $ref: "#/components/parameters/Token"
         - $ref: "#/components/parameters/UnisCustomerCd"
+        - $ref: "#/components/parameters/Token"
       responses:
         200:
           description: successful response
@@ -736,6 +784,8 @@ paths:
           $ref: "#/components/responses/BadRequest"
         401:
           $ref: "#/components/responses/Unauthorized"
+        403:
+          $ref: "#/components/responses/Forbidden"
         404:
           $ref: "#/components/responses/NotFound"
         5XX:
@@ -750,8 +800,8 @@ paths:
       #   - ApiKeyAuth: []
       parameters:
         - $ref: "#/components/parameters/CmId"
-        # - $ref: "#/components/parameters/Token"
         - $ref: "#/components/parameters/UnisCustomerCd"
+        - $ref: "#/components/parameters/Token"
       responses:
         200:
           description: successful response
@@ -763,6 +813,8 @@ paths:
           $ref: "#/components/responses/BadRequest"
         401:
           $ref: "#/components/responses/Unauthorized"
+        403:
+          $ref: "#/components/responses/Forbidden"
         404:
           $ref: "#/components/responses/NotFound"
         5XX:
@@ -778,7 +830,6 @@ paths:
       # security:
       #   - ApiKeyAuth: []
       parameters:
-        # - $ref: "#/components/parameters/Token"
         - $ref: "#/components/parameters/IndustryCd"
         - $ref: "#/components/parameters/Sort"
       responses:
@@ -794,6 +845,8 @@ paths:
           $ref: "#/components/responses/BadRequest"
         401:
           $ref: "#/components/responses/Unauthorized"
+        403:
+          $ref: "#/components/responses/Forbidden"
         404:
           $ref: "#/components/responses/NotFound"
         5XX:
@@ -809,7 +862,6 @@ paths:
       # security:
       #   - ApiKeyAuth: []
       parameters:
-        # - $ref: "#/components/parameters/Token"
         - $ref: "#/components/parameters/IndustryCd"
         - $ref: "#/components/parameters/SceneCd"
         - $ref: "#/components/parameters/Sort"
@@ -826,6 +878,8 @@ paths:
           $ref: "#/components/responses/BadRequest"
         401:
           $ref: "#/components/responses/Unauthorized"
+        403:
+          $ref: "#/components/responses/Forbidden"
         404:
           $ref: "#/components/responses/NotFound"
         5XX:
@@ -841,7 +895,6 @@ paths:
       # security:
       #   - ApiKeyAuth: []
       parameters:
-        # - $ref: "#/components/parameters/Token"
         - $ref: "#/components/parameters/Sort"
       responses:
         200:
@@ -856,6 +909,8 @@ paths:
           $ref: "#/components/responses/BadRequest"
         401:
           $ref: "#/components/responses/Unauthorized"
+        403:
+          $ref: "#/components/responses/Forbidden"
         404:
           $ref: "#/components/responses/NotFound"
         5XX:
@@ -871,7 +926,6 @@ paths:
       # security:
       #   - ApiKeyAuth: []
       parameters:
-        # - $ref: "#/components/parameters/Token"
         - $ref: "#/components/parameters/IndustryCd"
         - $ref: "#/components/parameters/SceneCd"
         - $ref: "#/components/parameters/Sort"
@@ -888,6 +942,8 @@ paths:
           $ref: "#/components/responses/BadRequest"
         401:
           $ref: "#/components/responses/Unauthorized"
+        403:
+          $ref: "#/components/responses/Forbidden"
         404:
           $ref: "#/components/responses/NotFound"
         5XX:
@@ -903,7 +959,6 @@ paths:
       # security:
       #   - ApiKeyAuth: []
       parameters:
-        # - $ref: "#/components/parameters/Token"
         - $ref: "#/components/parameters/IndustryCd"
         - $ref: "#/components/parameters/SceneCd"
         - $ref: "#/components/parameters/Sort"
@@ -920,6 +975,8 @@ paths:
           $ref: "#/components/responses/BadRequest"
         401:
           $ref: "#/components/responses/Unauthorized"
+        403:
+          $ref: "#/components/responses/Forbidden"
         404:
           $ref: "#/components/responses/NotFound"
         5XX:
@@ -935,7 +992,6 @@ paths:
       # security:
       #   - ApiKeyAuth: []
       parameters:
-        # - $ref: "#/components/parameters/Token"
         - name: id
           in: query
           description: 音源ID
@@ -970,6 +1026,8 @@ paths:
           $ref: "#/components/responses/BadRequest"
         401:
           $ref: "#/components/responses/Unauthorized"
+        403:
+          $ref: "#/components/responses/Forbidden"
         404:
           $ref: "#/components/responses/NotFound"
         5XX:
@@ -1009,6 +1067,8 @@ paths:
           $ref: "#/components/responses/BadRequest"
         401:
           $ref: "#/components/responses/Unauthorized"
+        403:
+          $ref: "#/components/responses/Forbidden"
         404:
           $ref: "#/components/responses/NotFound"
         5XX:
@@ -1055,6 +1115,8 @@ paths:
           $ref: "#/components/responses/BadRequest"
         401:
           $ref: "#/components/responses/Unauthorized"
+        403:
+          $ref: "#/components/responses/Forbidden"
         404:
           $ref: "#/components/responses/NotFound"
         5XX:
@@ -1095,6 +1157,8 @@ paths:
           $ref: "#/components/responses/BadRequest"
         401:
           $ref: "#/components/responses/Unauthorized"
+        403:
+          $ref: "#/components/responses/Forbidden"
         404:
           $ref: "#/components/responses/NotFound"
         5XX:
@@ -1803,6 +1867,8 @@ components:
             properties:
               unisCustomerCd:
                 type: string
+              contractCd:
+                type: string
     CmCreateRequest:
       description: CMデータ作成リクエストBody
       content:
@@ -1964,6 +2030,12 @@ components:
         WWW_Authenticate:
           schema:
             type: string
+    Forbidden:
+      description: Access denied
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Error"
     NotFound:
       description: A user with the specified ID was not found.
       content:

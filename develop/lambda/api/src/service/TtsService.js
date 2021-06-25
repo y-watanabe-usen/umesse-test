@@ -18,9 +18,10 @@ const {
  *
  * body Object TTS登録リクエストBody (optional)
  * xUnisCustomerCd String UNIS顧客CD
+ * xToken String トークンID
  * returns List
  **/
-exports.createUserTts = function (body, xUnisCustomerCd) {
+exports.createUserTts = function (body, xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
       const json = await createTtsResource(xUnisCustomerCd, body);
@@ -42,9 +43,10 @@ exports.createUserTts = function (body, xUnisCustomerCd) {
  *
  * id String 合成音声ID
  * xUnisCustomerCd String UNIS顧客CD
+ * xToken String トークンID
  * returns TtsItem
  **/
-exports.deleteUserTts = function (id, xUnisCustomerCd) {
+exports.deleteUserTts = function (id, xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
       const json = await deleteUserResource(
@@ -70,9 +72,10 @@ exports.deleteUserTts = function (id, xUnisCustomerCd) {
  *
  * body Object TTS作成リクエストBody (optional)
  * xUnisCustomerCd String UNIS顧客CD
+ * xToken String トークンID
  * returns GenerateTtsItem
  **/
-exports.generateUserTts = function (body, xUnisCustomerCd) {
+exports.generateUserTts = function (body, xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
       const json = await generateTtsResource(xUnisCustomerCd, body);
@@ -94,9 +97,10 @@ exports.generateUserTts = function (body, xUnisCustomerCd) {
  *
  * id String 合成音声ID
  * xUnisCustomerCd String UNIS顧客CD
+ * xToken String トークンID
  * returns TtsItem
  **/
-exports.getUserTts = function (id, xUnisCustomerCd) {
+exports.getUserTts = function (id, xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
       const json = await getUserResource(
@@ -122,9 +126,10 @@ exports.getUserTts = function (id, xUnisCustomerCd) {
  *
  * sort Integer ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順) (optional)
  * xUnisCustomerCd String UNIS顧客CD
+ * xToken String トークンID
  * returns List
  **/
-exports.listUserTts = function (sort, xUnisCustomerCd) {
+exports.listUserTts = function (sort, xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
       const json = await getUserResource(
@@ -152,9 +157,10 @@ exports.listUserTts = function (sort, xUnisCustomerCd) {
  * body Object ユーザー素材データ更新リクエストBody (optional)
  * id String 合成音声ID
  * xUnisCustomerCd String UNIS顧客CD
+ * xToken String トークンID
  * returns TtsItem
  **/
-exports.updateUserTts = function (body, id, xUnisCustomerCd) {
+exports.updateUserTts = function (body, id, xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
       const json = await updateUserResource(

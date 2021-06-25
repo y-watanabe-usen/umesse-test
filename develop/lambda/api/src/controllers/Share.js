@@ -3,8 +3,8 @@
 var utils = require('../utils/writer.js');
 var Share = require('../service/ShareService');
 
-module.exports.createShareCm = function createShareCm (req, res, next, id, xUnisCustomerCd) {
-  Share.createShareCm(id, xUnisCustomerCd)
+module.exports.createShareCm = function createShareCm (req, res, next, id, xUnisCustomerCd, xToken) {
+  Share.createShareCm(id, xUnisCustomerCd, xToken)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -13,8 +13,8 @@ module.exports.createShareCm = function createShareCm (req, res, next, id, xUnis
     });
 };
 
-module.exports.deleteShareCm = function deleteShareCm (req, res, next, id, xUnisCustomerCd) {
-  Share.deleteShareCm(id, xUnisCustomerCd)
+module.exports.deleteShareCm = function deleteShareCm (req, res, next, id, xUnisCustomerCd, xToken) {
+  Share.deleteShareCm(id, xUnisCustomerCd, xToken)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -23,8 +23,8 @@ module.exports.deleteShareCm = function deleteShareCm (req, res, next, id, xUnis
     });
 };
 
-module.exports.getShareCm = function getShareCm (req, res, next, id, xUnisCustomerCd) {
-  Share.getShareCm(id, xUnisCustomerCd)
+module.exports.getShareCm = function getShareCm (req, res, next, id, xUnisCustomerCd, xToken) {
+  Share.getShareCm(id, xUnisCustomerCd, xToken)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -33,8 +33,8 @@ module.exports.getShareCm = function getShareCm (req, res, next, id, xUnisCustom
     });
 };
 
-module.exports.listShareCm = function listShareCm (req, res, next, xUnisCustomerCd) {
-  Share.listShareCm(xUnisCustomerCd)
+module.exports.listShareCm = function listShareCm (req, res, next, xUnisCustomerCd, xToken) {
+  Share.listShareCm(xUnisCustomerCd, xToken)
     .then(function (response) {
       utils.writeJson(res, response);
     })

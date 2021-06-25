@@ -12,9 +12,10 @@ const { getCm, createCm, updateCm, deleteCm } = require("../../umesse/cm");
  *
  * body Object CMデータ作成リクエストBody (optional)
  * xUnisCustomerCd String UNIS顧客CD
+ * xToken String トークンID
  * returns CreateCmItem
  **/
-exports.createUserCm = function (body, xUnisCustomerCd) {
+exports.createUserCm = function (body, xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
       const json = await createCm(xUnisCustomerCd, body);
@@ -36,9 +37,10 @@ exports.createUserCm = function (body, xUnisCustomerCd) {
  *
  * id String CM ID
  * xUnisCustomerCd String UNIS顧客CD
+ * xToken String トークンID
  * returns CmItem
  **/
-exports.deleteUserCm = function (id, xUnisCustomerCd) {
+exports.deleteUserCm = function (id, xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
       const json = await deleteCm(xUnisCustomerCd, id);
@@ -60,9 +62,10 @@ exports.deleteUserCm = function (id, xUnisCustomerCd) {
  *
  * id String CM ID
  * xUnisCustomerCd String UNIS顧客CD
+ * xToken String トークンID
  * returns CmItem
  **/
-exports.getUserCm = function (id, xUnisCustomerCd) {
+exports.getUserCm = function (id, xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
       const json = await getCm(xUnisCustomerCd, id);
@@ -84,9 +87,10 @@ exports.getUserCm = function (id, xUnisCustomerCd) {
  *
  * sort Integer ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順) (optional)
  * xUnisCustomerCd String UNIS顧客CD
- * returns List
+ * xToken String トークンID
+ * returns CmListItem
  **/
-exports.listUserCm = function (sort, xUnisCustomerCd) {
+exports.listUserCm = function (sort, xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
       const json = await getCm(xUnisCustomerCd, "", sort);
@@ -109,9 +113,10 @@ exports.listUserCm = function (sort, xUnisCustomerCd) {
  * body Object CMデータ更新リクエストBody (optional)
  * id String CM ID
  * xUnisCustomerCd String UNIS顧客CD
+ * xToken String トークンID
  * returns CmItem
  **/
-exports.updateUserCm = function (body, id, xUnisCustomerCd) {
+exports.updateUserCm = function (body, id, xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
       const json = await updateCm(xUnisCustomerCd, id, body);
