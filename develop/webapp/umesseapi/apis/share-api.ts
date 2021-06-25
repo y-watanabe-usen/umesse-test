@@ -28,10 +28,11 @@ export const ShareApiAxiosParamCreator = function (configuration?: Configuration
          * @summary CM共有追加
          * @param {string} id CM ID
          * @param {string} xUnisCustomerCd UNIS顧客CD
+         * @param {string} xToken トークンID
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createShareCm: async (id: string, xUnisCustomerCd: string, options: any = {}): Promise<RequestArgs> => {
+        createShareCm: async (id: string, xUnisCustomerCd: string, xToken: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             if (id === null || id === undefined) {
                 throw new RequiredError('id','Required parameter id was null or undefined when calling createShareCm.');
@@ -39,6 +40,10 @@ export const ShareApiAxiosParamCreator = function (configuration?: Configuration
             // verify required parameter 'xUnisCustomerCd' is not null or undefined
             if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
                 throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling createShareCm.');
+            }
+            // verify required parameter 'xToken' is not null or undefined
+            if (xToken === null || xToken === undefined) {
+                throw new RequiredError('xToken','Required parameter xToken was null or undefined when calling createShareCm.');
             }
             const localVarPath = `/share/cm/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
@@ -54,6 +59,10 @@ export const ShareApiAxiosParamCreator = function (configuration?: Configuration
 
             if (xUnisCustomerCd !== undefined && xUnisCustomerCd !== null) {
                 localVarHeaderParameter['x-unis-customer-cd'] = String(xUnisCustomerCd);
+            }
+
+            if (xToken !== undefined && xToken !== null) {
+                localVarHeaderParameter['x-token'] = String(xToken);
             }
 
             const query = new URLSearchParams(localVarUrlObj.search);
@@ -77,10 +86,11 @@ export const ShareApiAxiosParamCreator = function (configuration?: Configuration
          * @summary CM共有削除
          * @param {string} id CM ID
          * @param {string} xUnisCustomerCd UNIS顧客CD
+         * @param {string} xToken トークンID
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteShareCm: async (id: string, xUnisCustomerCd: string, options: any = {}): Promise<RequestArgs> => {
+        deleteShareCm: async (id: string, xUnisCustomerCd: string, xToken: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             if (id === null || id === undefined) {
                 throw new RequiredError('id','Required parameter id was null or undefined when calling deleteShareCm.');
@@ -88,6 +98,10 @@ export const ShareApiAxiosParamCreator = function (configuration?: Configuration
             // verify required parameter 'xUnisCustomerCd' is not null or undefined
             if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
                 throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling deleteShareCm.');
+            }
+            // verify required parameter 'xToken' is not null or undefined
+            if (xToken === null || xToken === undefined) {
+                throw new RequiredError('xToken','Required parameter xToken was null or undefined when calling deleteShareCm.');
             }
             const localVarPath = `/share/cm/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
@@ -103,6 +117,10 @@ export const ShareApiAxiosParamCreator = function (configuration?: Configuration
 
             if (xUnisCustomerCd !== undefined && xUnisCustomerCd !== null) {
                 localVarHeaderParameter['x-unis-customer-cd'] = String(xUnisCustomerCd);
+            }
+
+            if (xToken !== undefined && xToken !== null) {
+                localVarHeaderParameter['x-token'] = String(xToken);
             }
 
             const query = new URLSearchParams(localVarUrlObj.search);
@@ -126,10 +144,11 @@ export const ShareApiAxiosParamCreator = function (configuration?: Configuration
          * @summary 共有CM取得
          * @param {string} id CM ID
          * @param {string} xUnisCustomerCd UNIS顧客CD
+         * @param {string} xToken トークンID
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getShareCm: async (id: string, xUnisCustomerCd: string, options: any = {}): Promise<RequestArgs> => {
+        getShareCm: async (id: string, xUnisCustomerCd: string, xToken: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             if (id === null || id === undefined) {
                 throw new RequiredError('id','Required parameter id was null or undefined when calling getShareCm.');
@@ -137,6 +156,10 @@ export const ShareApiAxiosParamCreator = function (configuration?: Configuration
             // verify required parameter 'xUnisCustomerCd' is not null or undefined
             if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
                 throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling getShareCm.');
+            }
+            // verify required parameter 'xToken' is not null or undefined
+            if (xToken === null || xToken === undefined) {
+                throw new RequiredError('xToken','Required parameter xToken was null or undefined when calling getShareCm.');
             }
             const localVarPath = `/share/cm/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
@@ -152,6 +175,10 @@ export const ShareApiAxiosParamCreator = function (configuration?: Configuration
 
             if (xUnisCustomerCd !== undefined && xUnisCustomerCd !== null) {
                 localVarHeaderParameter['x-unis-customer-cd'] = String(xUnisCustomerCd);
+            }
+
+            if (xToken !== undefined && xToken !== null) {
+                localVarHeaderParameter['x-token'] = String(xToken);
             }
 
             const query = new URLSearchParams(localVarUrlObj.search);
@@ -174,13 +201,18 @@ export const ShareApiAxiosParamCreator = function (configuration?: Configuration
          * 共有CMの情報を一覧で取得する
          * @summary 共有CM一覧取得
          * @param {string} xUnisCustomerCd UNIS顧客CD
+         * @param {string} xToken トークンID
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listShareCm: async (xUnisCustomerCd: string, options: any = {}): Promise<RequestArgs> => {
+        listShareCm: async (xUnisCustomerCd: string, xToken: string, options: any = {}): Promise<RequestArgs> => {
             // verify required parameter 'xUnisCustomerCd' is not null or undefined
             if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
                 throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling listShareCm.');
+            }
+            // verify required parameter 'xToken' is not null or undefined
+            if (xToken === null || xToken === undefined) {
+                throw new RequiredError('xToken','Required parameter xToken was null or undefined when calling listShareCm.');
             }
             const localVarPath = `/share/cm`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -195,6 +227,10 @@ export const ShareApiAxiosParamCreator = function (configuration?: Configuration
 
             if (xUnisCustomerCd !== undefined && xUnisCustomerCd !== null) {
                 localVarHeaderParameter['x-unis-customer-cd'] = String(xUnisCustomerCd);
+            }
+
+            if (xToken !== undefined && xToken !== null) {
+                localVarHeaderParameter['x-token'] = String(xToken);
             }
 
             const query = new URLSearchParams(localVarUrlObj.search);
@@ -227,11 +263,12 @@ export const ShareApiFp = function(configuration?: Configuration) {
          * @summary CM共有追加
          * @param {string} id CM ID
          * @param {string} xUnisCustomerCd UNIS顧客CD
+         * @param {string} xToken トークンID
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createShareCm(id: string, xUnisCustomerCd: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CmItem>> {
-            const localVarAxiosArgs = await ShareApiAxiosParamCreator(configuration).createShareCm(id, xUnisCustomerCd, options);
+        async createShareCm(id: string, xUnisCustomerCd: string, xToken: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CmItem>> {
+            const localVarAxiosArgs = await ShareApiAxiosParamCreator(configuration).createShareCm(id, xUnisCustomerCd, xToken, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -242,11 +279,12 @@ export const ShareApiFp = function(configuration?: Configuration) {
          * @summary CM共有削除
          * @param {string} id CM ID
          * @param {string} xUnisCustomerCd UNIS顧客CD
+         * @param {string} xToken トークンID
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteShareCm(id: string, xUnisCustomerCd: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CmItem>> {
-            const localVarAxiosArgs = await ShareApiAxiosParamCreator(configuration).deleteShareCm(id, xUnisCustomerCd, options);
+        async deleteShareCm(id: string, xUnisCustomerCd: string, xToken: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CmItem>> {
+            const localVarAxiosArgs = await ShareApiAxiosParamCreator(configuration).deleteShareCm(id, xUnisCustomerCd, xToken, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -257,11 +295,12 @@ export const ShareApiFp = function(configuration?: Configuration) {
          * @summary 共有CM取得
          * @param {string} id CM ID
          * @param {string} xUnisCustomerCd UNIS顧客CD
+         * @param {string} xToken トークンID
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getShareCm(id: string, xUnisCustomerCd: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CmItem>> {
-            const localVarAxiosArgs = await ShareApiAxiosParamCreator(configuration).getShareCm(id, xUnisCustomerCd, options);
+        async getShareCm(id: string, xUnisCustomerCd: string, xToken: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<CmItem>> {
+            const localVarAxiosArgs = await ShareApiAxiosParamCreator(configuration).getShareCm(id, xUnisCustomerCd, xToken, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -271,11 +310,12 @@ export const ShareApiFp = function(configuration?: Configuration) {
          * 共有CMの情報を一覧で取得する
          * @summary 共有CM一覧取得
          * @param {string} xUnisCustomerCd UNIS顧客CD
+         * @param {string} xToken トークンID
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async listShareCm(xUnisCustomerCd: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CmItem>>> {
-            const localVarAxiosArgs = await ShareApiAxiosParamCreator(configuration).listShareCm(xUnisCustomerCd, options);
+        async listShareCm(xUnisCustomerCd: string, xToken: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Array<CmItem>>> {
+            const localVarAxiosArgs = await ShareApiAxiosParamCreator(configuration).listShareCm(xUnisCustomerCd, xToken, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -295,43 +335,47 @@ export const ShareApiFactory = function (configuration?: Configuration, basePath
          * @summary CM共有追加
          * @param {string} id CM ID
          * @param {string} xUnisCustomerCd UNIS顧客CD
+         * @param {string} xToken トークンID
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createShareCm(id: string, xUnisCustomerCd: string, options?: any): AxiosPromise<CmItem> {
-            return ShareApiFp(configuration).createShareCm(id, xUnisCustomerCd, options).then((request) => request(axios, basePath));
+        createShareCm(id: string, xUnisCustomerCd: string, xToken: string, options?: any): AxiosPromise<CmItem> {
+            return ShareApiFp(configuration).createShareCm(id, xUnisCustomerCd, xToken, options).then((request) => request(axios, basePath));
         },
         /**
          * CMの共有を解除する
          * @summary CM共有削除
          * @param {string} id CM ID
          * @param {string} xUnisCustomerCd UNIS顧客CD
+         * @param {string} xToken トークンID
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteShareCm(id: string, xUnisCustomerCd: string, options?: any): AxiosPromise<CmItem> {
-            return ShareApiFp(configuration).deleteShareCm(id, xUnisCustomerCd, options).then((request) => request(axios, basePath));
+        deleteShareCm(id: string, xUnisCustomerCd: string, xToken: string, options?: any): AxiosPromise<CmItem> {
+            return ShareApiFp(configuration).deleteShareCm(id, xUnisCustomerCd, xToken, options).then((request) => request(axios, basePath));
         },
         /**
          * 共有CMの情報を取得
          * @summary 共有CM取得
          * @param {string} id CM ID
          * @param {string} xUnisCustomerCd UNIS顧客CD
+         * @param {string} xToken トークンID
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getShareCm(id: string, xUnisCustomerCd: string, options?: any): AxiosPromise<CmItem> {
-            return ShareApiFp(configuration).getShareCm(id, xUnisCustomerCd, options).then((request) => request(axios, basePath));
+        getShareCm(id: string, xUnisCustomerCd: string, xToken: string, options?: any): AxiosPromise<CmItem> {
+            return ShareApiFp(configuration).getShareCm(id, xUnisCustomerCd, xToken, options).then((request) => request(axios, basePath));
         },
         /**
          * 共有CMの情報を一覧で取得する
          * @summary 共有CM一覧取得
          * @param {string} xUnisCustomerCd UNIS顧客CD
+         * @param {string} xToken トークンID
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        listShareCm(xUnisCustomerCd: string, options?: any): AxiosPromise<Array<CmItem>> {
-            return ShareApiFp(configuration).listShareCm(xUnisCustomerCd, options).then((request) => request(axios, basePath));
+        listShareCm(xUnisCustomerCd: string, xToken: string, options?: any): AxiosPromise<Array<CmItem>> {
+            return ShareApiFp(configuration).listShareCm(xUnisCustomerCd, xToken, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -348,46 +392,50 @@ export class ShareApi extends BaseAPI {
      * @summary CM共有追加
      * @param {string} id CM ID
      * @param {string} xUnisCustomerCd UNIS顧客CD
+     * @param {string} xToken トークンID
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ShareApi
      */
-    public createShareCm(id: string, xUnisCustomerCd: string, options?: any) {
-        return ShareApiFp(this.configuration).createShareCm(id, xUnisCustomerCd, options).then((request) => request(this.axios, this.basePath));
+    public createShareCm(id: string, xUnisCustomerCd: string, xToken: string, options?: any) {
+        return ShareApiFp(this.configuration).createShareCm(id, xUnisCustomerCd, xToken, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * CMの共有を解除する
      * @summary CM共有削除
      * @param {string} id CM ID
      * @param {string} xUnisCustomerCd UNIS顧客CD
+     * @param {string} xToken トークンID
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ShareApi
      */
-    public deleteShareCm(id: string, xUnisCustomerCd: string, options?: any) {
-        return ShareApiFp(this.configuration).deleteShareCm(id, xUnisCustomerCd, options).then((request) => request(this.axios, this.basePath));
+    public deleteShareCm(id: string, xUnisCustomerCd: string, xToken: string, options?: any) {
+        return ShareApiFp(this.configuration).deleteShareCm(id, xUnisCustomerCd, xToken, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * 共有CMの情報を取得
      * @summary 共有CM取得
      * @param {string} id CM ID
      * @param {string} xUnisCustomerCd UNIS顧客CD
+     * @param {string} xToken トークンID
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ShareApi
      */
-    public getShareCm(id: string, xUnisCustomerCd: string, options?: any) {
-        return ShareApiFp(this.configuration).getShareCm(id, xUnisCustomerCd, options).then((request) => request(this.axios, this.basePath));
+    public getShareCm(id: string, xUnisCustomerCd: string, xToken: string, options?: any) {
+        return ShareApiFp(this.configuration).getShareCm(id, xUnisCustomerCd, xToken, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * 共有CMの情報を一覧で取得する
      * @summary 共有CM一覧取得
      * @param {string} xUnisCustomerCd UNIS顧客CD
+     * @param {string} xToken トークンID
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof ShareApi
      */
-    public listShareCm(xUnisCustomerCd: string, options?: any) {
-        return ShareApiFp(this.configuration).listShareCm(xUnisCustomerCd, options).then((request) => request(this.axios, this.basePath));
+    public listShareCm(xUnisCustomerCd: string, xToken: string, options?: any) {
+        return ShareApiFp(this.configuration).listShareCm(xUnisCustomerCd, xToken, options).then((request) => request(this.axios, this.basePath));
     }
 }

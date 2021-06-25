@@ -16,9 +16,10 @@ const {
  *
  * id String CM ID
  * xUnisCustomerCd String UNIS顧客CD
+ * xToken String トークンID
  * returns CmItem
  **/
-exports.createShareCm = function (id, xUnisCustomerCd) {
+exports.createShareCm = function (id, xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
       const json = await createShareCm(xUnisCustomerCd, id);
@@ -40,9 +41,10 @@ exports.createShareCm = function (id, xUnisCustomerCd) {
  *
  * id String CM ID
  * xUnisCustomerCd String UNIS顧客CD
+ * xToken String トークンID
  * returns CmItem
  **/
-exports.deleteShareCm = function (id, xUnisCustomerCd) {
+exports.deleteShareCm = function (id, xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
       const json = await deleteShareCm(xUnisCustomerCd, id);
@@ -64,9 +66,10 @@ exports.deleteShareCm = function (id, xUnisCustomerCd) {
  *
  * id String CM ID
  * xUnisCustomerCd String UNIS顧客CD
+ * xToken String トークンID
  * returns CmItem
  **/
-exports.getShareCm = function (id, xUnisCustomerCd) {
+exports.getShareCm = function (id, xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
       const json = await getShareCm(xUnisCustomerCd, id);
@@ -87,9 +90,10 @@ exports.getShareCm = function (id, xUnisCustomerCd) {
  * 共有CMの情報を一覧で取得する
  *
  * xUnisCustomerCd String UNIS顧客CD
+ * xToken String トークンID
  * returns List
  **/
-exports.listShareCm = function (xUnisCustomerCd) {
+exports.listShareCm = function (xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
       const json = await getShareCm(xUnisCustomerCd);

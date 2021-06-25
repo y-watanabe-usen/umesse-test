@@ -40,7 +40,7 @@ describe("fetchのテスト", () => {
     ];
     jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
 
-    const response = await recordingService.fetch("authToken");
+    const response = await recordingService.fetch("unisCustomerCd", "authToken");
 
     expect(response.length).toBe(2);
     expect(response[0].id).toBe("123456789-c-v2qvc913");
@@ -58,7 +58,7 @@ describe("fetchのテスト", () => {
 
     jest.spyOn(axios, "request").mockRejectedValue({ data: responseJson });
 
-    await expect(recordingService.fetch("authToken")).rejects.toThrowError(
+    await expect(recordingService.fetch("unisCustomerCd", "authToken")).rejects.toThrowError(
       expoectedError
     );
   });
@@ -74,7 +74,7 @@ describe("fetchのテスト", () => {
       .spyOn(axios, "request")
       .mockRejectedValue({ response: { status: 500 } });
 
-    await expect(recordingService.fetch("authToken")).rejects.toThrowError(
+    await expect(recordingService.fetch("unisCustomerCd", "authToken")).rejects.toThrowError(
       expoectedError
     );
   });
@@ -97,6 +97,7 @@ describe("updateのテスト", () => {
     jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
 
     const response = await recordingService.update(
+      "unisCustomerCd",
       "authToken",
       "001",
       "title",
@@ -118,7 +119,7 @@ describe("updateのテスト", () => {
     jest.spyOn(axios, "request").mockRejectedValue({ data: responseJson });
 
     await expect(
-      recordingService.update("authToken", "001", "title", "description")
+      recordingService.update("unisCustomerCd", "authToken", "001", "title", "description")
     ).rejects.toThrowError(expoectedError);
   });
 
@@ -134,7 +135,7 @@ describe("updateのテスト", () => {
       .mockRejectedValue({ response: { status: 500 } });
 
     await expect(
-      recordingService.update("authToken", "001", "title", "description")
+      recordingService.update("unisCustomerCd", "authToken", "001", "title", "description")
     ).rejects.toThrowError(expoectedError);
   });
 });
@@ -155,7 +156,7 @@ describe("uploadのテスト", () => {
     };
     jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
 
-    const response = await recordingService.upload("authToken", <RecordingFile>{
+    const response = await recordingService.upload("unisCustomerCd", "authToken", <RecordingFile>{
       id: "id",
       title: "title",
       description: "description",
@@ -178,7 +179,7 @@ describe("uploadのテスト", () => {
     jest.spyOn(axios, "request").mockRejectedValue({ data: responseJson });
 
     await expect(
-      recordingService.upload("authToken", <RecordingFile>{
+      recordingService.upload("unisCustomerCd", "authToken", <RecordingFile>{
         id: "id",
         title: "title",
         description: "description",
@@ -199,7 +200,7 @@ describe("uploadのテスト", () => {
       .mockRejectedValue({ response: { status: 500 } });
 
     await expect(
-      recordingService.upload("authToken", <RecordingFile>{
+      recordingService.upload("unisCustomerCd", "authToken", <RecordingFile>{
         id: "id",
         title: "title",
         description: "description",
@@ -225,7 +226,7 @@ describe("removeのテスト", () => {
     };
     jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
 
-    const response = await recordingService.remove("authToken", "001");
+    const response = await recordingService.remove("unisCustomerCd", "authToken", "001");
 
     expect(response.id).toBe("123456789-c-v2qvc913");
     expect(response.category).toBe("recording");
@@ -241,7 +242,7 @@ describe("removeのテスト", () => {
     jest.spyOn(axios, "request").mockRejectedValue({ data: responseJson });
 
     await expect(
-      recordingService.remove("authToken", "001")
+      recordingService.remove("unisCustomerCd", "authToken", "001")
     ).rejects.toThrowError(expoectedError);
   });
 
@@ -256,7 +257,7 @@ describe("removeのテスト", () => {
       .mockRejectedValue({ response: { status: 500 } });
 
     await expect(
-      recordingService.remove("authToken", "001")
+      recordingService.remove("unisCustomerCd", "authToken", "001")
     ).rejects.toThrowError(expoectedError);
   });
 });

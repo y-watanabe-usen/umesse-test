@@ -17,9 +17,10 @@ const {
  * body Object CM外部連携システムリクエストBody (optional)
  * id String CM ID
  * xUnisCustomerCd String UNIS顧客CD
+ * xToken String トークンID
  * returns ExternalItem
  **/
-exports.createUploadCm = function (body, id, xUnisCustomerCd) {
+exports.createUploadCm = function (body, id, xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
       const json = await createUploadCm(xUnisCustomerCd, id, body);
@@ -41,9 +42,10 @@ exports.createUploadCm = function (body, id, xUnisCustomerCd) {
  *
  * id String CM ID
  * xUnisCustomerCd String UNIS顧客CD
+ * xToken String トークンID
  * returns ExternalItem
  **/
-exports.deleteUploadCm = function (id, xUnisCustomerCd) {
+exports.deleteUploadCm = function (id, xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
       const json = await deleteUploadCm(xUnisCustomerCd, id);
@@ -65,9 +67,10 @@ exports.deleteUploadCm = function (id, xUnisCustomerCd) {
  *
  * id String CM ID
  * xUnisCustomerCd String UNIS顧客CD
+ * xToken String トークンID
  * returns ExternalItem
  **/
-exports.getUploadCm = function (id, xUnisCustomerCd) {
+exports.getUploadCm = function (id, xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
       const json = await getUploadCm(xUnisCustomerCd, id);
@@ -88,9 +91,10 @@ exports.getUploadCm = function (id, xUnisCustomerCd) {
  * CMの外部連携状態を一覧で取得する
  *
  * xUnisCustomerCd String UNIS顧客CD
+ * xToken String トークンID
  * returns ExternalItems
  **/
-exports.listUploadCm = function (xUnisCustomerCd) {
+exports.listUploadCm = function (xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
       const json = await getUploadCm(xUnisCustomerCd);

@@ -23,10 +23,11 @@ export default function recordingStore() {
     error: undefined as string | undefined,
   });
 
+  const unisCustomerCd = () => <string>auth.getUserInfo()?.unisCustomerCd;
   const token = () => <string>auth.getToken();
 
   const fetchRecordingData = async () => {
-    return await recordingService.fetch(token());
+    return await recordingService.fetch(unisCustomerCd(), token());
   };
 
   const getUserRecording = (id: string) => {
@@ -36,7 +37,7 @@ export default function recordingStore() {
 
   const deleteUserRecording = async (id: string) => {
     try {
-      const response = await recordingService.remove(token(), id);
+      const response = await recordingService.remove(unisCustomerCd(), token(), id);
       state.status = UPLOAD_RECORDING_STATE.NONE;
       return response;
     } catch (e) {
@@ -58,6 +59,7 @@ export default function recordingStore() {
       const uploadUrl = await recordingService.uploadById(id, "recording");
       await recordingService.put(uploadUrl, recordingFile);
       const response = await recordingService.upload(
+        unisCustomerCd(),
         token(),
         recordingFile
       );
@@ -77,7 +79,7 @@ export default function recordingStore() {
   ) => {
     try {
       state.status = UPLOAD_RECORDING_STATE.UPDATING;
-      return await recordingService.update(token(), id, title, description);
+      return await recordingService.update(unisCustomerCd(), token(), id, title, description);
     } catch (e) {
       state.status = UPLOAD_RECORDING_STATE.UPDATED;
       throw e;

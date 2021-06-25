@@ -36,7 +36,7 @@ export default function authStore() {
     try {
       state.authenticating = true;
       state.token = await userService.auth(unisCustomerCd);
-      state.user = await userService.getInfo(state.token);
+      state.user = await userService.getInfo(unisCustomerCd, state.token);
       analytics.setUserId(state.user.unisCustomerCd);
     } finally {
       state.authenticating = false;

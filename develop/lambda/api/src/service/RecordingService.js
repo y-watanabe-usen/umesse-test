@@ -17,9 +17,10 @@ const {
  *
  * body List 録音音声登録リクエストBody (optional)
  * xUnisCustomerCd String UNIS顧客CD
+ * xToken String トークンID
  * returns List
  **/
-exports.createUserRecording = function (body, xUnisCustomerCd) {
+exports.createUserRecording = function (body, xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
       const json = await createRecordingResource(xUnisCustomerCd, body);
@@ -41,9 +42,10 @@ exports.createUserRecording = function (body, xUnisCustomerCd) {
  *
  * id String 録音音声ID
  * xUnisCustomerCd String UNIS顧客CD
+ * xToken String トークンID
  * returns RecordingItem
  **/
-exports.deleteUserRecording = function (id, xUnisCustomerCd) {
+exports.deleteUserRecording = function (id, xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
       const json = await deleteUserResource(
@@ -69,9 +71,10 @@ exports.deleteUserRecording = function (id, xUnisCustomerCd) {
  *
  * id String 録音音声ID
  * xUnisCustomerCd String UNIS顧客CD
+ * xToken String トークンID
  * returns RecordingItem
  **/
-exports.getUserRecording = function (id, xUnisCustomerCd) {
+exports.getUserRecording = function (id, xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
       const json = await getUserResource(
@@ -97,9 +100,10 @@ exports.getUserRecording = function (id, xUnisCustomerCd) {
  *
  * sort Integer ソート (1：title昇順, 2：title降順, 3：timestamp昇順, 4：timestamp降順) (optional)
  * xUnisCustomerCd String UNIS顧客CD
+ * xToken String トークンID
  * returns List
  **/
-exports.listUserRecording = function (sort, xUnisCustomerCd) {
+exports.listUserRecording = function (sort, xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
       const json = await getUserResource(
@@ -127,9 +131,10 @@ exports.listUserRecording = function (sort, xUnisCustomerCd) {
  * body Object ユーザー素材データ更新リクエストBody (optional)
  * id String 録音音声ID
  * xUnisCustomerCd String UNIS顧客CD
+ * xToken String トークンID
  * returns RecordingItem
  **/
-exports.updateUserRecording = function (body, id, xUnisCustomerCd) {
+exports.updateUserRecording = function (body, id, xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
       const json = await updateUserResource(

@@ -46,6 +46,7 @@ describe("fetchNarrationのテスト", () => {
     jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
 
     const response = await resourcesService.fetchNarration(
+      "unisCustomerCd",
       "authToken",
       "01",
       "901",
@@ -85,6 +86,7 @@ describe("fetchNarrationのテスト", () => {
     jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
 
     const response = await resourcesService.fetchNarration(
+      "unisCustomerCd",
       "authToken",
       "02",
       "901",
@@ -124,6 +126,7 @@ describe("fetchNarrationのテスト", () => {
     jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
 
     const response = await resourcesService.fetchNarration(
+      "unisCustomerCd",
       "authToken",
       "02",
       "902",
@@ -146,7 +149,7 @@ describe("fetchNarrationのテスト", () => {
     jest.spyOn(axios, "request").mockRejectedValue({ data: responseJson });
 
     await expect(
-      resourcesService.fetchNarration("authToken", "01", "901", 1)
+      resourcesService.fetchNarration("unisCustomerCd", "authToken", "01", "901", 1)
     ).rejects.toThrowError(expoectedError);
   });
 
@@ -161,7 +164,7 @@ describe("fetchNarrationのテスト", () => {
     jest.spyOn(axios, "request").mockRejectedValue({ data: responseJson });
 
     await expect(
-      resourcesService.fetchNarration("authToken", "02", "901", 1)
+      resourcesService.fetchNarration("unisCustomerCd", "authToken", "02", "901", 1)
     ).rejects.toThrowError(expoectedError);
   });
 
@@ -176,7 +179,7 @@ describe("fetchNarrationのテスト", () => {
     jest.spyOn(axios, "request").mockRejectedValue({ data: responseJson });
 
     await expect(
-      resourcesService.fetchNarration("authToken", "02", "902", 1)
+      resourcesService.fetchNarration("unisCustomerCd", "authToken", "02", "902", 1)
     ).rejects.toThrowError(expoectedError);
   });
 
@@ -192,7 +195,7 @@ describe("fetchNarrationのテスト", () => {
       .mockRejectedValue({ response: { status: 500 } });
 
     await expect(
-      resourcesService.fetchNarration("authToken", "01", "901", 1)
+      resourcesService.fetchNarration("unisCustomerCd", "authToken", "01", "901", 1)
     ).rejects.toThrowError(expoectedError);
   });
 
@@ -208,7 +211,7 @@ describe("fetchNarrationのテスト", () => {
       .mockRejectedValue({ response: { status: 500 } });
 
     await expect(
-      resourcesService.fetchNarration("authToken", "02", "901", 1)
+      resourcesService.fetchNarration("unisCustomerCd", "authToken", "02", "901", 1)
     ).rejects.toThrowError(expoectedError);
   });
 
@@ -224,7 +227,7 @@ describe("fetchNarrationのテスト", () => {
       .mockRejectedValue({ response: { status: 500 } });
 
     await expect(
-      resourcesService.fetchNarration("authToken", "02", "902", 1)
+      resourcesService.fetchNarration("unisCustomerCd", "authToken", "02", "902", 1)
     ).rejects.toThrowError(expoectedError);
   });
 });
@@ -453,7 +456,7 @@ describe("fetchTemplateのテスト", () => {
       .spyOn(axios, "request")
       .mockRejectedValue({ response: { status: 500 } });
 
-    await expect(resourcesService.fetchTemplate("01", "10",1)).rejects.toThrowError(
+    await expect(resourcesService.fetchTemplate("01", "10", 1)).rejects.toThrowError(
       expoectedError
     );
   });

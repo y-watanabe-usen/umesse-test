@@ -30,6 +30,7 @@ export default function ttsStore() {
     error: undefined as string | undefined,
   });
 
+  const unisCustomerCd = () => <string>auth.getUserInfo()?.unisCustomerCd;
   const token = () => <string>auth.getToken();
 
   const isGenerating = () => state.generating;
@@ -37,7 +38,7 @@ export default function ttsStore() {
 
   const fetchTtsData = async () => {
     try {
-      const response = await ttsService.fetch(token());
+      const response = await ttsService.fetch(unisCustomerCd(), token());
       state.ttsItems = response;
     } catch (e) {
       // throw new e;
@@ -51,7 +52,7 @@ export default function ttsStore() {
 
   const deleteUserTts = async (id: string) => {
     try {
-      await ttsService.remove(token(), id);
+      await ttsService.remove(unisCustomerCd(), token(), id);
     } catch (e) {
       // throw new e;
     }
@@ -63,7 +64,7 @@ export default function ttsStore() {
     description: string
   ) => {
     try {
-      await ttsService.update(token(), id, title, description);
+      await ttsService.update(unisCustomerCd(), token(), id, title, description);
     } catch (e) {
       // throw new e;
     }
@@ -132,7 +133,7 @@ export default function ttsStore() {
         details: details,
       };
 
-      const response = await ttsService.generate(token(), requestModel);
+      const response = await ttsService.generate(unisCustomerCd(), token(), requestModel);
       state.ttsDatas = response.details;
       // throw new e;
     } catch (err) {
@@ -162,7 +163,7 @@ export default function ttsStore() {
           },
         ],
       };
-      const response = await ttsService.generate(token(), requestModel);
+      const response = await ttsService.generate(unisCustomerCd(), token(), requestModel);
       state.ttsDatas = response.details;
       // throw new e;
     } catch (err) {
@@ -199,7 +200,7 @@ export default function ttsStore() {
         details: details,
       };
 
-      const response = await ttsService.create(token(), requestModel);
+      const response = await ttsService.create(unisCustomerCd(), token(), requestModel);
       return response;
     } catch (e) {
       state.error = e.message;

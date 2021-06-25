@@ -63,7 +63,7 @@ describe("fetchのテスト", () => {
     ];
     jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
 
-    const response = await cmService.fetch("token", 1);
+    const response = await cmService.fetch("unisCustomerCd", "token", 1);
 
     expect(response.length).toBe(2);
     expect(response[0].length).toBe(1);
@@ -82,7 +82,7 @@ describe("fetchのテスト", () => {
 
     jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
 
-    await expect(cmService.fetch("token", 1)).rejects.toThrowError(
+    await expect(cmService.fetch("unisCustomerCd", "token", 1)).rejects.toThrowError(
       expoectedError
     );
   });
@@ -98,7 +98,7 @@ describe("fetchのテスト", () => {
       .spyOn(axios, "request")
       .mockRejectedValue({ response: { status: 500 } });
 
-    await expect(cmService.fetch("token", 1)).rejects.toThrowError(
+    await expect(cmService.fetch("unisCustomerCd", "token", 1)).rejects.toThrowError(
       expoectedError
     );
   });
@@ -161,6 +161,7 @@ describe("createのテスト", () => {
       .mockResolvedValueOnce({ data: getUserCmResponseJson });
 
     const iterator = cmService.createGenerator(
+      "unisCustomerCd",
       "token",
       [
         <Narration>{
@@ -264,6 +265,7 @@ describe("createのテスト", () => {
     cmCache.set(cacheKey, responseJson);
 
     const iterator = cmService.createGenerator(
+      "unisCustomerCd",
       "token",
       [
         <Recording>{
@@ -302,6 +304,7 @@ describe("createのテスト", () => {
     );
 
     const iterator = cmService.createGenerator(
+      "unisCustomerCd",
       "token",
       [
         <Recording>{
@@ -333,6 +336,7 @@ describe("createのテスト", () => {
       .spyOn(axios, "request")
       .mockRejectedValue({ response: { status: 500 } });
     const iterator = cmService.createGenerator(
+      "unisCustomerCd",
       "token",
       [
         <Recording>{
@@ -393,6 +397,7 @@ describe("updateのテスト", () => {
     jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
 
     const response = await cmService.update(
+      "unisCustomerCd",
       "token",
       "001",
       "タイトル",
@@ -417,7 +422,7 @@ describe("updateのテスト", () => {
     jest.spyOn(axios, "request").mockRejectedValue({ data: responseJson });
 
     await expect(
-      cmService.update("token", "001", "タイトル", "説明", "001", "02", "原稿")
+      cmService.update("unisCustomerCd", "token", "001", "タイトル", "説明", "001", "02", "原稿")
     ).rejects.toThrowError(expoectedError);
   });
 
@@ -433,7 +438,7 @@ describe("updateのテスト", () => {
       .mockRejectedValue({ response: { status: 500 } });
 
     await expect(
-      cmService.update("token", "001", "タイトル", "説明", "001", "02", "原稿")
+      cmService.update("unisCustomerCd", "token", "001", "タイトル", "説明", "001", "02", "原稿")
     ).rejects.toThrowError(expoectedError);
   });
 });
@@ -476,7 +481,7 @@ describe("removeのテスト", () => {
     };
     jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
 
-    const response = await cmService.remove("token", "001");
+    const response = await cmService.remove("unisCustomerCd", "token", "001");
 
     expect(response.id).toBe("123456789-c-v2qvc913");
     expect(response.title).toBe("cmテスト");
@@ -492,7 +497,7 @@ describe("removeのテスト", () => {
 
     jest.spyOn(axios, "request").mockRejectedValue({ data: responseJson });
 
-    await expect(cmService.remove("token", "001")).rejects.toThrowError(
+    await expect(cmService.remove("unisCustomerCd", "token", "001")).rejects.toThrowError(
       expoectedError
     );
   });
@@ -508,7 +513,7 @@ describe("removeのテスト", () => {
       .spyOn(axios, "request")
       .mockRejectedValue({ response: { status: 500 } });
 
-    await expect(cmService.remove("token", "001")).rejects.toThrowError(
+    await expect(cmService.remove("unisCustomerCd", "token", "001")).rejects.toThrowError(
       expoectedError
     );
   });

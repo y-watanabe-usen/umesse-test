@@ -36,7 +36,7 @@ describe("fetchのテスト", () => {
     ];
     jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
 
-    const response = await ttsService.fetch("token");
+    const response = await ttsService.fetch("unisCustomerCd", "token");
 
     expect(response.length).toBe(2);
     expect(response[0].id).toBe("サンプル01");
@@ -53,7 +53,7 @@ describe("fetchのテスト", () => {
 
     jest.spyOn(axios, "request").mockRejectedValue({ data: responseJson });
 
-    await expect(ttsService.fetch("token")).rejects.toThrowError(
+    await expect(ttsService.fetch("unisCustomerCd", "token")).rejects.toThrowError(
       expoectedError
     );
   });
@@ -69,7 +69,7 @@ describe("fetchのテスト", () => {
       .spyOn(axios, "request")
       .mockRejectedValue({ response: { status: 500 } });
 
-    await expect(ttsService.fetch("token")).rejects.toThrowError(
+    await expect(ttsService.fetch("unisCustomerCd", "token")).rejects.toThrowError(
       expoectedError
     );
   });
@@ -98,7 +98,7 @@ describe("generateのテスト", () => {
     };
     jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
 
-    const response = await ttsService.generate("token", {
+    const response = await ttsService.generate("unisCustomerCd", "token", {
       id: "サンプル01",
       category: "tts",
       details: [
@@ -159,7 +159,7 @@ describe("generateのテスト", () => {
     const cacheKey = Convert.generateUserTtsRequestItemToJson(requestModel);
     ttsCache.set(cacheKey, responseJson);
 
-    const response = await ttsService.generate("token", requestModel);
+    const response = await ttsService.generate("unisCustomerCd", "token", requestModel);
 
     expect(response.id).toBe("サンプル01");
     expect(response.details.length).toBe(2);
@@ -176,7 +176,7 @@ describe("generateのテスト", () => {
     jest.spyOn(axios, "request").mockRejectedValue({ data: responseJson });
 
     await expect(
-      ttsService.generate("token", {
+      ttsService.generate("unisCustomerCd", "token", {
         id: "サンプル01",
         category: "tts",
         details: [
@@ -209,7 +209,7 @@ describe("generateのテスト", () => {
       .mockRejectedValue({ response: { status: 500 } });
 
     await expect(
-      ttsService.generate("token", {
+      ttsService.generate("unisCustomerCd", "token", {
         id: "サンプル01",
         category: "tts",
         details: [
@@ -257,7 +257,7 @@ describe("createのテスト", () => {
     ];
     jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
 
-    const response = await ttsService.create("token", {
+    const response = await ttsService.create("unisCustomerCd", "token", {
       id: "サンプル01",
       category: "tts",
       details: [
@@ -290,7 +290,7 @@ describe("createのテスト", () => {
     jest.spyOn(axios, "request").mockRejectedValue({ data: responseJson });
 
     await expect(
-      ttsService.create("token", {
+      ttsService.create("unisCustomerCd", "token", {
         id: "サンプル01",
         category: "tts",
         details: [
@@ -321,7 +321,7 @@ describe("createのテスト", () => {
       .mockRejectedValue({ response: { status: 500 } });
 
     await expect(
-      ttsService.create("token", {
+      ttsService.create("unisCustomerCd", "token", {
         id: "サンプル01",
         category: "tts",
         details: [
@@ -358,6 +358,7 @@ describe("updateのテスト", () => {
     jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
 
     const response = await ttsService.update(
+      "unisCustomerCd",
       "token",
       "001",
       "サンプル",
@@ -378,7 +379,7 @@ describe("updateのテスト", () => {
     jest.spyOn(axios, "request").mockRejectedValue({ data: responseJson });
 
     await expect(
-      ttsService.update("token", "001", "サンプル", "説明")
+      ttsService.update("unisCustomerCd", "token", "001", "サンプル", "説明")
     ).rejects.toThrowError(expoectedError);
   });
 
@@ -394,7 +395,7 @@ describe("updateのテスト", () => {
       .mockRejectedValue({ response: { status: 500 } });
 
     await expect(
-      ttsService.update("token", "001", "サンプル", "説明")
+      ttsService.update("unisCustomerCd", "token", "001", "サンプル", "説明")
     ).rejects.toThrowError(expoectedError);
   });
 });
@@ -415,7 +416,7 @@ describe("removeのテスト", () => {
     };
     jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
 
-    const response = await ttsService.remove("token", "001");
+    const response = await ttsService.remove("unisCustomerCd", "token", "001");
 
     expect(response.id).toBe("サンプル01");
   });
@@ -430,7 +431,7 @@ describe("removeのテスト", () => {
 
     jest.spyOn(axios, "request").mockRejectedValue({ data: responseJson });
 
-    await expect(ttsService.remove("token", "001")).rejects.toThrowError(
+    await expect(ttsService.remove("unisCustomerCd", "token", "001")).rejects.toThrowError(
       expoectedError
     );
   });
@@ -446,7 +447,7 @@ describe("removeのテスト", () => {
       .spyOn(axios, "request")
       .mockRejectedValue({ response: { status: 500 } });
 
-    await expect(ttsService.remove("token", "001")).rejects.toThrowError(
+    await expect(ttsService.remove("unisCustomerCd", "token", "001")).rejects.toThrowError(
       expoectedError
     );
   });

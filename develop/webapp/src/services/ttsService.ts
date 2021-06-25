@@ -10,10 +10,10 @@ export function useTtsService(
   ttsCache: TtsCache
 ) {
 
-  const fetch = async (authToken: string): Promise<TtsItem[]> => {
+  const fetch = async (unisCustomerCd: string, authToken: string): Promise<TtsItem[]> => {
     return new Promise(function (resolve, reject) {
       ttsApi
-        .listUserTts(authToken)
+        .listUserTts(unisCustomerCd, authToken)
         .then((value) => {
           resolve(value.data);
         })
@@ -23,14 +23,14 @@ export function useTtsService(
     });
   };
 
-  const generate = async (authToken: string, requestModel: GenerateUserTtsRequestItem): Promise<GenerateTtsItem> => {
+  const generate = async (unisCustomerCd: string, authToken: string, requestModel: GenerateUserTtsRequestItem): Promise<GenerateTtsItem> => {
     const cacheKey = Convert.generateUserTtsRequestItemToJson(requestModel);
     const cacheValue = ttsCache.get<GenerateTtsItem | undefined>(cacheKey);
     if (cacheValue) return cacheValue;
 
     return new Promise(function (resolve, reject) {
       ttsApi
-        .generateUserTts(authToken, requestModel)
+        .generateUserTts(unisCustomerCd, authToken, requestModel)
         .then((value) => {
           ttsCache.set<GenerateTtsItem>(cacheKey, value.data);
           resolve(value.data);
@@ -41,10 +41,10 @@ export function useTtsService(
     });
   };
 
-  const create = async (authToken: string, requestModel: CreateUserTtsRequestItem): Promise<TtsItem[]> => {
+  const create = async (unisCustomerCd: string, authToken: string, requestModel: CreateUserTtsRequestItem): Promise<TtsItem[]> => {
     return new Promise(function (resolve, reject) {
       ttsApi
-        .createUserTts(authToken, requestModel)
+        .createUserTts(unisCustomerCd, authToken, requestModel)
         .then((value) => {
           resolve(value.data);
         })
@@ -54,10 +54,10 @@ export function useTtsService(
     });
   };
 
-  const update = async (authToken: string, id: string, title: string, description: string): Promise<TtsItem> => {
+  const update = async (unisCustomerCd: string, authToken: string, id: string, title: string, description: string): Promise<TtsItem> => {
     return new Promise(function (resolve, reject) {
       ttsApi
-        .updateUserTts(authToken, id, {
+        .updateUserTts(unisCustomerCd, authToken, id, {
           title: title,
           description: description,
         })
@@ -70,10 +70,10 @@ export function useTtsService(
     });
   };
 
-  const remove = async (authToken: string, id: string): Promise<TtsItem> => {
+  const remove = async (unisCustomerCd: string, authToken: string, id: string): Promise<TtsItem> => {
     return new Promise(function (resolve, reject) {
       ttsApi
-        .deleteUserTts(id, authToken)
+        .deleteUserTts(id, unisCustomerCd, authToken)
         .then((value) => {
           resolve(value.data);
         })

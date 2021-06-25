@@ -3,8 +3,8 @@
 var utils = require('../utils/writer.js');
 var Upload = require('../service/UploadService');
 
-module.exports.createUploadCm = function createUploadCm (req, res, next, body, id, xUnisCustomerCd) {
-  Upload.createUploadCm(body, id, xUnisCustomerCd)
+module.exports.createUploadCm = function createUploadCm (req, res, next, body, id, xUnisCustomerCd, xToken) {
+  Upload.createUploadCm(body, id, xUnisCustomerCd, xToken)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -13,8 +13,8 @@ module.exports.createUploadCm = function createUploadCm (req, res, next, body, i
     });
 };
 
-module.exports.deleteUploadCm = function deleteUploadCm (req, res, next, id, xUnisCustomerCd) {
-  Upload.deleteUploadCm(id, xUnisCustomerCd)
+module.exports.deleteUploadCm = function deleteUploadCm (req, res, next, id, xUnisCustomerCd, xToken) {
+  Upload.deleteUploadCm(id, xUnisCustomerCd, xToken)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -23,8 +23,8 @@ module.exports.deleteUploadCm = function deleteUploadCm (req, res, next, id, xUn
     });
 };
 
-module.exports.getUploadCm = function getUploadCm (req, res, next, id, xUnisCustomerCd) {
-  Upload.getUploadCm(id, xUnisCustomerCd)
+module.exports.getUploadCm = function getUploadCm (req, res, next, id, xUnisCustomerCd, xToken) {
+  Upload.getUploadCm(id, xUnisCustomerCd, xToken)
     .then(function (response) {
       utils.writeJson(res, response);
     })
@@ -33,8 +33,8 @@ module.exports.getUploadCm = function getUploadCm (req, res, next, id, xUnisCust
     });
 };
 
-module.exports.listUploadCm = function listUploadCm (req, res, next, xUnisCustomerCd) {
-  Upload.listUploadCm(xUnisCustomerCd)
+module.exports.listUploadCm = function listUploadCm (req, res, next, xUnisCustomerCd, xToken) {
+  Upload.listUploadCm(xUnisCustomerCd, xToken)
     .then(function (response) {
       utils.writeJson(res, response);
     })

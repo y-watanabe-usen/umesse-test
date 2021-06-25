@@ -16,6 +16,7 @@ export function useResourcesService(
 ) {
 
   const fetchNarration = async (
+    unisCustomerCd: string,
     authToken: string,
     industryCd: string,
     sceneCd: string,
@@ -26,7 +27,7 @@ export function useResourcesService(
       if (sceneCd == "901") {
         return new Promise(function (resolve, reject) {
           recordingApi
-            .listUserRecording(authToken, sort)
+            .listUserRecording(unisCustomerCd, authToken, sort)
             .then((value) => {
               const data: NarrationItem[] = [];
               value.data.forEach((v) => {
@@ -48,7 +49,7 @@ export function useResourcesService(
       } else {
         return new Promise(function (resolve, reject) {
           ttsApi
-            .listUserTts(authToken, sort)
+            .listUserTts(unisCustomerCd, authToken, sort)
             .then((value) => {
               const data: NarrationItem[] = [];
               value.data.forEach((v) => {
