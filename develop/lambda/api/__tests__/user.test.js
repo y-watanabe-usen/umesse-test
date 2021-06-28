@@ -76,7 +76,7 @@ describe("ユーザー認証", () => {
       authUser({
         unisCustomerCd: data[0].unisCustomerCd,
       })
-    ).resolves.toEqual({ token: data[0].unisCustomerCd });
+    ).resolves.toEqual({ token: expect.stringMatching(`[0-9a-z]{64}$`) });
   });
 
   test("[error] ユーザー認証　データ存在しない", async () => {

@@ -1,8 +1,14 @@
 "use strict";
 
-const { debuglog, errorlog } = require("umesse-lib/constants");
+const {
+  debuglog,
+  errorlog,
+  timestamp,
+  generateToken,
+} = require("umesse-lib/constants");
 const { checkParams } = require("umesse-lib/validation");
 const {
+  ERROR_CODE,
   BadRequestError,
   NotFoundError,
   InternalServerError,
@@ -55,5 +61,18 @@ exports.authUser = async (body) => {
     throw new InternalServerError(ERROR_CODE.E0000500);
   }
 
-  return { token: ret.unisCustomerCd };
+  // token発行
+  const token = generateToken();
+  const expiration = timestamp(9 + 24); // 24h
+
+  console.log(token, expiration);
+
+  try {
+    ret = await db.User.updateAuth(body.unisCustomerCd, token, expiration);
+  } catch (e) {
+    errorlog(JSON.stringify(e));
+    throw new InternalServerError(ERROR_CODE.E0000500);
+  }
+
+  return { token: token };
 };

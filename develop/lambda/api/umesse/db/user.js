@@ -172,6 +172,31 @@ module.exports = {
     return ret.Attributes[category].pop();
   },
 
+  updateAuth: async function (unisCustomerCd, token, expiration) {
+    const key = { unisCustomerCd: unisCustomerCd };
+    const options = {
+      UpdateExpression: `SET 
+      authToken = :authToken,
+      authExpiration = :authExpiration`,
+      ExpressionAttributeValues: {
+        ":authToken": token,
+        ":authExpiration": expiration,
+      },
+      ReturnValues: "UPDATED_NEW",
+    };
+    debuglog(JSON.stringify({ key: key, options: options }));
+
+    let ret = await dynamodbManager.update(
+      constants.dynamoDbTable().users,
+      key,
+      options
+    );
+    debuglog(JSON.stringify(ret));
+    if (!ret) throw new Error(ERROR_CODE.E0000500);
+
+    return ret.Attributes;
+  },
+
   updateCm: async function (unisCustomerCd, index, cm) {
     const key = { unisCustomerCd: unisCustomerCd };
     const options = {
