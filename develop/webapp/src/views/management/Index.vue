@@ -418,7 +418,7 @@ import {
   convertDatestringToDate,
   convertNumberToTime,
 } from "@/utils/formatDate";
-import Constants, { Scene } from "@/utils/constants";
+import Constants, { Scene, ERROR_CODE } from "@/utils/constants";
 import { useRouter } from "vue-router";
 import SelectBox from "@/components/atoms/SelectBox.vue";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
@@ -617,7 +617,11 @@ export default defineComponent({
           fetchCm(state.activeSceneCd);
         }
       } catch (e) {
-        openErrorModal(e);
+        if (e.errorCode == ERROR_CODE.A3001) {
+          toHome();
+        } else {
+          openErrorModal(e);
+        }
       } finally {
         closeLoadingModal();
       }
