@@ -9,6 +9,7 @@ const {
   createShareCm,
   deleteShareCm,
 } = require("../../umesse/share");
+const { authToken } = require("../../umesse/user");
 
 /**
  * CM共有追加
@@ -22,6 +23,7 @@ const {
 exports.createShareCm = function (id, xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
+      await authToken(xUnisCustomerCd, xToken);
       const json = await createShareCm(xUnisCustomerCd, id);
       debuglog(JSON.stringify(json));
       resolve(json);
@@ -47,6 +49,7 @@ exports.createShareCm = function (id, xUnisCustomerCd, xToken) {
 exports.deleteShareCm = function (id, xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
+      await authToken(xUnisCustomerCd, xToken);
       const json = await deleteShareCm(xUnisCustomerCd, id);
       debuglog(JSON.stringify(json));
       resolve(json);
@@ -72,6 +75,7 @@ exports.deleteShareCm = function (id, xUnisCustomerCd, xToken) {
 exports.getShareCm = function (id, xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
+      await authToken(xUnisCustomerCd, xToken);
       const json = await getShareCm(xUnisCustomerCd, id);
       debuglog(JSON.stringify(json));
       resolve(json);
@@ -96,6 +100,7 @@ exports.getShareCm = function (id, xUnisCustomerCd, xToken) {
 exports.listShareCm = function (xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
+      await authToken(xUnisCustomerCd, xToken);
       const json = await getShareCm(xUnisCustomerCd);
       debuglog(JSON.stringify(json));
       resolve(json);

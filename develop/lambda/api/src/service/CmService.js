@@ -5,6 +5,7 @@ const { respondWithCode } = require("../utils/writer");
 const { UMesseError } = require("umesse-lib/error");
 const { debuglog } = require("umesse-lib/constants");
 const { getCm, createCm, updateCm, deleteCm } = require("../../umesse/cm");
+const { authToken } = require("../../umesse/user");
 
 /**
  * CM新規結合
@@ -18,6 +19,7 @@ const { getCm, createCm, updateCm, deleteCm } = require("../../umesse/cm");
 exports.createUserCm = function (body, xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
+      await authToken(xUnisCustomerCd, xToken);
       const json = await createCm(xUnisCustomerCd, body);
       debuglog(JSON.stringify(json));
       resolve(json);
@@ -43,6 +45,7 @@ exports.createUserCm = function (body, xUnisCustomerCd, xToken) {
 exports.deleteUserCm = function (id, xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
+      await authToken(xUnisCustomerCd, xToken);
       const json = await deleteCm(xUnisCustomerCd, id);
       debuglog(JSON.stringify(json));
       resolve(json);
@@ -68,6 +71,7 @@ exports.deleteUserCm = function (id, xUnisCustomerCd, xToken) {
 exports.getUserCm = function (id, xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
+      await authToken(xUnisCustomerCd, xToken);
       const json = await getCm(xUnisCustomerCd, id);
       debuglog(JSON.stringify(json));
       resolve(json);
@@ -93,6 +97,7 @@ exports.getUserCm = function (id, xUnisCustomerCd, xToken) {
 exports.listUserCm = function (sort, xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
+      await authToken(xUnisCustomerCd, xToken);
       const json = await getCm(xUnisCustomerCd, "", sort);
       debuglog(JSON.stringify(json));
       resolve(json);
@@ -119,6 +124,7 @@ exports.listUserCm = function (sort, xUnisCustomerCd, xToken) {
 exports.updateUserCm = function (body, id, xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
+      await authToken(xUnisCustomerCd, xToken);
       const json = await updateCm(xUnisCustomerCd, id, body);
       debuglog(JSON.stringify(json));
       resolve(json);

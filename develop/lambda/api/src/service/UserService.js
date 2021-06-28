@@ -4,7 +4,7 @@ const assert = require("assert");
 const { respondWithCode } = require("../utils/writer");
 const { UMesseError } = require("umesse-lib/error");
 const { debuglog } = require("umesse-lib/constants");
-const { getUser } = require("../../umesse/user");
+const { getUser,authToken } = require("../../umesse/user");
 
 /**
  * ユーザー情報取得
@@ -17,6 +17,7 @@ const { getUser } = require("../../umesse/user");
 exports.getUser = function (xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
+      await authToken(xUnisCustomerCd, xToken);
       const json = await getUser(xUnisCustomerCd);
       debuglog(JSON.stringify(json));
       resolve(json);
