@@ -93,7 +93,7 @@ exports.authToken = async (unisCustomerCd, token) => {
 
   let ret;
   try {
-    ret = await db.User.find(body.unisCustomerCd);
+    ret = await db.User.find(unisCustomerCd);
   } catch (e) {
     if (e instanceof NotFoundError) throw e;
     errorlog(JSON.stringify(e));
