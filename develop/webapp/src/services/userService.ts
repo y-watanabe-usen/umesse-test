@@ -5,10 +5,11 @@ export function useUserService(
   authRepository: AuthApi,
   userRepository: UserApi
 ) {
-  const auth = async (unisCustomerCd: string): Promise<string> => {
+  const auth = async (unisCustomerCd: string, contractCd: string): Promise<string> => {
     try {
       const requestModel = {
-        unisCustomerCd: unisCustomerCd
+        unisCustomerCd: unisCustomerCd,
+        contractCd: contractCd,
       };
       const response = await authRepository.auth(requestModel);
       return response.data.token;

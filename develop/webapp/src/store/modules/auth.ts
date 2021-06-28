@@ -29,13 +29,14 @@ export default function authStore() {
     if (state.token) return;
 
     const unisCustomerCd = getUnisCustomerCd();
-    if (unisCustomerCd == undefined) {
+    const contractCd = getUnisContractCd();
+    if (unisCustomerCd == undefined || contractCd == undefined) {
       throw new UMesseError(ERROR_CODE.A4002, ERROR_PATTERN.A4002, "");
     }
 
     try {
       state.authenticating = true;
-      state.token = await userService.auth(unisCustomerCd);
+      state.token = await userService.auth(unisCustomerCd, contractCd);
       state.user = await userService.getInfo(unisCustomerCd, state.token);
       analytics.setUserId(state.user.unisCustomerCd);
     } finally {
@@ -50,6 +51,15 @@ export default function authStore() {
       unisCustomerCd = "123456789";
     }
     return unisCustomerCd;
+  };
+
+  const getUnisContractCd = () => {
+    let contractCd = router.currentRoute.value.query.contractCd as string;
+    if (contractCd == undefined && process.env.NODE_ENV !== "production") {
+      // contractCdが空で、かつ本番環境でなければデバッグ値をセット
+      contractCd = "N01234567890123456789";
+    }
+    return contractCd;
   };
 
   return {
