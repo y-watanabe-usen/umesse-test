@@ -11,6 +11,7 @@ const {
   updateUserResource,
   deleteUserResource,
 } = require("../../umesse/resources");
+const { authToken } = require("../../umesse/user");
 
 /**
  * TTSデータ登録
@@ -24,6 +25,7 @@ const {
 exports.createUserTts = function (body, xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
+      await authToken(xUnisCustomerCd, xToken);
       const json = await createTtsResource(xUnisCustomerCd, body);
       debuglog(JSON.stringify(json));
       resolve(json);
@@ -49,6 +51,7 @@ exports.createUserTts = function (body, xUnisCustomerCd, xToken) {
 exports.deleteUserTts = function (id, xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
+      await authToken(xUnisCustomerCd, xToken);
       const json = await deleteUserResource(
         xUnisCustomerCd,
         constants.resourceCategory.TTS,
@@ -78,6 +81,7 @@ exports.deleteUserTts = function (id, xUnisCustomerCd, xToken) {
 exports.generateUserTts = function (body, xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
+      await authToken(xUnisCustomerCd, xToken);
       const json = await generateTtsResource(xUnisCustomerCd, body);
       debuglog(JSON.stringify(json));
       resolve(json);
@@ -103,6 +107,7 @@ exports.generateUserTts = function (body, xUnisCustomerCd, xToken) {
 exports.getUserTts = function (id, xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
+      await authToken(xUnisCustomerCd, xToken);
       const json = await getUserResource(
         xUnisCustomerCd,
         constants.resourceCategory.TTS,
@@ -132,6 +137,7 @@ exports.getUserTts = function (id, xUnisCustomerCd, xToken) {
 exports.listUserTts = function (sort, xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
+      await authToken(xUnisCustomerCd, xToken);
       const json = await getUserResource(
         xUnisCustomerCd,
         constants.resourceCategory.TTS,
@@ -163,6 +169,7 @@ exports.listUserTts = function (sort, xUnisCustomerCd, xToken) {
 exports.updateUserTts = function (body, id, xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
+      await authToken(xUnisCustomerCd, xToken);
       const json = await updateUserResource(
         xUnisCustomerCd,
         constants.resourceCategory.TTS,

@@ -20,7 +20,9 @@ module.exports = {
         "contractStatusCd," +
         "contractStatusName," +
         "createDate," +
-        "renewalDate",
+        "renewalDate," +
+        "authToken," +
+        "authExpiration",
     };
     debuglog(JSON.stringify({ key: key, options: options }));
 

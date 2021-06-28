@@ -9,6 +9,7 @@ const {
   createUploadCm,
   deleteUploadCm,
 } = require("../../umesse/upload");
+const { authToken } = require("../../umesse/user");
 
 /**
  * CM外部連携追加
@@ -23,6 +24,7 @@ const {
 exports.createUploadCm = function (body, id, xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
+      await authToken(xUnisCustomerCd, xToken);
       const json = await createUploadCm(xUnisCustomerCd, id, body);
       debuglog(JSON.stringify(json));
       resolve(json);
@@ -48,6 +50,7 @@ exports.createUploadCm = function (body, id, xUnisCustomerCd, xToken) {
 exports.deleteUploadCm = function (id, xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
+      await authToken(xUnisCustomerCd, xToken);
       const json = await deleteUploadCm(xUnisCustomerCd, id);
       debuglog(JSON.stringify(json));
       resolve(json);
@@ -73,6 +76,7 @@ exports.deleteUploadCm = function (id, xUnisCustomerCd, xToken) {
 exports.getUploadCm = function (id, xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
+      await authToken(xUnisCustomerCd, xToken);
       const json = await getUploadCm(xUnisCustomerCd, id);
       debuglog(JSON.stringify(json));
       resolve(json);
@@ -97,6 +101,7 @@ exports.getUploadCm = function (id, xUnisCustomerCd, xToken) {
 exports.listUploadCm = function (xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
+      await authToken(xUnisCustomerCd, xToken);
       const json = await getUploadCm(xUnisCustomerCd);
       debuglog(JSON.stringify(json));
       resolve(json);

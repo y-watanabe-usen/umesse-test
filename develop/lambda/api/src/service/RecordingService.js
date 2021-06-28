@@ -10,6 +10,7 @@ const {
   updateUserResource,
   deleteUserResource,
 } = require("../../umesse/resources");
+const { authToken } = require("../../umesse/user");
 
 /**
  * 録音データ登録
@@ -23,6 +24,7 @@ const {
 exports.createUserRecording = function (body, xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
+      await authToken(xUnisCustomerCd, xToken);
       const json = await createRecordingResource(xUnisCustomerCd, body);
       debuglog(JSON.stringify(json));
       resolve(json);
@@ -48,6 +50,7 @@ exports.createUserRecording = function (body, xUnisCustomerCd, xToken) {
 exports.deleteUserRecording = function (id, xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
+      await authToken(xUnisCustomerCd, xToken);
       const json = await deleteUserResource(
         xUnisCustomerCd,
         constants.resourceCategory.RECORDING,
@@ -77,6 +80,7 @@ exports.deleteUserRecording = function (id, xUnisCustomerCd, xToken) {
 exports.getUserRecording = function (id, xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
+      await authToken(xUnisCustomerCd, xToken);
       const json = await getUserResource(
         xUnisCustomerCd,
         constants.resourceCategory.RECORDING,
@@ -106,6 +110,7 @@ exports.getUserRecording = function (id, xUnisCustomerCd, xToken) {
 exports.listUserRecording = function (sort, xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
+      await authToken(xUnisCustomerCd, xToken);
       const json = await getUserResource(
         xUnisCustomerCd,
         constants.resourceCategory.RECORDING,
@@ -137,6 +142,7 @@ exports.listUserRecording = function (sort, xUnisCustomerCd, xToken) {
 exports.updateUserRecording = function (body, id, xUnisCustomerCd, xToken) {
   return new Promise(async function (resolve, reject) {
     try {
+      await authToken(xUnisCustomerCd, xToken);
       const json = await updateUserResource(
         xUnisCustomerCd,
         constants.resourceCategory.RECORDING,
