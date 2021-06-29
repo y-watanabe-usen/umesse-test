@@ -4,6 +4,7 @@ var utils = require('../utils/writer.js');
 var User = require('../service/UserService');
 
 module.exports.getUser = function getUser (req, res, next, xUnisCustomerCd, xToken) {
+  console.debug(req.headers);
   User.getUser(xUnisCustomerCd, xToken)
     .then(function (response) {
       utils.writeJson(res, response);
