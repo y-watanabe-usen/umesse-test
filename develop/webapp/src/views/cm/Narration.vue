@@ -400,7 +400,7 @@ import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
 import MessageDialogContents from "@/components/molecules/MessageDialogContents.vue";
-import Constants, { Scene } from "@/utils/constants";
+import Constants, { Scene, ERROR_CODE } from "@/utils/constants";
 import useModalController from "@/mixins/modalController";
 import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
@@ -577,7 +577,11 @@ export default defineComponent({
           openNarrationTtsAbsentModal();
         }
       } catch (e) {
-        openErrorModal(e);
+        if (e.errorCode == ERROR_CODE.A3001) {
+          toHome();
+        } else {
+          openErrorModal(e);
+        }
       } finally {
         closeLoadingModal();
       }
@@ -683,7 +687,11 @@ export default defineComponent({
         closeSaveModal();
         openSavedModal();
       } catch (e) {
-        openErrorModal(e);
+        if (e.errorCode == ERROR_CODE.A3001) {
+          toHome();
+        } else {
+          openErrorModal(e);
+        }
       } finally {
         closeLoadingModal();
       }
@@ -727,8 +735,12 @@ export default defineComponent({
         closeRemoveModal();
         openRemovedModal();
       } catch (e) {
-        closeRemoveModal();
-        openErrorModal(e);
+        if (e.errorCode == ERROR_CODE.A3001) {
+          toHome();
+        } else {
+          closeRemoveModal();
+          openErrorModal(e);
+        }
       } finally {
         closeLoadingModal();
       }
@@ -750,6 +762,10 @@ export default defineComponent({
 
     const changeAudioPlayerSlider = (value: number) => {
       audioPlayer.changePlaybackTime(value);
+    };
+
+    const toHome = () => {
+      router.go(1 - history.length); // gohome.
     };
 
     return {

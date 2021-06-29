@@ -687,7 +687,11 @@ export default defineComponent({
         );
         openUploadedModal();
       } catch (e) {
-        openErrorModal(e);
+        if (e.errorCode == ERROR_CODE.A3001) {
+          toHome();
+        } else {
+          openErrorModal(e);
+        }
       } finally {
         closeLoadingModal();
       }
@@ -700,7 +704,11 @@ export default defineComponent({
         await uploadService.remove(cmId, authUser.unisCustomerCd, authToken);
         openUnUploadedModal();
       } catch (e) {
-        openErrorModal(e);
+        if (e.errorCode == ERROR_CODE.A3001) {
+          toHome();
+        } else {
+          openErrorModal(e);
+        }
       } finally {
         closeLoadingModal();
         closeUnUploadModal();
@@ -765,8 +773,12 @@ export default defineComponent({
         closeSaveModal();
         openSavedModal();
       } catch (e) {
-        closeSaveModal();
-        openErrorModal(e);
+        if (e.errorCode == ERROR_CODE.A3001) {
+          toHome();
+        } else {
+          closeSaveModal();
+          openErrorModal(e);
+        }
       } finally {
         closeLoadingModal();
       }
@@ -784,8 +796,12 @@ export default defineComponent({
         closeRemoveModal();
         openRemovedModal();
       } catch (e) {
-        closeRemoveModal();
-        openErrorModal(e);
+        if (e.errorCode == ERROR_CODE.A3001) {
+          toHome();
+        } else {
+          closeRemoveModal();
+          openErrorModal(e);
+        }
       } finally {
         closeLoadingModal();
       }

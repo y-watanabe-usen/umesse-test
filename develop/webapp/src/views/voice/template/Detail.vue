@@ -158,9 +158,9 @@
               type="primary"
               :isDisabled="
                 title === undefined ||
-                title === '' ||
-                isCreating ||
-                isGenerating
+                  title === '' ||
+                  isCreating ||
+                  isGenerating
               "
               @click="createTts"
               >保存して作成を続ける</Button
@@ -179,14 +179,8 @@
         </template>
         <template #footer>
           <ModalFooter>
-            <Button type="secondary" @click="closeTimeModal"
-              >キャンセル</Button
-            >
-            <Button
-              type="primary"
-              @click="confirmTime"
-              >確定</Button
-            >
+            <Button type="secondary" @click="closeTimeModal">キャンセル</Button>
+            <Button type="primary" @click="confirmTime">確定</Button>
           </ModalFooter>
         </template>
       </ModalDialog>
@@ -224,7 +218,7 @@ import SelectBox from "@/components/atoms/SelectBox.vue";
 import TimeInput from "@/components/atoms/TimeInput.vue";
 import TimeSelector from "@/components/molecules/TimeSelector.vue";
 import { TemplateItem } from "umesseapi/models";
-import Constants from "@/utils/constants";
+import Constants, { ERROR_CODE } from "@/utils/constants";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { lang, speaker, TemplateDetailItem } from "@/models/templateDetailItem";
 import validator from "@/utils/validator";
@@ -477,7 +471,11 @@ export default defineComponent({
         analytics.setTts(idString);
         router.push({ name: "Cm" });
       } catch (e) {
-        openErrorModal(e);
+        if (e.errorCode == ERROR_CODE.A3001) {
+          toHome();
+        } else {
+          openErrorModal(e);
+        }
       } finally {
         closeLoadingModal();
       }
@@ -501,8 +499,12 @@ export default defineComponent({
           state.point
         );
       } catch (e) {
-        closeModal();
-        openErrorModal(e);
+        if (e.errorCode == ERROR_CODE.A3001) {
+          toHome();
+        } else {
+          closeModal();
+          openErrorModal(e);
+        }
       }
     };
     const stopAndCloseModal = () => {
@@ -611,6 +613,10 @@ export default defineComponent({
     const confirmTime = () => {
       state.time = state.tmpTime;
       closeTimeModal();
+    };
+
+    const toHome = () => {
+      router.go(1 - history.length); // gohome.
     };
 
     return {

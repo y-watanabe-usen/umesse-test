@@ -213,7 +213,7 @@ import analytics from "@/utils/firebaseAnalytics";
 import useModalController from "@/mixins/modalController";
 import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
-import Constants from "@/utils/constants";
+import Constants, { ERROR_CODE } from "@/utils/constants";
 import { useCmStore } from "@/store/cm";
 
 export default defineComponent({
@@ -329,7 +329,11 @@ export default defineComponent({
         closeLoadingModal();
         closeModal();
       } catch (e) {
-        openErrorModal(e);
+        if (e.errorCode == ERROR_CODE.A3001) {
+          toHome();
+        } else {
+          openErrorModal(e);
+        }
       } finally {
         closeLoadingModal();
       }
@@ -342,6 +346,10 @@ export default defineComponent({
     onMounted(() => {
       analytics.screenView(Constants.SCREEN.RECORDING);
     });
+
+    const toHome = () => {
+      router.go(1 - history.length); // gohome.
+    };
     return {
       ...toRefs(state),
       toggleVoiceRecorder,

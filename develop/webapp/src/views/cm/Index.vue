@@ -104,9 +104,9 @@
               :key="narration.contentsId"
               :title="
                 'ナレーション ' +
-                `${index + 1}` +
-                '/' +
-                `${MAX_NARRATION_COUNT}`
+                  `${index + 1}` +
+                  '/' +
+                  `${MAX_NARRATION_COUNT}`
               "
               size="flexible"
               :contentTitle="`${narration.title}`"
@@ -185,9 +185,9 @@
               <CmItem
                 :title="
                   'ナレーション ' +
-                  `${narrations.length + 1}` +
-                  '/' +
-                  `${MAX_NARRATION_COUNT}`
+                    `${narrations.length + 1}` +
+                    '/' +
+                    `${MAX_NARRATION_COUNT}`
                 "
                 :isEmpty="true"
                 :contentTitleName="'narration' + `${narrations.length}`"
@@ -545,7 +545,10 @@
               "
             />
           </FormGroup>
-          <FormGroup title="アップロード先" description="保存後に「音声CM一覧画面」からアップロード先を変更することができます。">
+          <FormGroup
+            title="アップロード先"
+            description="保存後に「音声CM一覧画面」からアップロード先を変更することができます。"
+          >
             <SelectBox
               v-model="uploadSystem"
               :options="
@@ -582,7 +585,9 @@
         <template #footer>
           <ModalFooter>
             <Button type="secondary" @click="toHome">トップ画面に戻る</Button>
-            <Button type="primary" @click="toManagement">CM一覧を表示する</Button>
+            <Button type="primary" @click="toManagement"
+              >CM一覧を表示する</Button
+            >
           </ModalFooter>
         </template>
       </ModalDialog>
@@ -639,7 +644,7 @@ import {
 import useAudioPlayer from "@/utils/audioPlayer";
 import { useGlobalStore } from "@/store";
 import * as formatDate from "@/utils/formatDate";
-import Constants from "@/utils/constants";
+import Constants, { ERROR_CODE } from "@/utils/constants";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import Header from "@/components/organisms/Header.vue";
 import Button from "@/components/atoms/Button.vue";
@@ -955,7 +960,11 @@ export default defineComponent({
         closeCreateCmLoadingModal();
         openSaveModal();
       } catch (e) {
-        openErrorModal(e);
+        if (e.errorCode == ERROR_CODE.A3001) {
+          toHome();
+        } else {
+          openErrorModal(e);
+        }
         state.isIndicateCmTime = false;
       } finally {
         closeCreateCmLoadingModal();
@@ -971,9 +980,13 @@ export default defineComponent({
         state.isIndicateCmTime = true;
         await audioPlayer.load(cm.url);
       } catch (e) {
-        closeCreateCmLoadingModal();
-        closePlayModal();
-        openErrorModal(e);
+        if (e.errorCode == ERROR_CODE.A3001) {
+          toHome();
+        } else {
+          closeCreateCmLoadingModal();
+          closePlayModal();
+          openErrorModal(e);
+        }
         state.isIndicateCmTime = false;
       }
     };
@@ -995,7 +1008,11 @@ export default defineComponent({
         closeSaveModal();
         openSavedModal();
       } catch (e) {
-        openErrorModal(e);
+        if (e.errorCode == ERROR_CODE.A3001) {
+          toHome();
+        } else {
+          openErrorModal(e);
+        }
       } finally {
         closeLoadingModal();
       }

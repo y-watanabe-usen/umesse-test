@@ -119,7 +119,7 @@ import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
 import SelectBox from "@/components/atoms/SelectBox.vue";
-import Constants from "@/utils/constants";
+import Constants, { ERROR_CODE } from "@/utils/constants";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { displayCache } from "@/repository/cache";
 import analytics from "@/utils/firebaseAnalytics";
@@ -236,7 +236,11 @@ export default defineComponent({
         analytics.setTts(idString);
         router.push({ name: "Cm" });
       } catch (e) {
-        openErrorModal(e);
+        if (e.errorCode == ERROR_CODE.A3001) {
+          toHome();
+        } else {
+          openErrorModal(e);
+        }
       } finally {
         closeLoadingModal();
       }
@@ -247,8 +251,12 @@ export default defineComponent({
         openModal();
         await ttsStore.generateTtsDataFromFree(state.text, state.speaker);
       } catch (e) {
-        closeModal();
-        openErrorModal(e);
+        if (e.errorCode == ERROR_CODE.A3001) {
+          toHome();
+        } else {
+          closeModal();
+          openErrorModal(e);
+        }
       }
     };
     const stopAndCloseModal = () => {
@@ -276,6 +284,10 @@ export default defineComponent({
 
     const changeAudioPlayerSlider = (value: number) => {
       audioPlayer.changePlaybackTime(value);
+    };
+
+    const toHome = () => {
+      router.go(1 - history.length); // gohome.
     };
 
     return {
