@@ -194,6 +194,20 @@
         :errorMessage="errorMessage"
       />
     </transition>
+    <transition>
+      <ModalDialog v-if="isInvalidTokenModalAppear" size="small">
+        <template #contents>
+          <MessageDialogContents>
+            セッションの有効期限が切れています。
+          </MessageDialogContents>
+        </template>
+        <template #footer>
+          <ModalFooter>
+            <Button type="primary" @click="toHome">ホーム画面へ戻る</Button>
+          </ModalFooter>
+        </template>
+      </ModalDialog>
+    </transition>
   </div>
 </template>
 
@@ -209,6 +223,7 @@ import Button from "@/components/atoms/Button.vue";
 import ModalDialog from "@/components/organisms/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
+import MessageDialogContents from "@/components/molecules/MessageDialogContents.vue";
 import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
 import PlayDialogContents from "@/components/molecules/PlayDialogContents.vue";
 import FormGroup from "@/components/molecules/FormGroup.vue";
@@ -249,6 +264,7 @@ export default defineComponent({
     ModalDialog,
     ModalHeader,
     ModalFooter,
+    MessageDialogContents,
     ModalErrorDialog,
     PlayDialogContents,
     FormGroup,
@@ -316,6 +332,11 @@ export default defineComponent({
       isApper: isTimeModalAppear,
       // open: openTimeModal,
       close: closeTimeModal,
+    } = useModalController();
+    const {
+      isApper: isInvalidTokenModalAppear,
+      open: openInvalidTokenModal,
+      close: closeInvalidTokenModal,
     } = useModalController();
     const {
       isApper: isLoading,
@@ -472,7 +493,7 @@ export default defineComponent({
         router.push({ name: "Cm" });
       } catch (e) {
         if (e.errorCode == ERROR_CODE.A3001) {
-          toHome();
+          openInvalidTokenModal();
         } else {
           openErrorModal(e);
         }
@@ -500,7 +521,8 @@ export default defineComponent({
         );
       } catch (e) {
         if (e.errorCode == ERROR_CODE.A3001) {
-          toHome();
+          closeModal();
+          openInvalidTokenModal();
         } else {
           closeModal();
           openErrorModal(e);
@@ -616,6 +638,7 @@ export default defineComponent({
     };
 
     const toHome = () => {
+      if (isInvalidTokenModalAppear) closeInvalidTokenModal();
       router.go(1 - history.length); // gohome.
     };
 
@@ -659,6 +682,8 @@ export default defineComponent({
       closeErrorModal,
       confirmTime,
       Constants,
+      toHome,
+      isInvalidTokenModalAppear,
     };
   },
 });

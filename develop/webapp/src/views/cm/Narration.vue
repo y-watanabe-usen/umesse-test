@@ -355,6 +355,20 @@
       />
     </transition>
     <ModalLoading v-if="isLoading" title="" />
+    <transition>
+      <ModalDialog v-if="isInvalidTokenModalAppear" size="small">
+        <template #contents>
+          <MessageDialogContents>
+            セッションの有効期限が切れています。
+          </MessageDialogContents>
+        </template>
+        <template #footer>
+          <ModalFooter>
+            <Button type="primary" @click="toHome">ホーム画面へ戻る</Button>
+          </ModalFooter>
+        </template>
+      </ModalDialog>
+    </transition>
   </div>
 </template>
 
@@ -476,6 +490,11 @@ export default defineComponent({
       close: closeLoadingModal,
     } = useLoadingModalController();
     const {
+      isApper: isInvalidTokenModalAppear,
+      open: openInvalidTokenModal,
+      close: closeInvalidTokenModal,
+    } = useModalController();
+    const {
       isApper: isErrorModalApper,
       errorCode,
       errorMessage,
@@ -578,7 +597,7 @@ export default defineComponent({
         }
       } catch (e) {
         if (e.errorCode == ERROR_CODE.A3001) {
-          toHome();
+          openInvalidTokenModal();
         } else {
           openErrorModal(e);
         }
@@ -688,7 +707,7 @@ export default defineComponent({
         openSavedModal();
       } catch (e) {
         if (e.errorCode == ERROR_CODE.A3001) {
-          toHome();
+          openInvalidTokenModal();
         } else {
           openErrorModal(e);
         }
@@ -736,7 +755,8 @@ export default defineComponent({
         openRemovedModal();
       } catch (e) {
         if (e.errorCode == ERROR_CODE.A3001) {
-          toHome();
+          closeRemoveModal();
+          openInvalidTokenModal();
         } else {
           closeRemoveModal();
           openErrorModal(e);
@@ -765,6 +785,7 @@ export default defineComponent({
     };
 
     const toHome = () => {
+      if (isInvalidTokenModalAppear) closeInvalidTokenModal();
       router.go(1 - history.length); // gohome.
     };
 
@@ -827,6 +848,8 @@ export default defineComponent({
       closeNarrationTtsAbsentModal,
       Constants,
       download,
+      toHome,
+      isInvalidTokenModalAppear,
     };
   },
 });

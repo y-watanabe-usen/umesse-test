@@ -379,6 +379,25 @@
         </template>
       </ModalDialog>
     </transition>
+    <transition>
+      <ModalDialog
+        v-if="isInvalidTokenModalAppear"
+        size="small"
+      >
+        <template #contents>
+          <MessageDialogContents>
+            セッションの有効期限が切れています。
+          </MessageDialogContents>
+        </template>
+        <template #footer>
+          <ModalFooter>
+            <Button type="primary" @click="toHome"
+              >ホーム画面へ戻る</Button
+            >
+          </ModalFooter>
+        </template>
+      </ModalDialog>
+    </transition>
   </div>
 </template>
 
@@ -551,6 +570,11 @@ export default defineComponent({
       close: closeUnUploadedModal,
     } = useModalController();
     const {
+      isApper: isInvalidTokenModalAppear,
+      open: openInvalidTokenModal,
+      close: closeInvalidTokenModal,
+    } = useModalController();
+    const {
       isApper: isLoading,
       loadingMessage,
       open: openLoadingModal,
@@ -618,7 +642,7 @@ export default defineComponent({
         }
       } catch (e) {
         if (e.errorCode == ERROR_CODE.A3001) {
-          toHome();
+          openInvalidTokenModal();
         } else {
           openErrorModal(e);
         }
@@ -688,7 +712,7 @@ export default defineComponent({
         openUploadedModal();
       } catch (e) {
         if (e.errorCode == ERROR_CODE.A3001) {
-          toHome();
+          openInvalidTokenModal();
         } else {
           openErrorModal(e);
         }
@@ -705,7 +729,7 @@ export default defineComponent({
         openUnUploadedModal();
       } catch (e) {
         if (e.errorCode == ERROR_CODE.A3001) {
-          toHome();
+          openInvalidTokenModal();
         } else {
           openErrorModal(e);
         }
@@ -774,7 +798,8 @@ export default defineComponent({
         openSavedModal();
       } catch (e) {
         if (e.errorCode == ERROR_CODE.A3001) {
-          toHome();
+          closeSaveModal();
+          openInvalidTokenModal();
         } else {
           closeSaveModal();
           openErrorModal(e);
@@ -797,7 +822,8 @@ export default defineComponent({
         openRemovedModal();
       } catch (e) {
         if (e.errorCode == ERROR_CODE.A3001) {
-          toHome();
+          closeRemoveModal();
+          openInvalidTokenModal();
         } else {
           closeRemoveModal();
           openErrorModal(e);
@@ -813,6 +839,7 @@ export default defineComponent({
       router.push({ name: "Cm" });
     };
     const toHome = () => {
+      if (isInvalidTokenModalAppear) closeInvalidTokenModal();
       router.go(1 - history.length); // gohome.
     };
     const handleBackButton = () => {
@@ -950,6 +977,7 @@ export default defineComponent({
       isUploadErrorApper,
       closeUploadErrorModal,
       errorUpload,
+      isInvalidTokenModalAppear,
     };
   },
 });
