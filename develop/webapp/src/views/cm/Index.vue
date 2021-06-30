@@ -1097,7 +1097,10 @@ export default defineComponent({
     };
     const toHome = () => {
       cm.reset();
-      if (isInvalidTokenModalAppear) closeInvalidTokenModal();
+      if (isInvalidTokenModalAppear.value) {
+        auth.resetToken();
+        closeInvalidTokenModal();
+      }
       router.go(1 - history.length); // gohome.
     };
     const toRecoding = () => {

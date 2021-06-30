@@ -779,7 +779,10 @@ export default defineComponent({
     };
 
     const toHome = () => {
-      if (isInvalidTokenModalAppear) closeInvalidTokenModal();
+      if (isInvalidTokenModalAppear.value) {
+        auth.resetToken();
+        closeInvalidTokenModal();
+      }
       router.go(1 - history.length); // gohome.
     };
 

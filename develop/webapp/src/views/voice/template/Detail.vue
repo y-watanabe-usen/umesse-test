@@ -208,6 +208,7 @@
 import { computed, defineComponent, reactive, toRefs, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import useAudioPlayer from "@/utils/audioPlayer";
+import { useGlobalStore } from "@/store";
 import provideTtsStore from "@/store/tts";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
@@ -281,7 +282,7 @@ export default defineComponent({
     const audioPlayer = useAudioPlayer();
     const ttsSpeakers = Constants.TTS_GENDERS;
     const cm = useCmStore();
-
+    const { auth } = useGlobalStore();
     const template = displayCache.get<TemplateItem>(
       DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_SELECT_TEMPLATE
     );
@@ -630,7 +631,10 @@ export default defineComponent({
     };
 
     const toHome = () => {
-      if (isInvalidTokenModalAppear) closeInvalidTokenModal();
+      if (isInvalidTokenModalAppear.value) {
+        auth.resetToken();
+        closeInvalidTokenModal();
+      }
       router.go(1 - history.length); // gohome.
     };
 

@@ -27,7 +27,6 @@ export default function authStore() {
     if (state.authenticating) return;
     // 認証済み
     if (state.token) return;
-
     const unisCustomerCd = getUnisCustomerCd();
     const contractCd = getUnisContractCd();
     if (unisCustomerCd == undefined || contractCd == undefined) {
@@ -62,12 +61,17 @@ export default function authStore() {
     return contractCd;
   };
 
+  const resetToken = () => {
+    state.token = "";
+  };
+
   return {
     ...toRefs(state),
     requestAuth,
     getToken,
     getUserInfo,
     isAuthenticating,
+    resetToken,
   };
 }
 
