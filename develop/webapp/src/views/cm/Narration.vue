@@ -754,11 +754,10 @@ export default defineComponent({
         closeRemoveModal();
         openRemovedModal();
       } catch (e) {
+        closeRemoveModal();
         if (e.errorCode == ERROR_CODE.A3001) {
-          closeRemoveModal();
           openInvalidTokenModal();
         } else {
-          closeRemoveModal();
           openErrorModal(e);
         }
       } finally {

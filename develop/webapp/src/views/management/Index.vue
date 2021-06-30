@@ -380,10 +380,7 @@
       </ModalDialog>
     </transition>
     <transition>
-      <ModalDialog
-        v-if="isInvalidTokenModalAppear"
-        size="small"
-      >
+      <ModalDialog v-if="isInvalidTokenModalAppear" size="small">
         <template #contents>
           <MessageDialogContents>
             セッションの有効期限が切れています。
@@ -391,9 +388,7 @@
         </template>
         <template #footer>
           <ModalFooter>
-            <Button type="primary" @click="toHome"
-              >ホーム画面へ戻る</Button
-            >
+            <Button type="primary" @click="toHome">ホーム画面へ戻る</Button>
           </ModalFooter>
         </template>
       </ModalDialog>
@@ -797,11 +792,10 @@ export default defineComponent({
         closeSaveModal();
         openSavedModal();
       } catch (e) {
+        closeSaveModal();
         if (e.errorCode == ERROR_CODE.A3001) {
-          closeSaveModal();
           openInvalidTokenModal();
         } else {
-          closeSaveModal();
           openErrorModal(e);
         }
       } finally {
@@ -821,11 +815,10 @@ export default defineComponent({
         closeRemoveModal();
         openRemovedModal();
       } catch (e) {
+        closeRemoveModal();
         if (e.errorCode == ERROR_CODE.A3001) {
-          closeRemoveModal();
           openInvalidTokenModal();
         } else {
-          closeRemoveModal();
           openErrorModal(e);
         }
       } finally {

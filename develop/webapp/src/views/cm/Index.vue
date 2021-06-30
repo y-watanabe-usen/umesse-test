@@ -999,13 +999,11 @@ export default defineComponent({
         state.isIndicateCmTime = true;
         await audioPlayer.load(cm.url);
       } catch (e) {
+        closeCreateCmLoadingModal();
+        closePlayModal();
         if (e.errorCode == ERROR_CODE.A3001) {
-          closeCreateCmLoadingModal();
-          closePlayModal();
           openInvalidTokenModal();
         } else {
-          closeCreateCmLoadingModal();
-          closePlayModal();
           openErrorModal(e);
         }
         state.isIndicateCmTime = false;

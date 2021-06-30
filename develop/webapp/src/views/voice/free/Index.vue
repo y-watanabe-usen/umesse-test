@@ -272,11 +272,10 @@ export default defineComponent({
         openModal();
         await ttsStore.generateTtsDataFromFree(state.text, state.speaker);
       } catch (e) {
+        closeModal();
         if (e.errorCode == ERROR_CODE.A3001) {
-          closeModal();
           openInvalidTokenModal();
         } else {
-          closeModal();
           openErrorModal(e);
         }
       }
