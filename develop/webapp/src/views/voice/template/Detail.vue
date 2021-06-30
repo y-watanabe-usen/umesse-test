@@ -158,9 +158,9 @@
               type="primary"
               :isDisabled="
                 title === undefined ||
-                title === '' ||
-                isCreating ||
-                isGenerating
+                  title === '' ||
+                  isCreating ||
+                  isGenerating
               "
               @click="createTts"
               >保存して作成を続ける</Button
@@ -179,14 +179,8 @@
         </template>
         <template #footer>
           <ModalFooter>
-            <Button type="secondary" @click="closeTimeModal"
-              >キャンセル</Button
-            >
-            <Button
-              type="primary"
-              @click="confirmTime"
-              >確定</Button
-            >
+            <Button type="secondary" @click="closeTimeModal">キャンセル</Button>
+            <Button type="primary" @click="confirmTime">確定</Button>
           </ModalFooter>
         </template>
       </ModalDialog>
@@ -198,6 +192,13 @@
         @close="closeErrorModal"
         :errorCode="errorCode"
         :errorMessage="errorMessage"
+      />
+    </transition>
+    <transition>
+      <ModalInvalidTokenDialog
+        v-if="isInvalidTokenModalAppear"
+        @close="toHome"
+        :onClick="toHome"
       />
     </transition>
   </div>
@@ -216,6 +217,7 @@ import ModalDialog from "@/components/organisms/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
 import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
+import ModalInvalidTokenDialog from "@/components/organisms/ModalInvalidTokenDialog.vue";
 import PlayDialogContents from "@/components/molecules/PlayDialogContents.vue";
 import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
@@ -224,7 +226,7 @@ import SelectBox from "@/components/atoms/SelectBox.vue";
 import TimeInput from "@/components/atoms/TimeInput.vue";
 import TimeSelector from "@/components/molecules/TimeSelector.vue";
 import { TemplateItem } from "umesseapi/models";
-import Constants from "@/utils/constants";
+import Constants, { ERROR_CODE } from "@/utils/constants";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { lang, speaker, TemplateDetailItem } from "@/models/templateDetailItem";
 import validator from "@/utils/validator";
@@ -256,6 +258,7 @@ export default defineComponent({
     ModalHeader,
     ModalFooter,
     ModalErrorDialog,
+    ModalInvalidTokenDialog,
     PlayDialogContents,
     FormGroup,
     TextBox,
@@ -322,6 +325,11 @@ export default defineComponent({
       isApper: isTimeModalAppear,
       // open: openTimeModal,
       close: closeTimeModal,
+    } = useModalController();
+    const {
+      isApper: isInvalidTokenModalAppear,
+      open: openInvalidTokenModal,
+      close: closeInvalidTokenModal,
     } = useModalController();
     const {
       isApper: isLoading,
@@ -477,7 +485,11 @@ export default defineComponent({
         analytics.setTts(idString);
         router.push({ name: "Cm" });
       } catch (e) {
-        openErrorModal(e);
+        if (e.errorCode == ERROR_CODE.A3001) {
+          openInvalidTokenModal();
+        } else {
+          openErrorModal(e);
+        }
       } finally {
         closeLoadingModal();
       }
@@ -502,7 +514,11 @@ export default defineComponent({
         );
       } catch (e) {
         closeModal();
-        openErrorModal(e);
+        if (e.errorCode == ERROR_CODE.A3001) {
+          openInvalidTokenModal();
+        } else {
+          openErrorModal(e);
+        }
       }
     };
     const stopAndCloseModal = () => {
@@ -613,6 +629,11 @@ export default defineComponent({
       closeTimeModal();
     };
 
+    const toHome = () => {
+      if (isInvalidTokenModalAppear) closeInvalidTokenModal();
+      router.go(1 - history.length); // gohome.
+    };
+
     return {
       ...toRefs(state),
       ttsSpeakers,
@@ -653,6 +674,8 @@ export default defineComponent({
       closeErrorModal,
       confirmTime,
       Constants,
+      toHome,
+      isInvalidTokenModalAppear,
     };
   },
 });

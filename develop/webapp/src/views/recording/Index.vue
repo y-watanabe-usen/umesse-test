@@ -177,6 +177,13 @@
       />
     </transition>
     <ModalLoading v-if="isLoading" />
+    <transition>
+      <ModalInvalidTokenDialog
+        v-if="isInvalidTokenModalAppear"
+        @close="toHome"
+        :onClick="toHome"
+      />
+    </transition>
   </div>
 </template>
 
@@ -202,6 +209,7 @@ import ModalDialog from "@/components/organisms/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
 import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
+import ModalInvalidTokenDialog from "@/components/organisms/ModalInvalidTokenDialog.vue";
 import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
@@ -213,7 +221,7 @@ import analytics from "@/utils/firebaseAnalytics";
 import useModalController from "@/mixins/modalController";
 import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
-import Constants from "@/utils/constants";
+import Constants, { ERROR_CODE } from "@/utils/constants";
 import { useCmStore } from "@/store/cm";
 
 export default defineComponent({
@@ -226,6 +234,7 @@ export default defineComponent({
     ModalHeader,
     ModalFooter,
     ModalErrorDialog,
+    ModalInvalidTokenDialog,
     FormGroup,
     TextBox,
     TextArea,
@@ -248,6 +257,11 @@ export default defineComponent({
       isApper: isModalAppear,
       open: openModal,
       close: closeModal,
+    } = useModalController();
+    const {
+      isApper: isInvalidTokenModalAppear,
+      open: openInvalidTokenModal,
+      close: closeInvalidTokenModal,
     } = useModalController();
     const {
       isApper: isErrorModalApper,
@@ -329,7 +343,11 @@ export default defineComponent({
         closeLoadingModal();
         closeModal();
       } catch (e) {
-        openErrorModal(e);
+        if (e.errorCode == ERROR_CODE.A3001) {
+          openInvalidTokenModal();
+        } else {
+          openErrorModal(e);
+        }
       } finally {
         closeLoadingModal();
       }
@@ -342,6 +360,11 @@ export default defineComponent({
     onMounted(() => {
       analytics.screenView(Constants.SCREEN.RECORDING);
     });
+
+    const toHome = () => {
+      if (isInvalidTokenModalAppear) closeInvalidTokenModal();
+      router.go(1 - history.length); // gohome.
+    };
     return {
       ...toRefs(state),
       toggleVoiceRecorder,
@@ -364,6 +387,8 @@ export default defineComponent({
       openErrorModal,
       closeErrorModal,
       Constants,
+      toHome,
+      isInvalidTokenModalAppear,
     };
   },
 });

@@ -355,6 +355,13 @@
       />
     </transition>
     <ModalLoading v-if="isLoading" title="" />
+    <transition>
+      <ModalInvalidTokenDialog
+        v-if="isInvalidTokenModalAppear"
+        @close="toHome"
+        :onClick="toHome"
+      />
+    </transition>
   </div>
 </template>
 
@@ -376,6 +383,7 @@ import ModalDialog from "@/components/organisms/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
 import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
+import ModalInvalidTokenDialog from "@/components/organisms/ModalInvalidTokenDialog.vue";
 import PlayDialogContents from "@/components/molecules/PlayDialogContents.vue";
 import TextDialogContents from "@/components/molecules/TextDialogContents.vue";
 import DropdownMenu from "@/components/molecules/DropdownMenu.vue";
@@ -400,7 +408,7 @@ import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
 import MessageDialogContents from "@/components/molecules/MessageDialogContents.vue";
-import Constants, { Scene } from "@/utils/constants";
+import Constants, { Scene, ERROR_CODE } from "@/utils/constants";
 import useModalController from "@/mixins/modalController";
 import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
@@ -422,6 +430,7 @@ export default defineComponent({
     ModalHeader,
     ModalFooter,
     ModalErrorDialog,
+    ModalInvalidTokenDialog,
     ModalLoading,
     PlayDialogContents,
     TextDialogContents,
@@ -475,6 +484,11 @@ export default defineComponent({
       open: openLoadingModal,
       close: closeLoadingModal,
     } = useLoadingModalController();
+    const {
+      isApper: isInvalidTokenModalAppear,
+      open: openInvalidTokenModal,
+      close: closeInvalidTokenModal,
+    } = useModalController();
     const {
       isApper: isErrorModalApper,
       errorCode,
@@ -577,7 +591,11 @@ export default defineComponent({
           openNarrationTtsAbsentModal();
         }
       } catch (e) {
-        openErrorModal(e);
+        if (e.errorCode == ERROR_CODE.A3001) {
+          openInvalidTokenModal();
+        } else {
+          openErrorModal(e);
+        }
       } finally {
         closeLoadingModal();
       }
@@ -683,7 +701,11 @@ export default defineComponent({
         closeSaveModal();
         openSavedModal();
       } catch (e) {
-        openErrorModal(e);
+        if (e.errorCode == ERROR_CODE.A3001) {
+          openInvalidTokenModal();
+        } else {
+          openErrorModal(e);
+        }
       } finally {
         closeLoadingModal();
       }
@@ -728,7 +750,11 @@ export default defineComponent({
         openRemovedModal();
       } catch (e) {
         closeRemoveModal();
-        openErrorModal(e);
+        if (e.errorCode == ERROR_CODE.A3001) {
+          openInvalidTokenModal();
+        } else {
+          openErrorModal(e);
+        }
       } finally {
         closeLoadingModal();
       }
@@ -750,6 +776,11 @@ export default defineComponent({
 
     const changeAudioPlayerSlider = (value: number) => {
       audioPlayer.changePlaybackTime(value);
+    };
+
+    const toHome = () => {
+      if (isInvalidTokenModalAppear) closeInvalidTokenModal();
+      router.go(1 - history.length); // gohome.
     };
 
     return {
@@ -811,6 +842,8 @@ export default defineComponent({
       closeNarrationTtsAbsentModal,
       Constants,
       download,
+      toHome,
+      isInvalidTokenModalAppear,
     };
   },
 });

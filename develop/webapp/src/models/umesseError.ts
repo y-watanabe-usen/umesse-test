@@ -19,7 +19,7 @@ export const UMesseErrorFromApiFactory = (e: any) => {
       code = ERROR_CODE.A3002;
       break;
     case 401: // 認証エラー
-      code = ERROR_CODE.A3001;
+      code = ERROR_CODE.A3004;
       break;
     case 403: // 認証エラー
       code = ERROR_CODE.A3001;

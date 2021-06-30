@@ -98,6 +98,13 @@
         :errorMessage="errorMessage"
       />
     </transition>
+    <transition>
+      <ModalInvalidTokenDialog
+        v-if="isInvalidTokenModalAppear"
+        @close="toHome"
+        :onClick="toHome"
+      />
+    </transition>
   </div>
 </template>
 
@@ -114,12 +121,13 @@ import ModalDialog from "@/components/organisms/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
 import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
+import ModalInvalidTokenDialog from "@/components/organisms/ModalInvalidTokenDialog.vue";
 import PlayDialogContents from "@/components/molecules/PlayDialogContents.vue";
 import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
 import SelectBox from "@/components/atoms/SelectBox.vue";
-import Constants from "@/utils/constants";
+import Constants, { ERROR_CODE } from "@/utils/constants";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import { displayCache } from "@/repository/cache";
 import analytics from "@/utils/firebaseAnalytics";
@@ -139,6 +147,7 @@ export default defineComponent({
     ModalHeader,
     ModalFooter,
     ModalErrorDialog,
+    ModalInvalidTokenDialog,
     PlayDialogContents,
     FormGroup,
     TextBox,
@@ -157,6 +166,11 @@ export default defineComponent({
       isApper: isModalAppear,
       open: openModal,
       close: closeModal,
+    } = useModalController();
+    const {
+      isApper: isInvalidTokenModalAppear,
+      open: openInvalidTokenModal,
+      close: closeInvalidTokenModal,
     } = useModalController();
     const {
       isApper: isLoading,
@@ -236,7 +250,11 @@ export default defineComponent({
         analytics.setTts(idString);
         router.push({ name: "Cm" });
       } catch (e) {
-        openErrorModal(e);
+        if (e.errorCode == ERROR_CODE.A3001) {
+          openInvalidTokenModal();
+        } else {
+          openErrorModal(e);
+        }
       } finally {
         closeLoadingModal();
       }
@@ -248,7 +266,11 @@ export default defineComponent({
         await ttsStore.generateTtsDataFromFree(state.text, state.speaker);
       } catch (e) {
         closeModal();
-        openErrorModal(e);
+        if (e.errorCode == ERROR_CODE.A3001) {
+          openInvalidTokenModal();
+        } else {
+          openErrorModal(e);
+        }
       }
     };
     const stopAndCloseModal = () => {
@@ -278,6 +300,11 @@ export default defineComponent({
       audioPlayer.changePlaybackTime(value);
     };
 
+    const toHome = () => {
+      if (isInvalidTokenModalAppear) closeInvalidTokenModal();
+      router.go(1 - history.length); // gohome.
+    };
+
     return {
       ttsSpeakers,
       ...toRefs(state),
@@ -302,6 +329,8 @@ export default defineComponent({
       Constants,
       toVoiceFreeSelectTemplate,
       clickBack,
+      toHome,
+      isInvalidTokenModalAppear,
     };
   },
 });

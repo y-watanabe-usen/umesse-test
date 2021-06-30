@@ -19,7 +19,7 @@ describe("authのテスト", () => {
     };
     jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
 
-    const response = await userService.auth("1111");
+    const response = await userService.auth("1111", "N1234567890");
 
     expect(response).toBe("123456789");
   });
@@ -34,7 +34,7 @@ describe("authのテスト", () => {
 
     jest.spyOn(axios, "request").mockRejectedValue({ data: responseJson });
 
-    await expect(userService.auth("1111")).rejects.toThrowError(expoectedError);
+    await expect(userService.auth("1111", "N1234567890")).rejects.toThrowError(expoectedError);
   });
 
   test(`エラーの場合、UMesseErrorがthrowされること`, async () => {
@@ -48,7 +48,7 @@ describe("authのテスト", () => {
       .spyOn(axios, "request")
       .mockRejectedValue({ response: { status: 500 } });
 
-    await expect(userService.auth("1111")).rejects.toThrowError(expoectedError);
+    await expect(userService.auth("1111", "N1234567890")).rejects.toThrowError(expoectedError);
   });
 });
 
