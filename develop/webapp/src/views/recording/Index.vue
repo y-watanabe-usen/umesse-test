@@ -178,18 +178,11 @@
     </transition>
     <ModalLoading v-if="isLoading" />
     <transition>
-      <ModalDialog v-if="isInvalidTokenModalAppear" size="small">
-        <template #contents>
-          <MessageDialogContents>
-            セッションの有効期限が切れています。
-          </MessageDialogContents>
-        </template>
-        <template #footer>
-          <ModalFooter>
-            <Button type="primary" @click="toHome">ホーム画面へ戻る</Button>
-          </ModalFooter>
-        </template>
-      </ModalDialog>
+      <ModalInvalidTokenDialog
+        v-if="isInvalidTokenModalAppear"
+        @close="toHome"
+        :onClick="toHome"
+      />
     </transition>
   </div>
 </template>
@@ -215,8 +208,8 @@ import Button from "@/components/atoms/Button.vue";
 import ModalDialog from "@/components/organisms/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
-import MessageDialogContents from "@/components/molecules/MessageDialogContents.vue";
 import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
+import ModalInvalidTokenDialog from "@/components/organisms/ModalInvalidTokenDialog.vue";
 import FormGroup from "@/components/molecules/FormGroup.vue";
 import TextBox from "@/components/atoms/TextBox.vue";
 import TextArea from "@/components/atoms/TextArea.vue";
@@ -240,8 +233,8 @@ export default defineComponent({
     ModalDialog,
     ModalHeader,
     ModalFooter,
-    MessageDialogContents,
     ModalErrorDialog,
+    ModalInvalidTokenDialog,
     FormGroup,
     TextBox,
     TextArea,
