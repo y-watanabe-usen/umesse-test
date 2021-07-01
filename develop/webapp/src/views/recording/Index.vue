@@ -199,6 +199,7 @@ import {
 import useAudioRecorder from "@/utils/audioRecorder";
 import useAudioPlayer from "@/utils/audioPlayer";
 import { RecordingFile } from "@/services/recordingService";
+import { useGlobalStore } from "@/store";
 import provideRecordingStore from "@/store/recording";
 import { convertNumberToTime } from "@/utils/formatDate";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
@@ -247,6 +248,7 @@ export default defineComponent({
     const audioRecorder = useAudioRecorder();
     const audioPlayer = useAudioPlayer();
     const cm = useCmStore();
+    const { auth } = useGlobalStore();
     const {
       isApper: isLoading,
       loadingMessage,
@@ -344,6 +346,7 @@ export default defineComponent({
         closeModal();
       } catch (e) {
         if (e.errorCode == ERROR_CODE.A3001) {
+          auth.resetToken();
           openInvalidTokenModal();
         } else {
           openErrorModal(e);
@@ -362,7 +365,7 @@ export default defineComponent({
     });
 
     const toHome = () => {
-      if (isInvalidTokenModalAppear) closeInvalidTokenModal();
+      if (isInvalidTokenModalAppear.value) closeInvalidTokenModal();
       router.go(1 - history.length); // gohome.
     };
     return {

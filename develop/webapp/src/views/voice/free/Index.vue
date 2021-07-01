@@ -112,6 +112,7 @@
 import { defineComponent, reactive, computed, toRefs, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import useAudioPlayer from "@/utils/audioPlayer";
+import { useGlobalStore } from "@/store";
 import provideTtsStore from "@/store/tts";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
@@ -162,6 +163,7 @@ export default defineComponent({
     const ttsSpeakers = Constants.TTS_GENDERS;
     const lang = "ja";
     const cm = useCmStore();
+    const { auth } = useGlobalStore();
     const {
       isApper: isModalAppear,
       open: openModal,
@@ -251,6 +253,7 @@ export default defineComponent({
         router.push({ name: "Cm" });
       } catch (e) {
         if (e.errorCode == ERROR_CODE.A3001) {
+          auth.resetToken();
           openInvalidTokenModal();
         } else {
           openErrorModal(e);
@@ -267,6 +270,7 @@ export default defineComponent({
       } catch (e) {
         closeModal();
         if (e.errorCode == ERROR_CODE.A3001) {
+          auth.resetToken();
           openInvalidTokenModal();
         } else {
           openErrorModal(e);
@@ -301,7 +305,7 @@ export default defineComponent({
     };
 
     const toHome = () => {
-      if (isInvalidTokenModalAppear) closeInvalidTokenModal();
+      if (isInvalidTokenModalAppear.value) closeInvalidTokenModal();
       router.go(1 - history.length); // gohome.
     };
 
