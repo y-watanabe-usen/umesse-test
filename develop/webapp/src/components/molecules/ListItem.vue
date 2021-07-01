@@ -109,7 +109,7 @@ export default defineComponent({
           border-radius: 15px;
           &.comp {
             color: rgb(47, 118, 178);
-            background-color: rgb(232, 244, 253);
+            background-color: rgb(204, 242, 255);
           }
           &.busy {
             color: rgb(45, 172, 34);
