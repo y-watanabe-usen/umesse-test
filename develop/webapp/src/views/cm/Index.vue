@@ -516,7 +516,7 @@
         @close="closeSaveModal"
       >
         <template #header>
-          <ModalHeader title="保存しますか？" @close="closeSaveModal" />
+          <ModalHeader title="音声CMの必要情報入力" @close="closeSaveModal" />
         </template>
         <template #contents>
           <FormGroup title="タイトル" :required="true">

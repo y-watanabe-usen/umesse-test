@@ -50,7 +50,7 @@
     <transition>
       <ModalDialog v-if="isModalAppear" @close="stopAndCloseModal">
         <template #header>
-          <ModalHeader title="保存しますか？" @close="stopAndCloseModal" />
+          <ModalHeader title="音声合成素材の必要情報入力" @close="stopAndCloseModal" />
         </template>
         <template #contents>
           <FormGroup title="試聴" class="play-form-group">

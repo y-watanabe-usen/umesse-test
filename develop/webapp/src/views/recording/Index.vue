@@ -134,7 +134,7 @@
     <transition>
       <ModalDialog v-if="isModalAppear" size="large" @close="closeModal">
         <template #header>
-          <ModalHeader title="保存しますか？" @close="closeModal" />
+          <ModalHeader title="録音素材の必要情報入力" @close="closeModal" />
         </template>
         <template #contents>
           <form>
