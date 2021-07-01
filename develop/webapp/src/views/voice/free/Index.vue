@@ -253,6 +253,7 @@ export default defineComponent({
         router.push({ name: "Cm" });
       } catch (e) {
         if (e.errorCode == ERROR_CODE.A3001) {
+          auth.resetToken();
           openInvalidTokenModal();
         } else {
           openErrorModal(e);
@@ -269,6 +270,7 @@ export default defineComponent({
       } catch (e) {
         closeModal();
         if (e.errorCode == ERROR_CODE.A3001) {
+          auth.resetToken();
           openInvalidTokenModal();
         } else {
           openErrorModal(e);
@@ -303,10 +305,7 @@ export default defineComponent({
     };
 
     const toHome = () => {
-      if (isInvalidTokenModalAppear.value) {
-        auth.resetToken();
-        closeInvalidTokenModal();
-      }
+      if (isInvalidTokenModalAppear.value) closeInvalidTokenModal();
       router.go(1 - history.length); // gohome.
     };
 

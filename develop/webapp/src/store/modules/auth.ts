@@ -62,7 +62,7 @@ export default function authStore() {
   };
 
   const resetToken = () => {
-    state.token = "";
+    state.token = undefined;
   };
 
   return {
