@@ -119,7 +119,7 @@ resource "aws_lambda_function" "umesse_webapp_function" {
   function_name    = "UMesseWebAppBasicAuthFunction"
   handler          = "webapp.handler"
   role             = aws_iam_role.umesse_webapp_lambda_role.arn
-  runtime          = "nodejs12.x"
+  runtime          = "nodejs14.x"
   filename         = data.archive_file.umesse_webapp_file.output_path
   source_code_hash = data.archive_file.umesse_webapp_file.output_base64sha256
   memory_size      = "128"
