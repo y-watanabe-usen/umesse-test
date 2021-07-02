@@ -76,7 +76,7 @@
                 </template>
                 <template #operations>
                   <Button
-                    v-if="freeItem.manuscript"
+                    v-if="freeItem.ttsFree"
                     class="btn-document"
                     @click="
                       setManuscriptAndOpenDocumentModal(freeItem, freeItem.id)
@@ -105,7 +105,7 @@
         </template>
         <template #contents>
           <TextDialogContents>
-            {{ selectedFreeItem?.manuscript }}
+            {{ selectedFreeItem?.ttsFree }}
           </TextDialogContents>
         </template>
         <template #footer>
@@ -267,7 +267,7 @@ export default defineComponent({
     const selectFreeTemplate = (free: FreeItem) => {
       displayCache.set<string>(
         DISPLAY_CACHE_KEY.VOICE_FREE_INDEX_SELECT_TEXT,
-        free.manuscript
+        free.ttsFree
       );
       analytics.selectFree(free.id);
       router.push({ name: "VoiceFree" });
