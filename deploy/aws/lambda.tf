@@ -57,7 +57,7 @@ resource "aws_lambda_function" "umesse_api_function" {
   function_name    = "UMesseApiFunction"
   handler          = "lambda.handler"
   role             = aws_iam_role.umesse_api_lambda_role.arn
-  runtime          = "nodejs12.x"
+  runtime          = "nodejs14.x"
   filename         = data.archive_file.umesse_api_file.output_path
   source_code_hash = data.archive_file.umesse_api_file.output_base64sha256
   memory_size      = "512"
@@ -83,7 +83,7 @@ resource "aws_lambda_function" "umesse_converter_function" {
   function_name    = "UMesseConverterFunction"
   handler          = "lambda.handler"
   role             = aws_iam_role.umesse_converter_lambda_role.arn
-  runtime          = "nodejs12.x"
+  runtime          = "nodejs14.x"
   filename         = data.archive_file.umesse_converter_file.output_path
   source_code_hash = data.archive_file.umesse_converter_file.output_base64sha256
   memory_size      = "1024"
@@ -107,7 +107,7 @@ resource "aws_lambda_function" "umesse_generate_function" {
   function_name    = "UMesseGenerateFunction"
   handler          = "lambda.handler"
   role             = aws_iam_role.umesse_generate_lambda_role.arn
-  runtime          = "nodejs12.x"
+  runtime          = "nodejs14.x"
   filename         = data.archive_file.umesse_generate_file.output_path
   source_code_hash = data.archive_file.umesse_generate_file.output_base64sha256
   memory_size      = "1024"
@@ -131,7 +131,7 @@ resource "aws_lambda_function" "umesse_sync_function" {
   function_name    = "UMesseSyncFunction"
   handler          = "lambda.handler"
   role             = aws_iam_role.umesse_sync_lambda_role.arn
-  runtime          = "nodejs12.x"
+  runtime          = "nodejs14.x"
   filename         = data.archive_file.umesse_sync_file.output_path
   source_code_hash = data.archive_file.umesse_sync_file.output_base64sha256
   memory_size      = "512"
@@ -161,7 +161,7 @@ resource "aws_lambda_layer_version" "umesse_layer" {
   layer_name          = "UMesseLayer"
   filename            = data.archive_file.umesse_layer_file.output_path
   source_code_hash    = data.archive_file.umesse_layer_file.output_base64sha256
-  compatible_runtimes = ["nodejs12.x"]
+  compatible_runtimes = ["nodejs14.x"]
 }
 
 # Lambda Aliace

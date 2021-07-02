@@ -45,7 +45,7 @@ resource "aws_lambda_function" "umesse_api_function" {
   function_name    = "UMesseApiFunction"
   handler          = "lambda.handler"
   role             = aws_iam_role.iam_for_lambda.arn
-  runtime          = "nodejs12.x"
+  runtime          = "nodejs14.x"
   filename         = data.archive_file.umesse_api_file.output_path
   source_code_hash = data.archive_file.umesse_api_file.output_base64sha256
   memory_size      = "128"
@@ -69,7 +69,7 @@ resource "aws_lambda_function" "umesse_converter_function" {
   function_name    = "UMesseConverterFunction"
   handler          = "lambda.handler"
   role             = aws_iam_role.iam_for_lambda.arn
-  runtime          = "nodejs12.x"
+  runtime          = "nodejs14.x"
   filename         = data.archive_file.umesse_converter_file.output_path
   source_code_hash = data.archive_file.umesse_converter_file.output_base64sha256
   memory_size      = "128"
@@ -91,7 +91,7 @@ resource "aws_lambda_function" "umesse_generate_function" {
   function_name    = "UMesseGenerateFunction"
   handler          = "lambda.handler"
   role             = aws_iam_role.iam_for_lambda.arn
-  runtime          = "nodejs12.x"
+  runtime          = "nodejs14.x"
   filename         = data.archive_file.umesse_generate_file.output_path
   source_code_hash = data.archive_file.umesse_generate_file.output_base64sha256
   memory_size      = "128"
@@ -113,7 +113,7 @@ resource "aws_lambda_function" "umesse_sync_function" {
   function_name    = "UMesseSyncFunction"
   handler          = "lambda.handler"
   role             = aws_iam_role.iam_for_lambda.arn
-  runtime          = "nodejs12.x"
+  runtime          = "nodejs14.x"
   filename         = data.archive_file.umesse_sync_file.output_path
   source_code_hash = data.archive_file.umesse_sync_file.output_base64sha256
   memory_size      = "128"
