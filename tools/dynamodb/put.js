@@ -65,6 +65,16 @@ parser.on("readable", () => {
         }
       }
     }
+    // - ttsFree
+    if (data.category === "narration" || data.lang === "JP") {
+      for (let i = 0; i <= data.ttsFree.length; i++) {
+        const v = data.ttsFree.substring(i, i + 1);
+        const hexV = v.charCodeAt(0).toString(16).toLowerCase();
+        if (isNeedReplace(hexV)) {
+          data.ttsFree = data.ttsFree.replace(v, convert[v]);
+        }
+      }
+    }
 
     // contentsId
     let contentsId = data.contentsId;
@@ -127,6 +137,7 @@ parser.on("readable", () => {
         title: title,
         description: data.description,
         manuscript: data.manuscript,
+        ttsFree: data.ttsFree,
         seconds: seconds,
         industry: industry,
         scene: scene,
