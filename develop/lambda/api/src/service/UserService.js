@@ -4,7 +4,7 @@ const assert = require("assert");
 const { respondWithCode } = require("../utils/writer");
 const { UMesseError } = require("umesse-lib/error");
 const { debuglog } = require("umesse-lib/constants");
-const { agreeUser, getUser, authToken } = require("../../umesse/user");
+const { getUser, agreeUser, authToken } = require("../../umesse/user");
 
 /**
  * 約款同意
