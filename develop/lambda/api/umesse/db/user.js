@@ -21,6 +21,7 @@ module.exports = {
         "contractStatusName," +
         "createDate," +
         "renewalDate," +
+        "authAgree," +
         "authToken," +
         "authExpiration",
     };
@@ -183,6 +184,29 @@ module.exports = {
       ExpressionAttributeValues: {
         ":authToken": token,
         ":authExpiration": expiration,
+      },
+      ReturnValues: "UPDATED_NEW",
+    };
+    debuglog(JSON.stringify({ key: key, options: options }));
+
+    let ret = await dynamodbManager.update(
+      constants.dynamoDbTable().users,
+      key,
+      options
+    );
+    debuglog(JSON.stringify(ret));
+    if (!ret) throw new Error(ERROR_CODE.E0000500);
+
+    return ret.Attributes;
+  },
+
+  updateAgree: async function (unisCustomerCd) {
+    const key = { unisCustomerCd: unisCustomerCd };
+    const options = {
+      UpdateExpression: `SET 
+      authAgree = :authAgree`,
+      ExpressionAttributeValues: {
+        ":authAgree": true,
       },
       ReturnValues: "UPDATED_NEW",
     };

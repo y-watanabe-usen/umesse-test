@@ -81,6 +81,36 @@ paths:
         5XX:
           $ref: "#/components/responses/Unexpected"
 
+  /user/agree:
+    post:
+      tags:
+        - user
+      summary: 約款同意
+      description: ユーザーの同意を登録する
+      operationId: agreeUser
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        - $ref: "#/components/parameters/UnisCustomerCd"
+        - $ref: "#/components/parameters/Token"
+      responses:
+        200:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Agree"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        403:
+          $ref: "#/components/responses/Forbidden"
+        404:
+          $ref: "#/components/responses/NotFound"
+        5XX:
+          $ref: "#/components/responses/Unexpected"
+
   /user/cm:
     get:
       tags:
@@ -1234,6 +1264,12 @@ components:
         token:
           type: string
           example: "1234567890"
+        expiration:
+          type: string
+          example: "2019-09-01T09:00:00+9:00"
+        agree:
+          type: boolean
+          example: true
     User:
       properties:
         unisCustomerCd:
@@ -1284,6 +1320,11 @@ components:
           type: string
           description: 更新日
           example: "2019-09-01T09:00:00+9:00"
+    Agree:
+      properties:
+        agree:
+          type: boolean
+          example: true
     CmListItem:
       type: array
       items:
@@ -1569,6 +1610,9 @@ components:
           description: 説明文
           example: "放送開始日2020年10月15日 有効期限2020年10月20日"
         manuscript:
+          type: string
+          example: "本日はご来店いただきましてありがとうございます。当店は18時30分閉店です"
+        ttsFree:
           type: string
           example: "本日はご来店いただきましてありがとうございます。当店は18時30分閉店です"
         industry:

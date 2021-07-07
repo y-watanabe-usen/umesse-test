@@ -39,6 +39,39 @@ exports.getUser = async (unisCustomerCd) => {
   }
 };
 
+// 同意
+exports.agreeUser = async (unisCustomerCd) => {
+  debuglog(
+    `[agreeUser] ${JSON.stringify({
+      unisCustomerCd: unisCustomerCd,
+    })}`
+  );
+
+  // パラメーターチェック
+  let checkError = checkParams({
+    unisCustomerCd: unisCustomerCd,
+  });
+  if (checkError) throw new BadRequestError(checkError);
+
+  let ret;
+  try {
+    ret = await db.User.find(unisCustomerCd);
+  } catch (e) {
+    if (e instanceof NotFoundError) throw e;
+    errorlog(JSON.stringify(e));
+    throw new InternalServerError(ERROR_CODE.E0000500);
+  }
+
+  try {
+    ret = await db.User.updateAgree(unisCustomerCd);
+  } catch (e) {
+    errorlog(JSON.stringify(e));
+    throw new InternalServerError(ERROR_CODE.E0000500);
+  }
+
+  return { agree: ret.authAgree };
+};
+
 // 認証
 exports.authUser = async (body) => {
   debuglog(
@@ -62,6 +95,10 @@ exports.authUser = async (body) => {
     throw new InternalServerError(ERROR_CODE.E0000500);
   }
 
+  // agree
+  let agree = false;
+  if (ret.authAgree) agree = ret.authAgree;
+
   // token発行
   const token = generateToken();
   const expiration = timestamp(9 + 24); // 24h
@@ -73,7 +110,7 @@ exports.authUser = async (body) => {
     throw new InternalServerError(ERROR_CODE.E0000500);
   }
 
-  return { token: token };
+  return { token: token, expiration: expiration, agree: agree };
 };
 
 // token認証
@@ -100,6 +137,10 @@ exports.authToken = async (unisCustomerCd, token) => {
     throw new InternalServerError(ERROR_CODE.E0000500);
   }
 
+  // agree
+  let agree = false;
+  if (ret.authAgree) agree = ret.authAgree;
+
   // token check
   if (token != ret.authToken) throw new ForbiddenError(ERROR_CODE.E0000403);
   if (timestamp() > ret.authExpiration)
@@ -115,5 +156,5 @@ exports.authToken = async (unisCustomerCd, token) => {
     throw new InternalServerError(ERROR_CODE.E0000500);
   }
 
-  return { token: token };
+  return { token: token, expiration: expiration, agree: agree };
 };

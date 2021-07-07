@@ -17,6 +17,7 @@
           "renewalDate": { "S": "2019-09-01T09:00:00+09:00" },
           "authToken": { "S": "token" },
           "authExpiration": { "S": "2019-09-01T09:00:00+09:00" },
+          "authAgree": { "BOOL": false },
           "cm": {
             "L": [
               {

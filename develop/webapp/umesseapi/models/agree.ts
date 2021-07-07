@@ -14,25 +14,13 @@
 /**
  * 
  * @export
- * @interface Auth
+ * @interface Agree
  */
-export interface Auth {
-    /**
-     * 
-     * @type {string}
-     * @memberof Auth
-     */
-    token?: any;
-    /**
-     * 
-     * @type {string}
-     * @memberof Auth
-     */
-    expiration?: any;
+export interface Agree {
     /**
      * 
      * @type {boolean}
-     * @memberof Auth
+     * @memberof Agree
      */
     agree?: any;
 }
