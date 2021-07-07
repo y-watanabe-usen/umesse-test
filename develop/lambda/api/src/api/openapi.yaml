@@ -134,6 +134,72 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
       x-swagger-router-controller: User
+  /user/agree:
+    post:
+      tags:
+      - user
+      summary: 約款同意
+      description: ユーザーの同意を登録する
+      operationId: agreeUser
+      parameters:
+      - name: x-unis-customer-cd
+        in: header
+        description: UNIS顧客CD
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: "123456789"
+      - name: x-token
+        in: header
+        description: トークンID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: "1234567890"
+      responses:
+        "200":
+          description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        "400":
+          description: Bad request. Response invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: API key is missing or invalid
+          headers:
+            WWW_Authenticate:
+              style: simple
+              explode: false
+              schema:
+                type: string
+        "403":
+          description: Access denied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: A user with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-swagger-router-controller: User
   /user/cm:
     get:
       tags:
@@ -2555,7 +2621,11 @@ components:
         token:
           type: string
           example: "1234567890"
+        agree:
+          type: boolean
+          example: true
       example:
+        agree: true
         token: "1234567890"
     User:
       properties:
@@ -3016,6 +3086,9 @@ components:
         manuscript:
           type: string
           example: 本日はご来店いただきましてありがとうございます。当店は18時30分閉店です
+        ttsFree:
+          type: string
+          example: 本日はご来店いただきましてありがとうございます。当店は18時30分閉店です
         industry:
           type: array
           items:
@@ -3028,6 +3101,7 @@ components:
           type: string
           example: 2019-09-01T09:00:00+9:00
       example:
+        ttsFree: 本日はご来店いただきましてありがとうございます。当店は18時30分閉店です
         manuscript: 本日はご来店いただきましてありがとうございます。当店は18時30分閉店です
         description: 放送開始日2020年10月15日 有効期限2020年10月20日
         industry:

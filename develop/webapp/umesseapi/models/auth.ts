@@ -23,4 +23,10 @@ export interface Auth {
      * @memberof Auth
      */
     token?: any;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof Auth
+     */
+    agree?: any;
 }
