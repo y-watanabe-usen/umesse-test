@@ -69,7 +69,7 @@ exports.agreeUser = async (unisCustomerCd) => {
     throw new InternalServerError(ERROR_CODE.E0000500);
   }
 
-  return ret;
+  return { agree: ret.authAgree };
 };
 
 // 認証
