@@ -1,3 +1,4 @@
+export * from './agree';
 export * from './auth';
 export * from './bgm-item';
 export * from './chime-item';

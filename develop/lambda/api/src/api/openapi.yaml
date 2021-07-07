@@ -166,7 +166,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: '#/components/schemas/Agree'
         "400":
           description: Bad request. Response invalid.
           content:
@@ -2694,6 +2694,13 @@ components:
         customerName: カフェUSEN
         customerGroupCd: "1234567"
         createDate: 2019-09-01T09:00:00+9:00
+    Agree:
+      properties:
+        agree:
+          type: boolean
+          example: true
+      example:
+        agree: true
     CmListItem:
       type: array
       items:

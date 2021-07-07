@@ -16,6 +16,7 @@ import { Configuration } from '../configuration';
 // Some imports not used depending on template conditions
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { Agree } from '../models';
 import { User } from '../models';
 /**
  * UserApi - axios parameter creator
@@ -144,7 +145,7 @@ export const UserApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async agreeUser(xUnisCustomerCd: string, xToken: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>> {
+        async agreeUser(xUnisCustomerCd: string, xToken: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Agree>> {
             const localVarAxiosArgs = await UserApiAxiosParamCreator(configuration).agreeUser(xUnisCustomerCd, xToken, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
@@ -183,7 +184,7 @@ export const UserApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        agreeUser(xUnisCustomerCd: string, xToken: string, options?: any): AxiosPromise<User> {
+        agreeUser(xUnisCustomerCd: string, xToken: string, options?: any): AxiosPromise<Agree> {
             return UserApiFp(configuration).agreeUser(xUnisCustomerCd, xToken, options).then((request) => request(axios, basePath));
         },
         /**

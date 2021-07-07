@@ -99,7 +99,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                $ref: "#/components/schemas/Agree"
         400:
           $ref: "#/components/responses/BadRequest"
         401:
@@ -1320,6 +1320,11 @@ components:
           type: string
           description: 更新日
           example: "2019-09-01T09:00:00+9:00"
+    Agree:
+      properties:
+        agree:
+          type: boolean
+          example: true
     CmListItem:
       type: array
       items:
