@@ -25,6 +25,12 @@ export interface Auth {
     token?: any;
     /**
      * 
+     * @type {string}
+     * @memberof Auth
+     */
+    expiration?: any;
+    /**
+     * 
      * @type {boolean}
      * @memberof Auth
      */

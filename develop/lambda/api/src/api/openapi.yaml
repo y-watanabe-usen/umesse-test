@@ -2621,10 +2621,14 @@ components:
         token:
           type: string
           example: "1234567890"
+        expiration:
+          type: string
+          example: 2019-09-01T09:00:00+9:00
         agree:
           type: boolean
           example: true
       example:
+        expiration: 2019-09-01T09:00:00+9:00
         agree: true
         token: "1234567890"
     User:
