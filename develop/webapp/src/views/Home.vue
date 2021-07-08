@@ -139,7 +139,6 @@ import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
 import ModalDialog from "@/components/organisms/ModalDialog.vue";
 import ModalHeader from "@/components/molecules/ModalHeader.vue";
 import ModalFooter from "@/components/molecules/ModalFooter.vue";
-import MessageDialogContents from "@/components/molecules/MessageDialogContents.vue";
 import TutorialItem from "@/components/molecules/TutorialItem.vue";
 import Button from "@/components/atoms/Button.vue";
 import useLoadingModalController from "@/mixins/loadingModalController";
@@ -149,6 +148,8 @@ import analytics from "@/utils/firebaseAnalytics";
 import Constants from "@/utils/constants";
 import { displayCache } from "@/repository/cache";
 import { DISPLAY_CACHE_KEY } from "@/repository/cache/displayCache";
+import { LOCAL_STORAGE_KEY } from "@/repository/localStorage/localStorage";
+import { localStorageService } from "@/services";
 
 export default defineComponent({
   components: {
@@ -158,14 +159,12 @@ export default defineComponent({
     ModalDialog,
     ModalHeader,
     ModalFooter,
-    MessageDialogContents,
     Button,
     TutorialItem,
   },
   name: "Home",
   setup() {
     const { auth } = useGlobalStore();
-    const storage = localStorage;
     const {
       isApper: isLoading,
       loadingMessage: loadingMessage,
@@ -190,9 +189,7 @@ export default defineComponent({
     });
 
     const closeTutorial = () => {
-      console.log("close storage");
-      console.log(state.readTutorial);
-      if (state.readTutorial) storage.setItem("check-tutorial", "true");
+      if (state.readTutorial) localStorageService.setItem(LOCAL_STORAGE_KEY.TUTORIAL, "true");
       closeTutorialModal();
     };
 
@@ -200,11 +197,9 @@ export default defineComponent({
       removeDisplayCache();
       try {
         await auth.requestAuth();
-        console.log("storage");
-        console.log(storage.getItem("check-tutorial"));
         if (
-          storage.getItem("check-tutorial") == null ||
-          storage.getItem("check-tutorial") == "false"
+          localStorageService.getItem(LOCAL_STORAGE_KEY.TUTORIAL) == null ||
+          localStorageService.getItem(LOCAL_STORAGE_KEY.TUTORIAL) == "false"
         )
           openTutorialModal();
         analytics.screenView(Constants.SCREEN.HOME);
