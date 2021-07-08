@@ -8,6 +8,13 @@ resource "aws_api_gateway_rest_api" "umesse" {
   ]
 }
 
+### Resource Policy
+resource "aws_api_gateway_rest_api_policy" "umesse" {
+  for_each    = toset(var.name)
+  rest_api_id = aws_api_gateway_rest_api.umesse[each.key].id
+  policy = file("umesse_apigateway_policy.json")
+}
+
 ### Set Path
 resource "aws_api_gateway_resource" "umesse" {
   for_each    = toset(var.name)
@@ -133,7 +140,7 @@ resource "aws_api_gateway_usage_plan_key" "umesse_plan_key" {
 #   status_code = aws_api_gateway_method_response.umesse_options[each.key].status_code
 
 #   response_parameters = {
-#     "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Unis-Customer-Cd'",
+#     "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Unis-Customer-Cd,X-Token'",
 #     "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS,POST,PUT,DELETE'",
 #     "method.response.header.Access-Control-Allow-Origin"  = "'*'"
 #   }
