@@ -47,14 +47,26 @@
                 <template #description>{{ version }}</template>
               </SettingListItem>
               <h2>ライセンス</h2>
-              <p class="lisence">
+              <div class="lisence">
                 U MESSE<br />
                 Copyright © USEN CORPORATION All Rights Reserved.<br />
                 <br />
                 ReadSpeaker ® WebAPI<br />
                 「ReadSpeaker」は
-                HOYA株式会社またはHOYAグループ会社が保有する日本国およびその他の国における登録商標です。
-              </p>
+                HOYA株式会社またはHOYAグループ会社が保有する日本国およびその他の国における登録商標です。<br />
+                <br />
+                <div
+                  class="thirdparty"
+                  v-for="license in thirdparty"
+                  :key="license.name"
+                >
+                  {{ license.name }} {{ license.version }} {{ license.publisher
+                  }}<br />
+                  {{ license.description }} {{ license.copyright }}<br />
+                  {{ license.repository }}<br />
+                  <br />
+                </div>
+              </div>
             </List>
           </div>
           <div v-if="activeAppInformationCd === '03'">
@@ -96,6 +108,7 @@ import {
 } from "@/utils/formatDate";
 import analytics from "@/utils/firebaseAnalytics";
 import Constants from "@/utils/constants";
+import thirdparty from "@/../public/thirdparty.json";
 
 export default defineComponent({
   components: {
@@ -137,6 +150,11 @@ export default defineComponent({
       authUser,
     };
   },
+  data() {
+    return {
+      thirdparty: thirdparty,
+    };
+  },
 });
 </script>
 
@@ -165,15 +183,31 @@ export default defineComponent({
     overflow: hidden;
     overflow-y: scroll;
     scroll-behavior: smooth;
-    &:first-child {
-      margin-top: 40px;
-    }
   }
   .lisence {
     height: 56vh;
   }
   .cautions {
     height: 69vh;
+  }
+  div.lisence {
+    color: rgb(92, 92, 92);
+    font-size: 20px;
+    line-height: 1.8em;
+    margin-top: -10px;
+    margin-left: 34px;
+    margin-right: 30px;
+    overflow: hidden;
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+    height: 56vh;
+  }
+  div.thirdparty {
+    color: rgb(92, 92, 92);
+    font-size: 20px;
+    line-height: 1.8em;
+    margin-top: -10px;
+    margin-right: 30px;
   }
 }
 </style>
