@@ -3,6 +3,7 @@
 output "rest_api_key_prod" {
   description = "REST API key prod"
   value       = aws_api_gateway_api_key.umesse_key["umesse"].value
+  sensitive   = true
 }
 
 output "rest_api_id_prod" {
@@ -44,6 +45,7 @@ output "cloud_front_destribution_domain_name_prod" {
 output "rest_api_key_stg" {
   description = "REST API key stg"
   value       = aws_api_gateway_api_key.umesse_key["stg-umesse"].value
+  sensitive   = true
 }
 
 output "rest_api_id_stg" {
@@ -85,6 +87,7 @@ output "cloud_front_destribution_domain_name_stg" {
 output "rest_api_key_dev" {
   description = "REST API key dev"
   value       = aws_api_gateway_api_key.umesse_key["dev-umesse"].value
+  sensitive   = true
 }
 
 output "rest_api_id_dev" {
