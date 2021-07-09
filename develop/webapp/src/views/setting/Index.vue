@@ -53,7 +53,14 @@
                 <br />
                 ReadSpeaker ® WebAPI<br />
                 「ReadSpeaker」は
-                HOYA株式会社またはHOYAグループ会社が保有する日本国およびその他の国における登録商標です。
+                HOYA株式会社またはHOYAグループ会社が保有する日本国およびその他の国における登録商標です。<br />
+                <br />
+                <div class="thirdparty" v-for="(license, key) in thirdparty">
+                  {{ license.name }} {{ license.version }} {{ license.publisher }}<br />
+                  {{ license.description }} {{ license.copyright }}<br />
+                  {{ license.repository }}<br />
+                  <br />
+                </div>
               </p>
             </List>
           </div>
@@ -96,6 +103,7 @@ import {
 } from "@/utils/formatDate";
 import analytics from "@/utils/firebaseAnalytics";
 import Constants from "@/utils/constants";
+import thirdparty from "@/../public/thirdparty.json";
 
 export default defineComponent({
   components: {
@@ -137,6 +145,11 @@ export default defineComponent({
       authUser,
     };
   },
+  data() {
+    return {
+      thirdparty: thirdparty,
+    };
+  },
 });
 </script>
 
@@ -174,6 +187,18 @@ export default defineComponent({
   }
   .cautions {
     height: 69vh;
+  }
+  div.thirdparty {
+    color: rgb(92, 92, 92);
+    font-size: 20px;
+    line-height: 1.8em;
+    margin-top: -10px;
+    margin-right: 30px;
+    overflow: hidden;
+    scroll-behavior: smooth;
+    &:first-child {
+      margin-top: 40px;
+    }
   }
 }
 </style>
