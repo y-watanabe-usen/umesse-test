@@ -3,7 +3,8 @@
     <BasicLayout>
       <template #header>
         <Header :clickBack="openConfirmBackHomeModal">
-          <template #title>
+          <template #title>音声CMの内容編集</template>
+          <template #buttons>
             <div class="header-info">
               <Button
                 :isDisabled="narrations.length === 0"
@@ -22,11 +23,11 @@
               <p v-if="isIndicateCmTime">{{ convertNumberToTime(cmTime) }}</p>
               <p v-else>約 {{ convertNumberToTime(getAboutCmTime()) }}</p>
             </div>
-          </template>
-          <template #buttons>
-            <Button :isDisabled="narrations.length === 0" @click="clickConfirm"
-              >確定</Button
-            >
+            <div class="header-confirm">
+              <Button :isDisabled="narrations.length === 0" @click="clickConfirm"
+                >確定</Button
+              >
+            </div>
           </template>
         </Header>
       </template>
@@ -1396,14 +1397,13 @@ export default defineComponent({
 }
 
 .header-info {
-  @include flex_between;
   align-items: center;
-  height: 60px;
-  width: 440px;
+  height: 110px;
+  width: 193px;
   border-radius: 30px;
-  background-color: rgba(0, 0, 0, 0.4);
   button {
     width: 110px;
+    margin-top: 30px;
     margin-left: 5px;
     img {
       height: 26px;
@@ -1414,7 +1414,22 @@ export default defineComponent({
     color: white;
     font-size: 16px;
     font-weight: $font_weight_bold;
-    margin-right: 28px;
+    text-align: center;
+    margin-top: 5px;
+  }
+}
+
+.header-confirm {
+  align-items: center;
+  height: 110px;
+  width: 193px;
+  border-radius: 30px;
+  button {
+    background-color: #2dd62d;
+    color: white;
+    width: 110px;
+    margin-top: 30px;
+    margin-left: 5px;
   }
 }
 
