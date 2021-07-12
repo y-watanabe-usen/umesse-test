@@ -184,6 +184,7 @@ export default class Constants {
     { cd: "01", name: "お客様情報" },
     { cd: "02", name: "アプリ情報" },
     { cd: "03", name: "注意事項" },
+    { cd: "04", name: "チュートリアル" },
   ];
 
   public static readonly CATEGORY = {

@@ -499,6 +499,7 @@ describe("getSettingAppInformationsのテスト", () => {
     { cd: "01", name: "お客様情報" },
     { cd: "02", name: "アプリ情報" },
     { cd: "03", name: "注意事項" },
+    { cd: "04", name: "チュートリアル" },
   ];
   test(`全設定項目が返ること`, () => {
     expect(common.getSettingAppInformations()).toEqual(expected);
