@@ -1,10 +1,5 @@
 ## FIXME: outputでは、for_eachが利用できないため、個々にoutput
 ## prod
-output "rest_api_key_prod" {
-  description = "REST API key prod"
-  value       = aws_api_gateway_api_key.umesse_key["umesse"].value
-}
-
 output "rest_api_id_prod" {
   description = "REST API id prod"
   value       = aws_api_gateway_rest_api.umesse["umesse"].id
@@ -41,11 +36,6 @@ output "cloud_front_destribution_domain_name_prod" {
 }
 
 ## stg
-output "rest_api_key_stg" {
-  description = "REST API key stg"
-  value       = aws_api_gateway_api_key.umesse_key["stg-umesse"].value
-}
-
 output "rest_api_id_stg" {
   description = "REST API id stg"
   value       = aws_api_gateway_rest_api.umesse["stg-umesse"].id
@@ -82,11 +72,6 @@ output "cloud_front_destribution_domain_name_stg" {
 }
 
 ## dev
-output "rest_api_key_dev" {
-  description = "REST API key dev"
-  value       = aws_api_gateway_api_key.umesse_key["dev-umesse"].value
-}
-
 output "rest_api_id_dev" {
   description = "REST API id dev"
   value       = aws_api_gateway_rest_api.umesse["dev-umesse"].id

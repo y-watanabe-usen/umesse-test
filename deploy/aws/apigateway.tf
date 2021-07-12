@@ -12,7 +12,12 @@ resource "aws_api_gateway_rest_api" "umesse" {
 resource "aws_api_gateway_rest_api_policy" "umesse" {
   for_each    = toset(var.name)
   rest_api_id = aws_api_gateway_rest_api.umesse[each.key].id
-  policy = file("umesse_apigateway_policy.json")
+  policy      = file("umesse_apigateway_policy.json")
+
+  lifecycle {
+    # 保存されるリソースポリシーが自動でarnを設定し、更新がかかってしまうため
+    ignore_changes = [policy]
+  }
 }
 
 ### Set Path
