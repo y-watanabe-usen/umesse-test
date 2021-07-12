@@ -109,7 +109,7 @@
             </FormGroup>
           </div>
           <div class="maniscript">
-            {{ text }}
+            <p v-html="text"></p>
           </div>
         </ContentsBase>
       </template>
@@ -371,18 +371,52 @@ export default defineComponent({
       minutes: 10,
       point: 3,
       text: computed(() => {
-        const text: string = ttsTextConverter.convertManuscript(
+        const text: string = ttsTextConverter.convertTemplateManuscript(
           template.manuscript,
-          "ja",
-          state.customerName,
-          state.time,
-          state.percentage,
-          state.count,
-          state.endYearDate,
-          state.newYearDate,
-          state.age,
-          state.minutes,
+          state.customerName
+            ? '<span class="customerName">' +
+                `${state.customerName}` +
+                "</span>"
+            : "",
+          state.time
+            ? '<span class="time">' +
+                `${ttsTextConverter.convertTime(state.time, "ja")}` +
+                "</span>"
+            : "",
+          state.percentage
+            ? '<span class="percentage">' +
+                `${ttsTextConverter.convertPercentage(
+                  state.percentage,
+                  "ja"
+                )}` +
+                "</span>"
+            : "",
+          state.count
+            ? '<span class="count">' + `${state.count}` + "</span>"
+            : "",
+          state.endYearDate
+            ? '<span class="endYearDate">' +
+                `${ttsTextConverter.convertEndYearDate(
+                  state.endYearDate,
+                  "ja"
+                )}` +
+                "</span>"
+            : "",
+          state.newYearDate
+            ? '<span class="newYearDate">' +
+                `${ttsTextConverter.convertNewYearDate(
+                  state.newYearDate,
+                  "ja"
+                )}` +
+                "</span>"
+            : "",
+          state.age ? '<span class="age">' + `${state.age}` + "</span>" : "",
+          state.minutes
+            ? '<span class="minutes">' + `${state.minutes}` + "</span>"
+            : "",
           state.point
+            ? '<span class="point">' + `${state.point}` + "</span>"
+            : ""
         );
         return text;
       }),
@@ -722,6 +756,7 @@ export default defineComponent({
       ::v-deep {
         .title {
           width: 96px;
+          color: red;
         }
         .input-wrapper {
           width: 370px;
@@ -733,6 +768,7 @@ export default defineComponent({
       ::v-deep {
         .title {
           width: 96px;
+          color: blue;
         }
         .input-wrapper {
           width: 150px;
@@ -744,6 +780,7 @@ export default defineComponent({
       ::v-deep {
         .title {
           width: 200px;
+          color: green;
         }
         .input-wrapper {
           width: 150px;
@@ -754,6 +791,7 @@ export default defineComponent({
       ::v-deep {
         .title {
           width: 96px;
+          color: yellow;
         }
         .input-wrapper {
           width: 150px;
@@ -764,6 +802,7 @@ export default defineComponent({
       ::v-deep {
         .title {
           width: 150px;
+          color: orange;
         }
         .input-wrapper {
           width: 150px;
@@ -774,6 +813,7 @@ export default defineComponent({
       ::v-deep {
         .title {
           width: 150px;
+          color: purple;
         }
         .input-wrapper {
           width: 150px;
@@ -784,6 +824,7 @@ export default defineComponent({
       ::v-deep {
         .title {
           width: 96px;
+          color: pink;
         }
         .input-wrapper {
           width: 150px;
@@ -794,6 +835,7 @@ export default defineComponent({
       ::v-deep {
         .title {
           width: 96px;
+          color: brown;
         }
         .input-wrapper {
           width: 150px;
@@ -804,6 +846,7 @@ export default defineComponent({
       ::v-deep {
         .title {
           width: 150px;
+          color: khaki;
         }
         .input-wrapper {
           width: 150px;
@@ -829,11 +872,68 @@ export default defineComponent({
   padding-right: 24px;
   padding-top: 14px;
   padding-bottom: 14px;
-  font-size: 19px;
-  font-weight: $font_weight_bold;
-  line-height: 2em;
   height: 302px;
   caret-color: transparent;
+  p {
+    font-size: 19px;
+    font-weight: $font_weight_bold;
+    line-height: 2em;
+    color: black;
+    ::v-deep .customerName {
+      font-size: 19px;
+      font-weight: $font_weight_bold;
+      line-height: 2em;
+      color: red;
+    }
+    ::v-deep .time {
+      font-size: 19px;
+      font-weight: $font_weight_bold;
+      line-height: 2em;
+      color: blue;
+    }
+    ::v-deep .percentage {
+      font-size: 19px;
+      font-weight: $font_weight_bold;
+      line-height: 2em;
+      color: green;
+    }
+    ::v-deep .count {
+      font-size: 19px;
+      font-weight: $font_weight_bold;
+      line-height: 2em;
+      color: yellow;
+    }
+    ::v-deep .endYearDate {
+      font-size: 19px;
+      font-weight: $font_weight_bold;
+      line-height: 2em;
+      color: orange;
+    }
+    ::v-deep .newYearDate {
+      font-size: 19px;
+      font-weight: $font_weight_bold;
+      line-height: 2em;
+      color: purple;
+    }
+    ::v-deep .age {
+      font-size: 19px;
+      font-weight: $font_weight_bold;
+      line-height: 2em;
+      color: pink;
+    }
+    ::v-deep .minutes {
+      font-size: 19px;
+      font-weight: $font_weight_bold;
+      line-height: 2em;
+      color: brown;
+    }
+    ::v-deep .point {
+      font-size: 19px;
+      font-weight: $font_weight_bold;
+      line-height: 2em;
+      color: khaki;
+    }
+  }
 }
 .lang-check {
   position: relative;

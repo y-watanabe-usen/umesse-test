@@ -145,12 +145,38 @@ const convertManuscript = (
     .replace(new RegExp(`\\${ConverterType.point}`, "g"), point + "");
 };
 
+const convertTemplateManuscript = (
+  manuscript: string,
+  customerName: string,
+  time: string,
+  percentage: string,
+  count: string,
+  endYearDate: string,
+  newYearDate: string,
+  age: string,
+  minutes: string,
+  point: string,
+) => {
+  return manuscript
+    .replace(new RegExp(`\\${ConverterType.customerName}`, "g"), customerName)
+    .replace(new RegExp(`\\${ConverterType.time}`, "g"), time)
+    .replace(new RegExp(`\\${ConverterType.percentage}`, "g"), percentage)
+    .replace(new RegExp(`\\${ConverterType.count}`, "g"), count)
+    .replace(new RegExp(`\\${ConverterType.endYearDate}`, "g"), endYearDate)
+    .replace(new RegExp(`\\${ConverterType.newYearDate}`, "g"), newYearDate)
+    .replace(new RegExp(`\\${ConverterType.age}`, "g"), age)
+    .replace(new RegExp(`\\${ConverterType.minutes}`, "g"), minutes)
+    .replace(new RegExp(`\\${ConverterType.minutes}`, "g"), minutes)
+    .replace(new RegExp(`\\${ConverterType.point}`, "g"), point);
+};
+
 const converter = {
   convertTime,
   convertPercentage,
   convertEndYearDate,
   convertNewYearDate,
   convertManuscript,
+  convertTemplateManuscript,
 };
 
 export default converter;
