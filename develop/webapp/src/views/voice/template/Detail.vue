@@ -5,7 +5,10 @@
         <Header>
           <template #title>音声合成でナレーションを作成する</template>
           <template #buttons>
-            <Button :isDisabled="isDisabledConfirm" @click="generateTts"
+            <Button
+              :isDisabled="isDisabledConfirm"
+              type="emphasis"
+              @click="generateTts"
               >確定</Button
             >
           </template>
@@ -115,7 +118,10 @@
     <transition>
       <ModalDialog v-if="isModalAppear" @close="stopAndCloseModal">
         <template #header>
-          <ModalHeader title="音声合成素材の必要情報入力" @close="stopAndCloseModal" />
+          <ModalHeader
+            title="音声合成素材の必要情報入力"
+            @close="stopAndCloseModal"
+          />
         </template>
         <template #contents>
           <FormGroup title="試聴" class="play-form-group">

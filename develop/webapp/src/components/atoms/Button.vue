@@ -61,6 +61,12 @@ button {
     background-color: white;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.29);
   }
+  &.emphasis {
+    width: 110px;
+    box-shadow: $box_shadow;
+    color: white;
+    background-color: rgb(50, 205, 50);
+  }
   &:disabled {
     color: white;
     background-color: rgb(173, 173, 173);
