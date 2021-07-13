@@ -118,7 +118,7 @@
                 v-model="readTutorial"
                 :value="readTutorial"
               />
-              <label :for="readTutorial">次回以降表示しない</label>
+              <label for="tutorial-check">次回以降表示しない</label>
             </div>
             <Button type="secondary" @click="closeTutorial"
               >確認しました</Button
@@ -149,7 +149,7 @@ import Constants from "@/utils/constants";
 import { displayCache } from "@/repository/cache";
 import { DISPLAY_CACHE_KEY } from "@/repository/cache/displayCache";
 import { LOCAL_STORAGE_KEY } from "@/repository/localStorage/localStorage";
-import { localStorageService } from "@/services";
+import { userService } from "@/services";
 
 export default defineComponent({
   components: {
@@ -189,7 +189,7 @@ export default defineComponent({
     });
 
     const closeTutorial = () => {
-      if (state.readTutorial) localStorageService.setItem(LOCAL_STORAGE_KEY.TUTORIAL, "true");
+      if (state.readTutorial) userService.setTutorial(LOCAL_STORAGE_KEY.TUTORIAL, "true");
       closeTutorialModal();
     };
 
@@ -198,8 +198,8 @@ export default defineComponent({
       try {
         await auth.requestAuth();
         if (
-          localStorageService.getItem(LOCAL_STORAGE_KEY.TUTORIAL) == null ||
-          localStorageService.getItem(LOCAL_STORAGE_KEY.TUTORIAL) == "false"
+          userService.getTutorial(LOCAL_STORAGE_KEY.TUTORIAL) == null ||
+          userService.getTutorial(LOCAL_STORAGE_KEY.TUTORIAL) == "false"
         )
           openTutorialModal();
         analytics.screenView(Constants.SCREEN.HOME);

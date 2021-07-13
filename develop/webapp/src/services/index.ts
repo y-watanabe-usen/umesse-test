@@ -7,16 +7,14 @@ import { useAudioService } from "@/services/audioService";
 import { audioCache, cmCache, ttsCache } from "@/repository/cache";
 import { useUserService } from "@/services/userService";
 import { useUploadService } from "@/services/uploadService";
-import { useLocalStorageService } from "@/services/localStorage";
 import { localStorage } from "@/repository/localStorage";
 
-const userService = useUserService(authRepository, userRepository);
+const userService = useUserService(authRepository, userRepository, localStorage);
 const resourcesService = useResourcesService(resourcesRepository, recordingRepository, ttsRepository);
 const recordingService = useRecordingService(resourcesRepository, recordingRepository);
 const cmService = useCmService(cmRepository, cmCache);
 const ttsService = useTtsService(ttsRepository, ttsCache);
 const audioService = useAudioService(audioRepository, resourcesRepository, audioCache);
 const uploadService = useUploadService(uploadRepository);
-const localStorageService = useLocalStorageService(localStorage);
 
-export { userService, resourcesService, recordingService, cmService, ttsService, audioService, uploadService, localStorageService };
+export { userService, resourcesService, recordingService, cmService, ttsService, audioService, uploadService };

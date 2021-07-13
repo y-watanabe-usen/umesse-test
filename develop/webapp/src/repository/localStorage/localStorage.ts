@@ -10,11 +10,11 @@ export class umesseLocalStorage {
     this.storage = localStorage;
   }
 
-  get(key: string) {
+  get(key: LOCAL_STORAGE_KEY) {
     return this.storage.getItem(key);
   }
 
-  set(key: string, value: string) {
+  set(key: LOCAL_STORAGE_KEY, value: string) {
     this.storage.setItem(key, value);
   }
 }

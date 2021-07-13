@@ -1,22 +1,22 @@
-import { UMesseError } from '@/models/umesseError';
-import router from '@/router';
-import { userService } from '@/services';
-import { ERROR_CODE, ERROR_PATTERN } from '@/utils/constants';
-import analytics from '@/utils/firebaseAnalytics';
-import { User } from 'umesseapi/models';
-import { reactive, toRefs } from 'vue';
+import { UMesseError } from "@/models/umesseError";
+import router from "@/router";
+import { userService } from "@/services";
+import { ERROR_CODE, ERROR_PATTERN } from "@/utils/constants";
+import analytics from "@/utils/firebaseAnalytics";
+import { User } from "umesseapi/models";
+import { reactive, toRefs } from "vue";
 
 export interface authState {
-  token: string | undefined,
-  user: User | undefined,
-  authenticating: boolean
+  token: string | undefined;
+  user: User | undefined;
+  authenticating: boolean;
 }
 
 export default function authStore() {
   const state = reactive<authState>({
     token: undefined,
     user: undefined,
-    authenticating: false
+    authenticating: false,
   });
 
   const getToken = () => state.token;
@@ -44,7 +44,8 @@ export default function authStore() {
   };
 
   const getUnisCustomerCd = () => {
-    let unisCustomerCd = router.currentRoute.value.query.unisCustomerCd as string;
+    let unisCustomerCd = router.currentRoute.value.query
+      .unisCustomerCd as string;
     if (unisCustomerCd == undefined && process.env.NODE_ENV !== "production") {
       // unisCustomerCdが空で、かつ本番環境でなければデバッグ値をセット
       unisCustomerCd = "123456789";
