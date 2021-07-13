@@ -5,7 +5,7 @@
         <Header>
           <template #title>録音する</template>
           <template #buttons v-if="hasRecordedData === true">
-            <Button @click="openModal">確定</Button>
+            <Button type="emphasis" @click="openModal">確定</Button>
           </template>
         </Header>
       </template>

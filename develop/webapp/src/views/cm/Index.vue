@@ -24,7 +24,10 @@
               <p v-else>約 {{ convertNumberToTime(getAboutCmTime()) }}</p>
             </div>
             <div class="header-confirm">
-              <Button :isDisabled="narrations.length === 0" @click="clickConfirm"
+              <Button
+                :isDisabled="narrations.length === 0"
+                type="emphasis"
+                @click="clickConfirm"
                 >確定</Button
               >
             </div>
