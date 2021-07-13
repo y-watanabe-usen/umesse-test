@@ -39,6 +39,12 @@ $color_blue: rgb(87, 142, 217);
   align-items: flex-start;
 }
 
+@mixin flex_around {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-around;
+}
+
 @mixin ellipsis {
   overflow: hidden;
   text-overflow: ellipsis;
