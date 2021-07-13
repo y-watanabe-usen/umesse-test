@@ -756,7 +756,7 @@ export default defineComponent({
       ::v-deep {
         .title {
           width: 96px;
-          color: red;
+          color: $color_green;
         }
         .input-wrapper {
           width: 370px;
@@ -768,7 +768,7 @@ export default defineComponent({
       ::v-deep {
         .title {
           width: 96px;
-          color: blue;
+          color: $color_yellow;
         }
         .input-wrapper {
           width: 150px;
@@ -780,7 +780,7 @@ export default defineComponent({
       ::v-deep {
         .title {
           width: 200px;
-          color: green;
+          color: $color_purple;
         }
         .input-wrapper {
           width: 150px;
@@ -791,7 +791,7 @@ export default defineComponent({
       ::v-deep {
         .title {
           width: 96px;
-          color: yellow;
+          color: $color_purple;
         }
         .input-wrapper {
           width: 150px;
@@ -802,7 +802,7 @@ export default defineComponent({
       ::v-deep {
         .title {
           width: 150px;
-          color: orange;
+          color: $color_red;
         }
         .input-wrapper {
           width: 150px;
@@ -813,7 +813,7 @@ export default defineComponent({
       ::v-deep {
         .title {
           width: 150px;
-          color: purple;
+          color: $color_red;
         }
         .input-wrapper {
           width: 150px;
@@ -824,7 +824,7 @@ export default defineComponent({
       ::v-deep {
         .title {
           width: 96px;
-          color: pink;
+          color: $color_purple;
         }
         .input-wrapper {
           width: 150px;
@@ -835,7 +835,7 @@ export default defineComponent({
       ::v-deep {
         .title {
           width: 96px;
-          color: brown;
+          color: $color_yellow;
         }
         .input-wrapper {
           width: 150px;
@@ -846,7 +846,7 @@ export default defineComponent({
       ::v-deep {
         .title {
           width: 150px;
-          color: khaki;
+          color: $color_purple;
         }
         .input-wrapper {
           width: 150px;
@@ -883,55 +883,55 @@ export default defineComponent({
       font-size: 19px;
       font-weight: $font_weight_bold;
       line-height: 2em;
-      color: red;
+      color: $color_green;
     }
     ::v-deep .time {
       font-size: 19px;
       font-weight: $font_weight_bold;
       line-height: 2em;
-      color: blue;
+      color: $color_yellow;
     }
     ::v-deep .percentage {
       font-size: 19px;
       font-weight: $font_weight_bold;
       line-height: 2em;
-      color: green;
+      color: $color_purple;
     }
     ::v-deep .count {
       font-size: 19px;
       font-weight: $font_weight_bold;
       line-height: 2em;
-      color: yellow;
+      color: $color_purple;
     }
     ::v-deep .endYearDate {
       font-size: 19px;
       font-weight: $font_weight_bold;
       line-height: 2em;
-      color: orange;
+      color: $color_red;
     }
     ::v-deep .newYearDate {
       font-size: 19px;
       font-weight: $font_weight_bold;
       line-height: 2em;
-      color: purple;
+      color: $color_red;
     }
     ::v-deep .age {
       font-size: 19px;
       font-weight: $font_weight_bold;
       line-height: 2em;
-      color: pink;
+      color: $color_purple;
     }
     ::v-deep .minutes {
       font-size: 19px;
       font-weight: $font_weight_bold;
       line-height: 2em;
-      color: brown;
+      color: $color_yellow;
     }
     ::v-deep .point {
       font-size: 19px;
       font-weight: $font_weight_bold;
       line-height: 2em;
-      color: khaki;
+      color: $color_purple;
     }
   }
 }
