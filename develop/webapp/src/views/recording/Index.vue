@@ -103,7 +103,9 @@
                       @click="toggleVoicePlayer"
                     >
                       <span v-if="isPlaying === false">
-                        <img src="@/assets/icon_play.svg" />再生
+                        <img src="@/assets/icon_sound.svg"
+                          class="icon-play"
+                        />再生
                       </span>
                       <span v-else>
                         <img
@@ -112,17 +114,10 @@
                         />停止
                       </span>
                     </button>
-                    <button
-                      class="btn-delete"
-                      :disabled="!hasRecordedData || isPlaying"
-                      @click="deleteRecordedData"
-                    >
-                      <img src="@/assets/icon_delete.svg" />削除
-                    </button>
+                    <p class="description">
+                      録音し直したい場合は、録音開始ボタンを押して再収録してください。
+                    </p>
                   </div>
-                  <p class="description">
-                    録音し直したい場合は、録音開始ボタンを押して再収録してください。
-                  </p>
                 </div>
               </div>
             </div>
@@ -330,7 +325,6 @@ export default defineComponent({
       }
     };
 
-    const deleteRecordedData = () => audioRecorder.reset();
     const uploadRecordingFile = async () => {
       /// check state.file.
       try {
@@ -372,7 +366,6 @@ export default defineComponent({
       ...toRefs(state),
       toggleVoiceRecorder,
       toggleVoicePlayer,
-      deleteRecordedData,
       uploadRecordingFile,
       UPLOAD_RECORDING_STATE,
       convertNumberToTime,
@@ -570,28 +563,32 @@ export default defineComponent({
         }
       }
       .buttons {
-        @include flex_center;
-        margin-top: 32px;
-        margin-bottom: 24px;
+        @include flex_around;
+          align-items: center;
+          height: 67px;
+          width: 640px;
+          margin-top: 25px;
+          border-radius: 30px;
+          background-color: rgba(224, 224, 224, 0.4);
         button {
-          @include flex_center;
           display: block;
-          width: 194px;
-          height: 54px;
-          border-radius: 4px;
+          width: 160px;
+          height: 50px;
+          border-radius: 30px;
           box-shadow: $box_shadow_weak;
-          margin-left: 9px;
-          margin-right: 9px;
-          font-size: 16px;
-          font-weight: $font_weight_bold;
+          cursor: pointer;
           &.btn-play {
-            border: 3px solid rgb(87, 142, 217);
-          }
-          &.btn-delete {
-            border: 3px solid rgb(152, 46, 46);
+            background-color: white;
+            .icon-play {
+              width: 37px;
+              height: 26px;
+            }
+            span {
+              font-size: 20px;
+              font-weight: bold;
+            }
           }
           &.btn-stop {
-            border: 3px solid rgb(0, 0, 0);
             .icon-stop {
               width: 33px;
               height: 22px;
@@ -606,8 +603,8 @@ export default defineComponent({
         }
       }
       .description {
-        font-size: 16px;
-        text-align: center;
+        font-size: 13px;
+        font-weight: bold;
       }
     }
   }
