@@ -373,50 +373,16 @@ export default defineComponent({
       text: computed(() => {
         const text: string = ttsTextConverter.convertTemplateManuscript(
           template.manuscript,
-          state.customerName
-            ? '<span class="customerName">' +
-                `${state.customerName}` +
-                "</span>"
-            : "",
-          state.time
-            ? '<span class="time">' +
-                `${ttsTextConverter.convertTime(state.time, "ja")}` +
-                "</span>"
-            : "",
-          state.percentage
-            ? '<span class="percentage">' +
-                `${ttsTextConverter.convertPercentage(
-                  state.percentage,
-                  "ja"
-                )}` +
-                "</span>"
-            : "",
-          state.count
-            ? '<span class="count">' + `${state.count}` + "</span>"
-            : "",
-          state.endYearDate
-            ? '<span class="endYearDate">' +
-                `${ttsTextConverter.convertEndYearDate(
-                  state.endYearDate,
-                  "ja"
-                )}` +
-                "</span>"
-            : "",
-          state.newYearDate
-            ? '<span class="newYearDate">' +
-                `${ttsTextConverter.convertNewYearDate(
-                  state.newYearDate,
-                  "ja"
-                )}` +
-                "</span>"
-            : "",
-          state.age ? '<span class="age">' + `${state.age}` + "</span>" : "",
-          state.minutes
-            ? '<span class="minutes">' + `${state.minutes}` + "</span>"
-            : "",
+          "ja",
+          state.customerName,
+          state.time,
+          state.percentage,
+          state.count,
+          state.endYearDate,
+          state.newYearDate,
+          state.age,
+          state.minutes,
           state.point
-            ? '<span class="point">' + `${state.point}` + "</span>"
-            : ""
         );
         return text;
       }),
@@ -879,59 +845,29 @@ export default defineComponent({
     font-weight: $font_weight_bold;
     line-height: 2em;
     color: black;
-    ::v-deep .customerName {
+    ::v-deep .green {
       font-size: 19px;
       font-weight: $font_weight_bold;
       line-height: 2em;
       color: $color_green;
     }
-    ::v-deep .time {
+    ::v-deep .yellow {
       font-size: 19px;
       font-weight: $font_weight_bold;
       line-height: 2em;
       color: $color_yellow;
     }
-    ::v-deep .percentage {
+    ::v-deep .purple {
       font-size: 19px;
       font-weight: $font_weight_bold;
       line-height: 2em;
       color: $color_purple;
     }
-    ::v-deep .count {
-      font-size: 19px;
-      font-weight: $font_weight_bold;
-      line-height: 2em;
-      color: $color_purple;
-    }
-    ::v-deep .endYearDate {
+    ::v-deep .red {
       font-size: 19px;
       font-weight: $font_weight_bold;
       line-height: 2em;
       color: $color_red;
-    }
-    ::v-deep .newYearDate {
-      font-size: 19px;
-      font-weight: $font_weight_bold;
-      line-height: 2em;
-      color: $color_red;
-    }
-    ::v-deep .age {
-      font-size: 19px;
-      font-weight: $font_weight_bold;
-      line-height: 2em;
-      color: $color_purple;
-    }
-    ::v-deep .minutes {
-      font-size: 19px;
-      font-weight: $font_weight_bold;
-      line-height: 2em;
-      color: $color_yellow;
-    }
-    ::v-deep .point {
-      font-size: 19px;
-      font-weight: $font_weight_bold;
-      line-height: 2em;
-      color: $color_purple;
     }
   }
 }

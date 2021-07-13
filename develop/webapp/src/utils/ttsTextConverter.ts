@@ -130,15 +130,27 @@ const convertManuscript = (
   newYearDate: string,
   age: number,
   minutes: number,
-  point: number,
+  point: number
 ) => {
   return manuscript
     .replace(new RegExp(`\\${ConverterType.customerName}`, "g"), customerName)
-    .replace(new RegExp(`\\${ConverterType.time}`, "g"), convertTime(time, lang))
-    .replace(new RegExp(`\\${ConverterType.percentage}`, "g"), convertPercentage(percentage, lang) + "")
+    .replace(
+      new RegExp(`\\${ConverterType.time}`, "g"),
+      convertTime(time, lang)
+    )
+    .replace(
+      new RegExp(`\\${ConverterType.percentage}`, "g"),
+      convertPercentage(percentage, lang) + ""
+    )
     .replace(new RegExp(`\\${ConverterType.count}`, "g"), count + "")
-    .replace(new RegExp(`\\${ConverterType.endYearDate}`, "g"), convertEndYearDate(endYearDate, lang))
-    .replace(new RegExp(`\\${ConverterType.newYearDate}`, "g"), convertNewYearDate(newYearDate, lang))
+    .replace(
+      new RegExp(`\\${ConverterType.endYearDate}`, "g"),
+      convertEndYearDate(endYearDate, lang)
+    )
+    .replace(
+      new RegExp(`\\${ConverterType.newYearDate}`, "g"),
+      convertNewYearDate(newYearDate, lang)
+    )
     .replace(new RegExp(`\\${ConverterType.age}`, "g"), age + "")
     .replace(new RegExp(`\\${ConverterType.minutes}`, "g"), minutes + "")
     .replace(new RegExp(`\\${ConverterType.minutes}`, "g"), minutes + "")
@@ -147,27 +159,68 @@ const convertManuscript = (
 
 const convertTemplateManuscript = (
   manuscript: string,
+  lang: string,
   customerName: string,
   time: string,
-  percentage: string,
-  count: string,
+  percentage: number,
+  count: number,
   endYearDate: string,
   newYearDate: string,
-  age: string,
-  minutes: string,
-  point: string,
+  age: number,
+  minutes: number,
+  point: number
 ) => {
   return manuscript
-    .replace(new RegExp(`\\${ConverterType.customerName}`, "g"), customerName)
-    .replace(new RegExp(`\\${ConverterType.time}`, "g"), time)
-    .replace(new RegExp(`\\${ConverterType.percentage}`, "g"), percentage)
-    .replace(new RegExp(`\\${ConverterType.count}`, "g"), count)
-    .replace(new RegExp(`\\${ConverterType.endYearDate}`, "g"), endYearDate)
-    .replace(new RegExp(`\\${ConverterType.newYearDate}`, "g"), newYearDate)
-    .replace(new RegExp(`\\${ConverterType.age}`, "g"), age)
-    .replace(new RegExp(`\\${ConverterType.minutes}`, "g"), minutes)
-    .replace(new RegExp(`\\${ConverterType.minutes}`, "g"), minutes)
-    .replace(new RegExp(`\\${ConverterType.point}`, "g"), point);
+    .replace(
+      new RegExp(`\\${ConverterType.customerName}`, "g"),
+      greenHtmlTag(customerName)
+    )
+    .replace(
+      new RegExp(`\\${ConverterType.time}`, "g"),
+      yellowHtmlTag(convertTime(time, lang))
+    )
+    .replace(
+      new RegExp(`\\${ConverterType.percentage}`, "g"),
+      purpleHtmlTag(convertPercentage(percentage, "ja") + "")
+    )
+    .replace(new RegExp(`\\${ConverterType.count}`, "g"), purpleHtmlTag(count + ""))
+    .replace(
+      new RegExp(`\\${ConverterType.endYearDate}`, "g"),
+      redHtmlTag(convertEndYearDate(endYearDate, lang))
+    )
+    .replace(
+      new RegExp(`\\${ConverterType.newYearDate}`, "g"),
+      redHtmlTag(convertNewYearDate(newYearDate, lang))
+    )
+    .replace(new RegExp(`\\${ConverterType.age}`, "g"), purpleHtmlTag(age + ""))
+    .replace(
+      new RegExp(`\\${ConverterType.minutes}`, "g"),
+      yellowHtmlTag(minutes + "")
+    )
+    .replace(
+      new RegExp(`\\${ConverterType.minutes}`, "g"),
+      yellowHtmlTag(minutes + "")
+    )
+    .replace(
+      new RegExp(`\\${ConverterType.point}`, "g"),
+      purpleHtmlTag(point + "")
+    );
+};
+
+const redHtmlTag = (value: string) => {
+  return `<span class="red">${value}</span>`;
+};
+
+const greenHtmlTag = (value: string) => {
+  return `<span class="green">${value}</span>`;
+};
+
+const purpleHtmlTag = (value: string) => {
+  return `<span class="purple">${value}</span>`;
+};
+
+const yellowHtmlTag = (value: string) => {
+  return `<span class="yellow">${value}</span>`;
 };
 
 const converter = {
@@ -177,6 +230,10 @@ const converter = {
   convertNewYearDate,
   convertManuscript,
   convertTemplateManuscript,
+  redHtmlTag,
+  greenHtmlTag,
+  purpleHtmlTag,
+  yellowHtmlTag,
 };
 
 export default converter;
