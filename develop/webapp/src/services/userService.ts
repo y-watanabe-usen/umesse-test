@@ -1,11 +1,13 @@
 import { UMesseErrorFromAuthFactory } from "@/models/umesseError";
 import { AuthApi, UserApi } from "umesseapi";
-import { umesseLocalStorage, LOCAL_STORAGE_KEY } from "@/repository/localStorage/localStorage";
+import { umesseLocalStorage, LOCAL_STORAGE_KEY } from "@/repository/storage/localStorage";
+import { umesseSessionStorage, SESSION_STORAGE_KEY } from "@/repository/storage/sessionStorage";
 
 export function useUserService(
   authRepository: AuthApi,
   userRepository: UserApi,
-  localStorage: umesseLocalStorage
+  localStorage: umesseLocalStorage,
+  sessionStorage: umesseSessionStorage,
 ) {
   const auth = async (
     unisCustomerCd: string,
@@ -32,18 +34,28 @@ export function useUserService(
     }
   };
 
-  const getTutorial = (key: LOCAL_STORAGE_KEY) => {
+  const getLocalStorageTutorial = (key: LOCAL_STORAGE_KEY) => {
     return localStorage.get(key);
   };
 
-  const setTutorial = (key: LOCAL_STORAGE_KEY, setValue: string) => {
+  const setLocalStorageTutorial = (key: LOCAL_STORAGE_KEY, setValue: string) => {
     localStorage.set(key, setValue);
+  };
+
+  const getSessionStorageTutorial = (key: SESSION_STORAGE_KEY) => {
+    return sessionStorage.get(key);
+  };
+
+  const setSessionStorageTutorial = (key: SESSION_STORAGE_KEY, setValue: string) => {
+    sessionStorage.set(key, setValue);
   };
 
   return {
     auth,
     getInfo,
-    getTutorial,
-    setTutorial,
+    getLocalStorageTutorial,
+    setLocalStorageTutorial,
+    getSessionStorageTutorial,
+    setSessionStorageTutorial,
   };
 }

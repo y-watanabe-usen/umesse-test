@@ -31,7 +31,7 @@
         :isNarrow="true"
       >
         <template #header>
-          <ModalHeader title="音声CM作成の流れ" @close="closeTutorialModal" />
+          <ModalHeader title="音声CM作成の流れ" @close="closeTutorial(false)" />
         </template>
         <template #contents>
           <div>
@@ -148,7 +148,8 @@ import analytics from "@/utils/firebaseAnalytics";
 import Constants from "@/utils/constants";
 import { displayCache } from "@/repository/cache";
 import { DISPLAY_CACHE_KEY } from "@/repository/cache/displayCache";
-import { LOCAL_STORAGE_KEY } from "@/repository/localStorage/localStorage";
+import { LOCAL_STORAGE_KEY } from "@/repository/storage/localStorage";
+import { SESSION_STORAGE_KEY } from "@/repository/storage/sessionStorage";
 import { userService } from "@/services";
 
 export default defineComponent({
@@ -188,8 +189,18 @@ export default defineComponent({
       readTutorial: false,
     });
 
-    const closeTutorial = () => {
-      if (state.readTutorial) userService.setTutorial(LOCAL_STORAGE_KEY.TUTORIAL, "true");
+    const closeTutorial = (confirm = true) => {
+      if (confirm) {
+        if (state.readTutorial)
+          userService.setLocalStorageTutorial(
+            LOCAL_STORAGE_KEY.TUTORIAL,
+            "true"
+          );
+      }
+      userService.setSessionStorageTutorial(
+        SESSION_STORAGE_KEY.TUTORIAL,
+        "true"
+      );
       closeTutorialModal();
     };
 
@@ -197,11 +208,7 @@ export default defineComponent({
       removeDisplayCache();
       try {
         await auth.requestAuth();
-        if (
-          userService.getTutorial(LOCAL_STORAGE_KEY.TUTORIAL) == null ||
-          userService.getTutorial(LOCAL_STORAGE_KEY.TUTORIAL) == "false"
-        )
-          openTutorialModal();
+        if (!isValidTutorial()) openTutorialModal();
         analytics.screenView(Constants.SCREEN.HOME);
       } catch (e) {
         openErrorModal(e);
@@ -217,6 +224,27 @@ export default defineComponent({
       displayCache.remove(DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_TEMPLATES);
       displayCache.remove(DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_SCENES);
       displayCache.remove(DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_SORT);
+    };
+    const isValidTutorial = () => {
+      // localStorageのチェック
+      if (
+        userService.getLocalStorageTutorial(LOCAL_STORAGE_KEY.TUTORIAL) ==
+          null ||
+        userService.getLocalStorageTutorial(LOCAL_STORAGE_KEY.TUTORIAL) ==
+          "false"
+      ) {
+        // sessionStorageのチェック
+        if (
+          userService.getSessionStorageTutorial(SESSION_STORAGE_KEY.TUTORIAL) ==
+            null ||
+          userService.getSessionStorageTutorial(SESSION_STORAGE_KEY.TUTORIAL) ==
+            "false"
+        ) {
+          return false;
+        }
+        return true;
+      }
+      return true;
     };
     return {
       ...toRefs(state),

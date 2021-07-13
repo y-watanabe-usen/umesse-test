@@ -3,10 +3,19 @@ import axios from "@/repository/api/axiosInstance";
 import { useUserService } from "@/services/userService";
 import { ERROR_CODE, ERROR_PATTERN } from "@/utils/constants";
 import * as umesseapi from "umesseapi";
+import * as umesseLocalStorage from "@/repository/storage/localStorage";
+import * as umesseSessionStorage from "@/repository/storage/sessionStorage";
 
 const authRepository = new umesseapi.AuthApi(undefined, "", axios);
 const userRepository = new umesseapi.UserApi(undefined, "", axios);
-const userService = useUserService(authRepository, userRepository);
+const localStorage = new umesseLocalStorage.umesseLocalStorage();
+const sessionStorage = new umesseSessionStorage.umesseSessionStorage();
+const userService = useUserService(
+  authRepository,
+  userRepository,
+  localStorage,
+  sessionStorage
+);
 
 describe("authのテスト", () => {
   beforeEach(() => {
@@ -34,7 +43,9 @@ describe("authのテスト", () => {
 
     jest.spyOn(axios, "request").mockRejectedValue({ data: responseJson });
 
-    await expect(userService.auth("1111", "N1234567890")).rejects.toThrowError(expoectedError);
+    await expect(userService.auth("1111", "N1234567890")).rejects.toThrowError(
+      expoectedError
+    );
   });
 
   test(`エラーの場合、UMesseErrorがthrowされること`, async () => {
@@ -48,7 +59,9 @@ describe("authのテスト", () => {
       .spyOn(axios, "request")
       .mockRejectedValue({ response: { status: 500 } });
 
-    await expect(userService.auth("1111", "N1234567890")).rejects.toThrowError(expoectedError);
+    await expect(userService.auth("1111", "N1234567890")).rejects.toThrowError(
+      expoectedError
+    );
   });
 });
 
@@ -89,9 +102,9 @@ describe("getInfoのテスト", () => {
 
     jest.spyOn(axios, "request").mockRejectedValue({ data: responseJson });
 
-    await expect(userService.getInfo("unisCustomerCd", "authToken")).rejects.toThrowError(
-      expoectedError
-    );
+    await expect(
+      userService.getInfo("unisCustomerCd", "authToken")
+    ).rejects.toThrowError(expoectedError);
   });
 
   test(`エラーの場合、UMesseErrorがthrowされること`, async () => {
@@ -105,8 +118,78 @@ describe("getInfoのテスト", () => {
       .spyOn(axios, "request")
       .mockRejectedValue({ response: { status: 500 } });
 
-    await expect(userService.getInfo("unisCustomerCd", "authToken")).rejects.toThrowError(
-      expoectedError
+    await expect(
+      userService.getInfo("unisCustomerCd", "authToken")
+    ).rejects.toThrowError(expoectedError);
+  });
+});
+
+describe("getLocalStorageTutorialのテスト", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test(`正常終了の場合、trueが返ること`, () => {
+    localStorage.set(umesseLocalStorage.LOCAL_STORAGE_KEY.TUTORIAL, "false");
+
+    const response = userService.getLocalStorageTutorial(
+      umesseLocalStorage.LOCAL_STORAGE_KEY.TUTORIAL
     );
+
+    expect(response).toBe("false");
+  });
+});
+
+describe("setLocalStorageTutorialのテスト", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test(`正常終了の場合、trueが返ること`, () => {
+    userService.setLocalStorageTutorial(
+      umesseLocalStorage.LOCAL_STORAGE_KEY.TUTORIAL,
+      "true"
+    );
+
+    const response = userService.getLocalStorageTutorial(
+      umesseLocalStorage.LOCAL_STORAGE_KEY.TUTORIAL
+    );
+
+    expect(response).toBe("true");
+  });
+});
+
+describe("getSessionStorageTutorialのテスト", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test(`正常終了の場合、trueが返ること`, () => {
+    sessionStorage.set(umesseSessionStorage.SESSION_STORAGE_KEY.TUTORIAL, "true");
+
+    const response = userService.getSessionStorageTutorial(
+      umesseSessionStorage.SESSION_STORAGE_KEY.TUTORIAL
+    );
+
+    expect(response).toBe("true");
+  });
+});
+
+describe("setSessionStorageTutorialのテスト", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test(`正常終了の場合、trueが返ること`, () => {
+    userService.setSessionStorageTutorial(
+      umesseSessionStorage.SESSION_STORAGE_KEY.TUTORIAL,
+      "true"
+    );
+
+    const response = userService.getSessionStorageTutorial(
+      umesseSessionStorage.SESSION_STORAGE_KEY.TUTORIAL
+    );
+
+    expect(response).toBe("true");
   });
 });
