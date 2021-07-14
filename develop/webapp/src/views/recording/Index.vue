@@ -366,9 +366,8 @@ export default defineComponent({
     const clickConfirm = async () => {
       if (state.isPlaying) {
         audioPlayer.stop();
-      } else {
-        openModal();
       }
+      openModal();
     };
 
     return {
