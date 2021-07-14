@@ -10,6 +10,7 @@ export interface authState {
   token: string | undefined;
   user: User | undefined;
   authenticating: boolean;
+  agree: boolean | undefined;
 }
 
 export default function authStore() {
@@ -17,11 +18,13 @@ export default function authStore() {
     token: undefined,
     user: undefined,
     authenticating: false,
+    agree: undefined,
   });
 
   const getToken = () => state.token;
   const getUserInfo = () => state.user;
   const isAuthenticating = () => state.authenticating;
+  const getAgree = () => state.agree;
 
   const requestAuth = async () => {
     if (state.authenticating) return;
@@ -35,8 +38,10 @@ export default function authStore() {
 
     try {
       state.authenticating = true;
-      state.token = await userService.auth(unisCustomerCd, contractCd);
-      state.user = await userService.getInfo(unisCustomerCd, state.token);
+      const resAuth = await userService.auth(unisCustomerCd, contractCd);
+      state.token = resAuth.token;
+      state.user = await userService.getInfo(unisCustomerCd, resAuth.token);
+      state.agree = resAuth.agree;
       analytics.setUserId(state.user.unisCustomerCd);
     } finally {
       state.authenticating = false;
@@ -66,6 +71,18 @@ export default function authStore() {
     state.token = undefined;
   };
 
+  const agree = async () => {
+    const unisCustomerCd = getUserInfo()?.unisCustomerCd;
+    const token = getToken() ?? "";
+
+    try {
+      await userService.agree(unisCustomerCd, token);
+      state.agree = true;
+    } finally {
+      state.authenticating = false;
+    }
+  };
+
   return {
     ...toRefs(state),
     requestAuth,
@@ -73,6 +90,8 @@ export default function authStore() {
     getUserInfo,
     isAuthenticating,
     resetToken,
+    agree,
+    getAgree,
   };
 }
 

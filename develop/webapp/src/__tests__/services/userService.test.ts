@@ -22,15 +22,17 @@ describe("authのテスト", () => {
     jest.clearAllMocks();
   });
 
-  test(`正常終了の場合、tokenが返ること`, async () => {
+  test(`正常終了の場合、Authが返ること`, async () => {
     const responseJson = {
+      expiration: "2019-09-01T09:00:00+9:00",
       token: "123456789",
+      agree: "true",
     };
     jest.spyOn(axios, "request").mockResolvedValue({ data: responseJson });
 
     const response = await userService.auth("1111", "N1234567890");
 
-    expect(response).toBe("123456789");
+    expect(response.token).toBe("123456789");
   });
 
   test(`想定外の値が返却された場合、UMesseErrorがthrowされること`, async () => {

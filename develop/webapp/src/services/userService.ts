@@ -2,6 +2,8 @@ import { UMesseErrorFromAuthFactory } from "@/models/umesseError";
 import { AuthApi, UserApi } from "umesseapi";
 import { umesseLocalStorage, LOCAL_STORAGE_KEY } from "@/repository/storage/localStorage";
 import { umesseSessionStorage, SESSION_STORAGE_KEY } from "@/repository/storage/sessionStorage";
+import { Auth } from "umesseapi/models/auth";
+
 
 export function useUserService(
   authRepository: AuthApi,
@@ -9,17 +11,14 @@ export function useUserService(
   localStorage: umesseLocalStorage,
   sessionStorage: umesseSessionStorage,
 ) {
-  const auth = async (
-    unisCustomerCd: string,
-    contractCd: string
-  ): Promise<string> => {
+  const auth = async (unisCustomerCd: string, contractCd: string): Promise<Auth> => {
     try {
       const requestModel = {
         unisCustomerCd: unisCustomerCd,
         contractCd: contractCd,
       };
       const response = await authRepository.auth(requestModel);
-      return response.data.token;
+      return response.data;
     } catch (e) {
       throw UMesseErrorFromAuthFactory(e);
     }
@@ -50,6 +49,14 @@ export function useUserService(
     sessionStorage.set(SESSION_STORAGE_KEY.ALREADY_SHOW_TUTORIAL, "true");
   };
 
+  const agree = async (unisCustomerCd: string, authToken: string) => {
+    try {
+      await userRepository.agreeUser(unisCustomerCd, authToken);
+    } catch (e) {
+      throw UMesseErrorFromAuthFactory(e);
+    }
+  };
+
   return {
     auth,
     getInfo,
@@ -57,5 +64,6 @@ export function useUserService(
     dontShowForeverTutorial,
     isAlreadyShowTutorial,
     showTutorial,
+    agree,
   };
 }
