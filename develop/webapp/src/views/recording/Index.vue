@@ -4,8 +4,8 @@
       <template #header>
         <Header>
           <template #title>録音する</template>
-          <template #buttons v-if="hasRecordedData === true && isPlaying === false">
-            <Button type="emphasis" @click="openModal">確定</Button>
+          <template #buttons v-if="hasRecordedData === true">
+            <Button type="emphasis" @click="clickConfirm">確定</Button>
           </template>
         </Header>
       </template>
@@ -362,6 +362,15 @@ export default defineComponent({
       if (isInvalidTokenModalAppear.value) closeInvalidTokenModal();
       router.go(1 - history.length); // gohome.
     };
+
+    const clickConfirm = async () => {
+      if (state.isPlaying) {
+        audioPlayer.stop();
+      } else {
+        openModal();
+      }
+    };
+
     return {
       ...toRefs(state),
       toggleVoiceRecorder,
@@ -385,6 +394,7 @@ export default defineComponent({
       Constants,
       toHome,
       isInvalidTokenModalAppear,
+      clickConfirm,
     };
   },
 });
