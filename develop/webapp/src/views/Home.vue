@@ -13,6 +13,7 @@
       </ul>
     </header>
     <MainMenu />
+    <!-- modal -->
     <transition>
       <ModalErrorDialog
         v-if="isErrorModalApper"
@@ -22,6 +23,12 @@
       />
     </transition>
     <ModalLoading v-if="isLoading" />
+    <transition>
+      <ModalTutorialDialog
+        v-if="isTutorialModalAppear"
+        :closeModal="closeTutorial"
+      />
+    </transition>
   </div>
 </template>
 
@@ -31,18 +38,22 @@ import { defineComponent, onMounted, reactive, toRefs } from "vue";
 import MainMenu from "@/components/organisms/MainMenu.vue";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
 import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
+import ModalTutorialDialog from "@/components/organisms/ModalTutorialDialog.vue";
 import useLoadingModalController from "@/mixins/loadingModalController";
+import useModalController from "@/mixins/modalController";
 import useErrorModalController from "@/mixins/errorModalController";
 import analytics from "@/utils/firebaseAnalytics";
 import Constants from "@/utils/constants";
 import { displayCache } from "@/repository/cache";
 import { DISPLAY_CACHE_KEY } from "@/repository/cache/displayCache";
+import { userService } from "@/services";
 
 export default defineComponent({
   components: {
     MainMenu,
     ModalLoading,
     ModalErrorDialog,
+    ModalTutorialDialog,
   },
   name: "Home",
   setup() {
@@ -60,13 +71,27 @@ export default defineComponent({
       open: openErrorModal,
       close: closeErrorModal,
     } = useErrorModalController();
+    const {
+      isApper: isTutorialModalAppear,
+      open: openTutorialModal,
+      close: closeTutorialModal,
+    } = useModalController();
 
     const state = reactive({});
+
+    const closeTutorial = (isCheck = false, confirm = true) => {
+      if (confirm) {
+        if (isCheck) userService.dontShowForeverTutorial();
+      }
+      userService.showTutorial();
+      closeTutorialModal();
+    };
 
     onMounted(async () => {
       removeDisplayCache();
       try {
         await auth.requestAuth();
+        if (isShowTutorial()) openTutorialModal();
         analytics.screenView(Constants.SCREEN.HOME);
       } catch (e) {
         openErrorModal(e);
@@ -83,6 +108,16 @@ export default defineComponent({
       displayCache.remove(DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_SCENES);
       displayCache.remove(DISPLAY_CACHE_KEY.VOICE_TEMPLATE_INDEX_SORT);
     };
+    const isShowTutorial = () => {
+      if (userService.isAlreadyShowTutorial()) {
+        return false;
+      }
+      if (userService.getDontShowForeverTutorial()) {
+        return false;
+      }
+
+      return true;
+    };
     return {
       ...toRefs(state),
       ...auth,
@@ -97,6 +132,10 @@ export default defineComponent({
       openErrorModal,
       closeErrorModal,
       removeDisplayCache,
+      isTutorialModalAppear,
+      openTutorialModal,
+      closeTutorialModal,
+      closeTutorial,
     };
   },
 });

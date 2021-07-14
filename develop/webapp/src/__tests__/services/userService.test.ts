@@ -3,10 +3,19 @@ import axios from "@/repository/api/axiosInstance";
 import { useUserService } from "@/services/userService";
 import { ERROR_CODE, ERROR_PATTERN } from "@/utils/constants";
 import * as umesseapi from "umesseapi";
+import * as umesseLocalStorage from "@/repository/storage/localStorage";
+import * as umesseSessionStorage from "@/repository/storage/sessionStorage";
 
 const authRepository = new umesseapi.AuthApi(undefined, "", axios);
 const userRepository = new umesseapi.UserApi(undefined, "", axios);
-const userService = useUserService(authRepository, userRepository);
+const localStorage = new umesseLocalStorage.umesseLocalStorage();
+const sessionStorage = new umesseSessionStorage.umesseSessionStorage();
+const userService = useUserService(
+  authRepository,
+  userRepository,
+  localStorage,
+  sessionStorage
+);
 
 describe("authのテスト", () => {
   beforeEach(() => {
@@ -34,7 +43,9 @@ describe("authのテスト", () => {
 
     jest.spyOn(axios, "request").mockRejectedValue({ data: responseJson });
 
-    await expect(userService.auth("1111", "N1234567890")).rejects.toThrowError(expoectedError);
+    await expect(userService.auth("1111", "N1234567890")).rejects.toThrowError(
+      expoectedError
+    );
   });
 
   test(`エラーの場合、UMesseErrorがthrowされること`, async () => {
@@ -48,7 +59,9 @@ describe("authのテスト", () => {
       .spyOn(axios, "request")
       .mockRejectedValue({ response: { status: 500 } });
 
-    await expect(userService.auth("1111", "N1234567890")).rejects.toThrowError(expoectedError);
+    await expect(userService.auth("1111", "N1234567890")).rejects.toThrowError(
+      expoectedError
+    );
   });
 });
 
@@ -89,9 +102,9 @@ describe("getInfoのテスト", () => {
 
     jest.spyOn(axios, "request").mockRejectedValue({ data: responseJson });
 
-    await expect(userService.getInfo("unisCustomerCd", "authToken")).rejects.toThrowError(
-      expoectedError
-    );
+    await expect(
+      userService.getInfo("unisCustomerCd", "authToken")
+    ).rejects.toThrowError(expoectedError);
   });
 
   test(`エラーの場合、UMesseErrorがthrowされること`, async () => {
@@ -105,8 +118,70 @@ describe("getInfoのテスト", () => {
       .spyOn(axios, "request")
       .mockRejectedValue({ response: { status: 500 } });
 
-    await expect(userService.getInfo("unisCustomerCd", "authToken")).rejects.toThrowError(
-      expoectedError
+    await expect(
+      userService.getInfo("unisCustomerCd", "authToken")
+    ).rejects.toThrowError(expoectedError);
+  });
+});
+
+describe("getDontShowForeverTutorialのテスト", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test(`正常終了の場合、trueが返ること`, () => {
+    localStorage.set(
+      umesseLocalStorage.LOCAL_STORAGE_KEY.DONT_SHOW_FOREVER_TUTORIAL,
+      "false"
     );
+
+    const response = userService.getDontShowForeverTutorial();
+
+    expect(response).toBe("false");
+  });
+});
+
+describe("dontShowForeverTutorialのテスト", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test(`正常終了の場合、trueが返ること`, () => {
+    userService.dontShowForeverTutorial();
+
+    const response = userService.getDontShowForeverTutorial();
+
+    expect(response).toBe("true");
+  });
+});
+
+describe("isAlreadyShowTutorialのテスト", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test(`正常終了の場合、trueが返ること`, () => {
+    sessionStorage.set(
+      umesseSessionStorage.SESSION_STORAGE_KEY.ALREADY_SHOW_TUTORIAL,
+      "true"
+    );
+
+    const response = userService.isAlreadyShowTutorial();
+
+    expect(response).toBe("true");
+  });
+});
+
+describe("showTutorialのテスト", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  test(`正常終了の場合、trueが返ること`, () => {
+    userService.showTutorial();
+
+    const response = userService.isAlreadyShowTutorial();
+
+    expect(response).toBe("true");
   });
 });

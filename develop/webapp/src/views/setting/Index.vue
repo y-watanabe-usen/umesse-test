@@ -85,6 +85,9 @@
               PLATFORMサービス契約約款」をご確認ください。<br />
             </p>
           </div>
+          <div v-if="activeAppInformationCd === '04'">
+            <h2>チュートリアル</h2>
+          </div>
         </div>
       </ContentsBase>
     </template>
