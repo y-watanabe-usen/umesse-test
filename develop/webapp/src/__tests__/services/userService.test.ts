@@ -124,71 +124,63 @@ describe("getInfoのテスト", () => {
   });
 });
 
-describe("getLocalStorageTutorialのテスト", () => {
+describe("getDontShowForeverTutorialのテスト", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   test(`正常終了の場合、trueが返ること`, () => {
-    localStorage.set(umesseLocalStorage.LOCAL_STORAGE_KEY.TUTORIAL, "false");
-
-    const response = userService.getLocalStorageTutorial(
-      umesseLocalStorage.LOCAL_STORAGE_KEY.TUTORIAL
+    localStorage.set(
+      umesseLocalStorage.LOCAL_STORAGE_KEY.DONT_SHOW_FOREVER_TUTORIAL,
+      "false"
     );
+
+    const response = userService.getDontShowForeverTutorial();
 
     expect(response).toBe("false");
   });
 });
 
-describe("setLocalStorageTutorialのテスト", () => {
+describe("dontShowForeverTutorialのテスト", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   test(`正常終了の場合、trueが返ること`, () => {
-    userService.setLocalStorageTutorial(
-      umesseLocalStorage.LOCAL_STORAGE_KEY.TUTORIAL,
-      "true"
-    );
+    userService.dontShowForeverTutorial();
 
-    const response = userService.getLocalStorageTutorial(
-      umesseLocalStorage.LOCAL_STORAGE_KEY.TUTORIAL
-    );
+    const response = userService.getDontShowForeverTutorial();
 
     expect(response).toBe("true");
   });
 });
 
-describe("getSessionStorageTutorialのテスト", () => {
+describe("isAlreadyShowTutorialのテスト", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   test(`正常終了の場合、trueが返ること`, () => {
-    sessionStorage.set(umesseSessionStorage.SESSION_STORAGE_KEY.TUTORIAL, "true");
-
-    const response = userService.getSessionStorageTutorial(
-      umesseSessionStorage.SESSION_STORAGE_KEY.TUTORIAL
+    sessionStorage.set(
+      umesseSessionStorage.SESSION_STORAGE_KEY.ALREADY_SHOW_TUTORIAL,
+      "true"
     );
+
+    const response = userService.isAlreadyShowTutorial();
 
     expect(response).toBe("true");
   });
 });
 
-describe("setSessionStorageTutorialのテスト", () => {
+describe("showTutorialのテスト", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
   test(`正常終了の場合、trueが返ること`, () => {
-    userService.setSessionStorageTutorial(
-      umesseSessionStorage.SESSION_STORAGE_KEY.TUTORIAL,
-      "true"
-    );
+    userService.showTutorial();
 
-    const response = userService.getSessionStorageTutorial(
-      umesseSessionStorage.SESSION_STORAGE_KEY.TUTORIAL
-    );
+    const response = userService.isAlreadyShowTutorial();
 
     expect(response).toBe("true");
   });

@@ -2,7 +2,7 @@
   <div class="modal-dialog" @click="onClick">
     <div class="base" :class="[size, isFocus ? 'base-margin-top' : '']">
       <slot name="header" />
-      <div class="contents" :class="[isNarrow ? 'is-narrow' : '']">
+      <div class="contents">
         <slot name="contents" />
       </div>
       <slot name="footer" />
@@ -25,10 +25,6 @@ export default defineComponent({
       default: false,
     },
     isFocus: {
-      type: Boolean,
-      default: false,
-    },
-    isNarrow: {
       type: Boolean,
       default: false,
     },
@@ -81,9 +77,6 @@ export default defineComponent({
     .contents {
       padding-top: 40px;
       padding-bottom: 40px;
-      &.is-narrow {
-        padding: 10px 0px;
-      }
     }
   }
   .base-margin-top {

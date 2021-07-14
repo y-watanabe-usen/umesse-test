@@ -34,28 +34,28 @@ export function useUserService(
     }
   };
 
-  const getLocalStorageTutorial = (key: LOCAL_STORAGE_KEY) => {
-    return localStorage.get(key);
+  const getDontShowForeverTutorial = () => {
+    return localStorage.get(LOCAL_STORAGE_KEY.DONT_SHOW_FOREVER_TUTORIAL);
   };
 
-  const setLocalStorageTutorial = (key: LOCAL_STORAGE_KEY, setValue: string) => {
-    localStorage.set(key, setValue);
+  const dontShowForeverTutorial = () => {
+    localStorage.set(LOCAL_STORAGE_KEY.DONT_SHOW_FOREVER_TUTORIAL, "true");
   };
 
-  const getSessionStorageTutorial = (key: SESSION_STORAGE_KEY) => {
-    return sessionStorage.get(key);
+  const isAlreadyShowTutorial = () => {
+    return sessionStorage.get(SESSION_STORAGE_KEY.ALREADY_SHOW_TUTORIAL);
   };
 
-  const setSessionStorageTutorial = (key: SESSION_STORAGE_KEY, setValue: string) => {
-    sessionStorage.set(key, setValue);
+  const showTutorial = () => {
+    sessionStorage.set(SESSION_STORAGE_KEY.ALREADY_SHOW_TUTORIAL, "true");
   };
 
   return {
     auth,
     getInfo,
-    getLocalStorageTutorial,
-    setLocalStorageTutorial,
-    getSessionStorageTutorial,
-    setSessionStorageTutorial,
+    getDontShowForeverTutorial,
+    dontShowForeverTutorial,
+    isAlreadyShowTutorial,
+    showTutorial,
   };
 }

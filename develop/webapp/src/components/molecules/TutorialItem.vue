@@ -41,7 +41,7 @@ export default defineComponent({
   border: 2px solid rgb(192, 192, 191);
   border-radius: 10px;
   background-color: white;
-  padding: 15px 15px;
+  padding: 10px 10px;
   min-height: 200px;
   text-align: center;
   display: flex;
