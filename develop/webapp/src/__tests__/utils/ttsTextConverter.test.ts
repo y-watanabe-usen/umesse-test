@@ -149,7 +149,9 @@ describe("convertTimeのテスト", () => {
   ];
   datas.forEach((v) => {
     test(`引数に("${v.timeString}", "${v.lang}")を渡すと"${v.expected}"が返ること`, () => {
-      expect(ttsTextConverter.convertTime(v.timeString, v.lang)).toBe(v.expected);
+      expect(ttsTextConverter.convertTime(v.timeString, v.lang)).toBe(
+        v.expected
+      );
     });
   });
 });
@@ -555,7 +557,9 @@ describe("convertPercentageのテスト", () => {
   ];
   datas.forEach((v) => {
     test(`引数に("${v.percentage}", "${v.lang}")を渡すと"${v.expected}"が返ること`, () => {
-      expect(ttsTextConverter.convertPercentage(v.percentage, v.lang)).toBe(v.expected);
+      expect(ttsTextConverter.convertPercentage(v.percentage, v.lang)).toBe(
+        v.expected
+      );
     });
   });
 });
@@ -689,7 +693,9 @@ describe("convertEndYearDateのテスト", () => {
   ];
   datas.forEach((v) => {
     test(`引数に("${v.dateString}", "${v.lang}")を渡すと"${v.expected}"が返ること`, () => {
-      expect(ttsTextConverter.convertEndYearDate(v.dateString, v.lang)).toBe(v.expected);
+      expect(ttsTextConverter.convertEndYearDate(v.dateString, v.lang)).toBe(
+        v.expected
+      );
     });
   });
 });
@@ -823,7 +829,9 @@ describe("convertNewYearDateのテスト", () => {
   ];
   datas.forEach((v) => {
     test(`引数に("${v.dateString}", "${v.lang}")を渡すと"${v.expected}"が返ること`, () => {
-      expect(ttsTextConverter.convertNewYearDate(v.dateString, v.lang)).toBe(v.expected);
+      expect(ttsTextConverter.convertNewYearDate(v.dateString, v.lang)).toBe(
+        v.expected
+      );
     });
   });
 });
@@ -831,7 +839,8 @@ describe("convertNewYearDateのテスト", () => {
 describe("convertManuscriptのテスト", () => {
   const datas = [
     {
-      manuscript: "皆さん、おはようございます。只今、開店${minutes}分前です。お客様をお迎えするために、各自準備をすすめてください。服装は清潔にしていますか？店内の清掃は⾏き届いていますか？テーブルなどのセッティングは整っていますか？接客時は丁寧な⾔葉遣いを⼼がけましょう。今⽇も⼀⽇、お客様に気持ちよくお食事していただけるよう⼀人ひとりが最善をつくしましょう。只今、開店${minutes}分前です。",
+      manuscript:
+        "皆さん、おはようございます。只今、開店${minutes}分前です。お客様をお迎えするために、各自準備をすすめてください。服装は清潔にしていますか？店内の清掃は⾏き届いていますか？テーブルなどのセッティングは整っていますか？接客時は丁寧な⾔葉遣いを⼼がけましょう。今⽇も⼀⽇、お客様に気持ちよくお食事していただけるよう⼀人ひとりが最善をつくしましょう。只今、開店${minutes}分前です。",
       lang: "ja",
       customerName: "",
       time: "",
@@ -842,10 +851,12 @@ describe("convertManuscriptのテスト", () => {
       age: 100,
       minutes: 10,
       point: 100,
-      expected: "皆さん、おはようございます。只今、開店10分前です。お客様をお迎えするために、各自準備をすすめてください。服装は清潔にしていますか？店内の清掃は⾏き届いていますか？テーブルなどのセッティングは整っていますか？接客時は丁寧な⾔葉遣いを⼼がけましょう。今⽇も⼀⽇、お客様に気持ちよくお食事していただけるよう⼀人ひとりが最善をつくしましょう。只今、開店10分前です。",
+      expected:
+        "皆さん、おはようございます。只今、開店10分前です。お客様をお迎えするために、各自準備をすすめてください。服装は清潔にしていますか？店内の清掃は⾏き届いていますか？テーブルなどのセッティングは整っていますか？接客時は丁寧な⾔葉遣いを⼼がけましょう。今⽇も⼀⽇、お客様に気持ちよくお食事していただけるよう⼀人ひとりが最善をつくしましょう。只今、開店10分前です。",
     },
     {
-      manuscript: "本⽇は、${customerName}にご来店いただきまして、誠にありがとうございます。お客様にご案内申し上げます。当店の営業時間は${time}までとなっております。本⽇は、ご利⽤ありがとうございます。どうぞごゆっくりお過ごしくださいませ。",
+      manuscript:
+        "本⽇は、${customerName}にご来店いただきまして、誠にありがとうございます。お客様にご案内申し上げます。当店の営業時間は${time}までとなっております。本⽇は、ご利⽤ありがとうございます。どうぞごゆっくりお過ごしくださいませ。",
       lang: "ja",
       customerName: "ユーセンカフェ",
       time: "21:00",
@@ -856,10 +867,12 @@ describe("convertManuscriptのテスト", () => {
       age: 100,
       minutes: 10,
       point: 100,
-      expected: "本⽇は、ユーセンカフェにご来店いただきまして、誠にありがとうございます。お客様にご案内申し上げます。当店の営業時間は午後9時までとなっております。本⽇は、ご利⽤ありがとうございます。どうぞごゆっくりお過ごしくださいませ。",
+      expected:
+        "本⽇は、ユーセンカフェにご来店いただきまして、誠にありがとうございます。お客様にご案内申し上げます。当店の営業時間は午後9時までとなっております。本⽇は、ご利⽤ありがとうございます。どうぞごゆっくりお過ごしくださいませ。",
     },
     {
-      manuscript: "Thank you for visiting us today. The following is an announcement for our customers. We are open until ${time}. We thank you for visiting us today. We hope you enjoy your time here with us today.",
+      manuscript:
+        "Thank you for visiting us today. The following is an announcement for our customers. We are open until ${time}. We thank you for visiting us today. We hope you enjoy your time here with us today.",
       lang: "en",
       customerName: "ユーセンカフェ",
       time: "21:00",
@@ -870,10 +883,12 @@ describe("convertManuscriptのテスト", () => {
       age: 100,
       minutes: 10,
       point: 100,
-      expected: "Thank you for visiting us today. The following is an announcement for our customers. We are open until 9:00 p.m. We thank you for visiting us today. We hope you enjoy your time here with us today.",
+      expected:
+        "Thank you for visiting us today. The following is an announcement for our customers. We are open until 9:00 p.m. We thank you for visiting us today. We hope you enjoy your time here with us today.",
     },
     {
-      manuscript: "衷心感谢各位顾客今天的光临。下面为您广播通知。本店的营业时间截止至${time}。感谢您今天的惠顾。祝您度过一段轻松愉快的时光。",
+      manuscript:
+        "衷心感谢各位顾客今天的光临。下面为您广播通知。本店的营业时间截止至${time}。感谢您今天的惠顾。祝您度过一段轻松愉快的时光。",
       lang: "zh",
       customerName: "ユーセンカフェ",
       time: "21:00",
@@ -884,10 +899,12 @@ describe("convertManuscriptのテスト", () => {
       age: 100,
       minutes: 10,
       point: 100,
-      expected: "衷心感谢各位顾客今天的光临。下面为您广播通知。本店的营业时间截止至晚上9点。感谢您今天的惠顾。祝您度过一段轻松愉快的时光。",
+      expected:
+        "衷心感谢各位顾客今天的光临。下面为您广播通知。本店的营业时间截止至晚上9点。感谢您今天的惠顾。祝您度过一段轻松愉快的时光。",
     },
     {
-      manuscript: "오늘도 방문해 주셔서 대단히 감사합니다. 고객님께 안내 말씀드립니다. 저희 매장의 영업시간은 ${time}까지입니다. 오늘도 이용해 주셔서 감사합니다. 편안한 시간 보내시기 바랍니다.",
+      manuscript:
+        "오늘도 방문해 주셔서 대단히 감사합니다. 고객님께 안내 말씀드립니다. 저희 매장의 영업시간은 ${time}까지입니다. 오늘도 이용해 주셔서 감사합니다. 편안한 시간 보내시기 바랍니다.",
       lang: "ko",
       customerName: "ユーセンカフェ",
       time: "21:00",
@@ -898,10 +915,12 @@ describe("convertManuscriptのテスト", () => {
       age: 100,
       minutes: 10,
       point: 100,
-      expected: "오늘도 방문해 주셔서 대단히 감사합니다. 고객님께 안내 말씀드립니다. 저희 매장의 영업시간은 오후 9시까지입니다. 오늘도 이용해 주셔서 감사합니다. 편안한 시간 보내시기 바랍니다.",
+      expected:
+        "오늘도 방문해 주셔서 대단히 감사합니다. 고객님께 안내 말씀드립니다. 저희 매장의 영업시간은 오후 9시까지입니다. 오늘도 이용해 주셔서 감사합니다. 편안한 시간 보내시기 바랍니다.",
     },
     {
-      manuscript: "いらっしゃいませ。${customerName}では、ただ今、特別セールを実施中！各有名メーカーの商品がなんと${percentage}パーセントオフ！この機会をお⾒逃し無く！ なお一部セール除外品もございますのでご了承ください。本日はご来店誠にありがとうございます。",
+      manuscript:
+        "いらっしゃいませ。${customerName}では、ただ今、特別セールを実施中！各有名メーカーの商品がなんと${percentage}パーセントオフ！この機会をお⾒逃し無く！ なお一部セール除外品もございますのでご了承ください。本日はご来店誠にありがとうございます。",
       lang: "ja",
       customerName: "ユーセンカフェ",
       time: "21:00",
@@ -912,10 +931,12 @@ describe("convertManuscriptのテスト", () => {
       age: 100,
       minutes: 10,
       point: 100,
-      expected: "いらっしゃいませ。ユーセンカフェでは、ただ今、特別セールを実施中！各有名メーカーの商品がなんと50パーセントオフ！この機会をお⾒逃し無く！ なお一部セール除外品もございますのでご了承ください。本日はご来店誠にありがとうございます。",
+      expected:
+        "いらっしゃいませ。ユーセンカフェでは、ただ今、特別セールを実施中！各有名メーカーの商品がなんと50パーセントオフ！この機会をお⾒逃し無く！ なお一部セール除外品もございますのでご了承ください。本日はご来店誠にありがとうございます。",
     },
     {
-      manuscript: "欢迎光临。本店现正在举办特价优惠活动！各种名牌商品现正${percentage}折出售！请各位顾客莫失良机！另外，部分商品不参与本次活动，敬请理解。再次衷心感谢您今天的光临。",
+      manuscript:
+        "欢迎光临。本店现正在举办特价优惠活动！各种名牌商品现正${percentage}折出售！请各位顾客莫失良机！另外，部分商品不参与本次活动，敬请理解。再次衷心感谢您今天的光临。",
       lang: "zh",
       customerName: "ユーセンカフェ",
       time: "21:00",
@@ -926,10 +947,12 @@ describe("convertManuscriptのテスト", () => {
       age: 100,
       minutes: 10,
       point: 100,
-      expected: "欢迎光临。本店现正在举办特价优惠活动！各种名牌商品现正5折出售！请各位顾客莫失良机！另外，部分商品不参与本次活动，敬请理解。再次衷心感谢您今天的光临。",
+      expected:
+        "欢迎光临。本店现正在举办特价优惠活动！各种名牌商品现正5折出售！请各位顾客莫失良机！另外，部分商品不参与本次活动，敬请理解。再次衷心感谢您今天的光临。",
     },
     {
-      manuscript: "本日も、${customerName}をご利⽤いただきまして誠にありがとうございます。お客様にご案内申し上げます。誠に勝⼿ながら、年内${date1}日までの営業とさせていただきます。ご了承くださいますよう、宜しくお願い申し上げます。",
+      manuscript:
+        "本日も、${customerName}をご利⽤いただきまして誠にありがとうございます。お客様にご案内申し上げます。誠に勝⼿ながら、年内${date1}日までの営業とさせていただきます。ご了承くださいますよう、宜しくお願い申し上げます。",
       lang: "ja",
       customerName: "ユーセンカフェ",
       time: "21:00",
@@ -940,10 +963,12 @@ describe("convertManuscriptのテスト", () => {
       age: 100,
       minutes: 10,
       point: 100,
-      expected: "本日も、ユーセンカフェをご利⽤いただきまして誠にありがとうございます。お客様にご案内申し上げます。誠に勝⼿ながら、年内30日までの営業とさせていただきます。ご了承くださいますよう、宜しくお願い申し上げます。",
+      expected:
+        "本日も、ユーセンカフェをご利⽤いただきまして誠にありがとうございます。お客様にご案内申し上げます。誠に勝⼿ながら、年内30日までの営業とさせていただきます。ご了承くださいますよう、宜しくお願い申し上げます。",
     },
     {
-      manuscript: "本日は、${customerName}をご利⽤いただきまして誠にありがとうございます。お客様にご案内申し上げます。試着室への商品のお持込は１回、${number}点迄とさせて頂いております。ご理解、ご協⼒の程、宜しくお願い申し上げます。本日のご利⽤、誠にありがとうございます。",
+      manuscript:
+        "本日は、${customerName}をご利⽤いただきまして誠にありがとうございます。お客様にご案内申し上げます。試着室への商品のお持込は１回、${number}点迄とさせて頂いております。ご理解、ご協⼒の程、宜しくお願い申し上げます。本日のご利⽤、誠にありがとうございます。",
       lang: "ja",
       customerName: "ユーセンカフェ",
       time: "21:00",
@@ -954,10 +979,12 @@ describe("convertManuscriptのテスト", () => {
       age: 100,
       minutes: 10,
       point: 100,
-      expected: "本日は、ユーセンカフェをご利⽤いただきまして誠にありがとうございます。お客様にご案内申し上げます。試着室への商品のお持込は１回、3点迄とさせて頂いております。ご理解、ご協⼒の程、宜しくお願い申し上げます。本日のご利⽤、誠にありがとうございます。",
+      expected:
+        "本日は、ユーセンカフェをご利⽤いただきまして誠にありがとうございます。お客様にご案内申し上げます。試着室への商品のお持込は１回、3点迄とさせて頂いております。ご理解、ご協⼒の程、宜しくお願い申し上げます。本日のご利⽤、誠にありがとうございます。",
     },
     {
-      manuscript: "本⽇は、${customerName}にご来店いただきまして、誠にありがとうございます。${age}才未満、及び小中学生のお客様に御案内申し上げます。風営法により、保護者同伴なしの${age}才未満のお客様は、${time}を過ぎてのご⼊場、ご遊戯をお断りさせて頂いております。只今、${time}となりました。${age}未満及び小中学生のお客様は、どうぞご理解頂きます様、宜しくお願い申し上げます。本⽇のご来店、誠にありがとうございます。",
+      manuscript:
+        "本⽇は、${customerName}にご来店いただきまして、誠にありがとうございます。${age}才未満、及び小中学生のお客様に御案内申し上げます。風営法により、保護者同伴なしの${age}才未満のお客様は、${time}を過ぎてのご⼊場、ご遊戯をお断りさせて頂いております。只今、${time}となりました。${age}未満及び小中学生のお客様は、どうぞご理解頂きます様、宜しくお願い申し上げます。本⽇のご来店、誠にありがとうございます。",
       lang: "ja",
       customerName: "ユーセンカフェ",
       time: "22:00",
@@ -968,10 +995,12 @@ describe("convertManuscriptのテスト", () => {
       age: 18,
       minutes: 10,
       point: 100,
-      expected: "本⽇は、ユーセンカフェにご来店いただきまして、誠にありがとうございます。18才未満、及び小中学生のお客様に御案内申し上げます。風営法により、保護者同伴なしの18才未満のお客様は、午後10時を過ぎてのご⼊場、ご遊戯をお断りさせて頂いております。只今、午後10時となりました。18未満及び小中学生のお客様は、どうぞご理解頂きます様、宜しくお願い申し上げます。本⽇のご来店、誠にありがとうございます。",
+      expected:
+        "本⽇は、ユーセンカフェにご来店いただきまして、誠にありがとうございます。18才未満、及び小中学生のお客様に御案内申し上げます。風営法により、保護者同伴なしの18才未満のお客様は、午後10時を過ぎてのご⼊場、ご遊戯をお断りさせて頂いております。只今、午後10時となりました。18未満及び小中学生のお客様は、どうぞご理解頂きます様、宜しくお願い申し上げます。本⽇のご来店、誠にありがとうございます。",
     },
     {
-      manuscript: "本日は、${customerName}にご来店いただきまして、誠にありがとうございます。お客様にご案内申し上げます。当店は、新年1月${date2}日より営業させていただきます。皆様のご来店を⼼よりお待ちしております。本日は、ご来店ありがとうございます。引き続き、お買い物をお楽しみください。",
+      manuscript:
+        "本日は、${customerName}にご来店いただきまして、誠にありがとうございます。お客様にご案内申し上げます。当店は、新年1月${date2}日より営業させていただきます。皆様のご来店を⼼よりお待ちしております。本日は、ご来店ありがとうございます。引き続き、お買い物をお楽しみください。",
       lang: "ja",
       customerName: "ユーセンカフェ",
       time: "22:00",
@@ -982,10 +1011,12 @@ describe("convertManuscriptのテスト", () => {
       age: 18,
       minutes: 10,
       point: 100,
-      expected: "本日は、ユーセンカフェにご来店いただきまして、誠にありがとうございます。お客様にご案内申し上げます。当店は、新年1月2日より営業させていただきます。皆様のご来店を⼼よりお待ちしております。本日は、ご来店ありがとうございます。引き続き、お買い物をお楽しみください。",
+      expected:
+        "本日は、ユーセンカフェにご来店いただきまして、誠にありがとうございます。お客様にご案内申し上げます。当店は、新年1月2日より営業させていただきます。皆様のご来店を⼼よりお待ちしております。本日は、ご来店ありがとうございます。引き続き、お買い物をお楽しみください。",
     },
     {
-      manuscript: "本日は、${customerName}にご来店いただきまして、誠にありがとうございます。当店は、本日ポイント${points}倍デー！！ご利⽤⾦額に応じてもらえるポイントが、なんと通常の${points}倍となっております！このお得な機会を、ぜひお⾒逃しなく。また、まだ会員でないお客様は、ぜひこの機会にポイントカードにご入会ください。詳しくは、係員スタッフまでお気軽にお問い合わせください。本日、ポイント${points}倍デー！！是非、この機会をご利⽤下さい！",
+      manuscript:
+        "本日は、${customerName}にご来店いただきまして、誠にありがとうございます。当店は、本日ポイント${points}倍デー！！ご利⽤⾦額に応じてもらえるポイントが、なんと通常の${points}倍となっております！このお得な機会を、ぜひお⾒逃しなく。また、まだ会員でないお客様は、ぜひこの機会にポイントカードにご入会ください。詳しくは、係員スタッフまでお気軽にお問い合わせください。本日、ポイント${points}倍デー！！是非、この機会をご利⽤下さい！",
       lang: "ja",
       customerName: "ユーセンカフェ",
       time: "22:00",
@@ -996,24 +1027,221 @@ describe("convertManuscriptのテスト", () => {
       age: 18,
       minutes: 10,
       point: 5,
-      expected: "本日は、ユーセンカフェにご来店いただきまして、誠にありがとうございます。当店は、本日ポイント5倍デー！！ご利⽤⾦額に応じてもらえるポイントが、なんと通常の5倍となっております！このお得な機会を、ぜひお⾒逃しなく。また、まだ会員でないお客様は、ぜひこの機会にポイントカードにご入会ください。詳しくは、係員スタッフまでお気軽にお問い合わせください。本日、ポイント5倍デー！！是非、この機会をご利⽤下さい！",
+      expected:
+        "本日は、ユーセンカフェにご来店いただきまして、誠にありがとうございます。当店は、本日ポイント5倍デー！！ご利⽤⾦額に応じてもらえるポイントが、なんと通常の5倍となっております！このお得な機会を、ぜひお⾒逃しなく。また、まだ会員でないお客様は、ぜひこの機会にポイントカードにご入会ください。詳しくは、係員スタッフまでお気軽にお問い合わせください。本日、ポイント5倍デー！！是非、この機会をご利⽤下さい！",
     },
   ];
   datas.forEach((v) => {
-    test(`各国の原稿が正しく変換されて返ること(${v.expected.slice(0, 30)}...)`, () => {
-      expect(ttsTextConverter.convertManuscript(
-        v.manuscript,
-        v.lang,
-        v.customerName,
-        v.time,
-        v.percentage,
-        v.count,
-        v.endYearDate,
-        v.newYearDate,
-        v.age,
-        v.minutes,
-        v.point
-      )).toBe(v.expected);
+    test(`各国の原稿が正しく変換されて返ること(${v.expected.slice(
+      0,
+      30
+    )}...)`, () => {
+      expect(
+        ttsTextConverter.convertManuscript(
+          v.manuscript,
+          v.lang,
+          v.customerName,
+          v.time,
+          v.percentage,
+          v.count,
+          v.endYearDate,
+          v.newYearDate,
+          v.age,
+          v.minutes,
+          v.point
+        )
+      ).toBe(v.expected);
     });
+  });
+});
+
+describe("convertTemplateManuscriptのテスト", () => {
+  const datas = [
+    {
+      manuscript:
+        "皆さん、おはようございます。只今、開店${minutes}分前です。お客様をお迎えするために、各自準備をすすめてください。服装は清潔にしていますか？店内の清掃は⾏き届いていますか？テーブルなどのセッティングは整っていますか？接客時は丁寧な⾔葉遣いを⼼がけましょう。今⽇も⼀⽇、お客様に気持ちよくお食事していただけるよう⼀人ひとりが最善をつくしましょう。只今、開店${minutes}分前です。",
+      lang: "ja",
+      customerName: "",
+      time: "",
+      percentage: 100,
+      count: 100,
+      endYearDate: "",
+      newYearDate: "",
+      age: 100,
+      minutes: 10,
+      point: 100,
+      expected:
+        '皆さん、おはようございます。只今、開店<span class="yellow">10</span>分前です。お客様をお迎えするために、各自準備をすすめてください。服装は清潔にしていますか？店内の清掃は⾏き届いていますか？テーブルなどのセッティングは整っていますか？接客時は丁寧な⾔葉遣いを⼼がけましょう。今⽇も⼀⽇、お客様に気持ちよくお食事していただけるよう⼀人ひとりが最善をつくしましょう。只今、開店<span class="yellow">10</span>分前です。',
+    },
+    {
+      manuscript:
+        "本⽇は、${customerName}にご来店いただきまして、誠にありがとうございます。お客様にご案内申し上げます。当店の営業時間は${time}までとなっております。本⽇は、ご利⽤ありがとうございます。どうぞごゆっくりお過ごしくださいませ。",
+      lang: "ja",
+      customerName: "ユーセンカフェ",
+      time: "21:00",
+      percentage: 100,
+      count: 100,
+      endYearDate: "",
+      newYearDate: "",
+      age: 100,
+      minutes: 10,
+      point: 100,
+      expected:
+        '本⽇は、<span class="green">ユーセンカフェ</span>にご来店いただきまして、誠にありがとうございます。お客様にご案内申し上げます。当店の営業時間は<span class="yellow">午後9時</span>までとなっております。本⽇は、ご利⽤ありがとうございます。どうぞごゆっくりお過ごしくださいませ。',
+    },
+    {
+      manuscript:
+        "いらっしゃいませ。${customerName}では、ただ今、特別セールを実施中！各有名メーカーの商品がなんと${percentage}パーセントオフ！この機会をお⾒逃し無く！ なお一部セール除外品もございますのでご了承ください。本日はご来店誠にありがとうございます。",
+      lang: "ja",
+      customerName: "ユーセンカフェ",
+      time: "21:00",
+      percentage: 50,
+      count: 100,
+      endYearDate: "",
+      newYearDate: "",
+      age: 100,
+      minutes: 10,
+      point: 100,
+      expected:
+        'いらっしゃいませ。<span class="green">ユーセンカフェ</span>では、ただ今、特別セールを実施中！各有名メーカーの商品がなんと<span class="purple">50</span>パーセントオフ！この機会をお⾒逃し無く！ なお一部セール除外品もございますのでご了承ください。本日はご来店誠にありがとうございます。',
+    },
+    {
+      manuscript:
+        "本日も、${customerName}をご利⽤いただきまして誠にありがとうございます。お客様にご案内申し上げます。誠に勝⼿ながら、年内${date1}日までの営業とさせていただきます。ご了承くださいますよう、宜しくお願い申し上げます。",
+      lang: "ja",
+      customerName: "ユーセンカフェ",
+      time: "21:00",
+      percentage: 50,
+      count: 100,
+      endYearDate: "12/30",
+      newYearDate: "",
+      age: 100,
+      minutes: 10,
+      point: 100,
+      expected:
+        '本日も、<span class="green">ユーセンカフェ</span>をご利⽤いただきまして誠にありがとうございます。お客様にご案内申し上げます。誠に勝⼿ながら、年内<span class="red">30</span>日までの営業とさせていただきます。ご了承くださいますよう、宜しくお願い申し上げます。',
+    },
+    {
+      manuscript:
+        "本日は、${customerName}をご利⽤いただきまして誠にありがとうございます。お客様にご案内申し上げます。試着室への商品のお持込は１回、${number}点迄とさせて頂いております。ご理解、ご協⼒の程、宜しくお願い申し上げます。本日のご利⽤、誠にありがとうございます。",
+      lang: "ja",
+      customerName: "ユーセンカフェ",
+      time: "21:00",
+      percentage: 50,
+      count: 3,
+      endYearDate: "12/30",
+      newYearDate: "",
+      age: 100,
+      minutes: 10,
+      point: 100,
+      expected:
+        '本日は、<span class="green">ユーセンカフェ</span>をご利⽤いただきまして誠にありがとうございます。お客様にご案内申し上げます。試着室への商品のお持込は１回、<span class="purple">3</span>点迄とさせて頂いております。ご理解、ご協⼒の程、宜しくお願い申し上げます。本日のご利⽤、誠にありがとうございます。',
+    },
+    {
+      manuscript:
+        "本⽇は、${customerName}にご来店いただきまして、誠にありがとうございます。${age}才未満、及び小中学生のお客様に御案内申し上げます。風営法により、保護者同伴なしの${age}才未満のお客様は、${time}を過ぎてのご⼊場、ご遊戯をお断りさせて頂いております。只今、${time}となりました。${age}未満及び小中学生のお客様は、どうぞご理解頂きます様、宜しくお願い申し上げます。本⽇のご来店、誠にありがとうございます。",
+      lang: "ja",
+      customerName: "ユーセンカフェ",
+      time: "22:00",
+      percentage: 50,
+      count: 3,
+      endYearDate: "12/30",
+      newYearDate: "",
+      age: 18,
+      minutes: 10,
+      point: 100,
+      expected:
+        '本⽇は、<span class="green">ユーセンカフェ</span>にご来店いただきまして、誠にありがとうございます。<span class="purple">18</span>才未満、及び小中学生のお客様に御案内申し上げます。風営法により、保護者同伴なしの<span class="purple">18</span>才未満のお客様は、<span class="yellow">午後10時</span>を過ぎてのご⼊場、ご遊戯をお断りさせて頂いております。只今、<span class="yellow">午後10時</span>となりました。<span class="purple">18</span>未満及び小中学生のお客様は、どうぞご理解頂きます様、宜しくお願い申し上げます。本⽇のご来店、誠にありがとうございます。',
+    },
+    {
+      manuscript:
+        "本日は、${customerName}にご来店いただきまして、誠にありがとうございます。お客様にご案内申し上げます。当店は、新年1月${date2}日より営業させていただきます。皆様のご来店を⼼よりお待ちしております。本日は、ご来店ありがとうございます。引き続き、お買い物をお楽しみください。",
+      lang: "ja",
+      customerName: "ユーセンカフェ",
+      time: "22:00",
+      percentage: 50,
+      count: 3,
+      endYearDate: "12/30",
+      newYearDate: "1/2",
+      age: 18,
+      minutes: 10,
+      point: 100,
+      expected:
+        '本日は、<span class="green">ユーセンカフェ</span>にご来店いただきまして、誠にありがとうございます。お客様にご案内申し上げます。当店は、新年1月<span class="red">2</span>日より営業させていただきます。皆様のご来店を⼼よりお待ちしております。本日は、ご来店ありがとうございます。引き続き、お買い物をお楽しみください。',
+    },
+    {
+      manuscript:
+        "本日は、${customerName}にご来店いただきまして、誠にありがとうございます。当店は、本日ポイント${points}倍デー！！ご利⽤⾦額に応じてもらえるポイントが、なんと通常の${points}倍となっております！このお得な機会を、ぜひお⾒逃しなく。また、まだ会員でないお客様は、ぜひこの機会にポイントカードにご入会ください。詳しくは、係員スタッフまでお気軽にお問い合わせください。本日、ポイント${points}倍デー！！是非、この機会をご利⽤下さい！",
+      lang: "ja",
+      customerName: "ユーセンカフェ",
+      time: "22:00",
+      percentage: 50,
+      count: 3,
+      endYearDate: "12/30",
+      newYearDate: "1/2",
+      age: 18,
+      minutes: 10,
+      point: 5,
+      expected:
+        '本日は、<span class="green">ユーセンカフェ</span>にご来店いただきまして、誠にありがとうございます。当店は、本日ポイント<span class="purple">5</span>倍デー！！ご利⽤⾦額に応じてもらえるポイントが、なんと通常の<span class="purple">5</span>倍となっております！このお得な機会を、ぜひお⾒逃しなく。また、まだ会員でないお客様は、ぜひこの機会にポイントカードにご入会ください。詳しくは、係員スタッフまでお気軽にお問い合わせください。本日、ポイント<span class="purple">5</span>倍デー！！是非、この機会をご利⽤下さい！',
+    },
+  ];
+  datas.forEach((v) => {
+    test(`原稿が正しく変換されて返ること(${v.expected.slice(
+      0,
+      30
+    )}...)`, () => {
+      expect(
+        ttsTextConverter.convertTemplateManuscript(
+          v.manuscript,
+          v.lang,
+          v.customerName,
+          v.time,
+          v.percentage,
+          v.count,
+          v.endYearDate,
+          v.newYearDate,
+          v.age,
+          v.minutes,
+          v.point
+        )
+      ).toBe(v.expected);
+    });
+  });
+});
+
+describe("redTagのテスト", () => {
+  const data = { value: "ユーセンカフェ", expected: "<span class=\"red\">ユーセンカフェ</span>" };
+  test(`引数に("${data.value}"を渡すと"${data.expected}"が返ること`, () => {
+    expect(ttsTextConverter.redHtmlTag(data.value)).toBe(
+      data.expected
+    );
+  });
+});
+
+describe("greenTagのテスト", () => {
+  const data = { value: "ユーセンカフェ", expected: "<span class=\"green\">ユーセンカフェ</span>" };
+  test(`引数に("${data.value}"を渡すと"${data.expected}"が返ること`, () => {
+    expect(ttsTextConverter.greenHtmlTag(data.value)).toBe(
+      data.expected
+    );
+  });
+});
+
+describe("purpleTagのテスト", () => {
+  const data = { value: "ユーセンカフェ", expected: "<span class=\"purple\">ユーセンカフェ</span>" };
+  test(`引数に("${data.value}"を渡すと"${data.expected}"が返ること`, () => {
+    expect(ttsTextConverter.purpleHtmlTag(data.value)).toBe(
+      data.expected
+    );
+  });
+});
+
+describe("yellowTagのテスト", () => {
+  const data = { value: "ユーセンカフェ", expected: "<span class=\"yellow\">ユーセンカフェ</span>" };
+  test(`引数に("${data.value}"を渡すと"${data.expected}"が返ること`, () => {
+    expect(ttsTextConverter.yellowHtmlTag(data.value)).toBe(
+      data.expected
+    );
   });
 });

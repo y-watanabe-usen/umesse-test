@@ -109,7 +109,7 @@
             </FormGroup>
           </div>
           <div class="maniscript">
-            {{ text }}
+            <p v-html="text"></p>
           </div>
         </ContentsBase>
       </template>
@@ -371,7 +371,7 @@ export default defineComponent({
       minutes: 10,
       point: 3,
       text: computed(() => {
-        const text: string = ttsTextConverter.convertManuscript(
+        const text: string = ttsTextConverter.convertTemplateManuscript(
           template.manuscript,
           "ja",
           state.customerName,
@@ -722,6 +722,7 @@ export default defineComponent({
       ::v-deep {
         .title {
           width: 96px;
+          color: $color_green;
         }
         .input-wrapper {
           width: 370px;
@@ -733,6 +734,7 @@ export default defineComponent({
       ::v-deep {
         .title {
           width: 96px;
+          color: $color_yellow;
         }
         .input-wrapper {
           width: 150px;
@@ -744,6 +746,7 @@ export default defineComponent({
       ::v-deep {
         .title {
           width: 200px;
+          color: $color_purple;
         }
         .input-wrapper {
           width: 150px;
@@ -754,6 +757,7 @@ export default defineComponent({
       ::v-deep {
         .title {
           width: 96px;
+          color: $color_purple;
         }
         .input-wrapper {
           width: 150px;
@@ -764,6 +768,7 @@ export default defineComponent({
       ::v-deep {
         .title {
           width: 150px;
+          color: $color_red;
         }
         .input-wrapper {
           width: 150px;
@@ -774,6 +779,7 @@ export default defineComponent({
       ::v-deep {
         .title {
           width: 150px;
+          color: $color_red;
         }
         .input-wrapper {
           width: 150px;
@@ -784,6 +790,7 @@ export default defineComponent({
       ::v-deep {
         .title {
           width: 96px;
+          color: $color_purple;
         }
         .input-wrapper {
           width: 150px;
@@ -794,6 +801,7 @@ export default defineComponent({
       ::v-deep {
         .title {
           width: 96px;
+          color: $color_yellow;
         }
         .input-wrapper {
           width: 150px;
@@ -804,6 +812,7 @@ export default defineComponent({
       ::v-deep {
         .title {
           width: 150px;
+          color: $color_purple;
         }
         .input-wrapper {
           width: 150px;
@@ -829,11 +838,38 @@ export default defineComponent({
   padding-right: 24px;
   padding-top: 14px;
   padding-bottom: 14px;
-  font-size: 19px;
-  font-weight: $font_weight_bold;
-  line-height: 2em;
   height: 302px;
   caret-color: transparent;
+  p {
+    font-size: 19px;
+    font-weight: $font_weight_bold;
+    line-height: 2em;
+    color: black;
+    ::v-deep .green {
+      font-size: 19px;
+      font-weight: $font_weight_bold;
+      line-height: 2em;
+      color: $color_green;
+    }
+    ::v-deep .yellow {
+      font-size: 19px;
+      font-weight: $font_weight_bold;
+      line-height: 2em;
+      color: $color_yellow;
+    }
+    ::v-deep .purple {
+      font-size: 19px;
+      font-weight: $font_weight_bold;
+      line-height: 2em;
+      color: $color_purple;
+    }
+    ::v-deep .red {
+      font-size: 19px;
+      font-weight: $font_weight_bold;
+      line-height: 2em;
+      color: $color_red;
+    }
+  }
 }
 .lang-check {
   position: relative;
