@@ -28,10 +28,9 @@
         v-if="isTutorialModalAppear"
         :closeModal="closeTutorial"
       />
-      <ModalAgreeDialog
-        v-if="isAgreeModalAppear"
-        :confirm="closeAgree"
-      />
+    </transition>
+    <transition>
+      <ModalAgreeDialog v-if="isAgreeModalAppear" :confirm="closeAgree" />
     </transition>
   </div>
 </template>
@@ -102,11 +101,11 @@ export default defineComponent({
       removeDisplayCache();
       try {
         await auth.requestAuth();
-        if (isShowTutorial()) openTutorialModal();
         const agree = <boolean>auth.getAgree();
         if (!agree) {
-          // 禁止事項モーダルの表示
-          openAgreeModal();
+          openAgreeModal(); // 禁止事項モーダルの表示
+        } else {
+          if (isShowTutorial()) openTutorialModal(); // チュートリアルモーダルの表示
         }
         analytics.screenView(Constants.SCREEN.HOME);
       } catch (e) {
@@ -137,7 +136,7 @@ export default defineComponent({
       try {
         if (isAgree) await auth.agree();
         closeAgreeModal();
-        // todo: チュートリアルモーダル表示判定
+        if (isShowTutorial()) openTutorialModal(); // チュートリアルモーダルの表示
       } catch (e) {
         openErrorModal(e);
       }
