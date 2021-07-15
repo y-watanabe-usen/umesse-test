@@ -1,7 +1,12 @@
 <template>
-  <div class="modal-header">
+  <div class="modal-header" :class="{ 'hide-border': hideBorder }">
     <p class="title">{{ title }}</p>
-    <button :disabled="closeDisabled" class="btn-close" @click="$emit('close')">
+    <button
+      v-if="showClose"
+      :disabled="closeDisabled"
+      class="btn-close"
+      @click="$emit('close')"
+    >
       <img src="@/assets/icon_close.svg" />
     </button>
   </div>
@@ -20,6 +25,14 @@ export default defineComponent({
     closeDisabled: {
       type: Boolean,
       default: false,
+    },
+    hideBorder: {
+      type: Boolean,
+      default: false,
+    },
+    showClose: {
+      type: Boolean,
+      default: true,
     },
   },
   setup() {
@@ -41,6 +54,9 @@ export default defineComponent({
   display: block;
   padding: 0;
   caret-color: transparent;
+  &.hide-border {
+    border-bottom: none;
+  }
   .title {
     color: black;
     font-size: 16px;

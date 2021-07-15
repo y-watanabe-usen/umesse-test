@@ -29,6 +29,9 @@
         :closeModal="closeTutorial"
       />
     </transition>
+    <transition>
+      <ModalAgreeDialog v-if="isAgreeModalAppear" :confirm="closeAgree" />
+    </transition>
   </div>
 </template>
 
@@ -37,10 +40,11 @@ import { useGlobalStore } from "@/store";
 import { defineComponent, onMounted, reactive, toRefs } from "vue";
 import MainMenu from "@/components/organisms/MainMenu.vue";
 import ModalLoading from "@/components/organisms/ModalLoading.vue";
+import useModalController from "@/mixins/modalController";
 import ModalErrorDialog from "@/components/organisms/ModalErrorDialog.vue";
 import ModalTutorialDialog from "@/components/organisms/ModalTutorialDialog.vue";
+import ModalAgreeDialog from "@/components/organisms/ModalAgreeDialog.vue";
 import useLoadingModalController from "@/mixins/loadingModalController";
-import useModalController from "@/mixins/modalController";
 import useErrorModalController from "@/mixins/errorModalController";
 import analytics from "@/utils/firebaseAnalytics";
 import Constants from "@/utils/constants";
@@ -54,10 +58,16 @@ export default defineComponent({
     ModalLoading,
     ModalErrorDialog,
     ModalTutorialDialog,
+    ModalAgreeDialog,
   },
   name: "Home",
   setup() {
     const { auth } = useGlobalStore();
+    const {
+      isApper: isAgreeModalAppear,
+      open: openAgreeModal,
+      close: closeAgreeModal,
+    } = useModalController();
     const {
       isApper: isLoading,
       loadingMessage: loadingMessage,
@@ -91,7 +101,12 @@ export default defineComponent({
       removeDisplayCache();
       try {
         await auth.requestAuth();
-        if (isShowTutorial()) openTutorialModal();
+        const agree = <boolean>auth.getAgree();
+        if (!agree) {
+          openAgreeModal(); // 禁止事項モーダルの表示
+        } else {
+          if (isShowTutorial()) openTutorialModal(); // チュートリアルモーダルの表示
+        }
         analytics.screenView(Constants.SCREEN.HOME);
       } catch (e) {
         openErrorModal(e);
@@ -115,8 +130,16 @@ export default defineComponent({
       if (userService.getDontShowForeverTutorial()) {
         return false;
       }
-
       return true;
+    };
+    const closeAgree = async (isAgree: boolean) => {
+      try {
+        if (isAgree) await auth.agree();
+        closeAgreeModal();
+        if (isShowTutorial()) openTutorialModal(); // チュートリアルモーダルの表示
+      } catch (e) {
+        openErrorModal(e);
+      }
     };
     return {
       ...toRefs(state),
@@ -136,6 +159,10 @@ export default defineComponent({
       openTutorialModal,
       closeTutorialModal,
       closeTutorial,
+      isAgreeModalAppear,
+      openAgreeModal,
+      closeAgreeModal,
+      closeAgree,
     };
   },
 });
