@@ -1,7 +1,9 @@
 <template>
   <ModalDialog size="large">
     <template #header>
-      <ModalHeader title="禁止事項" :hideBorder="true" :showClose="false" />
+      <div class="modal-header">
+        <p class="title">禁止事項</p>
+      </div>
     </template>
     <template #contents>
       <div class="contents">
@@ -27,20 +29,25 @@
       </div>
     </template>
     <template #footer>
-      <div class="prohibited-matter-checkbox">
-        <input
-          type="checkbox"
-          id="is-Agree"
-          v-model="isAgree"
-          :value="isAgree"
-        />
-        <label for="is-Agree">同意する</label>
+      <div class="modal-footer">
+        <div class="prohibited-matter-checkbox">
+          <input
+            type="checkbox"
+            id="is-Agree"
+            v-model="isAgree"
+            :value="isAgree"
+          />
+          <label for="is-Agree">同意する</label>
+        </div>
+        <div>
+          <Button
+            type="primary"
+            @click="confirm(isAgree)"
+            :isDisabled="!isAgree"
+            >利用する</Button
+          >
+        </div>
       </div>
-      <ModalFooter :hideBorder="true">
-        <Button type="primary" @click="confirm(isAgree)" :isDisabled="!isAgree"
-          >利用する</Button
-        >
-      </ModalFooter>
     </template>
   </ModalDialog>
 </template>
@@ -49,16 +56,12 @@
 import { defineComponent, reactive, toRefs } from "vue";
 import Button from "@/components/atoms/Button.vue";
 import ModalDialog from "@/components/organisms/ModalDialog.vue";
-import ModalHeader from "@/components/molecules/ModalHeader.vue";
-import ModalFooter from "@/components/molecules/ModalFooter.vue";
 
 export default defineComponent({
   name: "ModalAgreeDialog",
   components: {
     Button,
     ModalDialog,
-    ModalHeader,
-    ModalFooter,
   },
   props: {
     confirm: {
@@ -80,6 +83,31 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import "@/scss/_variables.scss";
 
+.modal-header {
+  position: relative;
+  height: 80px;
+  border-bottom: none;
+  display: block;
+  padding: 0;
+  caret-color: transparent;
+  .title {
+    color: black;
+    font-size: 20px;
+    font-weight: $font_weight_bold;
+    line-height: 80px;
+    text-align: center;
+  }
+}
+.modal-footer {
+  height: 130px;
+  ::v-deep button {
+    width: 242px;
+    margin: 25px auto;
+    &.rectangle {
+      width: 88px;
+    }
+  }
+}
 .contents {
   border: 2px solid rgb(190, 190, 190);
   border-radius: 6px;
@@ -107,7 +135,7 @@ export default defineComponent({
   align-items: center;
   position: relative;
   margin: 0 auto;
-  margin-top: 1em;
+  margin-top: 2em;
   width: 8em;
   padding-left: 10px;
   cursor: pointer;
@@ -125,8 +153,8 @@ export default defineComponent({
       position: absolute;
       top: 0px;
       left: 0px;
-      width: 16px;
-      height: 16px;
+      width: 20px;
+      height: 20px;
       border: 2px solid rgb(192, 192, 191);
       border-radius: 3px;
       box-sizing: content-box;
@@ -137,8 +165,8 @@ export default defineComponent({
         position: absolute;
         top: 0px;
         left: 0px;
-        width: 20px;
-        height: 20px;
+        width: 24px;
+        height: 24px;
         border: none;
         background-image: url("~@/assets/icon_checked.svg");
         background-repeat: no-repeat;
@@ -149,9 +177,9 @@ export default defineComponent({
   label {
     text-align: center;
     display: block;
-    width: 100%;
+    padding-left: 20px;
     color: black;
-    font-size: 16px;
+    font-size: 20px;
     font-weight: medium;
   }
 }

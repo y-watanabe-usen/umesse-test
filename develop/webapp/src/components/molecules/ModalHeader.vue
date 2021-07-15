@@ -1,5 +1,5 @@
 <template>
-  <div class="modal-header" :class="{ 'hide-border': hideBorder }">
+  <div class="modal-header">
     <p class="title">{{ title }}</p>
     <button
       v-if="showClose"
@@ -23,10 +23,6 @@ export default defineComponent({
       required: true,
     },
     closeDisabled: {
-      type: Boolean,
-      default: false,
-    },
-    hideBorder: {
       type: Boolean,
       default: false,
     },
@@ -54,9 +50,6 @@ export default defineComponent({
   display: block;
   padding: 0;
   caret-color: transparent;
-  &.hide-border {
-    border-bottom: none;
-  }
   .title {
     color: black;
     font-size: 16px;
