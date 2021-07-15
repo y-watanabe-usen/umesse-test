@@ -1,12 +1,12 @@
 <template>
-  <ModalDialog>
+  <ModalDialog size="large">
     <template #header>
       <ModalHeader title="禁止事項" :hideBorder="true" :showClose="false" />
     </template>
     <template #contents>
       <div class="contents">
         <p>
-          ・当社もしくは第三者の著作権、商標権などの知的財産権その他の権利を侵害する行為、または侵害する恐れのある行為<br />
+          ・当社もしくは第三者の著作権、商標権などの知的財産権その他の権利を侵害する行為、<br />または侵害する恐れのある行為<br />
           ・他人の名誉、社会的信用、プライバシーを侵害する恐れのある音声を送信する行為<br />
           ・法令若しくは公序良俗に違反し、当社若しくは第三者に不利益を与える行為<br />
           ・第三者になりすまして本サービスを利用する行為<br />
@@ -21,7 +21,7 @@
         </p>
         <div class="confirm">
           ※
-          <!-- <img src="@/assets/icon_plus.svg" /> -->
+          <img src="@/assets/icon_setting_black.png" />
           <p>設定画面にて、禁止事項のご確認を行うことができます。</p>
         </div>
       </div>
@@ -38,7 +38,7 @@
       </div>
       <ModalFooter :hideBorder="true">
         <Button type="primary" @click="confirm(isAgree)" :isDisabled="!isAgree"
-          >確定</Button
+          >利用する</Button
         >
       </ModalFooter>
     </template>
@@ -83,15 +83,15 @@ export default defineComponent({
 .contents {
   border: 2px solid rgb(190, 190, 190);
   border-radius: 6px;
-  margin: -40px 80px;
-  padding: 30px 50px;
+  margin: -40px 130px;
+  padding: 36px 65px;
   ::v-deep p {
     display: inline;
     color: black;
-    font-size: 14px;
-    font-weight: $font_weight_bold;
+    font-size: 16px;
+    font-weight: medium;
     text-align: center;
-    line-height: 1;
+    line-height: 1.5;
   }
   .confirm {
     vertical-align: middle;
@@ -151,8 +151,8 @@ export default defineComponent({
     display: block;
     width: 100%;
     color: black;
-    font-size: 15px;
-    font-weight: $font_weight_bold;
+    font-size: 16px;
+    font-weight: medium;
   }
 }
 </style>
