@@ -20,6 +20,7 @@ class MainActivity : AppCompatActivity() {
         webView = findViewById(R.id.webView)
         webView.also {
             it.settings.javaScriptEnabled = true
+            it.settings.domStorageEnabled = true
             it.settings.userAgentString =
                 it.settings.userAgentString + "U MESSE webview"
             it.settings.useWideViewPort = true
