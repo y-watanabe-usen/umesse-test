@@ -63,9 +63,10 @@ button {
   }
   &.emphasis {
     width: 110px;
-    box-shadow: $box_shadow;
+    box-shadow: $box_shadow_weak;
     color: white;
-    background-color: rgb(50, 205, 50);
+    background-color: rgb(70, 195, 40); // #46C328
+    font-size: 24px;
   }
   &:disabled {
     color: white;
