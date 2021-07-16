@@ -588,7 +588,7 @@
         </template>
         <template #footer>
           <ModalFooter>
-            <Button type="secondary" @click="toHome">トップ画面に戻る</Button>
+            <Button type="secondary" @click="toHome">ホーム画面に戻る</Button>
             <Button type="primary" @click="toManagement"
               >CM一覧を表示する</Button
             >
@@ -1279,7 +1279,7 @@ export default defineComponent({
         Constants.SCREEN.CM
       );
     };
-    const backScreenName = cm.isEdit ? "管理" : "ホーム";
+    const backScreenName = cm.isEdit ? "音声CM一覧" : "ホーム";
     const toBackFunction = cm.isEdit ? toManagement : toHome;
 
     const getAboutCmTime = () => {
