@@ -588,7 +588,7 @@
         </template>
         <template #footer>
           <ModalFooter>
-            <Button type="secondary" @click="toHome">トップ画面に戻る</Button>
+            <Button type="secondary" @click="toHome">ホーム画面に戻る</Button>
             <Button type="primary" @click="toManagement"
               >CM一覧を表示する</Button
             >
