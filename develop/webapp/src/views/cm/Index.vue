@@ -1279,7 +1279,7 @@ export default defineComponent({
         Constants.SCREEN.CM
       );
     };
-    const backScreenName = cm.isEdit ? "管理" : "ホーム";
+    const backScreenName = cm.isEdit ? "音声CM一覧" : "ホーム";
     const toBackFunction = cm.isEdit ? toManagement : toHome;
 
     const getAboutCmTime = () => {
