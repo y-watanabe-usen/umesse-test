@@ -184,7 +184,7 @@ export default class Constants {
     { cd: "01", name: "お客様情報" },
     { cd: "02", name: "アプリ情報" },
     { cd: "03", name: "禁止事項" },
-    { cd: "04", name: "チュートリアル" },
+    { cd: "04", name: "音声CM作成の流れ" },
   ];
 
   public static readonly CATEGORY = {

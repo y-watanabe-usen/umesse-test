@@ -86,7 +86,8 @@
             </p>
           </div>
           <div v-if="activeAppInformationCd === '04'">
-            <h2>チュートリアル</h2>
+            <h2>音声CM作成の流れ</h2>
+            <img src="@/assets/tutorial.png" class="tutorial" />
           </div>
         </div>
       </ContentsBase>
@@ -192,6 +193,10 @@ export default defineComponent({
   }
   .cautions {
     height: 69vh;
+  }
+  .tutorial {
+    margin: 0 34px;
+    width: 1150px;
   }
   div.lisence {
     color: rgb(92, 92, 92);
