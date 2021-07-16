@@ -43,7 +43,7 @@ button {
   box-shadow: $box_shadow_weak;
   cursor: pointer;
   &.primary {
-    font-size: 19px;
+    font-size: 20px;
     color: white;
     background-color: $color_blue;
   }

@@ -74,6 +74,9 @@ export default defineComponent({
     &.large {
       width: 1040px;
     }
+    &.xLarge {
+      width: 1110px;
+    }
     .contents {
       padding-top: 40px;
       padding-bottom: 40px;
