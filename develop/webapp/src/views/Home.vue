@@ -133,12 +133,16 @@ export default defineComponent({
       return true;
     };
     const closeAgree = async (isAgree: boolean) => {
+      if (!isAgree) return;
       try {
-        if (isAgree) await auth.agree();
+        auth.authenticating.value = true;
+        await auth.agree();
         closeAgreeModal();
         if (isShowTutorial()) openTutorialModal(); // チュートリアルモーダルの表示
       } catch (e) {
         openErrorModal(e);
+      } finally {
+        auth.authenticating.value = false;
       }
     };
     return {

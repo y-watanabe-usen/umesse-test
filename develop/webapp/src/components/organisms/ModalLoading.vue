@@ -59,7 +59,7 @@ export default defineComponent({
   max-width: initial;
   pointer-events: auto;
   margin: 0;
-  z-index: 1;
+  z-index: 10;
   .base {
     background-color: white;
     border-radius: 10px;
