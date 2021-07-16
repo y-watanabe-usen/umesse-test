@@ -71,7 +71,7 @@ export default defineComponent({
   .title {
     color: black;
     font-size: 20px;
-    font-weight: medium;
+    font-weight: $font_weight_bold;
     line-height: 80px;
     text-align: center;
   }
@@ -119,8 +119,8 @@ export default defineComponent({
       position: absolute;
       top: 0px;
       left: 0px;
-      width: 16px;
-      height: 16px;
+      width: 20px;
+      height: 20px;
       border: 2px solid rgb(192, 192, 191);
       border-radius: 3px;
       box-sizing: content-box;
@@ -131,8 +131,8 @@ export default defineComponent({
         position: absolute;
         top: 0px;
         left: 0px;
-        width: 20px;
-        height: 20px;
+        width: 24px;
+        height: 24px;
         border: none;
         background-image: url("~@/assets/icon_checked.svg");
         background-repeat: no-repeat;
@@ -142,10 +142,10 @@ export default defineComponent({
   }
   label {
     text-align: left;
-    font-size: 16px;
+    font-size: 20px;
     font-weight: medium;
     display: block;
-    width: 160px;
+    width: 180px;
     padding-left: 5px;
     color: black;
   }

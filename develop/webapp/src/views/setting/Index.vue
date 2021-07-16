@@ -196,7 +196,7 @@ export default defineComponent({
   }
   .tutorial {
     margin: 0 34px;
-    width: 1150px;
+    width: 1000px;
   }
   div.lisence {
     color: rgb(92, 92, 92);
