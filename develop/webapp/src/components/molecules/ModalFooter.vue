@@ -1,5 +1,5 @@
 <template>
-  <div class="modal-footer" :class="{ 'hide-border': hideBorder }">
+  <div class="modal-footer">
     <slot />
   </div>
 </template>
@@ -9,12 +9,6 @@ import { defineComponent, reactive } from "vue";
 
 export default defineComponent({
   name: "ModalFooter",
-  props: {
-    hideBorder: {
-      type: Boolean,
-      default: false,
-    },
-  },
   setup() {
     const state = reactive({});
     return {
@@ -33,9 +27,6 @@ export default defineComponent({
   height: 100px;
   border-top: 1px solid rgb(229, 229, 229);
   caret-color: transparent;
-  &.hide-border {
-    border-top: none;
-  }
   ::v-deep button {
     width: 242px;
     margin-left: 14px;
