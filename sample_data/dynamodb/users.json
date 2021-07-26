@@ -5,7 +5,7 @@
         "Item": {
           "unisCustomerCd": { "S": "123456789" },
           "contractCd": { "S": "N01234567890123456789" },
-          "serviceCd": { "S": "U01" },
+          "serviceCd": { "S": "U19" },
           "serviceName": { "S": "U∞MUSNC" },
           "customerName": { "S": "カフェUSEN" },
           "customerNameKana": { "S": "カフェユーセン" },

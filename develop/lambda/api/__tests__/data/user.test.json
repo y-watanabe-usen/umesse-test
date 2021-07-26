@@ -5,7 +5,7 @@
         "Item": {
           "unisCustomerCd": { "S": "010000000" },
           "contractCd": { "S": "N0100000000" },
-          "serviceCd": { "S": "U01" },
+          "serviceCd": { "S": "U19" },
           "serviceName": { "S": "U∞MUSNC" },
           "customerName": { "S": "テスト01" },
           "customerNameKana": { "S": "テスト01" },
@@ -23,7 +23,7 @@
         "Item": {
           "unisCustomerCd": { "S": "010000001" },
           "contractCd": { "S": "N0100000001" },
-          "serviceCd": { "S": "U01" },
+          "serviceCd": { "S": "U19" },
           "serviceName": { "S": "U∞MUSNC" },
           "customerName": { "S": "テスト01" },
           "customerNameKana": { "S": "テスト01" },
@@ -41,7 +41,7 @@
         "Item": {
           "unisCustomerCd": { "S": "010000002" },
           "contractCd": { "S": "N0100000002" },
-          "serviceCd": { "S": "U01" },
+          "serviceCd": { "S": "U19" },
           "serviceName": { "S": "U∞MUSNC" },
           "customerName": { "S": "テスト01" },
           "customerNameKana": { "S": "テスト01" },
@@ -59,7 +59,7 @@
         "Item": {
           "unisCustomerCd": { "S": "010000003" },
           "contractCd": { "S": "N0100000003" },
-          "serviceCd": { "S": "U01" },
+          "serviceCd": { "S": "U19" },
           "serviceName": { "S": "U∞MUSNC" },
           "customerName": { "S": "テスト01" },
           "customerNameKana": { "S": "テスト01" },

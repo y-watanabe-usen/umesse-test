@@ -1283,7 +1283,7 @@ components:
         serviceCd:
           type: string
           description: サービスCD
-          example: "U01"
+          example: "U19"
         serviceName:
           type: string
           description: サービス名

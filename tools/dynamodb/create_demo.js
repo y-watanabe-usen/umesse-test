@@ -14,14 +14,14 @@ const dynamodb = new aws.DynamoDB.DocumentClient();
 
 if (!process.argv[2] || !process.argv[3]) {
   console.log(
-    "argv error: node create_demo.js [dynamodb table] [unisCustomerCd range 100000000-100000010] [serviceCd U01 or U17]"
+    "argv error: node create_demo.js [dynamodb table] [unisCustomerCd range 100000000-100000010] [serviceCd U19 or U17]"
   );
   return;
 }
 
 const table = process.argv[2];
 const range = process.argv[3];
-const serviceCd = process.argv[4] || "U01";
+const serviceCd = process.argv[4] || "U19";
 
 const [start, end] = range.split("-");
 
@@ -33,7 +33,7 @@ for (let i = start; i <= end; i++) {
       unisCustomerCd: `${i}`,
       contractCd: `N${i}`,
       serviceCd: serviceCd,
-      serviceName: serviceCd == "U01" ? `UMUSIC` : `UMESSE(S'sence)`,
+      serviceName: serviceCd == "U19" ? `UMUSIC` : `UMESSE(S'sence)`,
       customerName: `USEN ${i}`,
       customerNameKana: `ユーセン ${i}`,
       customerGroupCd: `G${i}`,
