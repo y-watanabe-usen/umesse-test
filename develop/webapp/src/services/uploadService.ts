@@ -14,9 +14,9 @@ export function useUploadService(uploadRepository: UploadApi) {
     };
     try {
       const response = await uploadRepository.createUploadCm(
-        id,
         unisCustomerCd,
         authToken,
+        id,
         requestModel
       );
       return response.data;
