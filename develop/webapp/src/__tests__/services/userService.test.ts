@@ -83,7 +83,7 @@ describe("getInfoのテスト", () => {
       customerName: "カフェUSEN",
       customerNameKana: "カフェユーセン",
       renewalDate: "2019-09-01T09:00:00+09:00",
-      serviceCd: "U01",
+      serviceCd: "U19",
       serviceName: "U∞MUSNC",
       unisCustomerCd: "123456789",
     };

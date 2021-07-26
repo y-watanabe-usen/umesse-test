@@ -134,7 +134,7 @@ export default class Constants {
     { cd: "99", name: "アップロードしない" },
   ];
 
-  public static readonly SERVICE_CD_UMUSIC: string = "U01";
+  public static readonly SERVICE_CD_UMUSIC: string = "U19";
   public static readonly SERVICE_CD_SSENCE: string = "U17";
 
   public static readonly CM_STATUS_DELETE: string = "00";
