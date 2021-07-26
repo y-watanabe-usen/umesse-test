@@ -690,7 +690,7 @@ describe("getLangsのテスト", () => {
 describe("getUploadSystemServiceのテスト", () => {
   const datas = [
     {
-      cd: "U01",
+      cd: "U19",
       expected: [
         { cd: "01", name: "U MUSIC" },
         { cd: "99", name: "アップロードしない" },
@@ -715,13 +715,13 @@ describe("getUploadSystemServiceのテスト", () => {
 describe("getUploadSystemServiceCdのテスト", () => {
   const datas = [
     {
-      authUserServiceCd: "U01",
+      authUserServiceCd: "U19",
       uploadSystem: "01",
       isEdit: false,
       expected: "01",
     },
     {
-      authUserServiceCd: "U01",
+      authUserServiceCd: "U19",
       uploadSystem: "01",
       isEdit: true,
       expected: "01",
@@ -733,13 +733,13 @@ describe("getUploadSystemServiceCdのテスト", () => {
       expected: "02",
     },
     {
-      authUserServiceCd: "U01",
+      authUserServiceCd: "U19",
       uploadSystem: "99",
       isEdit: true,
       expected: "99",
     },
     {
-      authUserServiceCd: "U01",
+      authUserServiceCd: "U19",
       uploadSystem: "",
       isEdit: true,
       expected: "99",
