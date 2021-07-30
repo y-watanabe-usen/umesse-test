@@ -3,6 +3,7 @@
 const {
   constants,
   debuglog,
+  warnlog,
   errorlog,
   timestamp,
   generateId,
@@ -142,6 +143,7 @@ exports.completeExternalCm = async (unisCustomerCd, external, body) => {
       ret.dataProcessType === constants.cmDataProcessType.ADD
         ? constants.cmStatus.COMPLETE
         : constants.cmStatus.EXTERNAL_COMPLETE;
+    warnlog(JSON.stringify(body));
   } else {
     // 正常完了の場合
     if (ret.dataProcessType === constants.cmDataProcessType.DELETE) {
