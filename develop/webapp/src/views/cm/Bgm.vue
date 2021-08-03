@@ -102,7 +102,7 @@
 
 <script lang="ts">
 import { computed, defineComponent, onMounted, reactive, toRefs } from "vue";
-import useAudioPlayer from "@/utils/audioPlayer";
+import useHlsPlayer from "@/utils/hlsPlayer";
 import { BgmItem } from "umesseapi/models";
 import { useRouter } from "vue-router";
 import * as common from "@/utils/common";
@@ -129,6 +129,7 @@ import useModalController from "@/mixins/modalController";
 import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
 import { useCmStore } from "@/store/cm";
+import { useGlobalStore } from "@/store";
 
 export default defineComponent({
   components: {
@@ -151,7 +152,8 @@ export default defineComponent({
   },
   setup() {
     const router = useRouter();
-    const audioPlayer = useAudioPlayer();
+    const { auth } = useGlobalStore();
+    const hlsPlayer = useHlsPlayer();
     const cm = useCmStore();
     const sortList = common.getSort();
     const {
@@ -179,10 +181,11 @@ export default defineComponent({
       bgms: [] as BgmItem[],
       industries: computed(() => common.getBgmIndustries()),
       selectedBgm: null as BgmItem | null,
-      isPlaying: computed(() => audioPlayer.isPlaying()),
+      isPlaying: computed(() => hlsPlayer.isPlaying()),
       isDownloading: false,
-      playbackTime: computed(() => audioPlayer.getPlaybackTime()),
-      duration: computed(() => audioPlayer.getDuration()),
+      playbackTime: computed(() => hlsPlayer.getPlaybackTime()),
+      duration: computed(() => hlsPlayer.getDuration()),
+      url: "",
     });
 
     const setBgm = (bgm: BgmItem) => {
@@ -225,11 +228,11 @@ export default defineComponent({
         Constants.CATEGORY.BGM,
         Constants.SCREEN.BGM
       );
-      await audioPlayer.start();
+      await hlsPlayer.start(state.url);
     };
 
     const stop = () => {
-      if (state.isPlaying) audioPlayer.stop();
+      if (state.isPlaying) hlsPlayer.stop();
     };
 
     const selectBgmAndOpenPlayModal = async (bgm: BgmItem) => {
@@ -237,8 +240,15 @@ export default defineComponent({
         selectBgm(bgm);
         state.isDownloading = true;
         openPlayModal();
-        const url = await audioService.getUrlById(bgm.id, bgm.category);
-        await audioPlayer.load(url);
+        const unisCustomerCd = auth.getUserInfo()?.unisCustomerCd;
+        const token = auth.getToken() ?? "";
+        state.url = await audioService.getM3U8UrlById(
+          unisCustomerCd,
+          token,
+          bgm.id,
+          bgm.category
+        );
+        // await audioPlayer.load(url);
       } catch (e) {
         closePlayModal();
         openErrorModal(e);
@@ -252,7 +262,7 @@ export default defineComponent({
     };
 
     const changeAudioPlayerSlider = (value: number) => {
-      audioPlayer.changePlaybackTime(value);
+      hlsPlayer.changePlaybackTime(value);
     };
 
     onMounted(async () => {
