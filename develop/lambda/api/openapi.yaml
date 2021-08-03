@@ -1062,6 +1062,52 @@ paths:
           $ref: "#/components/responses/NotFound"
         5XX:
           $ref: "#/components/responses/Unexpected"
+  /m3u8SignedUrl:
+    get:
+      tags:
+        - resources
+      summary: S3オブジェクトの署名付きURLの取得(m3u8用)
+      description: 試聴再生のURLを取得する。bgmのみm3u8形式で取得するためapiを分ける
+      operationId: getM3U8SignedUrl
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        - $ref: "#/components/parameters/UnisCustomerCd"
+        - $ref: "#/components/parameters/Token"
+        - name: id
+          in: query
+          description: 音源ID
+          required: true
+          schema:
+            type: string
+            example: "123456789-c-12345678"
+        - name: category
+          in: query
+          description: カテゴリー
+          required: true
+          schema:
+            type: string
+            example: "bgm"
+      responses:
+        200:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                properties:
+                  url:
+                    type: string
+                    example: "https://xxxxx/123456789-c-12345678.m3u8?AWSAccessKeyId=xxxxxxxx"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        403:
+          $ref: "#/components/responses/Forbidden"
+        404:
+          $ref: "#/components/responses/NotFound"
+        5XX:
+          $ref: "#/components/responses/Unexpected"
 
   /{external}/cm:
     get:
