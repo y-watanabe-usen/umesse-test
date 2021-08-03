@@ -3,6 +3,17 @@
 var utils = require('../utils/writer.js');
 var Resources = require('../service/ResourcesService');
 
+module.exports.getM3U8SignedUrl = function getM3U8SignedUrl (req, res, next, id, category, xUnisCustomerCd, xToken) {
+  console.debug(req.headers);
+  Resources.getM3U8SignedUrl(xUnisCustomerCd, xToken, id, category)
+    .then(function (response) {
+      utils.writeJson(res, response);
+    })
+    .catch(function (response) {
+      utils.writeJson(res, response);
+    });
+};
+
 module.exports.getSignedUrl = function getSignedUrl (req, res, next, id, category, protocol) {
   console.debug(req.headers);
   Resources.getSignedUrl(id, category, protocol)

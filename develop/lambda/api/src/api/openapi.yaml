@@ -2406,6 +2406,90 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
       x-swagger-router-controller: Resources
+  /m3u8SignedUrl:
+    get:
+      tags:
+      - resources
+      summary: S3オブジェクトの署名付きURLの取得(m3u8用)
+      description: 試聴再生のURLを取得する。bgmのみm3u8形式で取得するためapiを分ける
+      operationId: getM3U8SignedUrl
+      parameters:
+      - name: x-unis-customer-cd
+        in: header
+        description: UNIS顧客CD
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: "123456789"
+      - name: x-token
+        in: header
+        description: トークンID
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: "1234567890"
+      - name: id
+        in: query
+        description: 音源ID
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: 123456789-c-12345678
+      - name: category
+        in: query
+        description: カテゴリー
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: bgm
+      responses:
+        "200":
+          description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+        "400":
+          description: Bad request. Response invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "401":
+          description: API key is missing or invalid
+          headers:
+            WWW_Authenticate:
+              style: simple
+              explode: false
+              schema:
+                type: string
+        "403":
+          description: Access denied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: A user with the specified ID was not found.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "5XX":
+          description: Unexpected error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+      x-swagger-router-controller: Resources
   /{external}/cm:
     get:
       tags:
@@ -3542,6 +3626,13 @@ components:
           example: https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx
       example:
         url: https://xxxxx/123456789-c-12345678.aac?AWSAccessKeyId=xxxxxxxx
+    inline_response_200_1:
+      properties:
+        url:
+          type: string
+          example: https://xxxxx/123456789-c-12345678.m3u8?AWSAccessKeyId=xxxxxxxx
+      example:
+        url: https://xxxxx/123456789-c-12345678.m3u8?AWSAccessKeyId=xxxxxxxx
     CmListItem_inner:
       properties:
         sceneCd:

@@ -1,10 +1,37 @@
-"use strict";
+'use strict';
+
 
 const assert = require("assert");
 const { respondWithCode } = require("../utils/writer");
 const { UMesseError } = require("umesse-lib/error");
 const { constants, debuglog } = require("umesse-lib/constants");
-const { getResource, getSignedUrl } = require("../../umesse/resources");
+const { getResource, getSignedUrl, getM3U8SignedUrl } = require("../../umesse/resources");
+
+/**
+ * S3オブジェクトの署名付きURLの取得(m3u8用)
+ * 試聴再生のURLを取得する。bgmのみm3u8形式で取得するためapiを分ける
+ *
+ * xUnisCustomerCd String UNIS顧客CD
+ * xToken String トークンID
+ * id String 音源ID
+ * category String カテゴリー
+ * returns inline_response_200_1
+ **/
+exports.getM3U8SignedUrl = function (xUnisCustomerCd, xToken, id, category) {
+  return new Promise(async function (resolve, reject) {
+    try {
+      const json = await getM3U8SignedUrl(xUnisCustomerCd, id, category);
+      debuglog(JSON.stringify(json));
+      resolve(json);
+    } catch (e) {
+      debuglog(JSON.stringify(e));
+      assert(e instanceof UMesseError);
+      reject(
+        respondWithCode(e.statusCode, { code: e.code, message: e.message })
+      );
+    }
+  });
+}
 
 /**
  * S3オブジェクトの署名付きURLの取得
