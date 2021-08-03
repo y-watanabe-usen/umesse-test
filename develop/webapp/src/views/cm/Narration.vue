@@ -367,7 +367,7 @@
 
 <script lang="ts">
 import { defineComponent, computed, onMounted, reactive, toRefs } from "vue";
-import useAudioPlayer from "@/utils/audioPlayer";
+// import useAudioPlayer from "@/utils/audioPlayer";
 import * as common from "@/utils/common";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
 import ContentsBase from "@/components/templates/ContentsBase.vue";
@@ -413,6 +413,7 @@ import useModalController from "@/mixins/modalController";
 import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
 import { useCmStore } from "@/store/cm";
+import useHlsPlayer from "@/utils/hlsPlayer";
 
 export default defineComponent({
   components: {
@@ -441,7 +442,8 @@ export default defineComponent({
     MessageDialogContents,
   },
   setup() {
-    const audioPlayer = useAudioPlayer();
+    // const audioPlayer = useAudioPlayer();
+    const hlsPlayer = useHlsPlayer();
     const { auth } = useGlobalStore();
     const cm = useCmStore();
     const authToken = <string>auth.getToken();
@@ -514,10 +516,10 @@ export default defineComponent({
       narrations: [] as NarrationItem[],
       scenes: [] as Scene[],
       selectedNarration: null as NarrationItem | null,
-      isPlaying: computed(() => audioPlayer.isPlaying()),
+      isPlaying: computed(() => hlsPlayer.isPlaying()),
       isDownloading: false,
-      playbackTime: computed(() => audioPlayer.getPlaybackTime()),
-      duration: computed(() => audioPlayer.getDuration()),
+      playbackTime: computed(() => hlsPlayer.getPlaybackTime()),
+      duration: computed(() => hlsPlayer.getDuration()),
       dropdownNarrationId: "",
       title: "",
       description: "",
@@ -609,7 +611,10 @@ export default defineComponent({
         Constants.CATEGORY.NARRATION,
         Constants.SCREEN.NARRATION
       );
-      await audioPlayer.start();
+      // const url = "https://ydobashi.tk/5zmTcEWY8k2Xy9LE/000742.m3u8";
+      const url = "http://192.168.0.12:8081/5zmTcEWY8k2Xy9LE/000742.m3u8";
+      await hlsPlayer.start(url);
+      // await audioPlayer.start();
     };
 
     const download = async (narration: NarrationItem) => {
@@ -627,7 +632,7 @@ export default defineComponent({
     };
 
     const stop = () => {
-      if (state.isPlaying) audioPlayer.stop();
+      if (state.isPlaying) hlsPlayer.stop();
     };
 
     const selectNarrationAndOpenDocumentModal = (narration: NarrationItem) => {
@@ -641,14 +646,16 @@ export default defineComponent({
     ) => {
       try {
         selectNarration(narration);
-        state.isDownloading = true;
+        // state.isDownloading = true;
         openPlayModal();
-        const url = await audioService.getUrlById(
-          narration.id,
-          narration.category
-        );
-        await audioPlayer.load(url);
+        // const url = await audioService.getUrlById(
+        //   narration.id,
+        //   narration.category
+        // );
+        // const url = "https://ydobashi.tk/5zmTcEWY8k2Xy9LE/000742.m3u8";
+        // await audioPlayer.load(url);
       } catch (e) {
+        console.log("catch", e);
         closePlayModal();
         openErrorModal(e);
       } finally {
@@ -778,7 +785,8 @@ export default defineComponent({
     };
 
     const changeAudioPlayerSlider = (value: number) => {
-      audioPlayer.changePlaybackTime(value);
+      hlsPlayer.changePlaybackTime(value);
+      // console.log("changeAudioPlayerSlider", value);
     };
 
     const toHome = () => {
