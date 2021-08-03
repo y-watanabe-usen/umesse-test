@@ -99,7 +99,7 @@ exports.getM3U8SignedUrl = async (unisCustomerCd, id, category) => {
   const bucket = constants.s3Bucket().contents;
   const dir = "bgm_hls";
   let path = "";
-  path = `${dir}/000742.m3u8`;
+  path = `${dir}/${id}.m3u8`;
 
   // m3u8ファイルを取得する
   const originalM3u8 = await s3Manager.get(bucket, path);
