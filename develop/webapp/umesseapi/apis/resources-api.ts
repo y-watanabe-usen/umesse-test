@@ -20,6 +20,7 @@ import { BgmItem } from '../models';
 import { ChimeItem } from '../models';
 import { FreeItem } from '../models';
 import { InlineResponse200 } from '../models';
+import { InlineResponse2001 } from '../models';
 import { NarrationItem } from '../models';
 import { TemplateItem } from '../models';
 /**
@@ -28,6 +29,76 @@ import { TemplateItem } from '../models';
  */
 export const ResourcesApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * 試聴再生のURLを取得する。bgmのみm3u8形式で取得するためapiを分ける
+         * @summary S3オブジェクトの署名付きURLの取得(m3u8用)
+         * @param {string} xUnisCustomerCd UNIS顧客CD
+         * @param {string} xToken トークンID
+         * @param {string} id 音源ID
+         * @param {string} category カテゴリー
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getM3U8SignedUrl: async (xUnisCustomerCd: string, xToken: string, id: string, category: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'xUnisCustomerCd' is not null or undefined
+            if (xUnisCustomerCd === null || xUnisCustomerCd === undefined) {
+                throw new RequiredError('xUnisCustomerCd','Required parameter xUnisCustomerCd was null or undefined when calling getM3U8SignedUrl.');
+            }
+            // verify required parameter 'xToken' is not null or undefined
+            if (xToken === null || xToken === undefined) {
+                throw new RequiredError('xToken','Required parameter xToken was null or undefined when calling getM3U8SignedUrl.');
+            }
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling getM3U8SignedUrl.');
+            }
+            // verify required parameter 'category' is not null or undefined
+            if (category === null || category === undefined) {
+                throw new RequiredError('category','Required parameter category was null or undefined when calling getM3U8SignedUrl.');
+            }
+            const localVarPath = `/m3u8SignedUrl`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            if (id !== undefined) {
+                localVarQueryParameter['id'] = id;
+            }
+
+            if (category !== undefined) {
+                localVarQueryParameter['category'] = category;
+            }
+
+            if (xUnisCustomerCd !== undefined && xUnisCustomerCd !== null) {
+                localVarHeaderParameter['x-unis-customer-cd'] = String(xUnisCustomerCd);
+            }
+
+            if (xToken !== undefined && xToken !== null) {
+                localVarHeaderParameter['x-token'] = String(xToken);
+            }
+
+            const query = new URLSearchParams(localVarUrlObj.search);
+            for (const key in localVarQueryParameter) {
+                query.set(key, localVarQueryParameter[key]);
+            }
+            for (const key in options.query) {
+                query.set(key, options.query[key]);
+            }
+            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * 試聴再生、音声素材アップロードのURLを取得する
          * @summary S3オブジェクトの署名付きURLの取得
@@ -325,6 +396,23 @@ export const ResourcesApiAxiosParamCreator = function (configuration?: Configura
 export const ResourcesApiFp = function(configuration?: Configuration) {
     return {
         /**
+         * 試聴再生のURLを取得する。bgmのみm3u8形式で取得するためapiを分ける
+         * @summary S3オブジェクトの署名付きURLの取得(m3u8用)
+         * @param {string} xUnisCustomerCd UNIS顧客CD
+         * @param {string} xToken トークンID
+         * @param {string} id 音源ID
+         * @param {string} category カテゴリー
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getM3U8SignedUrl(xUnisCustomerCd: string, xToken: string, id: string, category: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<InlineResponse2001>> {
+            const localVarAxiosArgs = await ResourcesApiAxiosParamCreator(configuration).getM3U8SignedUrl(xUnisCustomerCd, xToken, id, category, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
          * 試聴再生、音声素材アップロードのURLを取得する
          * @summary S3オブジェクトの署名付きURLの取得
          * @param {string} id 音源ID
@@ -427,6 +515,19 @@ export const ResourcesApiFp = function(configuration?: Configuration) {
 export const ResourcesApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     return {
         /**
+         * 試聴再生のURLを取得する。bgmのみm3u8形式で取得するためapiを分ける
+         * @summary S3オブジェクトの署名付きURLの取得(m3u8用)
+         * @param {string} xUnisCustomerCd UNIS顧客CD
+         * @param {string} xToken トークンID
+         * @param {string} id 音源ID
+         * @param {string} category カテゴリー
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getM3U8SignedUrl(xUnisCustomerCd: string, xToken: string, id: string, category: string, options?: any): AxiosPromise<InlineResponse2001> {
+            return ResourcesApiFp(configuration).getM3U8SignedUrl(xUnisCustomerCd, xToken, id, category, options).then((request) => request(axios, basePath));
+        },
+        /**
          * 試聴再生、音声素材アップロードのURLを取得する
          * @summary S3オブジェクトの署名付きURLの取得
          * @param {string} id 音源ID
@@ -505,6 +606,20 @@ export const ResourcesApiFactory = function (configuration?: Configuration, base
  * @extends {BaseAPI}
  */
 export class ResourcesApi extends BaseAPI {
+    /**
+     * 試聴再生のURLを取得する。bgmのみm3u8形式で取得するためapiを分ける
+     * @summary S3オブジェクトの署名付きURLの取得(m3u8用)
+     * @param {string} xUnisCustomerCd UNIS顧客CD
+     * @param {string} xToken トークンID
+     * @param {string} id 音源ID
+     * @param {string} category カテゴリー
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ResourcesApi
+     */
+    public getM3U8SignedUrl(xUnisCustomerCd: string, xToken: string, id: string, category: string, options?: any) {
+        return ResourcesApiFp(this.configuration).getM3U8SignedUrl(xUnisCustomerCd, xToken, id, category, options).then((request) => request(this.axios, this.basePath));
+    }
     /**
      * 試聴再生、音声素材アップロードのURLを取得する
      * @summary S3オブジェクトの署名付きURLの取得
