@@ -92,8 +92,8 @@ exports.getM3U8SignedUrl = async (unisCustomerCd, id, category) => {
   if (checkError) throw new BadRequestError(checkError);
 
   // bgmのみの機能とする
-  if (category != "bgm") {
-    throw new BadRequestError(checkError);
+  if (category != constants.resourceCategory.BGM) {
+    throw new BadRequestError(ERROR_CODE.E0001030);
   }
 
   const bucket = constants.s3Bucket().contents;
@@ -102,7 +102,13 @@ exports.getM3U8SignedUrl = async (unisCustomerCd, id, category) => {
   path = `${dir}/${id}.m3u8`;
 
   // m3u8ファイルを取得する
-  const originalM3u8 = await s3Manager.get(bucket, path);
+  let originalM3u8;
+  try {
+    originalM3u8 = await s3Manager.get(bucket, path);
+  } catch (e) {
+    errorlog(JSON.stringify(e));
+    throw new NotFoundError(ERROR_CODE.E0000404);
+  }
 
   // m3u8ファイルを改行コードで区切って配列に変換する
   const ary = originalM3u8.Body.toString('ascii').split("\n");

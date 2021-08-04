@@ -6,6 +6,7 @@ const { respondWithCode } = require("../utils/writer");
 const { UMesseError } = require("umesse-lib/error");
 const { constants, debuglog } = require("umesse-lib/constants");
 const { getResource, getSignedUrl, getM3U8SignedUrl } = require("../../umesse/resources");
+const { authToken } = require("../../umesse/user");
 
 /**
  * S3オブジェクトの署名付きURLの取得(m3u8用)
@@ -20,6 +21,7 @@ const { getResource, getSignedUrl, getM3U8SignedUrl } = require("../../umesse/re
 exports.getM3U8SignedUrl = function (xUnisCustomerCd, xToken, id, category) {
   return new Promise(async function (resolve, reject) {
     try {
+      await authToken(xUnisCustomerCd, xToken);
       const json = await getM3U8SignedUrl(xUnisCustomerCd, id, category);
       debuglog(JSON.stringify(json));
       resolve(json);
