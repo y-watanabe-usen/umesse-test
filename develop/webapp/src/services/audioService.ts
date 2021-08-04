@@ -36,7 +36,7 @@ export function useAudioService(
     }
   };
 
-  const getM3U8UrlById = async (unisCustomerCd: string, token: string, id: string, category: string) => {
+  const getM3U8UrlById = async (unisCustomerCd: string, token: string, id: string, category: string): Promise<string> => {
     try {
       const resourcesRepositoryResponse = await resourcesRepository.getM3U8SignedUrl(unisCustomerCd, token, id, category);
       return resourcesRepositoryResponse.data.url;

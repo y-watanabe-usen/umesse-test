@@ -185,7 +185,6 @@ export default defineComponent({
       isDownloading: false,
       playbackTime: computed(() => hlsPlayer.getPlaybackTime()),
       duration: computed(() => hlsPlayer.getDuration()),
-      url: "",
     });
 
     const setBgm = (bgm: BgmItem) => {
@@ -228,7 +227,7 @@ export default defineComponent({
         Constants.CATEGORY.BGM,
         Constants.SCREEN.BGM
       );
-      await hlsPlayer.start(state.url);
+      await hlsPlayer.start();
     };
 
     const stop = () => {
@@ -242,13 +241,13 @@ export default defineComponent({
         openPlayModal();
         const unisCustomerCd = auth.getUserInfo()?.unisCustomerCd;
         const token = auth.getToken() ?? "";
-        state.url = await audioService.getM3U8UrlById(
+        const url = await audioService.getM3U8UrlById(
           unisCustomerCd,
           token,
           bgm.id,
           bgm.category
         );
-        // await audioPlayer.load(url);
+        hlsPlayer.load(url);
       } catch (e) {
         closePlayModal();
         openErrorModal(e);

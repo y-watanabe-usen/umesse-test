@@ -10,18 +10,25 @@ export default function useHlsPlayer() {
   });
 
   let timer: number | undefined;
-  const video = document.createElement("video");
+  let video = document.createElement("video");
   let hls: Hls;
 
-  const start = async (url: string) => {
+  const load = (url: string) => {
     hls = new Hls();
+    video = document.createElement("video");
     hls.loadSource(url);
     hls.attachMedia(video);
-    await video.play();
+    video.load();
     video.removeEventListener("pause", stopFunction);
+    video.removeEventListener("error", stopFunction);
     video.removeEventListener("end", stopFunction);
     video.addEventListener("pause", stopFunction);
+    video.addEventListener("error", stopFunction);
     video.addEventListener("end", stopFunction);
+  };
+
+  const start = async () => {
+    await video.play();
     startFunction();
   };
 
@@ -40,6 +47,7 @@ export default function useHlsPlayer() {
 
   const stopFunction = () => {
     clearInterval(timer);
+    video.currentTime = 0;
     state.playbackTime = 0;
     state.playing = false;
   };
@@ -63,6 +71,6 @@ export default function useHlsPlayer() {
   };
 
   return {
-    start, stop, getPlaybackTime, getDuration, changePlaybackTime, isPlaying,
+    load, start, stop, getPlaybackTime, getDuration, changePlaybackTime, isPlaying,
   };
 }
