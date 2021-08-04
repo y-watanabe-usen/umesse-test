@@ -8,6 +8,16 @@ import Constants, {
 } from "@/utils/constants";
 import PackageJson from "@/../package.json";
 
+export function getNarrationIndustryScenes(industryCd: string) {
+  return getIndustryScenes(Constants.DISPLAY_NARRATION, industryCd);
+}
+export function getTemplateIndustryScenes(industryCd: string) {
+  return getIndustryScenes(Constants.DISPLAY_TEMPLATE, industryCd);
+}
+export function getFreeTemplateIndustryScenes(industryCd: string) {
+  return getIndustryScenes(Constants.DISPLAY_FREE, industryCd);
+}
+
 /**
  * ナレーション選択画面に表示する業種を取得する
  * @param
@@ -34,7 +44,7 @@ export function getNarrationIndustries() {
  * @param
  * @return Scene[]
  */
-export function getIndustryScenes(industryCd: string) {
+export function getIndustryScenes(type: string, industryCd: string) {
   let getCdList: string[] = [];
   switch (industryCd) {
     case "02":
@@ -125,35 +135,65 @@ export function getIndustryScenes(industryCd: string) {
         "052",
       ];
       break;
-    case "40":
-      getCdList = [
-        "007",
-        "008",
-        "009",
-        "011",
-        "012",
-        "013",
-        "015",
-        "018",
-        "021",
-        "023",
-        "024",
-        "025",
-        "026",
-        "027",
-        "028",
-        "029",
-        "030",
-        "031",
-        "032",
-        "033",
-        "034",
-        "035",
-        "036",
-        "037",
-        "045",
-        "052",
-      ];
+    case "40": 
+      if (type === Constants.DISPLAY_TEMPLATE){
+        getCdList = [
+          "007",
+          "008",
+          "009",
+          "011",
+          "012",
+          "013",
+          "015",
+          "018",
+          "021",
+          "023",
+          "024",
+          "025",
+          "026",
+          "027",
+          "028",
+          "029",
+          "030",
+          "031",
+          "032",
+          "034",
+          "035",
+          "036",
+          "037",
+          "045",
+          "052",
+        ];
+      } else {
+        getCdList = [
+          "007",
+          "008",
+          "009",
+          "011",
+          "012",
+          "013",
+          "015",
+          "018",
+          "021",
+          "023",
+          "024",
+          "025",
+          "026",
+          "027",
+          "028",
+          "029",
+          "030",
+          "031",
+          "032",
+          "033",
+          "034",
+          "035",
+          "036",
+          "037",
+          "045",
+          "052",
+        ];
+      }
       break;
     case "50":
       getCdList = [

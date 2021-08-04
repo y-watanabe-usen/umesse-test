@@ -251,7 +251,9 @@ export default class Constants {
 
   public static readonly MAX_RECORDING_TIME = 90; // 1分30秒
 
-  public static readonly YEAR_HEALTH_INFOMATION = 19; // 通年健康情報
+  public static readonly DISPLAY_NARRATION = 'narration'; // ナレーション選択画面
+  public static readonly DISPLAY_TEMPLATE = 'template'; // テンプレート選択画面
+  public static readonly DISPLAY_FREE = 'free'; // フリー入力テンプレート選択画面
 }
 
 export const ERROR_CODE = {

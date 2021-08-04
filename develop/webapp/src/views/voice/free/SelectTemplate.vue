@@ -239,7 +239,7 @@ export default defineComponent({
     };
 
     const fetchScene = () => {
-      state.scenes = common.getIndustryScenes(state.activeIndustryCd);
+      state.scenes = common.getFreeTemplateIndustryScenes(state.activeIndustryCd);
       state.freeItems = [];
     };
 

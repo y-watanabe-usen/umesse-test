@@ -269,10 +269,7 @@ export default defineComponent({
     });
 
     const fetchScene = () => {
-      state.scenes = common.getIndustryScenes(state.activeIndustryCd);
-      if (state.scenes[Constants.YEAR_HEALTH_INFOMATION]) {
-        state.scenes.splice(Constants.YEAR_HEALTH_INFOMATION, 1);
-      }
+      state.scenes = common.getTemplateIndustryScenes(state.activeIndustryCd);
       state.templates = [];
     };
     const clickScene = (sceneCd: string) => {
