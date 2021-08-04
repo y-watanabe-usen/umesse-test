@@ -8,16 +8,6 @@ import Constants, {
 } from "@/utils/constants";
 import PackageJson from "@/../package.json";
 
-export function getNarrationIndustryScenes(industryCd: string) {
-  return getIndustryScenes(Constants.DISPLAY_NARRATION, industryCd);
-}
-export function getTemplateIndustryScenes(industryCd: string) {
-  return getIndustryScenes(Constants.DISPLAY_TEMPLATE, industryCd);
-}
-export function getFreeTemplateIndustryScenes(industryCd: string) {
-  return getIndustryScenes(Constants.DISPLAY_FREE, industryCd);
-}
-
 /**
  * ナレーション選択画面に表示する業種を取得する
  * @param
@@ -654,4 +644,19 @@ function getUploadDestination(cdList: string[]) {
 
 export function isVisibleDownload() {
   return process.env.NODE_ENV !== "production";
+}
+
+/**
+ * ナレーション選択画面・テンプレート選択画面・フリー入力テンプレート選択画面でのシーンを取得する
+ * @param industryCd string
+ * @return CdList[]
+ */
+export function getNarrationIndustryScenes(industryCd: string) {
+  return getIndustryScenes(Constants.DISPLAY_NARRATION, industryCd);
+}
+export function getTemplateIndustryScenes(industryCd: string) {
+  return getIndustryScenes(Constants.DISPLAY_TEMPLATE, industryCd);
+}
+export function getFreeTemplateIndustryScenes(industryCd: string) {
+  return getIndustryScenes(Constants.DISPLAY_FREE, industryCd);
 }
