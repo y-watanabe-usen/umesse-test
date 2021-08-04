@@ -130,7 +130,7 @@ exports.getM3U8SignedUrl = async (unisCustomerCd, id, category) => {
   // signedUrlを付与したm3u8をs3内のユーザー領域にファイル書込み、
   // 書き込んだm3u8ファイルにsignedUrlを適用して返す
   const writeBucket = constants.s3Bucket().users;
-  const writePath = `users/${unisCustomerCd}/${category}/${id}.m3u8`;
+  const writePath = `users/${unisCustomerCd}/${category}/${category}.m3u8`;
   try {
     await s3Manager.put(writeBucket, writePath, Buffer.from(writeM3u8));
     const url = s3Manager.getSignedUrl(writeBucket, writePath);
