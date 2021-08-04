@@ -146,6 +146,7 @@ export function getIndustryScenes(industryCd: string) {
         "030",
         "031",
         "032",
+        "033",
         "034",
         "035",
         "036",

@@ -250,6 +250,8 @@ export default class Constants {
   public static readonly MAX_LENGTH_CUSTOMER_NAME = 30;
 
   public static readonly MAX_RECORDING_TIME = 90; // 1分30秒
+
+  public static readonly YEAR_HEALTH_INFOMATION = 19; // 通年健康情報
 }
 
 export const ERROR_CODE = {
