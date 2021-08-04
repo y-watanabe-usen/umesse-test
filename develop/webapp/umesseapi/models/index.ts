@@ -21,6 +21,7 @@ export * from './generate-tts-item';
 export * from './generate-tts-item-details';
 export * from './industry-item';
 export * from './inline-response200';
+export * from './inline-response2001';
 export * from './inline-response-default';
 export * from './model-error';
 export * from './narration-item';

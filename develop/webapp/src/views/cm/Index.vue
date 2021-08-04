@@ -108,9 +108,9 @@
               :key="narration.contentsId"
               :title="
                 'ナレーション ' +
-                  `${index + 1}` +
-                  '/' +
-                  `${MAX_NARRATION_COUNT}`
+                `${index + 1}` +
+                '/' +
+                `${MAX_NARRATION_COUNT}`
               "
               size="flexible"
               :contentTitle="`${narration.title}`"
@@ -189,9 +189,9 @@
               <CmItem
                 :title="
                   'ナレーション ' +
-                    `${narrations.length + 1}` +
-                    '/' +
-                    `${MAX_NARRATION_COUNT}`
+                  `${narrations.length + 1}` +
+                  '/' +
+                  `${MAX_NARRATION_COUNT}`
                 "
                 :isEmpty="true"
                 :contentTitleName="'narration' + `${narrations.length}`"
@@ -467,12 +467,12 @@
         <template #contents>
           <PlayDialogContents
             :isLoading="isDownloading || isCreating"
-            :isPlaying="isPlaying"
-            :playbackTime="playbackTime"
-            :duration="duration"
-            @play="play(bgm.id, Constants.CATEGORY.BGM)"
-            @stop="stop"
-            @change="changeAudioPlayerSlider"
+            :isPlaying="isHlsPlaying"
+            :playbackTime="hlsPlaybackTime"
+            :duration="hlsDuration"
+            @play="hlsPlay(bgm.id, Constants.CATEGORY.BGM)"
+            @stop="hlsStop"
+            @change="changeHlsPlayerSlider"
           />
         </template>
         <template #footer>
@@ -687,6 +687,7 @@ import useLoadingModalController from "@/mixins/loadingModalController";
 import useErrorModalController from "@/mixins/errorModalController";
 import { displayCache } from "@/repository/cache";
 import { DISPLAY_CACHE_KEY } from "@/repository/cache/displayCache";
+import useHlsPlayer from "@/utils/hlsPlayer";
 
 export default defineComponent({
   components: {
@@ -713,9 +714,11 @@ export default defineComponent({
   },
   setup() {
     const audioPlayer = useAudioPlayer();
+    const hlsPlayer = useHlsPlayer();
     const { auth } = useGlobalStore();
     const cm = useCmStore();
     const authUser = <User>auth.getUserInfo();
+    const authToken = auth.getToken() ?? "";
     const uploadSystemArray = common.getUploadSystemService(authUser.serviceCd);
     const inputScenesList = common.getInputScenes();
     const {
@@ -748,10 +751,8 @@ export default defineComponent({
       open: openSaveModal,
       close: closeSaveModal,
     } = useModalController();
-    const {
-      isApper: isSavedModalAppear,
-      open: openSavedModal,
-    } = useModalController();
+    const { isApper: isSavedModalAppear, open: openSavedModal } =
+      useModalController();
     const {
       isApper: isConfirmBackHomeModalAppear,
       open: openConfirmBackHomeModal,
@@ -787,12 +788,15 @@ export default defineComponent({
       bgm: computed(() => cm.bgm),
       endChime: computed(() => cm.endChime),
       isPlaying: computed(() => audioPlayer.isPlaying()),
+      isHlsPlaying: computed(() => hlsPlayer.isPlaying()),
       isDownloading: false,
       isCreating: computed(() => cm.status() == UPLOAD_CM_STATE.CREATING),
       isUpdating: computed(() => cm.status() == UPLOAD_CM_STATE.UPDATING),
       status: computed(() => cm.status()),
       playbackTime: computed(() => audioPlayer.getPlaybackTime()),
       duration: computed(() => audioPlayer.getDuration()),
+      hlsPlaybackTime: computed(() => hlsPlayer.getPlaybackTime()),
+      hlsDuration: computed(() => hlsPlayer.getDuration()),
       title: cm.title,
       description: cm.description,
       scene: common.getSceneCd(cm.scene.sceneCd, cm.isEdit),
@@ -891,13 +895,18 @@ export default defineComponent({
       try {
         state.isDownloading = true;
         openPlayBgmModal();
-        const url = await audioService.getUrlById(cm.bgm.id, cm.bgm.category);
+        const url = await audioService.getM3U8UrlById(
+          authUser.unisCustomerCd,
+          authToken,
+          cm.bgm.id,
+          cm.bgm.category
+        );
         analytics.pressButtonPlayTrial(
           cm.bgm.id,
           Constants.CATEGORY.BGM,
           Constants.SCREEN.CM
         );
-        await audioPlayer.load(url);
+        hlsPlayer.load(url);
       } catch (e) {
         closePlayBgmModal();
         openErrorModal(e);
@@ -910,6 +919,11 @@ export default defineComponent({
       if (state.isPlaying) return;
       analytics.pressButtonPlayTrial(id, category, Constants.SCREEN.CM);
       await audioPlayer.start();
+    };
+    const hlsPlay = async (id: string, category: string) => {
+      if (state.isHlsPlaying) return;
+      analytics.pressButtonPlayTrial(id, category, Constants.SCREEN.CM);
+      await hlsPlayer.start();
     };
 
     const playGenerateCm = async () => {
@@ -930,6 +944,9 @@ export default defineComponent({
     };
     const stop = () => {
       if (state.isPlaying) audioPlayer.stop();
+    };
+    const hlsStop = () => {
+      if (state.isHlsPlaying) hlsPlayer.stop();
     };
 
     const clearNarration = (index: number, id: string) => {
@@ -1050,7 +1067,7 @@ export default defineComponent({
     };
     const stopAndClosePlayBgmModal = () => {
       state.isDownloading = false;
-      stop();
+      hlsStop();
       closePlayBgmModal();
     };
     const stopAndClosePlayEndChimeModal = () => {
@@ -1294,6 +1311,9 @@ export default defineComponent({
     const changeAudioPlayerSlider = (value: number) => {
       audioPlayer.changePlaybackTime(value);
     };
+    const changeHlsPlayerSlider = (value: number) => {
+      hlsPlayer.changePlaybackTime(value);
+    };
 
     return {
       ...toRefs(state),
@@ -1303,6 +1323,7 @@ export default defineComponent({
       clearBgm,
       playGenerateCm,
       stop,
+      hlsStop,
       createAndOpenPlayModal,
       stopAndClosePlayModal,
       updateAndOpenSavedModal,
@@ -1327,6 +1348,7 @@ export default defineComponent({
       clickBgmAndOpenPlayModal,
       clickNarrationAndOpenPlayModal,
       play,
+      hlsPlay,
       toHome,
       getAboutCmTime,
       closeAllDropdownMenu,
@@ -1348,6 +1370,7 @@ export default defineComponent({
       changeCmBgm,
       clickConfirm,
       changeAudioPlayerSlider,
+      changeHlsPlayerSlider,
       isPlayModalAppear,
       openPlayModal,
       closePlayModal,

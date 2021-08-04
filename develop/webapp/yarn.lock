@@ -5687,6 +5687,11 @@ highlight.js@^9.6.0:
   resolved "https://registry.npmjs.org/highlight.js/-/highlight.js-9.18.3.tgz"
   integrity sha512-zBZAmhSupHIl5sITeMqIJnYCDfAEc3Gdkqj65wC1lpI468MMQeeQkhcIAvk+RylAkxrCcI9xy9piHiXeQ1BdzQ==
 
+hls.js@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/hls.js/-/hls.js-1.0.7.tgz#b4ab75e7a46650d02245a1da091efd15f07d16eb"
+  integrity sha512-NsGaksvOuYNyTmu/w239EtYFMadFzIoDkmStc1FDRcrGmvxOfMGKad/hLj4NHoE8H1S+Q8dT7HufMJJ6yiht7g==
+
 hmac-drbg@^1.0.0:
   version "1.0.1"
   resolved "https://registry.npmjs.org/hmac-drbg/-/hmac-drbg-1.0.1.tgz"
@@ -10377,7 +10382,7 @@ uglify-js@3.4.x:
     source-map "~0.6.1"
 
 "umesseapi@file:umesseapi":
-  version "0.0.1"
+  version "1.0.0"
   dependencies:
     axios "^0.19.2"
 

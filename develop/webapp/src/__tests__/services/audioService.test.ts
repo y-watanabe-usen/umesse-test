@@ -112,6 +112,40 @@ describe("getUrlByIdのテスト", () => {
   });
 });
 
+describe("getM3U8UrlByIdのテスト", () => {
+  beforeEach(() => {
+    jest.clearAllMocks().resetAllMocks();
+    audioCache.removeAll();
+  });
+
+  const unisCustomerCd = "123456789";
+  const token = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+  const id = "000013";
+  const category = "bgm";
+
+  test(`正常終了の場合、Urlが返ること`, async () => {
+    jest.spyOn(axios, 'request').mockResolvedValue({ data: { url: "https://example.com" } });
+
+    const response = await audioService.getM3U8UrlById(unisCustomerCd, token, id, category);
+
+    expect(response).toBe("https://example.com");
+  });
+
+  test(`404エラーの場合、UMesseErrorがthrowされること`, async () => {
+    jest.spyOn(axios, 'request').mockRejectedValue({ response: { status: 404 } });
+    const expoectedError = new UMesseError(ERROR_CODE.A3000, ERROR_PATTERN.A3000, "");
+
+    await expect(audioService.getM3U8UrlById(unisCustomerCd, token, id, category)).rejects.toThrowError(expoectedError);
+  });
+
+  test(`500エラーの場合、UMesseErrorがthrowされること`, async () => {
+    jest.spyOn(axios, 'request').mockRejectedValue({ response: { status: 500 } });
+    const expoectedError = new UMesseError(ERROR_CODE.A3999, ERROR_PATTERN.A3999, "");
+
+    await expect(audioService.getM3U8UrlById(unisCustomerCd, token, id, category)).rejects.toThrowError(expoectedError);
+  });
+});
+
 describe("getArrayBufferByUrlのテスト", () => {
   beforeEach(() => {
     jest.clearAllMocks().resetAllMocks();

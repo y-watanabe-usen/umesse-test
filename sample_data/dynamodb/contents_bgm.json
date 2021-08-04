@@ -3,10 +3,10 @@
     {
       "PutRequest": {
         "Item": {
-          "contentsId": { "S": "サンプル01" },
+          "contentsId": { "S": "000013" },
           "category": { "S": "bgm" },
-          "title": { "S": "サンプル01" },
-          "description": { "S": "BGM・サンプル01" },
+          "title": { "S": "サンプル13" },
+          "description": { "S": "BGM・サンプル13" },
           "seconds": { "N": "60" },
           "industry": {
             "L": [
@@ -35,10 +35,10 @@
     {
       "PutRequest": {
         "Item": {
-          "contentsId": { "S": "サンプル02" },
+          "contentsId": { "S": "000014" },
           "category": { "S": "bgm" },
-          "title": { "S": "サンプル02" },
-          "description": { "S": "BGM・サンプル02" },
+          "title": { "S": "サンプル14" },
+          "description": { "S": "BGM・サンプル14" },
           "seconds": { "N": "60" },
           "industry": {
             "L": [
@@ -67,10 +67,10 @@
     {
       "PutRequest": {
         "Item": {
-          "contentsId": { "S": "サンプル03" },
+          "contentsId": { "S": "000015" },
           "category": { "S": "bgm" },
-          "title": { "S": "サンプル03" },
-          "description": { "S": "BGM・サンプル03" },
+          "title": { "S": "サンプル15" },
+          "description": { "S": "BGM・サンプル15" },
           "seconds": { "N": "60" },
           "industry": {
             "L": [
@@ -99,10 +99,10 @@
     {
       "PutRequest": {
         "Item": {
-          "contentsId": { "S": "サンプル04" },
+          "contentsId": { "S": "000742" },
           "category": { "S": "bgm" },
-          "title": { "S": "サンプル04" },
-          "description": { "S": "BGM・サンプル04" },
+          "title": { "S": "サンプル742" },
+          "description": { "S": "BGM・サンプル742" },
           "seconds": { "N": "60" },
           "industry": {
             "L": [
@@ -131,10 +131,10 @@
     {
       "PutRequest": {
         "Item": {
-          "contentsId": { "S": "サンプル05" },
+          "contentsId": { "S": "000016" },
           "category": { "S": "bgm" },
-          "title": { "S": "サンプル05" },
-          "description": { "S": "BGM・サンプル05" },
+          "title": { "S": "サンプル16" },
+          "description": { "S": "BGM・サンプル16" },
           "seconds": { "N": "60" },
           "industry": {
             "L": [
@@ -163,10 +163,10 @@
     {
       "PutRequest": {
         "Item": {
-          "contentsId": { "S": "サンプル06" },
+          "contentsId": { "S": "000017" },
           "category": { "S": "bgm" },
-          "title": { "S": "サンプル06" },
-          "description": { "S": "BGM・サンプル06" },
+          "title": { "S": "サンプル17" },
+          "description": { "S": "BGM・サンプル17" },
           "seconds": { "N": "60" },
           "industry": {
             "L": [
@@ -195,10 +195,10 @@
     {
       "PutRequest": {
         "Item": {
-          "contentsId": { "S": "サンプル07" },
+          "contentsId": { "S": "000018" },
           "category": { "S": "bgm" },
-          "title": { "S": "サンプル07" },
-          "description": { "S": "BGM・サンプル07" },
+          "title": { "S": "サンプル18" },
+          "description": { "S": "BGM・サンプル18" },
           "seconds": { "N": "60" },
           "industry": {
             "L": [
@@ -227,10 +227,10 @@
     {
       "PutRequest": {
         "Item": {
-          "contentsId": { "S": "サンプル08" },
+          "contentsId": { "S": "000019" },
           "category": { "S": "bgm" },
-          "title": { "S": "サンプル08" },
-          "description": { "S": "BGM・サンプル08" },
+          "title": { "S": "サンプル19" },
+          "description": { "S": "BGM・サンプル19" },
           "seconds": { "N": "60" },
           "industry": {
             "L": [
@@ -259,10 +259,10 @@
     {
       "PutRequest": {
         "Item": {
-          "contentsId": { "S": "サンプル09" },
+          "contentsId": { "S": "000020" },
           "category": { "S": "bgm" },
-          "title": { "S": "サンプル09" },
-          "description": { "S": "BGM・サンプル09" },
+          "title": { "S": "サンプル20" },
+          "description": { "S": "BGM・サンプル20" },
           "seconds": { "N": "60" },
           "industry": {
             "L": [
@@ -291,10 +291,10 @@
     {
       "PutRequest": {
         "Item": {
-          "contentsId": { "S": "サンプル10" },
+          "contentsId": { "S": "000021" },
           "category": { "S": "bgm" },
-          "title": { "S": "サンプル10" },
-          "description": { "S": "BGM・サンプル10" },
+          "title": { "S": "サンプル21" },
+          "description": { "S": "BGM・サンプル21" },
           "seconds": { "N": "60" },
           "industry": {
             "L": [

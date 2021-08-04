@@ -73,6 +73,74 @@ exports.getResource = async (category, industryCd, sceneCd, sort) => {
   return responseData(ret, category, sort);
 };
 
+// 署名付きURL取得(meu8)
+exports.getM3U8SignedUrl = async (unisCustomerCd, id, category) => {
+  debuglog(
+    `[getM3U8SignedUrl] ${JSON.stringify({
+      unisCustomerCd: unisCustomerCd,
+      id: id,
+      category: category,
+    })}`
+  );
+
+  // パラメーターチェック
+  let params = {
+    unisCustomerCd: unisCustomerCd,
+    category: category,
+  };
+  let checkError = checkParams(params);
+  if (checkError) throw new BadRequestError(checkError);
+
+  // bgmのみの機能とする
+  if (category != constants.resourceCategory.BGM) {
+    throw new BadRequestError(ERROR_CODE.E0001030);
+  }
+
+  const bucket = constants.s3Bucket().contents;
+  const dir = "bgm_hls";
+  let path = "";
+  path = `${dir}/${id}.m3u8`;
+
+  // m3u8ファイルを取得する
+  let originalM3u8;
+  try {
+    originalM3u8 = await s3Manager.get(bucket, path);
+  } catch (e) {
+    errorlog(JSON.stringify(e));
+    throw new NotFoundError(ERROR_CODE.E0000404);
+  }
+
+  // m3u8ファイルを改行コードで区切って配列に変換する
+  const ary = originalM3u8.Body.toString('ascii').split("\n");
+
+  // m3u8内のそれぞれの音源ファイル(*.ts)にsignedUrlを適用する
+  let outLines = [];
+  ary.forEach((v) => {
+    const r = v.match(/^(.*).ts$/);
+    if (r) {
+      const signedUrl = s3Manager.getSignedUrl(bucket, `${dir}/${v}`);
+      outLines.push(signedUrl);
+    } else {
+      outLines.push(v);
+    }
+  });
+  // signedUrlを付与し、完成したm3u8
+  const writeM3u8 = outLines.join("\n");
+
+  // signedUrlを付与したm3u8をs3内のユーザー領域にファイル書込み、
+  // 書き込んだm3u8ファイルにsignedUrlを適用して返す
+  const writeBucket = constants.s3Bucket().users;
+  const writePath = `users/${unisCustomerCd}/${category}/${id}.m3u8`;
+  try {
+    await s3Manager.put(writeBucket, writePath, Buffer.from(writeM3u8));
+    const url = s3Manager.getSignedUrl(writeBucket, writePath);
+    return { url: url };
+  } catch (e) {
+    errorlog(JSON.stringify(e));
+    throw new InternalServerError(ERROR_CODE.E0000500);
+  }
+};
+
 // 署名付きURL取得
 exports.getSignedUrl = async (id, category, protocol) => {
   debuglog(
@@ -121,9 +189,8 @@ exports.getSignedUrl = async (id, category, protocol) => {
 
     case constants.resourceCategory.LANG:
       bucket = constants.s3Bucket().users;
-      path = `users/${id.split("-")[0]}/${constants.resourceCategory.TTS}/${
-        id.split("-")[1]
-      }.mp3`;
+      path = `users/${id.split("-")[0]}/${constants.resourceCategory.TTS}/${id.split("-")[1]
+        }.mp3`;
       break;
 
     case constants.resourceCategory.BGM:

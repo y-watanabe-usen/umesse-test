@@ -36,6 +36,15 @@ export function useAudioService(
     }
   };
 
+  const getM3U8UrlById = async (unisCustomerCd: string, token: string, id: string, category: string): Promise<string> => {
+    try {
+      const resourcesRepositoryResponse = await resourcesRepository.getM3U8SignedUrl(unisCustomerCd, token, id, category);
+      return resourcesRepositoryResponse.data.url;
+    } catch (e) {
+      throw UMesseErrorFromApiFactory(e);
+    }
+  };
+
   const getArrayBufferByUrl = async (url: string): Promise<ArrayBuffer> => {
     const cacheKey = `audioService/getArrayBufferByUrl/${url}`;
     const cacheData = <ArrayBuffer>audioCache.get(cacheKey);
@@ -53,6 +62,7 @@ export function useAudioService(
   return {
     getArrayBufferById,
     getUrlById,
+    getM3U8UrlById,
     getArrayBufferByUrl,
   };
 }
