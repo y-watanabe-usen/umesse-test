@@ -34,7 +34,7 @@ export function getNarrationIndustries() {
  * @param
  * @return Scene[]
  */
-export function getIndustryScenes(industryCd: string) {
+export function getIndustryScenes(type: string, industryCd: string) {
   let getCdList: string[] = [];
   switch (industryCd) {
     case "02":
@@ -125,35 +125,65 @@ export function getIndustryScenes(industryCd: string) {
         "052",
       ];
       break;
-    case "40":
-      getCdList = [
-        "007",
-        "008",
-        "009",
-        "011",
-        "012",
-        "013",
-        "015",
-        "018",
-        "021",
-        "023",
-        "024",
-        "025",
-        "026",
-        "027",
-        "028",
-        "029",
-        "030",
-        "031",
-        "032",
-        "033",
-        "034",
-        "035",
-        "036",
-        "037",
-        "045",
-        "052",
-      ];
+    case "40": 
+      if (type === Constants.DISPLAY_TEMPLATE){
+        getCdList = [
+          "007",
+          "008",
+          "009",
+          "011",
+          "012",
+          "013",
+          "015",
+          "018",
+          "021",
+          "023",
+          "024",
+          "025",
+          "026",
+          "027",
+          "028",
+          "029",
+          "030",
+          "031",
+          "032",
+          "034",
+          "035",
+          "036",
+          "037",
+          "045",
+          "052",
+        ];
+      } else {
+        getCdList = [
+          "007",
+          "008",
+          "009",
+          "011",
+          "012",
+          "013",
+          "015",
+          "018",
+          "021",
+          "023",
+          "024",
+          "025",
+          "026",
+          "027",
+          "028",
+          "029",
+          "030",
+          "031",
+          "032",
+          "033",
+          "034",
+          "035",
+          "036",
+          "037",
+          "045",
+          "052",
+        ];
+      }
       break;
     case "50":
       getCdList = [
@@ -221,54 +251,104 @@ export function getIndustryScenes(industryCd: string) {
       ];
       break;
     case "99":
-      getCdList = [
-        "004",
-        "005",
-        "007",
-        "008",
-        "009",
-        "010",
-        "011",
-        "012",
-        "013",
-        "014",
-        "015",
-        "018",
-        "019",
-        "020",
-        "021",
-        "022",
-        "023",
-        "024",
-        "025",
-        "026",
-        "027",
-        "028",
-        "029",
-        "030",
-        "031",
-        "032",
-        "033",
-        "034",
-        "035",
-        "036",
-        "037",
-        "038",
-        "039",
-        "040",
-        "041",
-        "042",
-        "043",
-        "044",
-        "045",
-        "046",
-        "047",
-        "048",
-        "049",
-        "050",
-        "051",
-        "052",
-      ];
+      if (type === Constants.DISPLAY_TEMPLATE){
+        getCdList = [
+          "004",
+          "005",
+          "007",
+          "008",
+          "009",
+          "010",
+          "011",
+          "012",
+          "013",
+          "014",
+          "015",
+          "018",
+          "019",
+          "020",
+          "021",
+          "022",
+          "023",
+          "024",
+          "025",
+          "026",
+          "027",
+          "028",
+          "029",
+          "030",
+          "031",
+          "032",
+          "034",
+          "035",
+          "036",
+          "037",
+          "038",
+          "039",
+          "040",
+          "041",
+          "042",
+          "043",
+          "044",
+          "045",
+          "046",
+          "047",
+          "048",
+          "049",
+          "050",
+          "051",
+          "052",
+        ];
+      } else {
+        getCdList = [
+          "004",
+          "005",
+          "007",
+          "008",
+          "009",
+          "010",
+          "011",
+          "012",
+          "013",
+          "014",
+          "015",
+          "018",
+          "019",
+          "020",
+          "021",
+          "022",
+          "023",
+          "024",
+          "025",
+          "026",
+          "027",
+          "028",
+          "029",
+          "030",
+          "031",
+          "032",
+          "033",
+          "034",
+          "035",
+          "036",
+          "037",
+          "038",
+          "039",
+          "040",
+          "041",
+          "042",
+          "043",
+          "044",
+          "045",
+          "046",
+          "047",
+          "048",
+          "049",
+          "050",
+          "051",
+          "052",
+        ]; 
+      }
       break;
     default:
       getCdList = [
@@ -614,4 +694,19 @@ function getUploadDestination(cdList: string[]) {
 
 export function isVisibleDownload() {
   return process.env.NODE_ENV !== "production";
+}
+
+/**
+ * ナレーション選択画面・テンプレート選択画面・フリー入力テンプレート選択画面でのシーンを取得する
+ * @param industryCd string
+ * @return CdList[]
+ */
+export function getNarrationIndustryScenes(industryCd: string) {
+  return getIndustryScenes(Constants.DISPLAY_NARRATION, industryCd);
+}
+export function getTemplateIndustryScenes(industryCd: string) {
+  return getIndustryScenes(Constants.DISPLAY_TEMPLATE, industryCd);
+}
+export function getFreeTemplateIndustryScenes(industryCd: string) {
+  return getIndustryScenes(Constants.DISPLAY_FREE, industryCd);
 }

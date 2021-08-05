@@ -269,7 +269,7 @@ export default defineComponent({
     });
 
     const fetchScene = () => {
-      state.scenes = common.getIndustryScenes(state.activeIndustryCd);
+      state.scenes = common.getTemplateIndustryScenes(state.activeIndustryCd);
       state.templates = [];
     };
     const clickScene = (sceneCd: string) => {
