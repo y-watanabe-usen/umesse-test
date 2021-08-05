@@ -103,7 +103,7 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted, reactive, toRefs } from "vue";
 import useHlsPlayer from "@/utils/hlsPlayer";
-import { BgmItem } from "umesseapi/models";
+import { BgmItem, User } from "umesseapi/models";
 import { useRouter } from "vue-router";
 import * as common from "@/utils/common";
 import BasicLayout from "@/components/templates/BasicLayout.vue";
@@ -153,6 +153,8 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const { auth } = useGlobalStore();
+    const authUser = <User>auth.getUserInfo();
+    const token = auth.getToken() ?? "";
     const hlsPlayer = useHlsPlayer();
     const cm = useCmStore();
     const sortList = common.getSort();
@@ -239,10 +241,8 @@ export default defineComponent({
         selectBgm(bgm);
         state.isDownloading = true;
         openPlayModal();
-        const unisCustomerCd = auth.getUserInfo()?.unisCustomerCd;
-        const token = auth.getToken() ?? "";
         const url = await audioService.getM3U8UrlById(
-          unisCustomerCd,
+          authUser.unisCustomerCd,
           token,
           bgm.id,
           bgm.category
