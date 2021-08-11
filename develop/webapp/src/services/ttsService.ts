@@ -25,6 +25,7 @@ export function useTtsService(
 
   const generate = async (unisCustomerCd: string, authToken: string, requestModel: GenerateUserTtsRequestItem): Promise<GenerateTtsItem> => {
     const cacheKey = Convert.generateUserTtsRequestItemToJson(requestModel);
+    ttsCache.removeOther(cacheKey);
     const cacheValue = ttsCache.get<GenerateTtsItem | undefined>(cacheKey);
     if (cacheValue) return cacheValue;
 
