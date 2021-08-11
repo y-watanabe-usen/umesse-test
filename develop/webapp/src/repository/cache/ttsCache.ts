@@ -29,4 +29,13 @@ export class TtsCache {
   removeAll() {
     this.cache.reset();
   }
+
+  // key以外のキャッシュを全削除
+  removeOther(key: string) {
+    const keys = this.cache.keys();
+    keys.forEach(v => {
+      if (v == key) return;
+      this.remove(v);
+    });
+  }
 }
