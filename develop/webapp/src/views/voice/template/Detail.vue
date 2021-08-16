@@ -52,7 +52,8 @@
             <FormGroup
               v-if="isVisibleCustomerName"
               title="店名"
-              description="※カタカナで入力"
+              description="※1  カタカナで入力"
+              descriptionSub="※2  店名は日本語の原稿のみに反映"
               class="name"
             >
               <TextBox

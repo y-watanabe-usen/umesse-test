@@ -12,6 +12,9 @@
       <p class="description" v-if="description != ''">
         {{ description }}
       </p>
+      <p class="descriptionSub" v-if="descriptionSub != ''">
+        {{ descriptionSub }}
+      </p>
     </div>
   </div>
 </template>
@@ -31,6 +34,10 @@ export default defineComponent({
       default: false,
     },
     description: {
+      type: String,
+      default: "",
+    },
+    descriptionSub: {
       type: String,
       default: "",
     },
@@ -98,6 +105,13 @@ export default defineComponent({
       position: absolute;
       left: 0;
       bottom: -24px;
+    }
+    .descriptionSub {
+      color: rgb(123, 123, 123);
+      font-size: 16px;
+      position: absolute;
+      left: 0;
+      bottom: -44px;
     }
   }
 }
