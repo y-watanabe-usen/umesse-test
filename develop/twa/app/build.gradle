@@ -25,8 +25,8 @@ def twaManifest = [
         applicationId              : 'com.usen.umesse',
         hostName                   : 'umesse.usen.com', // The domain being opened in the TWA.
         launchUrl                  : '/', // The start path for the TWA. Must be relative to the domain.
-        name                       : 'U MESSE', // The application name.
-        launcherName               : 'U MESSE', // The name shown on the Android Launcher.
+        name                       : 'U MESSAGE', // The application name.
+        launcherName               : 'U MESSAGE', // The name shown on the Android Launcher.
         themeColor                 : '#39A0D2', // The color used for the status bar.
         navigationColor            : '#000000', // The color used for the navigation bar.
         navigationColorDark        : '#000000', // The color used for the dark navbar.
