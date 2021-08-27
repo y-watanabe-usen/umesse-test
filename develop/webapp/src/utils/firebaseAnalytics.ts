@@ -245,7 +245,7 @@ const pressButtonEditContent = (id: string, screen: string) => {
 const screenView = (screen: string) => {
   const now = new Date().toLocaleString();
   fireBaseAnalytics.logEvent("screen_view", {
-    app_name: "UMESSE",
+    app_name: Constants.APP_NAME,
     screen_name: screen,
     timestamp: formatDate.convertDatestringToDateTime(now),
     env: process.env.VUE_APP_ENV,
