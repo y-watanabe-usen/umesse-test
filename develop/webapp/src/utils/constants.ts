@@ -42,7 +42,7 @@ export type TtsLangs = {
 };
 
 export default class Constants {
-  public static readonly APP_NAME = "U MESSE";
+  public static readonly APP_NAME = "U MESSEGE";
 
   public static readonly INDUSTORIES: Industry[] = [
     { cd: "01", name: "新着おすすめ", sort: 1 },
