@@ -8,7 +8,7 @@ const isEmpty = baseValidator.isEmpty;
  * @return bool
  */
 const isFullWidthKana = (text: string) => {
-  return baseValidator.matches(text, `^[ァ-ヶー\x20\u3000]*$`);
+  return baseValidator.matches(text, `^[ァ-ヶー\x20\u3000\u3001]*$`);
 };
 
 const validator = {
