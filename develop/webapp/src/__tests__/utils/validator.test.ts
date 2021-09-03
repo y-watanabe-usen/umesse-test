@@ -5,6 +5,7 @@ describe("isFullWidthKanaのテスト", () => {
     { text: "カタカナ", expected: true },
     { text: "カ タ カ ナ", expected: true },
     { text: "カ　タ　カ　ナ", expected: true, },
+    { text: "カタ、カナ", expected: true },
     { text: "かたかな", expected: false },
     { text: "katakana", expected: false, },
     { text: "ｋａｔａｋａｎａ", expected: false, },
