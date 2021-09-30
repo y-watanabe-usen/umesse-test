@@ -295,6 +295,16 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
 
   // 外部連携データ登録
   if (uploadSystem) {
+    // 既に連携データがある場合はエラー
+    let external;
+    try {
+      external = await db.External.find(unisCustomerCd);
+    } catch (e) {
+      errorlog(JSON.stringify(e));
+      throw new InternalServerError(ERROR_CODE.E0000500);
+    }
+    if (external) throw new BadRequestError(ERROR_CODE.E0400010);
+
     const item = {
       unisCustomerCd: unisCustomerCd,
       dataProcessType: dataProcessType,
