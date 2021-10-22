@@ -291,6 +291,9 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
     dataProcessType = constants.cmDataProcessType.UPDATE;
     uploadSystem = cm.uploadSystem;
     status = "1";
+  } else if (cm.status === constants.cmStatus.COMPLETE) {
+    startDatetime = cm.startDate;
+    endDatetime = "";
   }
 
   // 外部連携データ登録
