@@ -431,7 +431,7 @@ exports.generateTtsResource = async (unisCustomerCd, body) => {
   );
   if (checkError) throw new BadRequestError(checkError);
 
-  const options = {
+  let options = {
     host: constants.ttsApiConfig().host,
     path: constants.ttsApiConfig().path,
     port: 443,
@@ -486,6 +486,21 @@ exports.generateTtsResource = async (unisCustomerCd, body) => {
 
     const url = await this.getSignedUrl(id, constants.resourceCategory.LANG);
     json.details.push({ url: url.url, lang: data.lang });
+  }
+
+  // TTSの月内使用数の取得
+  try {
+    options = {
+      host: constants.ttsApiConfig().host,
+      path: constants.ttsApiConfig().usage,
+      port: 443,
+      auth: `${constants.ttsApiConfig().key}:`,
+      method: "GET",
+    };
+    let usage = await requestTtsApi(options, "");
+    debuglog(`total usage count: ${usage}`);
+  } catch (e) {
+    errorlog(JSON.stringify(e));
   }
 
   return json;
