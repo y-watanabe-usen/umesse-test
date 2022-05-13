@@ -1239,6 +1239,85 @@ paths:
           $ref: "#/components/responses/NotFound"
         5XX:
           $ref: "#/components/responses/Unexpected"
+    
+  /meta/cm:
+    get:
+      tags:
+        - meta
+      summary: 更新CMID一覧取得（外部システム専用）
+      description: 更新CMID一覧取得
+      operationId: listMetaCm
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        - name: targetDate
+          required: true
+          in: query
+          description: 取得日時(YYYYMMDD)
+          schema:
+            type: string
+            example: "20210329"
+        - $ref: "#/components/parameters/Token"
+      responses:
+        200:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MetaExternalList"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        403:
+          $ref: "#/components/responses/Forbidden"
+        404:
+          $ref: "#/components/responses/NotFound"
+        5XX:
+          $ref: "#/components/responses/Unexpected"
+  
+  /meta/cm/{cmId}:
+    get:
+      tags:
+        - meta
+      summary: 更新CM詳細取得（外部システム専用）
+      description: 外部連携するCMの詳細情報を取得する
+      operationId: ExternalCm
+      # security:
+      #   - ApiKeyAuth: []
+      parameters:
+        - name: cmId
+          in: path
+          description: CM ID
+          required: true
+          schema:
+            type: string
+            example: "123456789-c-12345677"
+        - name: targetDate
+          required: true
+          in: query
+          description: 取得日時(YYYYMMDD)
+          schema:
+            type: string
+            example: "20210329"
+        - $ref: "#/components/parameters/Token"
+      responses:
+        200:
+          description: successful response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MetaExternalCm"
+        400:
+          $ref: "#/components/responses/BadRequest"
+        401:
+          $ref: "#/components/responses/Unauthorized"
+        403:
+          $ref: "#/components/responses/Forbidden"
+        404:
+          $ref: "#/components/responses/NotFound"
+        5XX:
+          $ref: "#/components/responses/Unexpected"
 
 components:
   parameters:
@@ -1930,6 +2009,85 @@ components:
         errorMessage:
           type: string
           example: "CM名に規定外の文字が使用されています"
+    MetaExternalList:
+      properties:
+        targetDate:
+          type: string
+          example: "20220401"
+        cmIdList:
+          type: array
+          items:
+            type: string
+            example: 
+              - "123456789-c-12345677"
+              - "123456789-c-12345678"
+              - "123456789-c-12345679"
+    MetaExternalCm:
+      properties:
+        targetDate:
+          type: string
+          description: YYYYMMDD
+          example: "20220401"
+        cmMetas:
+          type: array
+          items:
+            $ref: "#/components/schemas/MetaExternalCmItem"
+    MetaExternalCmItem:
+      properties:
+        unisCustomerCd:
+          type: string
+          description: UNIS顧客CD
+          example: "123456789"
+        customerName:
+          type: string
+          description: 顧客名
+          example: "USEN店舗"
+        customerNameKana:
+          type: string
+          description: 顧客名カナ
+          example: "ユーセンテンポ"
+        serviceCd:
+          type: string
+          description: U19：U MESSAGE、U17:S'sence
+          example: "U19"
+        serviceName:
+          type: string
+          description: サービス名
+          example: "U MESSAGE"
+        cmId:
+          type: string
+          description: CM ID
+          example: "123456789-c-12345678"
+        cmName:
+          type: string
+          description: CM名
+          example: "時報A"
+        cmDescription:
+          type: string
+          description: CM説明
+          example: "テストCMです"
+        cmCommentManuscript:
+          type: string
+          description: CMコメント原稿
+          example: "テストCMです"
+        cmContentTime:
+          type: integer
+          description: 尺時間
+          format: int64
+          example: 30000
+        cmProductionType:
+          type: string
+          description: 01：音楽系、02：素ナレ
+          example: "01"
+        sceneCd:
+          type: string
+          description: シーンCD
+          example: "004"
+        sceneName:
+          type: string
+          description: シーン名
+          example: "開店"
+
     Error:
       description: Error
       type: object
