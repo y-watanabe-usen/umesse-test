@@ -113,16 +113,22 @@ resource "aws_dynamodb_table" "external" {
   # }
 }
 
+# Dynamodb Table umesse-meta
 resource "aws_dynamodb_table" "meta" {
-  for_each       = toset(var.name)
-  name           = format("%s-meta", each.key)
+  name           = "umesse-meta"
   billing_mode   = "PROVISIONED"
   read_capacity  = 10
   write_capacity = 10
-  hash_key       = "id"
+  hash_key       = "cmId"
+  range_key      = "targetDate"
 
   attribute {
-    name = "id"
+    name = "cmId"
+    type = "S"
+  }
+
+  attribute {
+    name = "targetDate"
     type = "S"
   }
 }

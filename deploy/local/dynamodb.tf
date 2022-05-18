@@ -106,10 +106,16 @@ resource "aws_dynamodb_table" "meta" {
   billing_mode   = "PROVISIONED"
   read_capacity  = 10
   write_capacity = 10
-  hash_key       = "unisCustomerCd"
+  hash_key       = "cmId"
+  range_key      = "targetDate"
 
   attribute {
-    name = "unisCustomerCd"
+    name = "cmId"
+    type = "S"
+  }
+
+  attribute {
+    name = "targetDate"
     type = "S"
   }
 }
