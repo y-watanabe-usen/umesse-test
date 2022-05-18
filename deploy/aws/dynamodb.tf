@@ -112,3 +112,17 @@ resource "aws_dynamodb_table" "external" {
   #   non_key_attributes = ["status"]
   # }
 }
+
+resource "aws_dynamodb_table" "meta" {
+  for_each       = toset(var.name)
+  name           = format("%s-meta", each.key)
+  billing_mode   = "PROVISIONED"
+  read_capacity  = 10
+  write_capacity = 10
+  hash_key       = "id"
+
+  attribute {
+    name = "id"
+    type = "S"
+  }
+}

@@ -22,12 +22,15 @@
         "arn:aws:dynamodb:*:*:table/dev-umesse-users",
         "arn:aws:dynamodb:*:*:table/dev-umesse-contents",
         "arn:aws:dynamodb:*:*:table/dev-umesse-external",
+        "arn:aws:dynamodb:*:*:table/dev-umesse-meta",
         "arn:aws:dynamodb:*:*:table/stg-umesse-users",
         "arn:aws:dynamodb:*:*:table/stg-umesse-contents",
         "arn:aws:dynamodb:*:*:table/stg-umesse-external",
+        "arn:aws:dynamodb:*:*:table/stg-umesse-meta",
         "arn:aws:dynamodb:*:*:table/umesse-users",
         "arn:aws:dynamodb:*:*:table/umesse-contents",
-        "arn:aws:dynamodb:*:*:table/umesse-external"
+        "arn:aws:dynamodb:*:*:table/umesse-external",
+        "arn:aws:dynamodb:*:*:table/umesse-meta"
       ]
     },
     {

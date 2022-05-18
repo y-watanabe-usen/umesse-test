@@ -99,3 +99,17 @@ resource "aws_dynamodb_table" "external" {
   #   non_key_attributes = ["status"]
   # }
 }
+
+# Dynamodb Table umesse-meta
+resource "aws_dynamodb_table" "meta" {
+  name           = "umesse-meta"
+  billing_mode   = "PROVISIONED"
+  read_capacity  = 10
+  write_capacity = 10
+  hash_key       = "unisCustomerCd"
+
+  attribute {
+    name = "unisCustomerCd"
+    type = "S"
+  }
+}
