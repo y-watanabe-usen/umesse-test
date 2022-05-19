@@ -28,6 +28,17 @@
           "aws:SourceIp": "125.63.42.192/27"
         }
       }
+    },
+    {
+      "Effect": "Deny",
+      "Principal": "*",
+      "Action": "execute-api:Invoke",
+      "Resource": "execute-api:/*/*/meta/*",
+      "Condition": {
+        "NotIpAddress": {
+          "aws:SourceIp": "125.63.42.192/27"
+        }
+      }
     }
   ]
 }
