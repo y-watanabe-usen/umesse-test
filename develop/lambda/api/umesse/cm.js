@@ -331,6 +331,46 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
       errorlog(JSON.stringify(e));
       throw new InternalServerError(ERROR_CODE.E0000500);
     }
+
+     
+    const date = `
+    ${d.getFullYear()}
+    ${(d.getMonth()).toString().padStart(2, '0')}
+    ${d.getDate().toString().padStart(2, '0')}
+    `.replace(/\n|\r/g, '');
+
+    let customerData;
+    try {
+      customerData = await db.User.find(unisCustomerCd);
+    } catch (e) {
+      errorlog(JSON.stringify(e));
+      throw new InternalServerError(ERROR_CODE.E0000500);
+    }
+    if (customerData) throw new BadRequestError(ERROR_CODE.E0400010);
+  
+    const meta = {
+      targetDate: date,
+      id: date + '-' + id,
+      unisCustomerCd: unisCustomerCd,
+      customerName: customerData.customerName,
+      customerNameKana: customerData.customerNameKana,
+      serviceCd: customerData.serviceCd,
+      serviceName: customerData.serviceName,
+      cmId: id,
+      cmName: cm.title,
+      cmDescription: cm.description.replace(/\r?\n/g, " "), // 改行削除
+      cmCommentManuscript: cm.manuscript,
+      cmContentTime: cm.seconds * 1000, // millisecond
+      cmProductionType: cm.productionType,
+      sceneCd: cm.scene.sceneCd,
+      sceneName: cm.scene.sceneName,
+    };
+    try {
+      const _ = await db.Meta.add(meta);
+    } catch (e) {
+      errorlog(JSON.stringify(e));
+      throw new InternalServerError(ERROR_CODE.E0000500);
+    }
   }
 
   // DynamoDBのデータ更新

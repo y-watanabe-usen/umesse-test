@@ -141,11 +141,11 @@ exports.createUploadCm = async (unisCustomerCd, id, body) => {
   }
 
   // CMES連携用のデータ追加
-  var d = new Date();
+  const d = new Date();
  
-  var date = `
+  const date = `
   ${d.getFullYear()}
-  ${(d.getMonth()+1).toString().padStart(2, '0')}
+  ${(d.getMonth()).toString().padStart(2, '0')}
   ${d.getDate().toString().padStart(2, '0')}
   `.replace(/\n|\r/g, '');
 
@@ -236,35 +236,6 @@ exports.deleteUploadCm = async (unisCustomerCd, id) => {
   };
   try {
     const _ = await db.External.add(item);
-  } catch (e) {
-    errorlog(JSON.stringify(e));
-    throw new InternalServerError(ERROR_CODE.E0000500);
-  }
-
-  // DynamoDBのデータ更新
-  cm.status = constants.cmStatus.EXTERNAL_UPLOADING;
-  cm.timestamp = timestamp();
-  if (cm.uploadError) cm.uploadError = 0;
-
-  let ret;
-  try {
-    ret = await db.User.updateCm(unisCustomerCd, index, cm);
-  } catch (e) {
-    errorlog(JSON.stringify(e));
-    throw new InternalServerError(ERROR_CODE.E0000500);
-  }
-
-  var d = new Date();
- 
-  var date = `
-  ${d.getFullYear()}
-  ${(d.getMonth()+1).toString().padStart(2, '0')}
-  ${d.getDate().toString().padStart(2, '0')}
-  `.replace(/\n|\r/g, '');
-
-
-  try {
-    ret = await db.Meta.delete(date, date + '-' + id);
   } catch (e) {
     errorlog(JSON.stringify(e));
     throw new InternalServerError(ERROR_CODE.E0000500);
