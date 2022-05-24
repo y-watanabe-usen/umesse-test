@@ -1,0 +1,44 @@
+{
+  "umesse-meta": [
+    {
+      "PutRequest": {
+        "Item": {
+          "id": { "S": "20220523-060000000-c-00000001"},
+          "unisCustomerCd": { "S": "123456789" },
+          "customerName": { "S": "カフェUSEN" },
+          "customerNameKana": { "S": "カフェユーセン" },
+          "serviceCd": { "S": "U19" },
+          "serviceName": { "S": "U∞MUSNC" },
+          "cmId": { "S": "123456789-c-12345678" },
+          "cmName": { "S": "サンプル" },
+          "cmDescription": { "S": "サンプル" },
+          "cmCommentManuscript": { "S": "テストCMです" },
+          "cmContentTime": { "N": "540000" },
+          "cmProductionType": { "S": "01" },
+          "sceneCd": { "S": "01" },
+          "sceneName": { "S": "シーン01" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": { "S": "20220523-123456789-c-99999999"},
+          "unisCustomerCd": { "S": "123456789" },
+          "customerName": { "S": "カフェUSEN" },
+          "customerNameKana": { "S": "カフェユーセン" },
+          "serviceCd": { "S": "U19" },
+          "serviceName": { "S": "U∞MUSNC" },
+          "cmId": { "S": "123456789-c-99999999" },
+          "cmName": { "S": "サンプル" },
+          "cmDescription": { "S": "サンプル" },
+          "cmCommentManuscript": { "S": "テストCMです" },
+          "cmContentTime": { "N": "540000" },
+          "cmProductionType": { "S": "01" },
+          "sceneCd": { "S": "01" },
+          "sceneName": { "S": "シーン01" }
+        }
+      }
+    }
+  ]
+}
