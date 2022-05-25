@@ -21,3 +21,4 @@ $AWSCLI dynamodb batch-write-item --request-items file://$HERE/data/upload.test.
 $AWSCLI dynamodb batch-write-item --request-items file://$HERE/data/share.test.json
 $AWSCLI dynamodb batch-write-item --request-items file://$HERE/data/resources.test.json
 $AWSCLI dynamodb batch-write-item --request-items file://$HERE/data/external.test.json
+$AWSCLI dynamodb batch-write-item --request-items file://$HERE/data/meta.test.json
