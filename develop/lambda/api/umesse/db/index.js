@@ -2,8 +2,8 @@
 
 var User = require("./user");
 var External = require("./external");
-var External = require("./meta");
 var Contents = require("./contents");
+var Meta = require("./meta");
 
 module.exports = {
   User,
