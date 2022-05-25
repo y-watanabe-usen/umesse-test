@@ -3,6 +3,7 @@
     {
       "PutRequest": {
         "Item": {
+          "targetDate": { "S": "20220523"},
           "id": { "S": "20220523-060000000-c-00000001"},
           "unisCustomerCd": { "S": "123456789" },
           "customerName": { "S": "カフェUSEN" },
@@ -23,6 +24,7 @@
     {
       "PutRequest": {
         "Item": {
+          "targetDate": { "S": "20220523"},
           "id": { "S": "20220523-123456789-c-99999999"},
           "unisCustomerCd": { "S": "123456789" },
           "customerName": { "S": "カフェUSEN" },
