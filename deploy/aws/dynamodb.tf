@@ -115,7 +115,8 @@ resource "aws_dynamodb_table" "external" {
 
 # Dynamodb Table umesse-meta
 resource "aws_dynamodb_table" "meta" {
-  name           = "umesse-meta"
+  for_each       = toset(var.name)
+  name           = format("%s-meta", each.key)
   billing_mode   = "PROVISIONED"
   read_capacity  = 10
   write_capacity = 10
