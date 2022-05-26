@@ -332,12 +332,11 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
       throw new InternalServerError(ERROR_CODE.E0000500);
     }
 
-     
     const date = `
     ${d.getFullYear()}
-    ${(d.getMonth()).toString().padStart(2, '0')}
-    ${d.getDate().toString().padStart(2, '0')}
-    `.replace(/\n|\r/g, '');
+    ${d.getMonth().toString().padStart(2, "0")}
+    ${d.getDate().toString().padStart(2, "0")}
+    `.replace(/\n|\r/g, "");
 
     let customerData;
     try {
@@ -347,10 +346,10 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
       throw new InternalServerError(ERROR_CODE.E0000500);
     }
     if (customerData) throw new BadRequestError(ERROR_CODE.E0400010);
-  
+
     const meta = {
       targetDate: date,
-      id: date + '-' + id,
+      id: date + "-" + id,
       unisCustomerCd: unisCustomerCd,
       customerName: customerData.customerName,
       customerNameKana: customerData.customerNameKana,
