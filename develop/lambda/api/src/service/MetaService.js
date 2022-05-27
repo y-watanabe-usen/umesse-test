@@ -18,7 +18,14 @@ exports.listMetaCm = function (targetDate) {
     try {
       const json = await getMetaCm(targetDate);
       debuglog(JSON.stringify(json));
-      resolve(json);
+
+      if (!json.metas.length) {
+        resolve(
+          respondWithCode(204, json)
+        );
+      } else {
+        resolve(json);
+      }
     } catch (e) {
       debuglog(JSON.stringify(e));
       assert(e instanceof UMesseError);
