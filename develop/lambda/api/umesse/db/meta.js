@@ -35,7 +35,7 @@ module.exports = {
       options
     );
     debuglog(JSON.stringify(ret));
-    if (!ret) throw new NotFoundError(ERROR_CODE.E0000404);
+    if (!ret || !ret.Item) return;
     return ret.Items;
   },
 

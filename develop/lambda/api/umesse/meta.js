@@ -45,12 +45,14 @@ exports.getMetaCm = async (targetDate) => {
   }
  
   let meta = [];
-  ret.forEach(async (item) => {
-    delete item.id;
-    delete item.targetDate;
-
-    meta.push(item);
-  });
+  if (!ret) {
+    ret.forEach(async (item) => {
+      delete item.id;
+      delete item.targetDate;
+  
+      meta.push(item);
+    });
+  }
   let json = {
     targetDate: targetDate,
     metas: meta,
