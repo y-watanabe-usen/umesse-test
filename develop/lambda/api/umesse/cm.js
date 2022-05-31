@@ -356,13 +356,13 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
       serviceCd: customerData.serviceCd,
       serviceName: customerData.serviceName,
       cmId: id,
-      cmName: cm.title,
-      cmDescription: cm.description.replace(/\r?\n/g, " "), // 改行削除
-      cmCommentManuscript: cm.manuscript,
-      cmContentTime: cm.seconds * 1000, // millisecond
-      cmProductionType: cm.productionType,
-      sceneCd: cm.scene.sceneCd,
-      sceneName: cm.scene.sceneName,
+      cmName: body.title,
+      cmDescription: body.description.replace(/\r?\n/g, " "), // 改行削除
+      cmCommentManuscript: cmCommentManuscript,
+      cmContentTime: contentTime,
+      cmProductionType: productionType,
+      sceneCd: body.scene.sceneCd,
+      sceneName: body.scene.sceneName,
     };
 
     try {
