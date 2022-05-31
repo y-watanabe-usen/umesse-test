@@ -332,11 +332,12 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
       throw new InternalServerError(ERROR_CODE.E0000500);
     }
 
-    const date = `
-    ${d.getFullYear()}
-    ${d.getMonth().toString().padStart(2, "0")}
-    ${d.getDate().toString().padStart(2, "0")}
-    `.replace(/\n|\r/g, "");
+    // CMES連携用のデータ追加
+    const d = new Date();
+    const date =
+      d.getFullYear() +
+      (d.getMonth() + 1).toString().padStart(2, "0") +
+      d.getDate().toString().padStart(2, "0");
 
     let customerData;
     try {
@@ -345,7 +346,6 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
       errorlog(JSON.stringify(e));
       throw new InternalServerError(ERROR_CODE.E0000500);
     }
-    if (customerData) throw new BadRequestError(ERROR_CODE.E0400010);
 
     const meta = {
       targetDate: date,
@@ -364,6 +364,7 @@ exports.updateCm = async (unisCustomerCd, id, body) => {
       sceneCd: cm.scene.sceneCd,
       sceneName: cm.scene.sceneName,
     };
+
     try {
       const _ = await db.Meta.add(meta);
     } catch (e) {
