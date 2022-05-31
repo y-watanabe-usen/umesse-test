@@ -23,17 +23,11 @@ exports.getMetaCm = async (targetDate) => {
     })}`
   );
 
-  // パラメーターチェック
-  let params = {
-    targetDate: targetDate,
-  };
-  let checkError = checkParams(params);
-  if (checkError) throw new BadRequestError(checkError);
-
   // YYYYMMDDのチェック
-  let pattern = "/^[1-9]{1}[0-9]{3}(0[0-9]|1[0-2])([0-2][0-9]|3[0-1])$/";
-  let pramCheck = targetDate.match(pattern)
-  if (pramCheck != null) throw new BadRequestError(checkError);
+  let pattern = /^[1-9]{1}[0-9]{3}(0[0-9]|1[0-2])([0-2][0-9]|3[0-1])$/;
+  let paramCheck = targetDate.match(pattern);
+  if (paramCheck == null)
+    throw new BadRequestError("targetDateに不備があります。");
 
   let ret;
   try {
@@ -43,13 +37,12 @@ exports.getMetaCm = async (targetDate) => {
     errorlog(JSON.stringify(e));
     throw new InternalServerError(ERROR_CODE.E0000500);
   }
- 
+
   let meta = [];
-  if (!ret) {
-    ret.forEach(async (item) => {
+  if (ret && ret.length > 0) {
+    ret.forEach((item) => {
       delete item.id;
       delete item.targetDate;
-  
       meta.push(item);
     });
   }

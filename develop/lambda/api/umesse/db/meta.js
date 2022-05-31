@@ -6,7 +6,7 @@ const { dynamodbManager } = require("umesse-lib/utils/dynamodbManager");
 
 module.exports = {
   find: async function (targetDate, id) {
-    const key = { targetDate: targetDate, id: id,};
+    const key = { targetDate: targetDate, id: id };
     debuglog(JSON.stringify({ key: key }));
 
     let ret = await dynamodbManager.get(
@@ -22,10 +22,11 @@ module.exports = {
 
   findAll: async function (targetDate) {
     const options = {
-      KeyConditionExpression: 'targetDate = :targetDate and id Like :id',
+      KeyConditionExpression:
+        "targetDate = :targetDate and begins_with(id, :id)",
       ExpressionAttributeValues: {
         ":targetDate": targetDate,
-        ":id": targetDate + '-%'
+        ":id": targetDate,
       },
     };
     debuglog(JSON.stringify({ options: options }));
@@ -35,7 +36,7 @@ module.exports = {
       options
     );
     debuglog(JSON.stringify(ret));
-    if (!ret || !ret.Item) return;
+    if (!ret || !ret.Items) return;
     return ret.Items;
   },
 
@@ -51,7 +52,7 @@ module.exports = {
   },
 
   delete: async function (targetDate, id) {
-    const key = { targetDate: targetDate, id: id};
+    const key = { targetDate: targetDate, id: id };
     debuglog(JSON.stringify({ key: key }));
 
     let ret = await dynamodbManager.delete(
@@ -63,5 +64,4 @@ module.exports = {
     if (!ret) throw new Error(ERROR_CODE.E0000500);
     return ret;
   },
-
 };
