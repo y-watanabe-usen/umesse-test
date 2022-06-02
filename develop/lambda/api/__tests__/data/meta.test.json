@@ -1,0 +1,24 @@
+{
+  "umesse-meta": [
+    {
+      "PutRequest": {
+        "Item": {
+          "id": { "S": "20220523-060000000-c-00000001"},
+          "unisCustomerCd": { "S": "060000000" },
+          "customerName": { "S": "テスト店舗" },
+          "customerNameKana": { "S": "テストテンポ" },
+          "serviceCd": { "S": "U19" },
+          "serviceName": { "S": "U∞MUSNC" },
+          "cmId": { "S": "060000000-c-00000001" },
+          "cmName": { "S": "時報A" },
+          "cmDescription": { "S": "テストCMです" },
+          "cmCommentManuscript": { "S": "テストCMです" },
+          "cmContentTime": { "N": "60" },
+          "cmProductionType": { "S": "01" },
+          "sceneCd": { "S": "01" },
+          "sceneName": { "S": "テストシーンです" }
+        }
+      }
+    }
+  ]
+}

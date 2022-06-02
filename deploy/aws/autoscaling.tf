@@ -142,3 +142,51 @@ resource "aws_appautoscaling_policy" "umesse_external_write_policy" {
     target_value = 70
   }
 }
+
+## umesse-meta read
+resource "aws_appautoscaling_target" "umesse_meta_read" {
+  max_capacity       = 100
+  min_capacity       = 10
+  resource_id        = "table/umesse-meta"
+  scalable_dimension = "dynamodb:table:ReadCapacityUnits"
+  service_namespace  = "dynamodb"
+}
+
+resource "aws_appautoscaling_policy" "umesse_meta_read_policy" {
+  name               = "dynamodb-read-capacity-utilization-${aws_appautoscaling_target.umesse_meta_read.resource_id}"
+  policy_type        = "TargetTrackingScaling"
+  resource_id        = aws_appautoscaling_target.umesse_meta_read.resource_id
+  scalable_dimension = aws_appautoscaling_target.umesse_meta_read.scalable_dimension
+  service_namespace  = aws_appautoscaling_target.umesse_meta_read.service_namespace
+
+  target_tracking_scaling_policy_configuration {
+    predefined_metric_specification {
+      predefined_metric_type = "DynamoDBReadCapacityUtilization"
+    }
+    target_value = 70
+  }
+}
+
+## umesse-meta write
+resource "aws_appautoscaling_target" "umesse_meta_write" {
+  max_capacity       = 100
+  min_capacity       = 10
+  resource_id        = "table/umesse-meta"
+  scalable_dimension = "dynamodb:table:WriteCapacityUnits"
+  service_namespace  = "dynamodb"
+}
+
+resource "aws_appautoscaling_policy" "umesse_meta_write_policy" {
+  name               = "dynamodb-write-capacity-utilization-${aws_appautoscaling_target.umesse_meta_write.resource_id}"
+  policy_type        = "TargetTrackingScaling"
+  resource_id        = aws_appautoscaling_target.umesse_meta_write.resource_id
+  scalable_dimension = aws_appautoscaling_target.umesse_meta_write.scalable_dimension
+  service_namespace  = aws_appautoscaling_target.umesse_meta_write.service_namespace
+
+  target_tracking_scaling_policy_configuration {
+    predefined_metric_specification {
+      predefined_metric_type = "DynamoDBWriteCapacityUtilization"
+    }
+    target_value = 70
+  }
+}
