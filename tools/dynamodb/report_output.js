@@ -28,7 +28,7 @@ switch (input) {
     json.forEach((i) => {
       if (i.cm.length > 0) {
         i.cm.forEach((j) => {
-          console.log(`${i.unisCustomerCd},${j.cmId},${j.timestamp}`);
+          console.log(`${i.unisCustomerCd},${j.cmId},${j.title},${j.timestamp}`);
         });
       }
     });
