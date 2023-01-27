@@ -42,11 +42,31 @@ if (target) {
     }
   );
 } else {
-  dynamodb.scan({ TableName: table }, (err, data) => {
-    if (err) {
-      console.error(JSON.stringify(err, null, 2));
-      return;
-    }
-    console.log(JSON.stringify(data.Items));
-  });
+  tableScan();
+}
+
+async function tableScan() {
+  try {
+    let ret = [];
+    const params = {
+      TableName: table,
+    };
+
+    const scan = async () => {
+      const data = await dynamodb.scan(params).promise();
+      ret.push(...data.Items);
+
+      // continue scanning if we have more movies, because
+      // scan can retrieve a maximum of 1MB of data
+      if (typeof data.LastEvaluatedKey != "undefined") {
+        params.ExclusiveStartKey = data.LastEvaluatedKey;
+        await scan();
+      }
+    };
+
+    await scan();
+    console.log(JSON.stringify(ret));
+  } catch (e) {
+    console.error(JSON.stringify(err, null, 2));
+  }
 }

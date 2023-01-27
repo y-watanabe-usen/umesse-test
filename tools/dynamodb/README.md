@@ -37,4 +37,8 @@ node report_output.js ./output.json tts > tts_$(date '+%Y%m%d').csv
 # create demo
 # node create_demo.js [table name] [unis customer cd] [service cd]
 ex. node create_demo.js stg-umesse-users 220125001-220125066 U19
+
+# cmes import
+# node cmes_data_import.js [table name] [json file]
+node cmes_data_import.js dev-umesse-meta ./output.json
 ```
