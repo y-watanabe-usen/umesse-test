@@ -1993,12 +1993,12 @@ components:
           example: "ユーセンテンポ"
         serviceCd:
           type: string
-          description: U19：U MESSAGE、U17:S'sence
+          description: U19：USEN MESSAGE、U17:S'sence
           example: "U19"
         serviceName:
           type: string
           description: サービス名
-          example: "U MESSAGE"
+          example: "USEN MESSAGE"
         cmId:
           type: string
           description: CM ID

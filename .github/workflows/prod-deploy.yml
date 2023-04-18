@@ -163,4 +163,4 @@ jobs:
       with:
         name: app-prod-release.apk
         path: ./develop/webview/app/build/outputs/apk/prod/release/app-prod-release.apk
-        retention-days: 3
+        retention-days: 7

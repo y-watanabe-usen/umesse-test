@@ -163,4 +163,4 @@ jobs:
       with:
         name: app-stg-release.apk
         path: ./develop/webview/app/build/outputs/apk/stg/release/app-stg-release.apk
-        retention-days: 3
+        retention-days: 7

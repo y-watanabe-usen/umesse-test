@@ -3683,7 +3683,7 @@ components:
           sceneName: 開店
           cmProductionType: "01"
           cmId: 123456789-c-12345678
-          serviceName: U MESSAGE
+          serviceName: USEN MESSAGE
           customerName: USEN店舗
           sceneCd: "004"
           unisCustomerCd: "123456789"
@@ -3696,7 +3696,7 @@ components:
           sceneName: 開店
           cmProductionType: "01"
           cmId: 123456789-c-12345678
-          serviceName: U MESSAGE
+          serviceName: USEN MESSAGE
           customerName: USEN店舗
           sceneCd: "004"
           unisCustomerCd: "123456789"
@@ -3720,12 +3720,12 @@ components:
           example: ユーセンテンポ
         serviceCd:
           type: string
-          description: U19：U MESSAGE、U17:S'sence
+          description: U19：USEN MESSAGE、U17:S'sence
           example: U19
         serviceName:
           type: string
           description: サービス名
-          example: U MESSAGE
+          example: USEN MESSAGE
         cmId:
           type: string
           description: CM ID
@@ -3766,7 +3766,7 @@ components:
         sceneName: 開店
         cmProductionType: "01"
         cmId: 123456789-c-12345678
-        serviceName: U MESSAGE
+        serviceName: USEN MESSAGE
         customerName: USEN店舗
         sceneCd: "004"
         unisCustomerCd: "123456789"

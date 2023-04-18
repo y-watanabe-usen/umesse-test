@@ -48,7 +48,7 @@
               </SettingListItem>
               <h2>ライセンス</h2>
               <div class="lisence">
-                U MESSAGE<br />
+                USEN MESSAGE<br />
                 Copyright © USEN CORPORATION All Rights Reserved.<br />
                 <br />
                 ReadSpeaker ® WebAPI<br />

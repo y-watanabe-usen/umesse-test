@@ -12,8 +12,8 @@ bubblewrap init --manifest http://localhost/manifest.json
 
 ? Domain: umesse.usen.com
 ? URL path: /
-? Application name: U MESSAGE
-? Short name: U MESSAGE
+? Application name: USEN MESSAGE
+? Short name: USEN MESSAGE
 ? Application ID: com.usen.umesse
 ? Starting version code for the new app version: 1
 ? Display mode: fullscreen
