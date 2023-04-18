@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
             it.settings.javaScriptEnabled = true
             it.settings.domStorageEnabled = true
             it.settings.userAgentString =
-                it.settings.userAgentString + "U MESSAGE webview"
+                it.settings.userAgentString + "USEN MESSAGE webview"
             it.settings.useWideViewPort = true
             it.settings.loadWithOverviewMode = true
             it.settings.cacheMode = WebSettings.LOAD_NO_CACHE

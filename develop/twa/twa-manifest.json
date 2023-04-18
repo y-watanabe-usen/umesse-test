@@ -1,8 +1,8 @@
 {
   "packageId": "com.usen.umesse",
   "host": "umesse.usen.com",
-  "name": "U MESSAGE",
-  "launcherName": "U MESSAGE",
+  "name": "USEN MESSAGE",
+  "launcherName": "USEN MESSAGE",
   "display": "fullscreen",
   "themeColor": "#39A0D2",
   "navigationColor": "#000000",

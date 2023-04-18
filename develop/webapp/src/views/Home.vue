@@ -2,7 +2,7 @@
   <div>
     <header>
       <h2>
-        <img src="@/assets/logo_umessage.png" />
+        <img src="@/assets/logo_usen_message.png" />
       </h2>
       <ul class="nav">
         <li>
