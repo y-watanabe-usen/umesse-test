@@ -1305,7 +1305,7 @@ describe("getUploadSystemServiceのテスト", () => {
     {
       cd: "U19",
       expected: [
-        { cd: "01", name: "U MUSIC" },
+        { cd: "01", name: "USEN MUSIC" },
         { cd: "99", name: "アップロードしない" },
       ],
     },

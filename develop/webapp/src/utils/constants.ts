@@ -129,7 +129,7 @@ export default class Constants {
   public static readonly UPLOAD_SYSTEM_SSENCE = "02";
 
   public static readonly UPLOAD_SYSTEMS: UploadSystem[] = [
-    { cd: "01", name: "U MUSIC" },
+    { cd: "01", name: "USEN MUSIC" },
     { cd: "02", name: "S'sence" },
     { cd: "99", name: "アップロードしない" },
   ];
