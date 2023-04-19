@@ -885,7 +885,7 @@ export default defineComponent({
     const getCmStatusName = (status: string) => {
       const uploadSystem =
         authUser.serviceCd === Constants.SERVICE_CD_UMUSIC
-          ? "U MUSIC"
+          ? "USEN MUSIC"
           : "S'Sence";
       return Constants.CM_STATUS.find((v) => v.cd == status)?.name.replace(
         "外部システム",
