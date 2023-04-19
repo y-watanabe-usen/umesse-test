@@ -189,7 +189,7 @@ header {
     line-height: 32px;
     caret-color: transparent;
     img {
-      height: 32px;
+      height: 64px;
       margin-right: 20px;
     }
   }
