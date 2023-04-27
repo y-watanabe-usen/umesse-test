@@ -1,11 +1,14 @@
 package com.usen.umesse
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.webkit.*
 import android.widget.LinearLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,6 +56,26 @@ class MainActivity : AppCompatActivity() {
             BuildConfig.LAUNCH_URL + "?unisCustomerCd=${Application.localData.unisCustomerCd}&contractCd=${Application.localData.contractCd}"
         Log.d(TAG, "launch url: $url")
         webView.loadUrl(url)
+
+        if (ActivityCompat.checkSelfPermission(
+                applicationContext,
+                Manifest.permission.RECORD_AUDIO
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestPermissions(
+                arrayOf(Manifest.permission.RECORD_AUDIO),
+                REQUEST_CODE_INITIALIZE
+            )
+            return
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
     override fun onDestroy() {
@@ -75,5 +98,6 @@ class MainActivity : AppCompatActivity() {
     companion object {
         private const val TAG = "MainActivity"
         private lateinit var webView: WebView
+        private const val REQUEST_CODE_INITIALIZE = 100
     }
 }

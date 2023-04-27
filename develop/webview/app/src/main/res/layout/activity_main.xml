@@ -22,7 +22,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/splash" />
+            android:src="@drawable/usen_iot_platform_bk" />
 
         <TextView
             android:layout_width="wrap_content"
