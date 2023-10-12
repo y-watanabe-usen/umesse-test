@@ -193,7 +193,8 @@ async function convertCm(unisCustomerCd, id) {
       ))
     )
       throw "getObject failed";
-
+console.log('test1');
+console.log(target);
     // 1. wav変換
     debuglog(`1. converter to wav`);
     await converter.toWav(`${workDir}/${id}.mp3`, tmpOutput1);
@@ -205,6 +206,7 @@ async function convertCm(unisCustomerCd, id) {
       LRA: "+20.0",
       tp: "-2.0",
     });
+console.log('test2');
     console.log(loudnorm);
 
     // 3. ラウドネス調整 + 音圧調整
@@ -219,7 +221,7 @@ async function convertCm(unisCustomerCd, id) {
       input_thresh: loudnorm.input_thresh,
       target_offset: loudnorm.target_offset,
     });
-
+console.log('test3');
     // 4. ラウドネス値取得 (2回目)
     debuglog(`4. converter get loudnorm`);
     loudnorm = await converter.getLoudnorm(tmpOutput2, {
@@ -227,6 +229,7 @@ async function convertCm(unisCustomerCd, id) {
       LRA: "+10.0",
       tp: "-2.0",
     });
+console.log('test4');
     console.log(loudnorm);
 
     // 5. ラウドネス調整 + HE-AACv2化
@@ -234,24 +237,25 @@ async function convertCm(unisCustomerCd, id) {
     await converter.runLoudnormConvert(tmpOutput2, output, {
       input_I: loudnorm.input_i,
     });
-
+console.log('test5');
     // S3へPUT
     const fileStream = fs.createReadStream(output);
     fileStream.on("error", (e) => {
       throw e;
     });
-
+console.log('test6');
     let ret = await s3Manager.put(
       constants.s3Bucket().users,
       `${target}.aac`,
       fileStream
     );
     if (!ret) throw "putObject failed";
-
+console.log('test7');
     await s3Manager.delete(constants.s3Bucket().users, `${target}.mp3`);
     debuglog("converter complete");
     return;
   } catch (e) {
+console.log('test8');
     errorlog(e.message);
     return "converter failed";
   }
